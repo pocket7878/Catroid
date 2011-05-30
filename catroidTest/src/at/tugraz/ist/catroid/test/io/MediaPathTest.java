@@ -29,6 +29,8 @@ import at.tugraz.ist.catroid.common.FileChecksumContainer;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.StartScript;
+import at.tugraz.ist.catroid.content.TapScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.ChangeXByBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeYByBrick;
@@ -110,7 +112,7 @@ public class MediaPathTest extends InstrumentationTestCase {
 
 	public void testPathsInSpfFile() throws IOException {
 		fillProjectWithAllBricksAndMediaFiles();
-		String spf = StorageHandler.getInstance().getProjectfileAsString(projectName);
+		String spf = Utils.getProjectfileAsString(projectName);
 
 		assertFalse("project contains DEFAULT_ROOT", spf.contains(Consts.DEFAULT_ROOT));
 		assertFalse("project contains IMAGE_DIRECTORY", spf.contains(Consts.IMAGE_DIRECTORY));
@@ -121,7 +123,7 @@ public class MediaPathTest extends InstrumentationTestCase {
 	public void testFilenameChecksum() throws IOException {
 		fillProjectWithAllBricksAndMediaFiles();
 
-		String spf = StorageHandler.getInstance().getProjectfileAsString(projectName);
+		String spf = Utils.getProjectfileAsString(projectName);
 
 		String checksumImage = StorageHandler.getInstance().getMD5Checksum(testImageCopy);
 		String checksumSound = StorageHandler.getInstance().getMD5Checksum(testSoundCopy);
@@ -217,19 +219,19 @@ public class MediaPathTest extends InstrumentationTestCase {
 
 	public void testFileChecksumContainerNotInSPF() throws IOException {
 		fillProjectWithAllBricksAndMediaFiles();
-		String spf = StorageHandler.getInstance().getProjectfileAsString(projectName);
+		String spf = Utils.getProjectfileAsString(projectName);
 		assertFalse("FileChecksumcontainer is in the spf", spf.contains("FileChecksumContainer"));
 		ProjectManager.getInstance().loadProject(projectName, getInstrumentation().getTargetContext(), false);
-		spf = StorageHandler.getInstance().getProjectfileAsString(projectName);
+		spf = Utils.getProjectfileAsString(projectName);
 		assertFalse("FileChecksumcontainer is in the spf", spf.contains("FileChecksumContainer"));
 	}
 
 	private void fillProjectWithAllBricksAndMediaFiles() throws IOException {
 		Sprite sprite = new Sprite("testSprite");
-		Script script = new Script("testScript", sprite);
-		Script touchedScript = new Script("touchedScript", sprite);
+		Script script = new StartScript("testScript", sprite);
+		Script tapedScript = new TapScript("tapScript", sprite);
 		sprite.getScriptList().add(script);
-		sprite.getScriptList().add(touchedScript);
+		sprite.getScriptList().add(tapedScript);
 		project.getSpriteList().add(sprite);
 
 		SetCostumeBrick costumeBrick2 = new SetCostumeBrick(sprite);
@@ -251,7 +253,7 @@ public class MediaPathTest extends InstrumentationTestCase {
 		PlaySoundBrick soundBrick = new PlaySoundBrick(sprite);
 		soundBrick.setPathToSoundfile(testSoundCopy.getName());
 
-		brickList2.add(new IfTouchedBrick(sprite, touchedScript));
+		brickList2.add(new IfTouchedBrick(sprite, tapedScript));
 		brickList2.add(new PlaceAtBrick(sprite, 50, 50));
 		brickList2.add(soundBrick);
 		brickList2.add(new ScaleCostumeBrick(sprite, 50));
@@ -265,7 +267,7 @@ public class MediaPathTest extends InstrumentationTestCase {
 			script.addBrick(brick);
 		}
 		for (Brick brick : brickList2) {
-			touchedScript.addBrick(brick);
+			tapedScript.addBrick(brick);
 		}
 
 		StorageHandler.getInstance().saveProject(project);

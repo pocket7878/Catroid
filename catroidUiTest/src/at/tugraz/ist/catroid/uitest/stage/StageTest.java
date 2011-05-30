@@ -26,6 +26,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.common.Values;
@@ -33,6 +34,8 @@ import at.tugraz.ist.catroid.content.Costume;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.StartScript;
+import at.tugraz.ist.catroid.content.TapScript;
 import at.tugraz.ist.catroid.content.bricks.ComeToFrontBrick;
 import at.tugraz.ist.catroid.content.bricks.GoNStepsBackBrick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
@@ -52,7 +55,8 @@ import com.jayway.android.robotium.solo.Solo;
 public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
 	private Solo solo;
 	private StorageHandler storageHandler;
-	private final String projectName = "project1";
+	private final static String TAG = "StageUITest";
+	private final String projectName = Utils.PROJECTNAME1;
 
 	private File image1;
 	private File image2;
@@ -79,7 +83,7 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 	@Override
 	public void setUp() throws Exception {
-		Utils.clearProject(projectName);
+		Utils.clearAllUtilTestProjects();
 
 		solo = new Solo(getInstrumentation(), getActivity());
 		super.setUp();
@@ -104,7 +108,7 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 			soundFile.delete();
 		}
 
-		Utils.clearProject(projectName);
+		Utils.clearAllUtilTestProjects();
 
 		getActivity().finish();
 		super.tearDown();
@@ -115,9 +119,9 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 		System.out.println("image1: " + image1.getAbsolutePath() + " " + image1Width + " " + image1Height);
 		System.out.println("image2: " + image2.getAbsolutePath() + " " + image2Width + " " + image2Height);
-		solo.clickOnButton(1); // this is the stage //change it when you mess with the buttons
+		solo.clickOnImageButton(1);
 
-		solo.sleep(2000);
+		solo.sleep(3000);
 		Costume costume = ProjectManager.getInstance().getCurrentProject().getSpriteList().get(1).getCostume();
 		assertEquals("image1 is not set ", (Integer) image1Width, costume.getImageWidthHeight().first);
 		assertEquals("image1 is not set ", (Integer) image1Height, costume.getImageWidthHeight().second);
@@ -132,9 +136,10 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 	public void testRunScript() {
 		createTestProject2(projectName);
 
-		System.out.println("image1: " + image1.getAbsolutePath() + " " + image1Width + " " + image1Height);
+		Log.v(TAG, "image1: " + image1.getAbsolutePath() + " " + image1Width + " " + image1Height);
 
-		solo.clickOnButton(1);
+		solo.clickOnImageButton(1);
+
 		solo.sleep(2000);
 		Costume costume = ProjectManager.getInstance().getCurrentProject().getSpriteList().get(1).getCostume();
 		assertEquals("a wrong image is set", (Integer) this.image2Width, costume.getImageWidthHeight().first);
@@ -144,11 +149,11 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 		solo.sleep(1500);
 		costume = ProjectManager.getInstance().getCurrentProject().getSpriteList().get(1).getCostume();
-		assertEquals("image not right scaled", (Integer) (image1Width / 2), costume.getImageWidthHeight().first);
+		assertEquals("image not scaled correctly", (Integer) (image1Width / 2), costume.getImageWidthHeight().first);
 
 		solo.sleep(2500);
 		costume = ProjectManager.getInstance().getCurrentProject().getSpriteList().get(1).getCostume();
-		assertEquals("image not right scaled", (Integer) (image1Width), costume.getImageWidthHeight().first);
+		assertEquals("image not scaled correctly", (Integer) (image1Width), costume.getImageWidthHeight().first);
 
 		int drawPositionX = Math.round(((Values.SCREEN_WIDTH / (2f * Consts.MAX_REL_COORDINATES)) * placeAt)
 				+ Values.SCREEN_WIDTH / 2f);
@@ -158,34 +163,34 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 	public void testClickAroundPicture() {
 		createTestproject(projectName);
-		solo.clickOnButton(1);
+		solo.clickOnImageButton(1);
 
 		solo.sleep(2000);
 		Costume costume = ProjectManager.getInstance().getCurrentProject().getSpriteList().get(1).getCostume();
 		assertEquals("image1 is not set ", (Integer) image1Width, costume.getImageWidthHeight().first);
 		assertEquals("image1 is not set ", (Integer) image1Height, costume.getImageWidthHeight().second);
 
-		System.out.println("image1: " + image1.getAbsolutePath() + " " + image1Width + " " + image1Height);
+		Log.v(TAG, "image1: " + image1.getAbsolutePath() + " " + image1Width + " " + image1Height);
 
 		int clickWidth = (Values.SCREEN_WIDTH - costume.getBitmap().getWidth()) / 2 - 4;
 		int clickHeight = Values.SCREEN_HEIGHT / 2;
-		System.out.println("click: " + clickWidth + " " + clickHeight);
+		Log.v(TAG, "click: " + clickWidth + " " + clickHeight);
 		solo.clickOnScreen(clickWidth, clickHeight);
 
 		clickWidth = (Values.SCREEN_WIDTH / 2);
 		clickHeight = (Values.SCREEN_HEIGHT - costume.getBitmap().getHeight()) / 2 - 4;
-		System.out.println("click: " + clickWidth + " " + clickHeight);
+		Log.v(TAG, "click: " + clickWidth + " " + clickHeight);
 		solo.clickOnScreen(clickWidth, clickHeight);
 
 		clickWidth = (Values.SCREEN_WIDTH / 2);
 		clickHeight = ((Values.SCREEN_HEIGHT - costume.getBitmap().getHeight()) / 2) + costume.getBitmap().getHeight()
 				+ 4;
-		System.out.println("click: " + clickWidth + " " + clickHeight);
+		Log.v(TAG, "click: " + clickWidth + " " + clickHeight);
 		solo.clickOnScreen(clickWidth, clickHeight);
 
 		clickWidth = ((Values.SCREEN_WIDTH - costume.getBitmap().getWidth()) / 2) + costume.getBitmap().getWidth() + 4;
 		clickHeight = (Values.SCREEN_HEIGHT / 2);
-		System.out.println("click: " + clickWidth + " " + clickHeight);
+		Log.v(TAG, "click: " + clickWidth + " " + clickHeight);
 		solo.clickOnScreen(clickWidth, clickHeight);
 
 		solo.sleep(1000);
@@ -202,30 +207,31 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 	public void testClickImageBoundaries() {
 		createTestproject(projectName);
-		solo.clickOnButton(1);
+		solo.clickOnImageButton(1);
+
 		solo.sleep(2000);
 		Costume costume = ProjectManager.getInstance().getCurrentProject().getSpriteList().get(1).getCostume();
 		int costumeWidth = costume.getBitmap().getWidth();
 		int costumeHeight = costume.getBitmap().getHeight();
 		int clickWidth = (Values.SCREEN_WIDTH - costumeWidth) / 2 + 4;
 		int clickHeight = Values.SCREEN_HEIGHT / 2;
-		System.out.println("click: " + clickWidth + " " + clickHeight);
+		Log.v(TAG, "click: " + clickWidth + " " + clickHeight);
 		clickOnScreenAndReturn(clickWidth, clickHeight, image2Width, image2Height);
 
 		clickWidth = (Values.SCREEN_WIDTH / 2);
 		clickHeight = (Values.SCREEN_HEIGHT - costumeHeight) / 2 + 18;
-		System.out.println("click: " + clickWidth + " " + clickHeight + " SCREEN:" + Values.SCREEN_WIDTH + " "
+		Log.v(TAG, "click: " + clickWidth + " " + clickHeight + " SCREEN:" + Values.SCREEN_WIDTH + " "
 				+ Values.SCREEN_HEIGHT);
 		clickOnScreenAndReturn(clickWidth, clickHeight, image2Width, image2Height);
 
 		clickWidth = (Values.SCREEN_WIDTH / 2 + 15);
 		clickHeight = ((Values.SCREEN_HEIGHT - costumeHeight) / 2) + costumeHeight - 4;
-		System.out.println("click: " + clickWidth + " " + clickHeight);
+		Log.v(TAG, "click: " + clickWidth + " " + clickHeight);
 		clickOnScreenAndReturn(clickWidth, clickHeight, image2Width, image2Height);
 
 		clickWidth = ((Values.SCREEN_WIDTH - costumeWidth) / 2) + costumeWidth - 4;
 		clickHeight = (Values.SCREEN_HEIGHT / 2);
-		System.out.println("click: " + clickWidth + " " + clickHeight);
+		Log.v(TAG, "click: " + clickWidth + " " + clickHeight);
 		clickOnScreenAndReturn(clickWidth, clickHeight, image2Width, image2Height);
 
 	}
@@ -237,7 +243,8 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		File mySpfFile = new File(Consts.DEFAULT_ROOT + "/" + projectName + "/" + projectName
 				+ Consts.PROJECT_EXTENTION);
 
-		solo.clickOnButton(1);
+		solo.clickOnImageButton(1);
+
 		solo.clickOnScreen(Values.SCREEN_WIDTH / 2, Values.SCREEN_HEIGHT / 2);
 		solo.goBack();
 		solo.clickOnButton(0);
@@ -254,7 +261,7 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 		Project project = new Project(getActivity(), projectName);
 		Sprite sprite = new Sprite("testSprite");
-		Script script = new Script("script", sprite);
+		Script script = new StartScript("script", sprite);
 		WaitBrick waitBrick = new WaitBrick(sprite, 5000);
 		ScaleCostumeBrick scaleCostumeBrick = new ScaleCostumeBrick(sprite, scale);
 
@@ -266,7 +273,8 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		storageHandler.saveProject(project);
 		ProjectManager.getInstance().setProject(project);
 
-		solo.clickOnButton(1);
+		solo.clickOnImageButton(1);
+
 		assertEquals(100.0, sprite.getScale());
 		solo.pressMenuItem(1);
 		solo.sleep(6000);
@@ -278,7 +286,7 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 	public void testZValue() {
 		createTestProject3(this.projectName);
-		solo.clickOnButton(1);
+		solo.clickOnImageButton(1);
 
 		solo.sleep(1000);
 		solo.clickOnScreen(Values.SCREEN_WIDTH / 2, Values.SCREEN_HEIGHT / 2);
@@ -300,7 +308,8 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		this.createTestProjectWithSound();
 		MediaPlayer mediaPlayer = SoundManager.getInstance().getMediaPlayer();
 		solo.sleep(800);
-		solo.clickOnButton(1);
+		solo.clickOnImageButton(1);
+
 		solo.clickOnScreen(Values.SCREEN_WIDTH / 2, Values.SCREEN_HEIGHT / 2);
 		solo.sleep(250);
 		int count = 0;
@@ -322,22 +331,32 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 		this.createTestProjectWithSound();
 
-		solo.clickOnButton(1);
+		solo.clickOnImageButton(1);
+
 		solo.clickOnScreen(Values.SCREEN_WIDTH / 2, Values.SCREEN_HEIGHT / 2);
 		solo.pressMenuItem(1);
 		solo.sleep(500);
 		assertFalse("Media player is playing while pausing", mediaPlayer.isPlaying());
 		solo.sleep(1000);
 		solo.pressMenuItem(1);
-		solo.sleep(50);
-		assertTrue("Media player is not playing after pause", mediaPlayer.isPlaying());
+		int count = 0;
+		while (true) {
+			if (mediaPlayer.isPlaying()) {
+				break;
+			}
+			solo.sleep(20);
+			count++;
+			if (count >= attempts) {
+				fail("Media player is not playing after pause");
+			}
+		}
 	}
 
 	public void testMediaPlayerNotPlayingAfterPause() {
 		MediaPlayer mediaPlayer = SoundManager.getInstance().getMediaPlayer();
 
 		this.createTestProjectWithSound();
-		solo.clickOnButton(1); //now in stage NOT playing sound
+		solo.clickOnImageButton(1); //now in stage NOT playing sound
 		solo.pressMenuItem(1);
 		solo.sleep(1000);
 		solo.pressMenuItem(1);
@@ -346,7 +365,8 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 	public void testClickOnHiddenSprite() {
 		createTestProject4(projectName);
-		solo.clickOnButton(1);
+		solo.clickOnImageButton(1);
+
 		solo.sleep(500);
 		solo.clickOnScreen(Values.SCREEN_WIDTH / 2, Values.SCREEN_HEIGHT / 2);
 		solo.sleep(1000);
@@ -357,7 +377,7 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 	public void testCanvas() {
 		Sprite sprite = new Sprite("sprite1");
-		Script script = new Script("script1", sprite);
+		Script script = new StartScript("script1", sprite);
 		sprite.getScriptList().add(script);
 		SetCostumeBrick setCostumeBrick = new SetCostumeBrick(sprite);
 		script.addBrick(setCostumeBrick);
@@ -368,8 +388,8 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 				getInstrumentation().getContext(), 0);
 		setImageMemberProperties(image);
 		setCostumeBrick.setCostume(image.getName());
-
-		solo.clickOnButton(1);
+		solo.sleep(100);
+		solo.clickOnImageButton(1);
 		solo.clickOnScreen(Values.SCREEN_WIDTH, 0); //save thumbnail
 
 		//File file = new File(Consts.DEFAULT_ROOT + "/" + projectName + "/" + Consts.SCREENSHOT_FILE_NAME);
@@ -384,28 +404,28 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		for (int i = startWidth; i < borderWidth; i++) {
 			for (int j = startHeight; j < borderHeight; j++) {
 				assertEquals("pixel is not red", Color.RED, bitmap.getPixel(i, j));
-				//System.out.println("in TEST " + i + " " + j);
+				//Log.v(TAG, "in TEST " + i + " " + j);
 			}
 		}
 
 		for (int j = startHeight; j < borderHeight; j++) {
 			assertEquals("pixel is not white", Color.WHITE, bitmap.getPixel(startWidth - 1, j));
-			//System.out.println("in TEST2 " + (startWidth - 1) + " " + j);
+			//Log.v(TAG, "in TEST2 " + (startWidth - 1) + " " + j);
 		}
 
 		for (int j = startHeight; j < borderHeight; j++) {
 			assertEquals("pixel is not white", Color.WHITE, bitmap.getPixel(borderWidth, j));
-			//System.out.println("in TEST3 " + borderWidth + " " + j);
+			//Log.v(TAG, "in TEST3 " + borderWidth + " " + j);
 		}
 
 		for (int i = startWidth; i < borderWidth; i++) {
 			assertEquals("pixel is not white", Color.WHITE, bitmap.getPixel(i, startHeight - 1));
-			//System.out.println("in TEST4 " + i + " " + (startHeight - 1));
+			//Log.v(TAG, "in TEST4 " + i + " " + (startHeight - 1));
 		}
 
 		for (int i = startWidth; i < borderWidth; i++) {
 			assertEquals("pixel is not white", Color.WHITE, bitmap.getPixel(i, borderHeight));
-			//System.out.println("in TEST5 " + i + " " + borderHeight);
+			//Log.v(TAG, "in TEST5 " + i + " " + borderHeight);
 		}
 
 	}
@@ -418,16 +438,16 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		assertEquals((Integer) expectedHeight, costume.getImageWidthHeight().second);
 
 		solo.goBack();
-		solo.clickOnButton(1);
+		solo.clickOnImageButton(1);
+
 	}
 
 	public void createTestproject(String projectName) {
 
 		//creating sprites for project:
 		Sprite firstSprite = new Sprite("sprite1");
-		Script testScript = new Script("script1", firstSprite);
-		Script touchScript = new Script("script2", firstSprite);
-		touchScript.setTouchScript(true);
+		Script testScript = new StartScript("script1", firstSprite);
+		Script touchScript = new TapScript("script2", firstSprite);
 
 		SetCostumeBrick setCostumeBrick = new SetCostumeBrick(firstSprite);
 		SetCostumeBrick setCostumeBrick2 = new SetCostumeBrick(firstSprite);
@@ -455,9 +475,8 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 		//creating sprites for project:
 		Sprite firstSprite = new Sprite("sprite1");
-		Script startScript = new Script("startscript", firstSprite);
-		Script touchScript = new Script("script2", firstSprite);
-		touchScript.setTouchScript(true);
+		Script startScript = new StartScript("startscript", firstSprite);
+		Script touchScript = new TapScript("script2", firstSprite);
 
 		SetCostumeBrick setCostumeBrick = new SetCostumeBrick(firstSprite);
 		SetCostumeBrick setCostumeBrick2 = new SetCostumeBrick(firstSprite);
@@ -496,9 +515,8 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 		// sprite1 --------------------------------
 		Sprite firstSprite = new Sprite("sprite1");
-		Script startScript1 = new Script("start1", firstSprite);
-		Script touchScript1 = new Script("script1", firstSprite);
-		touchScript1.setTouchScript(true);
+		Script startScript1 = new StartScript("start1", firstSprite);
+		Script touchScript1 = new TapScript("script1", firstSprite);
 		// creating bricks:
 		SetCostumeBrick setCostumeBrick = new SetCostumeBrick(firstSprite);
 
@@ -511,9 +529,8 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 		// sprite2 --------------------------------
 		Sprite secondSprite = new Sprite("sprite2");
-		Script startScript2 = new Script("start2", secondSprite);
-		Script touchScript2 = new Script("script2", secondSprite);
-		touchScript2.setTouchScript(true);
+		Script startScript2 = new StartScript("start2", secondSprite);
+		Script touchScript2 = new TapScript("script2", secondSprite);
 		// creating bricks:
 		SetCostumeBrick setCostumeBrick2 = new SetCostumeBrick(secondSprite);
 		// adding bricks:
@@ -542,9 +559,8 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 		//creating sprites for project:
 		Sprite firstSprite = new Sprite("sprite1");
-		Script startScript = new Script("startscript", firstSprite);
-		Script touchScript = new Script("touchscript", firstSprite);
-		touchScript.setTouchScript(true);
+		Script startScript = new StartScript("startscript", firstSprite);
+		Script touchScript = new TapScript("touchscript", firstSprite);
 
 		SetCostumeBrick setCostumeBrick = new SetCostumeBrick(firstSprite);
 
@@ -572,9 +588,8 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 		//creating sprites for project:
 		Sprite firstSprite = new Sprite("sprite1");
-		Script startScript = new Script("startscript", firstSprite);
-		Script touchScript = new Script("touchscript", firstSprite);
-		touchScript.setTouchScript(true);
+		Script startScript = new StartScript("startscript", firstSprite);
+		Script touchScript = new TapScript("touchscript", firstSprite);
 
 		SetCostumeBrick setCostumeBrick = new SetCostumeBrick(firstSprite);
 		PlaySoundBrick playSoundBrick = new PlaySoundBrick(firstSprite);

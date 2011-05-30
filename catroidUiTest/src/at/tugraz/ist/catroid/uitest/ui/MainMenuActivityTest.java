@@ -22,10 +22,12 @@ package at.tugraz.ist.catroid.uitest.ui;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.ProjectManager;
@@ -34,6 +36,7 @@ import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.ComeToFrontBrick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
@@ -49,10 +52,10 @@ import com.jayway.android.robotium.solo.Solo;
 
 public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
 	private Solo solo;
-	private String testProject = "testProject";
-	private String testProject2 = "testProject2";
-	private String testProject3 = "testProject3";
-	private String existingProject = "existingProject";
+	private String testProject = Utils.PROJECTNAME1;
+	private String testProject2 = Utils.PROJECTNAME2;
+	private String testProject3 = Utils.PROJECTNAME3;
+	private String existingProject = Utils.PROJECTNAME4;
 
 	public MainMenuActivityTest() {
 		super("at.tugraz.ist.catroid", MainMenuActivity.class);
@@ -60,10 +63,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 
 	@Override
 	public void setUp() throws Exception {
-		Utils.clearProject(testProject);
-		Utils.clearProject(testProject2);
-		Utils.clearProject(testProject3);
-		Utils.clearProject(existingProject);
+		Utils.clearAllUtilTestProjects();
 		solo = new Solo(getInstrumentation(), getActivity());
 	}
 
@@ -75,12 +75,8 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 			e.printStackTrace();
 		}
 		getActivity().finish();
+		Utils.clearAllUtilTestProjects();
 		super.tearDown();
-
-		Utils.clearProject(testProject);
-		Utils.clearProject(testProject2);
-		Utils.clearProject(testProject3);
-		Utils.clearProject(existingProject);
 	}
 
 	public void testCreateNewProject() throws InterruptedException {
@@ -95,7 +91,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		solo.clickOnButton(getActivity().getString(R.string.new_project_dialog_button));
 		Thread.sleep(2000);
 
-		File file = new File(Consts.DEFAULT_ROOT + "/testProject/" + testProject + Consts.PROJECT_EXTENTION);
+		File file = new File(Consts.DEFAULT_ROOT + "/" + testProject + "/" + testProject + Consts.PROJECT_EXTENTION);
 		assertTrue(testProject + " was not created!", file.exists());
 	}
 
@@ -148,9 +144,9 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 
 		createTestProject(testProject2);
 
-		solo.clickOnButton(getActivity().getString(R.string.load_project));
+		solo.clickOnButton(getActivity().getString(R.string.projects_on_phone));
 		solo.clickOnText(testProject2);
-		ListView spritesList = (ListView) solo.getCurrentActivity().findViewById(R.id.sprite_list_view);
+		ListView spritesList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
 		Sprite first = (Sprite) spritesList.getItemAtPosition(1);
 		assertEquals("Sprite at index 1 is not \"cat\"!", "cat", first.getName());
 		Sprite second = (Sprite) spritesList.getItemAtPosition(2);
@@ -160,9 +156,9 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		Sprite fourth = (Sprite) spritesList.getItemAtPosition(4);
 		assertEquals("Sprite at index 4 is not \"pig\"!", "pig", fourth.getName());
 		solo.goBack();
-		TextView currentProject = (TextView) getActivity().findViewById(R.id.currentProjectNameTextView);
-		assertEquals("Current project is not testProject2!", getActivity().getString(R.string.current_project) + " "
-				+ testProject2, currentProject.getText());
+		//		TextView currentProject = (TextView) getActivity().findViewById(R.id.currentProjectNameTextView);
+		//		assertEquals("Current project is not testProject2!", getActivity().getString(R.string.current_project) + " "
+		//				+ testProject2, currentProject.getText());
 	}
 
 	public void testResume() throws NameNotFoundException, IOException {
@@ -172,18 +168,18 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 
 		createTestProject(testProject3);
 
-		solo.clickOnButton(getActivity().getString(R.string.load_project));
+		solo.clickOnButton(getActivity().getString(R.string.projects_on_phone));
 		solo.clickOnText(testProject3);
 		solo.goBack();
 
-		solo.clickOnButton(getActivity().getString(R.string.resume));
+		solo.clickOnButton(getActivity().getString(R.string.current_project_button));
 
-		TextView projectTitle = (TextView) solo.getCurrentActivity().findViewById(R.id.project_title_text_view);
+		//		TextView projectTitle = (TextView) solo.getCurrentActivity().findViewById(R.id.project_title_text_view);
+		//
+		//		assertEquals("Project title is not " + testProject3, getActivity().getString(R.string.project_name)
+		//				+ " " + testProject3, projectTitle.getText());
 
-		assertEquals("Project title is not " + testProject3, getActivity().getString(R.string.project_name)
-				+ " " + testProject3, projectTitle.getText());
-
-		ListView spritesList = (ListView) solo.getCurrentActivity().findViewById(R.id.sprite_list_view);
+		ListView spritesList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
 		Sprite first = (Sprite) spritesList.getItemAtPosition(1);
 		assertEquals("Sprite at index 1 is not \"cat\"!", "cat", first.getName());
 		Sprite second = (Sprite) spritesList.getItemAtPosition(2);
@@ -206,8 +202,14 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 				.get(2).getText().toString());
 	}
 
-	public void testToStageButton() {
-		solo.clickOnButton(getActivity().getString(R.string.construction_site_play));
+	public void testPlayButton() {
+		List<ImageButton> btnList = solo.getCurrentImageButtons();
+		for (int i = 0; i < btnList.size(); i++) {
+			ImageButton btn = btnList.get(i);
+			if (btn.getId() == R.id.btn_action_play) {
+				solo.clickOnImageButton(i);
+			}
+		}
 		assertTrue("StageActivity is not showing!", solo.getCurrentActivity() instanceof StageActivity);
 	}
 
@@ -232,7 +234,13 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		StorageHandler handler = StorageHandler.getInstance();
 		ProjectManager project = ProjectManager.getInstance();
 		project.setProject(handler.createDefaultProject(getActivity()));
-		solo.clickOnButton(1);
+		List<ImageButton> btnList = solo.getCurrentImageButtons();
+		for (int i = 0; i < btnList.size(); i++) {
+			ImageButton btn = btnList.get(i);
+			if (btn.getId() == R.id.btn_action_play) {
+				solo.clickOnImageButton(i);
+			}
+		}
 		Thread.sleep(1500);
 		Bitmap bitmap = project.getCurrentProject().getSpriteList().get(1).getCostume().getBitmap();
 		assertNotNull("Bitmap is null", bitmap);
@@ -254,8 +262,8 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		Sprite secondSprite = new Sprite("dog");
 		Sprite thirdSprite = new Sprite("horse");
 		Sprite fourthSprite = new Sprite("pig");
-		Script testScript = new Script("testScript", firstSprite);
-		Script otherScript = new Script("otherScript", secondSprite);
+		Script testScript = new StartScript("testScript", firstSprite);
+		Script otherScript = new StartScript("otherScript", secondSprite);
 		HideBrick hideBrick = new HideBrick(firstSprite);
 		ShowBrick showBrick = new ShowBrick(firstSprite);
 		ScaleCostumeBrick scaleCostumeBrick = new ScaleCostumeBrick(secondSprite, scaleValue);

@@ -31,6 +31,8 @@ import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.StartScript;
+import at.tugraz.ist.catroid.content.TapScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.ChangeXByBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeYByBrick;
@@ -84,8 +86,8 @@ public class StorageHandlerTest extends AndroidTestCase {
 		Sprite secondSprite = new Sprite("second");
 		Sprite thirdSprite = new Sprite("third");
 		Sprite fourthSprite = new Sprite("fourth");
-		Script testScript = new Script("testScript", firstSprite);
-		Script otherScript = new Script("otherScript", secondSprite);
+		Script testScript = new StartScript("testScript", firstSprite);
+		Script otherScript = new StartScript("otherScript", secondSprite);
 		HideBrick hideBrick = new HideBrick(firstSprite);
 		ShowBrick showBrick = new ShowBrick(firstSprite);
 		ScaleCostumeBrick scaleCostumeBrick = new ScaleCostumeBrick(secondSprite, scaleValue);
@@ -140,8 +142,6 @@ public class StorageHandlerTest extends AndroidTestCase {
 		assertEquals("YPosition was not deserialized right", yPosition, ((PlaceAtBrick) (postSpriteList.get(2)
 				.getScriptList().get(0).getBrickList().get(0))).getYPosition());
 
-		assertEquals("isTouchScript should not be set in script", preSpriteList.get(1).getScriptList().get(0)
-				.isTouchScript(), postSpriteList.get(1).getScriptList().get(0).isTouchScript());
 		assertFalse("paused should not be set in script", preSpriteList.get(1).getScriptList().get(0).isPaused());
 
 		// Test version codes and names
@@ -172,15 +172,15 @@ public class StorageHandlerTest extends AndroidTestCase {
 
 		//test if images are existing:
 		String imagePath = Consts.DEFAULT_ROOT + "/" + getContext().getString(R.string.default_project_name)
-				+ Consts.IMAGE_DIRECTORY + "/" + Consts.CAT1;
+				+ Consts.IMAGE_DIRECTORY + "/" + Consts.NORMAL_CAT;
 		File testFile = new File(imagePath);
-		assertTrue("Image " + Consts.CAT1 + " does not exist", testFile.exists());
+		assertTrue("Image " + Consts.NORMAL_CAT + " does not exist", testFile.exists());
 		imagePath = Consts.DEFAULT_ROOT + "/" + getContext().getString(R.string.default_project_name)
-				+ Consts.IMAGE_DIRECTORY + "/" + Consts.CAT2;
+				+ Consts.IMAGE_DIRECTORY + "/" + Consts.BANZAI_CAT;
 		testFile = new File(imagePath);
-		assertTrue("Image " + Consts.CAT2 + " does not exist", testFile.exists());
+		assertTrue("Image " + Consts.BANZAI_CAT + " does not exist", testFile.exists());
 		imagePath = Consts.DEFAULT_ROOT + "/" + getContext().getString(R.string.default_project_name)
-				+ Consts.IMAGE_DIRECTORY + "/" + Consts.CAT3;
+				+ Consts.IMAGE_DIRECTORY + "/" + Consts.CHESHIRE_CAT;
 		testFile = new File(imagePath);
 		assertTrue("Image " + Consts.BACKGROUND + " does not exist", testFile.exists());
 		imagePath = Consts.DEFAULT_ROOT + "/" + getContext().getString(R.string.default_project_name)
@@ -201,8 +201,8 @@ public class StorageHandlerTest extends AndroidTestCase {
 
 		Project project = new Project(getContext(), projectName);
 		Sprite sprite = new Sprite("testSprite");
-		Script script = new Script("testScript", sprite);
-		Script touchedScript = new Script("touchedScript", sprite);
+		Script script = new StartScript("testScript", sprite);
+		Script touchedScript = new TapScript("touchedScript", sprite);
 		sprite.getScriptList().add(script);
 		sprite.getScriptList().add(touchedScript);
 		project.getSpriteList().add(sprite);
@@ -234,7 +234,7 @@ public class StorageHandlerTest extends AndroidTestCase {
 		}
 
 		StorageHandler.getInstance().saveProject(project);
-		String spf = StorageHandler.getInstance().getProjectfileAsString(projectName);
+		String spf = Utils.getProjectfileAsString(projectName);
 		assertFalse("project contains package information", spf.contains("at.tugraz.ist"));
 
 		proj = new File(Consts.DEFAULT_ROOT + "/" + projectName);

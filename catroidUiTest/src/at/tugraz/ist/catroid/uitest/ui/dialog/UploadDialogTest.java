@@ -20,10 +20,12 @@
 package at.tugraz.ist.catroid.uitest.ui.dialog;
 
 import java.io.File;
+import java.util.List;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 import android.view.View;
+import android.widget.ImageButton;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
@@ -34,8 +36,8 @@ import com.jayway.android.robotium.solo.Solo;
 
 public class UploadDialogTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
 	private Solo solo;
-	private String testProject = "testProject";
-	private String newTestProject = "newProjectToTest";
+	private String testProject = Utils.PROJECTNAME1;
+	private String newTestProject = Utils.PROJECTNAME2;
 
 	public UploadDialogTest() {
 		super("at.tugraz.ist.catroid", MainMenuActivity.class);
@@ -44,16 +46,14 @@ public class UploadDialogTest extends ActivityInstrumentationTestCase2<MainMenuA
 	@Override
 	@UiThreadTest
 	public void setUp() throws Exception {
-		Utils.clearProject(testProject);
-		Utils.clearProject(newTestProject);
+		Utils.clearAllUtilTestProjects();
 		solo = new Solo(getInstrumentation(), getActivity());
 		super.setUp();
 	}
 
 	@Override
 	public void tearDown() throws Exception {
-		Utils.clearProject(testProject);
-		Utils.clearProject(newTestProject);
+		Utils.clearAllUtilTestProjects();
 		try {
 			solo.finalize();
 		} catch (Throwable e) {
@@ -116,6 +116,12 @@ public class UploadDialogTest extends ActivityInstrumentationTestCase2<MainMenuA
 
 		File file = new File(Consts.DEFAULT_ROOT + "/" + testProject + "/" + testProject + Consts.PROJECT_EXTENTION);
 		assertTrue(testProject + " was not created!", file.exists());
-		solo.clickOnButton(getActivity().getString(R.string.main_menu));
+		List<ImageButton> btnList = solo.getCurrentImageButtons();
+		for (int i = 0; i < btnList.size(); i++) {
+			ImageButton btn = btnList.get(i);
+			if (btn.getId() == R.id.btn_action_home) {
+				solo.clickOnImageButton(i);
+			}
+		}
 	}
 }

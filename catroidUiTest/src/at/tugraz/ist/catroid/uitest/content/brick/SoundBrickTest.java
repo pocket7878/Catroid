@@ -29,10 +29,12 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.Smoke;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.PlaySoundBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
@@ -130,7 +132,7 @@ public class SoundBrickTest extends ActivityInstrumentationTestCase2<ScriptActiv
 
 		project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
-		Script script = new Script("script", sprite);
+		Script script = new StartScript("script", sprite);
 		soundBrick = new PlaySoundBrick(sprite);
 		soundBrick.setPathToSoundfile(soundInfo.getTitle());
 		soundBrick.setTitle(selectedTitle);
@@ -149,9 +151,9 @@ public class SoundBrickTest extends ActivityInstrumentationTestCase2<ScriptActiv
 		BufferedInputStream inputStream = new BufferedInputStream(getInstrumentation().getContext().getResources()
 				.openRawResource(SOUND_FILE_ID));
 		soundFile = File.createTempFile("audioTest_new", ".mp3");
-		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(soundFile), 1024);
+		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(soundFile), Consts.BUFFER_8K);
 
-		byte[] buffer = new byte[1024];
+		byte[] buffer = new byte[Consts.BUFFER_8K];
 		int length = 0;
 		while ((length = inputStream.read(buffer)) > 0) {
 			outputStream.write(buffer, 0, length);

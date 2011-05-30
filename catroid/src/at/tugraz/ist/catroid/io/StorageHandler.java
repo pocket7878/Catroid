@@ -19,13 +19,11 @@
 package at.tugraz.ist.catroid.io;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,9 +49,12 @@ import at.tugraz.ist.catroid.content.Costume;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.StartScript;
+import at.tugraz.ist.catroid.content.TapScript;
 import at.tugraz.ist.catroid.content.bricks.ChangeXByBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeYByBrick;
 import at.tugraz.ist.catroid.content.bricks.ComeToFrontBrick;
+import at.tugraz.ist.catroid.content.bricks.GlideToBrick;
 import at.tugraz.ist.catroid.content.bricks.GoNStepsBackBrick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.IfStartedBrick;
@@ -89,6 +90,8 @@ public class StorageHandler {
 		xstream.alias("project", Project.class);
 		xstream.alias("sprite", Sprite.class);
 		xstream.alias("script", Script.class);
+		xstream.alias("startScript", StartScript.class);
+		xstream.alias("tapScript", TapScript.class);
 		xstream.alias("costume", Costume.class);
 
 		xstream.alias("changeXByBrick", ChangeXByBrick.class);
@@ -106,6 +109,7 @@ public class StorageHandler {
 		xstream.alias("setYBrick", SetYBrick.class);
 		xstream.alias("showBrick", ShowBrick.class);
 		xstream.alias("waitBrick", WaitBrick.class);
+		xstream.alias("glideToBrick", GlideToBrick.class);
 
 		if (!Environment.MEDIA_MOUNTED.equals(state)) {
 			throw new IOException("Could not read external storage");
@@ -183,7 +187,7 @@ public class StorageHandler {
 			}
 
 			BufferedWriter out = new BufferedWriter(new FileWriter(projectDirectoryName + "/" + project.getName()
-					+ Consts.PROJECT_EXTENTION));
+					+ Consts.PROJECT_EXTENTION), Consts.BUFFER_8K);
 
 			out.write(spfFile);
 			out.flush();
@@ -212,7 +216,6 @@ public class StorageHandler {
 		return true;
 	}
 
-	// TODO: Find a way to access sound files on the device
 	public void loadSoundContent(Context context) {
 		soundContent = new ArrayList<SoundInfo>();
 		String[] projectionOnOrig = { MediaStore.Audio.Media.DATA, MediaStore.Audio.AudioColumns.TITLE,
@@ -234,7 +237,7 @@ public class StorageHandler {
 				soundContent.add(info);
 			} while (cursor.moveToNext());
 		}
-		System.out.println("LOAD SOUND");
+		Log.v(TAG, "LOAD SOUND");
 		cursor.close();
 	}
 
@@ -322,7 +325,8 @@ public class StorageHandler {
 		String checksumCompressedFile = StorageHandler.getInstance().getMD5Checksum(outputFile);
 
 		FileChecksumContainer fileChecksumContainer = ProjectManager.getInstance().fileChecksumContainer;
-		String newFilePath = imageDirectory.getAbsolutePath() + "/" + checksumCompressedFile + "_" + inputFile.getName();
+		String newFilePath = imageDirectory.getAbsolutePath() + "/" + checksumCompressedFile + "_"
+				+ inputFile.getName();
 
 		if (!fileChecksumContainer.addChecksum(checksumCompressedFile, newFilePath)) {
 			outputFile.delete();
@@ -383,7 +387,7 @@ public class StorageHandler {
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(file);
-			byte[] buffer = new byte[8192];
+			byte[] buffer = new byte[Consts.BUFFER_8K];
 
 			int length = 0;
 
@@ -392,6 +396,7 @@ public class StorageHandler {
 			}
 		} catch (IOException e) {
 			Log.e(TAG, "IOException thrown in StorageHandler::getMD5Checksum");
+			e.printStackTrace();
 		} finally {
 			try {
 				if (fis != null) {
@@ -427,14 +432,14 @@ public class StorageHandler {
 		Sprite sprite = new Sprite("Catroid");
 		Sprite stageSprite = defaultProject.getSpriteList().get(0);
 		//scripts:
-		Script stageStartScript = new Script("stageStartScript", stageSprite);
-		Script startScript = new Script("startScript", sprite);
-		Script touchScript = new Script("touchScript", sprite);
-		touchScript.setTouchScript(true);
+		Script stageStartScript = new StartScript("stageStartScript", stageSprite);
+		Script startScript = new StartScript("startScript", sprite);
+		Script touchScript = new TapScript("touchScript", sprite);
 		//bricks:
-		File normalCat = savePictureFromResInProject(projectName, Consts.CAT1, R.drawable.catroid, context);
-		File banzaiCat = savePictureFromResInProject(projectName, Consts.CAT2, R.drawable.catroid_banzai, context);
-		File cheshireCat = savePictureFromResInProject(projectName, Consts.CAT3, R.drawable.catroid_cheshire, context);
+		File normalCat = savePictureFromResInProject(projectName, Consts.NORMAL_CAT, R.drawable.catroid, context);
+		File banzaiCat = savePictureFromResInProject(projectName, Consts.BANZAI_CAT, R.drawable.catroid_banzai, context);
+		File cheshireCat = savePictureFromResInProject(projectName, Consts.CHESHIRE_CAT, R.drawable.catroid_cheshire,
+				context);
 		File background = savePictureFromResInProject(projectName, Consts.BACKGROUND, R.drawable.background_blueish,
 				context);
 
@@ -484,8 +489,8 @@ public class StorageHandler {
 			testImage.createNewFile();
 		}
 		InputStream in = context.getResources().openRawResource(fileID);
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(testImage));
-		byte[] buffer = new byte[1024];
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(testImage), Consts.BUFFER_8K);
+		byte[] buffer = new byte[Consts.BUFFER_8K];
 		int length = 0;
 		while ((length = in.read(buffer)) > 0) {
 			out.write(buffer, 0, length);
@@ -496,31 +501,5 @@ public class StorageHandler {
 		out.close();
 
 		return testImage;
-	}
-
-	//TODO: Only used in tests, put it there! - don't wanna
-	public String getProjectfileAsString(String projectName) {
-		File projectFile = new File(Consts.DEFAULT_ROOT + "/" + projectName + "/" + projectName
-				+ Consts.PROJECT_EXTENTION);
-		if (!projectFile.exists()) {
-			return null;
-		}
-		StringBuilder contents = new StringBuilder();
-
-		try {
-			BufferedReader input = new BufferedReader(new FileReader(projectFile));
-			try {
-				String line = null;
-				while ((line = input.readLine()) != null) {
-					contents.append(line);
-					contents.append(System.getProperty("line.separator"));
-				}
-			} finally {
-				input.close();
-			}
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		return contents.toString();
 	}
 }

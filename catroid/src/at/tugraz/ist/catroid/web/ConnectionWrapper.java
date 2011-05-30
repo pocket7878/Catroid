@@ -29,11 +29,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+import at.tugraz.ist.catroid.common.Consts;
 
 public class ConnectionWrapper {
 
@@ -100,10 +101,10 @@ public class ConnectionWrapper {
 		file.getParentFile().mkdirs();
 		FileOutputStream fos = new FileOutputStream(file);
 
-		byte[] buffer = new byte[1024];
-		int len1 = 0;
-		while ((len1 = input.read(buffer)) != -1) {
-			fos.write(buffer, 0, len1);
+		byte[] buffer = new byte[Consts.BUFFER_8K];
+		int length = 0;
+		while ((length = input.read(buffer)) != -1) {
+			fos.write(buffer, 0, length);
 		}
 		input.close();
 		fos.flush();
@@ -117,7 +118,6 @@ public class ConnectionWrapper {
 		}
 
 		URL url = new URL(urlString);
-		//System.out.println("url: " + urlString);
 
 		String boundary = MultiPartFormOutputStream.createBoundary();
 		urlConn = (HttpURLConnection) MultiPartFormOutputStream.createConnection(url);

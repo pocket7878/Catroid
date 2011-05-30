@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!-- 
+/**
  *  Catroid: An on-device graphical programming language for Android devices
  *  Copyright (C) 2010  Catroid development team 
  *  (<http://code.google.com/p/catroid/wiki/Credits>)
@@ -17,13 +15,23 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- -->
- 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item
-		android:id="@+id/project_menu_rename"
-		android:title="@string/rename" />
-	<item
-		android:id="@+id/project_menu_delete"
-		android:title="@string/delete" />
-</menu>
+ */
+package at.tugraz.ist.catroid.content;
+
+public class StartScript extends Script {
+
+	private static final long serialVersionUID = 1L;
+
+	public StartScript(String name, Sprite sprite) {
+		super(name, sprite);
+		super.isFinished = false;
+	}
+
+	@Override
+	protected Object readResolve() {
+		isFinished = false;
+		super.readResolve();
+		return this;
+	}
+
+}

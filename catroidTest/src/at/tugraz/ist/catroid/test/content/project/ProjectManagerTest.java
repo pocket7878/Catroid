@@ -24,11 +24,13 @@ import java.io.IOException;
 import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.test.InstrumentationTestCase;
+import android.util.Log;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.ComeToFrontBrick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
@@ -40,6 +42,7 @@ import at.tugraz.ist.catroid.test.util.Utils;
 
 public class ProjectManagerTest extends InstrumentationTestCase {
 
+	private static final String TAG = "ProjectManagerTest";
 	String projectNameOne = "Ulumulu";
 	String scriptNameOne = "Ulukai";
 	String scriptNameTwo = "Ulukai2";
@@ -72,7 +75,7 @@ public class ProjectManagerTest extends InstrumentationTestCase {
 		assertNotNull("no current sprite set", manager.getCurrentSprite());
 		assertEquals("The Spritename is not " + spriteNameOne, spriteNameOne, manager.getCurrentSprite().getName());
 
-		Script script = new Script(scriptNameOne, sprite);
+		Script script = new StartScript(scriptNameOne, sprite);
 		manager.addScript(script);
 		manager.setCurrentScript(script);
 
@@ -108,7 +111,7 @@ public class ProjectManagerTest extends InstrumentationTestCase {
 		//addScript
 
 		manager.setCurrentSprite(sprite2);
-		Script script2 = new Script(scriptNameTwo, sprite2);
+		Script script2 = new StartScript(scriptNameTwo, sprite2);
 		manager.addScript(script2);
 		assertTrue("Script not in current Sprite", manager.getCurrentSprite().getScriptList().contains(script2));
 
@@ -116,7 +119,7 @@ public class ProjectManagerTest extends InstrumentationTestCase {
 
 		manager.setCurrentScript(script2);
 		SetCostumeBrick brick = new SetCostumeBrick(sprite2);
-		manager.addBrick(brick);
+		manager.getCurrentScript().addBrick(brick);
 		assertTrue("Brick not in current Script", manager.getCurrentScript().getBrickList().contains(brick));
 
 		//move brick already tested
@@ -142,7 +145,7 @@ public class ProjectManagerTest extends InstrumentationTestCase {
 		File newProjectFile = new File(Consts.DEFAULT_ROOT + "/" + newProjectName + "/" + newProjectName
 				+ Consts.PROJECT_EXTENTION);
 
-		String spfFileAsString = StorageHandler.getInstance().getProjectfileAsString(newProjectName);
+		String spfFileAsString = Utils.getProjectfileAsString(newProjectName);
 
 		assertFalse("Old project folder is still existing", oldProjectFolder.exists());
 		assertFalse("Old project file is still existing", oldProjectFile.exists());
@@ -151,7 +154,7 @@ public class ProjectManagerTest extends InstrumentationTestCase {
 		assertTrue("New project file is not existing", newProjectFile.exists());
 
 		//this fails because catroid is buggy, fix catroid not this test --> we haven't decided yet how to fix the FileChecksumContainer
-		System.out.println(spfFileAsString);
+		Log.v(TAG, spfFileAsString);
 		assertFalse("old projectName still in spf file", spfFileAsString.contains(oldProjectName));
 
 	}
@@ -170,8 +173,8 @@ public class ProjectManagerTest extends InstrumentationTestCase {
 		Sprite secondSprite = new Sprite("dog");
 		Sprite thirdSprite = new Sprite("horse");
 		Sprite fourthSprite = new Sprite("pig");
-		Script testScript = new Script("testScript", firstSprite);
-		Script otherScript = new Script("otherScript", secondSprite);
+		Script testScript = new StartScript("testScript", firstSprite);
+		Script otherScript = new StartScript("otherScript", secondSprite);
 		HideBrick hideBrick = new HideBrick(firstSprite);
 		ShowBrick showBrick = new ShowBrick(firstSprite);
 		SetCostumeBrick costumeBrick = new SetCostumeBrick(firstSprite);
