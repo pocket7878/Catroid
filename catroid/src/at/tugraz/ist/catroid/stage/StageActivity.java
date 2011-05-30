@@ -85,8 +85,8 @@ public class StageActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.stage_menu, menu);
+		//super.onCreateOptionsMenu(menu);
+		//getMenuInflater().inflate(R.menu.stage_menu, menu);
 		return true;
 	}
 
@@ -127,7 +127,9 @@ public class StageActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		manageLoadAndFinish();
+		super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.stage_menu, menu);
+		//manageLoadAndFinish();
 	}
 
 	private void manageLoadAndFinish() {
