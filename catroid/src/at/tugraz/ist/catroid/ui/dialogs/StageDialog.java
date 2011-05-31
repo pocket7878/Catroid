@@ -21,6 +21,9 @@ package at.tugraz.ist.catroid.ui.dialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout.LayoutParams;
 import at.tugraz.ist.catroid.R;
 
 /**
@@ -41,6 +44,45 @@ public class StageDialog extends Dialog {
 
 		setContentView(R.layout.dialog_stage);
 		setTitle(R.string.stage_dialog_title);
+		setCanceledOnTouchOutside(true);
+		getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
+		/*
+		 * this.setOnShowListener(new OnShowListener() {
+		 * public void onShow(DialogInterface dialog) {
+		 * InputMethodManager inputManager = (InputMethodManager) context
+		 * .getSystemService(Context.INPUT_METHOD_SERVICE);
+		 * inputManager.showSoftInput(findViewById(R.id.newSpriteNameEditText), InputMethodManager.SHOW_IMPLICIT);
+		 * }
+		 * });
+		 */
+
+		Button backToConstructionSiteButton = (Button) findViewById(R.id.back_to_construction_site_button);
+		backToConstructionSiteButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				//go to construction site
+			}
+		});
+
+		Button resume_current_project_button = (Button) findViewById(R.id.resume_current_project_button);
+		backToConstructionSiteButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				//go to construction site
+			}
+		});
+
+		Button restart_current_project_button = (Button) findViewById(R.id.restart_current_project_button);
+		backToConstructionSiteButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				//go to construction site
+			}
+		});
+
+		Button snapshot_button = (Button) findViewById(R.id.snapshot_button);
+		backToConstructionSiteButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				//go to construction site
+			}
+		});
 	}
 }

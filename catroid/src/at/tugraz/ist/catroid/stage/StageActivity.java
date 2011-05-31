@@ -31,6 +31,7 @@ import android.view.WindowManager;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.io.SoundManager;
+import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class StageActivity extends Activity {
@@ -127,7 +128,9 @@ public class StageActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		manageLoadAndFinish();
+		//manageLoadAndFinish();
+		StageDialog stageDialog = new StageDialog(this);
+		stageDialog.show();
 	}
 
 	private void manageLoadAndFinish() {
