@@ -18,10 +18,10 @@
  */
 package at.tugraz.ist.catroid.ui.dialogs;
 
-import android.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import at.tugraz.ist.catroid.R;
 
 /**
  * @author
@@ -43,5 +43,4 @@ public class StageDialog extends Dialog {
 		setTitle(R.string.stage_dialog_title);
 
 	}
-
 }

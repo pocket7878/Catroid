@@ -132,6 +132,13 @@
     <!-- Load project dialog -->
     <string name="load_project_dialog_title">Projekt laden</string>
 
+	<!--  Stage menu dialog -->
+	<string name="back_to_construction_site">back_to_construction_site</string>
+	<string name="resume_current_project">resume_current_project</string>
+	<string name="restart_current_project">restart_current_projet</string>
+	<string name="snapshot">snapshot</string>
+	<string name="stage_dialog_title">stage_dialog_title</string>
+	
     <!--  Stage context menu -->
     <string name="stagemenu_construction_site">Zur Baustelle</string>
     <string name="stagemenu_start">Abspielen/Pause</string>
