@@ -133,6 +133,13 @@
     <!-- Load project dialog -->
     <string name="load_project_dialog_title">Load Project</string>
 
+	<!--  Stage menu dialog -->
+	<string name="back_to_construction_site_button">back_to_construction_site</string>
+	<string name="resume_current_project_button">resume_current_project</string>
+	<string name="restart_current_project_button">restart_current_projet</string>
+	<string name="snapshot_button">snapshot</string>
+	<string name="stage_dialog_title">stage_dialog_title</string>
+	
     <!-- Stage context menu -->
     <string name="stagemenu_construction_site">To Construction Site</string>
     <string name="stagemenu_start">Play/Pause</string>
@@ -224,4 +231,5 @@
     <string name="upload_project_dialog_title">Upload project</string>
     <string name="project_rename">(Your project will be renamed.)</string>
     <string name="screenshot_ok">Screenshot saved</string>
+    
 </resources>

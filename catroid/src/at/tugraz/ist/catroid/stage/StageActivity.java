@@ -127,11 +127,7 @@ public class StageActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-
-		//		Menu menu = new Menu();
-		//		super.onCreateOptionsMenu(menu);
-		//		getMenuInflater().inflate(R.menu.stage_menu, menu);
-		//manageLoadAndFinish();
+		manageLoadAndFinish();
 	}
 
 	private void manageLoadAndFinish() {
