@@ -39,15 +39,16 @@ public class StageDialog extends Dialog {
 	private Activity activity;
 	private StageManager stageManager;
 	private SoundManager soundManager;
-	private boolean stagePlaying = true;
+	private boolean stagePlaying;
 	public static final String backToConstruction = "BACK_TO_CONSTRUCTION";
 
-	public StageDialog(Activity currentActivity, StageManager stageManager) {
+	public StageDialog(Activity currentActivity, StageManager stageManager, boolean stagePlaying) {
 		super(currentActivity);
 		this.context = currentActivity.getApplicationContext();
 		this.activity = currentActivity;
 		this.stageManager = stageManager;
 		this.soundManager = SoundManager.getInstance();
+		this.stagePlaying = stagePlaying;
 	}
 
 	@Override

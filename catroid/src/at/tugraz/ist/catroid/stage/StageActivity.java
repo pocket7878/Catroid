@@ -22,7 +22,6 @@ package at.tugraz.ist.catroid.stage;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.Window;
@@ -38,7 +37,7 @@ public class StageActivity extends Activity {
 	private SoundManager soundManager;
 	private StageManager stageManager;
 
-	//private boolean stagePlaying = false;
+	private boolean stagePlaying = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +54,7 @@ public class StageActivity extends Activity {
 			soundManager = SoundManager.getInstance();
 			stageManager = new StageManager(this);
 			stageManager.start();
-			//	stagePlaying = true;
+			stagePlaying = true;
 
 		}
 	}
@@ -83,12 +82,12 @@ public class StageActivity extends Activity {
 		stageManager.processOnTouch(coordX, coordY);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.stage_menu, menu);
-		return true;
-	}
+	//	@Override
+	//	public boolean onCreateOptionsMenu(Menu menu) {
+	//		super.onCreateOptionsMenu(menu);
+	//		getMenuInflater().inflate(R.menu.stage_menu, menu);
+	//		return true;
+	//	}
 
 	//	@Override
 	//	public boolean onOptionsItemSelected(MenuItem item) {
@@ -108,7 +107,7 @@ public class StageActivity extends Activity {
 		super.onStop();
 		soundManager.pause();
 		stageManager.pause(false);
-		//	stagePlaying = false;
+		stagePlaying = false;
 	}
 
 	@Override
@@ -116,7 +115,7 @@ public class StageActivity extends Activity {
 		super.onRestart();
 		stageManager.resume();
 		soundManager.resume();
-		//	stagePlaying = true;
+		stagePlaying = true;
 	}
 
 	@Override
@@ -128,7 +127,7 @@ public class StageActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		//manageLoadAndFinish();
-		StageDialog stageDialog = new StageDialog(this, stageManager);
+		StageDialog stageDialog = new StageDialog(this, stageManager, stagePlaying);
 		stageDialog.show();
 	}
 
@@ -161,9 +160,5 @@ public class StageActivity extends Activity {
 			return;
 		}
 		super.onResume();
-	}
-
-	public StageManager getStageManager() {
-		return stageManager;
 	}
 }
