@@ -25,7 +25,10 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.io.SoundManager;
+import at.tugraz.ist.catroid.stage.StageManager;
 
 /**
  * @author
@@ -34,12 +37,17 @@ import at.tugraz.ist.catroid.R;
 public class StageDialog extends Dialog {
 	private final Context context;
 	private Activity activity;
+	private StageManager stageManager;
+	private SoundManager soundManager;
+	private boolean stagePlaying = true;
 	public static final String backToConstruction = "BACK_TO_CONSTRUCTION";
 
-	public StageDialog(Activity currentActivity) {
+	public StageDialog(Activity currentActivity, StageManager stageManager) {
 		super(currentActivity);
 		this.context = currentActivity.getApplicationContext();
 		this.activity = currentActivity;
+		this.stageManager = stageManager;
+		this.soundManager = SoundManager.getInstance();
 	}
 
 	@Override
@@ -58,28 +66,50 @@ public class StageDialog extends Dialog {
 			}
 		});
 
-		Button resume_current_project_button = (Button) findViewById(R.id.resume_current_project_button);
-		resume_current_project_button.setOnClickListener(new View.OnClickListener() {
+		Button resumeCurrentProjectButton = (Button) findViewById(R.id.resume_current_project_button);
+		resumeCurrentProjectButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				cancel();
 			}
 		});
 
-		Button restart_current_project_button = (Button) findViewById(R.id.restart_current_project_button);
-		restart_current_project_button.setOnClickListener(new View.OnClickListener() {
+		Button restartCurrentProjectButton = (Button) findViewById(R.id.restart_current_project_button);
+		restartCurrentProjectButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				//go to construction site
+				//start or restart
+				pauseOrContinue();
+
 			}
 		});
 
-		Button snapshot_button = (Button) findViewById(R.id.snapshot_button);
-		snapshot_button.setOnClickListener(new View.OnClickListener() {
+		Button snapshotButton = (Button) findViewById(R.id.snapshot_button);
+		snapshotButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				//go to construction site
 			}
 		});
 	}
 
-	public void backToConstruction() {
+	private void backToConstruction() {
+		ProjectManager projectManager = ProjectManager.getInstance();
+		int currentSpritePos = projectManager.getCurrentSpritePosition();
+		int currentScriptPos = projectManager.getCurrentScriptPosition();
+		projectManager.loadProject(projectManager.getCurrentProject().getName(), this.context,
+				false);
+		projectManager.setCurrentSpriteWithPosition(currentSpritePos);
+		projectManager.setCurrentScriptWithPosition(currentScriptPos);
+		this.activity.finish();
+	}
+
+	private void pauseOrContinue() {
+		if (stagePlaying) {
+			stageManager.pause(true);
+			soundManager.pause();
+			stagePlaying = false;
+		} else {
+			stageManager.resume();
+			soundManager.resume();
+			stagePlaying = true;
+		}
 	}
 }

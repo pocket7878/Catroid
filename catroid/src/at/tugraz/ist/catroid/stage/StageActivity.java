@@ -23,12 +23,10 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
-import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
@@ -39,7 +37,8 @@ public class StageActivity extends Activity {
 	public static SurfaceView stage;
 	private SoundManager soundManager;
 	private StageManager stageManager;
-	private boolean stagePlaying = false;
+
+	//private boolean stagePlaying = false;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +55,7 @@ public class StageActivity extends Activity {
 			soundManager = SoundManager.getInstance();
 			stageManager = new StageManager(this);
 			stageManager.start();
-			stagePlaying = true;
+			//	stagePlaying = true;
 
 		}
 	}
@@ -91,25 +90,25 @@ public class StageActivity extends Activity {
 		return true;
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.stagemenuStart:
-				pauseOrContinue();
-				break;
-			case R.id.stagemenuConstructionSite:
-				manageLoadAndFinish(); //calls finish
-				break;
-		}
-		return true;
-	}
+	//	@Override
+	//	public boolean onOptionsItemSelected(MenuItem item) {
+	//		switch (item.getItemId()) {
+	//			case R.id.stagemenuStart:
+	//				//pauseOrContinue();
+	//				break;
+	//			case R.id.stagemenuConstructionSite:
+	//				//manageLoadAndFinish(); //calls finish
+	//				break;
+	//		}
+	//		return true;
+	//	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
 		soundManager.pause();
 		stageManager.pause(false);
-		stagePlaying = false;
+		//	stagePlaying = false;
 	}
 
 	@Override
@@ -117,7 +116,7 @@ public class StageActivity extends Activity {
 		super.onRestart();
 		stageManager.resume();
 		soundManager.resume();
-		stagePlaying = true;
+		//	stagePlaying = true;
 	}
 
 	@Override
@@ -129,32 +128,32 @@ public class StageActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		//manageLoadAndFinish();
-		StageDialog stageDialog = new StageDialog(this);
+		StageDialog stageDialog = new StageDialog(this, stageManager);
 		stageDialog.show();
 	}
 
-	private void manageLoadAndFinish() {
-		ProjectManager projectManager = ProjectManager.getInstance();
-		int currentSpritePos = projectManager.getCurrentSpritePosition();
-		int currentScriptPos = projectManager.getCurrentScriptPosition();
-		projectManager.loadProject(projectManager.getCurrentProject().getName(), this,
-				false);
-		projectManager.setCurrentSpriteWithPosition(currentSpritePos);
-		projectManager.setCurrentScriptWithPosition(currentScriptPos);
-		finish();
-	}
+	//	private void manageLoadAndFinish() {
+	//		ProjectManager projectManager = ProjectManager.getInstance();
+	//		int currentSpritePos = projectManager.getCurrentSpritePosition();
+	//		int currentScriptPos = projectManager.getCurrentScriptPosition();
+	//		projectManager.loadProject(projectManager.getCurrentProject().getName(), this,
+	//				false);
+	//		projectManager.setCurrentSpriteWithPosition(currentSpritePos);
+	//		projectManager.setCurrentScriptWithPosition(currentScriptPos);
+	//		finish();
+	//	}
 
-	private void pauseOrContinue() {
-		if (stagePlaying) {
-			stageManager.pause(true);
-			soundManager.pause();
-			stagePlaying = false;
-		} else {
-			stageManager.resume();
-			soundManager.resume();
-			stagePlaying = true;
-		}
-	}
+	//	private void pauseOrContinue() {
+	//		if (stagePlaying) {
+	//			stageManager.pause(true);
+	//			soundManager.pause();
+	//			stagePlaying = false;
+	//		} else {
+	//			stageManager.resume();
+	//			soundManager.resume();
+	//			stagePlaying = true;
+	//		}
+	//	}
 
 	@Override
 	protected void onResume() {
@@ -162,5 +161,9 @@ public class StageActivity extends Activity {
 			return;
 		}
 		super.onResume();
+	}
+
+	public StageManager getStageManager() {
+		return stageManager;
 	}
 }
