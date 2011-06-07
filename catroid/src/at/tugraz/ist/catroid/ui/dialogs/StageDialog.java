@@ -57,7 +57,7 @@ public class StageDialog extends Dialog {
 
 		setContentView(R.layout.dialog_stage);
 		setTitle(R.string.stage_dialog_title);
-		setCanceledOnTouchOutside(true);
+		//setCanceledOnTouchOutside(true);
 		this.getWindow().setGravity(Gravity.LEFT);
 
 		Button backToConstructionSiteButton = (Button) findViewById(R.id.back_to_construction_site_button);
@@ -70,6 +70,9 @@ public class StageDialog extends Dialog {
 		Button resumeCurrentProjectButton = (Button) findViewById(R.id.resume_current_project_button);
 		resumeCurrentProjectButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				//				stageManager.resume();
+				//				soundManager.resume();
+				//				stagePlaying = true;
 				cancel();
 			}
 		});
@@ -78,8 +81,9 @@ public class StageDialog extends Dialog {
 		restartCurrentProjectButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				//start or restart
-				pauseOrContinue();
-
+				//				stageManager.resume();
+				//				soundManager.resume();
+				//				stagePlaying = true;
 			}
 		});
 
@@ -102,15 +106,48 @@ public class StageDialog extends Dialog {
 		this.activity.finish();
 	}
 
+	@Override
+	public void onBackPressed() {
+		//manageLoadAndFinish();
+		//		stageManager.pause(true);
+		//		soundManager.pause();
+		//		stagePlaying = false;
+		pauseOrContinue();
+	}
+
+	//	private void manageLoadAndFinish() {
+	//		ProjectManager projectManager = ProjectManager.getInstance();
+	//		int currentSpritePos = projectManager.getCurrentSpritePosition();
+	//		int currentScriptPos = projectManager.getCurrentScriptPosition();
+	//		projectManager.loadProject(projectManager.getCurrentProject().getName(), this,
+	//				false);
+	//		projectManager.setCurrentSpriteWithPosition(currentSpritePos);
+	//		projectManager.setCurrentScriptWithPosition(currentScriptPos);
+	//		finish();
+	//	}
+
 	private void pauseOrContinue() {
 		if (stagePlaying) {
 			stageManager.pause(true);
 			soundManager.pause();
 			stagePlaying = false;
+			this.show();
 		} else {
 			stageManager.resume();
 			soundManager.resume();
 			stagePlaying = true;
+			this.dismiss();
 		}
 	}
+	//	private void pauseOrContinue() {
+	//		if (stagePlaying) {
+	//			stageManager.pause(false);
+	//			soundManager.pause();
+	//			stagePlaying = false;
+	//		} else {
+	//			stageManager.resume();
+	//			soundManager.resume();
+	//			stagePlaying = true;
+	//		}
+	//	}
 }

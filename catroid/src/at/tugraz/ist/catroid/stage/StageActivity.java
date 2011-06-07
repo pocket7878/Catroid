@@ -36,8 +36,9 @@ public class StageActivity extends Activity {
 	public static SurfaceView stage;
 	private SoundManager soundManager;
 	private StageManager stageManager;
+	private StageDialog stageDialog;
 
-	private boolean stagePlaying = false;
+	private boolean stagePlaying = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class StageActivity extends Activity {
 			soundManager = SoundManager.getInstance();
 			stageManager = new StageManager(this);
 			stageManager.start();
-			stagePlaying = true;
+			stageDialog = new StageDialog(this, stageManager, stagePlaying);
 
 		}
 	}
@@ -127,8 +128,10 @@ public class StageActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		//manageLoadAndFinish();
-		StageDialog stageDialog = new StageDialog(this, stageManager, stagePlaying);
-		stageDialog.show();
+		//		stageManager.pause(true);
+		//		soundManager.pause();
+		//		stagePlaying = false;
+		pauseOrContinue();
 	}
 
 	//	private void manageLoadAndFinish() {
@@ -142,17 +145,19 @@ public class StageActivity extends Activity {
 	//		finish();
 	//	}
 
-	//	private void pauseOrContinue() {
-	//		if (stagePlaying) {
-	//			stageManager.pause(true);
-	//			soundManager.pause();
-	//			stagePlaying = false;
-	//		} else {
-	//			stageManager.resume();
-	//			soundManager.resume();
-	//			stagePlaying = true;
-	//		}
-	//	}
+	private void pauseOrContinue() {
+		if (stagePlaying) {
+			stageManager.pause(true);
+			soundManager.pause();
+			stagePlaying = false;
+			stageDialog.show();
+		} else {
+			stageManager.resume();
+			soundManager.resume();
+			stagePlaying = true;
+			stageDialog.dismiss();
+		}
+	}
 
 	@Override
 	protected void onResume() {

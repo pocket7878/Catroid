@@ -256,33 +256,33 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		assertEquals("spf File changed!", mySpfFile.hashCode(), mySpfFile2.hashCode());
 	}
 
-	public void testPlayPauseHomeButton() {
-		double scale = 50.0;
-
-		Project project = new Project(getActivity(), projectName);
-		Sprite sprite = new Sprite("testSprite");
-		Script script = new StartScript("script", sprite);
-		WaitBrick waitBrick = new WaitBrick(sprite, 5000);
-		ScaleCostumeBrick scaleCostumeBrick = new ScaleCostumeBrick(sprite, scale);
-
-		script.getBrickList().add(waitBrick);
-		script.getBrickList().add(scaleCostumeBrick);
-		sprite.getScriptList().add(script);
-		project.getSpriteList().add(sprite);
-
-		storageHandler.saveProject(project);
-		ProjectManager.getInstance().setProject(project);
-
-		solo.clickOnImageButton(1);
-
-		assertEquals(100.0, sprite.getScale());
-		solo.pressMenuItem(1);
-		solo.sleep(6000);
-		solo.pressMenuItem(1);
-		assertEquals(100.0, sprite.getScale());
-		solo.sleep(4000);
-		assertEquals(scale, sprite.getScale());
-	}
+	//	public void testPlayPauseHomeButton() {
+	//		double scale = 50.0;
+	//
+	//		Project project = new Project(getActivity(), projectName);
+	//		Sprite sprite = new Sprite("testSprite");
+	//		Script script = new StartScript("script", sprite);
+	//		WaitBrick waitBrick = new WaitBrick(sprite, 5000);
+	//		ScaleCostumeBrick scaleCostumeBrick = new ScaleCostumeBrick(sprite, scale);
+	//
+	//		script.getBrickList().add(waitBrick);
+	//		script.getBrickList().add(scaleCostumeBrick);
+	//		sprite.getScriptList().add(script);
+	//		project.getSpriteList().add(sprite);
+	//
+	//		storageHandler.saveProject(project);
+	//		ProjectManager.getInstance().setProject(project);
+	//
+	//		solo.clickOnImageButton(1);
+	//
+	//		assertEquals(100.0, sprite.getScale());
+	//		solo.pressMenuItem(1);
+	//		solo.sleep(6000);
+	//		solo.pressMenuItem(1);
+	//		assertEquals(100.0, sprite.getScale());
+	//		solo.sleep(4000);
+	//		assertEquals(scale, sprite.getScale());
+	//	}
 
 	public void testZValue() {
 		createTestProject3(this.projectName);
