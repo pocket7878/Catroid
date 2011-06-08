@@ -21,6 +21,7 @@ package at.tugraz.ist.catroid.ui.dialogs;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -40,15 +41,19 @@ public class StageDialog extends Dialog {
 	private StageManager stageManager;
 	private SoundManager soundManager;
 	private boolean stagePlaying;
+
+	private SharedPreferences prefs;
+	public static final String PREFS_NAME = "stagePrefs";
+
 	public static final String backToConstruction = "BACK_TO_CONSTRUCTION";
 
-	public StageDialog(Activity currentActivity, StageManager stageManager, boolean stagePlaying) {
+	public StageDialog(Activity currentActivity, StageManager stageManager) {
 		super(currentActivity);
 		this.context = currentActivity.getApplicationContext();
 		this.activity = currentActivity;
 		this.stageManager = stageManager;
 		this.soundManager = SoundManager.getInstance();
-		this.stagePlaying = stagePlaying;
+		//this.stagePlaying = stagePlaying;
 	}
 
 	@Override
@@ -74,6 +79,7 @@ public class StageDialog extends Dialog {
 				//				soundManager.resume();
 				//				stagePlaying = true;
 				cancel();
+				pauseOrContinue();
 			}
 		});
 
@@ -108,6 +114,7 @@ public class StageDialog extends Dialog {
 
 	@Override
 	public void onBackPressed() {
+		//stagePlaying = false;
 		//manageLoadAndFinish();
 		//		stageManager.pause(true);
 		//		soundManager.pause();
@@ -130,12 +137,12 @@ public class StageDialog extends Dialog {
 		if (stagePlaying) {
 			stageManager.pause(true);
 			soundManager.pause();
-			stagePlaying = false;
+			stagePlaying = true;
 			this.show();
 		} else {
 			stageManager.resume();
 			soundManager.resume();
-			stagePlaying = true;
+			stagePlaying = false;
 			this.dismiss();
 		}
 	}

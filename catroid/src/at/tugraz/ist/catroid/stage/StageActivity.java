@@ -55,8 +55,7 @@ public class StageActivity extends Activity {
 			soundManager = SoundManager.getInstance();
 			stageManager = new StageManager(this);
 			stageManager.start();
-			stageDialog = new StageDialog(this, stageManager, stagePlaying);
-
+			stageDialog = new StageDialog(this, stageManager);
 		}
 	}
 
@@ -132,6 +131,7 @@ public class StageActivity extends Activity {
 		//		soundManager.pause();
 		//		stagePlaying = false;
 		pauseOrContinue();
+		stagePlaying = !stagePlaying;
 	}
 
 	//	private void manageLoadAndFinish() {
@@ -155,7 +155,7 @@ public class StageActivity extends Activity {
 			stageManager.resume();
 			soundManager.resume();
 			stagePlaying = true;
-			stageDialog.dismiss();
+			//stageDialog.dismiss();
 		}
 	}
 
