@@ -22,28 +22,24 @@ package at.tugraz.ist.catroid.stage;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Vibrator;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Costume;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.utils.ImageEditing;
 
 /**
  * 
@@ -57,27 +53,27 @@ public class CanvasDraw implements IDraw {
 	private SurfaceHolder holder;
 	private Bitmap canvasBitmap;
 	private Canvas bufferCanvas;
-	private boolean firstRun;
+	//private boolean firstRun;
 	private Rect flushRectangle;
-	private Bitmap screenshotIcon;
-	private int screenshotIconPosX;
-	private Activity activity;
+	//private Bitmap screenshotIcon;
+	//private int screenshotIconPosX;
+	//private Activity activity;
 	ArrayList<Sprite> sprites;
 
 	public CanvasDraw(Activity activity) {
 		super();
-		this.activity = activity;
+		//this.activity = activity;
 		surfaceView = StageActivity.stage;
 		holder = surfaceView.getHolder();
 		whitePaint = new Paint();
 		whitePaint.setStyle(Paint.Style.FILL);
 		whitePaint.setColor(Color.WHITE);
-		firstRun = true;
+		//firstRun = true;
 		canvasBitmap = Bitmap.createBitmap(Values.SCREEN_WIDTH, Values.SCREEN_HEIGHT, Bitmap.Config.RGB_565);
 		bufferCanvas = new Canvas(canvasBitmap);
 		flushRectangle = new Rect(0, 0, Values.SCREEN_WIDTH, Values.SCREEN_HEIGHT);
-		screenshotIcon = BitmapFactory.decodeResource(activity.getResources(), R.drawable.ic_screenshot);
-		screenshotIconPosX = Values.SCREEN_WIDTH - screenshotIcon.getWidth() - Consts.SCREENSHOT_ICON_PADDING_RIGHT;
+		//screenshotIcon = BitmapFactory.decodeResource(activity.getResources(), R.drawable.ic_screenshot);
+		//screenshotIconPosX = Values.SCREEN_WIDTH - screenshotIcon.getWidth() - Consts.SCREENSHOT_ICON_PADDING_RIGHT;
 		sprites = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject().getSpriteList();
 	}
 
@@ -102,14 +98,8 @@ public class CanvasDraw implements IDraw {
 					sprite.setToDraw(false);
 				}
 			}
-			bufferCanvas.drawBitmap(screenshotIcon, screenshotIconPosX, Consts.SCREENSHOT_ICON_PADDING_TOP, null);
 			canvas.drawBitmap(canvasBitmap, 0, 0, null);
 			holder.unlockCanvasAndPost(canvas);
-
-			if (firstRun) {
-				saveThumbnail(false);
-				firstRun = false;
-			}
 
 			return true;
 		} catch (Exception e) {
@@ -118,51 +108,37 @@ public class CanvasDraw implements IDraw {
 	}
 
 	public synchronized void drawPauseScreen(Bitmap pauseBitmap) {
-		Paint greyPaint = new Paint();
-		greyPaint.setStyle(Paint.Style.FILL);
-		greyPaint.setColor(Color.DKGRAY);
-		canvas = holder.lockCanvas();
-		if (canvas != null) {
-			canvas.drawRect(new Rect(0, 0, canvas.getWidth(), canvas.getHeight()), greyPaint);
-			if (pauseBitmap != null) {
-				Bitmap scaledPauseBitmap = ImageEditing.scaleBitmap(pauseBitmap,
-						(canvas.getWidth() / 2f) / pauseBitmap.getWidth(), false);
-				int posX = canvas.getWidth() / 2 - scaledPauseBitmap.getWidth() / 2;
-				int posY = canvas.getHeight() / 2 - scaledPauseBitmap.getHeight() / 2;
-				canvas.drawBitmap(scaledPauseBitmap, posX, posY, null);
-			}
-		}
-		holder.unlockCanvasAndPost(canvas);
-
+		//		Paint greyPaint = new Paint();
+		//		greyPaint.setStyle(Paint.Style.FILL);
+		//		greyPaint.setColor(Color.DKGRAY);
+		//		canvas = holder.lockCanvas();
+		//		if (canvas != null) {
+		//			canvas.drawRect(new Rect(0, 0, canvas.getWidth(), canvas.getHeight()), greyPaint);
+		//			if (pauseBitmap != null) {
+		//				Bitmap scaledPauseBitmap = ImageEditing.scaleBitmap(pauseBitmap,
+		//						(canvas.getWidth() / 2f) / pauseBitmap.getWidth(), false);
+		//				int posX = canvas.getWidth() / 2 - scaledPauseBitmap.getWidth() / 2;
+		//				int posY = canvas.getHeight() / 2 - scaledPauseBitmap.getHeight() / 2;
+		//				canvas.drawBitmap(scaledPauseBitmap, posX, posY, null);
+		//			}
+		//		}
+		//		holder.unlockCanvasAndPost(canvas);
+		//
 	}
 
-	public void processOnTouch(int coordX, int coordY) {
-		CharSequence text;
-		if (coordX >= screenshotIconPosX && coordY <= Consts.SCREENSHOT_ICON_PADDING_TOP + screenshotIcon.getHeight()) {
-			Vibrator vibr = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
-			vibr.vibrate(100);
-			if (saveThumbnail(true)) {
-				text = activity.getString(R.string.screenshot_ok);
-			} else {
-				text = activity.getString(R.string.error_screenshot_failed);
-			}
-
-			Toast toast = Toast.makeText(activity, text, Toast.LENGTH_SHORT);
-			toast.show();
-		}
-
+	public void processOnTouch(int coordX, int coordY) { //TODO: only DUmmy??
 	}
 
-	public boolean saveThumbnail(boolean overwrite) {
+	public boolean saveScreenshot() {
 		try {
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyymmddhhmmss");
+
 			String path = Consts.DEFAULT_ROOT + "/" + ProjectManager.getInstance().getCurrentProject().getName() + "/";
-			File file = new File(path + Consts.SCREENSHOT_FILE_NAME);
+			File file = new File(path + sdf.format(cal.getTime()) + Consts.SCREENSHOT_FILE_NAME);
 			File noMediaFile = new File(path + ".nomedia");
 			if (!noMediaFile.exists()) {
 				noMediaFile.createNewFile();
-			}
-			if (file.exists() && !overwrite) {
-				return false;
 			}
 
 			FileOutputStream fileOutputStream = new FileOutputStream(file.getAbsolutePath());

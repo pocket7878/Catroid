@@ -82,26 +82,6 @@ public class StageActivity extends Activity {
 		stageManager.processOnTouch(coordX, coordY);
 	}
 
-	//	@Override
-	//	public boolean onCreateOptionsMenu(Menu menu) {
-	//		super.onCreateOptionsMenu(menu);
-	//		getMenuInflater().inflate(R.menu.stage_menu, menu);
-	//		return true;
-	//	}
-
-	//	@Override
-	//	public boolean onOptionsItemSelected(MenuItem item) {
-	//		switch (item.getItemId()) {
-	//			case R.id.stagemenuStart:
-	//				//pauseOrContinue();
-	//				break;
-	//			case R.id.stagemenuConstructionSite:
-	//				//manageLoadAndFinish(); //calls finish
-	//				break;
-	//		}
-	//		return true;
-	//	}
-
 	@Override
 	protected void onStop() {
 		super.onStop();
@@ -126,24 +106,9 @@ public class StageActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		//manageLoadAndFinish();
-		//		stageManager.pause(true);
-		//		soundManager.pause();
-		//		stagePlaying = false;
 		pauseOrContinue();
 		stagePlaying = !stagePlaying;
 	}
-
-	//	private void manageLoadAndFinish() {
-	//		ProjectManager projectManager = ProjectManager.getInstance();
-	//		int currentSpritePos = projectManager.getCurrentSpritePosition();
-	//		int currentScriptPos = projectManager.getCurrentScriptPosition();
-	//		projectManager.loadProject(projectManager.getCurrentProject().getName(), this,
-	//				false);
-	//		projectManager.setCurrentSpriteWithPosition(currentSpritePos);
-	//		projectManager.setCurrentScriptWithPosition(currentScriptPos);
-	//		finish();
-	//	}
 
 	private void pauseOrContinue() {
 		if (stagePlaying) {
@@ -155,7 +120,6 @@ public class StageActivity extends Activity {
 			stageManager.resume();
 			soundManager.resume();
 			stagePlaying = true;
-			//stageDialog.dismiss();
 		}
 	}
 

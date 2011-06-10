@@ -34,7 +34,7 @@ public class StageManager {
 	private Activity activity;
 	protected ArrayList<Sprite> spriteList;
 	private Boolean spritesChanged;
-	private IDraw draw;
+	private CanvasDraw draw;//maybe horrible in other parts of code
 	private boolean isPaused;
 	private Handler handler = new Handler();
 
@@ -77,8 +77,12 @@ public class StageManager {
 		return draw.draw();
 	}
 
+	public boolean saveScreenshot() {
+		draw.draw();
+		return draw.saveScreenshot();
+	}
+
 	public void processOnTouch(int coordX, int coordY) {
-		draw.processOnTouch(coordX, coordY);
 		ArrayList<Sprite> touchedSpriteList = new ArrayList<Sprite>();
 		for (Sprite sprite : spriteList) {
 			if (sprite.processOnTouch(coordX, coordY)) {
