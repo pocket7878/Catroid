@@ -47,6 +47,7 @@ import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetXBrick;
 import at.tugraz.ist.catroid.content.bricks.SetYBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
+import at.tugraz.ist.catroid.content.bricks.VibrateBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
 import at.tugraz.ist.catroid.ui.ScriptActivity;
 import at.tugraz.ist.catroid.ui.adapter.PrototypeBrickAdapter;
@@ -67,6 +68,7 @@ public class AddBrickDialog extends Dialog {
 			prototypeBrickList.add(new SetCostumeBrick(sprite));
 			prototypeBrickList.add(new ScaleCostumeBrick(sprite, 100));
 			prototypeBrickList.add(new PlaySoundBrick(sprite));
+			prototypeBrickList.add(new VibrateBrick(sprite, 1000));
 		} else {
 			prototypeBrickList = new ArrayList<Brick>();
 			prototypeBrickList.add(new WaitBrick(sprite, 1000));
@@ -85,6 +87,7 @@ public class AddBrickDialog extends Dialog {
 			prototypeBrickList.add(new IfTouchedBrick(sprite, null));
 			prototypeBrickList.add(new IfStartedBrick(sprite, null));
 			prototypeBrickList.add(new GlideToBrick(sprite, 100, 100, 3000));
+			prototypeBrickList.add(new VibrateBrick(sprite, 1000));
 		}
 
 	}

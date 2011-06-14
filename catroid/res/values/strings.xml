@@ -136,6 +136,7 @@
     <string name="brick_set_background">Set Background</string>
     <string name="brick_play_sound">Play Sound</string>
     <string name="brick_wait">Wait</string>
+    <string name="brick_vibrate">Vibrate</string>
     <string name="seconds">Seconds</string>
     
     <string name="brick_hide">Hide</string>
