@@ -248,6 +248,7 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		solo.clickOnScreen(Values.SCREEN_WIDTH / 2, Values.SCREEN_HEIGHT / 2);
 		solo.goBack();
 		solo.clickOnButton(0);
+		solo.clickOnButton(0);
 		solo.clickInList(1);
 
 		File mySpfFile2 = new File(Consts.DEFAULT_ROOT + "/" + projectName + "/" + projectName
@@ -334,11 +335,11 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		solo.clickOnImageButton(1);
 
 		solo.clickOnScreen(Values.SCREEN_WIDTH / 2, Values.SCREEN_HEIGHT / 2);
-		solo.pressMenuItem(1);
+		solo.goBack();
 		solo.sleep(500);
 		assertFalse("Media player is playing while pausing", mediaPlayer.isPlaying());
 		solo.sleep(1000);
-		solo.pressMenuItem(1);
+		solo.goBack();
 		int count = 0;
 		while (true) {
 			if (mediaPlayer.isPlaying()) {
@@ -390,11 +391,18 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		setCostumeBrick.setCostume(image.getName());
 		solo.sleep(100);
 		solo.clickOnImageButton(1);
-		solo.clickOnScreen(Values.SCREEN_WIDTH, 0); //save thumbnail
+
+		solo.goBack();
+		solo.clickOnButton(3);
+		solo.sleep(1000);
+
+		//solo.clickOnScreen(Values.SCREEN_WIDTH, 0); //save thumbnail
 
 		//File file = new File(Consts.DEFAULT_ROOT + "/" + projectName + "/" + Consts.SCREENSHOT_FILE_NAME);
 		Bitmap bitmap = BitmapFactory.decodeFile(Consts.DEFAULT_ROOT + "/" + projectName + "/"
 				+ Consts.SCREENSHOT_FILE_NAME);
+
+		//BitmapFactory.decode
 
 		int borderWidth = ((Values.SCREEN_WIDTH / 2) + 100 / 2);
 		int borderHeight = ((Values.SCREEN_HEIGHT / 2) + 100 / 2);
@@ -438,7 +446,7 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		assertEquals((Integer) expectedHeight, costume.getImageWidthHeight().second);
 
 		solo.goBack();
-		solo.clickOnImageButton(1);
+		solo.clickOnButton(1);
 
 	}
 

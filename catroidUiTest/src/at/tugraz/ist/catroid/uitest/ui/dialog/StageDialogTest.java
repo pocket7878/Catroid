@@ -52,7 +52,7 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		super.tearDown();
 	}
 
-	public void backButtonPressedTwiceTest() {
+	public void testBackButtonPressedTwice() {
 
 		List<ImageButton> btnList = solo.getCurrentImageButtons();
 		for (int i = 0; i < btnList.size(); i++) {
@@ -68,7 +68,7 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		assertTrue("Not in stage", solo.getCurrentActivity() instanceof StageActivity);
 	}
 
-	public void backToPreviousActivityTest() throws NameNotFoundException, IOException {
+	public void testBackToPreviousActivity() throws NameNotFoundException, IOException {
 		createTestProject(testProject);
 		solo.clickOnButton(getActivity().getString(R.string.projects_on_phone));
 		solo.clickOnText(testProject);
@@ -89,7 +89,7 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		assertEquals("Not equal Activities", previousActivity, getActivity());
 	}
 
-	public void pauseOnBackButtonTest() {
+	public void testPauseOnBackButton() {
 		double scale = 50.0;
 
 		Project project = new Project(getActivity(), testProject);
