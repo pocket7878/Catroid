@@ -79,6 +79,7 @@ public class StageDialog extends Dialog {
 		Button restartCurrentProjectButton = (Button) findViewById(R.id.restart_current_project_button);
 		restartCurrentProjectButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				restartProject();
 			}
 		});
 
@@ -131,5 +132,13 @@ public class StageDialog extends Dialog {
 			stagePlaying = false;
 			this.dismiss();
 		}
+	}
+
+	private void restartProject() {
+
+		soundManager.clear();
+		this.activity.startActivity(this.activity.getIntent());
+		//this.activity.finish();
+		backToConstruction();
 	}
 }
