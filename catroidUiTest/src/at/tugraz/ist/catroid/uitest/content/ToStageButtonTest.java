@@ -86,6 +86,7 @@ public class ToStageButtonTest extends ActivityInstrumentationTestCase2<MainMenu
 		assertEquals("Script list has to much elements", 0, sprite_list.get(0).getScriptList().size());
 
 		solo.goBack();
+		solo.clickOnButton(getActivity().getString(R.string.back_to_construction_site));
 		solo.clickOnButton(getActivity().getString(R.string.add_new_brick));
 		solo.clickOnText(getActivity().getString(R.string.brick_if_touched));
 		solo.clickOnButton(getActivity().getString(R.string.add_new_brick));
@@ -107,6 +108,7 @@ public class ToStageButtonTest extends ActivityInstrumentationTestCase2<MainMenu
 				sprite_list.get(0).getScriptList().get(0).getBrickList().get(0) instanceof ScaleCostumeBrick);
 
 		solo.goBack();
+		solo.clickOnButton(getActivity().getString(R.string.back_to_construction_site));
 		solo.clickLongOnText(getActivity().getString(R.string.brick_if_touched));
 		solo.clickOnText(getActivity().getString(R.string.delete_script_button));
 
@@ -124,6 +126,7 @@ public class ToStageButtonTest extends ActivityInstrumentationTestCase2<MainMenu
 		assertEquals("Script list has wrong number of elements", 0, sprite_list.get(0).getScriptList().size());
 
 		solo.goBack();
+		solo.clickOnButton(getActivity().getString(R.string.back_to_construction_site));
 		solo.goBack();
 		solo.sleep(500);
 
@@ -155,6 +158,7 @@ public class ToStageButtonTest extends ActivityInstrumentationTestCase2<MainMenu
 		assertEquals("Script list has wrong number of elements", 0, sprite_list.get(0).getScriptList().size());
 
 		solo.goBack();
+		solo.clickOnButton(getActivity().getString(R.string.back_to_construction_site));
 		solo.clickOnButton(getActivity().getString(R.string.add_new_brick));
 		solo.clickOnText(getActivity().getString(R.string.brick_if_touched));
 		solo.clickOnButton(getActivity().getString(R.string.add_new_brick));
@@ -168,13 +172,18 @@ public class ToStageButtonTest extends ActivityInstrumentationTestCase2<MainMenu
 		}
 
 		solo.sleep(500);
-		sprite_list = ProjectManager.getInstance().getCurrentProject().getSpriteList();
+		solo.goBack();
+		solo.sleep(1000);
+		solo.goBack();
+		solo.sleep(1000);
 		assertTrue("Not in stage", solo.getCurrentActivity() instanceof StageActivity);
+		sprite_list = ProjectManager.getInstance().getCurrentProject().getSpriteList();
 		assertEquals("Script list has wrong number of elements", 1, sprite_list.get(1).getScriptList().size());
 		assertTrue("Is not correct Block",
 				sprite_list.get(1).getScriptList().get(0).getBrickList().get(0) instanceof ScaleCostumeBrick);
 
 		solo.goBack();
+		solo.clickOnButton(getActivity().getString(R.string.back_to_construction_site));
 		btnList = solo.getCurrentImageButtons();
 		for (int i = 0; i < btnList.size(); i++) {
 			ImageButton btn = btnList.get(i);
