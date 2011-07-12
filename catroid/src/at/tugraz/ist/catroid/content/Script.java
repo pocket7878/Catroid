@@ -126,4 +126,8 @@ public abstract class Script implements Serializable {
 	public Sprite getSprite() {
 		return sprite;
 	}
+
+	public int getBrickPosition() {
+		return brickPositionAfterPause;
+	}
 }

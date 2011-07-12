@@ -108,6 +108,7 @@ public class StageDialog extends Dialog {
 		ProjectManager projectManager = ProjectManager.getInstance();
 		int currentSpritePos = projectManager.getCurrentSpritePosition();
 		int currentScriptPos = projectManager.getCurrentScriptPosition();
+
 		projectManager.loadProject(projectManager.getCurrentProject().getName(), this.context,
 				false);
 		projectManager.setCurrentSpriteWithPosition(currentSpritePos);
@@ -135,10 +136,8 @@ public class StageDialog extends Dialog {
 	}
 
 	private void restartProject() {
-
-		soundManager.clear();
-		this.activity.startActivity(this.activity.getIntent());
-		//this.activity.finish();
 		backToConstruction();
+		stageManager.resume();
+		this.activity.startActivity(this.activity.getIntent());
 	}
 }

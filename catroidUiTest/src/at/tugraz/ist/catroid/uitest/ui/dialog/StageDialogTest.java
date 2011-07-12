@@ -1,6 +1,7 @@
 package at.tugraz.ist.catroid.uitest.ui.dialog;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -9,6 +10,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ImageButton;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -85,6 +87,7 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 
 		solo.goBack();
 		solo.clickOnButton(getActivity().getString(R.string.back_to_construction_site));
+
 		solo.sleep(1000);
 		assertEquals("Not equal Activities", previousActivity, getActivity());
 	}
@@ -121,6 +124,87 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		assertEquals(100.0, sprite.getScale());
 		solo.sleep(4000);
 		assertEquals(scale, sprite.getScale());
+	}
+
+	public void testRestartButtonActivityChain() throws NameNotFoundException, IOException {
+		createTestProject(testProject);
+		solo.clickOnButton(getActivity().getString(R.string.projects_on_phone));
+		solo.clickOnText(testProject);
+
+		Activity currentActivity = solo.getCurrentActivity();
+
+		List<ImageButton> btnList = solo.getCurrentImageButtons();
+		for (int i = 0; i < btnList.size(); i++) {
+			ImageButton btn = btnList.get(i);
+			if (btn.getId() == R.id.btn_action_play) {
+				solo.clickOnImageButton(i);
+			}
+		}
+
+		solo.sleep(1000);
+		solo.goBack();
+		solo.sleep(1000);
+		solo.clickOnButton(getActivity().getString(R.string.restart_current_project));
+		solo.sleep(1000);
+
+		assertTrue("Not in Stage", solo.getCurrentActivity() instanceof StageActivity);
+
+		solo.sleep(500);
+		solo.goBack();
+		solo.sleep(500);
+		solo.clickOnButton(getActivity().getString(R.string.back_to_construction_site));
+		solo.sleep(500);
+		assertEquals("Returned to wrong Activity", currentActivity, solo.getCurrentActivity());
+	}
+
+	public void testRestartButtonScriptPosition() {
+		ArrayList<Integer> scriptPositionsStart = new ArrayList<Integer>();
+		ArrayList<Integer> scriptPositionsRestart = new ArrayList<Integer>();
+		scriptPositionsStart.clear();
+		scriptPositionsRestart.clear();
+
+		List<ImageButton> btnList = solo.getCurrentImageButtons();
+		for (int i = 0; i < btnList.size(); i++) {
+			ImageButton btn = btnList.get(i);
+			if (btn.getId() == R.id.btn_action_play) {
+				solo.clickOnImageButton(i);
+			}
+		}
+
+		solo.sleep(2000);
+
+		ProjectManager projectManager = ProjectManager.getInstance();
+		Project project = projectManager.getCurrentProject();
+
+		//scriptPositions at start
+		List<Sprite> spriteList = project.getSpriteList();
+		for (int i = 0; i < spriteList.size(); i++) {
+			int size = spriteList.get(i).getScriptList().size();
+			for (int j = 0; j < size; j++) {
+				scriptPositionsStart.add(spriteList.get(i).getScriptList().get(j).getBrickPosition());
+			}
+		}
+
+		solo.clickOnScreen(Values.SCREEN_WIDTH / 2, Values.SCREEN_HEIGHT / 2);
+		solo.sleep(500);
+		solo.goBack();
+		solo.sleep(500);
+		solo.clickOnButton(getActivity().getString(R.string.restart_current_project));
+		solo.sleep(1000);
+
+		//scriptPositions in between
+		for (int i = 0; i < spriteList.size(); i++) {
+			int size = spriteList.get(i).getScriptList().size();
+			solo.sleep(1000);
+			for (int j = 0; j < size; j++) {
+				solo.sleep(1000);
+				scriptPositionsRestart.add(spriteList.get(i).getScriptList().get(j).getBrickPosition());
+			}
+		}
+
+		for (int i = 0; i < scriptPositionsStart.size(); i++) {
+			assertEquals(scriptPositionsStart.get(i).intValue(), scriptPositionsRestart.get(i).intValue());
+		}
 	}
 
 	public void createTestProject(String projectName) throws IOException, NameNotFoundException {
