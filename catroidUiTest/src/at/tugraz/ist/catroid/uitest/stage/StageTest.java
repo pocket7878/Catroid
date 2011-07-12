@@ -414,10 +414,13 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 			for (File file : listOfFiles) {
 				if (file.getName().endsWith("." + imageExtension)) {
+
 					String currentPath = new String(Consts.DEFAULT_ROOT + "/" + projectName + "/"
-							+ file.getName());
+												+ file.getName());
 
 					Bitmap bitmap = BitmapFactory.decodeFile(currentPath);
+
+					solo.sleep(1000);
 
 					for (int i = startWidth; i < borderWidth; i++) {
 						for (int j = startHeight; j < borderHeight; j++) {
