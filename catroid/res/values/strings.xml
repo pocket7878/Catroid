@@ -136,7 +136,7 @@
 	<!--  Stage menu dialog -->
 	<string name="back_to_construction_site">To Construction Site</string>
 	<string name="resume_current_project">Resume</string>
-	<string name="restart_current_project">(Re)Start</string>
+	<string name="restart_current_project">Restart</string>
 	<string name="snapshot">Snapshot</string>
 	<string name="stage_dialog_title">Stage Options</string>
 	
