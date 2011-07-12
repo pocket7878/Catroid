@@ -455,9 +455,9 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 							Log.v(TAG, "in TEST5 " + i + " " + borderHeight);
 						}
 					}
-					if (screenshotMatched == true) {
-						break;
-					}
+				}
+				if (screenshotMatched == true) {
+					break;
 				}
 				assertEquals("Screenshot doesn't work correctly", screenshotMatched, true);
 			}
