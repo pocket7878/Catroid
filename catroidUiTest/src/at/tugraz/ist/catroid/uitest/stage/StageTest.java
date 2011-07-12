@@ -396,45 +396,112 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		solo.clickOnButton(3);
 		solo.sleep(1000);
 
-		//solo.clickOnScreen(Values.SCREEN_WIDTH, 0); //save thumbnail
-
-		//File file = new File(Consts.DEFAULT_ROOT + "/" + projectName + "/" + Consts.SCREENSHOT_FILE_NAME);
-		Bitmap bitmap = BitmapFactory.decodeFile(Consts.DEFAULT_ROOT + "/" + projectName + "/"
-				+ Consts.SCREENSHOT_FILE_NAME);
-
-		//BitmapFactory.decode
+		File folder = new File(Consts.DEFAULT_ROOT + "/" + projectName + "/");
+		String imageExtension = "png";
+		boolean screenshotMatched = true;
 
 		int borderWidth = ((Values.SCREEN_WIDTH / 2) + 100 / 2);
 		int borderHeight = ((Values.SCREEN_HEIGHT / 2) + 100 / 2);
 		int startWidth = ((Values.SCREEN_WIDTH - 100) / 2);
 		int startHeight = ((Values.SCREEN_HEIGHT - 100) / 2);
 
-		for (int i = startWidth; i < borderWidth; i++) {
-			for (int j = startHeight; j < borderHeight; j++) {
-				assertEquals("pixel is not red", Color.RED, bitmap.getPixel(i, j));
-				//Log.v(TAG, "in TEST " + i + " " + j);
+		if (folder.isDirectory()) {
+			File[] listOfFiles = folder.listFiles();
+
+			if (listOfFiles == null) {
+				System.out.println("Folder contains no image");
+			}
+
+			for (File file : listOfFiles) {
+				if (file.getName().endsWith("." + imageExtension)) {
+					String currentPath = new String(Consts.DEFAULT_ROOT + "/" + projectName + "/"
+							+ file.getName());
+
+					Bitmap bitmap = BitmapFactory.decodeFile(currentPath);
+
+					for (int i = startWidth; i < borderWidth; i++) {
+						for (int j = startHeight; j < borderHeight; j++) {
+							if (bitmap.getPixel(i, j) != Color.RED) {
+								screenshotMatched = false;
+								Log.v(TAG, "in TEST " + i + " " + j);
+							}
+						}
+					}
+
+					for (int j = startHeight; j < borderHeight; j++) {
+						if (bitmap.getPixel(startWidth - 1, j) != Color.WHITE) {
+							screenshotMatched = false;
+							Log.v(TAG, "in TEST2 " + (startWidth - 1) + " " + j);
+						}
+					}
+
+					for (int j = startHeight; j < borderHeight; j++) {
+						if (bitmap.getPixel(borderWidth, j) != Color.WHITE) {
+							screenshotMatched = false;
+							Log.v(TAG, "in TEST3 " + borderWidth + " " + j);
+						}
+					}
+
+					for (int i = startWidth; i < borderWidth; i++) {
+						if (bitmap.getPixel(i, startHeight - 1) != Color.WHITE) {
+							screenshotMatched = false;
+							Log.v(TAG, "in TEST4 " + i + " " + (startHeight - 1));
+						}
+					}
+
+					for (int i = startWidth; i < borderWidth; i++) {
+						if (bitmap.getPixel(i, borderHeight) != Color.WHITE) {
+							screenshotMatched = false;
+							Log.v(TAG, "in TEST5 " + i + " " + borderHeight);
+						}
+					}
+					if (screenshotMatched == true) {
+						break;
+					}
+				}
+				assertEquals("Screenshot doesn't work correctly", screenshotMatched, true);
 			}
 		}
 
-		for (int j = startHeight; j < borderHeight; j++) {
-			assertEquals("pixel is not white", Color.WHITE, bitmap.getPixel(startWidth - 1, j));
-			//Log.v(TAG, "in TEST2 " + (startWidth - 1) + " " + j);
-		}
+		//solo.clickOnScreen(Values.SCREEN_WIDTH, 0); //save thumbnail
 
-		for (int j = startHeight; j < borderHeight; j++) {
-			assertEquals("pixel is not white", Color.WHITE, bitmap.getPixel(borderWidth, j));
-			//Log.v(TAG, "in TEST3 " + borderWidth + " " + j);
-		}
+		//File file = new File(Consts.DEFAULT_ROOT + "/" + projectName + "/" + Consts.SCREENSHOT_FILE_NAME);
+		//		Bitmap bitmap = BitmapFactory.decodeFile(Consts.DEFAULT_ROOT + "/" + projectName + "/"
+		//				+ Consts.SCREENSHOT_FILE_NAME);
 
-		for (int i = startWidth; i < borderWidth; i++) {
-			assertEquals("pixel is not white", Color.WHITE, bitmap.getPixel(i, startHeight - 1));
-			//Log.v(TAG, "in TEST4 " + i + " " + (startHeight - 1));
-		}
-
-		for (int i = startWidth; i < borderWidth; i++) {
-			assertEquals("pixel is not white", Color.WHITE, bitmap.getPixel(i, borderHeight));
-			//Log.v(TAG, "in TEST5 " + i + " " + borderHeight);
-		}
+		//		//BitmapFactory.decode
+		//
+		//		int borderWidth = ((Values.SCREEN_WIDTH / 2) + 100 / 2);
+		//		int borderHeight = ((Values.SCREEN_HEIGHT / 2) + 100 / 2);
+		//		int startWidth = ((Values.SCREEN_WIDTH - 100) / 2);
+		//		int startHeight = ((Values.SCREEN_HEIGHT - 100) / 2);
+		//
+		//		for (int i = startWidth; i < borderWidth; i++) {
+		//			for (int j = startHeight; j < borderHeight; j++) {
+		//				assertEquals("pixel is not red", Color.RED, bitmap.getPixel(i, j));
+		//				//Log.v(TAG, "in TEST " + i + " " + j);
+		//			}
+		//		}
+		//
+		//		for (int j = startHeight; j < borderHeight; j++) {
+		//			assertEquals("pixel is not white", Color.WHITE, bitmap.getPixel(startWidth - 1, j));
+		//			//Log.v(TAG, "in TEST2 " + (startWidth - 1) + " " + j);
+		//		}
+		//
+		//		for (int j = startHeight; j < borderHeight; j++) {
+		//			assertEquals("pixel is not white", Color.WHITE, bitmap.getPixel(borderWidth, j));
+		//			//Log.v(TAG, "in TEST3 " + borderWidth + " " + j);
+		//		}
+		//
+		//		for (int i = startWidth; i < borderWidth; i++) {
+		//			assertEquals("pixel is not white", Color.WHITE, bitmap.getPixel(i, startHeight - 1));
+		//			//Log.v(TAG, "in TEST4 " + i + " " + (startHeight - 1));
+		//		}
+		//
+		//		for (int i = startWidth; i < borderWidth; i++) {
+		//			assertEquals("pixel is not white", Color.WHITE, bitmap.getPixel(i, borderHeight));
+		//			//Log.v(TAG, "in TEST5 " + i + " " + borderHeight);
+		//		}
 
 	}
 
