@@ -412,6 +412,8 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 				System.out.println("Folder contains no image");
 			}
 
+			solo.sleep(1000);
+
 			for (File file : listOfFiles) {
 				if (file.getName().endsWith("." + imageExtension)) {
 
@@ -419,6 +421,7 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 												+ file.getName());
 
 					Bitmap bitmap = BitmapFactory.decodeFile(currentPath);
+					assertTrue("Bitmap is NULL", bitmap != null);
 
 					solo.sleep(1000);
 
@@ -465,6 +468,8 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 				assertEquals("Screenshot doesn't work correctly", screenshotMatched, true);
 			}
 		}
+
+		assertEquals("Screenshot doesn't work correctly", screenshotMatched, true);
 
 		//solo.clickOnScreen(Values.SCREEN_WIDTH, 0); //save thumbnail
 
