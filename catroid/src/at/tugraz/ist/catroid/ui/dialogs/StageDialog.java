@@ -59,6 +59,7 @@ public class StageDialog extends Dialog {
 
 		setContentView(R.layout.dialog_stage);
 		setTitle(R.string.stage_dialog_title);
+
 		this.getWindow().setGravity(Gravity.LEFT);
 
 		Button backToConstructionSiteButton = (Button) findViewById(R.id.back_to_construction_site_button);
