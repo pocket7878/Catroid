@@ -18,6 +18,8 @@
  */
 package at.tugraz.ist.catroid.content.bricks;
 
+import java.util.concurrent.CountDownLatch;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +34,7 @@ public class LoopEndBrick implements Brick {
 	private Sprite sprite;
 	private LoopBeginBrick loopBeginBrick;
 	private int timesToRepeat;
+	private CountDownLatch loopEndLatch = null;
 
 	public LoopEndBrick(Sprite sprite, LoopBeginBrick loopStartingBrick) {
 		this.sprite = sprite;
@@ -46,6 +49,11 @@ public class LoopEndBrick implements Brick {
 			Script script = getScript();
 			script.setExecutingBrickIndex(script.getBrickList().indexOf(loopBeginBrick));
 			timesToRepeat--;
+		} else {
+			if (loopEndLatch != null) {
+				loopEndLatch.countDown();
+				loopEndLatch = null;
+			}
 		}
 	}
 
@@ -73,6 +81,10 @@ public class LoopEndBrick implements Brick {
 
 	public LoopBeginBrick getLoopBeginBrick() {
 		return loopBeginBrick;
+	}
+
+	public void setLoopEndCountDownLatch(CountDownLatch latch) {
+		loopEndLatch = latch;
 	}
 
 	public View getView(Context context, int brickId, BaseExpandableListAdapter adapter) {

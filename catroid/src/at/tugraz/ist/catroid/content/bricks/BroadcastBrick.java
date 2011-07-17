@@ -37,7 +37,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.content.BroadcastScript;
+import at.tugraz.ist.catroid.content.IBroadcastReceiver;
 import at.tugraz.ist.catroid.content.Sprite;
 
 /**
@@ -55,7 +55,7 @@ public class BroadcastBrick implements Brick {
 	}
 
 	public void execute() {
-		final Vector<BroadcastScript> receiver = ProjectManager.getInstance().messageContainer
+		final Vector<IBroadcastReceiver> receiver = ProjectManager.getInstance().messageContainer
 				.getReceiverOfMessage(selectedMessage);
 		if (receiver == null) {
 			return;
@@ -66,8 +66,8 @@ public class BroadcastBrick implements Brick {
 		Thread startThread = new Thread(new Runnable() {
 			public void run() {
 				CountDownLatch simultaneousStart = new CountDownLatch(1);
-				for (BroadcastScript receiverScript : receiver) {
-					receiverScript.executeBroadcast(simultaneousStart);
+				for (IBroadcastReceiver broadcastReceiver : receiver) {
+					broadcastReceiver.executeBroadcast(simultaneousStart);
 				}
 				simultaneousStart.countDown();
 			}

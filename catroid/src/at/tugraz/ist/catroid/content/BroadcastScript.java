@@ -26,7 +26,7 @@ import at.tugraz.ist.catroid.ProjectManager;
  * @author Johannes Iber
  * 
  */
-public class BroadcastScript extends Script {
+public class BroadcastScript extends Script implements IBroadcastReceiver {
 
 	private static final long serialVersionUID = 1L;
 	private String selectedMessage = "";
@@ -47,7 +47,7 @@ public class BroadcastScript extends Script {
 	}
 
 	public void setBroadcastMessage(String selectedMessage) {
-		ProjectManager.getInstance().messageContainer.deleteReceiverScript(this.selectedMessage, this);
+		ProjectManager.getInstance().messageContainer.deleteReceiver(this.selectedMessage, this);
 		this.selectedMessage = selectedMessage;
 		ProjectManager.getInstance().messageContainer.addMessage(this.selectedMessage, this);
 	}

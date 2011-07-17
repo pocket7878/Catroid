@@ -25,7 +25,7 @@ import java.util.Vector;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.content.BroadcastScript;
+import at.tugraz.ist.catroid.content.IBroadcastReceiver;
 
 /**
  * @author Johannes Iber
@@ -33,7 +33,7 @@ import at.tugraz.ist.catroid.content.BroadcastScript;
  */
 public class MessageContainer {
 
-	private TreeMap<String, Vector<BroadcastScript>> receiverMap = new TreeMap<String, Vector<BroadcastScript>>();
+	private TreeMap<String, Vector<IBroadcastReceiver>> receiverMap = new TreeMap<String, Vector<IBroadcastReceiver>>();
 	private ArrayAdapter<String> messageAdapter = null;
 
 	public void addMessage(String message) {
@@ -41,32 +41,32 @@ public class MessageContainer {
 			return;
 		}
 		if (!receiverMap.containsKey(message)) {
-			receiverMap.put(message, new Vector<BroadcastScript>());
+			receiverMap.put(message, new Vector<IBroadcastReceiver>());
 			this.addMessageToAdapter(message);
 		}
 	}
 
-	public void addMessage(String message, BroadcastScript script) {
+	public void addMessage(String message, IBroadcastReceiver broadcastReceiver) {
 		if (message.length() == 0) {
 			return;
 		}
 		if (receiverMap.containsKey(message)) {
-			receiverMap.get(message).add(script);
+			receiverMap.get(message).add(broadcastReceiver);
 		} else {
-			Vector<BroadcastScript> receiverVec = new Vector<BroadcastScript>();
-			receiverVec.add(script);
+			Vector<IBroadcastReceiver> receiverVec = new Vector<IBroadcastReceiver>();
+			receiverVec.add(broadcastReceiver);
 			receiverMap.put(message, receiverVec);
 			this.addMessageToAdapter(message);
 		}
 	}
 
-	public void deleteReceiverScript(String message, BroadcastScript script) {
+	public void deleteReceiver(String message, IBroadcastReceiver broadcastReceiver) {
 		if (receiverMap.containsKey(message)) {
-			receiverMap.get(message).removeElement(script);
+			receiverMap.get(message).removeElement(broadcastReceiver);
 		}
 	}
 
-	public Vector<BroadcastScript> getReceiverOfMessage(String message) {
+	public Vector<IBroadcastReceiver> getReceiverOfMessage(String message) {
 		return receiverMap.get(message);
 	}
 

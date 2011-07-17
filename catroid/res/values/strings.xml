@@ -170,6 +170,7 @@
 	<string name="brick_loop_end">End Of Loop</string>
 	<string name="brick_repeat">Repeat</string>
 	<string name="times_label">times</string>
+	<string name="brick_repeat_until_broadcast">Repeat until received</string>
 	
 	<string name="choose_sound_title">choose a title</string>
 

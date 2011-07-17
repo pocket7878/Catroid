@@ -1,6 +1,6 @@
 /**
  *  Catroid: An on-device graphical programming language for Android devices
- *  Copyright (C) 2010  Catroid development team 
+ *  Copyright (C) 2010  Catroid development team
  *  (<http://code.google.com/p/catroid/wiki/Credits>)
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,6 @@
  */
 package at.tugraz.ist.catroid.content.bricks;
 
-import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
 import android.app.AlertDialog;
@@ -40,69 +39,30 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.IBroadcastReceiver;
 import at.tugraz.ist.catroid.content.Sprite;
 
-/**
- * @author Johannes Iber
- * 
- */
-public class BroadcastWaitBrick implements Brick {
-
+public class RepeatUntilBroadcastReceivedBrick extends LoopBeginBrick implements IBroadcastReceiver {
 	private static final long serialVersionUID = 1L;
-	private Sprite sprite;
-	private String selectedMessage = "";
+	private String broadcastMessage = "";
 
-	public BroadcastWaitBrick(Sprite sprite) {
+	public RepeatUntilBroadcastReceivedBrick(Sprite sprite) {
 		this.sprite = sprite;
 	}
 
+	@Override
 	public void execute() {
-		Vector<IBroadcastReceiver> receiver = ProjectManager.getInstance().messageContainer
-				.getReceiverOfMessage(selectedMessage);
-		if (receiver == null) {
-			return;
-		}
-		if (receiver.size() == 0) {
-			return;
-		}
-		CountDownLatch simultaneousStart = new CountDownLatch(1);
-		CountDownLatch wait = new CountDownLatch(receiver.size());
-
-		for (IBroadcastReceiver broadcastReceiver : receiver) {
-			broadcastReceiver.executeBroadcastWait(simultaneousStart, wait);
-		}
-		simultaneousStart.countDown();
-
-		try {
-			wait.await();
-		} catch (InterruptedException e) {
-		}
+		loopEndBrick.setTimesToRepeat(LoopEndBrick.FOREVER);
 	}
 
-	public Sprite getSprite() {
-		return sprite;
-	}
-
-	public String getSelectedMessage() {
-		return selectedMessage;
-	}
-
-	public void setSelectedMessage(String selectedMessage) {
-		this.selectedMessage = selectedMessage;
-		ProjectManager.getInstance().messageContainer.addMessage(this.selectedMessage);
-	}
-
-	private Object readResolve() {
-		if (selectedMessage != null && ProjectManager.getInstance().getCurrentProject() != null) {
-			ProjectManager.getInstance().messageContainer.addMessage(selectedMessage);
-		}
-		return this;
+	@Override
+	public Brick clone() {
+		return new RepeatUntilBroadcastReceivedBrick(getSprite());
 	}
 
 	public View getView(final Context context, int brickId, BaseExpandableListAdapter adapter) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View brickView = inflater.inflate(R.layout.construction_brick_broadcast_wait, null);
+		View brickView = inflater.inflate(R.layout.construction_brick_repeat_until_broadcast_received, null);
+
 		final Spinner spinner = (Spinner) brickView.findViewById(R.id.broadcast_spinner);
 		spinner.setAdapter(ProjectManager.getInstance().messageContainer.getMessageAdapter(context));
-
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			private boolean start = true;
 
@@ -111,21 +71,22 @@ public class BroadcastWaitBrick implements Brick {
 					start = false;
 					return;
 				}
-				selectedMessage = ((String) parent.getItemAtPosition(pos)).trim();
-				if (selectedMessage == context.getString(R.string.broadcast_nothing_selected)) {
-					selectedMessage = "";
+				String message = ((String) parent.getItemAtPosition(pos)).trim();
+
+				if (message == context.getString(R.string.broadcast_nothing_selected)) {
+					setBroadcastMessage("");
+				} else {
+					setBroadcastMessage(message);
 				}
 			}
 
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
-
-		int pos = ProjectManager.getInstance().messageContainer.getPosOfMessageInAdapter(selectedMessage);
+		int pos = ProjectManager.getInstance().messageContainer.getPosOfMessageInAdapter(broadcastMessage);
 		if (pos > 0) {
 			spinner.setSelection(pos);
 		}
-
 		Button newBroadcastMessage = (Button) brickView.findViewById(R.id.broadcast_new_message);
 		newBroadcastMessage.setOnClickListener(new OnClickListener() {
 
@@ -142,13 +103,9 @@ public class BroadcastWaitBrick implements Brick {
 							dialog.cancel();
 							return;
 						}
-						selectedMessage = newMessage;
-						ProjectManager.getInstance().messageContainer.addMessage(selectedMessage);
-						int pos = ProjectManager.getInstance().messageContainer
-								.getPosOfMessageInAdapter(selectedMessage);
-
+						setBroadcastMessage(newMessage);
+						int pos = ProjectManager.getInstance().messageContainer.getPosOfMessageInAdapter(newMessage);
 						spinner.setSelection(pos);
-
 					}
 				});
 				builder.setNegativeButton(context.getString(R.string.cancel_button),
@@ -169,18 +126,52 @@ public class BroadcastWaitBrick implements Brick {
 				alertDialog.show();
 			}
 		});
+
+		spinner.setFocusable(false);
+		newBroadcastMessage.setFocusable(false);
 		return brickView;
 	}
 
 	public View getPrototypeView(Context context) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View view = inflater.inflate(R.layout.toolbox_brick_broadcast_wait, null);
+		View view = inflater.inflate(R.layout.toolbox_brick_repeat_until_broadcast_received, null);
 		return view;
 	}
 
-	@Override
-	public Brick clone() {
-		return new BroadcastWaitBrick(sprite);
+	public void setBroadcastMessage(String broadcastMessage) {
+		ProjectManager.getInstance().messageContainer.deleteReceiver(this.broadcastMessage, this);
+		this.broadcastMessage = broadcastMessage;
+		ProjectManager.getInstance().messageContainer.addMessage(this.broadcastMessage, this);
 	}
 
+	public String getBroadcastMessage() {
+		return broadcastMessage;
+	}
+
+	public void executeBroadcast(final CountDownLatch simultaneousStart) {
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				try {
+					simultaneousStart.await();
+				} catch (InterruptedException e) {
+				}
+				loopEndBrick.setTimesToRepeat(0);
+			}
+		});
+		t.start();
+	}
+
+	public void executeBroadcastWait(final CountDownLatch simultaneousStart, final CountDownLatch wait) {
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				try {
+					simultaneousStart.await();
+				} catch (InterruptedException e) {
+				}
+				loopEndBrick.setTimesToRepeat(0);
+				loopEndBrick.setLoopEndCountDownLatch(wait);
+			}
+		});
+		t.start();
+	}
 }
