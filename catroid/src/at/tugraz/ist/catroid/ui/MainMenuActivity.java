@@ -72,7 +72,7 @@ public class MainMenuActivity extends Activity {
 			Button currentProjectButton = (Button) findViewById(R.id.current_project_button);
 			currentProjectButton.setEnabled(false);
 		}
-	}
+	}//dummy change
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
