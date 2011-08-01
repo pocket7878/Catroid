@@ -393,6 +393,7 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 
 					String currentPath = new String(Consts.DEFAULT_ROOT + "/" + projectName + "/"
 												+ file.getName());
+					solo.sleep(1000);
 
 					Bitmap bitmap = BitmapFactory.decodeFile(currentPath);
 					assertTrue("Bitmap is NULL", bitmap != null);
