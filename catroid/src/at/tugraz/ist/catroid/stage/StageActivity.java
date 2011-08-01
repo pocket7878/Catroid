@@ -56,7 +56,6 @@ public class StageActivity extends Activity {
 			stageManager = new StageManager(this);
 			stageManager.start();
 			stageDialog = new StageDialog(this, stageManager);
-			//stageDialog.getWindow().getAttributes().windowAnimations = R.anim.stage_dialog_in;
 		}
 	}
 

@@ -23,15 +23,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Handler;
 import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 
 public class StageManager {
-	private Activity activity;
 	protected ArrayList<Sprite> spriteList;
 	private Boolean spritesChanged;
 	private CanvasDraw draw;//maybe horrible in other parts of code
@@ -63,7 +59,6 @@ public class StageManager {
 	public StageManager(Activity activity) {
 
 		spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject().getSpriteList();
-		this.activity = activity;
 
 		spritesChanged = true;
 		draw = new CanvasDraw(activity);
@@ -102,8 +97,6 @@ public class StageManager {
 		}
 
 		if (drawScreen) {
-			Bitmap pauseBitmap = BitmapFactory.decodeResource(activity.getResources(), R.drawable.paused_cat);
-			draw.drawPauseScreen(pauseBitmap);
 			handler.removeCallbacks(runnable);
 			spritesChanged = true;
 		}

@@ -257,34 +257,6 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		assertEquals("spf File changed!", mySpfFile.hashCode(), mySpfFile2.hashCode());
 	}
 
-	//	public void testPlayPauseHomeButton() {
-	//		double scale = 50.0;
-	//
-	//		Project project = new Project(getActivity(), projectName);
-	//		Sprite sprite = new Sprite("testSprite");
-	//		Script script = new StartScript("script", sprite);
-	//		WaitBrick waitBrick = new WaitBrick(sprite, 5000);
-	//		ScaleCostumeBrick scaleCostumeBrick = new ScaleCostumeBrick(sprite, scale);
-	//
-	//		script.getBrickList().add(waitBrick);
-	//		script.getBrickList().add(scaleCostumeBrick);
-	//		sprite.getScriptList().add(script);
-	//		project.getSpriteList().add(sprite);
-	//
-	//		storageHandler.saveProject(project);
-	//		ProjectManager.getInstance().setProject(project);
-	//
-	//		solo.clickOnImageButton(1);
-	//
-	//		assertEquals(100.0, sprite.getScale());
-	//		solo.pressMenuItem(1);
-	//		solo.sleep(6000);
-	//		solo.pressMenuItem(1);
-	//		assertEquals(100.0, sprite.getScale());
-	//		solo.sleep(4000);
-	//		assertEquals(scale, sprite.getScale());
-	//	}
-
 	public void testZValue() {
 		createTestProject3(this.projectName);
 		solo.clickOnImageButton(1);
@@ -472,46 +444,6 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		}
 
 		assertEquals("Screenshot doesn't work correctly", screenshotMatched, true);
-
-		//solo.clickOnScreen(Values.SCREEN_WIDTH, 0); //save thumbnail
-
-		//File file = new File(Consts.DEFAULT_ROOT + "/" + projectName + "/" + Consts.SCREENSHOT_FILE_NAME);
-		//		Bitmap bitmap = BitmapFactory.decodeFile(Consts.DEFAULT_ROOT + "/" + projectName + "/"
-		//				+ Consts.SCREENSHOT_FILE_NAME);
-
-		//		//BitmapFactory.decode
-		//
-		//		int borderWidth = ((Values.SCREEN_WIDTH / 2) + 100 / 2);
-		//		int borderHeight = ((Values.SCREEN_HEIGHT / 2) + 100 / 2);
-		//		int startWidth = ((Values.SCREEN_WIDTH - 100) / 2);
-		//		int startHeight = ((Values.SCREEN_HEIGHT - 100) / 2);
-		//
-		//		for (int i = startWidth; i < borderWidth; i++) {
-		//			for (int j = startHeight; j < borderHeight; j++) {
-		//				assertEquals("pixel is not red", Color.RED, bitmap.getPixel(i, j));
-		//				//Log.v(TAG, "in TEST " + i + " " + j);
-		//			}
-		//		}
-		//
-		//		for (int j = startHeight; j < borderHeight; j++) {
-		//			assertEquals("pixel is not white", Color.WHITE, bitmap.getPixel(startWidth - 1, j));
-		//			//Log.v(TAG, "in TEST2 " + (startWidth - 1) + " " + j);
-		//		}
-		//
-		//		for (int j = startHeight; j < borderHeight; j++) {
-		//			assertEquals("pixel is not white", Color.WHITE, bitmap.getPixel(borderWidth, j));
-		//			//Log.v(TAG, "in TEST3 " + borderWidth + " " + j);
-		//		}
-		//
-		//		for (int i = startWidth; i < borderWidth; i++) {
-		//			assertEquals("pixel is not white", Color.WHITE, bitmap.getPixel(i, startHeight - 1));
-		//			//Log.v(TAG, "in TEST4 " + i + " " + (startHeight - 1));
-		//		}
-		//
-		//		for (int i = startWidth; i < borderWidth; i++) {
-		//			assertEquals("pixel is not white", Color.WHITE, bitmap.getPixel(i, borderHeight));
-		//			//Log.v(TAG, "in TEST5 " + i + " " + borderHeight);
-		//		}
 
 	}
 
