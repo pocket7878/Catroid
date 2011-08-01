@@ -417,6 +417,8 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 			for (File file : listOfFiles) {
 				if (file.getName().endsWith("." + imageExtension)) {
 
+					screenshotMatched = true;
+
 					String currentPath = new String(Consts.DEFAULT_ROOT + "/" + projectName + "/"
 												+ file.getName());
 
