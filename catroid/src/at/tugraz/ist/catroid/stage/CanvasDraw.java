@@ -142,8 +142,6 @@ public class CanvasDraw implements IDraw {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
-
 		}
 	}
-
 }

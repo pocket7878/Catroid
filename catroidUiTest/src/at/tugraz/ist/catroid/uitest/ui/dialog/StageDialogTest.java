@@ -15,18 +15,18 @@ import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
-import at.tugraz.ist.catroid.content.bricks.ScaleCostumeBrick;
+import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
-import at.tugraz.ist.catroid.uitest.util.Utils;
+import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
 
 public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
 	private Solo solo;
-	private String testProject = Utils.PROJECTNAME1;
+	private String testProject = UiTestUtils.PROJECTNAME1;
 	private StorageHandler storageHandler;
 
 	public StageDialogTest() {
@@ -36,7 +36,7 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 
 	@Override
 	public void setUp() throws Exception {
-		Utils.clearAllUtilTestProjects();
+		UiTestUtils.clearAllUtilTestProjects();
 
 		solo = new Solo(getInstrumentation(), getActivity());
 		super.setUp();
@@ -50,7 +50,7 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 			e.printStackTrace();
 		}
 		getActivity().finish();
-		Utils.clearAllUtilTestProjects();
+		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
 	}
 
@@ -99,11 +99,11 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		Sprite sprite = new Sprite("testSprite");
 		Script script = new StartScript("script", sprite);
 		WaitBrick waitBrick = new WaitBrick(sprite, 5000);
-		ScaleCostumeBrick scaleCostumeBrick = new ScaleCostumeBrick(sprite, scale);
+		SetSizeToBrick scaleCostumeBrick = new SetSizeToBrick(sprite, scale);
 
 		script.getBrickList().add(waitBrick);
 		script.getBrickList().add(scaleCostumeBrick);
-		sprite.getScriptList().add(script);
+		sprite.addScript(script);
 		project.getSpriteList().add(sprite);
 
 		storageHandler.saveProject(project);
@@ -117,13 +117,13 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 			}
 		}
 
-		assertEquals(100.0, sprite.getScale());
+		assertEquals("Unexpected sprite size", 100.0, sprite.getSize());
 		solo.goBack();
 		solo.sleep(6000);
 		solo.goBack();
-		assertEquals(100.0, sprite.getScale());
+		assertEquals("Unexpected sprite size", 100.0, sprite.getSize());
 		solo.sleep(4000);
-		assertEquals(scale, sprite.getScale());
+		assertEquals("Unexpected sprite size", scale, sprite.getSize());
 	}
 
 	public void testRestartButtonActivityChain() throws NameNotFoundException, IOException {
@@ -176,12 +176,13 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		ProjectManager projectManager = ProjectManager.getInstance();
 		Project project = projectManager.getCurrentProject();
 
-		//scriptPositions at start
+		//scriptPositions at startKÄSE
 		List<Sprite> spriteList = project.getSpriteList();
 		for (int i = 0; i < spriteList.size(); i++) {
 			int size = spriteList.get(i).getScriptList().size();
+			List<Script> scriptList = spriteList.get(i).getScriptList();
 			for (int j = 0; j < size; j++) {
-				scriptPositionsStart.add(spriteList.get(i).getScriptList().get(j).getBrickPosition());
+				scriptPositionsStart.add(scriptList.get(j).getExecutingBrickIndex());
 			}
 		}
 
@@ -193,12 +194,13 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		solo.sleep(1000);
 
 		//scriptPositions in between
+		spriteList.clear();
+		spriteList = project.getSpriteList();
 		for (int i = 0; i < spriteList.size(); i++) {
 			int size = spriteList.get(i).getScriptList().size();
-			solo.sleep(1000);
+			List<Script> scriptList = spriteList.get(i).getScriptList();
 			for (int j = 0; j < size; j++) {
-				solo.sleep(1000);
-				scriptPositionsRestart.add(spriteList.get(i).getScriptList().get(j).getBrickPosition());
+				scriptPositionsStart.add(scriptList.get(j).getExecutingBrickIndex());
 			}
 		}
 

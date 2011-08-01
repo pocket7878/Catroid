@@ -37,19 +37,18 @@ import at.tugraz.ist.catroid.utils.ImageEditing;
 
 public class SpriteAdapter extends ArrayAdapter<Sprite> {
 
-	private Context context;
 	private static LayoutInflater inflater = null;
+	boolean first = true;
 
-	public SpriteAdapter(Context context2, int resource, int textViewResourceId, List<Sprite> objects) {
-		super(context2, resource, textViewResourceId, objects);
-		this.context = context2;
+	public SpriteAdapter(Context context, int resource, int textViewResourceId, List<Sprite> objects) {
+		super(context, resource, textViewResourceId, objects);
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 	public static class ViewHolder {
 		public TextView text;
 		public ImageView image;
-		public TextView detail;
+		//public TextView detail;
 	}
 
 	@Override
@@ -57,10 +56,10 @@ public class SpriteAdapter extends ArrayAdapter<Sprite> {
 		View spriteView = convertView;
 		ViewHolder holder;
 		if (convertView == null) {
-			spriteView = inflater.inflate(R.layout.sprite_list, null);
+			spriteView = inflater.inflate(R.layout.activity_project_spritelist_item, null);
 			holder = new ViewHolder();
 			holder.text = (TextView) spriteView.findViewById(R.id.sprite_title);
-			holder.detail = (TextView) spriteView.findViewById(R.id.sprite_detail);
+			//holder.detail = (TextView) spriteView.findViewById(R.id.sprite_detail);
 			holder.image = (ImageView) spriteView.findViewById(R.id.sprite_img);
 			spriteView.setTag(holder);
 		} else {
@@ -71,7 +70,8 @@ public class SpriteAdapter extends ArrayAdapter<Sprite> {
 		//this will change after the refactoring of the scriptactivity
 		Sprite sprite = getItem(position);
 		String imagepath = null;
-		for (Script script : sprite.getScriptList()) {
+		for (int i = 0; i < sprite.getNumberOfScripts(); i++) {
+			Script script = sprite.getScript(i);
 			for (Brick brick : script.getBrickList()) {
 				if (brick instanceof SetCostumeBrick) {
 					imagepath = ((SetCostumeBrick) brick).getImagePath();
@@ -85,9 +85,9 @@ public class SpriteAdapter extends ArrayAdapter<Sprite> {
 		//------------------------------------------------------------
 
 		holder.text.setText(sprite.getName());
-		holder.detail.setText("details");
+		//holder.detail.setText("details");
 		if (imagepath == null) {
-			holder.image.setImageResource(R.drawable.sadfrog);
+			holder.image.setImageBitmap(null);
 		} else { //it would be more efficient to use the thumb from setCostumeBrick - but this will change in the near future so I didn't implement it
 			//TODO make this more efficient after the refact of ScriptActivity
 			holder.image.setImageBitmap(ImageEditing.getScaledBitmap(imagepath, Consts.THUMBNAIL_HEIGHT,

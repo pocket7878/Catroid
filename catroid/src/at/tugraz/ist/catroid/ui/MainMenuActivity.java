@@ -23,14 +23,19 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.preference.PreferenceManager;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
-import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.dialogs.AboutDialog;
@@ -41,73 +46,20 @@ import at.tugraz.ist.catroid.utils.ActivityHelper;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class MainMenuActivity extends Activity {
-	private static final String PREFS_NAME = "at.tugraz.ist.catroid";
 	private static final String PREF_PROJECTNAME_KEY = "projectName";
 	private ProjectManager projectManager;
 	private ActivityHelper activityHelper = new ActivityHelper(this);
 
-	private void initListeners() {
-
-		Button currentProjectButton = (Button) findViewById(R.id.current_project_button);
-		currentProjectButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				if (projectManager.getCurrentProject() != null) {
-					Intent intent = new Intent(MainMenuActivity.this, ProjectActivity.class);
-					startActivity(intent);
-				}
-			}
-		});
-
-		Button newProjectButton = (Button) findViewById(R.id.new_project_button);
-		newProjectButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				showDialog(Consts.DIALOG_NEW_PROJECT);
-			}
-		});
-
-		Button loadProjectButton = (Button) findViewById(R.id.projects_on_phone_button);
-		loadProjectButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				showDialog(Consts.DIALOG_LOAD_PROJECT);
-			}
-		});
-
-		Button uploadProjectButton = (Button) findViewById(R.id.upload_project_button);
-		uploadProjectButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				showDialog(Consts.DIALOG_UPLOAD_PROJECT);
-			}
-		});
-
-		Button aboutCatroidButton = (Button) findViewById(R.id.about_catroid_button);
-		aboutCatroidButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				showDialog(Consts.DIALOG_ABOUT);
-			}
-		});
-
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-		Values.SCREEN_WIDTH = dm.widthPixels;
-		Values.SCREEN_HEIGHT = dm.heightPixels;
+		Utils.updateScreenWidthAndHeight(this);
 
 		setContentView(R.layout.activity_main_menu);
 		projectManager = ProjectManager.getInstance();
 
-		if (projectManager.getCurrentProject() != null) {
-			initListeners();
-			return;
-		}
-
 		// Try to load sharedPreferences
-		SharedPreferences prefs = this.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String projectName = prefs.getString(PREF_PROJECTNAME_KEY, null);
 
 		if (projectName != null) {
@@ -119,10 +71,7 @@ public class MainMenuActivity extends Activity {
 		if (projectManager.getCurrentProject() == null) {
 			Button currentProjectButton = (Button) findViewById(R.id.current_project_button);
 			currentProjectButton.setEnabled(false);
-
 		}
-		initListeners();
-
 	}
 
 	@Override
@@ -143,7 +92,7 @@ public class MainMenuActivity extends Activity {
 	protected Dialog onCreateDialog(int id) {
 		Dialog dialog;
 		if (projectManager.getCurrentProject() != null
-					&& StorageHandler.getInstance().projectExists(projectManager.getCurrentProject().getName())) {
+				&& StorageHandler.getInstance().projectExists(projectManager.getCurrentProject().getName())) {
 			projectManager.saveProject(this);
 		}
 
@@ -181,9 +130,6 @@ public class MainMenuActivity extends Activity {
 		if (projectManager.getCurrentProject() == null) {
 			return;
 		}
-		//		TextView currentProjectTextView = (TextView) findViewById(R.id.currentProjectNameTextView);
-		//		currentProjectTextView.setText(getString(R.string.current_project) + " "
-		//				+ projectManager.getCurrentProject().getName());
 
 		projectManager.loadProject(projectManager.getCurrentProject().getName(), this, false);
 	}
@@ -194,9 +140,7 @@ public class MainMenuActivity extends Activity {
 		if (projectManager.getCurrentProject() == null) {
 			return;
 		}
-		//		TextView currentProjectTextView = (TextView) findViewById(R.id.currentProjectNameTextView);
-		//		currentProjectTextView.setText(getString(R.string.current_project) + " "
-		//				+ projectManager.getCurrentProject().getName());
+
 	}
 
 	@Override
@@ -207,10 +151,61 @@ public class MainMenuActivity extends Activity {
 		// also when you switch activities
 		if (projectManager.getCurrentProject() != null) {
 			projectManager.saveProject(this);
-			SharedPreferences.Editor prefs = this.getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-			prefs.putString(PREF_PROJECTNAME_KEY, projectManager.getCurrentProject().getName());
-			prefs.commit();
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			Editor edit = prefs.edit();
+			edit.putString(PREF_PROJECTNAME_KEY, projectManager.getCurrentProject().getName());
+			edit.commit();
 		}
 	}
 
+	public void handleCurrentProjectButton(View v) {
+		if (projectManager.getCurrentProject() != null) {
+			Intent intent = new Intent(MainMenuActivity.this, ProjectActivity.class);
+			startActivity(intent);
+		}
+	}
+
+	public void handleNewProjectButton(View v) {
+		showDialog(Consts.DIALOG_NEW_PROJECT);
+	}
+
+	public void handleLoadProjectButton(View v) {
+		showDialog(Consts.DIALOG_LOAD_PROJECT);
+	}
+
+	public void handleUploadProjectButton(View v) {
+		showDialog(Consts.DIALOG_UPLOAD_PROJECT);
+	}
+
+	public void handleSettingsButton(View v) {
+		LayoutInflater inflater = getLayoutInflater();
+		View layout = inflater.inflate(R.layout.toast_settings, (ViewGroup) findViewById(R.id.toast_layout_root));
+
+		TextView text = (TextView) layout.findViewById(R.id.text);
+		text.setText("Settings not yet implemented!");
+
+		Toast toast = new Toast(getApplicationContext());
+		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setView(layout);
+		toast.show();
+	}
+
+	public void handleTutorialButton(View v) {
+		LayoutInflater inflater = getLayoutInflater();
+		View layout = inflater.inflate(R.layout.toast_tutorial, (ViewGroup) findViewById(R.id.toast_layout_root));
+
+		TextView text = (TextView) layout.findViewById(R.id.text);
+		text.setText("Tutorial not yet implemented!");
+
+		Toast toast = new Toast(getApplicationContext());
+		toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setView(layout);
+		toast.show();
+	}
+
+	public void handleAboutCatroidButton(View v) {
+		showDialog(Consts.DIALOG_ABOUT);
+	}
 }

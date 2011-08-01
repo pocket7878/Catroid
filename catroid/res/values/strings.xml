@@ -40,6 +40,7 @@
     <string name="error">Error</string>
     <string name="please_wait">Please wait</string>
     <string name="loading">Loading...</string>
+    <string name="background">Background</string>
     <string name="stage">Stage</string>
     <string name="ok">OK</string>
 
@@ -57,6 +58,7 @@
     <string name="upload_project">Upload Project</string>
 
     <!-- Main menu activity -->
+    <string name="resume">Resume</string>
     <string name="current_project">Current project:</string>
     <string name="no_project">No project currently loaded</string>
     <string name="current_project_button">Current Project</string>
@@ -134,11 +136,15 @@
     <string name="load_project_dialog_title">Load Project</string>
 
 	<!--  Stage menu dialog -->
-	<string name="back_to_construction_site">To Construction Site</string>
-	<string name="resume_current_project">Resume</string>
-	<string name="restart_current_project">Restart</string>
-	<string name="snapshot">Snapshot</string>
-	<string name="stage_dialog_title">Stage Options</string>
+	<string name="back_to_construction_site">back_to_construction_site</string>
+	<string name="resume_current_project">resume_current_project</string>
+	<string name="restart_current_project">restart_current_projet</string>
+	<string name="snapshot">snapshot</string>
+	<string name="stage_dialog_title">stage_dialog_title</string>
+
+	<!-- Broadcast spinner -->
+	<string name="new_broadcast_message">new...</string>
+	<string name="broadcast_nothing_selected">Nothing...</string>
 	
     <!-- Stage context menu -->
     <string name="stagemenu_construction_site">To Construction Site</string>
@@ -155,9 +161,9 @@
     <string name="x_label">X:</string>
     <string name="y_label">Y:</string>
     <string name="brick_set_costume">Set Costume</string>
-    <string name="brick_scale_costume">Scale Costume to</string>
+    <string name="brick_set_size_to">Set size to</string>
     <string name="brick_go_back">Go back</string>
-    <string name="steps_label">steps</string>
+    <string name="brick_go_back_layers">layers</string>
     <string name="brick_come_to_front">Come to front</string>
     <string name="brick_if_touched">If Touched</string>
     <string name="brick_if_started">If Started</string>
@@ -167,10 +173,50 @@
 	<string name="brick_set_y">Set Y to:</string>
 	<string name="brick_glide">Glide</string>
 	<string name="brick_glide_to">to</string>
+	<string name="brick_when">When</string>
+	<string name="brick_set_ghost_effect">Set Ghost Effect </string>
+	<string name="brick_change_ghost_effect">Change Ghost Effect</string>
+	<string name="brick_set_brightness">Set Brightness</string>
+	<string name="brick_change_brightness">Change Brightness</string>
+	<string name="by_label">by</string>
+	<string name="to_label">to</string>
+	<string name="brick_clear_graphic_effect">Clear graphic effect</string>
+	<string name="brick_set_volume_to">Set volume to</string>
+	<string name="brick_change_volume_by">Change volume by</string>
+	<string name="brick_speak">Speak</string>
+	<string name="brick_forever">Forever</string>
+	<string name="brick_loop_end">End Of Loop</string>
+	<string name="brick_repeat">Repeat</string>
+	<string name="times_label">times</string>
+	<string name="brick_if_on_edge_bounce">If on edge bounce</string>
+	<string name="brick_move">Move</string>
+	<string name="brick_move_n_steps">steps</string>
+	<string name="brick_turn_right">Turn right</string>
+	<string name="brick_turn_right_n_degrees">degrees</string>
+	<string name="brick_turn_left">Turn left</string>
+	<string name="brick_turn_left_n_degrees">degrees</string>
+	<string name="brick_point_in_direction">Point in direction</string>
 	
 	<string name="choose_sound_title">choose a title</string>
+	<string name="choose_language">choose a language</string>
+	
+    <string name="when_action">Choose an action</string>
+    <string name="action_tapped">Tapped</string>
+    <string name="action_doubleTapped">Double Tapped</string>
+    <string name="action_longPressed">Long Pressed</string>
+    <string name="action_touchingStops">Touching Stops</string>
+    <string name="action_swipeLeft">Swipe Left</string> 
+    <string name="action_swipeRight">Swipe Right</string>
+    <string name="action_swipeUp">Swipe Up</string>
+    <string name="action_swipeDown">Swipe Down</string>
 
-    <!-- defaultValues -->
+	<string name="brick_note">Note</string>
+	<string name="brick_broadcast_receive">When I receive</string>
+	
+	<string name="brick_broadcast">Broadcast</string>
+    <string name="brick_broadcast_wait">Broadcast and wait</string>
+	<string name="brick_stop_all_sounds">Stop all sounds</string>
+    <!-- defaulValues -->
     <string name="default_project_name">defaultProject</string>
     
     <!-- Notifications -->
@@ -179,6 +225,9 @@
     </string>
     <string name="notification_invalid_name_entered">
     	Please enter a name
+    </string>
+    <string name="notification_screenshot_ok">
+        Screenshot saved
     </string>
 
     <!-- Error messages -->
@@ -216,7 +265,7 @@
     <string name="error_no_number_entered">
         Please enter a number.
     </string>
-     <string name="error_screenshot_failed">
+    <string name="error_screenshot_failed">
         An error occurred while saving the screenshot.
     </string>
     <string name="error_load_image">
@@ -230,6 +279,4 @@
     <string name="upload_button">Upload</string>
     <string name="upload_project_dialog_title">Upload project</string>
     <string name="project_rename">(Your project will be renamed.)</string>
-    <string name="screenshot_ok">Screenshot saved</string>
-    
 </resources>

@@ -76,11 +76,13 @@ public class StageManager {
 		draw.draw();
 		return draw.saveScreenshot();
 	}
-
-	public void processOnTouch(int coordX, int coordY) {
+	
+	
+	public void processOnTouch(int xCoordinate, int yCoordinate, String action) {
+		draw.processOnTouch(xCoordinate, yCoordinate);
 		ArrayList<Sprite> touchedSpriteList = new ArrayList<Sprite>();
 		for (Sprite sprite : spriteList) {
-			if (sprite.processOnTouch(coordX, coordY)) {
+			if (sprite.processOnTouch(xCoordinate, yCoordinate)) {
 				touchedSpriteList.add(sprite);
 			}
 		}
@@ -88,6 +90,7 @@ public class StageManager {
 		Collections.sort(touchedSpriteList);
 		if (!touchedSpriteList.isEmpty()) {
 			touchedSpriteList.get(touchedSpriteList.size() - 1).startTapScripts();
+			touchedSpriteList.get(touchedSpriteList.size() - 1).startWhenScripts(action);
 		}
 	}
 
@@ -116,5 +119,11 @@ public class StageManager {
 	public void start() {
 		isPaused = false;
 		runnable.run();
+	}
+
+	public void finish() {
+		for (Sprite sprite : spriteList) {
+			sprite.finish();
+		}
 	}
 }

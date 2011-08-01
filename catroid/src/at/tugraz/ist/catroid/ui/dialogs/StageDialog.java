@@ -94,7 +94,7 @@ public class StageDialog extends Dialog {
 				boolean success = stageManager.saveScreenshot();
 
 				if (success) {
-					text = activity.getString(R.string.screenshot_ok);
+					text = activity.getString(R.string.notification_screenshot_ok);
 				} else {
 					text = activity.getString(R.string.error_screenshot_failed);
 				}
@@ -110,8 +110,7 @@ public class StageDialog extends Dialog {
 		int currentSpritePos = projectManager.getCurrentSpritePosition();
 		int currentScriptPos = projectManager.getCurrentScriptPosition();
 
-		projectManager.loadProject(projectManager.getCurrentProject().getName(), this.context,
-				false);
+		projectManager.loadProject(projectManager.getCurrentProject().getName(), this.context, false);
 		projectManager.setCurrentSpriteWithPosition(currentSpritePos);
 		projectManager.setCurrentScriptWithPosition(currentScriptPos);
 		this.activity.finish();

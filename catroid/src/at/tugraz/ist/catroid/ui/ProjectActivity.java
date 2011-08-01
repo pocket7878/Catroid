@@ -22,6 +22,8 @@ import java.util.ArrayList;
 
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -53,7 +55,8 @@ public class ProjectActivity extends ListActivity {
 
 	private void initListeners() {
 		spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject().getSpriteList();
-		spriteAdapter = new SpriteAdapter(this, R.layout.sprite_list, R.id.sprite_title, spriteList);
+		spriteAdapter = new SpriteAdapter(this, R.layout.activity_project_spritelist_item, R.id.sprite_title,
+				spriteList);
 
 		setListAdapter(spriteAdapter);
 		getListView().setTextFilterEnabled(true);
@@ -69,11 +72,9 @@ public class ProjectActivity extends ListActivity {
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				spriteToEdit = spriteList.get(position);
 				if (spriteToEdit.getName().equalsIgnoreCase( //better make a independent object for stage (to solve problem when switching languages)
-						ProjectActivity.this.getString(R.string.stage))) {
+						ProjectActivity.this.getString(R.string.background))) {
 					return true;
 				}
-				removeDialog(Consts.DIALOG_CONTEXT_MENU);
-				initCustomContextMenu();
 				showDialog(Consts.DIALOG_CONTEXT_MENU);
 				return true;
 			}
@@ -81,11 +82,11 @@ public class ProjectActivity extends ListActivity {
 	}
 
 	private void initCustomContextMenu() {
-		Resources res = getResources();
+		Resources resources = getResources();
 		iconContextMenu = new CustomIconContextMenu(this, Consts.DIALOG_CONTEXT_MENU);
-		iconContextMenu.addItem(res, this.getString(R.string.rename), R.drawable.ic_context_rename,
+		iconContextMenu.addItem(resources, this.getString(R.string.rename), R.drawable.ic_context_rename,
 				CONTEXT_MENU_ITEM_RENAME);
-		iconContextMenu.addItem(res, this.getString(R.string.delete), R.drawable.ic_context_delete,
+		iconContextMenu.addItem(resources, this.getString(R.string.delete), R.drawable.ic_context_delete,
 				CONTEXT_MENU_ITEM_DELETE);
 
 		iconContextMenu.setOnClickListener(new CustomIconContextMenu.IconContextMenuOnClickListener() {
@@ -112,17 +113,14 @@ public class ProjectActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_project);
-		//setting divider for list:
-		this.getListView().setDivider(getResources().getDrawable(R.drawable.divider));
-		this.getListView().setDividerHeight(3);
-		//setting background of the list
-		this.getListView().setBackgroundColor(getResources().getColor(R.color.solid_black));
 	}
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		activityHelper.setupActionBar(false, this.getResources().getString(R.string.sprite_list));
+		String title = this.getResources().getString(R.string.project_name) + " "
+				+ ProjectManager.getInstance().getCurrentProject().getName();
+		activityHelper.setupActionBar(false, title);
 
 		activityHelper.addActionButton(R.id.btn_action_add_sprite, R.drawable.ic_plus_black,
 				new View.OnClickListener() {
@@ -143,21 +141,35 @@ public class ProjectActivity extends ListActivity {
 	protected void onStart() {
 		super.onStart();
 		initListeners();
+		initCustomContextMenu();
 	}
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		Dialog dialog;
+		final Dialog dialog;
 
 		switch (id) {
 			case Consts.DIALOG_NEW_SPRITE:
 				dialog = new NewSpriteDialog(this);
 				break;
 			case Consts.DIALOG_RENAME_SPRITE:
-				dialog = new RenameSpriteDialog(this);
+				if (spriteToEdit == null) {
+					dialog = null;
+				} else {
+					dialog = new RenameSpriteDialog(this);
+				}
 				break;
 			case Consts.DIALOG_CONTEXT_MENU:
-				dialog = iconContextMenu.createMenu(spriteToEdit.getName());
+				if (iconContextMenu == null || spriteToEdit == null) {
+					dialog = null;
+				} else {
+					dialog = iconContextMenu.createMenu(spriteToEdit.getName());
+					dialog.setOnShowListener(new OnShowListener() { //TODO try to find a better place: not in init Custom.. (there this is not initialized) also not in CustomIconContextMenu 
+						public void onShow(DialogInterface dialogInterface) {
+							dialog.setTitle(spriteToEdit.getName());
+						}
+					});
+				}
 				break;
 			default:
 				dialog = null;

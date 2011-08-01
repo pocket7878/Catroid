@@ -63,7 +63,7 @@ public class SetCostumeBrick implements Brick {
 	}
 
 	public void execute() {
-		this.sprite.getCostume().setImagePath(getAbsoluteImagePath());
+		this.sprite.getCostume().changeImagePath(getAbsoluteImagePath());
 	}
 
 	public Sprite getSprite() {
@@ -75,6 +75,9 @@ public class SetCostumeBrick implements Brick {
 	}
 
 	private String getAbsoluteImagePath() {
+		if (imageName == null) {
+			return null;
+		}
 		return Consts.DEFAULT_ROOT + "/" + ProjectManager.getInstance().getCurrentProject().getName()
 				+ Consts.IMAGE_DIRECTORY + "/" + imageName;
 	}
