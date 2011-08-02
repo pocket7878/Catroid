@@ -63,12 +63,13 @@ public class ScriptActivityTest extends ActivityInstrumentationTestCase2<ScriptA
 	}
 
 	public void testMainMenuButton() {
-		//kann vorher net gangen sein weil am anfang
-		// kein home button auf action bar vorhanden
 		UiTestUtils.clickOnImageButton(solo, R.id.btn_action_home);
+		solo.sleep(5000);
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
+		solo.sleep(5000);
 		solo.assertCurrentActivity("Clicking on main menu button did not cause main menu to be displayed",
 				MainMenuActivity.class);
+		solo.sleep(5000);
 	}
 
 	public void testCreateNewBrickButton() {

@@ -163,20 +163,23 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		scriptPositionsStart.clear();
 		scriptPositionsRestart.clear();
 
-		List<ImageButton> btnList = solo.getCurrentImageButtons();
-		for (int i = 0; i < btnList.size(); i++) {
-			ImageButton btn = btnList.get(i);
-			if (btn.getId() == R.id.btn_action_play) {
-				solo.clickOnImageButton(i);
-			}
-		}
+		UiTestUtils.clickOnImageButton(solo, R.id.btn_action_play);
+
+		//		solo.clickOnButton(getActivity().getString(R.id.btn_action_play));
+		//		List<ImageButton> btnList = solo.getCurrentImageButtons();
+		//		for (int i = 0; i < btnList.size(); i++) {
+		//			ImageButton btn = btnList.get(i);
+		//			if (btn.getId() == R.id.btn_action_play) {
+		//				solo.clickOnImageButton(i);
+		//			}
+		//		}
 
 		solo.sleep(2000);
 
 		ProjectManager projectManager = ProjectManager.getInstance();
 		Project project = projectManager.getCurrentProject();
 
-		//scriptPositions at startKÄSE
+		//scriptPositions at start
 		List<Sprite> spriteList = project.getSpriteList();
 		for (int i = 0; i < spriteList.size(); i++) {
 			int size = spriteList.get(i).getScriptList().size();
@@ -190,7 +193,7 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		solo.sleep(500);
 		solo.goBack();
 		solo.sleep(500);
-		solo.clickOnButton(getActivity().getString(R.string.restart_current_project));
+		solo.clickOnButton(getActivity().getString(R.id.restart_current_project_button));
 		solo.sleep(1000);
 
 		//scriptPositions in between

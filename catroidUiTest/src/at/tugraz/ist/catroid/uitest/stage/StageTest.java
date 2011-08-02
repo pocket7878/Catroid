@@ -292,9 +292,9 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		UiTestUtils.clickOnImageButton(solo, R.id.btn_action_play);
 		solo.sleep(3000);
 		assertEquals("Unexpected sprite size", 100.0, sprite.getSize());
-		solo.pressMenuItem(1);
+		solo.goBack();
 		solo.sleep(6000);
-		solo.pressMenuItem(1);
+		solo.goBack();
 		assertEquals("Unexpected sprite size", 100.0, sprite.getSize());
 		solo.sleep(4000);
 		assertEquals("Unexpected sprite size", size, sprite.getSize());
@@ -478,7 +478,9 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		assertEquals("Unexpected image height", expectedHeight, costume.getImageHeight());
 
 		solo.goBack();
-		solo.sleep(2000);
+		solo.sleep(5000);
+		solo.clickOnButton(getActivity().getString(R.string.back_to_construction_site));
+		solo.sleep(5000);
 		UiTestUtils.clickOnImageButton(solo, R.id.btn_action_play);
 		solo.sleep(5000);
 	}
