@@ -30,7 +30,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
@@ -113,14 +112,22 @@ public class SetSizeToBrickTest extends ActivityInstrumentationTestCase2<ScriptA
 
 		solo.sleep(1500);
 
-		solo.clickOnScreen(Values.SCREEN_WIDTH, 0);
+		solo.goBack();
+		solo.clickOnButton(3);
+		solo.goBack();
 
-		assertTrue("Successful screenshot Toast not found!",
-				solo.searchText(getActivity().getString(R.string.notification_screenshot_ok)));
+		//assertTrue("Successful screenshot Toast not found!",
+		//		solo.searchText(getActivity().getString(R.string.notification_screenshot_ok)));
 
+		solo.sleep(1500);
 		// -------------------------------------------------------------------------------------------------------------
-		Bitmap screenshot = BitmapFactory.decodeFile(Consts.DEFAULT_ROOT + "/" + projectName + "/"
-				+ Consts.SCREENSHOT_FILE_NAME);
+		ProjectManager projectManager = ProjectManager.getInstance();
+		String lastFilePath = projectManager.getLastFilePath();
+
+		Bitmap screenshot = BitmapFactory.decodeFile(lastFilePath);
+
+		solo.sleep(1500);
+		assertNotNull("Screenshot could not be decoded", screenshot);
 
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;

@@ -123,6 +123,7 @@ public class CanvasDraw implements IDraw {
 
 	public boolean saveScreenshot() {
 		try {
+			ProjectManager projectManager = ProjectManager.getInstance();
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyymmddhhmmss");
 
@@ -133,7 +134,9 @@ public class CanvasDraw implements IDraw {
 				noMediaFile.createNewFile();
 			}
 
-			FileOutputStream fileOutputStream = new FileOutputStream(file.getAbsolutePath());
+			FileOutputStream fileOutputStream;
+			fileOutputStream = new FileOutputStream(file.getAbsolutePath());
+			projectManager.setLastFilePath(file.getAbsolutePath());
 			BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
 			canvasBitmap.compress(CompressFormat.PNG, 0, bos);
 			bos.flush();

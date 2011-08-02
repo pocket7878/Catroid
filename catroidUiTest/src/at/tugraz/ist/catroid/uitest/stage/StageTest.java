@@ -412,8 +412,6 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		solo.clickOnButton(3);
 		solo.sleep(5000);
 
-		File folder = new File(Consts.DEFAULT_ROOT + "/" + projectName + "/");
-		String imageExtension = "png";
 		boolean screenshotMatched = true;
 
 		int borderWidth = ((Values.SCREEN_WIDTH / 2) + 100 / 2);
@@ -421,74 +419,54 @@ public class StageTest extends ActivityInstrumentationTestCase2<MainMenuActivity
 		int startWidth = ((Values.SCREEN_WIDTH - 100) / 2);
 		int startHeight = ((Values.SCREEN_HEIGHT - 100) / 2);
 
-		if (folder.isDirectory()) {
-			File[] listOfFiles = folder.listFiles();
+		solo.sleep(1000);
 
-			if (listOfFiles == null) {
-				System.out.println("Folder contains no image");
-			}
+		ProjectManager projectManager = ProjectManager.getInstance();
+		String lastFilePath = projectManager.getLastFilePath();
 
-			solo.sleep(1000);
+		solo.sleep(1000);
 
-			for (File file : listOfFiles) {
-				if (file.getName().endsWith("." + imageExtension)) {
+		Bitmap bitmap = BitmapFactory.decodeFile(lastFilePath);
+		assertNotNull("Bitmap is NULL", bitmap);
 
-					screenshotMatched = true;
-
-					String currentPath = new String(Consts.DEFAULT_ROOT + "/" + projectName + "/" + file.getName());
-					solo.sleep(1000);
-
-					Bitmap bitmap = BitmapFactory.decodeFile(currentPath);
-					assertTrue("Bitmap is NULL", bitmap != null);
-
-					solo.sleep(1000);
-
-					for (int i = startWidth; i < borderWidth; i++) {
-						for (int j = startHeight; j < borderHeight; j++) {
-							if (bitmap.getPixel(i, j) != Color.RED) {
-								screenshotMatched = false;
-								Log.v(TAG, "in TEST " + i + " " + j);
-							}
-						}
-					}
-
-					for (int j = startHeight; j < borderHeight; j++) {
-						if (bitmap.getPixel(startWidth - 1, j) != Color.WHITE) {
-							screenshotMatched = false;
-							Log.v(TAG, "in TEST2 " + (startWidth - 1) + " " + j);
-						}
-					}
-
-					for (int j = startHeight; j < borderHeight; j++) {
-						if (bitmap.getPixel(borderWidth, j) != Color.WHITE) {
-							screenshotMatched = false;
-							Log.v(TAG, "in TEST3 " + borderWidth + " " + j);
-						}
-					}
-
-					for (int i = startWidth; i < borderWidth; i++) {
-						if (bitmap.getPixel(i, startHeight - 1) != Color.WHITE) {
-							screenshotMatched = false;
-							Log.v(TAG, "in TEST4 " + i + " " + (startHeight - 1));
-						}
-					}
-
-					for (int i = startWidth; i < borderWidth; i++) {
-						if (bitmap.getPixel(i, borderHeight) != Color.WHITE) {
-							screenshotMatched = false;
-							Log.v(TAG, "in TEST5 " + i + " " + borderHeight);
-						}
-					}
+		solo.sleep(1000);
+		for (int i = startWidth; i < borderWidth; i++) {
+			for (int j = startHeight; j < borderHeight; j++) {
+				if (bitmap.getPixel(i, j) != Color.RED) {
+					screenshotMatched = false;
+					Log.v(TAG, "in TEST " + i + " " + j);
 				}
-				if (screenshotMatched == true) {
-					break;
-				}
-				assertEquals("Screenshot doesn't work correctly", screenshotMatched, true);
 			}
 		}
 
-		assertEquals("Screenshot doesn't work correctly", screenshotMatched, true);
+		for (int j = startHeight; j < borderHeight; j++) {
+			if (bitmap.getPixel(startWidth - 1, j) != Color.WHITE) {
+				screenshotMatched = false;
+				Log.v(TAG, "in TEST2 " + (startWidth - 1) + " " + j);
+			}
+		}
 
+		for (int j = startHeight; j < borderHeight; j++) {
+			if (bitmap.getPixel(borderWidth, j) != Color.WHITE) {
+				screenshotMatched = false;
+				Log.v(TAG, "in TEST3 " + borderWidth + " " + j);
+			}
+		}
+
+		for (int i = startWidth; i < borderWidth; i++) {
+			if (bitmap.getPixel(i, startHeight - 1) != Color.WHITE) {
+				screenshotMatched = false;
+				Log.v(TAG, "in TEST4 " + i + " " + (startHeight - 1));
+			}
+		}
+
+		for (int i = startWidth; i < borderWidth; i++) {
+			if (bitmap.getPixel(i, borderHeight) != Color.WHITE) {
+				screenshotMatched = false;
+				Log.v(TAG, "in TEST5 " + i + " " + borderHeight);
+			}
+		}
+		assertEquals("Screenshot doesn't work correctly", screenshotMatched, true);
 	}
 
 	public void clickOnScreenAndReturn(int x, int y, int expectedWidth, int expectedHeight) {

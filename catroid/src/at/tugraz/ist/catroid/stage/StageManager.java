@@ -76,8 +76,7 @@ public class StageManager {
 		draw.draw();
 		return draw.saveScreenshot();
 	}
-	
-	
+
 	public void processOnTouch(int xCoordinate, int yCoordinate, String action) {
 		draw.processOnTouch(xCoordinate, yCoordinate);
 		ArrayList<Sprite> touchedSpriteList = new ArrayList<Sprite>();
