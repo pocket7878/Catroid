@@ -67,7 +67,7 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 
 		solo.goBack();
 
-		assertTrue("Not in stage", solo.getCurrentActivity() instanceof StageActivity);
+		solo.assertCurrentActivity("Program is not in stage activity", StageActivity.class);
 	}
 
 	public void testBackToPreviousActivity() throws NameNotFoundException, IOException {
@@ -147,7 +147,7 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		solo.clickOnButton(getActivity().getString(R.string.restart_current_project));
 		solo.sleep(1000);
 
-		assertTrue("Not in Stage", solo.getCurrentActivity() instanceof StageActivity);
+		solo.assertCurrentActivity("Program is not in stage activity", StageActivity.class);
 
 		solo.sleep(500);
 		solo.goBack();
@@ -177,10 +177,12 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		solo.sleep(2000);
 
 		ProjectManager projectManager = ProjectManager.getInstance();
-		Project project = projectManager.getCurrentProject();
+		Project projectStart = projectManager.getCurrentProject();
+
+		String projectNameStart = projectStart.getName();
 
 		//scriptPositions at start
-		List<Sprite> spriteList = project.getSpriteList();
+		List<Sprite> spriteList = projectStart.getSpriteList();
 		for (int i = 0; i < spriteList.size(); i++) {
 			int size = spriteList.get(i).getScriptList().size();
 			List<Script> scriptList = spriteList.get(i).getScriptList();
@@ -188,22 +190,27 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 				scriptPositionsStart.add(scriptList.get(j).getExecutingBrickIndex());
 			}
 		}
+		spriteList.clear();
 
 		solo.clickOnScreen(Values.SCREEN_WIDTH / 2, Values.SCREEN_HEIGHT / 2);
 		solo.sleep(500);
 		solo.goBack();
 		solo.sleep(500);
-		solo.clickOnButton(getActivity().getString(R.id.restart_current_project_button));
+		solo.clickOnButton(getActivity().getString(R.string.restart_current_project));
 		solo.sleep(1000);
 
 		//scriptPositions in between
-		spriteList.clear();
-		spriteList = project.getSpriteList();
+		Project projectRestart = ProjectManager.getInstance().getCurrentProject();
+		String projectNameRestart = projectRestart.getName();
+
+		assertEquals("Wrong project after restart", projectNameStart, projectNameRestart);
+
+		spriteList = projectRestart.getSpriteList();
 		for (int i = 0; i < spriteList.size(); i++) {
 			int size = spriteList.get(i).getScriptList().size();
 			List<Script> scriptList = spriteList.get(i).getScriptList();
 			for (int j = 0; j < size; j++) {
-				scriptPositionsStart.add(scriptList.get(j).getExecutingBrickIndex());
+				scriptPositionsRestart.add(scriptList.get(j).getExecutingBrickIndex());
 			}
 		}
 

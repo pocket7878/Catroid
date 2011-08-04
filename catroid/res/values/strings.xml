@@ -136,11 +136,11 @@
     <string name="load_project_dialog_title">Load Project</string>
 
 	<!--  Stage menu dialog -->
-	<string name="back_to_construction_site">back_to_construction_site</string>
-	<string name="resume_current_project">resume_current_project</string>
-	<string name="restart_current_project">restart_current_projet</string>
-	<string name="snapshot">snapshot</string>
-	<string name="stage_dialog_title">stage_dialog_title</string>
+	<string name="back_to_construction_site">To construction site</string>
+	<string name="resume_current_project">Resume</string>
+	<string name="restart_current_project">Restart</string>
+	<string name="snapshot">Screenshot</string>
+	<string name="stage_dialog_title">Stage Options</string>
 
 	<!-- Broadcast spinner -->
 	<string name="new_broadcast_message">new...</string>
