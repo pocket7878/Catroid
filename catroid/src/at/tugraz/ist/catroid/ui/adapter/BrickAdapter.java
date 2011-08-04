@@ -26,6 +26,7 @@ package at.tugraz.ist.catroid.ui.adapter;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -60,6 +61,7 @@ public class BrickAdapter extends BaseExpandableListAdapter implements DropListe
 	private BrickListAnimation brickListAnimation;
 	private boolean animateChildren;
 	public static final int FOCUS_BLOCK_DESCENDANTS = 2;
+	private static final String TAG = "testMainMenuButton";
 
 	public BrickAdapter(Context context, Sprite sprite, DragNDropListView listView) {
 		this.context = context;
@@ -96,6 +98,7 @@ public class BrickAdapter extends BaseExpandableListAdapter implements DropListe
 	}
 
 	public int getGroupCount() {
+		Log.v(TAG, "getGroupCount(): " + sprite.getNumberOfScripts());
 		return sprite.getNumberOfScripts();
 	}
 
