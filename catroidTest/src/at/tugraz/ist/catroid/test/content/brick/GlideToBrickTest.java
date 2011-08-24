@@ -126,7 +126,6 @@ public class GlideToBrickTest extends AndroidTestCase {
 		script.addBrick(showBrick);
 
 		sprite.getScriptList().add(script);
-
 		sprite.startScripts();
 
 		try {
