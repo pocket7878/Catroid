@@ -40,6 +40,7 @@ public class Project implements Serializable {
 	private String deviceName;
 	@SuppressWarnings("unused")
 	private String screenResolution;
+	private static Context internalContext;
 
 	private int versionCode;
 
@@ -54,6 +55,7 @@ public class Project implements Serializable {
 			return;
 		}
 
+		internalContext = context;
 		Sprite stage = new Sprite(context.getString(R.string.stage));
 		addSprite(stage);
 
@@ -98,6 +100,10 @@ public class Project implements Serializable {
 
 	public String getName() {
 		return name;
+	}
+
+	public static Context getContext() {
+		return internalContext;
 	}
 
 	public void setVersionName(String versionName) {

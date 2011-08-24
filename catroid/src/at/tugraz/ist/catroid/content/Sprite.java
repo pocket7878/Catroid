@@ -34,6 +34,7 @@ public class Sprite implements Serializable, Comparable<Sprite> {
 	private transient int zPosition;
 	private transient double scale;
 	private transient boolean isVisible;
+	private transient boolean isVibrate;
 	private transient boolean toDraw;
 	private List<Script> scriptList;
 	private transient List<Thread> threadList;
@@ -48,6 +49,7 @@ public class Sprite implements Serializable, Comparable<Sprite> {
 		zPosition = 0;
 		scale = 100.0;
 		isVisible = true;
+		isVibrate = false;
 		threadList = new ArrayList<Thread>();
 		costume = new Costume(this, null);
 		xPosition = 0;
@@ -145,6 +147,10 @@ public class Sprite implements Serializable, Comparable<Sprite> {
 		return isVisible;
 	}
 
+	public boolean isVibrate() {
+		return isVibrate;
+	}
+
 	public synchronized void setXYPosition(int xPosition, int yPosition) {
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
@@ -200,6 +206,16 @@ public class Sprite implements Serializable, Comparable<Sprite> {
 		isVisible = false;
 		toDraw = true;
 	}
+
+	/*
+	 * public synchronized void vibrate() {
+	 * isVibrate = true;
+	 * }
+	 * 
+	 * public synchronized void endVibrate() {
+	 * isVibrate = false;
+	 * }
+	 */
 
 	public synchronized Costume getCostume() {
 		return costume;

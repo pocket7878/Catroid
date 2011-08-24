@@ -24,12 +24,15 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.Vibrator;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.exception.InterruptedRuntimeException;
 import at.tugraz.ist.catroid.ui.dialogs.EditDoubleDialog;
@@ -40,32 +43,66 @@ public class VibrateBrick implements Brick, OnDismissListener {
 	private Sprite sprite;
 	public Vibrator vibrator;
 	private Context internalContext;
+	private boolean vibrateStart, vibrateEnd, hasVibrator;
 
 	public VibrateBrick(Sprite sprite, int timeToVibrateInMilliseconds) {
 		Log.d("MyActivity", "Vibratetime " + timeToVibrateInMilliseconds);
 		this.timeToVibrateInMilliseconds = timeToVibrateInMilliseconds;
-		this.sprite = sprite;
+		if (sprite != null) {
+			this.sprite = sprite;
+		} else {
+			return;
+		}
 		internalContext = null;
+		vibrateStart = false;
+		vibrateEnd = false;
+	}
+
+	public boolean vibrateStartValue() {
+		return vibrateStart;
+	}
+
+	public boolean vibrateEndValue() {
+		return vibrateEnd;
 	}
 
 	public void execute() {
+		if (internalContext == null) {
+			Log.d("MyActivity", "Context null");
+			internalContext = Project.getContext();
+		}
+		Log.d("MyActivity", "Execute reached");
 		long startTime = 0;
-
-		Log.d("MyActivity", "While reached");
+		vibrateStart = true;
+		if (vibrateStartValue()) {
+			Log.d("MyActivity", "VibrateBrick.java -> TRUE");
+		}
+		Log.d("MyActivity", "Vor TRY");
 		try {
-
 			startTime = System.currentTimeMillis();
 			vibrator = (Vibrator) internalContext.getSystemService(Context.VIBRATOR_SERVICE);
+			sprite.isVibrate();
 			vibrator.vibrate(timeToVibrateInMilliseconds);
 			Thread.sleep(timeToVibrateInMilliseconds);
+			vibrateEnd = true;
 
 		} catch (InterruptedException e) {
+
 			vibrator.cancel();
 			timeToVibrateInMilliseconds = timeToVibrateInMilliseconds
 						- (int) (System.currentTimeMillis() - startTime);
-			throw new InterruptedRuntimeException("WaitBrick was interrupted", e);
+			throw new InterruptedRuntimeException("VibrateBrick was interrupted", e);
 		}
+	}
 
+	public boolean isMobile() {
+		String id = Settings.Secure.getString(Project.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+		boolean emulator = TextUtils.isEmpty(id);
+		if (!emulator) {
+			String emulatorID = "9774D56D682E549C";
+			emulator = id.toUpperCase().equals(emulatorID);
+		}
+		return emulator;
 	}
 
 	public Sprite getSprite() {
@@ -76,12 +113,13 @@ public class VibrateBrick implements Brick, OnDismissListener {
 		return timeToVibrateInMilliseconds;
 	}
 
-	public void stopVibrate() {
-		long temp = getVibrateTime();
-		Log.d("MyActivity", "STOP Vibrate" + temp);
-		vibrator = (Vibrator) internalContext.getSystemService(Context.VIBRATOR_SERVICE);
-		vibrator.cancel();
-	}
+	/*
+	 * public void stopVibrate() {
+	 * long temp = getVibrateTime();
+	 * vibrator = (Vibrator) internalContext.getSystemService(Context.VIBRATOR_SERVICE);
+	 * vibrator.cancel();
+	 * }
+	 */
 
 	public View getView(Context context, int brickId, BaseExpandableListAdapter adapter) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -114,21 +152,9 @@ public class VibrateBrick implements Brick, OnDismissListener {
 
 	public void onDismiss(DialogInterface dialog) {
 		Log.d("MyActivity", "ONDISMISS REACHED");
-		stopVibrate();
 		timeToVibrateInMilliseconds = (int) Math.round(((EditDoubleDialog) dialog).getValue() * 1000);
 		dialog.cancel();
 
 	}
 
-	public void onPause() {
-		Log.d("MyActivity", "ONPAUSE REACHED");
-	}
-
-	public void onCancel() {
-		Log.d("MyActivity", "ONCANCEL REACHED");
-	}
-
-	public void onStop() {
-		Log.d("MyActivity", "ONSTOP REACHED");
-	}
 }
