@@ -24,6 +24,12 @@ import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.VibrateBrick;
 
+/**
+ * 
+ * @author Stefan Hohenwarter
+ * 
+ */
+
 public class VibrateBrickTest extends AndroidTestCase {
 
 	public void testVibrate() {
