@@ -26,7 +26,6 @@ import android.content.DialogInterface.OnDismissListener;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
@@ -37,6 +36,12 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.exception.InterruptedRuntimeException;
 import at.tugraz.ist.catroid.ui.dialogs.EditDoubleDialog;
 
+/**
+ * 
+ * @author Stefan Hohenwarter
+ * 
+ */
+
 public class VibrateBrick implements Brick, OnDismissListener {
 	private static final long serialVersionUID = 1L;
 	private int timeToVibrateInMilliseconds;
@@ -46,7 +51,6 @@ public class VibrateBrick implements Brick, OnDismissListener {
 	private boolean vibrateStart, vibrateEnd, hasVibrator;
 
 	public VibrateBrick(Sprite sprite, int timeToVibrateInMilliseconds) {
-		Log.d("MyActivity", "Vibratetime " + timeToVibrateInMilliseconds);
 		this.timeToVibrateInMilliseconds = timeToVibrateInMilliseconds;
 		if (sprite != null) {
 			this.sprite = sprite;
@@ -68,16 +72,10 @@ public class VibrateBrick implements Brick, OnDismissListener {
 
 	public void execute() {
 		if (internalContext == null) {
-			Log.d("MyActivity", "Context null");
 			internalContext = Project.getContext();
 		}
-		Log.d("MyActivity", "Execute reached");
 		long startTime = 0;
 		vibrateStart = true;
-		if (vibrateStartValue()) {
-			Log.d("MyActivity", "VibrateBrick.java -> TRUE");
-		}
-		Log.d("MyActivity", "Vor TRY");
 		try {
 			startTime = System.currentTimeMillis();
 			vibrator = (Vibrator) internalContext.getSystemService(Context.VIBRATOR_SERVICE);
@@ -113,14 +111,6 @@ public class VibrateBrick implements Brick, OnDismissListener {
 		return timeToVibrateInMilliseconds;
 	}
 
-	/*
-	 * public void stopVibrate() {
-	 * long temp = getVibrateTime();
-	 * vibrator = (Vibrator) internalContext.getSystemService(Context.VIBRATOR_SERVICE);
-	 * vibrator.cancel();
-	 * }
-	 */
-
 	public View getView(Context context, int brickId, BaseExpandableListAdapter adapter) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		internalContext = context;
@@ -151,7 +141,6 @@ public class VibrateBrick implements Brick, OnDismissListener {
 	}
 
 	public void onDismiss(DialogInterface dialog) {
-		Log.d("MyActivity", "ONDISMISS REACHED");
 		timeToVibrateInMilliseconds = (int) Math.round(((EditDoubleDialog) dialog).getValue() * 1000);
 		dialog.cancel();
 
