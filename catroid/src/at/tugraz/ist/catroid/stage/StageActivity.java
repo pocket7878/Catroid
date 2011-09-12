@@ -30,17 +30,15 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
-import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.stage.SimpleGestureFilter.SimpleGestureListener;
+import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class StageActivity extends Activity implements SimpleGestureListener, OnInitListener {
@@ -48,7 +46,8 @@ public class StageActivity extends Activity implements SimpleGestureListener, On
 	public static SurfaceView stage;
 	private SoundManager soundManager;
 	private StageManager stageManager;
-	private boolean stagePlaying = false;
+	private StageDialog stageDialog;
+	private boolean stagePlaying = true;
 	private SimpleGestureFilter detector;
 	private final static String TAG = StageActivity.class.getSimpleName();
 	private int MY_DATA_CHECK_CODE = 0;
@@ -81,6 +80,8 @@ public class StageActivity extends Activity implements SimpleGestureListener, On
 				startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
 			}
 
+			stageDialog = new StageDialog(this, stageManager);
+		
 			startStage();
 		}
 	}
@@ -105,25 +106,29 @@ public class StageActivity extends Activity implements SimpleGestureListener, On
 		Log.v(TAG, action);
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.stage_menu, menu);
-		return true;
-	}
+	/*
+	 * @Override
+	 * public boolean onCreateOptionsMenu(Menu menu) {
+	 * super.onCreateOptionsMenu(menu);
+	 * getMenuInflater().inflate(R.menu.stage_menu, menu);
+	 * return true;
+	 * }
+	 */
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.stagemenuStart:
-				pauseOrContinue();
-				break;
-			case R.id.stagemenuConstructionSite:
-				manageLoadAndFinish();
-				break;
-		}
-		return true;
-	}
+	/*
+	 * @Override
+	 * public boolean onOptionsItemSelected(MenuItem item) {
+	 * switch (item.getItemId()) {
+	 * case R.id.stagemenuStart:
+	 * pauseOrContinue();
+	 * break;
+	 * case R.id.stagemenuConstructionSite:
+	 * manageLoadAndFinish();
+	 * break;
+	 * }
+	 * return true;
+	 * }
+	 *///Options Menu no longer existing
 
 	@Override
 	protected void onStop() {
@@ -158,19 +163,10 @@ public class StageActivity extends Activity implements SimpleGestureListener, On
 		soundManager.stopAllSounds();
 		if (textToSpeechEngine != null) {
 			textToSpeechEngine.stop();
-			textToSpeechEngine.shutdown();
+			textToSpeechEngine.shutdown();//only in back to construction
 		}
-		manageLoadAndFinish();
-	}
-
-	private void manageLoadAndFinish() {
-		ProjectManager projectManager = ProjectManager.getInstance();
-		int currentSpritePos = projectManager.getCurrentSpritePosition();
-		int currentScriptPos = projectManager.getCurrentScriptPosition();
-		projectManager.loadProject(projectManager.getCurrentProject().getName(), this, false);
-		projectManager.setCurrentSpriteWithPosition(currentSpritePos);
-		projectManager.setCurrentScriptWithPosition(currentScriptPos);
-		finish();
+		pauseOrContinue();
+		stagePlaying = !stagePlaying;
 	}
 
 	private void pauseOrContinue() {
@@ -178,6 +174,7 @@ public class StageActivity extends Activity implements SimpleGestureListener, On
 			stageManager.pause(true);
 			soundManager.pause();
 			stagePlaying = false;
+			stageDialog.show();
 		} else {
 			stageManager.resume();
 			soundManager.resume();

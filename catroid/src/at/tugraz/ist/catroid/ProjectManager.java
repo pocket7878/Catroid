@@ -38,6 +38,7 @@ public class ProjectManager {
 	private Script currentScript;
 	private Sprite currentSprite;
 	private static ProjectManager instance;
+	private String lastFileSaved;
 
 	public FileChecksumContainer fileChecksumContainer;
 	public MessageContainer messageContainer;
@@ -111,20 +112,20 @@ public class ProjectManager {
 	public Project getCurrentProject() {
 		return project;
 	}
-
+	
 	public void setProject(Project project) {
 		currentScript = null;
 		currentSprite = null;
 
 		this.project = project;
 	}
-
+	
 	public void deleteCurrentProject() {
 		StorageHandler.getInstance().deleteProject(project);
 
 		project = null;
 	}
-
+	
 	public boolean renameProject(String newProjectName, Context context) {
 		if (StorageHandler.getInstance().projectExists(newProjectName)) {
 			Utils.displayErrorMessage(context, context.getString(R.string.error_project_exists));
@@ -146,10 +147,11 @@ public class ProjectManager {
 
 		return (directoryRenamed && fileRenamed);
 	}
-
+	
 	public Sprite getCurrentSprite() {
 		return currentSprite;
 	}
+
 
 	public void setCurrentSprite(Sprite sprite) {
 		currentSprite = sprite;
@@ -166,6 +168,7 @@ public class ProjectManager {
 			currentScript = script;
 		}
 	}
+
 
 	public void addSprite(Sprite sprite) {
 		project.addSprite(sprite);
@@ -219,5 +222,13 @@ public class ProjectManager {
 		currentScript = project.getSpriteList().get(this.getCurrentSpritePosition()).getScript(position);
 
 		return true;
+	}
+
+	public String getLastFilePath() {
+		return lastFileSaved;
+	}
+
+	public void setLastFilePath(String fd) {
+		lastFileSaved = fd;
 	}
 }
