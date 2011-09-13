@@ -184,10 +184,10 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		//scriptPositions at start
 		List<Sprite> spriteList = projectStart.getSpriteList();
 		for (int i = 0; i < spriteList.size(); i++) {
-			int size = spriteList.get(i).getScriptList().size();
-			List<Script> scriptList = spriteList.get(i).getScriptList();
+			Sprite sprite = spriteList.get(i);
+			int size = sprite.getNumberOfScripts();
 			for (int j = 0; j < size; j++) {
-				scriptPositionsStart.add(scriptList.get(j).getExecutingBrickIndex());
+				scriptPositionsRestart.add(sprite.getScript(j).getExecutingBrickIndex());
 			}
 		}
 		spriteList.clear();
@@ -207,10 +207,10 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 
 		spriteList = projectRestart.getSpriteList();
 		for (int i = 0; i < spriteList.size(); i++) {
-			int size = spriteList.get(i).getScriptList().size();
-			List<Script> scriptList = spriteList.get(i).getScriptList();
+			Sprite sprite = spriteList.get(i);
+			int size = sprite.getNumberOfScripts();
 			for (int j = 0; j < size; j++) {
-				scriptPositionsRestart.add(scriptList.get(j).getExecutingBrickIndex());
+				scriptPositionsRestart.add(sprite.getScript(j).getExecutingBrickIndex());
 			}
 		}
 

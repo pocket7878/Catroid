@@ -42,8 +42,6 @@ import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Costume;
 import at.tugraz.ist.catroid.content.SpeechBubble;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.utils.ImageEditing;
-import at.tugraz.ist.catroid.utils.Utils;
 
 /**
  * 
@@ -59,9 +57,11 @@ public class CanvasDraw implements IDraw {
 	private Canvas bufferCanvas;
 	private Rect flushRectangle;
 	ArrayList<Sprite> sprites;
+	private Activity activity;
 
 	public CanvasDraw(Activity activity) {
 		super();
+		this.activity = activity;
 		surfaceView = StageActivity.stage;
 		holder = surfaceView.getHolder();
 		whitePaint = new Paint();

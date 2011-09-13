@@ -124,12 +124,14 @@ public class StageDialog extends Dialog {
 	private void pauseOrContinue() {
 		if (stagePlaying) {
 			stageManager.pause(true);
-			soundManager.pause();
+			//soundManager.pause();
+			SoundManager.getInstance().pause();
 			stagePlaying = true;
 			this.show();
 		} else {
+			//soundManager.resume();
+			SoundManager.getInstance().resume();
 			stageManager.resume();
-			soundManager.resume();
 			stagePlaying = false;
 			this.dismiss();
 		}

@@ -81,7 +81,7 @@ public class StageActivity extends Activity implements SimpleGestureListener, On
 			}
 
 			stageDialog = new StageDialog(this, stageManager);
-		
+
 			startStage();
 		}
 	}
@@ -160,11 +160,6 @@ public class StageActivity extends Activity implements SimpleGestureListener, On
 
 	@Override
 	public void onBackPressed() {
-		soundManager.stopAllSounds();
-		if (textToSpeechEngine != null) {
-			textToSpeechEngine.stop();
-			textToSpeechEngine.shutdown();//only in back to construction
-		}
 		pauseOrContinue();
 		stagePlaying = !stagePlaying;
 	}
