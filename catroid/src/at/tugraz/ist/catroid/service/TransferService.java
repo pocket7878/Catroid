@@ -12,6 +12,7 @@ import android.os.IBinder;
 import android.util.Log;
 import at.tugraz.ist.catroid.service.requests.BillingRequest;
 import at.tugraz.ist.catroid.service.requests.UploadRequest;
+import at.tugraz.ist.catroid.web.ServerCalls;
 
 public class TransferService extends Service implements ServiceConnection {
 
@@ -26,6 +27,15 @@ public class TransferService extends Service implements ServiceConnection {
 	public IBinder onBind(Intent intent) {
 		Log.d(TAG, "onServiceConnected address of transfer Service: " + ((LocalBinder) binder).getService());
 		return binder;
+	}
+
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		String name = intent.getStringExtra("name");
+		
+		ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString, userEmail, language, token)
+		
+		return Service.START_STICKY;
 	}
 
 	public boolean bindToMarketBillingService() {

@@ -57,7 +57,7 @@ public class UploadRequest extends BillingRequest {
 		String[] paths = dirPath.list();
 
 		if (paths == null) {
-			throw new WebconnectionException(WebconnectionException.ERROR_UNKNOWN);
+			//throw new WebconnectionException(WebconnectionException.ERROR_UNKNOWN);
 		}
 
 		for (int i = 0; i < paths.length; i++) {
@@ -74,7 +74,7 @@ public class UploadRequest extends BillingRequest {
 			}
 			if (!UtilZip.writeToZipFile(paths, zipFileString)) {
 				zipFile.delete();
-				throw new WebconnectionException(WebconnectionException.ERROR_UNKNOWN);
+				//throw new WebconnectionException(WebconnectionException.ERROR_UNKNOWN);
 			}
 
 			//String deviceIMEI = UtilDeviceInfo.getDeviceIMEI(context);
