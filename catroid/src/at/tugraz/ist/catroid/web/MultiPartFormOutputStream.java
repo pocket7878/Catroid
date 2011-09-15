@@ -289,6 +289,9 @@ public class MultiPartFormOutputStream {
 		}
 		out.writeBytes(NEWLINE);
 		// write content
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> UPLOAD
 		byte[] data = new byte[Consts.BUFFER_8K];
 		int length = 0;
 		while ((length = is.read(data, 0, data.length)) != -1) {

@@ -102,6 +102,8 @@ public class ConnectionWrapper {
 		file.getParentFile().mkdirs();
 		FileOutputStream fos = new FileOutputStream(file);
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> DOWNLOAD
 		byte[] buffer = new byte[Consts.BUFFER_8K];
 		int length = 0;
 		while ((length = input.read(buffer)) != -1) {
