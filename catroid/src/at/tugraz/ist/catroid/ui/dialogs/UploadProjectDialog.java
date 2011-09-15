@@ -21,6 +21,7 @@ package at.tugraz.ist.catroid.ui.dialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -37,7 +38,7 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
-import at.tugraz.ist.catroid.transfers.ProjectUploadTask;
+import at.tugraz.ist.catroid.service.TransferService;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class UploadProjectDialog extends Dialog implements OnClickListener {
@@ -148,7 +149,12 @@ public class UploadProjectDialog extends Dialog implements OnClickListener {
 
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 				String token = prefs.getString(Consts.TOKEN, "0");
-				new ProjectUploadTask(context, uploadName, projectDescription, projectPath, token).execute();
+
+				// create service
+				Intent i = new Intent(context, TransferService.class);
+				i.putExtra("name", uploadName);
+				context.startService(i);
+				//new ProjectUploadTask(context.startService(arg0), uploadName, projectDescription, projectPath, token).execute();
 				break;
 
 			case R.id.cancel_button:
