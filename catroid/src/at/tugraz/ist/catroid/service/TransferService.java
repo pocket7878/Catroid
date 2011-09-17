@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,6 +16,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.service.requests.BillingRequest;
 import at.tugraz.ist.catroid.service.requests.UploadRequest;
@@ -38,33 +41,58 @@ public class TransferService extends Service implements ServiceConnection {
 
 	@Override
 	public void onCreate() {
-		NotificationManager mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-		// Display a notification about us starting.  We put an icon in the status bar.
-		//showNotification();
+		//		String ns = Context.NOTIFICATION_SERVICE;
+		//		final NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
+		//
+		//		int icon = R.drawable.ic_screenshot; // icon from resources
+		//		CharSequence tickerText = "Upload..."; // ticker-text
+		//		long when = System.currentTimeMillis(); // notification time
+		//		Context context = getApplicationContext(); // application Context
+		//		CharSequence contentTitle = "Upload Notification"; // expanded message title
+		//		CharSequence contentText = "Upload is starting..."; // expanded message text
+		//
+		//		Intent notificationIntent = new Intent(this, TransferService.class);
+		//		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+		//
+		//		// the next two lines initialize the Notification, using the configurations above
+		//		final Notification notification = new Notification(icon, tickerText, when);
+		//		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+		//
+		//		mNotificationManager.notify(1, notification);
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+
 		String projectName = intent.getStringExtra("name");
+		String ns = Context.NOTIFICATION_SERVICE;
+		final NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
+
+		int icon = R.drawable.ic_screenshot; // icon from resources
+		CharSequence tickerText = "Upload..."; // ticker-text
+		long when = System.currentTimeMillis(); // notification time
+		Context context = getApplicationContext(); // application Context
+		CharSequence contentTitle = "Upload Notification"; // expanded message title
+		CharSequence contentText = "Upload is starting for Project: " + projectName; // expanded message text
+
+		Intent notificationIntent = new Intent(this, TransferService.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+		// the next two lines initialize the Notification, using the configurations above
+		final Notification notification = new Notification(icon, tickerText, when);
+		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+
+		mNotificationManager.notify(1, notification);
+
 		String projectDescription = intent.getStringExtra("description");
 		String token = intent.getStringExtra("token");
-
-		android.os.Debug.waitForDebugger();
-
-		Context context = getApplicationContext();
-		CharSequence text = "Upload process starting....";
-		int duration = Toast.LENGTH_SHORT;
-
-		Toast toast = Toast.makeText(context, text, duration);
-		toast.show();
 
 		File dirPath = new File(intent.getStringExtra("projectPath"));
 		String[] paths = dirPath.list();
 
-		//		if (paths == null) {
-		//			return false;
-		//		}
+		if (paths == null) {
+			return 0;
+		}
 
 		for (int i = 0; i < paths.length; i++) {
 			paths[i] = dirPath + "/" + paths[i];
@@ -83,22 +111,23 @@ public class TransferService extends Service implements ServiceConnection {
 		}
 		if (!UtilZip.writeToZipFile(paths, zipFileString)) {
 			zipFile.delete();
-			//return false;
+			return 0;
 		}
 
 		try {
 			ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString, null, null, token);
-			text = "Upload process finished!";
-			toast = Toast.makeText(context, text, duration);
+			CharSequence toast_message = "Upload process finished!";
+			int duration = Toast.LENGTH_SHORT;
+			//Context context = getApplicationContext();
+			Toast toast = Toast.makeText(context, toast_message, duration);
 			toast.show();
 		} catch (WebconnectionException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			text = e.getMessage();
-			toast = Toast.makeText(context, text, duration);
-			toast.show();
+			e.printStackTrace();
+			return 0;
 		}
 		zipFile.delete();
+		stopSelf();
+
 		return Service.START_STICKY;
 	}
 
@@ -166,7 +195,6 @@ public class TransferService extends Service implements ServiceConnection {
 
 	@Override
 	public void onDestroy() {
-		//threadExecutor.shutdown();
 		Log.d(TAG, "service sucessfully shutdown...");
 	}
 

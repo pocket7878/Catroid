@@ -150,16 +150,12 @@ public class UploadProjectDialog extends Dialog implements OnClickListener {
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 				String token = prefs.getString(Consts.TOKEN, "0");
 
-				// create service
-				Intent i = new Intent(context, TransferService.class);
-				i.putExtra("name", uploadName);
-				i.putExtra("description", projectDescription);
-				i.putExtra("token", token);
-				i.putExtra("projectPath", projectPath);
-
-				context.startService(i);
-				//new ProjectUploadTask(context.startService(arg0), uploadName, projectDescription, projectPath, token).execute();
-
+				Intent intent_service = new Intent(context, TransferService.class);
+				intent_service.putExtra("name", uploadName);
+				intent_service.putExtra("description", projectDescription);
+				intent_service.putExtra("token", token);
+				intent_service.putExtra("projectPath", projectPath);
+				context.startService(intent_service);
 				break;
 
 			case R.id.cancel_button:
