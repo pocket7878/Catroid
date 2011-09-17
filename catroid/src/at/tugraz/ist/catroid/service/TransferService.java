@@ -1,7 +1,10 @@
 package at.tugraz.ist.catroid.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,9 +13,13 @@ import android.content.ServiceConnection;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
+import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.service.requests.BillingRequest;
 import at.tugraz.ist.catroid.service.requests.UploadRequest;
+import at.tugraz.ist.catroid.utils.UtilZip;
 import at.tugraz.ist.catroid.web.ServerCalls;
+import at.tugraz.ist.catroid.web.WebconnectionException;
 
 public class TransferService extends Service implements ServiceConnection {
 
@@ -30,11 +37,68 @@ public class TransferService extends Service implements ServiceConnection {
 	}
 
 	@Override
+	public void onCreate() {
+		NotificationManager mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+		// Display a notification about us starting.  We put an icon in the status bar.
+		//showNotification();
+	}
+
+	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		String name = intent.getStringExtra("name");
-		
-		ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString, userEmail, language, token)
-		
+		String projectName = intent.getStringExtra("name");
+		String projectDescription = intent.getStringExtra("description");
+		String token = intent.getStringExtra("token");
+
+		android.os.Debug.waitForDebugger();
+
+		Context context = getApplicationContext();
+		CharSequence text = "Upload process starting....";
+		int duration = Toast.LENGTH_SHORT;
+
+		Toast toast = Toast.makeText(context, text, duration);
+		toast.show();
+
+		File dirPath = new File(intent.getStringExtra("projectPath"));
+		String[] paths = dirPath.list();
+
+		//		if (paths == null) {
+		//			return false;
+		//		}
+
+		for (int i = 0; i < paths.length; i++) {
+			paths[i] = dirPath + "/" + paths[i];
+		}
+
+		String zipFileString = Consts.TMP_PATH + "/upload" + Consts.CATROID_EXTENTION;
+		File zipFile = new File(zipFileString);
+		if (!zipFile.exists()) {
+			zipFile.getParentFile().mkdirs();
+			try {
+				zipFile.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (!UtilZip.writeToZipFile(paths, zipFileString)) {
+			zipFile.delete();
+			//return false;
+		}
+
+		try {
+			ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString, null, null, token);
+			text = "Upload process finished!";
+			toast = Toast.makeText(context, text, duration);
+			toast.show();
+		} catch (WebconnectionException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			text = e.getMessage();
+			toast = Toast.makeText(context, text, duration);
+			toast.show();
+		}
+		zipFile.delete();
 		return Service.START_STICKY;
 	}
 

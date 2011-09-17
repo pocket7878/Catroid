@@ -153,8 +153,13 @@ public class UploadProjectDialog extends Dialog implements OnClickListener {
 				// create service
 				Intent i = new Intent(context, TransferService.class);
 				i.putExtra("name", uploadName);
+				i.putExtra("description", projectDescription);
+				i.putExtra("token", token);
+				i.putExtra("projectPath", projectPath);
+
 				context.startService(i);
 				//new ProjectUploadTask(context.startService(arg0), uploadName, projectDescription, projectPath, token).execute();
+
 				break;
 
 			case R.id.cancel_button:

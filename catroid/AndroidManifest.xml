@@ -76,6 +76,7 @@
 					
 			</intent-filter>
 		</activity>
+		<service android:enabled="true" android:debuggable="true" android:name=".service.TransferService" />
 		
 	</application>
 	
