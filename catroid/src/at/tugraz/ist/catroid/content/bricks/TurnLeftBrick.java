@@ -18,18 +18,16 @@
  */
 package at.tugraz.ist.catroid.content.bricks;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.text.InputType;
+import android.content.Intent;
+import android.preference.PreferenceManager.OnActivityResultListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
-import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.ui.RotationActivity;
 
 public class TurnLeftBrick implements Brick, OnClickListener {
 
@@ -38,6 +36,7 @@ public class TurnLeftBrick implements Brick, OnClickListener {
 	private double degrees;
 
 	private transient View view;
+	private OnActivityResultListener listener;
 
 	public TurnLeftBrick(Sprite sprite, double degrees) {
 		this.sprite = sprite;
@@ -80,33 +79,39 @@ public class TurnLeftBrick implements Brick, OnClickListener {
 	}
 
 	public void onClick(View view) {
-		final Context context = view.getContext();
 
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		final EditText input = new EditText(context);
-		input.setText(String.valueOf(degrees));
-		input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-		input.setSelectAllOnFocus(true);
-		dialog.setView(input);
-		dialog.setOnCancelListener((OnCancelListener) context);
-		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				try {
-					degrees = Double.parseDouble(input.getText().toString());
-				} catch (NumberFormatException exception) {
-					Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT);
-				}
-				dialog.cancel();
-			}
-		});
-		dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.cancel();
-			}
-		});
+		Context context = view.getContext();
+		Intent graphicalTransformationIntent = new Intent();
+		graphicalTransformationIntent.setClass(context, RotationActivity.class);
+		context.startActivity(graphicalTransformationIntent);
 
-		dialog.show();
-
+		/*
+		 * final Context context = view.getContext();
+		 * 
+		 * AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+		 * final EditText input = new EditText(context);
+		 * input.setText(String.valueOf(degrees));
+		 * input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+		 * input.setSelectAllOnFocus(true);
+		 * dialog.setView(input);
+		 * dialog.setOnCancelListener((OnCancelListener) context);
+		 * dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+		 * public void onClick(DialogInterface dialog, int which) {
+		 * try {
+		 * degrees = Double.parseDouble(input.getText().toString());
+		 * } catch (NumberFormatException exception) {
+		 * Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT);
+		 * }
+		 * dialog.cancel();
+		 * }
+		 * });
+		 * dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+		 * public void onClick(DialogInterface dialog, int which) {
+		 * dialog.cancel();
+		 * }
+		 * });
+		 * 
+		 * dialog.show();
+		 */
 	}
-
 }
