@@ -100,7 +100,8 @@ public class TransferService extends Service implements ServiceConnection {
 			Toast toast = Toast.makeText(context, toast_message, duration);
 			toast.show();
 			notification_counter--;
-			//mNotificationManager.cancel(1);
+			final NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			mNotificationManager.cancel(1);
 		} catch (WebconnectionException e) {
 			e.printStackTrace();
 			return 0;
