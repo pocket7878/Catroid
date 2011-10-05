@@ -151,10 +151,10 @@ public class UploadProjectDialog extends Dialog implements OnClickListener {
 				String token = prefs.getString(Consts.TOKEN, "0");
 
 				Intent intent_service = new Intent(context, TransferService.class);
-				intent_service.putExtra("uploadName", uploadName);
-				intent_service.putExtra(context.getString(R.string.upload_intent_description), projectDescription);
-				intent_service.putExtra(context.getString(R.string.upload_intent_token), token);
-				intent_service.putExtra(context.getString(R.string.upload_intent_projectPath), projectPath);
+				intent_service.putExtra("name", uploadName);
+				intent_service.putExtra("description", projectDescription);
+				intent_service.putExtra("token", token);
+				intent_service.putExtra("projectPath", projectPath);
 				context.startService(intent_service);
 				break;
 

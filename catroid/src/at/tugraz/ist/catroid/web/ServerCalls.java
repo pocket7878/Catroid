@@ -37,6 +37,7 @@ public class ServerCalls {
 	protected String resultString;
 	private ConnectionWrapper connection;
 
+	// protected constructor to prevent direct instancing
 	protected ServerCalls() {
 		connection = new ConnectionWrapper();
 	}
