@@ -250,12 +250,4 @@
     <string name="upload_button">Upload</string>
     <string name="upload_project_dialog_title">Upload project</string>
     <string name="project_rename">(Your project will be renamed.)</string>
-    <string name="upload_service_name">name</string>
-    <string name="upload_notify_ticker">Upload...</string>
-    <string name="upload_notify_title">Upload Project</string>
-    <string name="upload_notify_content">Uploading... </string>
-    <string name="upload_intent_description">description</string>
-    <string name="upload_intent_token">token</string>
-    <string name="upload_intent_projectPath">projectPath</string>
-    
 </resources>
