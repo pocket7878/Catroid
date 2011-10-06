@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MainMenuTutorial>
+	<cat>foo</cat>
+	<flip>foo</flip>
+	<appear>50,230</appear>
+	<dog>foo</dog>
+	<appear>250,200</appear>
+	<sleep>1000</sleep>
+	<cat>foo</cat>
+	<say>Hallo du Hund!</say>
+	<dog>foo</dog>
+	<say>Miau, Miau!</say>
+	<waitfor>ProjectManager</waitfor>
+</MainMenuTutorial>
+ 
