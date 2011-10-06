@@ -35,6 +35,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.stage.StageActivity;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
 import at.tugraz.ist.catroid.ui.adapter.SpriteAdapter;
 import at.tugraz.ist.catroid.ui.dialogs.CustomIconContextMenu;
 import at.tugraz.ist.catroid.ui.dialogs.NewSpriteDialog;
@@ -57,6 +58,7 @@ public class ProjectActivity extends ListActivity {
 	private static final int DIALOG_RENAME_SPRITE = 1;
 	private static final int DIALOG_CONTEXT_MENU = 2;
 
+	private Tutorial tutorial;
 	private void initListeners() {
 		spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject().getSpriteList();
 		spriteAdapter = new SpriteAdapter(this, R.layout.activity_project_spritelist_item, R.id.sprite_title,
@@ -207,6 +209,8 @@ public class ProjectActivity extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		tutorial = Tutorial.getInstance(this);
+		tutorial.resumeTutorial();
 		if (!Utils.checkForSdCard(this)) {
 			return;
 		}
@@ -228,6 +232,7 @@ public class ProjectActivity extends ListActivity {
 	@Override
 	public void onPause() {
 		super.onPause();
+		tutorial.pauseTutorial();
 		ProjectManager projectManager = ProjectManager.getInstance();
 		if (projectManager.getCurrentProject() != null) {
 			projectManager.saveProject();

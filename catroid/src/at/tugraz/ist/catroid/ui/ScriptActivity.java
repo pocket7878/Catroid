@@ -34,6 +34,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
 import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
 import at.tugraz.ist.catroid.ui.dragndrop.DragAndDropListView;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -44,6 +45,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 	private Sprite sprite;
 	private Script scriptToEdit;
 	private static final int DIALOG_ADD_BRICK = 2;
+	private Tutorial tutorial;
 
 	private void initListeners() {
 		sprite = ProjectManager.getInstance().getCurrentSprite();
@@ -74,7 +76,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
-
+		tutorial.pauseTutorial();
 		ProjectManager projectManager = ProjectManager.getInstance();
 		if (projectManager.getCurrentProject() != null) {
 			projectManager.saveProject();
@@ -97,6 +99,8 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		tutorial = Tutorial.getInstance(this);
+		tutorial.resumeTutorial();
 		if (!Utils.checkForSdCard(this)) {
 			return;
 		}
@@ -119,7 +123,10 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 	private View.OnClickListener createAddBrickClickListener() {
 		return new View.OnClickListener() {
 			public void onClick(View v) {
+				tutorial.pauseTutorial();
 				getParent().showDialog(DIALOG_ADD_BRICK);
+				tutorial.resumeTutorial();
+				tutorial.setNotification("openDialog");
 			}
 		};
 	}
