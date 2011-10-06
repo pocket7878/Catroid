@@ -13,7 +13,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
@@ -31,7 +33,42 @@ public class TransferService extends Service implements ServiceConnection {
 	private static LinkedList<BillingRequest> pendingRequests = new LinkedList<BillingRequest>();
 	private TransferService transferService = null;
 	private Binder binder = new LocalBinder();
-	private static int notification_counter = 0;
+	private static int notificationCounter = 0;
+	private String projectName = "";
+	private static TransferService instance = null;
+	private int progress = 0;
+
+	public static TransferService getInstance() {
+		if (instance == null) {
+			instance = new TransferService();
+		}
+		return instance;
+	}
+
+	private Handler handler = new Handler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+			super.handleMessage(msg);
+			if (msg.what == 1) {
+				CharSequence toast_message = "Uploading project: " + projectName + " finished";
+				int duration = Toast.LENGTH_LONG;
+				Toast toast = Toast.makeText(TransferService.this, toast_message, duration);
+				toast.show();
+			}
+			if (msg.what == 2) {
+				CharSequence toast_message = "Progress: " + progress;
+				int duration = Toast.LENGTH_SHORT;
+				Toast toast = Toast.makeText(TransferService.this, toast_message, duration);
+				toast.show();
+			}
+		}
+	};
+
+	public void updateProgress(int progress) {
+		this.progress = progress;
+		//handler.sendEmptyMessage(2);
+	}
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -53,60 +90,66 @@ public class TransferService extends Service implements ServiceConnection {
 		String ticker = getString(R.string.upload_notify_ticker);
 		Notification notification = new Notification(R.drawable.catroid, ticker, System.currentTimeMillis());
 		notification.setLatestEventInfo(getApplicationContext(), title, content + projectName, contentIntent);
-		mNotificationManager.notify(notification_counter, notification);
+		mNotificationManager.notify(notificationCounter, notification);
 	}
 
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
+	public int onStartCommand(final Intent intent, int flags, int startId) {
 
-		notification_counter++;
-		Context context = getApplicationContext();
-		String projectName = intent.getStringExtra("uploadName");
-		createNotification(projectName);
+		Thread uploadThread = new Thread() {
+			@Override
+			public void run() {
+				notificationCounter++;
+				Context context = getApplicationContext();
+				projectName = intent.getStringExtra("uploadName");
+				createNotification(projectName);
 
-		String projectDescription = intent.getStringExtra(getString(R.string.upload_intent_description));
-		String token = intent.getStringExtra(getString(R.string.upload_intent_token));
-		File dirPath = new File(intent.getStringExtra(getString(R.string.upload_intent_projectPath)));
-		String[] paths = dirPath.list();
+				String projectDescription = intent.getStringExtra(getString(R.string.upload_intent_description));
+				String token = intent.getStringExtra(getString(R.string.upload_intent_token));
+				File dirPath = new File(intent.getStringExtra(getString(R.string.upload_intent_projectPath)));
+				String[] paths = dirPath.list();
 
-		if (paths == null) {
-			return 0;
-		}
-		for (int i = 0; i < paths.length; i++) {
-			paths[i] = dirPath + "/" + paths[i];
-		}
+				if (paths == null) {
+					return;
+				}
+				for (int i = 0; i < paths.length; i++) {
+					paths[i] = dirPath + "/" + paths[i];
+				}
 
-		String zipFileString = Consts.TMP_PATH + "/upload" + Consts.CATROID_EXTENTION;
-		File zipFile = new File(zipFileString);
-		if (!zipFile.exists()) {
-			zipFile.getParentFile().mkdirs();
+				String zipFileString = Consts.TMP_PATH + "/upload" + Consts.CATROID_EXTENTION;
+				File zipFile = new File(zipFileString);
+				if (!zipFile.exists()) {
+					zipFile.getParentFile().mkdirs();
 
-			try {
-				zipFile.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
+					try {
+						zipFile.createNewFile();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				if (!UtilZip.writeToZipFile(paths, zipFileString)) {
+					zipFile.delete();
+					return;
+				}
+
+				try {
+					ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString,
+							UtilDeviceInfo.getUserEmail(context), UtilDeviceInfo.getUserLanguageCode(context), token);
+
+					handler.sendEmptyMessage(1);
+					notificationCounter--;
+					final NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+					mNotificationManager.cancel(1);
+				} catch (WebconnectionException e) {
+					e.printStackTrace();
+					return;
+				}
+				zipFile.delete();
+				stopSelf();
 			}
-		}
-		if (!UtilZip.writeToZipFile(paths, zipFileString)) {
-			zipFile.delete();
-			return 0;
-		}
+		};
+		uploadThread.start();
 
-		try {
-			ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString,
-					UtilDeviceInfo.getUserEmail(context), UtilDeviceInfo.getUserLanguageCode(context), token);
-			CharSequence toast_message = "Uploading project: " + projectName + " finished";
-			int duration = Toast.LENGTH_LONG;
-			Toast toast = Toast.makeText(context, toast_message, duration);
-			toast.show();
-			notification_counter--;
-			//mNotificationManager.cancel(1);
-		} catch (WebconnectionException e) {
-			e.printStackTrace();
-			return 0;
-		}
-		zipFile.delete();
-		stopSelf();
 		return Service.START_STICKY;
 	}
 
