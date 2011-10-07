@@ -36,12 +36,8 @@ public class TransferService extends Service implements ServiceConnection {
 	private static int notificationCounter = 0;
 	private String projectName = "";
 	private static TransferService instance = null;
-	private int progress = 0;
 
 	public static TransferService getInstance() {
-		if (instance == null) {
-			instance = new TransferService();
-		}
 		return instance;
 	}
 
@@ -56,18 +52,11 @@ public class TransferService extends Service implements ServiceConnection {
 				Toast toast = Toast.makeText(TransferService.this, toast_message, duration);
 				toast.show();
 			}
-			if (msg.what == 2) {
-				CharSequence toast_message = "Progress: " + progress;
-				int duration = Toast.LENGTH_SHORT;
-				Toast toast = Toast.makeText(TransferService.this, toast_message, duration);
-				toast.show();
-			}
 		}
 	};
 
 	public void updateProgress(int progress) {
-		this.progress = progress;
-		//handler.sendEmptyMessage(2);
+
 	}
 
 	@Override
@@ -78,7 +67,7 @@ public class TransferService extends Service implements ServiceConnection {
 
 	@Override
 	public void onCreate() {
-
+		instance = new TransferService();
 	}
 
 	public void createNotification(String projectName) {
