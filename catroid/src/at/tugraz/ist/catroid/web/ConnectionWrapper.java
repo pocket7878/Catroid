@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import android.os.Handler;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import at.tugraz.ist.catroid.common.Consts;
@@ -68,7 +69,7 @@ public class ConnectionWrapper {
 	}
 
 	public String doHttpPostFileUpload(String urlString, HashMap<String, String> postValues, String fileTag,
-			String filePath) throws IOException, WebconnectionException {
+			String filePath, Handler handler) throws IOException, WebconnectionException {
 
 		MultiPartFormOutputStream out = buildPost(urlString, postValues);
 
@@ -76,7 +77,7 @@ public class ConnectionWrapper {
 			String extension = filePath.substring(filePath.lastIndexOf(".") + 1).toLowerCase();
 			String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
 
-			out.writeFile(fileTag, mimeType, new File(filePath));
+			out.writeFile(fileTag, mimeType, new File(filePath), handler);
 		}
 		out.close();
 
@@ -102,8 +103,8 @@ public class ConnectionWrapper {
 		file.getParentFile().mkdirs();
 		FileOutputStream fos = new FileOutputStream(file);
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> DOWNLOAD
+		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> DOWNLOAD
 		byte[] buffer = new byte[Consts.BUFFER_8K];
 		int length = 0;
 		while ((length = input.read(buffer)) != -1) {

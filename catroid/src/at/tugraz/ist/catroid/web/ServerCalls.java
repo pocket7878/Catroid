@@ -25,6 +25,7 @@ import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.os.Handler;
 import android.util.Log;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -54,7 +55,7 @@ public class ServerCalls {
 	}
 
 	public String uploadProject(String projectName, String projectDescription, String zipFileString, String userEmail,
-			String language, String token) throws WebconnectionException {
+			String language, String token, Handler handler) throws WebconnectionException {
 		try {
 			String md5Checksum = Utils.md5Checksum(new File(zipFileString));
 
@@ -73,12 +74,11 @@ public class ServerCalls {
 			String serverUrl = useTestUrl ? Consts.TEST_FILE_UPLOAD_URL : Consts.FILE_UPLOAD_URL;
 
 			Log.v(TAG, "url to upload: " + serverUrl);
-			resultString = connection
-					.doHttpPostFileUpload(serverUrl, postValues, Consts.FILE_UPLOAD_TAG, zipFileString);
+			resultString = connection.doHttpPostFileUpload(serverUrl, postValues, Consts.FILE_UPLOAD_TAG,
+					zipFileString, handler);
 
 			JSONObject jsonObject = null;
 			int statusCode = 0;
-
 			Log.v(TAG, "result string: " + resultString);
 
 			jsonObject = new JSONObject(resultString);

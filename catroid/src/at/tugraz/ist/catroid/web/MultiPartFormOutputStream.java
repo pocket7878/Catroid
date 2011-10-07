@@ -28,8 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-import at.tugraz.ist.catroid.common.Consts;
-import at.tugraz.ist.catroid.service.TransferService;
+import android.os.Handler;
 
 /**
  * <code>MultiPartFormOutputStream</code> is used to write
@@ -232,10 +231,11 @@ public class MultiPartFormOutputStream {
 	 *            the file content type (optional, recommended)
 	 * @param file
 	 *            the file (the file must exist)
+	 * @param handler
 	 * @throws java.io.IOException
 	 *             on input/output errors
 	 */
-	public void writeFile(String name, String mimeType, File file) throws java.io.IOException {
+	public void writeFile(String name, String mimeType, File file, Handler handler) throws java.io.IOException {
 		if (file == null) {
 			throw new IllegalArgumentException("File cannot be null.");
 		}
@@ -245,7 +245,7 @@ public class MultiPartFormOutputStream {
 		if (file.isDirectory()) {
 			throw new IllegalArgumentException("File cannot be a directory.");
 		}
-		writeFile(name, mimeType, file.getCanonicalPath(), new FileInputStream(file));
+		writeFile(name, mimeType, file.getCanonicalPath(), new FileInputStream(file), handler);
 	}
 
 	/**
@@ -260,10 +260,12 @@ public class MultiPartFormOutputStream {
 	 *            the file name (required)
 	 * @param is
 	 *            the input stream
+	 * @param handler
 	 * @throws java.io.IOException
 	 *             on input/output errors
 	 */
-	public void writeFile(String name, String mimeType, String fileName, InputStream is) throws java.io.IOException {
+	public void writeFile(String name, String mimeType, String fileName, InputStream is, Handler handler)
+			throws java.io.IOException {
 		if (is == null) {
 			throw new IllegalArgumentException("Input stream cannot be null.");
 		}
@@ -281,6 +283,7 @@ public class MultiPartFormOutputStream {
 		out.writeBytes(PREFIX);
 		out.writeBytes(boundary);
 		out.writeBytes(NEWLINE);
+
 		// write content header
 		out.writeBytes("Content-Disposition: form-data; name=\"" + name + "\"; filename=\"" + fileName + "\"");
 		out.writeBytes(NEWLINE);
@@ -288,16 +291,9 @@ public class MultiPartFormOutputStream {
 			out.writeBytes("Content-Type: " + mimeType);
 			out.writeBytes(NEWLINE);
 		}
-		out.writeBytes(NEWLINE);
-		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> UPLOAD
-		byte[] data = new byte[Consts.BUFFER_8K];
-		int length = 0;
-		while ((length = is.read(data, 0, data.length)) != -1) {
-			out.write(data, 0, length);
-			TransferService.getInstance().updateProgress(length);
-		}
-		// close input stream, but ignore any possible exception for it
+
+		UploadFile uploadprogress = new UploadFile();
+		uploadprogress.writeFile(out, is, handler);
 		try {
 			is.close();
 		} catch (Exception e) {
@@ -352,6 +348,7 @@ public class MultiPartFormOutputStream {
 		out.write(data, 0, data.length);
 		out.writeBytes(NEWLINE);
 		out.flush();
+
 	}
 
 	/**

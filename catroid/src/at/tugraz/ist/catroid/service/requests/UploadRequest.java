@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 
 import android.content.Context;
+import android.os.Handler;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.service.TransferService;
 import at.tugraz.ist.catroid.utils.UtilDeviceInfo;
@@ -31,13 +32,14 @@ import at.tugraz.ist.catroid.web.WebconnectionException;
 
 public class UploadRequest extends BillingRequest {
 
-	private final static String TAG = UploadRequest.class.getName();
+	//private final static String TAG = UploadRequest.class.getName();
 
 	private Context context;
 	private String projectName;
 	private String projectDescription;
 	private String projectPath;
 	private String token;
+	private Handler handler;
 
 	public UploadRequest(TransferService transferService, String projectName, String projectDescription,
 			String projectPath, String token) {
@@ -82,7 +84,7 @@ public class UploadRequest extends BillingRequest {
 			String language = UtilDeviceInfo.getUserLanguageCode(context);
 
 			ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString, userEmail,
-					language, token);
+					language, token, handler);
 			return 1;
 		} catch (WebconnectionException e) {
 			e.printStackTrace();

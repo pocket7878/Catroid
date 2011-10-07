@@ -51,12 +51,15 @@ public class TransferService extends Service implements ServiceConnection {
 				int duration = Toast.LENGTH_LONG;
 				Toast toast = Toast.makeText(TransferService.this, toast_message, duration);
 				toast.show();
+			} else {
+				updateProgress(msg.getData().getInt("uploadProgress"));
 			}
 		}
 	};
 
 	public void updateProgress(int progress) {
 
+		Log.d("UPDATE", "Update in % : " + progress);
 	}
 
 	@Override
@@ -123,12 +126,13 @@ public class TransferService extends Service implements ServiceConnection {
 
 				try {
 					ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString,
-							UtilDeviceInfo.getUserEmail(context), UtilDeviceInfo.getUserLanguageCode(context), token);
+							UtilDeviceInfo.getUserEmail(context), UtilDeviceInfo.getUserLanguageCode(context), token,
+							handler);
 
 					handler.sendEmptyMessage(1);
-					notificationCounter--;
 					final NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-					mNotificationManager.cancel(1);
+					mNotificationManager.cancel(notificationCounter);
+					notificationCounter--;
 				} catch (WebconnectionException e) {
 					e.printStackTrace();
 					return;
