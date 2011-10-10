@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
@@ -47,10 +48,17 @@ public class TransferService extends Service implements ServiceConnection {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			if (msg.what == 1) {
-				CharSequence toast_message = "Uploading project: " + projectName + " finished";
+				CharSequence toast_message = getString(R.string.upload_notify_title) + projectName + "\" finished";
 				int duration = Toast.LENGTH_LONG;
 				Toast toast = Toast.makeText(TransferService.this, toast_message, duration);
 				toast.show();
+			} else if (msg.what == 2) {
+				CharSequence toast_message = "No Internet Access!";
+				int duration = Toast.LENGTH_LONG;
+				Toast toast = Toast.makeText(TransferService.this, toast_message, duration);
+				toast.show();
+				final NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+				mNotificationManager.cancelAll();
 			} else {
 				updateProgress(msg.getData().getInt("uploadProgress"));
 			}
@@ -58,8 +66,8 @@ public class TransferService extends Service implements ServiceConnection {
 	};
 
 	public void updateProgress(int progress) {
-
 		Log.d("UPDATE", "Update in % : " + progress);
+		createNotification(projectName, progress);
 	}
 
 	@Override
@@ -73,16 +81,21 @@ public class TransferService extends Service implements ServiceConnection {
 		instance = new TransferService();
 	}
 
-	public void createNotification(String projectName) {
+	public void createNotification(String projectName, int progress) {
+
+		String title = getString(R.string.upload_notify_title) + projectName + "\"";
+		Intent intent = new Intent(this, TransferService.class);
+		final PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
+
 		final NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		Intent notificationIntent = new Intent(this, TransferService.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-		String title = getString(R.string.upload_notify_title);
-		String content = getString(R.string.upload_notify_content);
-		String ticker = getString(R.string.upload_notify_ticker);
-		Notification notification = new Notification(R.drawable.catroid, ticker, System.currentTimeMillis());
-		notification.setLatestEventInfo(getApplicationContext(), title, content + projectName, contentIntent);
-		mNotificationManager.notify(notificationCounter, notification);
+		Notification notification = new Notification(R.drawable.catroid, title, System.currentTimeMillis());
+		notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT;
+		notification.contentView = new RemoteViews(getApplicationContext().getPackageName(), R.layout.upload_progress);
+		notification.contentIntent = pendingIntent;
+		notification.contentView.setImageViewResource(R.id.status_icon, R.drawable.catroid);
+		notification.contentView.setTextViewText(R.id.status_text, title);
+		notification.contentView.setProgressBar(R.id.status_progress, 100, progress, false);
+		mNotificationManager.notify(1, notification);
 	}
 
 	@Override
@@ -94,7 +107,7 @@ public class TransferService extends Service implements ServiceConnection {
 				notificationCounter++;
 				Context context = getApplicationContext();
 				projectName = intent.getStringExtra("uploadName");
-				createNotification(projectName);
+				createNotification(projectName, 0);
 
 				String projectDescription = intent.getStringExtra(getString(R.string.upload_intent_description));
 				String token = intent.getStringExtra(getString(R.string.upload_intent_token));
@@ -112,7 +125,6 @@ public class TransferService extends Service implements ServiceConnection {
 				File zipFile = new File(zipFileString);
 				if (!zipFile.exists()) {
 					zipFile.getParentFile().mkdirs();
-
 					try {
 						zipFile.createNewFile();
 					} catch (IOException e) {
@@ -128,7 +140,6 @@ public class TransferService extends Service implements ServiceConnection {
 					ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString,
 							UtilDeviceInfo.getUserEmail(context), UtilDeviceInfo.getUserLanguageCode(context), token,
 							handler);
-
 					handler.sendEmptyMessage(1);
 					final NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 					mNotificationManager.cancel(notificationCounter);
@@ -142,7 +153,6 @@ public class TransferService extends Service implements ServiceConnection {
 			}
 		};
 		uploadThread.start();
-
 		return Service.START_STICKY;
 	}
 
