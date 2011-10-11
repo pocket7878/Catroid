@@ -20,15 +20,19 @@ package at.tugraz.ist.catroid.tutorial;
 
 import java.util.Vector;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.NinePatchDrawable;
+import android.view.Display;
 
 /**
  * @author User
@@ -46,7 +50,8 @@ public class TutorBubble {
 	int y; // defined by Tutor
 	int lineBreakYOffset = 0;
 
-	int maximumCharsPerLine = 18;
+	int maximumCharsPerLine = 15;
+	int maxLines = 4;
 
 	int height;
 	int width;
@@ -55,9 +60,9 @@ public class TutorBubble {
 	int yText;
 
 	int marginTop = 5;
-	int marginLeft = 15;
-	int marginRight = 10;
-	int marginBottom = 32;
+	int marginLeft = 25;
+	int marginRight = 20;
+	int marginBottom = 20;
 
 	boolean notificated = false;
 	Context context;
@@ -74,7 +79,7 @@ public class TutorBubble {
 	public boolean textFinished = false; // nur ende vom tippen -> Katze muss Mund still halten
 	private boolean waitAfterText = false;
 	private boolean waitedAfterText = false;
-	private int waitTimeAfterText = 2500;
+	private int waitTimeAfterText = 1000;
 	private int currentLine = 0;
 	private int currentChar = 1;
 
@@ -107,18 +112,27 @@ public class TutorBubble {
 		}
 	}
 
-	TutorBubble(String bubbleText, Drawable bubbleDrawable, int x, int y, Context context) {
+	TutorBubble(String bubbleText, Drawable bubbleDrawable, int posxTutor, int posyTutor, Context context) {
 
 		bubbleTextWords = new Vector<String>();
 		bubbleTextLines = new Vector<String>();
 		this.context = context;
 		this.bubbleTextRaw = bubbleText;
+
 		mSpeechBubble = (NinePatchDrawable) bubbleDrawable;
 		setSpeechBubblePaint();
 		animationFinished = false;
 
-		this.x = x;
-		this.y = y;
+		int screenWidth = getScreenWidth();
+
+		if ((screenWidth - posxTutor) >= 150) {
+			this.x = posxTutor + 70;
+			this.y = posyTutor - 30;
+		} else {
+			this.x = posxTutor + 50;
+			this.y = posyTutor + 280;
+		}
+
 		notificated = false;
 
 		framePeriod = 50; // alle 200 ms neues Zeichen
@@ -128,29 +142,105 @@ public class TutorBubble {
 	}
 
 	public void prepareTextForOutput(String text) {
+		setBubbleLimits();
+		calculateMaxCharsPerLine();
 		bubbleTextWrap();
 		buildTextLines();
-		setBubbleLimits();
 		calculateTextCoords();
+
+	}
+
+	public void calculateMaxCharsPerLine() {
+		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+
+		int orientation = display.getOrientation();
+		Rect boxSize = mSpeechBubble.getBounds();
+		int size = boxSize.width();
+
+		int space = size / ((textSize / 2) + 1);
+
+		switch (orientation) {
+			case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
+				maximumCharsPerLine = space;
+				break;
+			case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
+				maximumCharsPerLine = space;
+				break;
+		}
+
 	}
 
 	public void calculateTextCoords() {
-		xText = x + marginLeft;
-		yText = y - marginBottom - (textSize * bubbleTextLines.size());
+		Rect bounds = mSpeechBubble.getBounds();
+		xText = bounds.left + marginLeft;
+		yText = y - marginBottom - (textSize * maxLines);
+	}
+
+	public int getScreenHeight() {
+		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+		int screenHeight = display.getHeight();
+		return screenHeight;
+	}
+
+	public int getScreenWidth() {
+		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+		int screenWidth = display.getWidth();
+		return screenWidth;
 	}
 
 	public void setBubbleLimits() {
+
+		int screenWidth = getScreenWidth();
+
 		Rect bounds = new Rect();
-		bounds.left = x;
-		bounds.bottom = y;
-		bounds.top = y - (marginTop + marginBottom + (textSize * bubbleTextLines.size()));
-		bounds.right = x + marginLeft + marginRight + textWidth;
+
+		//		bounds.top = screenHeight - (screenHeight-y+marginTop+marginBottom);
+		//		bounds.top = y - (marginTop + marginBottom +(textSize * bubbleTextLines.size()));	
+		//		bounds.right = x + marginLeft + marginRight + textWidth;
+
+		if ((screenWidth - x) >= screenWidth / 2) {
+			//Katze
+			bounds.left = x;
+			bounds.top = y - (marginTop + marginBottom + (textSize * maxLines)); //immer 4 lines
+			bounds.right = screenWidth - marginRight;
+			bounds.bottom = y + marginBottom;
+
+		} else {
+			//Hund
+			bounds.left = marginLeft;
+			bounds.top = y - (2 * marginTop + 2 * marginBottom + (textSize * maxLines)); //immer 4 lines
+			bounds.right = x;
+			bounds.bottom = y;
+		}
+
 		mSpeechBubble.setBounds(bounds);
+
 	}
 
 	public void draw(Canvas canvas) {
 		mSpeechBubble.draw(canvas);
-		for (int i = 0; i < bubbleTextLines.size(); i++) {
+
+		if (bubbleTextLines.size() >= maxLines) {
+			drawText(canvas, maxLines);
+
+			if (currentLine > maxLines) {
+				for (int i = 0; i < maxLines; i++) {
+					bubbleTextLines.remove(0);
+				}
+				currentLine = 0;
+				canvas.drawColor(0, PorterDuff.Mode.CLEAR);
+			}
+
+		}
+
+		if (bubbleTextLines.size() < maxLines) {
+			drawText(canvas, bubbleTextLines.size());
+		}
+
+	}
+
+	public void drawText(Canvas canvas, int limit) {
+		for (int i = 0; i < limit; i++) {
 			if (i == currentLine) {
 				int charsToShow = currentChar;
 				if (currentChar >= bubbleTextLines.get(i).length()) {
@@ -162,8 +252,8 @@ public class TutorBubble {
 				int yTextFinal = yText + (textSize * (i + 1));
 				canvas.drawText(bubbleTextLines.get(i), xText, yTextFinal, textPaint);
 			}
-
 		}
+
 	}
 
 	public void drawSpeechBubble(Canvas canvas, int pos_x, int pos_y, int offset_x, int offset_y) {
@@ -178,7 +268,7 @@ public class TutorBubble {
 
 	private void buildTextLines() {
 
-		//String stringForOutput = "";
+		String stringForOutput = "";
 		// Speziallfall: leerer Textstring
 		String stringLastLine = bubbleTextWords.get(0);
 
