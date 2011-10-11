@@ -29,7 +29,6 @@ import android.os.Message;
 import at.tugraz.ist.catroid.common.Consts;
 
 public class UploadFile {
-	private static final String NEWLINE = "\r\n";
 
 	public int calcProgressRefresh(int totalPackages) {
 
@@ -44,24 +43,24 @@ public class UploadFile {
 
 	public void writeFile(DataOutputStream out, InputStream is, Handler handler) {
 		try {
-			out.writeBytes(NEWLINE);
+			out.writeBytes(Consts.NEWLINE);
 			int packageCounter = 1;
 			int totalPackages = (is.available() / Consts.BUFFER_8K) + 1;
 			int progressRefresh = calcProgressRefresh(totalPackages);
 
-			byte[] data = new byte[Consts.BUFFER_8K];
+			byte[] writeData = new byte[Consts.BUFFER_8K];
 			int length = 0;
-			while ((length = is.read(data, 0, data.length)) != -1) {
+			while ((length = is.read(writeData, 0, writeData.length)) != -1) {
 				packageCounter++;
-				out.write(data, 0, length);
+				out.write(writeData, 0, length);
 				if (packageCounter % progressRefresh == 0) {
+					int progress = (int) ((float) packageCounter / (float) totalPackages * 100);
+					if (progress > 100 || progress == 99) {
+						progress = 100;
+					}
 					Message message = new Message();
 					Bundle bundle = new Bundle();
-					int temp = (int) ((float) packageCounter / (float) totalPackages * 100);
-					if (temp > 100 || temp == 99) {
-						temp = 100;
-					}
-					bundle.putInt("uploadProgress", temp);
+					bundle.putInt(Consts.UPLOAD_PROGRESS_KEY, progress);
 					message.setData(bundle);
 					handler.sendMessage(message);
 				}

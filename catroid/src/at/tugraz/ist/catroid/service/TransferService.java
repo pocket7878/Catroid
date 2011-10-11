@@ -34,8 +34,7 @@ public class TransferService extends Service implements ServiceConnection {
 	private static LinkedList<BillingRequest> pendingRequests = new LinkedList<BillingRequest>();
 	private TransferService transferService = null;
 	private Binder binder = new LocalBinder();
-	private static int notificationCounter = 0;
-	private String projectName = "";
+	private String projectName;
 	private static TransferService instance = null;
 
 	public static TransferService getInstance() {
@@ -47,20 +46,20 @@ public class TransferService extends Service implements ServiceConnection {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			if (msg.what == 1) {
-				CharSequence toast_message = getString(R.string.upload_notify_title) + projectName + "\" finished";
-				int duration = Toast.LENGTH_LONG;
-				Toast toast = Toast.makeText(TransferService.this, toast_message, duration);
+			final NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			if (msg.what == Consts.UPLOAD_FINISHED_TOAST) {
+				CharSequence toast_message = getString(R.string.upload_notify_title) + projectName
+						+ Consts.UPLOAD_FINISHED;
+				Toast toast = Toast.makeText(TransferService.this, toast_message, Toast.LENGTH_LONG);
 				toast.show();
-			} else if (msg.what == 2) {
-				CharSequence toast_message = "No Internet Access!";
-				int duration = Toast.LENGTH_LONG;
-				Toast toast = Toast.makeText(TransferService.this, toast_message, duration);
+				mNotificationManager.cancel(1);
+			} else if (msg.what == Consts.UPLOAD_ERROR_TOAST) {
+				CharSequence toast_message = getString(R.string.error_project_upload);
+				Toast toast = Toast.makeText(TransferService.this, toast_message, Toast.LENGTH_LONG);
 				toast.show();
-				final NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 				mNotificationManager.cancelAll();
 			} else {
-				updateProgress(msg.getData().getInt("uploadProgress"));
+				updateProgress(msg.getData().getInt(Consts.UPLOAD_PROGRESS_KEY));
 			}
 		}
 	};
@@ -83,18 +82,18 @@ public class TransferService extends Service implements ServiceConnection {
 
 	public void createNotification(String projectName, int progress) {
 
-		String title = getString(R.string.upload_notify_title) + projectName + "\"";
+		String title = getString(R.string.upload_notify_title) + projectName + Consts.HIGH_POINT;
 		Intent intent = new Intent(this, TransferService.class);
 		final PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
 
 		final NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		Notification notification = new Notification(R.drawable.catroid, title, System.currentTimeMillis());
+		Notification notification = new Notification(R.drawable.catroid_upload, title, System.currentTimeMillis());
 		notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT;
 		notification.contentView = new RemoteViews(getApplicationContext().getPackageName(), R.layout.upload_progress);
 		notification.contentIntent = pendingIntent;
-		notification.contentView.setImageViewResource(R.id.status_icon, R.drawable.catroid);
-		notification.contentView.setTextViewText(R.id.status_text, title);
-		notification.contentView.setProgressBar(R.id.status_progress, 100, progress, false);
+		notification.contentView.setImageViewResource(R.id.status_icon, R.drawable.catroid_upload);
+		notification.contentView.setTextViewText(R.id.status_text, title + " " + progress + " %");
+		notification.contentView.setProgressBar(R.id.status_progress, Consts.UPLOAD_PROGRESS_MAX, progress, false);
 		mNotificationManager.notify(1, notification);
 	}
 
@@ -104,24 +103,23 @@ public class TransferService extends Service implements ServiceConnection {
 		Thread uploadThread = new Thread() {
 			@Override
 			public void run() {
-				notificationCounter++;
 				Context context = getApplicationContext();
-				projectName = intent.getStringExtra("uploadName");
+				projectName = intent.getStringExtra(Consts.UPLOAD_PROJECT_NAME_KEY);
 				createNotification(projectName, 0);
 
-				String projectDescription = intent.getStringExtra(getString(R.string.upload_intent_description));
-				String token = intent.getStringExtra(getString(R.string.upload_intent_token));
-				File dirPath = new File(intent.getStringExtra(getString(R.string.upload_intent_projectPath)));
+				String projectDescription = intent.getStringExtra(Consts.UPLOAD_INTENT_DESCRIPTION);
+				String token = intent.getStringExtra(Consts.UPLOAD_INTENT_TOKEN);
+				File dirPath = new File(intent.getStringExtra(Consts.UPLOAD_INTENT_PROJECTPATH));
 				String[] paths = dirPath.list();
 
 				if (paths == null) {
 					return;
 				}
 				for (int i = 0; i < paths.length; i++) {
-					paths[i] = dirPath + "/" + paths[i];
+					paths[i] = dirPath + Consts.SLASH + paths[i];
 				}
 
-				String zipFileString = Consts.TMP_PATH + "/upload" + Consts.CATROID_EXTENTION;
+				String zipFileString = Consts.TMP_PATH + Consts.UPLOAD_ZIP + Consts.CATROID_EXTENTION;
 				File zipFile = new File(zipFileString);
 				if (!zipFile.exists()) {
 					zipFile.getParentFile().mkdirs();
@@ -140,13 +138,10 @@ public class TransferService extends Service implements ServiceConnection {
 					ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString,
 							UtilDeviceInfo.getUserEmail(context), UtilDeviceInfo.getUserLanguageCode(context), token,
 							handler);
-					handler.sendEmptyMessage(1);
-					final NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-					mNotificationManager.cancel(notificationCounter);
-					notificationCounter--;
+					handler.sendEmptyMessage(Consts.UPLOAD_FINISHED_TOAST);
 				} catch (WebconnectionException e) {
 					e.printStackTrace();
-					return;
+					handler.sendEmptyMessage(Consts.UPLOAD_ERROR_TOAST);
 				}
 				zipFile.delete();
 				stopSelf();

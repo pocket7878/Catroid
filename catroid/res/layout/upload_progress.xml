@@ -16,8 +16,6 @@
 			android:layout_below="@id/status_text"
 			android:progressDrawable="@android:drawable/progress_horizontal"
 			android:indeterminate="false" android:indeterminateOnly="false" />
-
-
 	</RelativeLayout>
 
 </RelativeLayout>

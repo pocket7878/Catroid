@@ -95,7 +95,6 @@ public class ServerCalls {
 			throw new WebconnectionException(0);
 		} catch (IOException e) {
 			e.printStackTrace();
-			handler.sendEmptyMessage(2);
 			throw new WebconnectionException(0);
 		}
 	}
