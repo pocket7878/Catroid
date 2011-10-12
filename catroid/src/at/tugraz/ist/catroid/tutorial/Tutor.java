@@ -118,7 +118,14 @@ public class Tutor {
 
 	public void say(String text) {
 		controller.changeState(StateTalk.enter(controller, resources, tutorType));
-		tutorBubble = new TutorBubble(text, resources.getDrawable(R.drawable.bubble), this.x, this.y, context);
+
+		if (tutorType.equals(TutorType.DOG_TUTOR)) {
+			tutorBubble = new TutorBubble(text, resources.getDrawable(R.drawable.bubble_up), this.x, this.y, context);
+
+		} else if (tutorType.equals(TutorType.CAT_TUTOR)) {
+			tutorBubble = new TutorBubble(text, resources.getDrawable(R.drawable.bubble), this.x, this.y, context);
+		}
+
 	}
 
 	public void draw(Canvas canvas) {

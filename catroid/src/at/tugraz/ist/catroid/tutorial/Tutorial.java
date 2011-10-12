@@ -45,8 +45,7 @@ public class Tutorial {
 	private TutorialState tutorialState = new TutorialState();
 	public volatile ArrayList<String> notifies = new ArrayList<String>();
 	public HashMap<String, TutorialThread> threads = new HashMap<String, TutorialThread>();
-
-	volatile TutorialOverlay to;
+	public TutorialOverlay to;
 	WindowManager windowManager;
 	int test = 0;
 
@@ -186,7 +185,6 @@ public class Tutorial {
 
 		to.jumpTo(x, y);
 		waitForNotification("JumpDone");
-		//animator.goTo(x,y);
 	}
 
 	public void waitFor(String attribute) throws InterruptedException {
@@ -210,21 +208,12 @@ public class Tutorial {
 				if (notification.compareTo(waitNotification) == 0) {
 					notifies.remove(i);
 					Log.i("catroid", "waited enough!" + waitNotification);
-					if (waitNotification.compareTo("addBrick") == 0) {
-						Log.i("catroid", "Brick added!");
-					}
 					return;
 				}
 				synchronized (this) {
 					wait(500); // hmm ??????
 				}
 			}
-			//			for (String notification : notifies) {
-			//				if (notification.compareTo(waitNotification) == 0) {
-			//					notifies.clear();
-			//					return;
-			//				}
-			//			}
 		}
 	}
 
@@ -232,7 +221,6 @@ public class Tutorial {
 		Log.i("catroid", "saying something");
 		to.say(attribute);
 		waitForNotification("BubbleDone");
-		//animator.say(attribute);
 	}
 
 	public void interpret() throws InterruptedException {
