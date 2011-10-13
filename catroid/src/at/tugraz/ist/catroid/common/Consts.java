@@ -102,4 +102,11 @@ public final class Consts {
 	public static final int UPLOAD_FINISHED_TOAST = 1;
 	public static final int UPLOAD_ERROR_TOAST = 2;
 	public static final int UPLOAD_PROGRESS_MAX = 100;
+
+	public static final String SERVER = "www1.subdomain.com";
+	public static final String USERNAME = "user1688629";
+	public static final String PASSWORD = "2gCrg7fi";
+	public static final String PATH = "";
+	//public static final String FULL_PATH_TO_LOCAL_FILE = "mnt/sdcard/upload_test.rar";
+	public static final String UPLOADED_FILE_NAME = "uploaded_file.test";
 }

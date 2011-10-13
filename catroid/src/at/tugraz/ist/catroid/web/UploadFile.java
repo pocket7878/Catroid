@@ -52,7 +52,7 @@ public class UploadFile {
 			int length = 0;
 			while ((length = is.read(writeData, 0, writeData.length)) != -1) {
 				packageCounter++;
-				out.write(writeData, 0, length);
+				//out.write(writeData, 0, length);
 				if (packageCounter % progressRefresh == 0) {
 					int progress = (int) ((float) packageCounter / (float) totalPackages * 100);
 					if (progress > 100 || progress == 99) {

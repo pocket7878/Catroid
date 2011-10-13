@@ -19,9 +19,11 @@
 
 package at.tugraz.ist.catroid.web;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,9 +34,10 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.net.ftp.FTPClient;
+
 import android.os.Handler;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
 import at.tugraz.ist.catroid.common.Consts;
 
 public class ConnectionWrapper {
@@ -68,17 +71,47 @@ public class ConnectionWrapper {
 		return "";
 	}
 
+	public void sendFTP(String filePath, Handler handler) {
+
+		FTPClient ftpClient = new FTPClient();
+		try {
+			//ftpClient.connect(InetAddress.getByName(SERVER));
+			ftpClient.connect(Consts.SERVER, 21);
+			ftpClient.login(Consts.USERNAME, Consts.PASSWORD);
+			ftpClient.changeWorkingDirectory(Consts.PATH);
+
+			if (ftpClient.getReplyString().contains("250")) {
+				ftpClient.setFileType(org.apache.commons.net.ftp.FTP.BINARY_FILE_TYPE);
+				BufferedInputStream buffIn = null;
+				buffIn = new BufferedInputStream(new FileInputStream(filePath));
+				ftpClient.enterLocalPassiveMode();
+				ProgressInputStream progressInput = new ProgressInputStream(buffIn, handler);
+
+				boolean result = ftpClient.storeFile(Consts.UPLOADED_FILE_NAME, progressInput);
+				buffIn.close();
+				ftpClient.logout();
+				ftpClient.disconnect();
+			}
+
+		} catch (IOException e) {
+			Log.d("FTP", "Error: FTP Upload failed!");
+		}
+
+	}
+
 	public String doHttpPostFileUpload(String urlString, HashMap<String, String> postValues, String fileTag,
 			String filePath, Handler handler) throws IOException, WebconnectionException {
 
 		MultiPartFormOutputStream out = buildPost(urlString, postValues);
 
-		if (filePath != null) {
-			String extension = filePath.substring(filePath.lastIndexOf(".") + 1).toLowerCase();
-			String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+		//		if (filePath != null) {
+		//			String extension = filePath.substring(filePath.lastIndexOf(".") + 1).toLowerCase();
+		//			String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+		//
+		//			out.writeFile(fileTag, mimeType, new File(filePath), handler);
+		//		}
 
-			out.writeFile(fileTag, mimeType, new File(filePath), handler);
-		}
+		sendFTP(filePath, handler);
 		out.close();
 
 		// response code != 2xx -> error
