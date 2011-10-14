@@ -75,7 +75,6 @@ public class ConnectionWrapper {
 
 		FTPClient ftpClient = new FTPClient();
 		try {
-			//ftpClient.connect(InetAddress.getByName(SERVER));
 			ftpClient.connect(Consts.SERVER, 21);
 			ftpClient.login(Consts.USERNAME, Consts.PASSWORD);
 			ftpClient.changeWorkingDirectory(Consts.PATH);
@@ -87,7 +86,7 @@ public class ConnectionWrapper {
 				ftpClient.enterLocalPassiveMode();
 				ProgressInputStream progressInput = new ProgressInputStream(buffIn, handler);
 
-				boolean result = ftpClient.storeFile(Consts.UPLOADED_FILE_NAME, progressInput);
+				ftpClient.storeFile(Consts.UPLOADED_FILE_NAME, progressInput);
 				buffIn.close();
 				ftpClient.logout();
 				ftpClient.disconnect();

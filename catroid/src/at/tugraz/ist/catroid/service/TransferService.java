@@ -36,6 +36,7 @@ public class TransferService extends Service implements ServiceConnection {
 	private Binder binder = new LocalBinder();
 	private String projectName;
 	private static TransferService instance = null;
+	private boolean isRunning = false;
 
 	public static TransferService getInstance() {
 		return instance;
@@ -100,55 +101,65 @@ public class TransferService extends Service implements ServiceConnection {
 	@Override
 	public int onStartCommand(final Intent intent, int flags, int startId) {
 
-		Thread uploadThread = new Thread() {
-			@Override
-			public void run() {
-				Context context = getApplicationContext();
-				projectName = intent.getStringExtra(Consts.UPLOAD_PROJECT_NAME_KEY);
-				createNotification(projectName, 0);
+		if (isRunning == false) {
+			Thread uploadThread = new Thread() {
+				@Override
+				public void run() {
+					Context context = getApplicationContext();
+					projectName = intent.getStringExtra(Consts.UPLOAD_PROJECT_NAME_KEY);
+					createNotification(projectName, 0);
+					isRunning = true;
 
-				String projectDescription = intent.getStringExtra(Consts.UPLOAD_INTENT_DESCRIPTION);
-				String token = intent.getStringExtra(Consts.UPLOAD_INTENT_TOKEN);
-				File dirPath = new File(intent.getStringExtra(Consts.UPLOAD_INTENT_PROJECTPATH));
-				String[] paths = dirPath.list();
+					String projectDescription = intent.getStringExtra(Consts.UPLOAD_INTENT_DESCRIPTION);
+					String token = intent.getStringExtra(Consts.UPLOAD_INTENT_TOKEN);
+					File dirPath = new File(intent.getStringExtra(Consts.UPLOAD_INTENT_PROJECTPATH));
+					String[] paths = dirPath.list();
 
-				if (paths == null) {
-					return;
-				}
-				for (int i = 0; i < paths.length; i++) {
-					paths[i] = dirPath + Consts.SLASH + paths[i];
-				}
-
-				String zipFileString = Consts.TMP_PATH + Consts.UPLOAD_ZIP + Consts.CATROID_EXTENTION;
-				File zipFile = new File(zipFileString);
-				if (!zipFile.exists()) {
-					zipFile.getParentFile().mkdirs();
-					try {
-						zipFile.createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
+					if (paths == null) {
+						return;
 					}
-				}
-				if (!UtilZip.writeToZipFile(paths, zipFileString)) {
-					zipFile.delete();
-					return;
-				}
+					for (int i = 0; i < paths.length; i++) {
+						paths[i] = dirPath + Consts.SLASH + paths[i];
+					}
 
-				try {
-					ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString,
-							UtilDeviceInfo.getUserEmail(context), UtilDeviceInfo.getUserLanguageCode(context), token,
-							handler);
-					handler.sendEmptyMessage(Consts.UPLOAD_FINISHED_TOAST);
-				} catch (WebconnectionException e) {
-					e.printStackTrace();
-					handler.sendEmptyMessage(Consts.UPLOAD_ERROR_TOAST);
+					String zipFileString = Consts.TMP_PATH + Consts.UPLOAD_ZIP + Consts.CATROID_EXTENTION;
+					File zipFile = new File(zipFileString);
+					if (!zipFile.exists()) {
+						zipFile.getParentFile().mkdirs();
+						try {
+							zipFile.createNewFile();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					if (!UtilZip.writeToZipFile(paths, zipFileString)) {
+						zipFile.delete();
+						return;
+					}
+
+					try {
+						ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString,
+								UtilDeviceInfo.getUserEmail(context), UtilDeviceInfo.getUserLanguageCode(context),
+								token, handler);
+						handler.sendEmptyMessage(Consts.UPLOAD_FINISHED_TOAST);
+					} catch (WebconnectionException e) {
+						e.printStackTrace();
+						handler.sendEmptyMessage(Consts.UPLOAD_ERROR_TOAST);
+					}
+					zipFile.delete();
+					stopSelf();
+					isRunning = false;
 				}
-				zipFile.delete();
-				stopSelf();
-			}
-		};
-		uploadThread.start();
-		return Service.START_STICKY;
+			};
+			uploadThread.start();
+			return Service.START_STICKY;
+		} else {
+			CharSequence toast_message = getString(R.string.error_project_upload_running);
+			Toast toast = Toast.makeText(TransferService.this, toast_message, Toast.LENGTH_LONG);
+			toast.show();
+			return 0;
+		}
+
 	}
 
 	public boolean bindToMarketBillingService() {

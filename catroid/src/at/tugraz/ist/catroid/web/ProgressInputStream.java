@@ -13,12 +13,10 @@ public class ProgressInputStream extends InputStream {
 	/* Key to retrieve progress value from message bundle passed to handler */
 	public static final String PROGRESS_UPDATE = "progress_update";
 
-	private static final int TEN_KILOBYTES = 1024 * 10;
-
 	private InputStream inputStream;
 	private Handler handler;
 	private long progress;
-	private long lastUpdate;
+	private long updateTime;
 	private boolean closed;
 	private int totalSize;
 
@@ -26,8 +24,8 @@ public class ProgressInputStream extends InputStream {
 		this.inputStream = inputStream;
 		this.handler = handler;
 		this.progress = 0;
-		this.lastUpdate = 0;
 		this.closed = false;
+		updateTime = System.currentTimeMillis();
 		try {
 			this.totalSize = inputStream.available();
 		} catch (IOException e) {
@@ -41,21 +39,20 @@ public class ProgressInputStream extends InputStream {
 		if (count > 0) {
 			progress += count;
 		}
-		lastUpdate = maybeUpdateDisplay(progress, lastUpdate);
+		maybeUpdateDisplay(progress);
 		return count;
 	}
 
-	private long maybeUpdateDisplay(long progress, long lastUpdate) {
-		if (progress - lastUpdate > TEN_KILOBYTES) {
-			lastUpdate = progress;
+	private void maybeUpdateDisplay(long progress) {
+		if (System.currentTimeMillis() - updateTime > 300) {
 			Message message = new Message();
 			Bundle bundle = new Bundle();
 			double progressPercent = (100 / (double) totalSize) * progress;
 			bundle.putInt(Consts.UPLOAD_PROGRESS_KEY, (int) progressPercent);
 			message.setData(bundle);
 			handler.sendMessage(message);
+			updateTime = System.currentTimeMillis();
 		}
-		return lastUpdate;
 	}
 
 	@Override

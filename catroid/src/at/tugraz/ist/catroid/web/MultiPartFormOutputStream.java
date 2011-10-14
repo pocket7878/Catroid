@@ -286,11 +286,12 @@ public class MultiPartFormOutputStream {
 
 		// write content header
 		out.writeBytes("Content-Disposition: form-data; name=\"" + name + "\"; filename=\"" + fileName + "\"");
-		out.writeBytes(NEWLINE);
-		if (mimeType != null) {
-			out.writeBytes("Content-Type: " + mimeType);
-			out.writeBytes(NEWLINE);
-		}
+		//out.writeBytes(NEWLINE);
+		//		if (mimeType != null) {
+		//			out.writeBytes("Content-Type: " + mimeType);
+		//			out.writeBytes(NEWLINE);
+		//		}
+		out.writeBytes("Content-Type: " + "charset=utf8");
 
 		UploadFile uploadprogress = new UploadFile();
 		uploadprogress.writeFile(out, is, handler);
