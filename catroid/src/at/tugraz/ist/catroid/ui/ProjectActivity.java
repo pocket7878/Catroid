@@ -59,6 +59,7 @@ public class ProjectActivity extends ListActivity {
 	private static final int DIALOG_CONTEXT_MENU = 2;
 
 	private Tutorial tutorial;
+
 	private void initListeners() {
 		spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject().getSpriteList();
 		spriteAdapter = new SpriteAdapter(this, R.layout.activity_project_spritelist_item, R.id.sprite_title,
@@ -209,8 +210,7 @@ public class ProjectActivity extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		tutorial = Tutorial.getInstance(this);
-		tutorial.resumeTutorial();
+		Tutorial.getInstance(this).resumeTutorial();
 		if (!Utils.checkForSdCard(this)) {
 			return;
 		}
@@ -232,7 +232,8 @@ public class ProjectActivity extends ListActivity {
 	@Override
 	public void onPause() {
 		super.onPause();
-		tutorial.pauseTutorial();
+		Tutorial.getInstance(this).pauseTutorial();
+		//		tutorial.pauseTutorial();
 		ProjectManager projectManager = ProjectManager.getInstance();
 		if (projectManager.getCurrentProject() != null) {
 			projectManager.saveProject();

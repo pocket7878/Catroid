@@ -304,6 +304,7 @@ public class Tutorial {
 
 			windowManager.removeView(to);
 			to = null;
+
 		}
 	}
 
@@ -342,7 +343,7 @@ public class Tutorial {
 		windowParameters.height = Values.SCREEN_HEIGHT;
 		windowParameters.width = Values.SCREEN_WIDTH;
 		windowParameters.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-				| WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+				| /* WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | */WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
 				| WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
 		windowParameters.format = PixelFormat.TRANSLUCENT;
 
@@ -353,7 +354,7 @@ public class Tutorial {
 		if (!tutorialActive) {
 			//Tutorial is not active, so there is nothing to continue...
 		} else {
-			goToLastState();
+			//			goToLastState();
 			txh = new TutorialXmlHandler(context);
 			code = getCode();
 			interpret();

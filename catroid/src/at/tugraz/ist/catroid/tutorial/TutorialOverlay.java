@@ -18,6 +18,8 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
+import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -25,8 +27,13 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Button;
+import android.widget.ListView;
+import at.tugraz.ist.catroid.R;
 
 /**
  * @author User
@@ -37,6 +44,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	Tutor tutor;
 	Tutor tutor_2;
 	Tutor currentTutor;
+	Context context;
 
 	private TutorialThread mThread;
 
@@ -53,6 +61,70 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		currentTutor = tutor;
 		getHolder().addCallback(this);
 		mThread = new TutorialThread(this);
+		this.context = context;
+	}
+
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+
+		Activity dings = (Activity) context;
+		if (dings.getLocalClassName().compareTo("ui.MainMenuActivity") == 0) {
+			return dispatchMainMenu(ev);
+		} else if (dings.getLocalClassName().compareTo("ui.ProjectActivity") == 0) {
+			return dispatchProject(ev);
+		} else if (dings.getLocalClassName().compareTo("ui.ScriptActivit") == 0) {
+			return dispatchSkript(ev);
+		}
+		return false;
+	}
+
+	public boolean dispatchSkript(MotionEvent ev) {
+
+		return true;
+	}
+
+	public boolean dispatchProject(MotionEvent ev) {
+		ListActivity test = (ListActivity) context;
+		ListView livi = test.getListView();
+		int y = livi.getChildAt(0).getTop();
+		ev.setLocation(ev.getX(), ev.getY() - 100); // please anyone find out the real height of the titlebar!
+		int x = livi.getChildAt(0).getLeft();
+		int maxx = livi.getChildAt(0).getRight();
+		int maxy = livi.getChildAt(0).getBottom();
+		Log.i("faxxe", "touched!" + x + " " + y + " " + maxx + " " + maxy + " " + ev.getX() + " " + ev.getY());
+
+		if (ev.getX() < maxx && ev.getX() > x && ev.getY() < maxy && ev.getY() > y) {
+			Log.i("faxxe", "irgendwos" + x + " " + y + " " + maxx + " " + maxy + " " + ev.getX() + " " + ev.getY());
+			livi.dispatchTouchEvent(ev);
+		}
+
+		return true;
+	}
+
+	public boolean dispatchMainMenu(MotionEvent ev) {
+		Activity dings = (Activity) context;
+		Button teifl = (Button) dings.findViewById(R.id.current_project_button);
+		Button teifl1 = (Button) dings.findViewById(R.id.tutorial_button);
+		int location[] = new int[2];
+		int location1[] = new int[2];
+		teifl.getLocationOnScreen(location);
+		teifl1.getLocationOnScreen(location1);
+		int width = teifl.getWidth();
+		int height = teifl.getHeight();
+		int width1 = teifl1.getWidth();
+		int height1 = teifl1.getHeight();
+
+		if (ev.getX() > location[0] && ev.getX() < location[0] + width && ev.getY() > location[1]
+				&& ev.getY() < location[1] + height) {
+			dings.dispatchTouchEvent(ev);
+			Log.i("faxxe", "clicked: " + ev.getX() + " " + ev.getY());
+		}
+		if (ev.getX() > location1[0] && ev.getX() < location1[0] + width1 && ev.getY() > location1[1]
+				&& ev.getY() < location1[1] + height1) {
+			dings.dispatchTouchEvent(ev);
+			Log.i("faxxe", "clicked: " + ev.getX() + " " + ev.getY());
+		}
+		return true;
 	}
 
 	public void switchToDog() {
