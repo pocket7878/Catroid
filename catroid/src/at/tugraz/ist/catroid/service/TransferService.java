@@ -87,15 +87,15 @@ public class TransferService extends Service implements ServiceConnection {
 		Intent intent = new Intent(this, TransferService.class);
 		final PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
 
-		final NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		Notification notification = new Notification(R.drawable.catroid_upload, title, System.currentTimeMillis());
-		notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT;
+		notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT | Notification.FLAG_AUTO_CANCEL;
 		notification.contentView = new RemoteViews(getApplicationContext().getPackageName(), R.layout.upload_progress);
 		notification.contentIntent = pendingIntent;
 		notification.contentView.setImageViewResource(R.id.status_icon, R.drawable.catroid_upload);
 		notification.contentView.setTextViewText(R.id.status_text, title + " " + progress + " %");
 		notification.contentView.setProgressBar(R.id.status_progress, Consts.UPLOAD_PROGRESS_MAX, progress, false);
-		mNotificationManager.notify(1, notification);
+		notificationManager.notify(1, notification);
 	}
 
 	@Override

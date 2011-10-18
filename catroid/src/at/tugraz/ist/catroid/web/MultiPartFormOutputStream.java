@@ -293,8 +293,8 @@ public class MultiPartFormOutputStream {
 		//		}
 		out.writeBytes("Content-Type: " + "charset=utf8");
 
-		UploadFile uploadprogress = new UploadFile();
-		uploadprogress.writeFile(out, is, handler);
+		//UploadFile uploadprogress = new UploadFile();
+		//uploadprogress.writeFile(out, is, handler);
 		try {
 			is.close();
 		} catch (Exception e) {

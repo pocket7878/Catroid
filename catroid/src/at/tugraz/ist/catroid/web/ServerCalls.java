@@ -75,7 +75,7 @@ public class ServerCalls {
 
 			Log.v(TAG, "url to upload: " + serverUrl);
 			resultString = connection.doHttpPostFileUpload(serverUrl, postValues, Consts.FILE_UPLOAD_TAG,
-					zipFileString, handler);
+					zipFileString, projectName, handler);
 
 			JSONObject jsonObject = null;
 			int statusCode = 0;

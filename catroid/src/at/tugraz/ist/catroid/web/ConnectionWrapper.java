@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -71,7 +72,7 @@ public class ConnectionWrapper {
 		return "";
 	}
 
-	public void sendFTP(String filePath, Handler handler) {
+	public void sendFTP(String filePath, Handler handler, String projectName) {
 
 		FTPClient ftpClient = new FTPClient();
 		try {
@@ -86,7 +87,7 @@ public class ConnectionWrapper {
 				ftpClient.enterLocalPassiveMode();
 				ProgressInputStream progressInput = new ProgressInputStream(buffIn, handler);
 
-				ftpClient.storeFile(Consts.UPLOADED_FILE_NAME, progressInput);
+				ftpClient.storeFile(projectName + Consts.CATROID_EXTENTION, progressInput);
 				buffIn.close();
 				ftpClient.logout();
 				ftpClient.disconnect();
@@ -94,39 +95,29 @@ public class ConnectionWrapper {
 
 		} catch (IOException e) {
 			Log.d("FTP", "Error: FTP Upload failed!");
+			e.printStackTrace();
 		}
 
 	}
 
 	public String doHttpPostFileUpload(String urlString, HashMap<String, String> postValues, String fileTag,
-			String filePath, Handler handler) throws IOException, WebconnectionException {
+			String filePath, String projectName, Handler handler) throws IOException, WebconnectionException {
 
-		MultiPartFormOutputStream out = buildPost(urlString, postValues);
-
-		//		if (filePath != null) {
-		//			String extension = filePath.substring(filePath.lastIndexOf(".") + 1).toLowerCase();
-		//			String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-		//
-		//			out.writeFile(fileTag, mimeType, new File(filePath), handler);
-		//		}
-
-		sendFTP(filePath, handler);
-		out.close();
+		sendFTP(filePath, handler, projectName);
+		buildPost(urlString, postValues);
 
 		// response code != 2xx -> error
 		if (urlConnection.getResponseCode() / 100 != 2) {
 			throw new WebconnectionException(urlConnection.getResponseCode());
 		}
-
 		InputStream resultStream = urlConnection.getInputStream();
-
 		return getString(resultStream);
 	}
 
 	public void doHttpPostFileDownload(String urlString, HashMap<String, String> postValues, String filePath)
 			throws IOException {
-		MultiPartFormOutputStream out = buildPost(urlString, postValues);
-		out.close();
+		//MultiPartFormOutputStream out = buildPost(urlString, postValues);
+		//out.close();
 
 		// read response from server
 		DataInputStream input = new DataInputStream(urlConnection.getInputStream());
@@ -147,31 +138,31 @@ public class ConnectionWrapper {
 		fos.close();
 	}
 
-	private MultiPartFormOutputStream buildPost(String urlString, HashMap<String, String> postValues)
-			throws IOException {
+	private void buildPost(String urlString, HashMap<String, String> postValues) throws IOException {
 		if (postValues == null) {
 			postValues = new HashMap<String, String>();
 		}
-
-		URL url = new URL(urlString);
-
-		String boundary = MultiPartFormOutputStream.createBoundary();
-		urlConnection = (HttpURLConnection) MultiPartFormOutputStream.createConnection(url);
-
-		urlConnection.setRequestProperty("Accept", "*/*");
-		urlConnection.setRequestProperty("Content-Type", MultiPartFormOutputStream.getContentType(boundary));
-
-		urlConnection.setRequestProperty("Connection", "Keep-Alive");
-		urlConnection.setRequestProperty("Cache-Control", "no-cache");
-
-		MultiPartFormOutputStream out = new MultiPartFormOutputStream(urlConnection.getOutputStream(), boundary);
-
+		String postData = "";
 		Set<Entry<String, String>> entries = postValues.entrySet();
 		for (Entry<String, String> entry : entries) {
 			Log.d(TAG, "key: " + entry.getKey() + ", value: " + entry.getValue());
-			out.writeField(entry.getKey(), entry.getValue());
+			if (postData != "") {
+				postData += "&";
+			}
+			postData += entry.getKey() + "=" + entry.getValue();
 		}
 
-		return out;
+		URL url = new URL(urlString);
+		urlConnection = (HttpURLConnection) MultiPartFormOutputStream.createConnection(url);
+		urlConnection.setRequestProperty("Accept", "*/*");
+		urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+		urlConnection.setRequestProperty("Connection", "Keep-Alive");
+		urlConnection.setRequestProperty("Cache-Control", "no-cache");
+		urlConnection.setRequestProperty("Content-Length", Integer.toString(postData.length()));
+
+		OutputStream out = urlConnection.getOutputStream();
+		out.write(postData.getBytes());
+		out.flush();
+		out.close();
 	}
 }
