@@ -2,7 +2,7 @@
 <MainMenuTutorial>
 	<cat>foo</cat>
 	<flip>foo</flip>
-	<appear>30,230</appear>
+	<appear>30,430</appear>
 	
 	<cat>foo</cat>
 	<say>Willkommen bei Catroid! Du bist sicher der neue Entwickler für kommende Projekte. 
@@ -16,7 +16,7 @@
 	Also wird es Zeit ein erstes kleines Projekt zu erstellen. Dazu	klicke ... </say>
 	
 	<dog>foo</dog>
-	<appear>350,200</appear>
+	<appear>350,400</appear>
 	<dog>foo</dog>
 	<say>Hey was ist denn hier los??? Los raus mit der Sprache!! Ohne mich geht hier aber gar nichts. Ich 
 	bin Gerry, grrrr und ich mag es gar nicht wenn etwas hinter meinem Rücken passiert. </say>
@@ -26,16 +26,17 @@
 	doch letztens schon gezeigt.</say>
 	<dog>foo</dog>
 	<say>Wirklich? Das glaub ich nicht. Du hast mir nur gezeigt, wie ich auf meinem Smartphone meine eigenen
-	Spiele machen kann. Da war nichts mit Androidprogrammierung dabei, ganz bestimmt nicht. Daran könnte
+	Spiele machen kann. Da war nichts über Android dabei, ganz bestimmt nicht. Daran könnte
 	ich mich erinnern wenn du mir gezeigt hättest, wie ich meinen eigenen kleinen Roboter programmieren
 	kann.</say>
 	<cat>foo</cat>
 	<say>Ach Gerry, da hast du jetzt aber was falsch verstanden. Mit Android meine ich nicht einen Roboter
 	sondern das Betriebssystem, dass auch auf deinem Handy installiert ist. Spiele sind ein gutes
 	Beispiel dafür, was mit Catroid möglich ist. Na gut, bleib hier und pass gut auf. Ich muss es unserem
-	neuen Programmierer sowieso noch erklären. So also gut, wo fangen wir an? Schauen wir uns mal wie ein
+	neuen Programmierer sowieso noch erklären. So also gut, wo fangen wir an? Schauen wir uns mal an wie ein
 	Projekt in Catroid aussehen kann. Dafür hab ich bereits ein Projekt erstellt. Nun klicke auf 
 	"aktuelles Projekt", damit wir uns es ansehen können.</say>
+	
 	<waitfor>ProjectManager</waitfor>
 </MainMenuTutorial>
  

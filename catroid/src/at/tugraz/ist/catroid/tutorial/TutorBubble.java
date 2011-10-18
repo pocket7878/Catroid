@@ -26,10 +26,10 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Paint.Align;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.Paint.Align;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.view.Display;
@@ -157,7 +157,7 @@ public class TutorBubble {
 		Rect boxSize = mSpeechBubble.getBounds();
 		int size = boxSize.width();
 
-		int space = size / ((textSize / 2) + 1);
+		int space = (size / (textSize / 2)) - 3;
 
 		switch (orientation) {
 			case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
