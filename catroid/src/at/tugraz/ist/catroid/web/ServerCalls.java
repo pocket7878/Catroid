@@ -64,23 +64,21 @@ public class ServerCalls {
 			postValues.put(Consts.PROJECT_DESCRIPTION_TAG, projectDescription);
 			postValues.put(Consts.PROJECT_CHECKSUM_TAG, md5Checksum.toLowerCase());
 			postValues.put(Consts.TOKEN, token);
-
 			if (userEmail != null) {
 				postValues.put(Consts.USER_EMAIL, userEmail);
 			}
 			if (language != null) {
 				postValues.put(Consts.USER_LANGUAGE, language);
 			}
-			String serverUrl = useTestUrl ? Consts.TEST_FILE_UPLOAD_URL : Consts.FILE_UPLOAD_URL;
 
+			String serverUrl = useTestUrl ? Consts.TEST_FILE_UPLOAD_URL : Consts.FILE_UPLOAD_URL;
 			Log.v(TAG, "url to upload: " + serverUrl);
-			resultString = connection.doHttpPostFileUpload(serverUrl, postValues, Consts.FILE_UPLOAD_TAG,
-					zipFileString, projectName, handler);
+			resultString = connection.doHttpPost(serverUrl, postValues);
+			connection.sendFTP(zipFileString, handler, projectName);
 
 			JSONObject jsonObject = null;
 			int statusCode = 0;
 			Log.v(TAG, "result string: " + resultString);
-
 			jsonObject = new JSONObject(resultString);
 			statusCode = jsonObject.getInt("statusCode");
 			String serverAnswer = jsonObject.getString("answer");

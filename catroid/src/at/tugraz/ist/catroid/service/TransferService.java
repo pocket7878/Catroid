@@ -47,18 +47,10 @@ public class TransferService extends Service implements ServiceConnection {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			final NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 			if (msg.what == Consts.UPLOAD_FINISHED_TOAST) {
-				CharSequence toast_message = getString(R.string.upload_notify_title) + projectName
-						+ Consts.UPLOAD_FINISHED;
-				Toast toast = Toast.makeText(TransferService.this, toast_message, Toast.LENGTH_LONG);
-				toast.show();
-				mNotificationManager.cancel(1);
+				createFinishedNotification();
 			} else if (msg.what == Consts.UPLOAD_ERROR_TOAST) {
-				CharSequence toast_message = getString(R.string.error_project_upload);
-				Toast toast = Toast.makeText(TransferService.this, toast_message, Toast.LENGTH_LONG);
-				toast.show();
-				mNotificationManager.cancelAll();
+				createErrorNotification();
 			} else {
 				updateProgress(msg.getData().getInt(Consts.UPLOAD_PROGRESS_KEY));
 			}
@@ -83,11 +75,11 @@ public class TransferService extends Service implements ServiceConnection {
 
 	public void createNotification(String projectName, int progress) {
 
+		final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		String title = getString(R.string.upload_notify_title) + projectName + Consts.HIGH_POINT;
 		Intent intent = new Intent(this, TransferService.class);
 		final PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
 
-		final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		Notification notification = new Notification(R.drawable.catroid_upload, title, System.currentTimeMillis());
 		notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT | Notification.FLAG_AUTO_CANCEL;
 		notification.contentView = new RemoteViews(getApplicationContext().getPackageName(), R.layout.upload_progress);
@@ -96,6 +88,75 @@ public class TransferService extends Service implements ServiceConnection {
 		notification.contentView.setTextViewText(R.id.status_text, title + " " + progress + " %");
 		notification.contentView.setProgressBar(R.id.status_progress, Consts.UPLOAD_PROGRESS_MAX, progress, false);
 		notificationManager.notify(1, notification);
+	}
+
+	public void createFinishedNotification() {
+
+		final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.cancelAll();
+
+		int icon = R.drawable.catroid; // icon from resources
+		CharSequence tickerText = "Upload successful!"; // ticker-text
+		long when = System.currentTimeMillis(); // notification time
+		Context context = getApplicationContext(); // application Context
+		CharSequence contentTitle = "Upload successful!"; // message title
+		CharSequence contentText = "Uploading \"" + projectName + "\" finished!"; // message text
+
+		Intent notificationIntent = new Intent(this, TransferService.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+		Notification notification = new Notification(icon, tickerText, when);
+		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+		notificationManager.notify(2, notification);
+
+	}
+
+	public void createErrorNotification() {
+
+		final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.cancelAll();
+
+		int icon = R.drawable.catroid; // icon from resources
+		CharSequence tickerText = "Upload failed!"; // ticker-text
+		long when = System.currentTimeMillis(); // notification time
+		Context context = getApplicationContext(); // application Context
+		CharSequence contentTitle = "Upload failed!"; // message title
+		CharSequence contentText = "Uploading \"" + projectName + "\" failed!"; // message text
+
+		Intent notificationIntent = new Intent(this, TransferService.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+		Notification notification = new Notification(icon, tickerText, when);
+		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+		notificationManager.notify(3, notification);
+	}
+
+	public File createzipFile(String zipFileString) {
+		File dirPath = new File(zipFileString);
+		String[] paths = dirPath.list();
+
+		if (paths == null) {
+			return null;
+		}
+		for (int i = 0; i < paths.length; i++) {
+			paths[i] = dirPath + Consts.SLASH + paths[i];
+		}
+
+		zipFileString = Consts.TMP_PATH + Consts.UPLOAD_ZIP + Consts.CATROID_EXTENTION;
+		File zipFile = new File(zipFileString);
+		if (!zipFile.exists()) {
+			zipFile.getParentFile().mkdirs();
+			try {
+				zipFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if (!UtilZip.writeToZipFile(paths, zipFileString)) {
+			zipFile.delete();
+			return null;
+		}
+		return zipFile;
 	}
 
 	@Override
@@ -112,30 +173,9 @@ public class TransferService extends Service implements ServiceConnection {
 
 					String projectDescription = intent.getStringExtra(Consts.UPLOAD_INTENT_DESCRIPTION);
 					String token = intent.getStringExtra(Consts.UPLOAD_INTENT_TOKEN);
-					File dirPath = new File(intent.getStringExtra(Consts.UPLOAD_INTENT_PROJECTPATH));
-					String[] paths = dirPath.list();
-
-					if (paths == null) {
-						return;
-					}
-					for (int i = 0; i < paths.length; i++) {
-						paths[i] = dirPath + Consts.SLASH + paths[i];
-					}
-
-					String zipFileString = Consts.TMP_PATH + Consts.UPLOAD_ZIP + Consts.CATROID_EXTENTION;
-					File zipFile = new File(zipFileString);
-					if (!zipFile.exists()) {
-						zipFile.getParentFile().mkdirs();
-						try {
-							zipFile.createNewFile();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-					if (!UtilZip.writeToZipFile(paths, zipFileString)) {
-						zipFile.delete();
-						return;
-					}
+					String zipFileString = intent.getStringExtra(Consts.UPLOAD_INTENT_PROJECTPATH);
+					File zipFile = createzipFile(zipFileString);
+					zipFileString = Consts.TMP_PATH + Consts.UPLOAD_ZIP + Consts.CATROID_EXTENTION;
 
 					try {
 						ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString,

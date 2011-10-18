@@ -100,10 +100,9 @@ public class ConnectionWrapper {
 
 	}
 
-	public String doHttpPostFileUpload(String urlString, HashMap<String, String> postValues, String fileTag,
-			String filePath, String projectName, Handler handler) throws IOException, WebconnectionException {
+	public String doHttpPost(String urlString, HashMap<String, String> postValues) throws IOException,
+			WebconnectionException {
 
-		sendFTP(filePath, handler, projectName);
 		buildPost(urlString, postValues);
 
 		// response code != 2xx -> error
