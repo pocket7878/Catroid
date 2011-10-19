@@ -18,11 +18,13 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.view.Display;
 import at.tugraz.ist.catroid.R;
 
 /**
@@ -35,22 +37,74 @@ public class TutorialControlPanel {
 	Context context;
 
 	Drawable play;
+	Drawable pause;
+	Drawable forward;
+	Drawable backward;
+
+	Rect bounds;
 
 	public TutorialControlPanel(Resources resources, Context context) {
 		this.resources = resources;
 		this.context = context;
 		play = resources.getDrawable(R.drawable.play_tutorial);
+		pause = resources.getDrawable(R.drawable.pause_tutorial);
+		forward = resources.getDrawable(R.drawable.forward_tutorial);
+		backward = resources.getDrawable(R.drawable.backwards_tutorial);
 	}
 
 	public void draw(Canvas canvas) {
-		Rect bounds = new Rect();
-		bounds.left = 150;
-		bounds.right = 190;
-		bounds.top = 740;
-		bounds.bottom = 780;
+		bounds = new Rect();
+
+		//		bounds.left = (width - 260) / 2;
+		//		bounds.right = bounds.left + 50;
+		//		bounds.top = height - 70;
+		//		bounds.bottom = height - 20;
+
+		setBounds(0);
 
 		play.setBounds(bounds);
 		play.draw(canvas);
+
+		setBounds(70);
+		pause.setBounds(bounds);
+		pause.draw(canvas);
+
+		setBounds(140);
+		forward.setBounds(bounds);
+		forward.draw(canvas);
+
+		setBounds(210);
+		backward.setBounds(bounds);
+		backward.draw(canvas);
+
+	}
+
+	private void setBounds(int shift) {
+		int height = getScreenHeight();
+		int width = getScreenWidth();
+
+		bounds.left = ((width - 260) / 2) + shift;
+		bounds.right = bounds.left + 50;
+		bounds.top = height - 70;
+		bounds.bottom = height - 20;
+
+	}
+
+	private int getScreenHeight() {
+		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+		int screenHeight = display.getHeight();
+		return screenHeight;
+	}
+
+	private int getScreenWidth() {
+		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+		int screenWidth = display.getWidth();
+		return screenWidth;
+	}
+
+	public Rect getBounds() {
+
+		return bounds;
 
 	}
 
