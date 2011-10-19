@@ -176,13 +176,13 @@ public class TutorBubble {
 		yText = y - marginBottom - (textSize * maxLines);
 	}
 
-	public int getScreenHeight() {
+	private int getScreenHeight() {
 		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
 		int screenHeight = display.getHeight();
 		return screenHeight;
 	}
 
-	public int getScreenWidth() {
+	private int getScreenWidth() {
 		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
 		int screenWidth = display.getWidth();
 		return screenWidth;
