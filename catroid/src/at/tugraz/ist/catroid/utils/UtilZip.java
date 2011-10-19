@@ -36,6 +36,34 @@ public class UtilZip {
 
 	private static ZipOutputStream zipOutputStream;
 
+	public File createzipFile(String zipFileString) {
+		File dirPath = new File(zipFileString);
+		String[] paths = dirPath.list();
+
+		if (paths == null) {
+			return null;
+		}
+		for (int i = 0; i < paths.length; i++) {
+			paths[i] = dirPath + Consts.SLASH + paths[i];
+		}
+
+		zipFileString = Consts.TMP_PATH + Consts.UPLOAD_ZIP + Consts.CATROID_EXTENTION;
+		File zipFile = new File(zipFileString);
+		if (!zipFile.exists()) {
+			zipFile.getParentFile().mkdirs();
+			try {
+				zipFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if (!UtilZip.writeToZipFile(paths, zipFileString)) {
+			zipFile.delete();
+			return null;
+		}
+		return zipFile;
+	}
+
 	public static boolean writeToZipFile(String[] filePaths, String zipFile) {
 
 		try {

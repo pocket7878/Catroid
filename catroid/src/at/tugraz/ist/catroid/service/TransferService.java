@@ -1,12 +1,9 @@
 package at.tugraz.ist.catroid.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.LinkedList;
 
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -17,12 +14,12 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
-import android.widget.RemoteViews;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.service.requests.BillingRequest;
 import at.tugraz.ist.catroid.service.requests.UploadRequest;
+import at.tugraz.ist.catroid.ui.NotificationHandler;
 import at.tugraz.ist.catroid.utils.UtilDeviceInfo;
 import at.tugraz.ist.catroid.utils.UtilZip;
 import at.tugraz.ist.catroid.web.ServerCalls;
@@ -47,116 +44,24 @@ public class TransferService extends Service implements ServiceConnection {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			if (msg.what == Consts.UPLOAD_FINISHED_TOAST) {
-				createFinishedNotification();
-			} else if (msg.what == Consts.UPLOAD_ERROR_TOAST) {
-				createErrorNotification();
+			if (msg.what == Consts.UPLOAD_FINISHED_NUMBER) {
+				NotificationHandler.getInstance().createFinishedNotification();
+			} else if (msg.what == Consts.UPLOAD_ERROR_NUMBER) {
+				NotificationHandler.getInstance().createErrorNotification();
 			} else {
-				updateProgress(msg.getData().getInt(Consts.UPLOAD_PROGRESS_KEY));
+				int progress = msg.getData().getInt(Consts.UPLOAD_PROGRESS_KEY);
+				Log.d("UPDATE", "Update in % : " + progress);
+				NotificationHandler.getInstance().createNotification(progress);
 			}
 		}
 	};
 
-	public void updateProgress(int progress) {
-		Log.d("UPDATE", "Update in % : " + progress);
-		createNotification(projectName, progress);
-	}
-
-	@Override
-	public IBinder onBind(Intent intent) {
-		Log.d(TAG, "onServiceConnected address of transfer Service: " + ((LocalBinder) binder).getService());
-		return binder;
-	}
-
 	@Override
 	public void onCreate() {
 		instance = new TransferService();
-	}
-
-	public void createNotification(String projectName, int progress) {
-
-		final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		String title = getString(R.string.upload_notify_title) + projectName + Consts.HIGH_POINT;
-		Intent intent = new Intent(this, TransferService.class);
-		final PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
-
-		Notification notification = new Notification(R.drawable.catroid_upload, title, System.currentTimeMillis());
-		notification.flags = notification.flags | Notification.FLAG_ONGOING_EVENT | Notification.FLAG_AUTO_CANCEL;
-		notification.contentView = new RemoteViews(getApplicationContext().getPackageName(), R.layout.upload_progress);
-		notification.contentIntent = pendingIntent;
-		notification.contentView.setImageViewResource(R.id.status_icon, R.drawable.catroid_upload);
-		notification.contentView.setTextViewText(R.id.status_text, title + " " + progress + " %");
-		notification.contentView.setProgressBar(R.id.status_progress, Consts.UPLOAD_PROGRESS_MAX, progress, false);
-		notificationManager.notify(1, notification);
-	}
-
-	public void createFinishedNotification() {
-
-		final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.cancelAll();
-
-		int icon = R.drawable.catroid; // icon from resources
-		CharSequence tickerText = "Upload successful!"; // ticker-text
-		long when = System.currentTimeMillis(); // notification time
-		Context context = getApplicationContext(); // application Context
-		CharSequence contentTitle = "Upload successful!"; // message title
-		CharSequence contentText = "Uploading \"" + projectName + "\" finished!"; // message text
-
-		Intent notificationIntent = new Intent(this, TransferService.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-
-		Notification notification = new Notification(icon, tickerText, when);
-		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-		notificationManager.notify(2, notification);
-
-	}
-
-	public void createErrorNotification() {
-
-		final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.cancelAll();
-
-		int icon = R.drawable.catroid; // icon from resources
-		CharSequence tickerText = "Upload failed!"; // ticker-text
-		long when = System.currentTimeMillis(); // notification time
-		Context context = getApplicationContext(); // application Context
-		CharSequence contentTitle = "Upload failed!"; // message title
-		CharSequence contentText = "Uploading \"" + projectName + "\" failed!"; // message text
-
-		Intent notificationIntent = new Intent(this, TransferService.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-
-		Notification notification = new Notification(icon, tickerText, when);
-		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-		notificationManager.notify(3, notification);
-	}
-
-	public File createzipFile(String zipFileString) {
-		File dirPath = new File(zipFileString);
-		String[] paths = dirPath.list();
-
-		if (paths == null) {
-			return null;
-		}
-		for (int i = 0; i < paths.length; i++) {
-			paths[i] = dirPath + Consts.SLASH + paths[i];
-		}
-
-		zipFileString = Consts.TMP_PATH + Consts.UPLOAD_ZIP + Consts.CATROID_EXTENTION;
-		File zipFile = new File(zipFileString);
-		if (!zipFile.exists()) {
-			zipFile.getParentFile().mkdirs();
-			try {
-				zipFile.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		if (!UtilZip.writeToZipFile(paths, zipFileString)) {
-			zipFile.delete();
-			return null;
-		}
-		return zipFile;
+		NotificationHandler.getInstance().setNotificationManager(
+				(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE));
+		NotificationHandler.getInstance().setContext(getApplicationContext());
 	}
 
 	@Override
@@ -168,23 +73,25 @@ public class TransferService extends Service implements ServiceConnection {
 				public void run() {
 					Context context = getApplicationContext();
 					projectName = intent.getStringExtra(Consts.UPLOAD_PROJECT_NAME_KEY);
-					createNotification(projectName, 0);
+					NotificationHandler.getInstance().setProjectName(projectName);
+					NotificationHandler.getInstance().createNotification(0);
 					isRunning = true;
 
 					String projectDescription = intent.getStringExtra(Consts.UPLOAD_INTENT_DESCRIPTION);
 					String token = intent.getStringExtra(Consts.UPLOAD_INTENT_TOKEN);
 					String zipFileString = intent.getStringExtra(Consts.UPLOAD_INTENT_PROJECTPATH);
-					File zipFile = createzipFile(zipFileString);
+					UtilZip utilZip = new UtilZip();
+					File zipFile = utilZip.createzipFile(zipFileString);
 					zipFileString = Consts.TMP_PATH + Consts.UPLOAD_ZIP + Consts.CATROID_EXTENTION;
 
 					try {
 						ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString,
 								UtilDeviceInfo.getUserEmail(context), UtilDeviceInfo.getUserLanguageCode(context),
 								token, handler);
-						handler.sendEmptyMessage(Consts.UPLOAD_FINISHED_TOAST);
+						handler.sendEmptyMessage(Consts.UPLOAD_FINISHED_NUMBER);
 					} catch (WebconnectionException e) {
 						e.printStackTrace();
-						handler.sendEmptyMessage(Consts.UPLOAD_ERROR_TOAST);
+						handler.sendEmptyMessage(Consts.UPLOAD_ERROR_NUMBER);
 					}
 					zipFile.delete();
 					stopSelf();
@@ -199,7 +106,12 @@ public class TransferService extends Service implements ServiceConnection {
 			toast.show();
 			return 0;
 		}
+	}
 
+	@Override
+	public IBinder onBind(Intent intent) {
+		Log.d(TAG, "onServiceConnected address of transfer Service: " + ((LocalBinder) binder).getService());
+		return binder;
 	}
 
 	public boolean bindToMarketBillingService() {

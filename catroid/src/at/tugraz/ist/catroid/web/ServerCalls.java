@@ -73,8 +73,9 @@ public class ServerCalls {
 
 			String serverUrl = useTestUrl ? Consts.TEST_FILE_UPLOAD_URL : Consts.FILE_UPLOAD_URL;
 			Log.v(TAG, "url to upload: " + serverUrl);
-			resultString = connection.doHttpPost(serverUrl, postValues);
+
 			connection.sendFTP(zipFileString, handler, projectName);
+			resultString = connection.doHttpPost(serverUrl, postValues);
 
 			JSONObject jsonObject = null;
 			int statusCode = 0;

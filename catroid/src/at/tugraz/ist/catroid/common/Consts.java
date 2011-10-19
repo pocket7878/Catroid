@@ -92,21 +92,18 @@ public final class Consts {
 	public static final String SLASH = "/";
 	public static final String NEWLINE = "\r\n";
 	public static final String UPLOAD_PROGRESS_KEY = "uploadProgress";
-	public static final String UPLOAD_ZIP = "/upload";
 	public static final String UPLOAD_PROJECT_NAME_KEY = "uploadName";
 	public static final String UPLOAD_INTENT_DESCRIPTION = "description";
 	public static final String UPLOAD_INTENT_TOKEN = "token";
 	public static final String UPLOAD_INTENT_PROJECTPATH = "projectPath";
-	public static final String UPLOAD_FINISHED = "\" finished";
 	public static final String UPLOAD_PROGREESS_KEY = "uploadProgress";
-	public static final int UPLOAD_FINISHED_TOAST = 1;
-	public static final int UPLOAD_ERROR_TOAST = 2;
+	public static final int UPLOAD_FINISHED_NUMBER = 1;
+	public static final int UPLOAD_ERROR_NUMBER = 2;
 	public static final int UPLOAD_PROGRESS_MAX = 100;
+	public static final String UPLOAD_ZIP = "/upload";
 
 	public static final String SERVER = "www1.subdomain.com";
 	public static final String USERNAME = "user1688629";
 	public static final String PASSWORD = "2gCrg7fi";
 	public static final String PATH = "";
-	//public static final String FULL_PATH_TO_LOCAL_FILE = "mnt/sdcard/upload_test.rar";
-	public static final String UPLOADED_FILE_NAME = "uploaded_file.test";
 }

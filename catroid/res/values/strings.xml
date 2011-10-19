@@ -255,5 +255,6 @@
     <string name="project_rename">(Your project will be renamed.)</string>
     <string name="upload_service_name">name</string>
     <string name="upload_notify_title">Uploading: \"</string>
+    <string name="upload_finished">\" finished</string>
     
 </resources>
