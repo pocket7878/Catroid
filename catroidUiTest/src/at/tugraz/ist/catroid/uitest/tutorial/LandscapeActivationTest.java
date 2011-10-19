@@ -23,6 +23,7 @@ import java.lang.reflect.Field;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
+import android.widget.Button;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.tutorial.Tutorial;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
@@ -30,10 +31,10 @@ import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
 
-public class TutorialActivationTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
+public class LandscapeActivationTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
 	private Solo solo;
 
-	public TutorialActivationTest() {
+	public LandscapeActivationTest() {
 		super("at.tugraz.ist.catroid", MainMenuActivity.class);
 	}
 
@@ -70,51 +71,55 @@ public class TutorialActivationTest extends ActivityInstrumentationTestCase2<Mai
 		return tutorialActive;
 	}
 
-	public void testMainMenuActivity() {
-		String test = getActivity().getString(R.string.tutorial);
+	//	private void setTutorialActivatedBoolean(boolean newValue) {
+	//		Tutorial tutorial;
+	//		try {
+	//			MainMenuActivity act = getActivity();
+	//			tutorial = (Tutorial) UiTestUtils.getPrivateField("tutorial", act);
+	//			Field field = tutorial.getClass().getDeclaredField("tutorialActive");
+	//			field.setAccessible(true);
+	//			field.setBoolean(tutorial, newValue);
+	//		} catch (Exception e) {
+	//			Log.e("maxxle", "Class Cast Exception for Tutorial");
+	//		}
+	//	}
 
-		//		solo.setActivityOrientation(Solo.LANDSCAPE);
-		//		solo.sleep(5000);
-		//		solo.setActivityOrientation(Solo.PORTRAIT);
-		//		solo.sleep(5000);
+	//	UiTestUtils.clickOnImageButton(solo, R.id.btn_action_play);
+	//	solo.waitForActivity(StageActivity.class.getName(), 1000);
+	//	solo.sleep(5000);
+	//	assertTrue("Wrong orientation! Screen height: " + Values.SCREEN_HEIGHT + ", Screen width: "
+	//			+ Values.SCREEN_WIDTH, Values.SCREEN_HEIGHT > Values.SCREEN_WIDTH);
 
+	public void test_02_LandscapePortraitStart() {
+		solo.sleep(5000);
+		assertFalse("Tutorial active but should not be", getTutorialActivatedBoolean(true));
+		solo.setActivityOrientation(Solo.LANDSCAPE);
+		solo.sleep(5000);
+		solo.setActivityOrientation(Solo.PORTRAIT);
+		solo.sleep(5000);
 		assertFalse("Tutorial active but should not be", getTutorialActivatedBoolean(true));
 
-		try {
-			//UiTestUtils.clickOnImageButton(solo, R.id.tutorial_button);
-			solo.clickOnButton(test);
-		} catch (Exception e) {
-			Log.e("maxxle", "Exception bei Click Button in MainMenuActivity");
-		}
-
-		solo.sleep(5000);
-
-		assertTrue("Tutorial is not active but should be", getTutorialActivatedBoolean(false));
-
-		try {
-			//UiTestUtils.clickOnImageButton(solo, R.id.tutorial_button);
-			solo.clickOnButton(test);
-		} catch (Exception e) {
-			Log.e("maxxle", "Exception bei Click Button in MainMenuActivity");
-		}
+		getActivity().runOnUiThread(new Runnable() {
+			public void run() {
+				Button tutorialButton = (Button) getActivity().findViewById(R.id.tutorial_button);
+				tutorialButton.performClick();
+			}
+		});
 
 		solo.sleep(10000);
 
-		assertFalse("Tutorial is actived but should not be", getTutorialActivatedBoolean(false));
+		assertTrue("Tutorial is not active but should be", getTutorialActivatedBoolean(false));
 
-		//
-		//		solo.setActivityOrientation(Solo.PORTRAIT);
-		//
-		//		solo.sleep(5000);
-		//
-		//		assertTrue("Tutorial is not active but should be after setting portrait mode",
-		//				getTutorialActivatedBoolean(false));
-		//
-		//		solo.setActivityOrientation(Solo.LANDSCAPE);
-		//
-		//		solo.sleep(5000);
-		//
-		//		assertTrue("Tutorial is not active but should be, after going back to landscape mode",
-		//				getTutorialActivatedBoolean(false));
+		getActivity().runOnUiThread(new Runnable() {
+			public void run() {
+				Button tutorialButton = (Button) getActivity().findViewById(R.id.tutorial_button);
+				tutorialButton.performClick();
+			}
+		});
+
+		solo.sleep(10000);
+
+		assertFalse("Tutorial is active but should not be", getTutorialActivatedBoolean(false));
 	}
+
 }
