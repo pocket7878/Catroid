@@ -44,6 +44,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	Tutor tutor;
 	Tutor tutor_2;
 	Tutor currentTutor;
+	TutorialControlPanel panel;
 	Context context;
 
 	private TutorialThread mThread;
@@ -59,6 +60,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		tutor = new Tutor(getResources(), context, Tutor.TutorType.CAT_TUTOR);
 		tutor_2 = new Tutor(getResources(), context, Tutor.TutorType.DOG_TUTOR);
 		currentTutor = tutor;
+		panel = new TutorialControlPanel(getResources(), context);
 		getHolder().addCallback(this);
 		mThread = new TutorialThread(this);
 		this.context = context;
@@ -196,11 +198,13 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		postInvalidate();
 		tutor.draw(canvas);
 		tutor_2.draw(canvas);
+		panel.draw(canvas);
 	}
 
 	public void update() {
 		tutor.update(System.currentTimeMillis());
 		tutor_2.update(System.currentTimeMillis());
+
 	}
 
 }
