@@ -31,10 +31,10 @@ import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
 
-public class LandscapeActivationTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
+public class TutorialMainActivity extends ActivityInstrumentationTestCase2<MainMenuActivity> {
 	private Solo solo;
 
-	public LandscapeActivationTest() {
+	public TutorialMainActivity() {
 		super("at.tugraz.ist.catroid", MainMenuActivity.class);
 	}
 
@@ -54,6 +54,15 @@ public class LandscapeActivationTest extends ActivityInstrumentationTestCase2<Ma
 		getActivity().finish();
 		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
+	}
+
+	private void pressTutorialButton() {
+		getActivity().runOnUiThread(new Runnable() {
+			public void run() {
+				Button tutorialButton = (Button) getActivity().findViewById(R.id.tutorial_button);
+				tutorialButton.performClick();
+			}
+		});
 	}
 
 	private boolean getTutorialActivatedBoolean(boolean valueItShouldNotBe) {
@@ -84,13 +93,21 @@ public class LandscapeActivationTest extends ActivityInstrumentationTestCase2<Ma
 	//		}
 	//	}
 
-	//	UiTestUtils.clickOnImageButton(solo, R.id.btn_action_play);
-	//	solo.waitForActivity(StageActivity.class.getName(), 1000);
-	//	solo.sleep(5000);
 	//	assertTrue("Wrong orientation! Screen height: " + Values.SCREEN_HEIGHT + ", Screen width: "
 	//			+ Values.SCREEN_WIDTH, Values.SCREEN_HEIGHT > Values.SCREEN_WIDTH);
 
-	public void test_02_LandscapePortraitStart() {
+	public void testStartAndStopTutorial() {
+		solo.sleep(3000);
+		assertFalse("Tutorial active but should not be", getTutorialActivatedBoolean(true));
+		pressTutorialButton();
+		solo.sleep(3000);
+		assertTrue("Tutorial is not active but should be", getTutorialActivatedBoolean(false));
+		pressTutorialButton();
+		solo.sleep(3000);
+		assertFalse("Tutorial active but should not be", getTutorialActivatedBoolean(true));
+	}
+
+	public void testLandscapePortraitStart() {
 		solo.sleep(5000);
 		assertFalse("Tutorial active but should not be", getTutorialActivatedBoolean(true));
 		solo.setActivityOrientation(Solo.LANDSCAPE);
@@ -110,12 +127,7 @@ public class LandscapeActivationTest extends ActivityInstrumentationTestCase2<Ma
 
 		assertTrue("Tutorial is not active but should be", getTutorialActivatedBoolean(false));
 
-		getActivity().runOnUiThread(new Runnable() {
-			public void run() {
-				Button tutorialButton = (Button) getActivity().findViewById(R.id.tutorial_button);
-				tutorialButton.performClick();
-			}
-		});
+		pressTutorialButton();
 
 		solo.sleep(10000);
 
