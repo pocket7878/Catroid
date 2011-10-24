@@ -60,9 +60,15 @@ public class StateAppear implements State {
 		resetState();
 	}
 
+	@Override
 	public void resetState() {
 		currentFrame = 0;
 		frameCount = 5;
+	}
+
+	@Override
+	public String getStateName() {
+		return (this.getClass().getSimpleName());
 	}
 
 	public static State enter(StateController controller, Resources resources, Tutor.TutorType tutorType) {
@@ -77,6 +83,7 @@ public class StateAppear implements State {
 		return (instances.get(tutorType));
 	}
 
+	@Override
 	public Bitmap updateAnimation(Tutor.TutorType tutorType) {
 		if (currentFrame < (frameCount - 1)) {
 			currentFrame++;

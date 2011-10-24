@@ -26,4 +26,6 @@ public interface State {
 
 	public void resetState();
 
+	public String getStateName();
+
 }

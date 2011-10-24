@@ -34,6 +34,8 @@ import at.tugraz.ist.catroid.common.Values;
  * 
  */
 public class Tutorial {
+	public static final boolean DEBUG = true;
+
 	private static final Tutorial tutorial = new Tutorial();
 	private static boolean tutorialActive = false;
 	private static Context context;
@@ -48,6 +50,7 @@ public class Tutorial {
 	public TutorialOverlay to;
 	WindowManager windowManager;
 	int test = 0;
+	private String currentNotification = "";
 
 	private Tutorial() {
 
@@ -173,9 +176,6 @@ public class Tutorial {
 
 	public void jump(String attribute) {
 		Log.i("catroid", "jumpint somewere");
-		//int x = Integer.valueOf(attribute.substring(0, attribute.indexOf(",")));
-		//int y = Integer.valueOf(attribute.substring(attribute.indexOf(",") + 1));
-		//animator.jump(x,y);
 	}
 
 	public void goTo(String attribute) throws InterruptedException {
@@ -204,8 +204,8 @@ public class Tutorial {
 		Log.i("catroid", "waiting for: " + waitNotification);
 		while (true) {
 			for (int i = 0; i < notifies.size(); i++) {
-				String notification = notifies.get(i);
-				if (notification.compareTo(waitNotification) == 0) {
+				currentNotification = notifies.get(i);
+				if (currentNotification.compareTo(waitNotification) == 0) {
 					notifies.remove(i);
 					Log.i("catroid", "waited enough!" + waitNotification);
 					return;

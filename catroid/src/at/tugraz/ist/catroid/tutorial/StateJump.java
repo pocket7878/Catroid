@@ -31,6 +31,7 @@ import at.tugraz.ist.catroid.R;
  * 
  */
 public class StateJump implements State {
+	public String stateName = this.getClass().getSimpleName();
 	private StateController controller;
 	private static HashMap<Tutor.TutorType, StateJump> instances;
 	private Resources resources;
@@ -40,6 +41,11 @@ public class StateJump implements State {
 	int frameCount;
 	boolean portAway;
 	boolean notificated;
+
+	@Override
+	public String getStateName() {
+		return (this.getClass().getSimpleName());
+	}
 
 	private StateJump(StateController controller, Resources resources, Tutor.TutorType tutorType) {
 		this.controller = controller;
@@ -61,6 +67,7 @@ public class StateJump implements State {
 		resetState();
 	}
 
+	@Override
 	public void resetState() {
 		portAway = true;
 		currentFrame = 0;
@@ -80,6 +87,7 @@ public class StateJump implements State {
 		return (instances.get(tutorType));
 	}
 
+	@Override
 	public Bitmap updateAnimation(Tutor.TutorType tutorType) {
 		if (portAway) {
 			if (currentFrame < (frameCount - 1)) {

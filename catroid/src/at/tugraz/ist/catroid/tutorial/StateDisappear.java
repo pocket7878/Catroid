@@ -31,6 +31,7 @@ import at.tugraz.ist.catroid.R;
  * 
  */
 public class StateDisappear implements State {
+	public String stateName = this.getClass().getSimpleName();
 	private StateController controller;
 	private static HashMap<Tutor.TutorType, StateDisappear> instances;
 	private Resources resources;
@@ -38,6 +39,11 @@ public class StateDisappear implements State {
 
 	int currentFrame;
 	int frameCount;
+
+	@Override
+	public String getStateName() {
+		return (this.getClass().getSimpleName());
+	}
 
 	private StateDisappear(StateController controller, Resources resources, Tutor.TutorType tutorType) {
 		this.controller = controller;
@@ -61,6 +67,7 @@ public class StateDisappear implements State {
 		resetState();
 	}
 
+	@Override
 	public void resetState() {
 		currentFrame = 0;
 		frameCount = 5;
@@ -78,6 +85,7 @@ public class StateDisappear implements State {
 		return (instances.get(tutorType));
 	}
 
+	@Override
 	public Bitmap updateAnimation(Tutor.TutorType tutorType) {
 		if (currentFrame < (frameCount - 1)) {
 			currentFrame++;

@@ -31,10 +31,14 @@ public class StateController {
 	public Tutor tutor;
 	public boolean disappeared;
 
-	StateController(Resources resources, Tutor tutor) {
+	public StateController(Resources resources, Tutor tutor) {
 		state = StateIdle.enter(this, resources, tutor.tutorType);
 		this.tutor = tutor;
 		disappeared = true;
+	}
+
+	public State getState() {
+		return (state);
 	}
 
 	public void changeState(State state) {

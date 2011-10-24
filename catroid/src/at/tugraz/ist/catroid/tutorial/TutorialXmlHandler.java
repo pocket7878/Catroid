@@ -35,6 +35,7 @@ import at.tugraz.ist.catroid.R;
  * 
  */
 public class TutorialXmlHandler {
+	private static final boolean DEBUG = true;
 	//private DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 	//private DocumentBuilder db;
 	//private Document doc;
@@ -63,13 +64,22 @@ public class TutorialXmlHandler {
 	public void doXmlThing() {
 		Log.i("faxxe", "Activity: " + name);
 		if (0 == name.compareTo("ui.MainMenuActivity")) {
-			id = R.xml.mainmenututorial;
+			if (DEBUG) {
+				id = R.xml.mainmenututorial_debug;
+			} else {
+				id = R.xml.mainmenututorial;
+			}
 		} else if (0 == name.compareTo("ui.ProjectActivity")) {
-			{ //inflate for more xmls.. switch/case?
+			//inflate for more xmls.. switch/case?
+			if (DEBUG) {
+				id = R.xml.projecttutorial_debug;
+			} else {
 				id = R.xml.projecttutorial;
 			}
 		} else if (0 == name.compareTo("ui.ScriptActivity")) {
-			{
+			if (DEBUG) {
+				id = R.xml.scripttab_debug;
+			} else {
 				id = R.xml.scripttab;
 			}
 		} else {

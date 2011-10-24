@@ -31,12 +31,18 @@ import at.tugraz.ist.catroid.R;
  * 
  */
 public class StateTalk implements State {
+	public String stateName = this.getClass().getSimpleName();
 	int currentFrame;
 	int frameCount;
 	Bitmap bitmaps_talk[];
 	Resources resources;
 	//private StateController controller;
 	private static HashMap<Tutor.TutorType, StateTalk> instances;
+
+	@Override
+	public String getStateName() {
+		return (this.getClass().getSimpleName());
+	}
 
 	private StateTalk(StateController controller, Resources resources, Tutor.TutorType tutorType) {
 		this.resources = resources;
@@ -55,6 +61,7 @@ public class StateTalk implements State {
 		resetState();
 	}
 
+	@Override
 	public void resetState() {
 		currentFrame = 0;
 		frameCount = 3;
@@ -72,6 +79,7 @@ public class StateTalk implements State {
 		return (instances.get(tutorType));
 	}
 
+	@Override
 	public Bitmap updateAnimation(Tutor.TutorType tutorType) {
 		if (currentFrame < (frameCount - 1)) {
 			currentFrame++;
