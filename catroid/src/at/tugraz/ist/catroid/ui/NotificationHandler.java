@@ -43,7 +43,29 @@ public class NotificationHandler {
 		return instance;
 	}
 
-	public void createNotification(int progress) {
+	public void createNotification(int id) {
+
+		int progress = id;
+		if ((id - Consts.UPLOAD_PROGRESS_MAX) <= 0) {
+			id = 1;
+		}
+
+		switch (id) {
+			case Consts.UPLOAD_NOTIFICATION_PROGRESS:
+				createProgressNotification(progress);
+				break;
+			case Consts.UPLOAD_NOTIFICATION_FINISHED:
+				createFinishedNotification();
+				break;
+			case Consts.UPLOAD_NOTIFICATION_FAILED:
+				createErrorNotification();
+				break;
+			default:
+				break;
+		}
+	}
+
+	public void createProgressNotification(int progress) {
 
 		String title = context.getString(R.string.upload_notify_title) + projectName + Consts.HIGH_POINT;
 		Intent intent = new Intent(context, TransferService.class);
@@ -61,31 +83,30 @@ public class NotificationHandler {
 
 	public void createFinishedNotification() {
 
-		notificationManager.cancelAll();
 		int icon = R.drawable.catroid;
-		CharSequence tickerText = "Upload successful!";
-		long when = System.currentTimeMillis();
-		CharSequence contentTitle = "Upload successful!";
-		CharSequence contentText = "Uploading \"" + projectName + "\" finished!";
-
-		Intent notificationIntent = new Intent(context, TransferService.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-
-		Notification notification = new Notification(icon, tickerText, when);
-		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-		notificationManager.notify(2, notification);
+		CharSequence tickerText = context.getText(R.string.upload_ticker_success);
+		CharSequence contentTitle = context.getText(R.string.upload_ticker_success);
+		CharSequence contentText = context.getText(R.string.upload_text_first) + projectName
+				+ context.getText(R.string.upload_text_finished);
+		createNotification(icon, tickerText, contentTitle, contentText);
 
 	}
 
 	public void createErrorNotification() {
 
-		notificationManager.cancelAll();
 		int icon = R.drawable.catroid;
-		CharSequence tickerText = "Upload failed!";
-		long when = System.currentTimeMillis();
-		CharSequence contentTitle = "Upload failed!";
-		CharSequence contentText = "Uploading \"" + projectName + "\" failed!";
+		CharSequence tickerText = context.getText(R.string.upload_ticker_failed);
+		CharSequence contentTitle = context.getText(R.string.upload_ticker_failed);
+		CharSequence contentText = context.getText(R.string.upload_text_first) + projectName
+				+ context.getText(R.string.upload_text_failed);
+		createNotification(icon, tickerText, contentTitle, contentText);
+	}
 
+	public void createNotification(int icon, CharSequence tickerText, CharSequence contentTitle,
+			CharSequence contentText) {
+
+		notificationManager.cancelAll();
+		long when = System.currentTimeMillis();
 		Intent notificationIntent = new Intent(context, TransferService.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
@@ -105,5 +126,4 @@ public class NotificationHandler {
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
-
 }

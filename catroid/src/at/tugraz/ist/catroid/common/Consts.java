@@ -101,6 +101,21 @@ public final class Consts {
 	public static final int UPLOAD_ERROR_NUMBER = 2;
 	public static final int UPLOAD_PROGRESS_MAX = 100;
 	public static final String UPLOAD_ZIP = "/upload";
+	public static final int UPLOAD_NOTIFICATION_PROGRESS = 1;
+	public static final int UPLOAD_NOTIFICATION_FAILED = 333;
+	public static final int UPLOAD_NOTIFICATION_FINISHED = 222;
+	public static final int UPLOAD_REFRESH_MS = 300;
+
+	//UrlConnection
+	public static final String URL_ACCEPT_KEY = "Accept";
+	public static final String URL_ACCEPT_VALUE = "*/*";
+	public static final String URL_CONTENT_TYPE_KEY = "Content-Type";
+	public static final String URL_CONTENT_TYPE_VALUE = "application/x-www-form-urlencoded";
+	public static final String URL_CONNECTION_KEY = "Connection";
+	public static final String URL_CONNECTION_VALUE = "Keep-Alive";
+	public static final String URL_CACHE_KEY = "Cache-Control";
+	public static final String URL_CACHE_VALUE = "no-cache";
+	public static final String URL_LENGTH_KEY = "Content-Length";
 
 	public static final String SERVER = "www1.subdomain.com";
 	public static final String USERNAME = "user1688629";

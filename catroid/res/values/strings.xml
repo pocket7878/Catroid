@@ -256,5 +256,11 @@
     <string name="upload_service_name">name</string>
     <string name="upload_notify_title">Uploading: \"</string>
     <string name="upload_finished">\" finished</string>
+    <string name="upload_ticker_success">Upload successful!</string>
+    <string name="upload_ticker_failed">Upload failed!</string>
+    <string name="upload_text_first">Uploading \"</string>
+    <string name="upload_text_finished">\" finished!</string>
+    <string name="upload_text_failed">\" failed!</string>
+  
     
 </resources>

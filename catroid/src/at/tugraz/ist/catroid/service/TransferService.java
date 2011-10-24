@@ -51,7 +51,7 @@ public class TransferService extends Service implements ServiceConnection {
 			} else {
 				int progress = msg.getData().getInt(Consts.UPLOAD_PROGRESS_KEY);
 				Log.d("UPDATE", "Update in % : " + progress);
-				NotificationHandler.getInstance().createNotification(progress);
+				NotificationHandler.getInstance().createProgressNotification(progress);
 			}
 		}
 	};
@@ -74,7 +74,7 @@ public class TransferService extends Service implements ServiceConnection {
 					Context context = getApplicationContext();
 					projectName = intent.getStringExtra(Consts.UPLOAD_PROJECT_NAME_KEY);
 					NotificationHandler.getInstance().setProjectName(projectName);
-					NotificationHandler.getInstance().createNotification(0);
+					NotificationHandler.getInstance().createProgressNotification(0);
 					isRunning = true;
 
 					String projectDescription = intent.getStringExtra(Consts.UPLOAD_INTENT_DESCRIPTION);
@@ -135,7 +135,6 @@ public class TransferService extends Service implements ServiceConnection {
 
 	private void runPendingRequests() {
 		Log.d(TAG, "run pending requests");
-
 		Log.d(TAG, "Pending requests count: " + pendingRequests.size());
 
 		BillingRequest request;

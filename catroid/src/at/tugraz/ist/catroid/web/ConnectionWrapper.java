@@ -153,11 +153,11 @@ public class ConnectionWrapper {
 
 		URL url = new URL(urlString);
 		urlConnection = (HttpURLConnection) MultiPartFormOutputStream.createConnection(url);
-		urlConnection.setRequestProperty("Accept", "*/*");
-		urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-		urlConnection.setRequestProperty("Connection", "Keep-Alive");
-		urlConnection.setRequestProperty("Cache-Control", "no-cache");
-		urlConnection.setRequestProperty("Content-Length", Integer.toString(postData.length()));
+		urlConnection.setRequestProperty(Consts.URL_ACCEPT_KEY, Consts.URL_ACCEPT_VALUE);
+		urlConnection.setRequestProperty(Consts.URL_CONTENT_TYPE_KEY, Consts.URL_CONTENT_TYPE_VALUE);
+		urlConnection.setRequestProperty(Consts.URL_CONNECTION_KEY, Consts.URL_CONNECTION_VALUE);
+		urlConnection.setRequestProperty(Consts.URL_CACHE_KEY, Consts.URL_CACHE_VALUE);
+		urlConnection.setRequestProperty(Consts.URL_LENGTH_KEY, Integer.toString(postData.length()));
 
 		OutputStream out = urlConnection.getOutputStream();
 		out.write(postData.getBytes());

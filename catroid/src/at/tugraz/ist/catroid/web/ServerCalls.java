@@ -49,7 +49,6 @@ public class ServerCalls {
 		return instance;
 	}
 
-	// used for mock object testing
 	public void setConnectionToUse(ConnectionWrapper connection) {
 		this.connection = connection;
 	}

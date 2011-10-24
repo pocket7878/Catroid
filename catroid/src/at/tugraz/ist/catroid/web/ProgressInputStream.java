@@ -10,9 +10,6 @@ import at.tugraz.ist.catroid.common.Consts;
 
 public class ProgressInputStream extends InputStream {
 
-	/* Key to retrieve progress value from message bundle passed to handler */
-	public static final String PROGRESS_UPDATE = "progress_update";
-
 	private InputStream inputStream;
 	private Handler handler;
 	private long progress;
@@ -44,7 +41,7 @@ public class ProgressInputStream extends InputStream {
 	}
 
 	private void maybeUpdateDisplay(long progress) {
-		if (System.currentTimeMillis() - updateTime > 300) {
+		if (System.currentTimeMillis() - updateTime > Consts.UPLOAD_REFRESH_MS) {
 			Message message = new Message();
 			Bundle bundle = new Bundle();
 			double progressPercent = (100 / (double) totalSize) * progress;
@@ -65,7 +62,7 @@ public class ProgressInputStream extends InputStream {
 	public void close() throws IOException {
 		super.close();
 		if (closed) {
-			throw new IOException("already closed");
+			throw new IOException();
 		}
 		closed = true;
 	}
