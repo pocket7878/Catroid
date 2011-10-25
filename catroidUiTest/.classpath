@@ -8,6 +8,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/catroidUiTest/libs/robotium-solo-2.5-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/catroid1"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/catroid"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
