@@ -31,12 +31,17 @@ import at.tugraz.ist.catroid.R;
  * 
  */
 public class StateIdle implements State {
-	//private StateController controller;
+	public String stateName = this.getClass().getSimpleName();
 	private static HashMap<Tutor.TutorType, StateIdle> instances;
 	Bitmap bitmap;
 
 	int currentFrame;
 	int frameCount;
+
+	@Override
+	public String getStateName() {
+		return (this.getClass().getSimpleName());
+	}
 
 	private StateIdle(StateController controller, Resources resources, Tutor.TutorType tutorType) {
 		//this.controller = controller;
@@ -49,6 +54,7 @@ public class StateIdle implements State {
 		frameCount = 3;
 	}
 
+	@Override
 	public void resetState() {
 
 	}
@@ -65,6 +71,7 @@ public class StateIdle implements State {
 		return (instances.get(tutorType));
 	}
 
+	@Override
 	public Bitmap updateAnimation(Tutor.TutorType tutorType) {
 		if (currentFrame < frameCount) {
 			currentFrame++;

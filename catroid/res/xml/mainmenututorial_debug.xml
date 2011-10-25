@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MainMenuTutorial>
+	<cat>foo</cat>
+	<flip>foo</flip>
+	<appear>30,430</appear>
+	
+	<cat>foo</cat>
+	<say>Test blablablabla test 123</say>
+	
+	<dog>foo</dog>
+	<appear>350,400</appear>
+	<dog>foo</dog>
+	<say>Bla blubber debug bla </say>
+	<cat>foo</cat>
+	<say>Bla. Miau</say>
+	<dog>foo</dog>
+	<say>mhmhm</say>	
+	<waitfor>ProjectManager</waitfor>
+</MainMenuTutorial>

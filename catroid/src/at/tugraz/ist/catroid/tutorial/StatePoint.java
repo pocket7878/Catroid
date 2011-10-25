@@ -28,6 +28,7 @@ import at.tugraz.ist.catroid.R;
  * 
  */
 public class StatePoint implements State {
+	public String stateName = this.getClass().getSimpleName();
 	int currentFrame;
 	int frameCount;
 	Bitmap bitmaps_point[];
@@ -35,6 +36,11 @@ public class StatePoint implements State {
 	//private StateController controller;
 	private static StatePoint instance;
 	boolean animationDirectionToBody;
+
+	@Override
+	public String getStateName() {
+		return (this.getClass().getSimpleName());
+	}
 
 	private StatePoint(StateController controller, Resources resources) {
 		this.resources = resources;
@@ -49,6 +55,7 @@ public class StatePoint implements State {
 		resetState();
 	}
 
+	@Override
 	public void resetState() {
 		currentFrame = 0;
 		frameCount = 6;
@@ -62,6 +69,7 @@ public class StatePoint implements State {
 		return (instance);
 	}
 
+	@Override
 	public Bitmap updateAnimation(Tutor.TutorType tutorType) {
 		if (animationDirectionToBody) {
 			if (currentFrame < (frameCount - 1)) {
