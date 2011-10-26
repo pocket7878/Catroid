@@ -66,14 +66,14 @@ public class TutorialMainActivity extends ActivityInstrumentationTestCase2<MainM
 		});
 	}
 
-	private void pressCurrentProjectButton() {
-		getActivity().runOnUiThread(new Runnable() {
-			public void run() {
-				Button tutorialButton = (Button) getActivity().findViewById(R.id.current_project_button);
-				tutorialButton.performClick();
-			}
-		});
-	}
+	//	private void pressCurrentProjectButton() {
+	//		getActivity().runOnUiThread(new Runnable() {
+	//			public void run() {
+	//				Button tutorialButton = (Button) getActivity().findViewById(R.id.current_project_button);
+	//				tutorialButton.performClick();
+	//			}
+	//		});
+	//	}
 
 	private boolean getTutorialActivatedBoolean(boolean valueItShouldNotBe) {
 		Tutorial tut;
@@ -141,36 +141,5 @@ public class TutorialMainActivity extends ActivityInstrumentationTestCase2<MainM
 
 			assertFalse("Tutorial is active but should not be", getTutorialActivatedBoolean(false));
 		}
-	}
-
-	public void testPressCurrentProjectButton() {
-		//pressTutorialButton();
-
-		//Tutorial tutorial = Tutorial.getInstance(null);
-		//TutorialOverlay to = tutorial.to;
-
-		//Bitmap bitmap = to.getDrawingCache();
-		//bitmap.getHeight();
-		//bitmap.getWidth();
-
-		//pressTutorialButton();
-		//solo.sleep(4000);
-		//pressCurrentProjectButton();
-		//solo.sleep(5000);
-		//solo.goBack();
-
-		//		String currentNotification = (String) UiTestUtils.getPrivateField("currentNotification", tutorial);
-		//		assertEquals("Pressing Current Project Button did not notificate Tutorial", 0,
-		//				currentNotification.compareTo("currentProjectButton"));
-		//
-		//		getActivity().finish();
-		//		try {
-		//			solo.finalize();
-		//		} catch (Throwable e) {
-		//
-		//		}
-		//		solo.sleep(2000);
-		//getActivity().
-		//solo.goBack();
 	}
 }
