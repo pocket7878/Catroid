@@ -51,10 +51,29 @@ public class StateControllerTest extends AndroidTestCase {
 	 * Also tutors should start in idle, if not explicitely forced to a state.
 	 */
 	public void testIdleState() {
-		//		Tutor tutorDog = new Tutor(context.getResources(), context, Tutor.TutorType.DOG_TUTOR);
-		//		Tutor tutorCat = new Tutor(context.getResources(), context, Tutor.TutorType.CAT_TUTOR);
-		//		StateController stateControllerCat = new StateController(context.getResources(), tutorCat);
-		//		StateController stateControllerDog = new StateController(context.getResources(), tutorDog);
+		Tutor tutorDog = new Tutor(context.getResources(), context, Tutor.TutorType.DOG_TUTOR);
+		Tutor tutorCat = new Tutor(context.getResources(), context, Tutor.TutorType.CAT_TUTOR);
+		StateController stateControllerCat = new StateController(context.getResources(), tutorCat);
+		StateController stateControllerDog = new StateController(context.getResources(), tutorDog);
+		State currentStateCat = stateControllerCat.getState();
+		State currentStateDog = stateControllerDog.getState();
+		String nameOfCurrentStateCat = currentStateCat.getStateName();
+		String nameOfCurrentStateDog = currentStateDog.getStateName();
+		assertEquals("StateController should be in IdleState after Init", "StateIdle", nameOfCurrentStateCat);
+		assertEquals("StateController should be in IdleState after Init", "StateIdle", nameOfCurrentStateDog);
+		for (int i = 0; i < 10; i++) {
+			stateControllerCat.updateAnimation(Tutor.TutorType.CAT_TUTOR);
+			stateControllerDog.updateAnimation(Tutor.TutorType.DOG_TUTOR);
+		}
+		assertEquals("StateController should be in IdleState after Init and with no Statechange", "StateIdle",
+				nameOfCurrentStateCat);
+		assertEquals("StateController should be in IdleState after Init and with no Statechange", "StateIdle",
+				nameOfCurrentStateDog);
+		stateControllerDog.changeState(StateDisappear.enter(stateControllerDog, context.getResources(),
+				Tutor.TutorType.DOG_TUTOR));
+		nameOfCurrentStateCat = stateControllerCat.getState().getStateName();
+		assertEquals("StateController for Cat should stay in State Idle, even if other tutors state changes",
+				"StateIdle", nameOfCurrentStateCat);
 	}
 
 	/*
@@ -62,19 +81,47 @@ public class StateControllerTest extends AndroidTestCase {
 	 * after some time(depending on length of text).
 	 */
 	public void testTalkState() {
-		//		Tutor tutorCat = new Tutor(context.getResources(), context, Tutor.TutorType.CAT_TUTOR);
-		//		StateController stateControllerCat = new StateController(context.getResources(), tutorCat);
-		//		tutorCat.say("This is fancy pancy test text for testing the Statepattern of our little catroid tutors");
+		Tutor tutorCat = new Tutor(context.getResources(), context, Tutor.TutorType.CAT_TUTOR);
+		StateController stateControllerCat = new StateController(context.getResources(), tutorCat);
+		tutorCat.say("This is fancy pancy test text for testing the Statepattern of our little catroid tutors");
+		assertEquals("StateController should go to State Talk, if Tutor has something to say", "StateTalk",
+				stateControllerCat.getState().getStateName());
 
+		// sollte durchrennen in dem State bis von der Bubble befehl kommt in Idle zurueckzugehen
+		// evtl. Test mit Zeit? macht das Sinn in dem Fall? Oder ist das der Test fuer die Bubble?
 	}
 
 	public void testDisappearState() {
+		Tutor tutorDog = new Tutor(context.getResources(), context, Tutor.TutorType.DOG_TUTOR);
+		Tutor tutorCat = new Tutor(context.getResources(), context, Tutor.TutorType.CAT_TUTOR);
+		StateController stateControllerCat = new StateController(context.getResources(), tutorCat);
+		StateController stateControllerDog = new StateController(context.getResources(), tutorDog);
+		stateControllerCat.changeState(StateDisappear.enter(stateControllerCat, context.getResources(),
+				Tutor.TutorType.CAT_TUTOR));
+		stateControllerDog.changeState(StateAppear.enter(stateControllerDog, context.getResources(),
+				Tutor.TutorType.DOG_TUTOR));
+		stateControllerCat.updateAnimation(Tutor.TutorType.CAT_TUTOR);
+		State currentState = stateControllerCat.getState();
+		String nameOfCurrentState = currentState.getStateName();
+		assertEquals("StateController not in StateDisappear after one updateAnimation", "StateDisappear",
+				nameOfCurrentState);
+		for (int i = 0; i < 10; i++) {
+			stateControllerCat.updateAnimation(Tutor.TutorType.CAT_TUTOR);
+			stateControllerDog.updateAnimation(Tutor.TutorType.DOG_TUTOR);
+		}
+		stateControllerDog.changeState(StateDisappear.enter(stateControllerDog, context.getResources(),
+				Tutor.TutorType.DOG_TUTOR));
+		currentState = stateControllerCat.getState();
+		nameOfCurrentState = currentState.getStateName();
+		assertEquals("StateController did not switch back to StateIdle as expected", "StateIdle", nameOfCurrentState);
 	}
 
 	public void testPointState() {
+
 	}
 
 	public void testJumpState() {
+
 	}
 
 }
