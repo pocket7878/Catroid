@@ -33,6 +33,14 @@ import at.tugraz.ist.catroid.R;
  */
 public class TutorialControlPanel {
 
+	//ein paar gedanken zum control panel
+	//play / pause panel je nach status abwechseln
+	//wird es ausgeführt nur pause button anzeigen
+	//sind wir im pause modus playbutton stattdessen anzeigen
+	//pause bedeutet bleibt an der jeweiligen zeile stehen und wartet auf play
+	//forward wird geschwindigkeit des textes verdoppelt
+	//rewind bedeutet rückwärts schreiben ==> wird evt. tricky
+
 	Resources resources;
 	Context context;
 
@@ -82,11 +90,12 @@ public class TutorialControlPanel {
 	private void setBounds(int shift) {
 		int height = getScreenHeight();
 		int width = getScreenWidth();
+		//abstand zwischen buttons = 20
 
 		bounds.left = ((width - 260) / 2) + shift;
 		bounds.right = bounds.left + 50;
-		bounds.top = height - 70;
-		bounds.bottom = height - 20;
+		bounds.top = height - 60;
+		bounds.bottom = height - 10;
 
 	}
 
@@ -102,9 +111,12 @@ public class TutorialControlPanel {
 		return screenWidth;
 	}
 
-	public Rect getBounds() {
-
-		return bounds;
+	public Rect getPanelBounds() {
+		//coordinaten von gesamten panel mit 4 button
+		Rect panelBounds = bounds;
+		//3*20 = 60 ==> abstand zwischen buttons
+		panelBounds.left = bounds.right - 4 * (bounds.right - bounds.left) - 60;
+		return panelBounds;
 
 	}
 
