@@ -97,7 +97,39 @@ public class ConnectionWrapper {
 			Log.d("FTP", "Error: FTP Upload failed!");
 			e.printStackTrace();
 		}
+	}
 
+	public boolean checkChangeTime(String projectName) {
+
+		FTPClient ftpClient = new FTPClient();
+		try {
+			ftpClient.connect(Consts.SERVER, 21);
+			ftpClient.login(Consts.USERNAME, Consts.PASSWORD);
+			ftpClient.changeWorkingDirectory(Consts.PATH);
+			// TODO a test with the right catroid server 
+			//
+			//			if (ftpClient.getReplyString().contains("250")) {
+			//				FTPFile[] ftpFiles = ftpClient.listFiles(".");
+			//				String[] fileList = null;
+			//				fileList = new String[ftpFiles.length];
+			//
+			//				for (int i = 0; i < ftpFiles.length; i++) {
+			//					fileList[i] = ftpFiles[i].getName();
+			//				}
+			//
+			//				String name[] = ftpClient.listNames(".");
+			//				String directory = ftpClient.printWorkingDirectory();
+			//
+			//				ftpClient.logout();
+			//				ftpClient.disconnect();
+			return true;
+			//			}
+
+		} catch (IOException e) {
+			Log.d("FTP", "Error: FTP Conenction failed!");
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	public String doHttpPost(String urlString, HashMap<String, String> postValues) throws IOException,

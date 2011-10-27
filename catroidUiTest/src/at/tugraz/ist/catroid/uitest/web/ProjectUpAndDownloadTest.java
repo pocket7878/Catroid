@@ -32,10 +32,12 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.service.NotificationHandler;
 import at.tugraz.ist.catroid.ui.DownloadActivity;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
+import at.tugraz.ist.catroid.web.ConnectionWrapper;
 import at.tugraz.ist.catroid.web.ServerCalls;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -96,6 +98,27 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		UiTestUtils.clearAllUtilTestProjects();
 
 		downloadProject();
+	}
+
+	public void testFtpUplaod() throws Throwable {
+		startProjectUploadTask();
+		createTestProject();
+		addABrickToProject();
+
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		prefs.edit().putString(Consts.TOKEN, "0").commit();
+
+		solo.clickOnText(getActivity().getString(R.string.upload_project));
+		solo.sleep(500);
+		solo.clearEditText(0);
+		solo.clickOnEditText(0);
+		solo.enterText(0, newTestProject);
+		solo.clickOnButton(getActivity().getString(R.string.upload_button));
+		solo.clickOnText(getActivity().getString(R.string.upload_project));
+		solo.sleep(500);
+
+		ConnectionWrapper connection = new ConnectionWrapper();
+		assertEquals(true, connection.checkChangeTime(newTestProject));
 	}
 
 	public void testUploadProjectWithWrongToken() throws Throwable {
@@ -164,10 +187,15 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		solo.clickOnButton(getActivity().getString(R.string.upload_button));
 
 		try {
-			solo.waitForDialogToClose(10000);
+			// then do a test for ftp upload not here
+			NotificationHandler notifyHanlder = NotificationHandler.getInstance();
+			while (notifyHanlder.getLastNotification() <= 2) {
+				solo.sleep(1000);
+			}
+
 			if (expect_success) {
 				assertTrue("Upload failed. Internet connection?",
-						solo.searchText(getActivity().getString(R.string.success_project_upload)));
+						notifyHanlder.getLastNotification() == Consts.UPLOAD_NOTIFICATION_FINISHED);
 				String resultString = (String) UiTestUtils.getPrivateField("resultString", ServerCalls.getInstance());
 				JSONObject jsonObject;
 				jsonObject = new JSONObject(resultString);

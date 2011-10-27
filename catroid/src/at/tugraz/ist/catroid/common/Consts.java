@@ -120,5 +120,5 @@ public final class Consts {
 	public static final String SERVER = "www1.subdomain.com";
 	public static final String USERNAME = "user1688629";
 	public static final String PASSWORD = "2gCrg7fi";
-	public static final String PATH = "";
+	public static final String PATH = "www";
 }

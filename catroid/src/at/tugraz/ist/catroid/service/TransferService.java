@@ -19,7 +19,6 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.service.requests.BillingRequest;
 import at.tugraz.ist.catroid.service.requests.UploadRequest;
-import at.tugraz.ist.catroid.ui.NotificationHandler;
 import at.tugraz.ist.catroid.utils.UtilDeviceInfo;
 import at.tugraz.ist.catroid.utils.UtilZip;
 import at.tugraz.ist.catroid.web.ServerCalls;
@@ -45,13 +44,13 @@ public class TransferService extends Service implements ServiceConnection {
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
 			if (msg.what == Consts.UPLOAD_FINISHED_NUMBER) {
-				NotificationHandler.getInstance().createFinishedNotification();
+				NotificationHandler.getInstance().createNotification(Consts.UPLOAD_NOTIFICATION_FINISHED);
 			} else if (msg.what == Consts.UPLOAD_ERROR_NUMBER) {
-				NotificationHandler.getInstance().createErrorNotification();
+				NotificationHandler.getInstance().createNotification(Consts.UPLOAD_NOTIFICATION_FAILED);
 			} else {
 				int progress = msg.getData().getInt(Consts.UPLOAD_PROGRESS_KEY);
+				NotificationHandler.getInstance().createNotification(progress);
 				Log.d("UPDATE", "Update in % : " + progress);
-				NotificationHandler.getInstance().createProgressNotification(progress);
 			}
 		}
 	};

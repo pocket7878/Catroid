@@ -74,6 +74,7 @@ public class ServerCalls {
 			Log.v(TAG, "url to upload: " + serverUrl);
 
 			connection.sendFTP(zipFileString, handler, projectName);
+			connection.checkChangeTime(projectName);
 			resultString = connection.doHttpPost(serverUrl, postValues);
 
 			JSONObject jsonObject = null;
