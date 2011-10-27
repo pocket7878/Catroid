@@ -27,12 +27,14 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 
 /**
@@ -69,6 +71,17 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
 
+		int x = (int) ev.getX();
+		int y = (int) ev.getY();
+		Rect bounds = panel.getPanelBounds();
+
+		//check if event coordinates are the coordinates of the control panel buttons
+		if (x >= bounds.left && x <= bounds.right) {
+			if (y >= bounds.top && y <= bounds.bottom) {
+				return dispatchPanel(ev);
+			}
+		}
+
 		Activity dings = (Activity) context;
 		if (dings.getLocalClassName().compareTo("ui.MainMenuActivity") == 0) {
 			return dispatchMainMenu(ev);
@@ -78,6 +91,22 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 			return dispatchSkript(ev);
 		}
 		return false;
+	}
+
+	public boolean dispatchPanel(MotionEvent ev) {
+		//unterscheide buttons play, pause, forward, backward
+		int x = (int) ev.getX();
+		int y = (int) ev.getY();
+		Rect bounds = panel.getPanelBounds();
+
+		//check if event coordinates are the coordinates of the control panel buttons
+		if (x >= bounds.left && x <= bounds.left + 50) {
+			if (y >= bounds.top && y <= bounds.bottom) {
+				Toast toast = Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+		}
+		return true;
 	}
 
 	public boolean dispatchSkript(MotionEvent ev) {

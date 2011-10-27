@@ -68,22 +68,22 @@ public class TutorialControlPanel {
 
 		bounds = new Rect();
 
-		setBounds(0);
+		//setBounds(0);
 
-		play.setBounds(bounds);
+		//play.setBounds(bounds);
 		//play.draw(canvas);
 
-		setBounds(70);
-		pause.setBounds(bounds);
-		//pause.draw(canvas);
-
-		setBounds(140);
-		forward.setBounds(bounds);
-		//forward.draw(canvas);
-
-		setBounds(210);
-		backward.setBounds(bounds);
-		//backward.draw(canvas);
+		//		setBounds(70);
+		//		pause.setBounds(bounds);
+		//		//pause.draw(canvas);
+		//
+		//		setBounds(140);
+		//		forward.setBounds(bounds);
+		//		//forward.draw(canvas);
+		//
+		//		setBounds(210);
+		//		backward.setBounds(bounds);
+		//		//backward.draw(canvas);
 
 		playBitmap = ((BitmapDrawable) play).getBitmap();
 		pauseBitmap = ((BitmapDrawable) pause).getBitmap();
