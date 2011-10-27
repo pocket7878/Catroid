@@ -1,11 +1,16 @@
 package at.tugraz.ist.catroid.test.tutorial;
 
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.tutorial.State;
 import at.tugraz.ist.catroid.tutorial.StateAppear;
 import at.tugraz.ist.catroid.tutorial.StateController;
 import at.tugraz.ist.catroid.tutorial.StateDisappear;
+import at.tugraz.ist.catroid.tutorial.StatePoint;
 import at.tugraz.ist.catroid.tutorial.Tutor;
 
 public class StateControllerTest extends AndroidTestCase {
@@ -117,7 +122,34 @@ public class StateControllerTest extends AndroidTestCase {
 	}
 
 	public void testPointState() {
+		// Kleiner Versuch
+		long maxHeap = Runtime.getRuntime().maxMemory();
 
+		//
+
+		Tutor tutorDog = new Tutor(context.getResources(), context, Tutor.TutorType.DOG_TUTOR);
+		StateController stateControllerDog = new StateController(context.getResources(), tutorDog);
+		stateControllerDog.changeState(StatePoint.enter(stateControllerDog, context.getResources(),
+				Tutor.TutorType.DOG_TUTOR));
+		stateControllerDog.updateAnimation(Tutor.TutorType.DOG_TUTOR);
+		Bitmap previousBitmap = stateControllerDog.updateAnimation(Tutor.TutorType.DOG_TUTOR);
+		Bitmap currentBitmap;
+		for (int i = 0; i < 5; i++) {
+			currentBitmap = stateControllerDog.updateAnimation(Tutor.TutorType.DOG_TUTOR);
+			assertFalse("Same Bitmap after updateAnimation, should be a different one",
+					areBitmapsTheSame(previousBitmap, currentBitmap));
+			previousBitmap = currentBitmap;
+		}
+	}
+
+	public boolean areBitmapsTheSame(Bitmap bitmap1, Bitmap bitmap2) {
+		ByteBuffer buffer1 = ByteBuffer.allocate(bitmap1.getHeight() * bitmap1.getRowBytes());
+		bitmap1.copyPixelsToBuffer(buffer1);
+
+		ByteBuffer buffer2 = ByteBuffer.allocate(bitmap2.getHeight() * bitmap2.getRowBytes());
+		bitmap2.copyPixelsToBuffer(buffer2);
+
+		return Arrays.equals(buffer1.array(), buffer2.array());
 	}
 
 	public void testJumpState() {

@@ -72,10 +72,13 @@ public class Tutor {
 		}
 
 		if (tutorBubble != null) {
-			if (tutorBubble.done) { //intresting!!
+			if (tutorBubble.animationFinished) {
 				tutorBubble = null;
 			} else {
 				tutorBubble.update(gameTime);
+				if (tutorBubble.textFinished) {
+					controller.changeState(StateIdle.enter(controller, resources, tutorType));
+				}
 			}
 		}
 	}
@@ -95,7 +98,7 @@ public class Tutor {
 	}
 
 	public void point() {
-		controller.changeState(StatePoint.enter(controller, resources));
+		controller.changeState(StatePoint.enter(controller, resources, tutorType));
 	}
 
 	public void setNewPositionAfterPort() {

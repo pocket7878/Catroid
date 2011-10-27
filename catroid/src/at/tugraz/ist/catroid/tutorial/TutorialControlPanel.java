@@ -21,8 +21,11 @@ package at.tugraz.ist.catroid.tutorial;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.Display;
 import at.tugraz.ist.catroid.R;
@@ -48,6 +51,10 @@ public class TutorialControlPanel {
 	Drawable pause;
 	Drawable forward;
 	Drawable backward;
+	Bitmap playBitmap;
+	Bitmap pauseBitmap;
+	Bitmap forwardBitmap;
+	Bitmap backwardBitmap;
 
 	Rect bounds;
 
@@ -58,33 +65,43 @@ public class TutorialControlPanel {
 		pause = resources.getDrawable(R.drawable.pause_tutorial);
 		forward = resources.getDrawable(R.drawable.forward_tutorial);
 		backward = resources.getDrawable(R.drawable.backwards_tutorial);
-	}
 
-	public void draw(Canvas canvas) {
 		bounds = new Rect();
-
-		//		bounds.left = (width - 260) / 2;
-		//		bounds.right = bounds.left + 50;
-		//		bounds.top = height - 70;
-		//		bounds.bottom = height - 20;
 
 		setBounds(0);
 
 		play.setBounds(bounds);
-		play.draw(canvas);
+		//play.draw(canvas);
 
 		setBounds(70);
 		pause.setBounds(bounds);
-		pause.draw(canvas);
+		//pause.draw(canvas);
 
 		setBounds(140);
 		forward.setBounds(bounds);
-		forward.draw(canvas);
+		//forward.draw(canvas);
 
 		setBounds(210);
 		backward.setBounds(bounds);
-		backward.draw(canvas);
+		//backward.draw(canvas);
 
+		playBitmap = ((BitmapDrawable) play).getBitmap();
+		pauseBitmap = ((BitmapDrawable) pause).getBitmap();
+		forwardBitmap = ((BitmapDrawable) forward).getBitmap();
+		backwardBitmap = ((BitmapDrawable) backward).getBitmap();
+
+	}
+
+	public void draw(Canvas canvas) {
+		Paint paint = new Paint();
+		setBounds(0);
+		canvas.drawBitmap(playBitmap, bounds.left, bounds.top, paint);
+		setBounds(70);
+		canvas.drawBitmap(pauseBitmap, bounds.left, bounds.top, paint);
+		setBounds(140);
+		canvas.drawBitmap(forwardBitmap, bounds.left, bounds.top, paint);
+		setBounds(210);
+		canvas.drawBitmap(backwardBitmap, bounds.left, bounds.top, paint);
 	}
 
 	private void setBounds(int shift) {

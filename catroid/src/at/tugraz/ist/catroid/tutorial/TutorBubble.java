@@ -77,7 +77,7 @@ public class TutorBubble {
 	private int framePeriod; // milliseconds between each frame (1000/fps)
 	public boolean animationFinished = false; // do muss ma no wos ueberlegen, das hier: totales ende
 	public boolean textFinished = false; // nur ende vom tippen -> Katze muss Mund still halten
-	private boolean waitAfterText = false;
+	private boolean waitAfterText = true;
 	private boolean waitedAfterText = false;
 	private int waitTimeAfterText = 1000;
 	private int currentLine = 0;
@@ -147,7 +147,6 @@ public class TutorBubble {
 		bubbleTextWrap();
 		buildTextLines();
 		calculateTextCoords();
-
 	}
 
 	public void calculateMaxCharsPerLine() {
@@ -310,7 +309,6 @@ public class TutorBubble {
 		textPaint.setFakeBoldText(true);
 		textPaint.setTypeface(Typeface.SANS_SERIF);
 		textPaint.setTextAlign(Align.LEFT);
-
 	}
 
 }
