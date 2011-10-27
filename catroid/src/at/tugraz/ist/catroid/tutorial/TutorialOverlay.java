@@ -102,10 +102,38 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		//check if event coordinates are the coordinates of the control panel buttons
 		if (x >= bounds.left && x <= bounds.left + 50) {
 			if (y >= bounds.top && y <= bounds.bottom) {
+
 				Toast toast = Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT);
 				toast.show();
 			}
 		}
+		bounds.left = bounds.left + 70;
+
+		if (x >= bounds.left && x <= bounds.left + 50) {
+			if (y >= bounds.top && y <= bounds.bottom) {
+				Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+		}
+
+		bounds.left = bounds.left + 70;
+
+		if (x >= bounds.left && x <= bounds.left + 50) {
+			if (y >= bounds.top && y <= bounds.bottom) {
+				Toast toast = Toast.makeText(context, "FORWARD", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+		}
+
+		bounds.left = bounds.left + 70;
+
+		if (x >= bounds.left && x <= bounds.left + 50) {
+			if (y >= bounds.top && y <= bounds.bottom) {
+				Toast toast = Toast.makeText(context, "BACKWARD", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+		}
+
 		return true;
 	}
 

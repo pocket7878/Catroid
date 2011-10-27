@@ -130,7 +130,10 @@ public class TutorialControlPanel {
 
 	public Rect getPanelBounds() {
 		//coordinaten von gesamten panel mit 4 button
-		Rect panelBounds = bounds;
+		Rect panelBounds = new Rect();
+		panelBounds.bottom = bounds.bottom;
+		panelBounds.top = bounds.top;
+		panelBounds.right = bounds.right;
 		//3*20 = 60 ==> abstand zwischen buttons
 		panelBounds.left = bounds.right - 4 * (bounds.right - bounds.left) - 60;
 		return panelBounds;
