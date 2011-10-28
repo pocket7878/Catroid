@@ -128,7 +128,6 @@ public class Tutor {
 		} else if (tutorType.equals(TutorType.CAT_TUTOR)) {
 			tutorBubble = new TutorBubble(text, resources.getDrawable(R.drawable.bubble), this.x, this.y, context);
 		}
-
 	}
 
 	public void draw(Canvas canvas) {

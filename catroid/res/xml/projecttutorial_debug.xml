@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ProjectTutorial>
-	<flip>foo</flip>
-	<sleep>1000</sleep>
-	<appear>100,200</appear>
-	<dog>foo</dog>
-	<appear>250,200</appear>
 	<cat>foo</cat>
-	<sleep>1000</sleep>
-	<point>blubb</point>
-	<sleep>1000</sleep>
-	<say>tdssdd asdasd asd asd as d asd</say>
 	<flip>foo</flip>
-	<say>test test test test</say>
-	<flip>foo</flip>
-	<say>troet troet troet</say>
-	<goto>100,300</goto>
-	<say>blubb blubb</say>
-	<appear>150,250</appear>
-	<say>Gut gemacht!</say>
-	<say>Hier ist schon mal ein Hintergrund, der reicht uns einmal für den Anfang</say>
-	<say>Klicke auf "Hintergrund", dann können wir den einmal bearbeiten</say>
+	<appear>30,430</appear>
+	<say>Test blablablabla test 123</say>
 </ProjectTutorial>

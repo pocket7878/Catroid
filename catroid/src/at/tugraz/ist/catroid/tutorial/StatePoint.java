@@ -58,13 +58,12 @@ public class StatePoint implements State {
 			bitmaps_point[4] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_point_5);
 			bitmaps_point[5] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_point_6);
 		} else {
-			//TODO pngs austauschen
-			bitmaps_point[0] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_point_1);
-			bitmaps_point[1] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_point_2);
-			bitmaps_point[2] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_point_3);
-			bitmaps_point[3] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_point_4);
-			bitmaps_point[4] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_point_5);
-			bitmaps_point[5] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_point_6);
+			bitmaps_point[0] = BitmapFactory.decodeResource(resources, R.drawable.tutor_dog_point_1);
+			bitmaps_point[1] = BitmapFactory.decodeResource(resources, R.drawable.tutor_dog_point_2);
+			bitmaps_point[2] = BitmapFactory.decodeResource(resources, R.drawable.tutor_dog_point_3);
+			bitmaps_point[3] = BitmapFactory.decodeResource(resources, R.drawable.tutor_dog_point_4);
+			bitmaps_point[4] = BitmapFactory.decodeResource(resources, R.drawable.tutor_dog_point_5);
+			bitmaps_point[5] = BitmapFactory.decodeResource(resources, R.drawable.tutor_dog_point_6);
 		}
 		resetState();
 	}
