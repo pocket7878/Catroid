@@ -19,6 +19,7 @@
 package at.tugraz.ist.catroid.tutorial;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -32,6 +33,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import at.tugraz.ist.catroid.R;
 
@@ -68,19 +70,44 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
-
-		Activity dings = (Activity) context;
-		if (dings.getLocalClassName().compareTo("ui.MainMenuActivity") == 0) {
+		Log.i("faxxe", "hallo " + context.getClass().getName());
+		if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.MainMenuActivity") == 0) {
 			return dispatchMainMenu(ev);
-		} else if (dings.getLocalClassName().compareTo("ui.ProjectActivity") == 0) {
+		} else if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.ProjectActivity") == 0) {
 			return dispatchProject(ev);
-		} else if (dings.getLocalClassName().compareTo("ui.ScriptActivit") == 0) {
+		} else if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.ScriptActivity") == 0) {
 			return dispatchSkript(ev);
 		}
 		return false;
 	}
 
 	public boolean dispatchSkript(MotionEvent ev) {
+		Activity dings = (Activity) context;
+		Activity dongs = dings.getParent();
+		ImageButton lila = (ImageButton) dongs.findViewById(R.id.btn_action_add_sprite);
+
+		int x = lila.getLeft();
+		int y = lila.getTop();
+		int maxx = x + lila.getHeight();
+		int maxy = y + lila.getWidth();
+		Log.i("faxxe", x + " " + y + " " + maxx + " " + maxy);
+		Log.i("faxxe", ev.getX() + " " + ev.getY());
+		Dialog currentDialog = Tutorial.getInstance(null).getDialog();
+		if (currentDialog == null) {
+			dongs.dispatchTouchEvent(ev);
+		} else {
+			currentDialog.dispatchTouchEvent(ev);
+		}
+
+		//		if (ev.getX() > x && ev.getY() > y && ev.getX() < maxx && ev.getY() < maxy && currentDialog == null) {
+		//			dongs.dispatchTouchEvent(ev);
+		//		}
+		//		Log.i("faxxe", "schauma ob a einegeht!");
+		//		if (Tutorial.getInstance(null).getDialog() != null) {
+		//			Log.i("faxxe", "geht eh eine!");
+		//			Tutorial.getInstance(null).getDialog().dispatchTouchEvent(ev);
+		//			//Tutorial.getInstance(null).setDialog(null);
+		//		}
 
 		return true;
 	}
@@ -104,6 +131,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	}
 
 	public boolean dispatchMainMenu(MotionEvent ev) {
+		Log.i("faxxe", "mainmenudispatcher");
 		Activity dings = (Activity) context;
 		Button teifl = (Button) dings.findViewById(R.id.current_project_button);
 		Button teifl1 = (Button) dings.findViewById(R.id.tutorial_button);
@@ -161,10 +189,12 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		currentTutor.point();
 	}
 
+	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		// TODO Auto-generated method stub
 	}
 
+	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		if (!mThread.isAlive()) {
 			mThread = new TutorialThread(this);
@@ -173,6 +203,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		}
 	}
 
+	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 
 		// simply copied from sample application LunarLander:
@@ -198,7 +229,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		postInvalidate();
 		tutor.draw(canvas);
 		tutor_2.draw(canvas);
-		panel.draw(canvas);
+		//panel.draw(canvas);
 	}
 
 	public void update() {

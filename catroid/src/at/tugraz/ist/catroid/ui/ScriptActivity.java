@@ -1,4 +1,5 @@
 /**
+
  *  Catroid: An on-device graphical programming language for Android devices
  *  Copyright (C) 2010-2011 The Catroid Team
  *  (<http://code.google.com/p/catroid/wiki/Credits>)
@@ -122,6 +123,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 
 	private View.OnClickListener createAddBrickClickListener() {
 		return new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				tutorial.pauseTutorial();
 				getParent().showDialog(DIALOG_ADD_BRICK);
@@ -142,6 +144,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 		}
 	}
 
+	@Override
 	public void onCancel(DialogInterface arg0) {
 		adapter.notifyDataSetChanged();
 	}

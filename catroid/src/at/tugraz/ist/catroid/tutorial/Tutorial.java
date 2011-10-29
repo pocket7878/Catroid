@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.util.Log;
@@ -48,6 +49,7 @@ public class Tutorial {
 	public volatile ArrayList<String> notifies = new ArrayList<String>();
 	public HashMap<String, TutorialThread> threads = new HashMap<String, TutorialThread>();
 	public TutorialOverlay to;
+	private Dialog dialog;
 	WindowManager windowManager;
 	int test = 0;
 	private String currentNotification = "";
@@ -58,6 +60,14 @@ public class Tutorial {
 
 	public ArrayList[] getCode() {
 		return txh.getActions();
+	}
+
+	public void setDialog(Dialog dialog) {
+		this.dialog = dialog;
+	}
+
+	public Dialog getDialog() {
+		return this.dialog;
 	}
 
 	public int getIdFromOpCode(String opCode) {

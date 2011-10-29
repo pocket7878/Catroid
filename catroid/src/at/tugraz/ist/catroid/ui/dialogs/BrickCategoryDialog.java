@@ -24,6 +24,7 @@ import java.util.List;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.adapter.BrickCategoryAdapter;
 
@@ -71,12 +73,14 @@ public class BrickCategoryDialog extends Dialog {
 	@Override
 	protected void onStart() {
 		super.onStart();
-
+		Log.i("faxxe", "onStart() in BrickCategoryDialog");
+		Tutorial.getInstance(null).setDialog(this);
 		ListView listView = (ListView) findViewById(R.id.categoriesListView);
 		setupBrickCategories(listView);
 
 		listView.setOnItemClickListener(new ListView.OnItemClickListener() {
 
+			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				activity.selectedCategory = adapter.getItem(position);
 				activity.removeDialog(ScriptTabActivity.DIALOG_ADD_BRICK);
