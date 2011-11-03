@@ -43,15 +43,16 @@ public class ServerCalls {
 	public static final String REG_USER_LANGUAGE = "registrationLanguage";
 	public static final String REG_USER_EMAIL = "registrationEmail";
 
-	private static final String FILE_UPLOAD_TAG = "upload";
 	private static final String PROJECT_NAME_TAG = "projectTitle";
 	private static final String PROJECT_DESCRIPTION_TAG = "projectDescription";
 	private static final String PROJECT_CHECKSUM_TAG = "fileChecksum";
 	private static final String USER_EMAIL = "userEmail";
 	private static final String USER_LANGUAGE = "userLanguage";
+	private static final String TOKEN = "token";
+	private static final String FILE_NAME = "fileName";
 
-	public static final String BASE_URL = "http://www.catroid.org/";
-	//public static final String BASE_URL = "http://catroidtest.ist.tugraz.at/";
+	//public static final String BASE_URL = "http://www.catroid.org/";
+	public static final String BASE_URL = "http://catroidtest.ist.tugraz.at/";
 	public static final String FILE_UPLOAD_URL = BASE_URL + "api/upload/upload.json";
 	public static final String CHECK_TOKEN_URL = BASE_URL + "api/checkToken/check.json";
 	public static final String REGISTRATION_URL = BASE_URL + "api/checkTokenOrRegister/check.json";
@@ -91,23 +92,23 @@ public class ServerCalls {
 		}
 		try {
 			String md5Checksum = Utils.md5Checksum(new File(zipFileString));
+			String fileName = projectName + "_" + java.lang.System.currentTimeMillis() + Consts.CATROID_EXTENTION;
 
 			HashMap<String, String> postValues = new HashMap<String, String>();
 			postValues.put(PROJECT_NAME_TAG, projectName);
 			postValues.put(PROJECT_DESCRIPTION_TAG, projectDescription);
 			postValues.put(USER_EMAIL, userEmail);
 			postValues.put(PROJECT_CHECKSUM_TAG, md5Checksum.toLowerCase());
-			postValues.put(Consts.TOKEN, token);
+			postValues.put(TOKEN, token);
+			postValues.put(FILE_NAME, fileName);
+
 			if (language != null) {
 				postValues.put(USER_LANGUAGE, language);
 			}
 			String serverUrl = useTestUrl ? TEST_FILE_UPLOAD_URL : FILE_UPLOAD_URL;
-
-			String serverUrl = useTestUrl ? Consts.TEST_FILE_UPLOAD_URL : Consts.FILE_UPLOAD_URL;
 			Log.v(TAG, "url to upload: " + serverUrl);
 
-			connection.sendFTP(zipFileString, handler, projectName);
-			connection.checkChangeTime(projectName);
+			connection.sendFTP(zipFileString, handler, projectName, fileName);
 			resultString = connection.doHttpPost(serverUrl, postValues);
 
 			JSONObject jsonObject = null;
@@ -183,7 +184,8 @@ public class ServerCalls {
 			HashMap<String, String> postValues = new HashMap<String, String>();
 			postValues.put(REG_USER_NAME, username);
 			postValues.put(REG_USER_PASSWORD, password);
-			postValues.put(REG_USER_EMAIL, userEmail);
+			//postValues.put(REG_USER_EMAIL, userEmail);
+			postValues.put(REG_USER_EMAIL, "abc@gmail.com");
 			postValues.put(Consts.TOKEN, token);
 
 			if (country != null) {

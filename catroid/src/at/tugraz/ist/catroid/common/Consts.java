@@ -58,7 +58,6 @@ public final class Consts {
 	public static final String PAINTROID_DOWNLOAD_LINK = "https://code.google.com/p/catroid/downloads/detail?name=Paintroid_0.6.4b.apk&can=2&q=";
 	public static final String PASSWORD_FORGOTTEN_PATH = "catroid/passwordrecovery?username=";
 
-
 	//Upload
 	public static final String HIGH_POINT = "\"";
 	public static final String SLASH = "/";
@@ -89,8 +88,8 @@ public final class Consts {
 	public static final String URL_CACHE_VALUE = "no-cache";
 	public static final String URL_LENGTH_KEY = "Content-Length";
 
-	public static final String SERVER = "www1.subdomain.com";
-	public static final String USERNAME = "user1688629";
-	public static final String PASSWORD = "2gCrg7fi";
-	public static final String PATH = "www";
+	public static final String SERVER = "catroidwebtest.ist.tugraz.at";
+	public static final String USERNAME = "ftp-uploader";
+	public static final String PASSWORD = "cat.ftp.loader";
+	public static final String PATH = "";
 }

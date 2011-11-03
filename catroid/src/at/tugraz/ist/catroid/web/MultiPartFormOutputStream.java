@@ -33,6 +33,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import android.os.Handler;
+import at.tugraz.ist.catroid.common.Consts;
 
 /**
  * <code>MultiPartFormOutputStream</code> is used to write

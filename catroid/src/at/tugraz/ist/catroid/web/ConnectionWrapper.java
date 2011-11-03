@@ -31,14 +31,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 
 import android.os.Handler;
 import android.util.Log;
@@ -75,22 +75,21 @@ public class ConnectionWrapper {
 		return "";
 	}
 
-	public void sendFTP(String filePath, Handler handler, String projectName) {
+	public void sendFTP(String filePath, Handler handler, String projectName, String fileName) {
 
 		FTPClient ftpClient = new FTPClient();
 		try {
 			ftpClient.connect(Consts.SERVER, 21);
 			ftpClient.login(Consts.USERNAME, Consts.PASSWORD);
-			ftpClient.changeWorkingDirectory(Consts.PATH);
 
-			if (ftpClient.getReplyString().contains("250")) {
+			if (ftpClient.getReplyString().contains("230")) {
 				ftpClient.setFileType(org.apache.commons.net.ftp.FTP.BINARY_FILE_TYPE);
 				BufferedInputStream buffIn = null;
 				buffIn = new BufferedInputStream(new FileInputStream(filePath));
 				ftpClient.enterLocalPassiveMode();
 				ProgressInputStream progressInput = new ProgressInputStream(buffIn, handler);
 
-				ftpClient.storeFile(projectName + Consts.CATROID_EXTENTION, progressInput);
+				ftpClient.storeFile(fileName, progressInput);
 				buffIn.close();
 				ftpClient.logout();
 				ftpClient.disconnect();
@@ -108,25 +107,25 @@ public class ConnectionWrapper {
 		try {
 			ftpClient.connect(Consts.SERVER, 21);
 			ftpClient.login(Consts.USERNAME, Consts.PASSWORD);
-			ftpClient.changeWorkingDirectory(Consts.PATH);
+			//ftpClient.changeWorkingDirectory(Consts.PATH);
 			// TODO a test with the right catroid server 
-			//
-			//			if (ftpClient.getReplyString().contains("250")) {
-			//				FTPFile[] ftpFiles = ftpClient.listFiles(".");
-			//				String[] fileList = null;
-			//				fileList = new String[ftpFiles.length];
-			//
-			//				for (int i = 0; i < ftpFiles.length; i++) {
-			//					fileList[i] = ftpFiles[i].getName();
-			//				}
-			//
-			//				String name[] = ftpClient.listNames(".");
-			//				String directory = ftpClient.printWorkingDirectory();
-			//
-			//				ftpClient.logout();
-			//				ftpClient.disconnect();
-			return true;
-			//			}
+
+			if (ftpClient.getReplyString().contains("230")) {
+				FTPFile[] ftpFiles = ftpClient.listFiles(".");
+				String[] fileList = null;
+				fileList = new String[ftpFiles.length];
+
+				for (int i = 0; i < ftpFiles.length; i++) {
+					fileList[i] = ftpFiles[i].getName();
+				}
+
+				String name[] = ftpClient.listNames(".");
+				String directory = ftpClient.printWorkingDirectory();
+
+				ftpClient.logout();
+				ftpClient.disconnect();
+				return true;
+			}
 
 		} catch (IOException e) {
 			Log.d("FTP", "Error: FTP Conenction failed!");
@@ -135,18 +134,18 @@ public class ConnectionWrapper {
 		return false;
 	}
 
-	public String doHttpPost(String urlString, HashMap<String, String> postValues) throws IOException,
-			WebconnectionException {
-
-		buildPost(urlString, postValues);
-
-		// response code != 2xx -> error
-		if (urlConnection.getResponseCode() / 100 != 2) {
-			throw new WebconnectionException(urlConnection.getResponseCode());
-		}
-		InputStream resultStream = urlConnection.getInputStream();
-		return getString(resultStream);
-	}
+	//	public String doHttpPost(String urlString, HashMap<String, String> postValues) throws IOException,
+	//			WebconnectionException {
+	//
+	//		buildPost(urlString, postValues);
+	//
+	//		// response code != 2xx -> error
+	//		if (urlConnection.getResponseCode() / 100 != 2) {
+	//			throw new WebconnectionException(urlConnection.getResponseCode());
+	//		}
+	//		InputStream resultStream = urlConnection.getInputStream();
+	//		return getString(resultStream);
+	//	}
 
 	public void doHttpPostFileDownload(String urlString, HashMap<String, String> postValues, String filePath)
 			throws IOException {
@@ -172,7 +171,7 @@ public class ConnectionWrapper {
 		fos.close();
 	}
 
-	private void buildPost(String urlString, HashMap<String, String> postValues) throws IOException {
+	public String doHttpPost(String urlString, HashMap<String, String> postValues) throws IOException {
 		MultiPartFormOutputStream out = buildPost(urlString, postValues);
 		out.close();
 
@@ -209,25 +208,53 @@ public class ConnectionWrapper {
 		Set<Entry<String, String>> entries = postValues.entrySet();
 		for (Entry<String, String> entry : entries) {
 			Log.d(TAG, "key: " + entry.getKey() + ", value: " + entry.getValue());
-			if (postData != "") {
-				postData += "&";
-			}
-			postData += entry.getKey() + "=" + entry.getValue();
-			out.writeField(entry.getKey(), entry.getValue());
 			out.writeField(entry.getKey(), entry.getValue());
 		}
 
-		URL url = new URL(urlString);
-		urlConnection = (HttpURLConnection) MultiPartFormOutputStream.createConnection(url);
-		urlConnection.setRequestProperty(Consts.URL_ACCEPT_KEY, Consts.URL_ACCEPT_VALUE);
-		urlConnection.setRequestProperty(Consts.URL_CONTENT_TYPE_KEY, Consts.URL_CONTENT_TYPE_VALUE);
-		urlConnection.setRequestProperty(Consts.URL_CONNECTION_KEY, Consts.URL_CONNECTION_VALUE);
-		urlConnection.setRequestProperty(Consts.URL_CACHE_KEY, Consts.URL_CACHE_VALUE);
-		urlConnection.setRequestProperty(Consts.URL_LENGTH_KEY, Integer.toString(postData.length()));
-
-		OutputStream out = urlConnection.getOutputStream();
-		out.write(postData.getBytes());
-		out.flush();
-		out.close();
+		return out;
 	}
+
+	//private MultiPartFormOutputStream buildPost(String urlString, HashMap<String, String> postValues)
+	//	private void buildPost(String urlString, HashMap<String, String> postValues) throws IOException {
+	//		if (postValues == null) {
+	//			postValues = new HashMap<String, String>();
+	//		}
+	//
+	//		URL url = new URL(urlString);
+	//
+	//		String boundary = MultiPartFormOutputStream.createBoundary();
+	//		urlConnection = (HttpURLConnection) MultiPartFormOutputStream.createConnection(url);
+	//
+	//		urlConnection.setRequestProperty("Accept", "*/*");
+	//		urlConnection.setRequestProperty("Content-Type", MultiPartFormOutputStream.getContentType(boundary));
+	//
+	//		urlConnection.setRequestProperty("Connection", "Keep-Alive");
+	//		urlConnection.setRequestProperty("Cache-Control", "no-cache");
+	//
+	//		MultiPartFormOutputStream out = new MultiPartFormOutputStream(urlConnection.getOutputStream(), boundary);
+	//		String postData = "";
+	//		Set<Entry<String, String>> entries = postValues.entrySet();
+	//		for (Entry<String, String> entry : entries) {
+	//			Log.d(TAG, "key: " + entry.getKey() + ", value: " + entry.getValue());
+	//			if (postData != "") {
+	//				postData += "&";
+	//			}
+	//			postData += entry.getKey() + "=" + entry.getValue();
+	//			out.writeField(entry.getKey(), entry.getValue());
+	//			out.writeField(entry.getKey(), entry.getValue());
+	//		}
+	//
+	//		//URL url = new URL(urlString);
+	//		urlConnection = (HttpURLConnection) MultiPartFormOutputStream.createConnection(url);
+	//		urlConnection.setRequestProperty(Consts.URL_ACCEPT_KEY, Consts.URL_ACCEPT_VALUE);
+	//		urlConnection.setRequestProperty(Consts.URL_CONTENT_TYPE_KEY, Consts.URL_CONTENT_TYPE_VALUE);
+	//		urlConnection.setRequestProperty(Consts.URL_CONNECTION_KEY, Consts.URL_CONNECTION_VALUE);
+	//		urlConnection.setRequestProperty(Consts.URL_CACHE_KEY, Consts.URL_CACHE_VALUE);
+	//		//urlConnection.setRequestProperty(Consts.URL_LENGTH_KEY, Integer.toString(postData.length()));
+	//
+	//		//OutputStream out = urlConnection.getOutputStream();
+	//		//out.write(postData.getBytes());
+	//		out.flush();
+	//		out.close();
+	//	}
 }
