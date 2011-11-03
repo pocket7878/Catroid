@@ -28,6 +28,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.Display;
+import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 
 /**
@@ -138,6 +139,14 @@ public class TutorialControlPanel {
 		panelBounds.left = bounds.right - 4 * (bounds.right - bounds.left) - 60;
 		return panelBounds;
 
+	}
+
+	public void pressPlay() {
+		//check if tutorial is active, if so there is no need to press play
+		//otherwise resume the tutorial where it was stopped
+
+		Toast toast = Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT);
+		toast.show();
 	}
 
 }

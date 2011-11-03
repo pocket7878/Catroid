@@ -72,6 +72,17 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
+
+		int x = (int) ev.getX();
+		int y = (int) ev.getY();
+		Rect bounds = panel.getPanelBounds();
+
+		//check if event coordinates are the coordinates of the control panel buttons
+		if (x >= bounds.left && x <= bounds.right) {
+			if (y >= bounds.top && y <= bounds.bottom) {
+				return dispatchPanel(ev);
+			}
+		}
 		Log.i("faxxe", "hallo " + context.getClass().getName());
 		if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.MainMenuActivity") == 0) {
 			return dispatchMainMenu(ev);
@@ -93,8 +104,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		if (x >= bounds.left && x <= bounds.left + 50) {
 			if (y >= bounds.top && y <= bounds.bottom) {
 
-				Toast toast = Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT);
-				toast.show();
+				panel.pressPlay();
 			}
 		}
 		bounds.left = bounds.left + 70;
