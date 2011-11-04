@@ -18,17 +18,5 @@
 		android:baselineAligned="true"
 		android:orientation="horizontal"
 		android:layout_alignParentBottom="true">
-		<EditText
-			android:id="@+id/edit_angle"
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"
-			android:inputType="numberSigned">
-		</EditText>
-		<Button
-			android:id="@+id/button_perform_transformation"
-			android:text="OK"
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content">
-		</Button>
 	</LinearLayout>
 </RelativeLayout>

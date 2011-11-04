@@ -28,8 +28,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -207,5 +209,91 @@ public class StringsTest extends TestCase {
 		}
 
 		assertFalse("Unused string resources were found:" + errorMessage.toString(), unusedStringsFound);
+	}
+
+	private List<File> getLayoutXmlFiles() throws IOException {
+		List<File> layoutFiles = new ArrayList<File>();
+
+		File layoutDir = new File("../catroid/res/layout/");
+		for (File file : layoutDir.listFiles()) {
+			if (file.getName().endsWith(".xml")) {
+				layoutFiles.add(file);
+			}
+		}
+		layoutDir = new File("../catroid/res/layout-land/");
+		for (File file : layoutDir.listFiles()) {
+			if (file.getName().endsWith(".xml")) {
+				layoutFiles.add(file);
+			}
+		}
+		return layoutFiles;
+	}
+
+	private List<String> getUsedStringsFromLayoutFile(File layoutFile) throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader(layoutFile));
+
+		List<String> usedStrings = new ArrayList<String>();
+		String currentLine = null;
+		while ((currentLine = reader.readLine()) != null) {
+			String[] split = currentLine.split("\"");
+
+			// the number of " per line must be even
+			if (split.length <= 1) {
+				continue;
+			}
+			for (int i = 1; i < split.length; i += 2) {
+				if (split[i].startsWith(XML_STRING_PREFIX)) {
+					String stringToAdd = split[i].substring(XML_STRING_PREFIX.length());
+					usedStrings.add(stringToAdd + "|" + layoutFile.getName());
+				}
+			}
+		}
+		return usedStrings;
+	}
+
+	private List<String> getAllStringsUsedInLayoutXMLs() throws SAXException, IOException, ParserConfigurationException {
+		List<String> allStringNames = new ArrayList<String>();
+		List<File> layoutFiles = getLayoutXmlFiles();
+
+		for (File layoutFile : layoutFiles) {
+			List<String> usedStrings = getUsedStringsFromLayoutFile(layoutFile);
+			allStringNames.addAll(usedStrings);
+		}
+
+		return allStringNames;
+	}
+
+	public void testMissingStrings() throws SAXException, IOException, ParserConfigurationException {
+		StringBuilder errorMessage = new StringBuilder();
+		boolean missingStringsFound = false;
+
+		StringBuilder stringXmlSourceCodeBuilder = new StringBuilder();
+		File defaultResDirectory = new File("../catroid/res/values/");
+		for (File defaultStringFile : defaultResDirectory.listFiles()) {
+			BufferedReader reader = new BufferedReader(new FileReader(defaultStringFile));
+
+			String currentLine = null;
+			while ((currentLine = reader.readLine()) != null) {
+				stringXmlSourceCodeBuilder.append(currentLine + "\n");
+			}
+		}
+
+		String stringXmlSourceCode = stringXmlSourceCodeBuilder.toString();
+		List<String> allStringsUsedInLayoutFiles = getAllStringsUsedInLayoutXMLs();
+
+		Set<String> missingStrings = new HashSet<String>();
+		for (String stringPairUsedInXml : allStringsUsedInLayoutFiles) {
+			String[] split = stringPairUsedInXml.split("\\|");
+			String stringUsedInXml = split[0];
+			String layoutFileName = split[1];
+			if (!stringXmlSourceCode.contains(stringUsedInXml)) {
+				missingStringsFound = true;
+				missingStrings.add(stringUsedInXml + " used in the file: " + layoutFileName);
+			}
+		}
+		for (String missing : missingStrings) {
+			errorMessage.append("\nString with name " + missing + " is missing in the default resource folder.");
+		}
+		assertFalse("Missing string resources were found:" + errorMessage.toString(), missingStringsFound);
 	}
 }
