@@ -24,9 +24,8 @@ import at.tugraz.ist.catroid.utils.ImageEditing;
 import at.tugraz.ist.catroid.utils.TransformationsView;
 
 public class RotationDialog extends Dialog {
-	private OnTouchListener touchListener;
 	private Point centerOfScreen;
-	private Point verticalReferencePoint;
+	private Point referencePoint;
 	private double angle;
 	private Bitmap bitmap;
 	private Bitmap originalBitmap;
@@ -37,17 +36,15 @@ public class RotationDialog extends Dialog {
 	Button okButton;
 	String resultFieldName = "RotationAngle";
 
-	//TODO @ integration: CONSTS aus values und consts nehmen
-	private static final int MAX_REL_COORDINATES = 1000;
-
 	public RotationDialog(Context context, EditText view, Button okButton) {
 		super(context, R.style.settings_activity);
 		this.context = context;
 		this.angleEdit = view;
 		this.okButton = okButton;
-		centerOfScreen = new Point(200, 200);
-		verticalReferencePoint = new Point(200, 100);
-		angle = Double.parseDouble(view.getText().toString());
+
+		centerOfScreen = new Point();
+		referencePoint = new Point();
+		angle = roundToOneDecimal(Double.parseDouble(view.getText().toString()));
 	}
 
 	@Override
@@ -71,22 +68,21 @@ public class RotationDialog extends Dialog {
 			}
 		});
 
-		touchListener = new OnTouchListener() {
-			public boolean onTouch(View v, MotionEvent event) {
-				setNewAngle(v, event);
-				return true;
-			}
-		};
-
 		originalBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.catroid);
 		updateBitmap();
 		rotationView.setBitmap(bitmap);
 
 		rotationView.setPosition(Values.SCREEN_WIDTH / 2, Values.SCREEN_HEIGHT / 2);
 		centerOfScreen.set(Values.SCREEN_WIDTH / 2, Values.SCREEN_HEIGHT / 2);
-		verticalReferencePoint.set(Values.SCREEN_WIDTH / 2, 0);
+		referencePoint.set(Values.SCREEN_WIDTH / 2, 0);
 
-		rotationView.setOnTouchListener(touchListener);
+		rotationView.setOnTouchListener(new OnTouchListener() {
+
+			public boolean onTouch(View v, MotionEvent event) {
+				setNewAngle(v, event);
+				return true;
+			}
+		});
 
 		updateEditTextView();
 	}
@@ -106,8 +102,8 @@ public class RotationDialog extends Dialog {
 	}
 
 	private void calculateAngle(Point chosenPoint) {
-		int referenceX = verticalReferencePoint.x - centerOfScreen.x;
-		int referenceY = verticalReferencePoint.y - centerOfScreen.y;
+		int referenceX = referencePoint.x - centerOfScreen.x;
+		int referenceY = referencePoint.y - centerOfScreen.y;
 
 		int chosenX = chosenPoint.x - centerOfScreen.x;
 		int chosenY = chosenPoint.y - centerOfScreen.y;
@@ -121,14 +117,14 @@ public class RotationDialog extends Dialog {
 		actualAngle = Math.toDegrees(actualAngle);
 
 		if (chosenX < 0) {
-			actualAngle = -actualAngle;
+			actualAngle = (360 - actualAngle);
 		}
 
 		angle = roundToOneDecimal(actualAngle);
 	}
 
 	private void updateBitmap() {
-		bitmap = ImageEditing.rotateBitmap(originalBitmap, (int) angle);
+		bitmap = ImageEditing.rotateBitmap(originalBitmap, (float) angle);
 		rotationView.setBitmap(bitmap);
 		rotationView.invalidate();
 	}
@@ -140,6 +136,5 @@ public class RotationDialog extends Dialog {
 	private double roundToOneDecimal(double nonRounded) {
 		BigDecimal bd = new BigDecimal(nonRounded).setScale(1, RoundingMode.HALF_UP);
 		return bd.doubleValue();
-
 	}
 }
