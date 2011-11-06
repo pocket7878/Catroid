@@ -35,6 +35,7 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.SoundManager;
+import at.tugraz.ist.catroid.stage.StageRecorder;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class SetVolumeToBrick implements Brick, OnClickListener {
@@ -61,6 +62,8 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 			volume = 100.0;
 		}
 		SoundManager.getInstance().setVolume(getVolume());
+		StageRecorder recorder = StageRecorder.getInstance();
+		recorder.updateVolume(volume);
 	}
 
 	public Sprite getSprite() {

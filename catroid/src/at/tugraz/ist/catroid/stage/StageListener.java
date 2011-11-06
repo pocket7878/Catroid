@@ -23,6 +23,8 @@
 package at.tugraz.ist.catroid.stage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Comparator;
@@ -32,6 +34,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Color;
+import android.util.Log;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.common.Values;
@@ -153,6 +156,8 @@ public class StageListener implements ApplicationListener {
 
 		background = new Texture(Gdx.files.internal("stage/white_pixel.bmp"));
 		axes = new Texture(Gdx.files.internal("stage/red_pixel.bmp"));
+		StageRecorder recorder = StageRecorder.getInstance();
+		recorder.start();
 	}
 
 	public void menuResume() {
@@ -222,6 +227,21 @@ public class StageListener implements ApplicationListener {
 			for (Sprite sprite : sprites) {
 				sprite.finish();
 			}
+		}
+		StageRecorder recorder = StageRecorder.getInstance();
+		Log.e("!!!!!!!!!!!!", " " + recorder.getXml());
+		File file = new File("/sdcard/ololo.xml");
+		FileOutputStream filecon;
+		try {
+			filecon = new FileOutputStream(file);
+			filecon.write(recorder.getXml().getBytes());
+			filecon.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -328,6 +348,14 @@ public class StageListener implements ApplicationListener {
 		if (makeTestPixels) {
 			testPixels = ScreenUtils.getFrameBufferPixels(testX, testY, testWidth, testHeight, false);
 			makeTestPixels = false;
+		}
+
+		StageRecorder recorder = StageRecorder.getInstance();
+		for (Sprite sprite : sprites) {
+			if (sprite.costume.costumeChanged) {
+				recorder.updateCostume(sprite.costume);
+				sprite.costume.costumeChanged = false;
+			}
 		}
 	}
 

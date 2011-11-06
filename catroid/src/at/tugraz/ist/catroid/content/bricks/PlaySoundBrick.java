@@ -36,6 +36,7 @@ import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.stage.NativeAppActivity;
+import at.tugraz.ist.catroid.stage.StageRecorder;
 
 public class PlaySoundBrick implements Brick, Serializable, OnItemSelectedListener {
 	private static final long serialVersionUID = 1L;
@@ -59,6 +60,15 @@ public class PlaySoundBrick implements Brick, Serializable, OnItemSelectedListen
 				SoundManager.getInstance().playSoundFile(soundInfo.getAbsolutePath());
 			} else {
 				SoundManager.getInstance().playSoundFile("sounds/" + soundInfo.getSoundFileName());
+			}
+			StageRecorder recorder = StageRecorder.getInstance();
+			SoundInfo tempSoundInfo;
+			try {
+				tempSoundInfo = soundInfo.clone();
+				tempSoundInfo.isPlaying = true;
+				recorder.updateSound(tempSoundInfo);
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
 			}
 		}
 	}

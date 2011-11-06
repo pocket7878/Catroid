@@ -25,7 +25,7 @@ package at.tugraz.ist.catroid.common;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.utils.Utils;
 
-public class SoundInfo implements Comparable<SoundInfo> {
+public class SoundInfo implements Comparable<SoundInfo>, Cloneable {
 
 	private int id;
 	private String title;
@@ -96,5 +96,10 @@ public class SoundInfo implements Comparable<SoundInfo> {
 	@Override
 	public String toString() {
 		return title;
+	}
+
+	@Override
+	public SoundInfo clone() throws CloneNotSupportedException {
+		return (SoundInfo) super.clone();
 	}
 }

@@ -34,7 +34,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.actors.Image;
 
-public class Costume extends Image {
+public class Costume extends Image implements Cloneable {
 	protected Semaphore xYWidthHeightLock = new Semaphore(1);
 	protected Semaphore imageLock = new Semaphore(1);
 	protected Semaphore scaleLock = new Semaphore(1);
@@ -50,6 +50,7 @@ public class Costume extends Image {
 	protected boolean internalPath;
 	public boolean show;
 	public int zPosition;
+	public boolean costumeChanged;
 
 	public Costume(Sprite sprite) {
 		super(Utils.getUniqueName());
@@ -71,6 +72,7 @@ public class Costume extends Image {
 		this.currentAlphaPixmap = null;
 		this.zPosition = 0;
 		this.internalPath = false;
+		this.costumeChanged = true;
 	}
 
 	@Override
@@ -226,15 +228,18 @@ public class Costume extends Image {
 
 	public void setXPosition(float x) {
 		this.x = x - (this.width / 2f);
+		costumeChanged = true;
 	}
 
 	public void setYPosition(float y) {
 		this.y = y - (this.height / 2f);
+		costumeChanged = true;
 	}
 
 	public void setXYPosition(float x, float y) {
 		this.x = x - (this.width / 2f);
 		this.y = y - (this.height / 2f);
+		costumeChanged = true;
 	}
 
 	public float getXPosition() {
@@ -269,6 +274,7 @@ public class Costume extends Image {
 		imagePath = path;
 		imageChanged = true;
 		imageLock.release();
+		costumeChanged = true;
 	}
 
 	public void setImagePathInternal(String path) {
@@ -280,6 +286,7 @@ public class Costume extends Image {
 		imagePath = path;
 		imageChanged = true;
 		imageLock.release();
+		costumeChanged = true;
 	}
 
 	public String getImagePath() {
@@ -294,6 +301,7 @@ public class Costume extends Image {
 		this.scaleX = size;
 		this.scaleY = size;
 		scaleLock.release();
+		costumeChanged = true;
 	}
 
 	public float getSize() {
@@ -312,6 +320,7 @@ public class Costume extends Image {
 		alphaValueLock.acquireUninterruptibly();
 		this.alphaValue = alphaValue;
 		alphaValueLock.release();
+		costumeChanged = true;
 	}
 
 	public void changeAlphaValueBy(float value) {
@@ -325,6 +334,7 @@ public class Costume extends Image {
 			this.alphaValue = newAlphaValue;
 		}
 		alphaValueLock.release();
+		costumeChanged = true;
 	}
 
 	public float getAlphaValue() {
@@ -344,6 +354,7 @@ public class Costume extends Image {
 		imageLock.acquireUninterruptibly();
 		imageChanged = true;
 		imageLock.release();
+		costumeChanged = true;
 	}
 
 	public void changeBrightnessValueBy(float percent) {
@@ -356,6 +367,7 @@ public class Costume extends Image {
 		imageLock.acquireUninterruptibly();
 		imageChanged = true;
 		imageLock.release();
+		costumeChanged = true;
 	}
 
 	public float getBrightnessValue() {
@@ -365,4 +377,8 @@ public class Costume extends Image {
 		return brightness;
 	}
 
+	@Override
+	public Costume clone() throws CloneNotSupportedException {
+		return (Costume) super.clone();
+	}
 }

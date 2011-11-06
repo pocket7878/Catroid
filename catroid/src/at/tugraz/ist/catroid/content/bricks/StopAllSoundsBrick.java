@@ -25,9 +25,12 @@ package at.tugraz.ist.catroid.content.bricks;
 import android.content.Context;
 import android.view.View;
 import android.widget.BaseAdapter;
+import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.SoundManager;
+import at.tugraz.ist.catroid.stage.StageRecorder;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -49,6 +52,13 @@ public class StopAllSoundsBrick implements Brick {
 
 	public void execute() {
 		SoundManager.getInstance().pause();
+		ProjectManager projectManager = ProjectManager.getInstance();
+		StageRecorder recorder = StageRecorder.getInstance();
+		for (Sprite sprite : projectManager.getCurrentProject().getSpriteList()) {
+			for (SoundInfo soundInfo : sprite.getSoundList()) {
+				recorder.updateSound(soundInfo);
+			}
+		}
 	}
 
 	public Sprite getSprite() {
