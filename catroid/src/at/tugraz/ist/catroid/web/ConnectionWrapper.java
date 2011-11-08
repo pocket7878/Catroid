@@ -48,6 +48,13 @@ public class ConnectionWrapper {
 
 	private HttpURLConnection urlConnection;
 	private final static String TAG = ConnectionWrapper.class.getSimpleName();
+	private static String URL_ACCEPT_KEY = "Accept";
+	private static String URL_ACCEPT_VALUE = "*/*";
+	private static String CONTENT_KEY = "Content-Type";
+	private static String CONNECTION_KEY = "Connection";
+	private static String CONNECTION_VALUE = "Keep-Alive";
+	private static String CACHE_KEY = "Cache-Control";
+	private static String CACHE_VALUE = "no-cache";
 
 	private String getString(InputStream is) {
 		if (is == null) {
@@ -82,7 +89,7 @@ public class ConnectionWrapper {
 			ftpClient.connect(Consts.SERVER, 21);
 			ftpClient.login(Consts.USERNAME, Consts.PASSWORD);
 
-			if (ftpClient.getReplyString().contains("230")) {
+			if (ftpClient.getReplyString().contains(Consts.FTP_LOGIN_SUCCESS)) {
 				ftpClient.setFileType(org.apache.commons.net.ftp.FTP.BINARY_FILE_TYPE);
 				BufferedInputStream buffIn = null;
 				buffIn = new BufferedInputStream(new FileInputStream(filePath));
@@ -107,10 +114,8 @@ public class ConnectionWrapper {
 		try {
 			ftpClient.connect(Consts.SERVER, 21);
 			ftpClient.login(Consts.USERNAME, Consts.PASSWORD);
-			//ftpClient.changeWorkingDirectory(Consts.PATH);
-			// TODO a test with the right catroid server 
 
-			if (ftpClient.getReplyString().contains("230")) {
+			if (ftpClient.getReplyString().contains(Consts.FTP_LOGIN_SUCCESS)) {
 				FTPFile[] ftpFiles = ftpClient.listFiles(".");
 				String[] fileList = null;
 				fileList = new String[ftpFiles.length];
@@ -119,9 +124,8 @@ public class ConnectionWrapper {
 					fileList[i] = ftpFiles[i].getName();
 				}
 
-				String name[] = ftpClient.listNames(".");
-				String directory = ftpClient.printWorkingDirectory();
-
+				//String name[] = ftpClient.listNames(".");
+				//String directory = ftpClient.printWorkingDirectory();
 				ftpClient.logout();
 				ftpClient.disconnect();
 				return true;
@@ -134,23 +138,8 @@ public class ConnectionWrapper {
 		return false;
 	}
 
-	//	public String doHttpPost(String urlString, HashMap<String, String> postValues) throws IOException,
-	//			WebconnectionException {
-	//
-	//		buildPost(urlString, postValues);
-	//
-	//		// response code != 2xx -> error
-	//		if (urlConnection.getResponseCode() / 100 != 2) {
-	//			throw new WebconnectionException(urlConnection.getResponseCode());
-	//		}
-	//		InputStream resultStream = urlConnection.getInputStream();
-	//		return getString(resultStream);
-	//	}
-
 	public void doHttpPostFileDownload(String urlString, HashMap<String, String> postValues, String filePath)
 			throws IOException {
-		//MultiPartFormOutputStream out = buildPost(urlString, postValues);
-		//out.close();
 
 		// read response from server
 		DataInputStream input = new DataInputStream(urlConnection.getInputStream());
@@ -159,8 +148,6 @@ public class ConnectionWrapper {
 		file.getParentFile().mkdirs();
 		FileOutputStream fos = new FileOutputStream(file);
 
-		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-		// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> DOWNLOAD
 		byte[] buffer = new byte[Consts.BUFFER_8K];
 		int length = 0;
 		while ((length = input.read(buffer)) != -1) {
@@ -176,13 +163,9 @@ public class ConnectionWrapper {
 		out.close();
 
 		InputStream resultStream = null;
-		//try {
-
 		Log.e("bla", "http code: " + urlConnection.getResponseCode());
 		resultStream = urlConnection.getInputStream();
-		//		} catch (FileNotFoundException e) {
-		//			Log.e("bla", "error string: " + getString(urlConnection.getErrorStream()));
-		//		}
+
 		return getString(resultStream);
 	}
 
@@ -196,12 +179,10 @@ public class ConnectionWrapper {
 
 		String boundary = MultiPartFormOutputStream.createBoundary();
 		urlConnection = (HttpURLConnection) MultiPartFormOutputStream.createConnection(url);
-
-		urlConnection.setRequestProperty("Accept", "*/*");
-		urlConnection.setRequestProperty("Content-Type", MultiPartFormOutputStream.getContentType(boundary));
-
-		urlConnection.setRequestProperty("Connection", "Keep-Alive");
-		urlConnection.setRequestProperty("Cache-Control", "no-cache");
+		urlConnection.setRequestProperty(URL_ACCEPT_KEY, URL_ACCEPT_VALUE);
+		urlConnection.setRequestProperty(CONTENT_KEY, MultiPartFormOutputStream.getContentType(boundary));
+		urlConnection.setRequestProperty(CONNECTION_KEY, CONNECTION_VALUE);
+		urlConnection.setRequestProperty(CACHE_KEY, CACHE_VALUE);
 
 		MultiPartFormOutputStream out = new MultiPartFormOutputStream(urlConnection.getOutputStream(), boundary);
 
@@ -213,48 +194,4 @@ public class ConnectionWrapper {
 
 		return out;
 	}
-
-	//private MultiPartFormOutputStream buildPost(String urlString, HashMap<String, String> postValues)
-	//	private void buildPost(String urlString, HashMap<String, String> postValues) throws IOException {
-	//		if (postValues == null) {
-	//			postValues = new HashMap<String, String>();
-	//		}
-	//
-	//		URL url = new URL(urlString);
-	//
-	//		String boundary = MultiPartFormOutputStream.createBoundary();
-	//		urlConnection = (HttpURLConnection) MultiPartFormOutputStream.createConnection(url);
-	//
-	//		urlConnection.setRequestProperty("Accept", "*/*");
-	//		urlConnection.setRequestProperty("Content-Type", MultiPartFormOutputStream.getContentType(boundary));
-	//
-	//		urlConnection.setRequestProperty("Connection", "Keep-Alive");
-	//		urlConnection.setRequestProperty("Cache-Control", "no-cache");
-	//
-	//		MultiPartFormOutputStream out = new MultiPartFormOutputStream(urlConnection.getOutputStream(), boundary);
-	//		String postData = "";
-	//		Set<Entry<String, String>> entries = postValues.entrySet();
-	//		for (Entry<String, String> entry : entries) {
-	//			Log.d(TAG, "key: " + entry.getKey() + ", value: " + entry.getValue());
-	//			if (postData != "") {
-	//				postData += "&";
-	//			}
-	//			postData += entry.getKey() + "=" + entry.getValue();
-	//			out.writeField(entry.getKey(), entry.getValue());
-	//			out.writeField(entry.getKey(), entry.getValue());
-	//		}
-	//
-	//		//URL url = new URL(urlString);
-	//		urlConnection = (HttpURLConnection) MultiPartFormOutputStream.createConnection(url);
-	//		urlConnection.setRequestProperty(Consts.URL_ACCEPT_KEY, Consts.URL_ACCEPT_VALUE);
-	//		urlConnection.setRequestProperty(Consts.URL_CONTENT_TYPE_KEY, Consts.URL_CONTENT_TYPE_VALUE);
-	//		urlConnection.setRequestProperty(Consts.URL_CONNECTION_KEY, Consts.URL_CONNECTION_VALUE);
-	//		urlConnection.setRequestProperty(Consts.URL_CACHE_KEY, Consts.URL_CACHE_VALUE);
-	//		//urlConnection.setRequestProperty(Consts.URL_LENGTH_KEY, Integer.toString(postData.length()));
-	//
-	//		//OutputStream out = urlConnection.getOutputStream();
-	//		//out.write(postData.getBytes());
-	//		out.flush();
-	//		out.close();
-	//	}
 }

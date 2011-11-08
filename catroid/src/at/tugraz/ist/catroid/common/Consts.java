@@ -76,6 +76,7 @@ public final class Consts {
 	public static final int UPLOAD_NOTIFICATION_FAILED = 333;
 	public static final int UPLOAD_NOTIFICATION_FINISHED = 222;
 	public static final int UPLOAD_REFRESH_MS = 300;
+	public static final String FTP_LOGIN_SUCCESS = "230";
 
 	//UrlConnection
 	public static final String URL_ACCEPT_KEY = "Accept";
