@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CostumeTutorial>
+	<appear>50,300</appear>
+		<say>You are in CostumeActivity!</say>
+	
+	<goto>200,400</goto>
+	<point></point>
+	<say>Hier beginnt der spannende Teil!</say>
+	<say>Wir werden dem Projekt einige Bilder hinzufuegen, die dann später nacheinander angezeigt werden</say>
+	<say>Diese Bilder nennen wir unter uns Programmierern hier bei Catroid: Kostüme</say>
+	<say>Später sagen wir unserem Hintergrund dann, dass er nacheinander die Kostüme .. hm .. anziehen soll.</say>
+	<say>Tippe jetzt einmal auf Kostüme</say>
+	<waitfor>CostumeTab</waitfor>
+</CostumeTutorial>

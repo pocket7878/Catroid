@@ -82,6 +82,12 @@ public class TutorialXmlHandler {
 			} else {
 				id = R.xml.scripttab;
 			}
+		} else if (0 == name.compareTo("ui.CostumeActivity")) {
+			if (DEBUG) {
+				id = R.xml.costume_debug;
+			} else {
+				id = R.xml.costume;
+			}
 		} else {
 			id = 0;
 		}

@@ -79,6 +79,27 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 			return dispatchProject(ev);
 		} else if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.ScriptActivity") == 0) {
 			return dispatchSkript(ev);
+		} else if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.CostumeActivity") == 0) {
+			return dispatchCostume(ev);
+		}
+		return false;
+	}
+
+	public boolean dispatchCostume(MotionEvent ev) {
+		Activity dings = (Activity) context;
+		Activity dongs = dings.getParent();
+		ImageButton lila = (ImageButton) dongs.findViewById(R.id.btn_action_add_sprite);
+
+		int x = lila.getLeft();
+		int y = lila.getTop();
+		int maxx = x + lila.getHeight();
+		int maxy = y + lila.getWidth();
+		//		Dialog currentDialog = Tutorial.getInstance(null).getDialog();
+		if (ev.getX() < maxx && ev.getX() > x && ev.getY() < maxy && ev.getY() > y) {
+			//		if (currentDialog == null) {
+			dongs.dispatchTouchEvent(ev);
+			//		} else {
+			//			currentDialog.dispatchTouchEvent(ev);
 		}
 		return false;
 	}
@@ -144,17 +165,6 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		} else {
 			currentDialog.dispatchTouchEvent(ev);
 		}
-
-		//		if (ev.getX() > x && ev.getY() > y && ev.getX() < maxx && ev.getY() < maxy && currentDialog == null) {
-		//			dongs.dispatchTouchEvent(ev);
-		//		}
-		//		Log.i("faxxe", "schauma ob a einegeht!");
-		//		if (Tutorial.getInstance(null).getDialog() != null) {
-		//			Log.i("faxxe", "geht eh eine!");
-		//			Tutorial.getInstance(null).getDialog().dispatchTouchEvent(ev);
-		//			//Tutorial.getInstance(null).setDialog(null);
-		//		}
-
 		return true;
 	}
 

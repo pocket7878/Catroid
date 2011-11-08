@@ -35,6 +35,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
 import at.tugraz.ist.catroid.ui.adapter.CostumeAdapter;
 import at.tugraz.ist.catroid.utils.ActivityHelper;
 import at.tugraz.ist.catroid.utils.ImageEditing;
@@ -61,6 +62,7 @@ public class CostumeActivity extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		Tutorial.getInstance(this).resumeTutorial();
 		if (!Utils.checkForSdCard(this)) {
 			return;
 		}
@@ -88,6 +90,7 @@ public class CostumeActivity extends ListActivity {
 
 	private View.OnClickListener createAddCostumeClickListener() {
 		return new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 
@@ -104,6 +107,7 @@ public class CostumeActivity extends ListActivity {
 
 	@Override
 	protected void onPause() {
+		Tutorial.getInstance(this).pauseTutorial();
 		super.onPause();
 		ProjectManager projectManager = ProjectManager.getInstance();
 		if (projectManager.getCurrentProject() != null) {
@@ -122,6 +126,7 @@ public class CostumeActivity extends ListActivity {
 		{
 			final ListView listView = getListView();
 			listView.post(new Runnable() {
+				@Override
 				public void run() {
 					listView.setSelection(listView.getCount() - 1);
 				}
