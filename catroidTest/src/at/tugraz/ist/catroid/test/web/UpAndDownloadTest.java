@@ -26,15 +26,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
+import android.os.Handler;
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.transfers.ProjectDownloadTask;
-import at.tugraz.ist.catroid.transfers.ProjectUploadTask;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.web.ConnectionWrapper;
 import at.tugraz.ist.catroid.web.ServerCalls;
-import at.tugraz.ist.catroid.web.WebconnectionException;
 
 public class UpAndDownloadTest extends AndroidTestCase {
 
@@ -92,7 +91,9 @@ public class UpAndDownloadTest extends AndroidTestCase {
 		ServerCalls.getInstance().setConnectionToUse(new MockConnection());
 
 		assertTrue("The default Project does not exist.", new File(pathToDefaultProject).exists());
-		new ProjectUploadTask(null, testProjectName, projectDescription, pathToDefaultProject, "0").execute();
+		Handler handler = new Handler();
+		ServerCalls.getInstance().uploadProject(testProjectName, projectDescription, "", "mail@gmail.com", "de", "0",
+				handler);
 		Thread.sleep(3000);
 
 		assertTrue("Uploaded file does not exist", projectZipOnMockServer.exists());
@@ -110,12 +111,11 @@ public class UpAndDownloadTest extends AndroidTestCase {
 	}
 
 	private class MockConnection extends ConnectionWrapper {
+
 		@Override
-		public String doHttpPostFileUpload(String urlstring, HashMap<String, String> postValues, String filetag,
-				String filePath) throws IOException, WebconnectionException {
+		public void sendFTP(String filePath, Handler handler, String projectName, String fileName) {
 
 			new File(filePath).renameTo(projectZipOnMockServer);
-			return "";
 		}
 
 		@Override
