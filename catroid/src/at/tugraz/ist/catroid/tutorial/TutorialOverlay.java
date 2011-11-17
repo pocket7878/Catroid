@@ -36,7 +36,6 @@ import android.view.SurfaceView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 
 /**
@@ -80,7 +79,12 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		//check if event coordinates are the coordinates of the control panel buttons
 		if (x >= bounds.left && x <= bounds.right) {
 			if (y >= bounds.top && y <= bounds.bottom) {
-				return dispatchPanel(ev);
+				try {
+					return dispatchPanel(ev);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		Log.i("faxxe", "hallo " + context.getClass().getName());
@@ -115,7 +119,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		return false;
 	}
 
-	public boolean dispatchPanel(MotionEvent ev) {
+	public boolean dispatchPanel(MotionEvent ev) throws InterruptedException {
 		//unterscheide buttons play, pause, forward, backward
 		int x = (int) ev.getX();
 		int y = (int) ev.getY();
@@ -125,25 +129,14 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		if (x >= bounds.left && x <= bounds.left + 50) {
 			if (y >= bounds.top && y <= bounds.bottom) {
 
-				Toast toast = Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT);
-				toast.show();
+				panel.pressPlay();
 			}
 		}
 		bounds.left = bounds.left + 70;
 
 		if (x >= bounds.left && x <= bounds.left + 50) {
 			if (y >= bounds.top && y <= bounds.bottom) {
-				Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
-				toast.show();
-			}
-		}
-
-		bounds.left = bounds.left + 70;
-
-		if (x >= bounds.left && x <= bounds.left + 50) {
-			if (y >= bounds.top && y <= bounds.bottom) {
-				Toast toast = Toast.makeText(context, "FORWARD", Toast.LENGTH_SHORT);
-				toast.show();
+				panel.pressPause();
 			}
 		}
 
@@ -151,8 +144,15 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 
 		if (x >= bounds.left && x <= bounds.left + 50) {
 			if (y >= bounds.top && y <= bounds.bottom) {
-				Toast toast = Toast.makeText(context, "BACKWARD", Toast.LENGTH_SHORT);
-				toast.show();
+				panel.pressForward();
+			}
+		}
+
+		bounds.left = bounds.left + 70;
+
+		if (x >= bounds.left && x <= bounds.left + 50) {
+			if (y >= bounds.top && y <= bounds.bottom) {
+				panel.pressBackward();
 			}
 		}
 
@@ -296,7 +296,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		postInvalidate();
 		tutor.draw(canvas);
 		tutor_2.draw(canvas);
-		//panel.draw(canvas);
+		//		panel.draw(canvas);
 	}
 
 	public void update() {

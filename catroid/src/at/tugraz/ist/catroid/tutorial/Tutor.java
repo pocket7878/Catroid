@@ -41,6 +41,7 @@ public class Tutor {
 	private int fps;
 	private long frameTicker; // the time of the last frame update
 	TutorBubble tutorBubble;
+
 	Resources resources;
 	Context context;
 	int xPortTo = 0;
@@ -156,4 +157,9 @@ public class Tutor {
 		}
 
 	}
+
+	public TutorBubble getTutorBubble() {
+		return tutorBubble;
+	}
+
 }

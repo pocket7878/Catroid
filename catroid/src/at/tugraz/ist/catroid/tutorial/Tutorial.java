@@ -43,6 +43,7 @@ public class Tutorial {
 	private static TutorialXmlHandler txh;
 	private static ArrayList[] code;
 	private static TutorialThread tutorialThread = null;
+
 	private static WindowManager.LayoutParams dragViewParameters;
 	private int instructionCounter = 0;
 	private TutorialState tutorialState = new TutorialState();

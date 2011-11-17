@@ -59,7 +59,13 @@ public class TutorialControlPanel {
 
 	Rect bounds;
 
+	public static boolean active;
+
+	Tutorial tut;
+
 	public TutorialControlPanel(Resources resources, Context context) {
+		active = true;
+		tut = Tutorial.getInstance(context);
 		this.resources = resources;
 		this.context = context;
 		play = resources.getDrawable(R.drawable.play_tutorial);
@@ -68,23 +74,6 @@ public class TutorialControlPanel {
 		backward = resources.getDrawable(R.drawable.backwards_tutorial);
 
 		bounds = new Rect();
-
-		//setBounds(0);
-
-		//play.setBounds(bounds);
-		//play.draw(canvas);
-
-		//		setBounds(70);
-		//		pause.setBounds(bounds);
-		//		//pause.draw(canvas);
-		//
-		//		setBounds(140);
-		//		forward.setBounds(bounds);
-		//		//forward.draw(canvas);
-		//
-		//		setBounds(210);
-		//		backward.setBounds(bounds);
-		//		//backward.draw(canvas);
 
 		playBitmap = ((BitmapDrawable) play).getBitmap();
 		pauseBitmap = ((BitmapDrawable) pause).getBitmap();
@@ -95,6 +84,7 @@ public class TutorialControlPanel {
 
 	public void draw(Canvas canvas) {
 		Paint paint = new Paint();
+
 		setBounds(0);
 		canvas.drawBitmap(playBitmap, bounds.left, bounds.top, paint);
 		setBounds(70);
@@ -144,8 +134,28 @@ public class TutorialControlPanel {
 	public void pressPlay() {
 		//check if tutorial is active, if so there is no need to press play
 		//otherwise resume the tutorial where it was stopped
-
+		active = true;
+		//		tut.setNotification("BubblePlay");
 		Toast toast = Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT);
+		toast.show();
+
+	}
+
+	public void pressPause() throws InterruptedException {
+		active = false;
+		Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
+		toast.show();
+		//		tut.waitForNotification("BubblePlay");
+
+	}
+
+	public void pressForward() {
+		Toast toast = Toast.makeText(context, "FORWARD", Toast.LENGTH_SHORT);
+		toast.show();
+	}
+
+	public void pressBackward() {
+		Toast toast = Toast.makeText(context, "BACKWARD", Toast.LENGTH_SHORT);
 		toast.show();
 	}
 

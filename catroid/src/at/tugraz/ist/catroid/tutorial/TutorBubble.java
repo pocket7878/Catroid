@@ -40,7 +40,7 @@ import android.view.Display;
  */
 public class TutorBubble {
 
-	boolean done = false;
+	boolean pause = false;
 
 	NinePatchDrawable mSpeechBubble;
 	Paint textPaint;
@@ -173,12 +173,6 @@ public class TutorBubble {
 		Rect bounds = mSpeechBubble.getBounds();
 		xText = bounds.left + marginLeft;
 		yText = y - marginBottom - (textSize * maxLines);
-	}
-
-	private int getScreenHeight() {
-		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
-		int screenHeight = display.getHeight();
-		return screenHeight;
 	}
 
 	private int getScreenWidth() {
