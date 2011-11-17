@@ -23,14 +23,14 @@
  -->
 <manifest
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:versionCode="9"
+	android:versionCode="10"
 	package="at.tugraz.ist.catroid"
-	android:versionName="0.5.5a"
+	android:versionName="0.5.6a"
 	android:installLocation="auto">
 
     <uses-sdk
-        android:minSdkVersion="7" 
-        android:targetSdkVersion="8" />
+        android:minSdkVersion="8" 
+        android:targetSdkVersion="10" />
         
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -50,6 +50,16 @@
 			<intent-filter>
 				<action	android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+			<intent-filter>
+				<action	android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data
+					android:scheme="http"
+					android:host="*"
+					android:pathPattern="@string/catroid_extension_pathPattern" />
+					
 			</intent-filter>
 		</activity>
 		
@@ -76,21 +86,6 @@
 		<activity android:name=".ui.SoundActivity" />
 
 		<activity android:name=".ui.SettingsActivity" android:theme="@style/settings_activity"/>
-		<activity
-			android:name=".ui.DownloadActivity"
-			android:label="@string/app_name"
-			android:noHistory="true">
-			<intent-filter>
-				<action	android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<category android:name="android.intent.category.BROWSABLE" />
-				<data
-					android:scheme="http"
-					android:host="*"
-					android:pathPattern="@string/catroid_extension_pathPattern" />
-					
-			</intent-filter>
-		</activity>
 		<service android:enabled="true" android:debuggable="true" android:name=".service.TransferService" />
 		
 		<activity android:name=".bluetooth.DeviceListActivity" android:theme="@android:style/Theme.Dialog">
