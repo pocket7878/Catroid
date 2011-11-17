@@ -30,17 +30,18 @@ public class RotationDialog extends Dialog {
 	private Bitmap bitmap;
 	private Bitmap originalBitmap;
 
-	TransformationsView rotationView;
-	Context context;
-	EditText angleEdit;
-	Button okButton;
-	String resultFieldName = "RotationAngle";
+	private TransformationsView rotationView;
+	private Context context;
+	private EditText angleEdit;
+	private Button okButton;
+	private boolean toRight;
 
-	public RotationDialog(Context context, EditText view, Button okButton) {
+	public RotationDialog(Context context, EditText view, Button okButton, boolean toRight) {
 		super(context, R.style.settings_activity);
 		this.context = context;
 		this.angleEdit = view;
 		this.okButton = okButton;
+		this.toRight = toRight;
 
 		centerOfScreen = new Point();
 		referencePoint = new Point();
@@ -61,7 +62,6 @@ public class RotationDialog extends Dialog {
 		layout2.addView(okButton);
 
 		angleEdit.setOnEditorActionListener(new OnEditorActionListener() {
-
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 				setNewAngle(Double.parseDouble(angleEdit.getText().toString()));
 				return true;
@@ -98,6 +98,9 @@ public class RotationDialog extends Dialog {
 
 	private void setNewAngle(double newAngle) {
 		angle = roundToOneDecimal(newAngle);
+		if (!toRight) {
+			angle = 360 - angle;
+		}
 		updateBitmap();
 	}
 
@@ -121,10 +124,18 @@ public class RotationDialog extends Dialog {
 		}
 
 		angle = roundToOneDecimal(actualAngle);
+
+		if (!toRight) {
+			angle = 360 - angle;
+		}
 	}
 
 	private void updateBitmap() {
-		bitmap = ImageEditing.rotateBitmap(originalBitmap, (float) angle);
+		if (toRight) {
+			bitmap = ImageEditing.rotateBitmap(originalBitmap, (float) angle);
+		} else {
+			bitmap = ImageEditing.rotateBitmap(originalBitmap, (float) (360 - angle));
+		}
 		rotationView.setBitmap(bitmap);
 		rotationView.invalidate();
 	}

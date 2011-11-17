@@ -22,19 +22,16 @@
  */
 package at.tugraz.ist.catroid.content.bricks;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.utils.Utils;
+import at.tugraz.ist.catroid.ui.dialogs.RotationDialog;
 
 public class TurnRightBrick implements Brick, OnClickListener {
 
@@ -84,36 +81,34 @@ public class TurnRightBrick implements Brick, OnClickListener {
 		return new TurnRightBrick(getSprite(), degrees);
 	}
 
+	private void updateBrickView() {
+		EditText editDegrees = (EditText) view.findViewById(R.id.toolbox_brick_turn_right_edit_text);
+		editDegrees.setText(String.valueOf(degrees));
+	}
+
 	public void onClick(View view) {
 		final Context context = view.getContext();
 
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
 		final EditText input = new EditText(context);
 		input.setText(String.valueOf(degrees));
 		input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 		input.setSelectAllOnFocus(true);
-		dialog.setView(input);
-		dialog.setOnCancelListener((OnCancelListener) context);
-		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				try {
-					degrees = Double.parseDouble(input.getText().toString());
-				} catch (NumberFormatException exception) {
-					Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT);
-				}
-				dialog.cancel();
-			}
-		});
-		dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
+
+		Button okButton = new Button(context);
+		okButton.setText("OK");
+
+		final RotationDialog dialog = new RotationDialog(context, input, okButton, true);
+
+		okButton.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				degrees = Double.parseDouble(input.getText().toString());
+				updateBrickView();
 				dialog.cancel();
 			}
 		});
 
-		AlertDialog finishedDialog = dialog.create();
-		finishedDialog.setOnShowListener(Utils.getBrickDialogOnClickListener(context, input));
-
-		finishedDialog.show();
+		dialog.show();
 
 	}
 

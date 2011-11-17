@@ -95,7 +95,7 @@ public class TurnLeftBrick implements Brick, OnClickListener {
 		Button okButton = new Button(context);
 		okButton.setText("OK");
 
-		final RotationDialog dialog = new RotationDialog(context, input, okButton);
+		final RotationDialog dialog = new RotationDialog(context, input, okButton, false);
 
 		okButton.setOnClickListener(new OnClickListener() {
 
