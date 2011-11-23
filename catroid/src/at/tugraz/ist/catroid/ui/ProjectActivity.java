@@ -41,6 +41,7 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.adapter.SpriteAdapter;
+import at.tugraz.ist.catroid.ui.dialogs.CopySpriteDialog;
 import at.tugraz.ist.catroid.ui.dialogs.CustomIconContextMenu;
 import at.tugraz.ist.catroid.ui.dialogs.NewSpriteDialog;
 import at.tugraz.ist.catroid.ui.dialogs.RenameSpriteDialog;
@@ -55,6 +56,7 @@ public class ProjectActivity extends ListActivity {
 	private ActivityHelper activityHelper = new ActivityHelper(this);
 	private CustomIconContextMenu iconContextMenu;
 	private RenameSpriteDialog renameDialog;
+	private CopySpriteDialog copyDialog;
 	private NewSpriteDialog newSpriteDialog;
 	private static final int CONTEXT_MENU_ITEM_RENAME = 0; //or R.id.project_menu_rename
 	private static final int CONTEXT_MENU_ITEM_DELETE = 1; //or R.id.project_menu_delete 
@@ -80,6 +82,7 @@ public class ProjectActivity extends ListActivity {
 		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				spriteToEdit = spriteList.get(position);
+				spriteToEdit = spriteList.get(position);
 
 				//as long as background sprite is always the first one, we're fine
 				if (ProjectManager.getInstance().getCurrentProject().getSpriteList().indexOf(spriteToEdit) == 0) {
@@ -99,6 +102,7 @@ public class ProjectActivity extends ListActivity {
 				CONTEXT_MENU_ITEM_RENAME);
 		iconContextMenu.addItem(resources, this.getString(R.string.delete), R.drawable.ic_context_delete,
 				CONTEXT_MENU_ITEM_DELETE);
+		iconContextMenu.addItem(resources, "Kopieren", R.drawable.ic_context_copy, 3);
 
 		iconContextMenu.setOnClickListener(new CustomIconContextMenu.IconContextMenuOnClickListener() {
 			public void onClick(int menuId) {
@@ -113,6 +117,9 @@ public class ProjectActivity extends ListActivity {
 								&& projectManager.getCurrentSprite().equals(spriteToEdit)) {
 							projectManager.setCurrentSprite(null);
 						}
+						break;
+					case 3:
+						showDialog(3);
 						break;
 				}
 			}
@@ -192,6 +199,14 @@ public class ProjectActivity extends ListActivity {
 					dialog = iconContextMenu.createMenu(spriteToEdit.getName());
 				}
 				break;
+			case 3:
+				if (spriteToEdit == null) {
+					dialog = null;
+				} else {
+					copyDialog = new CopySpriteDialog(this);
+					dialog = copyDialog.createDialog(spriteToEdit.getName());
+				}
+				break;
 			default:
 				dialog = null;
 				break;
@@ -213,6 +228,12 @@ public class ProjectActivity extends ListActivity {
 				if (dialog != null) {
 					Button buttonPositive = (Button) dialog.findViewById(R.id.dialog_new_sprite_ok_button);
 					buttonPositive.setEnabled(false);
+				}
+				break;
+			case 3:
+				if (dialog != null && spriteToEdit != null) {
+					//EditText spriteTitleInput = (EditText) dialog.findViewById(R.id.dialog_copy_sprite_editText);
+					//spriteTitleInput.setText(spriteToEdit.getName());
 				}
 				break;
 		}
@@ -254,6 +275,14 @@ public class ProjectActivity extends ListActivity {
 
 	public void handleNegativeButtonRenameSprite(View v) {
 		renameDialog.renameDialog.cancel();
+	}
+
+	public void handlePositiveButtonCopySprite(View v) {
+		copyDialog.handleOkButton();
+	}
+
+	public void handleNegativeButtonCopySprite(View v) {
+		copyDialog.copyDialog.cancel();
 	}
 
 	public void handlePositiveButtonNewSprite(View v) {

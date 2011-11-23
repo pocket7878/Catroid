@@ -82,6 +82,16 @@ public class Sprite implements Serializable {
 		init();
 	}
 
+	public Sprite(Sprite spriteToCopy) {
+		this.name = spriteToCopy.name;
+		this.scriptList = spriteToCopy.scriptList;
+		this.costumeDataList = spriteToCopy.costumeDataList;
+		this.soundList = spriteToCopy.soundList;
+		this.costume = spriteToCopy.costume;
+		isPaused = false;
+		isFinished = false;
+	}
+
 	public void startWhenScripts(String action) {
 		for (Script s : scriptList) {
 			if (s instanceof WhenScript) {
