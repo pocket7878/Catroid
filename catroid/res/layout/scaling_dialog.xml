@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_height="fill_parent"
+	android:layout_width="fill_parent"
+	>
+	<LinearLayout
+		android:id="@+id/drag_n_drop_area"
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:orientation="vertical">
+	</LinearLayout>
+	<LinearLayout
+		android:id="@+id/scaling_controls_layout"
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:baselineAligned="true"
+		android:orientation="horizontal"
+		android:layout_alignParentBottom="true">
+	</LinearLayout>
+	<SeekBar
+		android:id="@+id/edit_scale_seekbar"
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:layout_alignParentTop="true">
+	</SeekBar>
+</RelativeLayout>
