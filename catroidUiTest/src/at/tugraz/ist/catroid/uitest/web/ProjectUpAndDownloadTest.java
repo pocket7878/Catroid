@@ -104,7 +104,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 
 	public void testFtpUplaod() throws Throwable {
 		startProjectUploadTask();
-		createTestProject();
+		createTestProject(newTestProject);
 		addABrickToProject();
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -127,13 +127,13 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		UiTestUtils.clearAllUtilTestProjects();
 		startProjectUploadTask();
 
-		createTestProject();
+		createTestProject(newTestProject);
 		addABrickToProject();
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		prefs.edit().putString(Consts.TOKEN, "wrong_token").commit();
 
-		uploadProject(false);
+		uploadProject();
 
 		String resultString = (String) UiTestUtils.getPrivateField("resultString", ServerCalls.getInstance());
 		JSONObject jsonObject = new JSONObject(resultString);
@@ -144,7 +144,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		UiTestUtils.clearAllUtilTestProjects();
 	}
 
-	private void createTestProject() {
+	private void createTestProject(String projectToCreate) {
 		File directory = new File(Consts.DEFAULT_ROOT + "/" + testProject);
 		if (directory.exists()) {
 			UtilFile.deleteDirectory(directory);
@@ -169,7 +169,6 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 	}
 
 	private void uploadProject() {
-	private void uploadProject(boolean expect_success) {
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
 		solo.sleep(500);
 
@@ -193,8 +192,8 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 			}
 
 			assertTrue("Upload failed. Internet connection?",
-						notifyHanlder.getLastNotification() == Consts.UPLOAD_NOTIFICATION_FINISHED);
-					solo.searchText(getActivity().getString(R.string.success_project_upload)));
+					notifyHanlder.getLastNotification() == Consts.UPLOAD_NOTIFICATION_FINISHED);
+			solo.searchText(getActivity().getString(R.string.success_project_upload));
 			String resultString = (String) UiTestUtils.getPrivateField("resultString", ServerCalls.getInstance());
 			JSONObject jsonObject;
 			jsonObject = new JSONObject(resultString);

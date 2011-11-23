@@ -183,8 +183,7 @@ public class ServerCalls {
 			HashMap<String, String> postValues = new HashMap<String, String>();
 			postValues.put(REG_USER_NAME, username);
 			postValues.put(REG_USER_PASSWORD, password);
-			//postValues.put(REG_USER_EMAIL, userEmail);
-			postValues.put(REG_USER_EMAIL, "abc@gmail.com");
+			postValues.put(REG_USER_EMAIL, userEmail);
 			postValues.put(Consts.TOKEN, token);
 
 			if (country != null) {

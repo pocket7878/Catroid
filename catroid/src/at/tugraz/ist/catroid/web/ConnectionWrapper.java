@@ -140,6 +140,8 @@ public class ConnectionWrapper {
 
 	public void doHttpPostFileDownload(String urlString, HashMap<String, String> postValues, String filePath)
 			throws IOException {
+		MultiPartFormOutputStream out = buildPost(urlString, postValues);
+		out.close();
 
 		// read response from server
 		DataInputStream input = new DataInputStream(urlConnection.getInputStream());
