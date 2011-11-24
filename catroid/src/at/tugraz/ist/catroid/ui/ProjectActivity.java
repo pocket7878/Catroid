@@ -232,8 +232,8 @@ public class ProjectActivity extends ListActivity {
 				break;
 			case 3:
 				if (dialog != null && spriteToEdit != null) {
-					//EditText spriteTitleInput = (EditText) dialog.findViewById(R.id.dialog_copy_sprite_editText);
-					//spriteTitleInput.setText(spriteToEdit.getName());
+					EditText spriteTitleInput = (EditText) dialog.findViewById(R.id.dialog_copy_sprite_editText);
+					spriteTitleInput.setText(spriteToEdit.getName() + " - Kopie");
 				}
 				break;
 		}

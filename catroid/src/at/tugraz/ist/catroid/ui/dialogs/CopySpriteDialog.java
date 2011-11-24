@@ -57,7 +57,7 @@ public class CopySpriteDialog {
 
 	public Dialog createDialog(String dialogTitle) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(projectActivity);
-		builder.setTitle("Kopieren...");
+		builder.setTitle("Kopieren");
 
 		LayoutInflater inflater = (LayoutInflater) projectActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.dialog_copy_sprite, null);
@@ -93,9 +93,11 @@ public class CopySpriteDialog {
 			return;
 		}
 		if (newSpriteName != null && !newSpriteName.equalsIgnoreCase("")) {
+
 			Sprite copySprite = new Sprite(projectActivity.getSpriteToEdit());
 			copySprite.setName(newSpriteName);
 			projectManager.getCurrentProject().getSpriteList().add(copySprite);
+
 		} else {
 			Utils.displayErrorMessage(projectActivity, projectActivity.getString(R.string.spritename_invalid));
 			return;
