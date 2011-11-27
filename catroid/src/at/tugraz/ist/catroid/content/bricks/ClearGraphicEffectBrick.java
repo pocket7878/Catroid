@@ -69,4 +69,8 @@ public class ClearGraphicEffectBrick implements Brick {
 	public Brick clone() {
 		return new ClearGraphicEffectBrick(getSprite());
 	}
+
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
 }

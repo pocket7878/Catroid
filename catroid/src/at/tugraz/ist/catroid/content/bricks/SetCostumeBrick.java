@@ -135,4 +135,8 @@ public class SetCostumeBrick implements Brick {
 		return clonedBrick;
 
 	}
+
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
 }

@@ -66,4 +66,8 @@ public class ForeverBrick extends LoopBeginBrick {
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.toolbox_brick_forever, null);
 	}
+
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
 }

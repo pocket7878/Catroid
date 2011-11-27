@@ -157,4 +157,10 @@ public abstract class Script implements Serializable {
 	public Brick getBrick(int index) {
 		return brickList.get(index);
 	}
+
+	protected void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
+
+	public abstract Script clone(String name, Sprite sprite);
 }

@@ -123,4 +123,8 @@ public class NXTMotorStopBrick implements Brick, OnItemSelectedListener {
 
 	}
 
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
+
 }

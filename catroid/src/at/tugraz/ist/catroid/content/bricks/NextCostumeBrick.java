@@ -102,4 +102,8 @@ public class NextCostumeBrick implements Brick {
 		return view;
 	}
 
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
+
 }

@@ -119,4 +119,8 @@ public class PlaySoundBrick implements Brick, Serializable, OnItemSelectedListen
 
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
+
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
 }

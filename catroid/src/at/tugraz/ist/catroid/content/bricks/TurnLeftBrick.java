@@ -115,4 +115,8 @@ public class TurnLeftBrick implements Brick, OnClickListener {
 
 	}
 
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
+
 }

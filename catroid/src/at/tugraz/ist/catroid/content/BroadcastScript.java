@@ -63,4 +63,9 @@ public class BroadcastScript extends Script {
 	public void executeBroadcastWait(CountDownLatch simultaneousStart, CountDownLatch wait) {
 		sprite.startScriptBroadcastWait(this, simultaneousStart, wait);
 	}
+
+	@Override
+	public Script clone(String name, Sprite sprite) {
+		return new BroadcastScript(name, sprite);
+	}
 }

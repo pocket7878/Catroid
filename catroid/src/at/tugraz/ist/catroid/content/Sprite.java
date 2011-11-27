@@ -82,26 +82,30 @@ public class Sprite implements Serializable {
 		init();
 	}
 
-	public Sprite(Sprite spriteToCopy) {
-		this.name = "blabla";
-		this.scriptList = new ArrayList<Script>(spriteToCopy.scriptList);
+	public Sprite(Sprite spriteToCopy, String newSpriteName) {
+		this.name = newSpriteName;
 
-		//		int numberOfScripts = spriteToCopy.scriptList.size();
-		//		for (int i = 0; i < numberOfScripts; i++) {
-		//			ArrayList<Brick> brickList = new ArrayList<Brick>(spriteToCopy.scriptList.get(i).getBrickList());
-		//			this.scriptList.get(i).setBrickList(brickList);
-		//		}
+		this.scriptList = new ArrayList<Script>();
+		for (Script element : spriteToCopy.scriptList) {
+
+			Script newScript = element.clone(element.getName(), this);
+			scriptList.add(newScript);
+
+		}
 
 		int numberOfScripts = spriteToCopy.scriptList.size();
 		for (int i = 0; i < numberOfScripts; i++) {
 			ArrayList<Brick> brickList = new ArrayList<Brick>();
 
 			int numberOfBricks = spriteToCopy.scriptList.get(i).getBrickList().size();
+			this.scriptList.get(i).setBrickList(null);
 			for (int j = 0; j < numberOfBricks; j++) {
 				Brick brick = spriteToCopy.scriptList.get(i).getBrickList().get(j).clone();
+				brick.setSprite(this);
 				brickList.add(brick);
 			}
 			this.scriptList.get(i).setBrickList(brickList);
+			this.scriptList.get(i).setSprite(this);
 		}
 
 		this.costumeDataList = new ArrayList<CostumeData>(spriteToCopy.costumeDataList);

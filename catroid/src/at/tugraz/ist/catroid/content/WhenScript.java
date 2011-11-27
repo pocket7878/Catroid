@@ -62,4 +62,9 @@ public class WhenScript extends Script {
 	public int getPosition() {
 		return position;
 	}
+
+	@Override
+	public Script clone(String name, Sprite sprite) {
+		return new WhenScript(name, sprite);
+	}
 }

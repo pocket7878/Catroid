@@ -94,8 +94,7 @@ public class CopySpriteDialog {
 		}
 		if (newSpriteName != null && !newSpriteName.equalsIgnoreCase("")) {
 
-			Sprite copySprite = new Sprite(projectActivity.getSpriteToEdit());
-			copySprite.setName(newSpriteName);
+			Sprite copySprite = new Sprite(projectActivity.getSpriteToEdit(), newSpriteName);
 			projectManager.getCurrentProject().getSpriteList().add(copySprite);
 
 		} else {

@@ -37,4 +37,9 @@ public class StartScript extends Script {
 		super.readResolve();
 		return this;
 	}
+
+	@Override
+	public Script clone(String name, Sprite sprite) {
+		return new StartScript(name, sprite);
+	}
 }

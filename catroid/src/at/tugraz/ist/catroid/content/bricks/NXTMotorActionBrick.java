@@ -246,4 +246,8 @@ public class NXTMotorActionBrick implements Brick, OnItemSelectedListener, OnSee
 
 	}
 
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
+
 }

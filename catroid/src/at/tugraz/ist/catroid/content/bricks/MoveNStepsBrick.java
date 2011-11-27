@@ -129,4 +129,8 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 
 	}
 
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
+
 }

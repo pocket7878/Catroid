@@ -69,4 +69,8 @@ public class HideBrick implements Brick {
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.toolbox_brick_hide, null);
 	}
+
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
 }

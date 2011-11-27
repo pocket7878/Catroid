@@ -128,4 +128,8 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 		finishedDialog.show();
 
 	}
+
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
 }

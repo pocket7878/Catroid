@@ -189,4 +189,8 @@ public class PointToBrick implements Brick {
 	public Brick clone() {
 		return new PointToBrick(sprite, pointedSprite);
 	}
+
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
 }

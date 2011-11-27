@@ -62,33 +62,35 @@ public class SpeakBrick implements Brick {
 
 	public synchronized void execute() {
 
-		OnUtteranceCompletedListener listener = new OnUtteranceCompletedListener() {
-			public void onUtteranceCompleted(String utteranceId) {
-				SpeakBrick speakBrick = activeSpeakBricks.get(utteranceId);
-				if (speakBrick == null) {
-					return;
+		if (text != "") {
+			OnUtteranceCompletedListener listener = new OnUtteranceCompletedListener() {
+				public void onUtteranceCompleted(String utteranceId) {
+					SpeakBrick speakBrick = activeSpeakBricks.get(utteranceId);
+					if (speakBrick == null) {
+						return;
+					}
+					synchronized (speakBrick) {
+						speakBrick.notifyAll();
+					}
 				}
-				synchronized (speakBrick) {
-					speakBrick.notifyAll();
-				}
+			};
+
+			String utteranceId = this.hashCode() + "";
+			activeSpeakBricks.put(utteranceId, this);
+
+			HashMap<String, String> speakParameter = new HashMap<String, String>();
+			speakParameter.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceId);
+
+			long time = System.currentTimeMillis();
+			PreStageActivity.textToSpeech(getText(), listener, speakParameter);
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				// nothing to do
 			}
-		};
-
-		String utteranceId = this.hashCode() + "";
-		activeSpeakBricks.put(utteranceId, this);
-
-		HashMap<String, String> speakParameter = new HashMap<String, String>();
-		speakParameter.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceId);
-
-		long time = System.currentTimeMillis();
-		PreStageActivity.textToSpeech(getText(), listener, speakParameter);
-		try {
-			this.wait();
-		} catch (InterruptedException e) {
-			// nothing to do
+			Log.i(LOG_TAG, "speak Time: " + (System.currentTimeMillis() - time));
+			activeSpeakBricks.remove(utteranceId);
 		}
-		Log.i(LOG_TAG, "speak Time: " + (System.currentTimeMillis() - time));
-		activeSpeakBricks.remove(utteranceId);
 	}
 
 	public Sprite getSprite() {
@@ -144,6 +146,10 @@ public class SpeakBrick implements Brick {
 	@Override
 	public Brick clone() {
 		return new SpeakBrick(this.sprite, this.text);
+	}
+
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
 	}
 
 }
