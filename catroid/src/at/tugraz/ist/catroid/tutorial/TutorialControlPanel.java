@@ -135,7 +135,6 @@ public class TutorialControlPanel {
 		//check if tutorial is active, if so there is no need to press play
 		//otherwise resume the tutorial where it was stopped
 		active = true;
-		//		tut.setNotification("BubblePlay");
 		Toast toast = Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT);
 		toast.show();
 
@@ -143,9 +142,9 @@ public class TutorialControlPanel {
 
 	public void pressPause() throws InterruptedException {
 		active = false;
-		Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
-		toast.show();
-		//		tut.waitForNotification("BubblePlay");
+		tut = Tutorial.getInstance(context);
+
+		tut.pause();
 
 	}
 

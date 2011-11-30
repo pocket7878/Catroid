@@ -23,6 +23,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 
 public class Tutor {
@@ -160,6 +161,12 @@ public class Tutor {
 
 	public TutorBubble getTutorBubble() {
 		return tutorBubble;
+	}
+
+	public void pause() {
+		//		tutorBubble.setPause();
+		Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
+		toast.show();
 	}
 
 }

@@ -35,7 +35,7 @@ import at.tugraz.ist.catroid.R;
  * 
  */
 public class TutorialXmlHandler {
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 	//private DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 	//private DocumentBuilder db;
 	//private Document doc;

@@ -305,4 +305,10 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 
 	}
 
+	public void pause() {
+		tutor.pause();
+		tutor_2.pause();
+
+	}
+
 }

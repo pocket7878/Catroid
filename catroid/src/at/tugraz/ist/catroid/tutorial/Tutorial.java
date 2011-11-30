@@ -375,4 +375,9 @@ public class Tutorial {
 		return tutorialActive;
 	}
 
+	public void pause() {
+		to.pause();
+
+	}
+
 }
