@@ -123,8 +123,10 @@ public class NXTMotorStopBrick implements Brick, OnItemSelectedListener {
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		NXTMotorStopBrick brick = new NXTMotorStopBrick(getSprite(), motor);
+		brick.sprite = sprite;
+		return brick;
 	}
 
 }

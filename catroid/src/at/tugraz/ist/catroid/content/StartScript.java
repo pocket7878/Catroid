@@ -42,4 +42,9 @@ public class StartScript extends Script {
 	public Script clone(String name, Sprite sprite) {
 		return new StartScript(name, sprite);
 	}
+
+	@Override
+	public Script cloneCopySprite(String name, Sprite sprite) {
+		return new StartScript(name, sprite);
+	}
 }

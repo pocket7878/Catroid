@@ -117,8 +117,10 @@ public class TurnRightBrick implements Brick, OnClickListener {
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		TurnRightBrick brick = new TurnRightBrick(getSprite(), degrees);
+		brick.sprite = sprite;
+		return brick;
 	}
 
 }

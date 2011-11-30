@@ -136,7 +136,10 @@ public class SetCostumeBrick implements Brick {
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		SetCostumeBrick brick = new SetCostumeBrick(getSprite());
+		brick.sprite = sprite;
+		brick.costumeData = costumeData;
+		return brick;
 	}
 }

@@ -129,7 +129,9 @@ public class ChangeYByBrick implements Brick, OnClickListener {
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		ChangeYByBrick brick = new ChangeYByBrick(getSprite(), yMovement);
+		brick.sprite = sprite;
+		return brick;
 	}
 }

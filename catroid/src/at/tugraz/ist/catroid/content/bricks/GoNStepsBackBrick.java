@@ -125,7 +125,9 @@ public class GoNStepsBackBrick implements Brick, OnClickListener {
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		GoNStepsBackBrick brick = new GoNStepsBackBrick(getSprite(), steps);
+		brick.sprite = sprite;
+		return brick;
 	}
 }

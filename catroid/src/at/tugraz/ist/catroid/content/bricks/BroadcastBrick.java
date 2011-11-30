@@ -189,7 +189,10 @@ public class BroadcastBrick implements Brick {
 		return new BroadcastBrick(sprite);
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		BroadcastBrick brick = new BroadcastBrick(getSprite());
+		brick.selectedMessage = selectedMessage;
+		brick.sprite = sprite;
+		return brick;
 	}
 }

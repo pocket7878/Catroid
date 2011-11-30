@@ -246,8 +246,10 @@ public class NXTMotorActionBrick implements Brick, OnItemSelectedListener, OnSee
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		NXTMotorActionBrick brick = new NXTMotorActionBrick(getSprite(), motor, speed);
+		brick.sprite = sprite;
+		return brick;
 	}
 
 }

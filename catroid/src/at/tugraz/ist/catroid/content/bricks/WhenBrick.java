@@ -104,8 +104,10 @@ public class WhenBrick implements Brick {
 		return new WhenBrick(getSprite(), whenScript);
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		WhenBrick brick = new WhenBrick(getSprite(), whenScript);
+		brick.sprite = sprite;
+		return brick;
 	}
 
 }

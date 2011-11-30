@@ -115,7 +115,9 @@ public class NoteBrick implements Brick {
 		return new NoteBrick(this.sprite, this.note);
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		NoteBrick brick = new NoteBrick(getSprite(), this.note);
+		brick.sprite = sprite;
+		return brick;
 	}
 }

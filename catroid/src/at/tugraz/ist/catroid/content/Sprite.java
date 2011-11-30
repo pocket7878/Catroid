@@ -89,23 +89,28 @@ public class Sprite implements Serializable {
 		for (Script element : spriteToCopy.scriptList) {
 
 			Script newScript = element.clone(element.getName(), this);
+			if (newScript.getClass() == BroadcastScript.class) {
+				BroadcastScript broadScript = (BroadcastScript) newScript;
+				BroadcastScript scriptToCopy = (BroadcastScript) element;
+				broadScript.setBroadcastMessage(scriptToCopy.getBroadcastMessage());
+			}
 			scriptList.add(newScript);
 
 		}
 
 		int numberOfScripts = spriteToCopy.scriptList.size();
-		for (int i = 0; i < numberOfScripts; i++) {
+		for (int scriptCounter = 0; scriptCounter < numberOfScripts; scriptCounter++) {
 			ArrayList<Brick> brickList = new ArrayList<Brick>();
 
-			int numberOfBricks = spriteToCopy.scriptList.get(i).getBrickList().size();
-			this.scriptList.get(i).setBrickList(null);
-			for (int j = 0; j < numberOfBricks; j++) {
-				Brick brick = spriteToCopy.scriptList.get(i).getBrickList().get(j).clone();
-				brick.setSprite(this);
+			int numberOfBricks = spriteToCopy.scriptList.get(scriptCounter).getBrickList().size();
+			this.scriptList.get(scriptCounter).setBrickList(null);
+			for (int brickCounter = 0; brickCounter < numberOfBricks; brickCounter++) {
+				Brick brick = spriteToCopy.scriptList.get(scriptCounter).getBrickList().get(brickCounter)
+						.cloneCopySprite(this);
 				brickList.add(brick);
 			}
-			this.scriptList.get(i).setBrickList(brickList);
-			this.scriptList.get(i).setSprite(this);
+			this.scriptList.get(scriptCounter).setBrickList(brickList);
+			this.scriptList.get(scriptCounter).setSprite(this);
 		}
 
 		this.costumeDataList = new ArrayList<CostumeData>(spriteToCopy.costumeDataList);

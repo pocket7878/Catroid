@@ -129,8 +129,10 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		MoveNStepsBrick brick = new MoveNStepsBrick(getSprite(), steps);
+		brick.sprite = sprite;
+		return brick;
 	}
 
 }

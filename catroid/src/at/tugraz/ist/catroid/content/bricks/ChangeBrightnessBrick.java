@@ -118,7 +118,9 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 		finishedDialog.show();
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		ChangeBrightnessBrick brick = new ChangeBrightnessBrick(getSprite(), getChangeBrightness());
+		brick.sprite = sprite;
+		return brick;
 	}
 }

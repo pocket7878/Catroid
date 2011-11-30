@@ -118,7 +118,9 @@ public class SetBrightnessBrick implements Brick, OnClickListener {
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		SetBrightnessBrick brick = new SetBrightnessBrick(getSprite(), getBrightnessValue());
+		brick.sprite = sprite;
+		return brick;
 	}
 }

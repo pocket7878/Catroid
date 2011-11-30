@@ -128,7 +128,9 @@ public class WaitBrick implements Brick, OnClickListener {
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		WaitBrick brick = new WaitBrick(getSprite(), timeToWaitInMilliSeconds);
+		brick.sprite = sprite;
+		return brick;
 	}
 }

@@ -73,7 +73,9 @@ public class WhenStartedBrick implements Brick {
 		return new WhenStartedBrick(getSprite(), script);
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		WhenStartedBrick brick = new WhenStartedBrick(getSprite(), script);
+		brick.sprite = sprite;
+		return brick;
 	}
 }

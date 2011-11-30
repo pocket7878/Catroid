@@ -128,7 +128,9 @@ public class ChangeVolumeByBrick implements Brick, OnClickListener {
 		finishedDialog.show();
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		ChangeVolumeByBrick brick = new ChangeVolumeByBrick(getSprite(), getVolume());
+		brick.sprite = sprite;
+		return brick;
 	}
 }

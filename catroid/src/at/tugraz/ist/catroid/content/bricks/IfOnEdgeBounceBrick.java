@@ -126,8 +126,10 @@ public class IfOnEdgeBounceBrick implements Brick {
 		return new IfOnEdgeBounceBrick(sprite);
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		IfOnEdgeBounceBrick brick = new IfOnEdgeBounceBrick(getSprite());
+		brick.sprite = sprite;
+		return brick;
 	}
 
 }

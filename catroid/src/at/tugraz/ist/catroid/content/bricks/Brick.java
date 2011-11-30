@@ -42,13 +42,13 @@ public interface Brick extends Serializable {
 
 	public Sprite getSprite();
 
-	public void setSprite(Sprite sprite);
-
 	public View getView(Context context, int brickId, BaseAdapter adapter);
 
 	public View getPrototypeView(Context context);
 
 	public Brick clone();
+	
+	public Brick cloneCopySprite(Sprite sprite);
 
 	public int getRequiredResources();
 

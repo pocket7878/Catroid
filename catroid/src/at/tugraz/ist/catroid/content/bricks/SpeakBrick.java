@@ -148,8 +148,10 @@ public class SpeakBrick implements Brick {
 		return new SpeakBrick(this.sprite, this.text);
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		SpeakBrick brick = new SpeakBrick(getSprite(), this.text);
+		brick.sprite = sprite;
+		return brick;
 	}
 
 }

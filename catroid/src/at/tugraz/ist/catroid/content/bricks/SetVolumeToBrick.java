@@ -124,7 +124,9 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		SetVolumeToBrick brick = new SetVolumeToBrick(getSprite(), getVolume());
+		brick.sprite = sprite;
+		return brick;
 	}
 }

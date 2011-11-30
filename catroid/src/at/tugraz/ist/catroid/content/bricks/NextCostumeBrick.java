@@ -102,8 +102,10 @@ public class NextCostumeBrick implements Brick {
 		return view;
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		NextCostumeBrick brick = new NextCostumeBrick(getSprite());
+		brick.sprite = sprite;
+		return brick;
 	}
 
 }

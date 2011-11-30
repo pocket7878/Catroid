@@ -267,7 +267,9 @@ public class NXTPlayToneBrick implements Brick, OnDismissListener, OnClickListen
 		finishedDialog.show();
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		NXTPlayToneBrick brick = new NXTPlayToneBrick(getSprite(), frequency, duration);
+		brick.sprite = sprite;
+		return brick;
 	}
 }

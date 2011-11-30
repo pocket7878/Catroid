@@ -118,7 +118,9 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 		finishedDialog.show();
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		ChangeSizeByNBrick brick = new ChangeSizeByNBrick(getSprite(), size);
+		brick.sprite = sprite;
+		return brick;
 	}
 }

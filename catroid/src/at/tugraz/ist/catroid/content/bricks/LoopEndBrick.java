@@ -107,7 +107,9 @@ public class LoopEndBrick implements Brick {
 		return null;
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		LoopEndBrick brick = new LoopEndBrick(getSprite(), getLoopBeginBrick());
+		brick.sprite = sprite;
+		return brick;
 	}
 }

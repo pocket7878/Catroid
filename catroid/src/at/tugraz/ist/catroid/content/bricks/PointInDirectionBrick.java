@@ -103,8 +103,10 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		PointInDirectionBrick brick = new PointInDirectionBrick(getSprite(), selectedIndex);
+		brick.sprite = sprite;
+		return brick;
 	}
 
 }

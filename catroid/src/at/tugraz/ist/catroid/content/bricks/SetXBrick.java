@@ -120,7 +120,9 @@ public class SetXBrick implements Brick, OnClickListener {
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		SetXBrick brick = new SetXBrick(getSprite(), xPosition);
+		brick.sprite = sprite;
+		return brick;
 	}
 }

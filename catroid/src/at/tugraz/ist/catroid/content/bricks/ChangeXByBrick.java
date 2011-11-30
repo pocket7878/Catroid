@@ -129,7 +129,9 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		ChangeXByBrick brick = new ChangeXByBrick(getSprite(), xMovement);
+		brick.sprite = sprite;
+		return brick;
 	}
 }

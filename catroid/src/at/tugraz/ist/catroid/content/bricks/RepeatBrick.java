@@ -120,7 +120,9 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		RepeatBrick brick = new RepeatBrick(getSprite(), timesToRepeat);
+		brick.sprite = sprite;
+		return brick;
 	}
 }

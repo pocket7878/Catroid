@@ -190,7 +190,21 @@ public class PointToBrick implements Brick {
 		return new PointToBrick(sprite, pointedSprite);
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		PointToBrick brick = new PointToBrick(getSprite(), pointedSprite);
+
+		final ArrayList<Sprite> spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject()
+				.getSpriteList();
+		int spriteCounter = 0;
+
+		for (Sprite spriteFromList : spriteList) {
+			String spriteName = spriteFromList.getName();
+			if (spriteName.equals(pointedSprite.getName())) {
+				brick.spinnerPosition = spriteCounter;
+			}
+			spriteCounter++;
+		}
+		brick.sprite = sprite;
+		return brick;
 	}
 }

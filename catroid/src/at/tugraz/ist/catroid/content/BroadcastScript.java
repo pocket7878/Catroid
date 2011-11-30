@@ -68,4 +68,11 @@ public class BroadcastScript extends Script {
 	public Script clone(String name, Sprite sprite) {
 		return new BroadcastScript(name, sprite);
 	}
+
+	@Override
+	public Script cloneCopySprite(String name, Sprite sprite) {
+		BroadcastScript script = new BroadcastScript(name, sprite);
+		script.selectedMessage = this.selectedMessage;
+		return script;
+	}
 }

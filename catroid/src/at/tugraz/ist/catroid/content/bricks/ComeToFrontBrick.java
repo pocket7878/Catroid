@@ -88,7 +88,9 @@ public class ComeToFrontBrick implements Brick {
 		return View.inflate(context, R.layout.toolbox_brick_come_to_front, null);
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		ComeToFrontBrick brick = new ComeToFrontBrick(getSprite());
+		brick.sprite = sprite;
+		return brick;
 	}
 }

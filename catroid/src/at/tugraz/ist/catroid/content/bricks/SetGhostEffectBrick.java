@@ -119,7 +119,9 @@ public class SetGhostEffectBrick implements Brick, OnClickListener {
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		SetGhostEffectBrick brick = new SetGhostEffectBrick(getSprite(), getGhostEffectValue());
+		brick.sprite = sprite;
+		return brick;
 	}
 }

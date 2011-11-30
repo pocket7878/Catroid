@@ -163,4 +163,6 @@ public abstract class Script implements Serializable {
 	}
 
 	public abstract Script clone(String name, Sprite sprite);
+
+	public abstract Script cloneCopySprite(String name, Sprite sprite);
 }

@@ -114,7 +114,9 @@ public class SetSizeToBrick implements Brick, OnClickListener {
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		SetSizeToBrick brick = new SetSizeToBrick(getSprite(), size);
+		brick.sprite = sprite;
+		return brick;
 	}
 }

@@ -67,4 +67,11 @@ public class WhenScript extends Script {
 	public Script clone(String name, Sprite sprite) {
 		return new WhenScript(name, sprite);
 	}
+
+	@Override
+	public Script cloneCopySprite(String name, Sprite sprite) {
+		WhenScript script = new WhenScript(name, sprite);
+		script.action = this.action;
+		return script;
+	}
 }

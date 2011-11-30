@@ -197,7 +197,9 @@ public class GlideToBrick implements Brick, OnClickListener {
 		finishedDialog.show();
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		GlideToBrick brick = new GlideToBrick(getSprite(), xDestination, yDestination, getDurationInMilliSeconds());
+		brick.sprite = sprite;
+		return brick;
 	}
 }

@@ -71,7 +71,9 @@ public class StopAllSoundsBrick implements Brick {
 		return View.inflate(context, R.layout.toolbox_brick_stop_all_sounds, null);
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		StopAllSoundsBrick brick = new StopAllSoundsBrick(getSprite());
+		brick.sprite = sprite;
+		return brick;
 	}
 }

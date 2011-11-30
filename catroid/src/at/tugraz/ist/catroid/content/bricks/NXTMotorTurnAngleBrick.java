@@ -258,8 +258,10 @@ public class NXTMotorTurnAngleBrick implements Brick, OnClickListener {
 
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		NXTMotorTurnAngleBrick brick = new NXTMotorTurnAngleBrick(getSprite(), motor, angle);
+		brick.sprite = sprite;
+		return brick;
 	}
 
 }

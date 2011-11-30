@@ -69,7 +69,9 @@ public class ShowBrick implements Brick {
 		return new ShowBrick(getSprite());
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		ShowBrick brick = new ShowBrick(getSprite());
+		brick.sprite = sprite;
+		return brick;
 	}
 }

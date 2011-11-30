@@ -70,7 +70,9 @@ public class HideBrick implements Brick {
 		return View.inflate(context, R.layout.toolbox_brick_hide, null);
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		HideBrick brick = new HideBrick(getSprite());
+		brick.sprite = sprite;
+		return brick;
 	}
 }

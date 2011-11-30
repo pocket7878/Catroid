@@ -118,7 +118,9 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 		finishedDialog.show();
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		ChangeGhostEffectBrick brick = new ChangeGhostEffectBrick(getSprite(), getChangeGhostEffect());
+		brick.sprite = sprite;
+		return brick;
 	}
 }

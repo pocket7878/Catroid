@@ -190,7 +190,10 @@ public class BroadcastWaitBrick implements Brick {
 		return new BroadcastWaitBrick(sprite);
 	}
 
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public Brick cloneCopySprite(Sprite sprite) {
+		BroadcastWaitBrick brick = new BroadcastWaitBrick(getSprite());
+		brick.selectedMessage = selectedMessage;
+		brick.sprite = sprite;
+		return brick;
 	}
 }
