@@ -16,16 +16,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.utils.TransformationsView;
 
 public class TranslationDialog extends Dialog {
-	//TODO bitmap wird nicht in genau der mitte gezeichnet
 
 	private Point devicePosition;
 	private Point virtualPosition; // thats the position you choose within catroid stage
 	private Point minPosition;
 	private Point maxPosition;
-	private Bitmap bitmap;
 	private Bitmap originalBitmap;
 
 	private TransformationsView translationView;
@@ -34,9 +33,8 @@ public class TranslationDialog extends Dialog {
 	private EditText yEdit;
 	private Button okButton;
 
-	//TODO @ integration: CONSTS aus values und consts nehmen
-	private static final int SCREEN_HEIGHT = 800;
-	private static final int SCREEN_WIDTH = 480;
+	private static final int SCREEN_HEIGHT = Values.SCREEN_HEIGHT;
+	private static final int SCREEN_WIDTH = Values.SCREEN_WIDTH;
 	private static final int MAX_REL_COORDINATES = 1000;
 
 	public TranslationDialog(Context context, EditText viewX, EditText viewY, Button okButton) {
@@ -48,7 +46,9 @@ public class TranslationDialog extends Dialog {
 
 		//control after here
 		devicePosition = new Point(0, 0);
-		virtualPosition = new Point(0, 0);
+		virtualPosition = new Point(Integer.valueOf(xEdit.getText().toString()).intValue(), Integer.valueOf(
+				yEdit.getText().toString()).intValue());
+
 		minPosition = new Point(0, 0);
 		maxPosition = new Point(SCREEN_WIDTH, SCREEN_HEIGHT);
 	}
@@ -63,7 +63,18 @@ public class TranslationDialog extends Dialog {
 		LinearLayout layout = (LinearLayout) findViewById(R.id.drag_n_drop_area);
 		layout.addView(translationView);
 		LinearLayout layout2 = (LinearLayout) findViewById(R.id.translation_controls_layout);
+
+		TextView labelX = new TextView(context);
+		TextView labelY = new TextView(context);
+
+		labelX.setText("X:");
+		labelX.setPadding(10, 0, 10, 0);
+		labelY.setText("Y:");
+		labelY.setPadding(10, 0, 10, 0);
+
+		layout2.addView(labelX);
 		layout2.addView(xEdit);
+		layout2.addView(labelY);
 		layout2.addView(yEdit);
 		layout2.addView(okButton);
 
@@ -91,6 +102,10 @@ public class TranslationDialog extends Dialog {
 		originalBitmap = BitmapFactory.decodeResource(this.context.getResources(), R.drawable.catroid);
 		translationView.setBitmap(originalBitmap);
 
+		calculateDevicePosition();
+
+		translationView.setPosition(devicePosition.x, devicePosition.y);
+
 		minPosition.set(0, 0);
 		maxPosition.set(SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -104,21 +119,17 @@ public class TranslationDialog extends Dialog {
 		devicePosition.set(xPosition, yPosition);
 		calculateVirtualPosition();
 
-		setImagePosition();
-
 		updateEditTextViews();
 		setImagePosition();
 	}
 
 	private void setNewXPosition(int xCoord) {
-		devicePosition.x = (int) ((SCREEN_WIDTH / 2f) - ((SCREEN_WIDTH / (2f * MAX_REL_COORDINATES)) * xCoord));
-		calculateVirtualPosition();
+		virtualPosition.x = xCoord;//(int) ((SCREEN_WIDTH / 2f) - ((SCREEN_WIDTH / (2f * MAX_REL_COORDINATES)) * xCoord));
 		setImagePosition();
 	}
 
 	private void setNewYPosition(int yCoord) {
-		devicePosition.y = (int) ((SCREEN_HEIGHT / 2f) - ((SCREEN_HEIGHT / (2f * MAX_REL_COORDINATES)) * yCoord));
-		calculateVirtualPosition();
+		virtualPosition.y = yCoord;//(int) ((SCREEN_HEIGHT / 2f) - ((SCREEN_HEIGHT / (2f * MAX_REL_COORDINATES)) * yCoord));
 		setImagePosition();
 	}
 
@@ -133,13 +144,12 @@ public class TranslationDialog extends Dialog {
 	}
 
 	private void calculateDevicePosition() {
-		//TODO
-		//am beginn wenn virtuelle position angegeben wird m�ssen
-		//die device coordinaten neu berechnet werden
-	}
+		devicePosition.x = Math.round(virtualPosition.x * ((SCREEN_WIDTH / (2f * MAX_REL_COORDINATES)))
+				+ (SCREEN_WIDTH / 2f));
 
-	private void setImagePosition() {
-		//TODO what about maximal virtual position?
+		devicePosition.y = Math.round(virtualPosition.y * ((SCREEN_HEIGHT / (2f * MAX_REL_COORDINATES)))
+				+ (SCREEN_HEIGHT / 2f));
+
 		if (devicePosition.x > maxPosition.x) {
 			devicePosition.x = maxPosition.x;
 		}
@@ -153,8 +163,10 @@ public class TranslationDialog extends Dialog {
 		if (devicePosition.y < minPosition.y) {
 			devicePosition.y = minPosition.y;
 		}
+	}
 
-		calculateVirtualPosition();
+	private void setImagePosition() {
+		calculateDevicePosition();
 
 		translationView.setPosition(devicePosition.x, devicePosition.y);
 		translationView.invalidate();

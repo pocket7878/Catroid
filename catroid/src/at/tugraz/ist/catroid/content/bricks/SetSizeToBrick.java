@@ -29,6 +29,7 @@ import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.ui.dialogs.ScalingDialog;
@@ -83,6 +84,10 @@ public class SetSizeToBrick implements Brick, OnClickListener {
 		editScale.setText(String.valueOf(size));
 	}
 
+	private void updateSize(double newsize) {
+		size = newsize;
+	}
+
 	public void onClick(View view) {
 
 		final Context context = view.getContext();
@@ -95,11 +100,12 @@ public class SetSizeToBrick implements Brick, OnClickListener {
 		Button okButton = new Button(context);
 		okButton.setText("OK");
 
-		final ScalingDialog dialog = new ScalingDialog(context, input, okButton);
+		final ScalingDialog dialog = new ScalingDialog(context, input, okButton, sprite.costume.getImagePath());
 
 		okButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				size = Double.parseDouble(input.getText().toString());
+				updateSize(Double.parseDouble(input.getText().toString()));
+				Toast.makeText(context, String.valueOf(size), 100).show();
 				updateBrickView();
 				dialog.cancel();
 			}

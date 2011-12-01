@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Values;
-import at.tugraz.ist.catroid.utils.ImageEditing;
 import at.tugraz.ist.catroid.utils.TransformationsView;
 
 public class RotationDialog extends Dialog {
@@ -132,9 +131,9 @@ public class RotationDialog extends Dialog {
 
 	private void updateBitmap() {
 		if (toRight) {
-			bitmap = ImageEditing.rotateBitmap(originalBitmap, (float) angle);
+			bitmap = originalBitmap;//ImageEditing.rotateBitmap(originalBitmap, (float) angle);
 		} else {
-			bitmap = ImageEditing.rotateBitmap(originalBitmap, (float) (360 - angle));
+			bitmap = originalBitmap;//ImageEditing.rotateBitmap(originalBitmap, (float) (360 - angle));
 		}
 		rotationView.setBitmap(bitmap);
 		rotationView.invalidate();

@@ -17,6 +17,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.utils.ImageEditing;
 import at.tugraz.ist.catroid.utils.TransformationsView;
 
@@ -32,30 +33,30 @@ public class ScalingDialog extends Dialog {
 	private double scaleInPercent;
 	private double scaleFactor;
 
-	//TODO @ integration: CONSTS aus values und consts nehmen
-	private static final int SCREEN_HEIGHT = 800;
-	private static final int SCREEN_WIDTH = 480;
-	private static final int MAX_REL_COORDINATES = 1000;
+	private static final int SCREEN_HEIGHT = Values.SCREEN_HEIGHT;
+	private static final int SCREEN_WIDTH = Values.SCREEN_WIDTH;
 
 	private TransformationsView scalingView;
 	private Context context;
 	private EditText scaleEdit;
 	private Button okButton;
 
-	public ScalingDialog(Context context, EditText view, Button okButton) {
+	public ScalingDialog(Context context, EditText view, Button okButton, String imagePath) {
 		super(context, R.style.settings_activity);
 		this.context = context;
 		this.scaleEdit = view;
 		this.okButton = okButton;
+
+		//int[] dimensions = ImageEditing.getImageDimensions(imagePath);
+		//originalBitmap = ImageEditing.getBitmap(imagePath, dimensions[0], dimensions[1]);
 
 		scaleInPercent = Math.round(Double.parseDouble(view.getText().toString()));
 		scaleFactor = scaleInPercent / 100;
 
 		//has to be changed according to given parameters
 		minimumScalingFactor = 5;
-		maximumScalingFactor = 1000;
-		//scaleFactor = 1;
-		//scaleInPercent = 100;
+		maximumScalingFactor = 350;
+
 		seekbarMinimumValue = 5;
 		seekbarMaximumValue = maximumScalingFactor;
 	}
@@ -80,7 +81,6 @@ public class ScalingDialog extends Dialog {
 			}
 		});
 
-		//SEEKBAR OPTIONS
 		SeekBar scalingSeekBar = (SeekBar) findViewById(R.id.edit_scale_seekbar);
 		scalingSeekBar.setMax((int) seekbarMaximumValue);
 		scalingSeekBar.setProgress((int) scaleInPercent);
@@ -96,13 +96,9 @@ public class ScalingDialog extends Dialog {
 			}
 
 			public void onStartTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-
 			}
 
 			public void onStopTrackingTouch(SeekBar seekBar) {
-				// TODO Auto-generated method stub
-				;
 			}
 		});
 
@@ -120,6 +116,7 @@ public class ScalingDialog extends Dialog {
 				return true;
 			}
 		});
+		updateImageScale();
 		updateViews();
 	}
 
@@ -151,12 +148,13 @@ public class ScalingDialog extends Dialog {
 		double referenceY = imageHeight;
 		double chosenY = Math.abs(chosenPoint.y - centerOfScreen.y);
 
-		scaleFactor = chosenY / referenceY;
+		scaleFactor = chosenY / referenceY * 2;
 		scaleInPercent = scaleFactor * 100;
 	}
 
 	private void updateImageScale() {
-		bitmap = ImageEditing.scaleBitmap(originalBitmap, scaleFactor);
+		bitmap = ImageEditing.scaleBitmap(originalBitmap, (int) (originalBitmap.getHeight() * scaleFactor),
+				(int) (originalBitmap.getWidth() * scaleFactor));
 		scalingView.setBitmap(bitmap);
 		scalingView.invalidate();
 	}

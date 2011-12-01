@@ -120,8 +120,8 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 		okButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				xPosition = Integer.parseInt(inputX.getText().toString());
-				yPosition = Integer.parseInt(inputY.getText().toString());
+				xPosition = Integer.valueOf(inputX.getText().toString()).intValue();
+				yPosition = Integer.valueOf(inputY.getText().toString()).intValue();
 				updateBrickView();
 				dialog.cancel();
 			}
