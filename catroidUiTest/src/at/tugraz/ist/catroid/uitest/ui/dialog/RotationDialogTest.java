@@ -117,7 +117,7 @@ public class RotationDialogTest extends ActivityInstrumentationTestCase2<ScriptA
 	public void createTestProject() {
 		Project project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
-		Script script = new StartScript("script", sprite);
+		Script script = new StartScript(sprite);
 		turnLeftBrick = new TurnLeftBrick(sprite, originalAngle);
 		script.addBrick(turnLeftBrick);
 		turnRightBrick = new TurnRightBrick(sprite, originalAngle);

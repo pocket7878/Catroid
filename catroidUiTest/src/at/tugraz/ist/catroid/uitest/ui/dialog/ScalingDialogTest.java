@@ -169,7 +169,7 @@ public class ScalingDialogTest extends ActivityInstrumentationTestCase2<ScriptAc
 	public void createTestProject() {
 		Project project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
-		Script script = new StartScript("script", sprite);
+		Script script = new StartScript(sprite);
 		script.addBrick(new HideBrick(sprite));
 		setSizeBrick = new SetSizeToBrick(sprite, originalSize);
 		script.addBrick(setSizeBrick);

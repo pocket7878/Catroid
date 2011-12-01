@@ -174,7 +174,7 @@ public class TranslationDialogTest extends ActivityInstrumentationTestCase2<Scri
 	public void createTestProject() {
 		Project project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
-		Script script = new StartScript("script", sprite);
+		Script script = new StartScript(sprite);
 		script.addBrick(new HideBrick(sprite));
 		placeAtBrick = new PlaceAtBrick(sprite, originalX, originalY);
 		script.addBrick(placeAtBrick);
