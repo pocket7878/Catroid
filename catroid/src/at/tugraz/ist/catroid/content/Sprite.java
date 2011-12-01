@@ -32,6 +32,10 @@ import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.FileChecksumContainer;
 import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.content.bricks.ForeverBrick;
+import at.tugraz.ist.catroid.content.bricks.LoopBeginBrick;
+import at.tugraz.ist.catroid.content.bricks.LoopEndBrick;
+import at.tugraz.ist.catroid.content.bricks.RepeatBrick;
 
 public class Sprite implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -101,9 +105,9 @@ public class Sprite implements Serializable {
 		int numberOfScripts = spriteToCopy.scriptList.size();
 		for (int scriptCounter = 0; scriptCounter < numberOfScripts; scriptCounter++) {
 			ArrayList<Brick> brickList = new ArrayList<Brick>();
-
 			int numberOfBricks = spriteToCopy.scriptList.get(scriptCounter).getBrickList().size();
 			this.scriptList.get(scriptCounter).setBrickList(null);
+
 			for (int brickCounter = 0; brickCounter < numberOfBricks; brickCounter++) {
 				Brick brick = spriteToCopy.scriptList.get(scriptCounter).getBrickList().get(brickCounter)
 						.cloneCopySprite(this);
@@ -118,6 +122,39 @@ public class Sprite implements Serializable {
 		this.costume = new Costume(this);
 		isPaused = false;
 		isFinished = false;
+		checkLoopsCopy(spriteToCopy);
+	}
+
+	public void checkLoopsCopy(Sprite spriteToCopy) {
+		int brickBegin = 0;
+		int brickEnd = 0;
+		Script scriptCopied = null;
+
+		for (Script scriptToCopy : spriteToCopy.scriptList) {
+
+			scriptCopied = this.getScript(spriteToCopy.getScriptIndex(scriptToCopy));
+			for (Brick element : scriptToCopy.getBrickList()) {
+
+				if (element.getClass() == RepeatBrick.class) {
+					brickBegin = scriptToCopy.getBrickList().indexOf(element);
+					brickEnd = scriptToCopy.getBrickList().indexOf(((LoopBeginBrick) element).getLoopEndBrick());
+
+					LoopEndBrick loopEndBrick = (LoopEndBrick) scriptCopied.getBrick(brickEnd);
+					((LoopBeginBrick) scriptCopied.getBrickList().get(brickBegin)).setLoopEndBrick(loopEndBrick);
+					loopEndBrick.setLoopBeginBrick((LoopBeginBrick) element);
+				}
+
+				if (element.getClass() == ForeverBrick.class) {
+					brickBegin = scriptToCopy.getBrickList().indexOf(element);
+					brickEnd = scriptToCopy.getBrickList().indexOf(((LoopBeginBrick) element).getLoopEndBrick());
+
+					LoopEndBrick loopEndBrick = (LoopEndBrick) scriptCopied.getBrick(brickEnd);
+					((LoopBeginBrick) scriptCopied.getBrickList().get(brickBegin)).setLoopEndBrick(loopEndBrick);
+					loopEndBrick.setLoopBeginBrick((LoopBeginBrick) element);
+				}
+			}
+		}
+
 	}
 
 	public void startWhenScripts(String action) {

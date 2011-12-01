@@ -93,6 +93,10 @@ public class LoopEndBrick implements Brick {
 		return loopBeginBrick;
 	}
 
+	public void setLoopBeginBrick(LoopBeginBrick brick) {
+		this.loopBeginBrick = brick;
+	}
+
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		return inflater.inflate(R.layout.toolbox_brick_loop_end, null);
