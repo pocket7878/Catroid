@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.tugraz.ist.catroid.tutorial;
+package at.tugraz.ist.catroid.tutorial.state;
 
 import java.util.HashMap;
 
@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.tutorial.Tutor;
 
 /**
  * @author User
@@ -67,7 +68,7 @@ public class StateIdle implements State {
 		if (!instances.containsKey(tutorType)) {
 			instances.put(tutorType, new StateIdle(controller, resources, tutorType));
 		}
-		controller.setDisappeared(false);
+
 		return (instances.get(tutorType));
 	}
 

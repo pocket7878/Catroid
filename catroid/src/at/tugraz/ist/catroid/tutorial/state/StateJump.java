@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.tugraz.ist.catroid.tutorial;
+package at.tugraz.ist.catroid.tutorial.state;
 
 import java.util.HashMap;
 
@@ -25,6 +25,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.tutorial.Tutor;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
 
 /**
  * @author User
@@ -103,7 +105,6 @@ public class StateJump implements State {
 				controller.changeState(StateIdle.enter(controller, resources, tutorType));
 				Tutorial tut = Tutorial.getInstance(null);
 				tut.setNotification("JumpDone");
-				//resetState();
 			}
 		}
 		return (bitmaps_portal[currentFrame]);

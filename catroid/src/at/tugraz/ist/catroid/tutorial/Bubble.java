@@ -38,7 +38,9 @@ import android.view.Display;
  * @author User
  * 
  */
-public class TutorBubble {
+public class Bubble {
+
+	boolean pause = false;
 
 	NinePatchDrawable mSpeechBubble;
 	Paint textPaint;
@@ -110,7 +112,7 @@ public class TutorBubble {
 		}
 	}
 
-	TutorBubble(String bubbleText, Drawable bubbleDrawable, int posxTutor, int posyTutor, Context context) {
+	Bubble(String bubbleText, Drawable bubbleDrawable, int posxTutor, int posyTutor, Context context) {
 
 		bubbleTextWords = new Vector<String>();
 		bubbleTextLines = new Vector<String>();
@@ -223,6 +225,7 @@ public class TutorBubble {
 			}
 
 		}
+
 		if (bubbleTextLines.size() < maxLines) {
 			drawText(canvas, bubbleTextLines.size());
 		}
@@ -230,7 +233,6 @@ public class TutorBubble {
 	}
 
 	public void drawText(Canvas canvas, int limit) {
-
 		for (int i = 0; i < limit; i++) {
 			if (i == currentLine) {
 				int charsToShow = currentChar;
@@ -303,11 +305,4 @@ public class TutorBubble {
 		textPaint.setTextAlign(Align.LEFT);
 	}
 
-	boolean pause = false;
-
-	public void setPause() {
-
-		pause = true;
-
-	}
 }

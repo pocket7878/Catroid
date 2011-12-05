@@ -91,6 +91,7 @@ public class MainMenuActivity extends Activity {
 		super.onPostCreate(savedInstanceState);
 		activityHelper.setupActionBar(true, null);
 		activityHelper.addActionButton(R.id.btn_action_play, R.drawable.ic_play_black, new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				if (projectManager.getCurrentProject() != null) {
 					Intent intent = new Intent(MainMenuActivity.this, StageActivity.class);

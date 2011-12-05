@@ -16,10 +16,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.tugraz.ist.catroid.tutorial;
+package at.tugraz.ist.catroid.tutorial.state;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.util.Log;
+import at.tugraz.ist.catroid.tutorial.Tutor;
 
 /**
  * @author User
@@ -29,7 +31,7 @@ public class StateController {
 
 	private State state;
 	public Tutor tutor;
-	public boolean disappeared;
+	private boolean disappeared;
 
 	public StateController(Resources resources, Tutor tutor) {
 		state = StateIdle.enter(this, resources, tutor.tutorType);
@@ -42,6 +44,7 @@ public class StateController {
 	}
 
 	public void changeState(State state) {
+		Log.i("catroid", "change State to: " + state.getStateName() + "on Tutor: " + tutor.tutorType.toString());
 		this.state = state;
 		this.state.resetState();
 	}

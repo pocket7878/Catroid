@@ -6,12 +6,12 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.view.SurfaceHolder;
 
-public class TutorialThread extends Thread {
+public class AnimationThread extends Thread {
 	private TutorialOverlay mOverlay;
 	private SurfaceHolder mHolder;
 	private volatile boolean mRun = false;
 
-	public TutorialThread(TutorialOverlay overlay) {
+	public AnimationThread(TutorialOverlay overlay) {
 		mOverlay = overlay;
 		mHolder = mOverlay.getHolder();
 	}

@@ -18,14 +18,37 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
-import android.graphics.Bitmap;
+import java.io.InputStream;
 
-public interface State {
+import android.content.Context;
+import android.content.res.AssetManager;
 
-	public Bitmap updateAnimation(Tutor.TutorType tutorType);
+import com.thoughtworks.xstream.XStream;
 
-	public void resetState();
+/**
+ * @author gnu
+ * 
+ */
+public class XmlHandler {
+	private LessonCollection lessonCollection;
 
-	public String getStateName();
+	XmlHandler(Context context) {
+		XStream xstream = new XStream();
+		AssetManager assetManager = context.getAssets();
+		try {
+			InputStream inputStream = assetManager.open("tutorial.xml");
+			lessonCollection = (LessonCollection) xstream.fromXML(inputStream);
+		} catch (Exception e) {
+		}
+
+		// Do no irgendwen vom Kernteam fragen, wieso XStream in allen Arrays den ersten 
+		// Eintrag dupliziert.
+
+		lessonCollection.cleanAfterXML();
+	}
+
+	LessonCollection getLessonCollection() {
+		return (lessonCollection);
+	}
 
 }

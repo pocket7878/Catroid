@@ -23,8 +23,15 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.widget.Toast;
+import android.util.Log;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.tutorial.state.StateAppear;
+import at.tugraz.ist.catroid.tutorial.state.StateController;
+import at.tugraz.ist.catroid.tutorial.state.StateDisappear;
+import at.tugraz.ist.catroid.tutorial.state.StateIdle;
+import at.tugraz.ist.catroid.tutorial.state.StateJump;
+import at.tugraz.ist.catroid.tutorial.state.StatePoint;
+import at.tugraz.ist.catroid.tutorial.state.StateTalk;
 
 public class Tutor {
 	static public enum TutorType {
@@ -41,24 +48,22 @@ public class Tutor {
 	private int framePeriod; // milliseconds between each frame (1000/fps)
 	private int fps;
 	private long frameTicker; // the time of the last frame update
-	TutorBubble tutorBubble;
+	Bubble tutorBubble;
 
 	Resources resources;
 	Context context;
 	int xPortTo = 0;
 	int yPortTo = 0;
-	boolean isAppeared;
 	boolean facingFlipped;
 	Matrix flipMatrix;
 
 	StateController controller;
-	TutorType tutorType;
+	public TutorType tutorType;
 
 	public Tutor(Resources resources, Context context, TutorType tutorType) {
 		this.tutorType = tutorType;
 		this.resources = resources;
 		this.context = context;
-		isAppeared = false;
 		fps = 10;
 		currentFrame = 0;
 		framePeriod = 1000 / fps;
@@ -68,6 +73,10 @@ public class Tutor {
 	}
 
 	public void update(long gameTime) {
+		if (controller.isDisappeared()) {
+			return;
+		}
+
 		if (gameTime > frameTicker + framePeriod) {
 			frameTicker = gameTime;
 			bitmap = controller.updateAnimation(tutorType);
@@ -99,6 +108,15 @@ public class Tutor {
 		yPortTo = y;
 	}
 
+	public void idle() {
+		if (tutorBubble != null) {
+			tutorBubble.animationFinished = true;
+			tutorBubble = null;
+		}
+		controller.setDisappeared(true);
+		controller.changeState(StateIdle.enter(controller, resources, tutorType));
+	}
+
 	public void point() {
 		controller.changeState(StatePoint.enter(controller, resources, tutorType));
 	}
@@ -109,26 +127,28 @@ public class Tutor {
 	}
 
 	public void appear(int x, int y) {
-		controller.changeState(StateAppear.enter(controller, resources, tutorType));
+		Log.i("catroid", "Appear wurde wirklich aufgerufen");
 		this.x = x;
 		this.y = y;
-		isAppeared = true;
+		controller.changeState(StateAppear.enter(controller, resources, tutorType));
+		controller.setDisappeared(false);
+		//isAppeared = true;
 	}
 
 	public void disappear() {
 		controller.changeState(StateDisappear.enter(controller, resources, tutorType));
 		//TODO: Das erst wenn Animation fertig
-		isAppeared = false;
+		//isAppeared = false;
 	}
 
 	public void say(String text) {
 		controller.changeState(StateTalk.enter(controller, resources, tutorType));
 
 		if (tutorType.equals(TutorType.DOG_TUTOR)) {
-			tutorBubble = new TutorBubble(text, resources.getDrawable(R.drawable.bubble_up), this.x, this.y, context);
+			tutorBubble = new Bubble(text, resources.getDrawable(R.drawable.bubble_up), this.x, this.y, context);
 
 		} else if (tutorType.equals(TutorType.CAT_TUTOR)) {
-			tutorBubble = new TutorBubble(text, resources.getDrawable(R.drawable.bubble), this.x, this.y, context);
+			tutorBubble = new Bubble(text, resources.getDrawable(R.drawable.bubble), this.x, this.y, context);
 		}
 	}
 
@@ -159,14 +179,8 @@ public class Tutor {
 
 	}
 
-	public TutorBubble getTutorBubble() {
+	public Bubble getTutorBubble() {
 		return tutorBubble;
-	}
-
-	public void pause() {
-		//		tutorBubble.setPause();
-		Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
-		toast.show();
 	}
 
 }

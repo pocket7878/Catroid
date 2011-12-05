@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.tugraz.ist.catroid.tutorial;
+package at.tugraz.ist.catroid.tutorial.state;
 
 import java.util.HashMap;
 
@@ -25,9 +25,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.tutorial.Tutor;
 
 /**
- * @author User
+ * @author Max
  * 
  */
 public class StatePoint implements State {
@@ -38,7 +39,6 @@ public class StatePoint implements State {
 	private StateController controller;
 	Resources resources;
 	private static HashMap<Tutor.TutorType, StatePoint> instances;
-	//private static StatePoint instance;
 	boolean animationDirectionToBody;
 
 	@Override

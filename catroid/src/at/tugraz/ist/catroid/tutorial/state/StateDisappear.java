@@ -16,7 +16,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.tugraz.ist.catroid.tutorial;
+package at.tugraz.ist.catroid.tutorial.state;
 
 import java.util.HashMap;
 
@@ -25,38 +25,47 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.tutorial.Tutor;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
 
 /**
  * @author User
  * 
  */
-public class StateAppear implements State {
+public class StateDisappear implements State {
+	public String stateName = this.getClass().getSimpleName();
 	private StateController controller;
-	private static HashMap<Tutor.TutorType, StateAppear> instances;
+	private static HashMap<Tutor.TutorType, StateDisappear> instances;
 	private Resources resources;
 	Bitmap bitmaps_portal[];
 
 	int currentFrame;
 	int frameCount;
-	Tutor.TutorType tutorType;
 
-	private StateAppear(StateController controller, Resources resources, Tutor.TutorType tutorType) {
+	@Override
+	public String getStateName() {
+		return (this.getClass().getSimpleName());
+	}
+
+	private StateDisappear(StateController controller, Resources resources, Tutor.TutorType tutorType) {
 		this.controller = controller;
 		this.resources = resources;
 		bitmaps_portal = new Bitmap[5];
+
 		if (tutorType.compareTo(Tutor.TutorType.CAT_TUTOR) == 0) {
-			bitmaps_portal[0] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_portal_5);
-			bitmaps_portal[1] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_portal_4);
+			bitmaps_portal[0] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_portal_1);
+			bitmaps_portal[1] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_portal_2);
 			bitmaps_portal[2] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_portal_3);
-			bitmaps_portal[3] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_portal_2);
-			bitmaps_portal[4] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_portal_1);
+			bitmaps_portal[3] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_portal_4);
+			bitmaps_portal[4] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_portal_5);
 		} else {
-			bitmaps_portal[0] = BitmapFactory.decodeResource(resources, R.drawable.tutor_dog_portal_1);
-			bitmaps_portal[1] = BitmapFactory.decodeResource(resources, R.drawable.tutor_dog_portal_2);
+			bitmaps_portal[0] = BitmapFactory.decodeResource(resources, R.drawable.tutor_dog_portal_5);
+			bitmaps_portal[1] = BitmapFactory.decodeResource(resources, R.drawable.tutor_dog_portal_4);
 			bitmaps_portal[2] = BitmapFactory.decodeResource(resources, R.drawable.tutor_dog_portal_3);
-			bitmaps_portal[3] = BitmapFactory.decodeResource(resources, R.drawable.tutor_dog_portal_4);
-			bitmaps_portal[4] = BitmapFactory.decodeResource(resources, R.drawable.tutor_dog_portal_5);
+			bitmaps_portal[3] = BitmapFactory.decodeResource(resources, R.drawable.tutor_dog_portal_2);
+			bitmaps_portal[4] = BitmapFactory.decodeResource(resources, R.drawable.tutor_dog_portal_1);
 		}
+
 		resetState();
 	}
 
@@ -66,20 +75,14 @@ public class StateAppear implements State {
 		frameCount = 5;
 	}
 
-	@Override
-	public String getStateName() {
-		return (this.getClass().getSimpleName());
-	}
-
 	public static State enter(StateController controller, Resources resources, Tutor.TutorType tutorType) {
 		Log.i("catroid", "State Appear");
 		if (instances == null) {
-			instances = new HashMap<Tutor.TutorType, StateAppear>();
+			instances = new HashMap<Tutor.TutorType, StateDisappear>();
 		}
 		if (!instances.containsKey(tutorType)) {
-			instances.put(tutorType, new StateAppear(controller, resources, tutorType));
+			instances.put(tutorType, new StateDisappear(controller, resources, tutorType));
 		}
-		controller.setDisappeared(false);
 		return (instances.get(tutorType));
 	}
 
@@ -88,12 +91,12 @@ public class StateAppear implements State {
 		if (currentFrame < (frameCount - 1)) {
 			currentFrame++;
 		} else {
-			Log.i("catroid", "State Appear: Last Image");
+			controller.setDisappeared(true);
+			//resetState(); nit so gut...
 			controller.changeState(StateIdle.enter(controller, resources, tutorType));
 			Tutorial tut = Tutorial.getInstance(null);
-			tut.setNotification("AppearDone");
-			controller.setDisappeared(false);
-			//resetState();
+			tut.setNotification("DisappearDone");
+
 		}
 		return (bitmaps_portal[currentFrame]);
 	}
