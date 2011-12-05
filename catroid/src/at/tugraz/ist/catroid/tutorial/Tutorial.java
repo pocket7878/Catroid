@@ -70,12 +70,13 @@ public class Tutorial {
 		if (con != null) {
 			context = con;
 		}
-
 		if (xmlHandler == null) {
 			xmlHandler = new XmlHandler(context);
+
+		}
+		if (lessonCollection == null) {
 			lessonCollection = xmlHandler.getLessonCollection();
 		}
-
 		if (tutor == null) {
 			tutor = new Tutor(context.getResources(), context, Tutor.TutorType.CAT_TUTOR);
 		}
@@ -169,6 +170,7 @@ public class Tutorial {
 
 	public boolean continueTutorial() {
 		if (tutorialActive) {
+
 			lessonCollection.setTutorialOverlay(tutorialOverlay);
 			do {
 				String notification = lessonCollection.executeTask();
@@ -180,10 +182,10 @@ public class Tutorial {
 					}
 				}
 			} while (lessonCollection.forwardStep() && tutorialThreadRunning);
-			lessonCollection.nextLesson();
 		}
 
 		if (tutorialThreadRunning) {
+			lessonCollection.nextLesson();
 			stopTutorial();
 		}
 
