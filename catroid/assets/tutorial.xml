@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<at.tugraz.ist.catroid.tutorial.LessonCollection>
+  <lessonArray>
+    <at.tugraz.ist.catroid.tutorial.Lesson>
+      <lessonName>Daumenkino</lessonName>
+      <lessonContent>
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+          <sleepTime>1000</sleepTime>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+          <tutorType>DOG</tutorType>
+          <x>200</x>
+          <y>300</y>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+          <sleepTime>1000</sleepTime>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+          <tutorType>DOG</tutorType>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+          <sleepTime>1000</sleepTime>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+          <notificationType>CURRENT_PROJECT_BUTTON</notificationType>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+        
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+          <sleepTime>10000</sleepTime>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+          <tutorType>CAT</tutorType>
+          <x>200</x>
+          <y>300</y>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+          <tutorType>CAT</tutorType>
+		  <message>test 123 debug blabla bullshit bingo extended extreme uhuhuh</message>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+          <sleepTime>10000</sleepTime>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+          <sleepTime>10000</sleepTime>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+          <notificationType>ADD_SPRITE_BUTTON</notificationType>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+        
+      </lessonContent>
+      <lessonID>0</lessonID>
+      <currentStep>0</currentStep>
+    </at.tugraz.ist.catroid.tutorial.Lesson>
+    <at.tugraz.ist.catroid.tutorial.Lesson>
+      <lessonName>Multithreading</lessonName>
+      <lessonContent>
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+          <tutorType>CAT</tutorType>
+          <x>100</x>
+          <y>300</y>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear reference="../at.tugraz.ist.catroid.tutorial.tasks.TaskAppear"/>
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+          <tutorType>CAT</tutorType>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+         <at.tugraz.ist.catroid.tutorial.tasks.TaskDisappear>
+          <tutorType>CAT</tutorType>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskDisappear>
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+          <tutorType>CAT</tutorType>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+      </lessonContent>
+      <lessonID>1</lessonID>
+      <currentStep>0</currentStep>
+    </at.tugraz.ist.catroid.tutorial.Lesson>
+    <at.tugraz.ist.catroid.tutorial.Lesson>
+      <lessonName>Daemonenaustreibung mit Catroid</lessonName>
+      <lessonContent>
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+          <tutorType>CAT</tutorType>
+          <x>100</x>
+          <y>300</y>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear reference="../at.tugraz.ist.catroid.tutorial.tasks.TaskAppear"/>
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+          <tutorType>DOG</tutorType>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+      </lessonContent>
+      <lessonID>2</lessonID>
+      <currentStep>0</currentStep>
+    </at.tugraz.ist.catroid.tutorial.Lesson>
+  </lessonArray>
+  <currentLesson>0</currentLesson>
+</at.tugraz.ist.catroid.tutorial.LessonCollection>
