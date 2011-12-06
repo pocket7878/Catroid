@@ -61,6 +61,12 @@
 	<string name="pref_category_mindstorm">Mindstorm settings</string>
 	<string name="pref_enable_ms_bricks">Enable Mindstorm bricks</string>
 	<string name="pref_descr_ms_bricks">These bricks are used to control Mindstorm robots.</string>
+	<string name="pref_category_drone">Drone settings</string>
+	<string name="pref_enable_drone_bricks">Enable Drone bricks</string>
+	<string name="pref_descr_drone_bricks">These bricks are used to control Parrots Drone.</string>
+	<string name="pref_plugin_drone">Drone Plugin Status</string>
+	<string name="pref_dsl_timeout_drone">Move Security Timeout</string>
+	<string name="pref_descr_dsl_timeout_drone">Seconds after Drone stops movements if no commands are sent. We recomend a value of 5, to avoid fly aways because of programming errors.</string>
 	
 		
     <!-- About Dialog -->
@@ -320,5 +326,98 @@
 	
 	<string name="number_to_small">Value is too small!</string>
 	<string name="number_to_big">Value is too big!</string>
-		
+	
+	<!-- Drone Strings -->
+    <string name="drone_choose_animation_title">choose animation</string>
+    <string name="drone_brick_led_animation">play led-animation</string>
+    <string name="drone_brick_take_off">take off</string>
+    <string name="drone_brick_land">land</string>
+    <string name="drone_brick_move_animation">play move-animation</string>
+    <string name="drone_for">for</string>
+    <string name="drone_choose_animation_frequency_title">choose velocity</string>
+    <string name="drone_brick_move">fly</string>
+    <string name="drone_choose_movement_title">choose movement</string>
+    <string name="drone_move_to">fly ...</string>
+    <string name="drone_seconds">seconds</string>
+    <string name="drone_to">to</string>
+    <string name="select_time_title">choose seconds</string>
+    <string name="drone_enable_wifi_err">Wifi could not be enabled.</string>
+    <string name="drone_connect_drone_err">A connection to the drone could not be established. Unpair?</string>
+    <string name="drone_connect_drone_success">Connected to drone!</string>
+    <string name="drone_wifi_connection_title">Drone connection-establishment</string>
+    <string name="drone_wifi_status_wifi">Activate Wifi.</string>
+    <string name="drone_wifi_status_wifi_scan_for_drone">Search Drone.</string>
+    <string name="drone_wifi_status_connect_drone">Connect to Drone.</string>
+    <string name="drone_wifi_status_get_navdata">Wait for NavDaten.</string>
+    <string name="drone_bt_wifi_start">Start</string>
+    <string name="drone_finding_drone_err">could not find drone. Turned on? Unpair?</string>
+    <string name="drone_wifi_connection_description">Check that the drone is turned on and wait until the leds flash green.\nAfterwards click on &quot;Start&quot; to establish a connection to the drone. This can last a few seconds.</string>
+    <string name="drone_connect_drone_cancel">Connection-establishment to drone cancelled.</string>
+    <string name="drone_wifi_status_enabling">activate Wifi...</string>
+    <string name="drone_wifi_status_enabled">Wifi activated.</string>
+    <string name="drone_wifi_status_scan_for_drone_scanning">search Drone...</string>
+    <string name="drone_wifi_status_scan_for_drone_scanned">Drone found.</string>
+    <string name="drone_wifi_status_connect_drone_connecting">connect to Drone...</string>
+    <string name="drone_wifi_status_connect_drone_connected">Connected to Drone.</string>
+    <string name="drone_wifi_status_get_navdata_getting">wait for NavDatas...</string>
+    <string name="drone_wifi_status_get_navdata_got">NavDatas received.</string>
+    <string name="drone_brick_change_flyingstate">change flying mode</string>
+    <string name="drone_choose_flyingstate_title">choose flying mode</string>
+    <string name="drone_wifi_status_check_config">Check config.</string>
+    <string name="drone_wifi_status_checking_config">checking config...</string>
+    <string name="drone_wifi_status_checked_config">Config checked.</string>
+    <string name="drone_wifi_status_check_firmware">Check firmware.</string>
+    <string name="drone_wifi_status_checking_firmware">checking firmware...</string>
+    <string name="drone_wifi_status_checked_firmware">Firmware checked.</string>
+    <string name="drone_firmware_err">A connection to the drone was not established. The drone has an old firmware that is not supported. Go back to the main menu &gt; Settings &gt; Drone. Follow the instructions to make a firmware update.</string>
+    <string name="drone_navdata_err">Could not receive NavDatas from the drone. Try again or switch the drone off-on.</string>
+    <string name="drone_config_err">An error during configuration occured. Try again or switch the drone off-on.</string>
+    <string name="drone_scan_err">An error during scanning the networks occured. No wifi-networks found.</string>
+    <string name="drone_infinite">infinitely</string>
+    <string name="drone_brick_stop_move">stop fly-movements</string>
+    <string name="drone_brick_config">change config</string>
+    <string name="drone_choose_config_key_title">choose configuration</string>
+    <string name="drone_choose_config_value_title">choose value</string>
+    <string name="drone_speed">Speed: %</string>
+    <string name="drone_pick_drone">Pick your drone</string>
+    <string name="drone_move_forward">forward</string>
+    <string name="drone_move_backward">backward</string>
+    <string name="drone_move_left">left</string>
+    <string name="drone_move_right">right</string>
+    <string name="drone_move_downward">downward</string>
+    <string name="drone_move_upward">upward</string>
+    <string name="drone_move_rotation_left">rotation\nleft</string>
+    <string name="drone_move_rotation_right">rotation\nright</string>
+    <string name="drone_not_installed_addon">The plugin for running Drone projects is not installed. Go to Seetings and install it.</string>
+    <string name="drone_terms_of_use_title">Terms of Use</string>
+    <string name="drone_terms_of_use">Drone is a registered trademark of Parrot SA.. Catroid and Drone Catroid Plugin is open source software licensed under the GNU AGPL v3 and not associated, affiliated, endorsed, or approved by Parrot SA.. The software is strictly experimental and untested, it is provided "as is", without fitness for a particular purpose. In no event shall the authors or copyright holders of the software, Catroid or software created with Catroid be liable for any claim, damages, injuries or other liability, arising from, out of or in connection with the software or the use or other dealings in the software.</string>
+    <string name="drone_tof_not_show_again">Never show again.</string>
+    <string name="drone_abort_install">Abortion</string>
+    <string name="drone_download_plugin_button">Start Download</string>
+    <string name="drone_install_plugin">Install Drone Plugin</string>
+    <string name="drone_not_connected_to_internet">Not connected to internet.</string>
+    <string name="drone_donwload_success">Successfully downloaded plugin.</string>
+    <string name="drone_donwload_fail">Plugin donwload failed.</string>
+    <string name="drone_brick_start_video">start video</string>
+    <string name="drone_brick_stop_video">stop video</string>
+    <string name="drone_brick_save_snapshot">save snapshot</string>
+    <string name="drone_brick_start_video_recorder">start video-recorder</string>
+    <string name="drone_brick_stop_video_recorder">stop video-recorder</string>
+    <string name="drone_accept_termsofuse_button">Accept</string>
+    <string name="drone_abort_termsofuse_button">Abort</string>
+    <string name="drone_firmware_update_inet">Please connect with the Internet!</string>
+    <string name="drone_firmware_update_D"></string>
+    <string name="drone_firmware_update_drone">Please connect to the Drone!</string>
+    <string name="drone_firmware_update_drone_header">Drone Firmware Update</string>
+    <string name="drone_firmware_update_startsettingsboutton">Start Network Settings</string>
+    <string name="drone_firmware_update_finish">Finish Update</string>
+    <string name="drone_firmware_update_start_update">Start</string>
+    <string name="drone_firmware_update_cancel">Cancel</string>
+	<string name="drone_plugin_installed">Drone Plugin for handling Parrots Drone is installed.</string>
+	<string name="drone_plugin_not_installed">Drone Plugin for handling Parrots Drone is not installed. Click to download and install.</string>
+	<string name="drone_category">Drone</string>
+	<string name="drone_processing">processing ...</string>
+	<string name="drone_settings_dsl_only_numbers">Only valid positive integers are allowed.</string>
+	<string name="drone_firmware_forceupdate">Force Firmwareupate to 1.7.4!</string>
+	
 </resources>
