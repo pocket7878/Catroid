@@ -53,7 +53,6 @@ public class Tutorial {
 	private Dialog dialog;
 	WindowManager windowManager;
 	static LessonCollection lessonCollection;
-
 	private static Tutor tutor;
 	private static Tutor tutor_2;
 
@@ -97,8 +96,8 @@ public class Tutorial {
 
 		//final CharSequence[] items = { "Red", "Green", "Blue" };
 		ArrayList<String> lessons = lessonCollection.getLessons();
-		final CharSequence[] items = new CharSequence[lessons.size()];
-		for (int i = 0; i < lessons.size(); i++) {
+		final CharSequence[] items = new CharSequence[lessonCollection.getLastPossibleLessonNumber() + 1];
+		for (int i = 0; i < lessonCollection.getLastPossibleLessonNumber() + 1; i++) {
 			items[i] = lessons.get(i);
 		}
 
@@ -107,6 +106,7 @@ public class Tutorial {
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int item) {
+				lessonCollection.switchToLesson(item);
 				resumeTutorial();
 			}
 		});
