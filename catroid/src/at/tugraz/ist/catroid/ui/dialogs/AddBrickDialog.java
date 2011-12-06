@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Dialog;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -87,6 +88,7 @@ import at.tugraz.ist.catroid.content.bricks.TurnRightBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
 import at.tugraz.ist.catroid.content.bricks.WhenBrick;
 import at.tugraz.ist.catroid.content.bricks.WhenStartedBrick;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.adapter.PrototypeBrickAdapter;
 
@@ -194,7 +196,8 @@ public class AddBrickDialog extends Dialog {
 	@Override
 	protected void onStart() {
 		super.onStart();
-
+		Tutorial.getInstance(null).setDialog(this);
+		Log.i("faxxe", " onStart() im AddBrickDialog");
 		listView = (ListView) findViewById(R.id.toolboxListView);
 		setupBrickMap(ProjectManager.getInstance().getCurrentSprite());
 		adapter = new PrototypeBrickAdapter(this.scriptTabActivity, brickMap.get(category));
@@ -261,6 +264,10 @@ public class AddBrickDialog extends Dialog {
 				}
 				scriptTabActivity.dismissDialog(ScriptTabActivity.DIALOG_ADD_BRICK);
 				scriptTabActivity.dismissDialog(ScriptTabActivity.DIALOG_BRICK_CATEGORY);
+
+				Tutorial tutorial = Tutorial.getInstance(scriptTabActivity.getApplicationContext());
+				tutorial.setNotification("DialogDone");
+				//				Tutorial.getInstance(null).setDialog(null);
 			}
 		});
 	}

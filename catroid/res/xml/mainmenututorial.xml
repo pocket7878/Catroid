@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MainMenuTutorial>
+	<cat>foo</cat>
+	<flip>foo</flip>
+	<appear>30,430</appear>
+	
+	<cat>foo</cat>
+	<say>Willkommen bei Catroid! Du bist sicher der neue Entwickler für kommende Projekte. 
+	Darf ich mich vorstellen ich bin Simon, deine persönliche Assistentenkatze. Nun zu Beginn, damit du 
+	weist worum es hier überhaupt geht. Catroid ist eine On-Device Programmiersprache für Android-Endgeräte.
+	Also das bedeutet wir können auf jedem Gerät, auf dem das Android-Betriebssystem installiert ist, unsere
+	eigenen Programme schreiben. Catroid basiert auf der Scratch Programmiersprache der berühmten technischen
+	Universität MIT (Massacchusetts Institute of Technology) aus den USA. In Catroid kannst du deine 
+	eigenen Programme erstellen, diese im Internet veröffentlichen und natürlich auch die Projekte anderer 
+	Catroid-User bewundern. So genug mit meinem Gerede, meine Devise ist ganz klar Learning by Doing.
+	Also wird es Zeit ein erstes kleines Projekt zu erstellen. Dazu	klicke ... </say>
+	
+	<dog>foo</dog>
+	<appear>350,400</appear>
+	<dog>foo</dog>
+	<say>Hey was ist denn hier los??? Los raus mit der Sprache!! Ohne mich geht hier aber gar nichts. Ich 
+	bin Gerry, grrrr und ich mag es gar nicht wenn etwas hinter meinem Rücken passiert. </say>
+	<cat>foo</cat>
+	<say>Ganz ruhig, Gerry. Wir machen hier nichts was du nicht bereits wissen solltest. Du weist doch 
+	bereits wie Catroid funktioniert und wie du darin deine eigenen Programme schreibst, das hab ich dir 
+	doch letztens schon gezeigt.</say>
+	<dog>foo</dog>
+	<say>Wirklich? Das glaub ich nicht. Du hast mir nur gezeigt, wie ich auf meinem Smartphone meine eigenen
+	Spiele machen kann. Da war nichts über Android dabei, ganz bestimmt nicht. Daran könnte
+	ich mich erinnern wenn du mir gezeigt hättest, wie ich meinen eigenen kleinen Roboter programmieren
+	kann.</say>
+	<cat>foo</cat>
+	<say>Ach Gerry, da hast du jetzt aber was falsch verstanden. Mit Android meine ich nicht einen Roboter
+	sondern das Betriebssystem, dass auch auf deinem Handy installiert ist. Spiele sind ein gutes
+	Beispiel dafür, was mit Catroid möglich ist. Na gut, bleib hier und pass gut auf. Ich muss es unserem
+	neuen Programmierer sowieso noch erklären. So also gut, wo fangen wir an? Schauen wir uns mal an wie ein
+	Projekt in Catroid aussehen kann. Dafür hab ich bereits ein Projekt erstellt. Nun klicke auf 
+	"aktuelles Projekt", damit wir uns es ansehen können.</say>
+	
+	<waitfor>ProjectManager</waitfor>
+</MainMenuTutorial>
+ 

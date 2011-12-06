@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProjectTutorial>
+	
+	<dog>foo</dog>
+	<appear>350,400</appear>
+	<say>Oooohhh wo sind wir denn hier gelandet? Sieht ja interessant aus.</say>
+	<cat>foo</cat>
+	<flip>foo</flip>
+	<appear>30,430</appear>
+	<say>Gut gemacht! Soweit so gut. Hier nun die Übersicht über das Default Projekt, das ich hier bereits 
+	begonnen habe. In diesem Fall gibt es zwei Objekte, einmal der Hintergrund und einmal die Catroid-Katze.
+	Unter Objekten verstehen wir alles, was wir in dieses Projekt einfügen und verändern können.
+	Hier kannst du alle möglichen Objekte zu deinem Programm hinzufügen und auch wieder löschen. Fürs erste
+	ist dies aber nicht so wichtig. Zuerst sehen wir uns mal an, was wir mit dem Objekten machen können. 
+	Hier ist schon mal ein Hintergrund, der reicht uns einmal für den Anfang. Klicke auf "Hintergrund", 
+	dann können wir den einmal bearbeiten.</say>
+	<waitfor>ScriptTab</waitfor>
+</ProjectTutorial>

@@ -2,12 +2,12 @@
  *  Catroid: An on-device graphical programming language for Android devices
  *  Copyright (C) 2010-2011 The Catroid Team
  *  (<http://code.google.com/p/catroid/wiki/Credits>)
- *  
+ * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
- *  
+ * 
  *  An additional term exception under section 7 of the GNU Affero
  *  General Public License, version 3, is available at
  *  http://www.catroid.org/catroid_license_additional_term
@@ -16,7 +16,7 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *   
+ * 
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -40,6 +40,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
 import at.tugraz.ist.catroid.ui.adapter.SpriteAdapter;
 import at.tugraz.ist.catroid.ui.dialogs.CustomIconContextMenu;
 import at.tugraz.ist.catroid.ui.dialogs.NewSpriteDialog;
@@ -61,6 +62,8 @@ public class ProjectActivity extends ListActivity {
 	private static final int DIALOG_NEW_SPRITE = 0;
 	private static final int DIALOG_RENAME_SPRITE = 1;
 	private static final int DIALOG_CONTEXT_MENU = 2;
+
+	private Tutorial tutorial;
 
 	private void initListeners() {
 		spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject().getSpriteList();
@@ -157,9 +160,9 @@ public class ProjectActivity extends ListActivity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == PreStageActivity.REQUEST_RESOURCES_INIT && resultCode == RESULT_OK) {
-			Intent intent = new Intent(ProjectActivity.this, StageActivity.class);
-			startActivity(intent);
-		}
+				Intent intent = new Intent(ProjectActivity.this, StageActivity.class);
+				startActivity(intent);
+			}
 	}
 
 	@Override
@@ -221,6 +224,7 @@ public class ProjectActivity extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		Tutorial.getInstance(this).resumeTutorial();
 		if (!Utils.checkForSdCard(this)) {
 			return;
 		}
@@ -242,6 +246,8 @@ public class ProjectActivity extends ListActivity {
 	@Override
 	public void onPause() {
 		super.onPause();
+		Tutorial.getInstance(this).pauseTutorial();
+		//		tutorial.pauseTutorial();
 		ProjectManager projectManager = ProjectManager.getInstance();
 		if (projectManager.getCurrentProject() != null) {
 			projectManager.saveProject();

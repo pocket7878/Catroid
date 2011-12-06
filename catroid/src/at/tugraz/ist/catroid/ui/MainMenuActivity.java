@@ -2,12 +2,12 @@
  *  Catroid: An on-device graphical programming language for Android devices
  *  Copyright (C) 2010-2011 The Catroid Team
  *  (<http://code.google.com/p/catroid/wiki/Credits>)
- *  
+ * 
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
- *  
+ * 
  *  An additional term exception under section 7 of the GNU Affero
  *  General Public License, version 3, is available at
  *  http://www.catroid.org/catroid_license_additional_term
@@ -16,10 +16,11 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *   
+ * 
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package at.tugraz.ist.catroid.ui;
 
 import java.io.File;
@@ -41,9 +42,9 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
-import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.transfers.CheckTokenTask;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
 import at.tugraz.ist.catroid.ui.dialogs.AboutDialog;
 import at.tugraz.ist.catroid.ui.dialogs.LoadProjectDialog;
 import at.tugraz.ist.catroid.ui.dialogs.LoginRegisterDialog;
@@ -64,6 +65,8 @@ public class MainMenuActivity extends Activity {
 	private static final int DIALOG_ABOUT = 3;
 	private static final int DIALOG_LOGIN_REGISTER = 4;
 	private boolean ignoreResume = false;
+
+	private Tutorial tutorial;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -115,10 +118,10 @@ public class MainMenuActivity extends Activity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == PreStageActivity.REQUEST_RESOURCES_INIT && resultCode == RESULT_OK) {
-			Intent intent = new Intent(MainMenuActivity.this, StageActivity.class);
-			startActivity(intent);
-		}
-	}
+					Intent intent = new Intent(MainMenuActivity.this, StageActivity.class);
+					startActivity(intent);
+				}
+			}
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
@@ -183,6 +186,8 @@ public class MainMenuActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		tutorial = Tutorial.getInstance(this);
+		tutorial.resumeTutorial();
 		if (!Utils.checkForSdCard(this)) {
 			return;
 		}
@@ -212,6 +217,8 @@ public class MainMenuActivity extends Activity {
 	@Override
 	public void onPause() {
 		super.onPause();
+		Tutorial.getInstance(this).pauseTutorial();
+		//		tutorial.pauseTutorial();
 		// onPause is sufficient --> gets called before "process_killed",
 		// onStop(), onDestroy(), onRestart()
 		// also when you switch activities
@@ -229,17 +236,21 @@ public class MainMenuActivity extends Activity {
 			Intent intent = new Intent(MainMenuActivity.this, ProjectActivity.class);
 			startActivity(intent);
 		}
+		tutorial.setNotification("currentProjectButton");
 	}
 
 	public void handleNewProjectButton(View v) {
+		tutorial.setNotification("NewProjectButton");
 		showDialog(DIALOG_NEW_PROJECT);
 	}
 
 	public void handleLoadProjectButton(View v) {
+		tutorial.setNotification("LoadProjectButton");
 		showDialog(DIALOG_LOAD_PROJECT);
 	}
 
 	public void handleUploadProjectButton(View v) {
+		tutorial.setNotification("UploadProjectButton");
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		String token = preferences.getString(Consts.TOKEN, null);
 
@@ -256,12 +267,13 @@ public class MainMenuActivity extends Activity {
 	}
 
 	public void handleSettingsButton(View v) {
+		tutorial.setNotification("SettingsButton");
 		Intent intent = new Intent(MainMenuActivity.this, SettingsActivity.class);
 		startActivity(intent);
 	}
 
 	public void handleTutorialButton(View v) {
-		Utils.displayToast(this, "Tutorial not yet implemented!");
+		tutorial.toggleTutorial();
 	}
 
 	public void handleAboutCatroidButton(View v) {

@@ -7,7 +7,7 @@
  *  it under the terms of the GNU Affero General Public License as
  *  published by the Free Software Foundation, either version 3 of the
  *  License, or (at your option) any later version.
- *  
+ * 
  *  An additional term exception under section 7 of the GNU Affero
  *  General Public License, version 3, is available at
  *  http://www.catroid.org/catroid_license_additional_term
@@ -16,7 +16,7 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *   
+ * 
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,6 +26,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnKeyListener;
 import android.content.DialogInterface.OnShowListener;
 import android.text.Editable;
@@ -40,6 +41,7 @@ import android.widget.EditText;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -80,7 +82,6 @@ public class NewSpriteDialog {
 	}
 
 	public void handleOkButton() {
-
 		String spriteName = input.getText().toString();
 
 		if (spriteName == null || spriteName.equalsIgnoreCase("")) {
@@ -92,6 +93,10 @@ public class NewSpriteDialog {
 			Utils.displayErrorMessage(projectActivity, projectActivity.getString(R.string.spritename_already_exists));
 			return;
 		}
+
+		Tutorial tutorial = Tutorial.getInstance(projectActivity.getApplicationContext());
+		tutorial.setNotification("DialogDone");
+
 		Sprite sprite = new Sprite(spriteName);
 		projectManager.addSprite(sprite);
 		((ArrayAdapter<?>) projectActivity.getListAdapter()).notifyDataSetChanged();
@@ -101,6 +106,17 @@ public class NewSpriteDialog {
 	}
 
 	private void initKeyListener(AlertDialog.Builder builder) {
+		builder.setOnCancelListener(new OnCancelListener() {
+
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				Tutorial tutorial = Tutorial.getInstance(projectActivity.getApplicationContext());
+				tutorial.rewindStep();
+				tutorial.rewindStep();
+				tutorial.setNotification("DialogDone");
+			}
+		});
+
 		builder.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
@@ -108,6 +124,8 @@ public class NewSpriteDialog {
 					if (projectManager.spriteExists(newSpriteName)) {
 						Utils.displayErrorMessage(projectActivity,
 								projectActivity.getString(R.string.spritename_already_exists));
+						Tutorial tutorial = Tutorial.getInstance(projectActivity.getApplicationContext());
+						tutorial.setNotification("DialogDone");
 					} else {
 						handleOkButton();
 						return true;
