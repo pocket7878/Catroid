@@ -42,16 +42,16 @@ public class ClickDispatcher {
 	ControlPanel panel;
 	Task.Notification currentNotification;
 	String notificationValue;
-	MotionEvent downTheRoad;
+	MotionEvent down;
 	MotionEvent second;
 	boolean scroll;
-	boolean flag;
+	boolean scroll2;
 
 	ClickDispatcher(Context context, ControlPanel panel) {
 		this.panel = panel;
 		this.context = context;
 		scroll = false;
-		flag = false;
+		scroll2 = false;
 	}
 
 	public void setCurrentNotification(Task.Notification currentNotification, String notificationValue) {
@@ -61,17 +61,17 @@ public class ClickDispatcher {
 
 	public void dispatchEvent(MotionEvent ev) {
 		if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-			downTheRoad = MotionEvent.obtain(ev);
+			down = MotionEvent.obtain(ev);
 		}
 		if (ev.getAction() == MotionEvent.ACTION_MOVE) {
-			if (flag == false) {
+			if (scroll2 == false) {
 				second = MotionEvent.obtain(ev);
-				flag = true;
+				scroll2 = true;
 				return;
 			}
 			if (scroll == false) {
 				scroll = true;
-				dispatchEventReally(downTheRoad);
+				dispatchEventReally(down);
 				dispatchEventReally(second);
 				dispatchEventReally(ev);
 				Log.i("faxxe", "moove!");
@@ -82,11 +82,11 @@ public class ClickDispatcher {
 		}
 		if (ev.getAction() == MotionEvent.ACTION_UP) {
 			if (scroll == false) {
-				dispatchEventReally(downTheRoad);
+				dispatchEventReally(down);
 			}
 			dispatchEventReally(ev);
 			scroll = false;
-			flag = false;
+			scroll2 = false;
 		}
 
 	}
@@ -94,9 +94,8 @@ public class ClickDispatcher {
 	public void dispatchEventReally(MotionEvent ev) {
 
 		if (scroll == true) {
-			Activity dings = (Activity) context;
-			Log.i("faxxe", "dispatching scroll dings" + ev.getAction() + " argl");
-			dings.dispatchTouchEvent(ev);
+			Activity currentActivity = (Activity) context;
+			currentActivity.dispatchTouchEvent(ev);
 			return;
 		}
 		int x = (int) ev.getX();
