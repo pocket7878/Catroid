@@ -32,6 +32,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
@@ -48,6 +49,7 @@ public class SettingsActivity extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
 
+		PreferenceManager.getDefaultSharedPreferences(this);
 		Preference dronePlugin = findPreference("setting_drone_plugin");
 		Preference droneBricks = findPreference("setting_drone_bricks");
 		Preference droneDslTimeout = findPreference("setting_drone_dsl_timeout");
