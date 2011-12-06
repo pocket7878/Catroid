@@ -42,6 +42,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.transfers.CheckTokenTask;
 import at.tugraz.ist.catroid.tutorial.Tutorial;
@@ -103,6 +104,7 @@ public class MainMenuActivity extends Activity {
 				+ projectManager.getCurrentProject().getName();
 		activityHelper.setupActionBar(true, title);
 		activityHelper.addActionButton(R.id.btn_action_play, R.drawable.ic_play_black, new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				if (projectManager.getCurrentProject() != null) {
 					Intent intent = new Intent(MainMenuActivity.this, PreStageActivity.class);
@@ -118,10 +120,10 @@ public class MainMenuActivity extends Activity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == PreStageActivity.REQUEST_RESOURCES_INIT && resultCode == RESULT_OK) {
-					Intent intent = new Intent(MainMenuActivity.this, StageActivity.class);
-					startActivity(intent);
-				}
-			}
+			Intent intent = new Intent(MainMenuActivity.this, StageActivity.class);
+			startActivity(intent);
+		}
+	}
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
