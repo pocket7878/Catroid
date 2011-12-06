@@ -6,6 +6,15 @@ import at.tugraz.ist.catroid.tutorial.TutorialOverlay;
 public class TaskNotification implements Task {
 	private Tutor tutorType;
 	private Notification notificationType;
+	private String notificationString;
+
+	public String getNotificationString() {
+		return notificationString;
+	}
+
+	public void setNotificationString(String notificationString) {
+		this.notificationString = notificationString;
+	}
 
 	public Notification getNotificationType() {
 		return notificationType;
@@ -32,9 +41,19 @@ public class TaskNotification implements Task {
 	@Override
 	public String execute(TutorialOverlay tutorialOverlay) {
 		ClickDispatcher clickDispatcher = tutorialOverlay.getClickDispatcher();
-		clickDispatcher.setCurrentNotification(notificationType);
+		clickDispatcher.setCurrentNotification(notificationType, null);
 
+		// TODO: Maybe Problem: User presses ProjectListItem between setting Notification at
+		// begin of execute and the specific setCurrentNotification with the notificationString
 		if (notificationType == notificationType.PROJECT_ADD_SPRITE) {
+			return ("DialogDone");
+		}
+
+		if (notificationType == notificationType.PROJECT_LIST_ITEM) {
+			clickDispatcher.setCurrentNotification(notificationType, notificationString);
+		}
+
+		if (notificationType == notificationType.SCRIPTS_ADD_BRICK) {
 			return ("DialogDone");
 		}
 
@@ -42,5 +61,4 @@ public class TaskNotification implements Task {
 		// notification, which will be deleted during pause/resume of the Tutorial
 		return ("ActivityChange");
 	}
-
 }

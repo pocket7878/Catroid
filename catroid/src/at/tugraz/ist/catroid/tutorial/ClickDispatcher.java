@@ -41,18 +41,19 @@ public class ClickDispatcher {
 	Context context;
 	ControlPanel panel;
 	Task.Notification currentNotification;
+	String notificationValue;
 
 	ClickDispatcher(Context context, ControlPanel panel) {
 		this.panel = panel;
 		this.context = context;
 	}
 
-	public void setCurrentNotification(Task.Notification currentNotification) {
+	public void setCurrentNotification(Task.Notification currentNotification, String notificationValue) {
 		this.currentNotification = currentNotification;
+		this.notificationValue = notificationValue;
 	}
 
 	public void dispatchEvent(MotionEvent ev) {
-
 		int x = (int) ev.getX();
 		int y = (int) ev.getY();
 
@@ -73,8 +74,7 @@ public class ClickDispatcher {
 
 		if (currentNotification == Task.Notification.CURRENT_PROJECT_BUTTON) {
 			if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.MainMenuActivity") != 0) {
-				// Das darf nicht sein, wie so ein Fehler ueberhaupt auftreten und kann
-				// und wie man damit umgeht ist noch rauszufinden
+				// TODO: This should never ever happen, something went terribly wrong: how to deal with this?
 				return;
 			}
 
@@ -94,14 +94,16 @@ public class ClickDispatcher {
 			return;
 		}
 
-		//		Log.i("faxxe", "hallo " + context.getClass().getName());
-		//		if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.MainMenuActivity") == 0) {
-		//			return dispatchMainMenu(ev);
-		//		} else if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.ProjectActivity") == 0) {
-		//			return dispatchProject(ev);
-		//		} else if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.ScriptActivity") == 0) {
-		//			return dispatchSkript(ev);
-		//		}
+		if (currentNotification == Task.Notification.SCRIPTS_ADD_BRICK
+				|| currentNotification == Task.Notification.SCRIPTS_TO_COSTUMES
+				|| currentNotification == Task.Notification.SCRIPTS_TO_SOUNDS) {
+			if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.ScriptActivity") != 0) {
+				// TODO: This should never ever happen, something went terribly wrong: how to deal with this?
+			}
+			dispatchSkript(ev);
+			return;
+		}
+
 		return;
 	}
 
@@ -199,18 +201,18 @@ public class ClickDispatcher {
 			ListView listView = listActivity.getListView();
 
 			// TODO: There has to be added a possibility to address specific entries of the list
-			if (isListItemClicked(ev, listView) != -1) {
+			if (isListItemClicked(ev, listView, Integer.parseInt(notificationValue)) != -1) {
 				listView.dispatchTouchEvent(ev);
 			}
 		}
 	}
 
-	public int isListItemClicked(MotionEvent event, ListView listView) {
-		int y = listView.getChildAt(0).getTop();
+	public int isListItemClicked(MotionEvent event, ListView listView, int index) {
 		event.setLocation(event.getX(), event.getY() - 100); // please anyone find out the real height of the titlebar!
-		int x = listView.getChildAt(0).getLeft();
-		int maxx = listView.getChildAt(0).getRight();
-		int maxy = listView.getChildAt(0).getBottom();
+		int y = listView.getChildAt(index).getTop();
+		int x = listView.getChildAt(index).getLeft();
+		int maxx = listView.getChildAt(index).getRight();
+		int maxy = listView.getChildAt(index).getBottom();
 		Log.i("faxxe", "touched!" + x + " " + y + " " + maxx + " " + maxy + " " + event.getX() + " " + event.getY());
 
 		if (event.getX() < maxx && event.getX() > x && event.getY() < maxy && event.getY() > y) {

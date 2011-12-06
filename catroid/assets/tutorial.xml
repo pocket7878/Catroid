@@ -36,7 +36,7 @@
         
         <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
           <tutorType>CAT</tutorType>
-		  <message>test 123 debug blabla bullshit bingo extended extreme uhuhuh</message>
+		  <message>Das Plus drücken sonst gibts 100 Schlaege auf den nackten Euter!</message>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
         
         <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
@@ -48,10 +48,30 @@
 		  <message>Sehr fein hast du das gemacht. Do host ein Wursti!</message>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
         
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
           <tutorType>CAT</tutorType>
-		  <sleepTime>5000</sleepTime>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep> 
+		  <message>Nun drueck drittes item in Liste</message>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+          <notificationType>PROJECT_LIST_ITEM</notificationType>
+          <notificationString>2</notificationString>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+          <tutorType>CAT</tutorType>
+		  <message>Jetzt mal Brick hinzufuegen!</message>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+          <notificationType>SCRIPTS_ADD_BRICK</notificationType>
+          <notificationString>2</notificationString>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+          <tutorType>CAT</tutorType>
+		  <message>Supi supi supi. Du bist so unglaublich spitze.</message>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay> 
         
       </lessonContent>
       <lessonID>0</lessonID>

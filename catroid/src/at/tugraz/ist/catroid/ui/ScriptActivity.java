@@ -125,10 +125,13 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 		return new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				tutorial.pauseTutorial();
+				//tutorial.stopTutorial();
+				//tutorial.pauseTutorial();
+				//tutorial.toggleTutorial();
 				getParent().showDialog(DIALOG_ADD_BRICK);
-				tutorial.resumeTutorial();
-				tutorial.setNotification("openDialog");
+				//tutorial.toggleTutorial();
+				//tutorial.resumeTutorial();
+				//tutorial.setNotification("openDialog");
 			}
 		};
 	}

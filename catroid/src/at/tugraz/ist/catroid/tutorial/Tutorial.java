@@ -58,6 +58,10 @@ public class Tutorial {
 	private Tutorial() {
 	}
 
+	public void rewindStep() {
+		lessonCollection.rewindStep();
+	}
+
 	public void setDialog(Dialog dialog) {
 		this.dialog = dialog;
 	}

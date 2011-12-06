@@ -107,6 +107,8 @@ public class NewSpriteDialog {
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				Tutorial tutorial = Tutorial.getInstance(projectActivity.getApplicationContext());
+				tutorial.rewindStep();
+				tutorial.rewindStep();
 				tutorial.setNotification("DialogDone");
 			}
 		});
