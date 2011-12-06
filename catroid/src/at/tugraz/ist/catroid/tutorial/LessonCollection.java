@@ -63,6 +63,18 @@ public class LessonCollection {
 		}
 	}
 
+	int getLastPossibleLessonNumber() {
+		return currentLesson;
+	}
+
+	ArrayList<String> getLessons() {
+		ArrayList<String> lessonNames = new ArrayList<String>();
+		for (Lesson tmp : lessonArray) {
+			lessonNames.add(tmp.lessonName);
+		}
+		return lessonNames;
+	}
+
 	boolean rewindStep() {
 		return (lessonArray.get(currentLesson).rewindStep());
 	}

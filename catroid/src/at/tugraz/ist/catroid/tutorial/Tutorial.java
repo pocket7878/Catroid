@@ -93,7 +93,14 @@ public class Tutorial {
 
 	private boolean startTutorial() {
 		tutorialActive = true;
+		int argl = lessonCollection.getLastPossibleLessonNumber();
+		Log.i("faxxe", "Next possible lesson number: " + argl);
+		ArrayList<String> lessons = lessonCollection.getLessons();
+		for (String tmp : lessons) {
+			Log.i("faxxe", "lesson: " + tmp);
+		}
 		Log.i("catroid", "starting tutorial...");
+
 		resumeTutorial();
 		return tutorialActive;
 	}
