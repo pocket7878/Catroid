@@ -92,7 +92,7 @@ public class Tutorial {
 		return tutorial;
 	}
 
-	private synchronized void showDialog() {
+	private void showLessonDialog() {
 
 		//final CharSequence[] items = { "Red", "Green", "Blue" };
 		ArrayList<String> lessons = lessonCollection.getLessons();
@@ -117,7 +117,7 @@ public class Tutorial {
 
 	private boolean startTutorial() {
 		tutorialActive = true;
-		showDialog();
+		showLessonDialog();
 		Log.i("catroid", "starting tutorial...");
 		return tutorialActive;
 	}
