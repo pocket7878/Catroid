@@ -21,8 +21,10 @@ package at.tugraz.ist.catroid.tutorial;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.PixelFormat;
 import android.util.Log;
 import android.view.Gravity;
@@ -91,17 +93,32 @@ public class Tutorial {
 		return tutorial;
 	}
 
+	private synchronized void showDialog() {
+
+		//final CharSequence[] items = { "Red", "Green", "Blue" };
+		ArrayList<String> lessons = lessonCollection.getLessons();
+		final CharSequence[] items = new CharSequence[lessons.size()];
+		for (int i = 0; i < lessons.size(); i++) {
+			items[i] = lessons.get(i);
+		}
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		builder.setTitle("choose lesson:");
+		builder.setItems(items, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int item) {
+				resumeTutorial();
+			}
+		});
+		AlertDialog alert = builder.create();
+		alert.show();
+
+	}
+
 	private boolean startTutorial() {
 		tutorialActive = true;
-		int argl = lessonCollection.getLastPossibleLessonNumber();
-		Log.i("faxxe", "Next possible lesson number: " + argl);
-		ArrayList<String> lessons = lessonCollection.getLessons();
-		for (String tmp : lessons) {
-			Log.i("faxxe", "lesson: " + tmp);
-		}
+		showDialog();
 		Log.i("catroid", "starting tutorial...");
-
-		resumeTutorial();
 		return tutorialActive;
 	}
 
