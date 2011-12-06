@@ -82,9 +82,12 @@ public class ClickDispatcher {
 			return;
 		}
 
-		if (currentNotification == Task.Notification.ADD_SPRITE_BUTTON) {
+		if (currentNotification == Task.Notification.PROJECT_ADD_SPRITE
+				|| currentNotification == Task.Notification.PROJECT_HOME_BUTTON
+				|| currentNotification == Task.Notification.PROJECT_LIST_ITEM
+				|| currentNotification == Task.Notification.PROJECT_STAGE_BUTTON) {
 			if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.ProjectActivity") != 0) {
-				//nogo
+				// TODO: This should never ever happen, something went terribly wrong: how to deal with this?
 				return;
 			}
 			dispatchProject(ev);
@@ -174,33 +177,49 @@ public class ClickDispatcher {
 	}
 
 	public void dispatchProject(MotionEvent ev) {
-		ListActivity listActivity = (ListActivity) context;
-		ListView livi = listActivity.getListView();
-		int y = livi.getChildAt(0).getTop();
-		ev.setLocation(ev.getX(), ev.getY() - 100); // please anyone find out the real height of the titlebar!
-		int x = livi.getChildAt(0).getLeft();
-		int maxx = livi.getChildAt(0).getRight();
-		int maxy = livi.getChildAt(0).getBottom();
-		Log.i("faxxe", "touched!" + x + " " + y + " " + maxx + " " + maxy + " " + ev.getX() + " " + ev.getY());
+		Activity currentActivity = (Activity) context;
 
-		if (ev.getX() < maxx && ev.getX() > x && ev.getY() < maxy && ev.getY() > y) {
-			Log.i("faxxe", "irgendwos" + x + " " + y + " " + maxx + " " + maxy + " " + ev.getX() + " " + ev.getY());
-			livi.dispatchTouchEvent(ev);
+		if (currentNotification == Task.Notification.PROJECT_ADD_SPRITE) {
+			ImageButton addSpriteButton = (ImageButton) currentActivity.findViewById(R.id.btn_action_add_sprite);
+			if (isImageButtonClicked(ev, addSpriteButton)) {
+				currentActivity.dispatchTouchEvent(ev);
+			}
+		}
+
+		if (currentNotification == Task.Notification.PROJECT_HOME_BUTTON) {
+
+		}
+
+		if (currentNotification == Task.Notification.PROJECT_STAGE_BUTTON) {
+
+		}
+
+		if (currentNotification == Task.Notification.PROJECT_LIST_ITEM) {
+			ListActivity listActivity = (ListActivity) context;
+			ListView listView = listActivity.getListView();
+
+			// TODO: There has to be added a possibility to address specific entries of the list
+			if (isListItemClicked(ev, listView) != -1) {
+				listView.dispatchTouchEvent(ev);
+			}
 		}
 	}
 
-	public boolean isButtonClicked(MotionEvent event, Button button) {
-		int location[] = new int[2];
-		button.getLocationOnScreen(location);
-		int width = button.getWidth();
-		int height = button.getHeight();
+	public int isListItemClicked(MotionEvent event, ListView listView) {
+		int y = listView.getChildAt(0).getTop();
+		event.setLocation(event.getX(), event.getY() - 100); // please anyone find out the real height of the titlebar!
+		int x = listView.getChildAt(0).getLeft();
+		int maxx = listView.getChildAt(0).getRight();
+		int maxy = listView.getChildAt(0).getBottom();
+		Log.i("faxxe", "touched!" + x + " " + y + " " + maxx + " " + maxy + " " + event.getX() + " " + event.getY());
 
-		if (event.getX() > location[0] && event.getX() < location[0] + width && event.getY() > location[1]
-				&& event.getY() < location[1] + height) {
-			return (true);
-		} else {
-			return (false);
+		if (event.getX() < maxx && event.getX() > x && event.getY() < maxy && event.getY() > y) {
+			Log.i("faxxe",
+					"irgendwos" + x + " " + y + " " + maxx + " " + maxy + " " + event.getX() + " " + event.getY());
+			listView.dispatchTouchEvent(event);
 		}
+
+		return -1;
 	}
 
 	public void dispatchMainMenu(MotionEvent ev) {
@@ -220,6 +239,34 @@ public class ClickDispatcher {
 		//		if (isButtonClicked(ev, tutorialButton)) {
 		//			currentActivity.dispatchTouchEvent(ev);
 		//		}
+	}
+
+	public boolean isButtonClicked(MotionEvent event, Button button) {
+		int location[] = new int[2];
+		button.getLocationOnScreen(location);
+		int width = button.getWidth();
+		int height = button.getHeight();
+
+		if (event.getX() > location[0] && event.getX() < location[0] + width && event.getY() > location[1]
+				&& event.getY() < location[1] + height) {
+			return (true);
+		} else {
+			return (false);
+		}
+	}
+
+	public boolean isImageButtonClicked(MotionEvent event, ImageButton button) {
+		int location[] = new int[2];
+		button.getLocationOnScreen(location);
+		int width = button.getWidth();
+		int height = button.getHeight();
+
+		if (event.getX() > location[0] && event.getX() < location[0] + width && event.getY() > location[1]
+				&& event.getY() < location[1] + height) {
+			return (true);
+		} else {
+			return (false);
+		}
 	}
 
 }

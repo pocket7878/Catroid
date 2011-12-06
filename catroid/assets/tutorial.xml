@@ -28,11 +28,6 @@
           <notificationType>CURRENT_PROJECT_BUTTON</notificationType>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
         
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-          <sleepTime>10000</sleepTime>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-        
         <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
           <tutorType>CAT</tutorType>
           <x>200</x>
@@ -44,17 +39,19 @@
 		  <message>test 123 debug blabla bullshit bingo extended extreme uhuhuh</message>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
         
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-          <sleepTime>10000</sleepTime>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-          <sleepTime>10000</sleepTime>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-        
         <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-          <notificationType>ADD_SPRITE_BUTTON</notificationType>
+          <notificationType>PROJECT_ADD_SPRITE</notificationType>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+          <tutorType>CAT</tutorType>
+		  <message>Sehr fein hast du das gemacht. Do host ein Wursti!</message>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+          <tutorType>CAT</tutorType>
+		  <sleepTime>5000</sleepTime>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep> 
         
       </lessonContent>
       <lessonID>0</lessonID>

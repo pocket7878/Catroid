@@ -33,6 +33,13 @@ public class TaskNotification implements Task {
 	public String execute(TutorialOverlay tutorialOverlay) {
 		ClickDispatcher clickDispatcher = tutorialOverlay.getClickDispatcher();
 		clickDispatcher.setCurrentNotification(notificationType);
+
+		if (notificationType == notificationType.PROJECT_ADD_SPRITE) {
+			return ("DialogDone");
+		}
+
+		// All tasks which result in a switch to another activity, just wait for a dummy
+		// notification, which will be deleted during pause/resume of the Tutorial
 		return ("ActivityChange");
 	}
 
