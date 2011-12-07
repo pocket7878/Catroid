@@ -18,28 +18,8 @@
  */
 package at.tugraz.ist.catroid.plugin.Drone;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.util.Log;
-import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.content.Script;
-import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneChangeFlyingModeBrick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneConfigBrick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLandBrick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLedAnimationBrick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneMoveAnimationBrick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneMoveBrick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneSaveSnapshotBrick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStartVideoBrick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStartVideoRecorderBrick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopMoveBrick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoBrick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoRecorderBrick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneTakeOffBrick;
 
 public class DroneHandler {
 
@@ -84,28 +64,4 @@ public class DroneHandler {
 	public void setWasAlreadyConnected() {
 		wasAlreadyConnected = true;
 	}
-
-	public boolean isDronepartOfProject() {
-		List<Sprite> sprites = ProjectManager.getInstance().getCurrentProject().getSpriteList();
-		for (Sprite sprite : sprites) {
-			for (int i = 0; i < sprite.getNumberOfScripts(); i++) {
-				Script script = sprite.getScript(i);
-				ArrayList<Brick> bricks = script.getBrickList();
-				for (Brick brick : bricks) {
-					if ((brick instanceof DroneTakeOffBrick || brick instanceof DroneLandBrick
-							|| brick instanceof DroneLedAnimationBrick || brick instanceof DroneMoveAnimationBrick
-							|| brick instanceof DroneMoveBrick || brick instanceof DroneChangeFlyingModeBrick
-							|| brick instanceof DroneStopMoveBrick || brick instanceof DroneConfigBrick
-							|| brick instanceof DroneStartVideoBrick || brick instanceof DroneStopVideoBrick
-							|| brick instanceof DroneStartVideoRecorderBrick
-							|| brick instanceof DroneStopVideoRecorderBrick || brick instanceof DroneSaveSnapshotBrick)) {
-						return true;
-					}
-				}
-			}
-		}
-
-		return false;
-	}
-
 }
