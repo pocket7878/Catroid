@@ -18,16 +18,20 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
@@ -60,34 +64,37 @@ public class ClickDispatcher {
 	}
 
 	public void dispatchEvent(MotionEvent ev) {
-		if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-			down = MotionEvent.obtain(ev);
-		}
-		if (ev.getAction() == MotionEvent.ACTION_MOVE) {
-			if (scroll2 == false) {
-				second = MotionEvent.obtain(ev);
-				scroll2 = true;
-				return;
-			}
-			if (scroll == false) {
-				scroll = true;
-				dispatchEventReally(down);
-				dispatchEventReally(second);
-				dispatchEventReally(ev);
-				Log.i("faxxe", "moove!");
-			} else {
-				Log.i("faxxe", "moove!");
-				dispatchEventReally(ev);
-			}
-		}
-		if (ev.getAction() == MotionEvent.ACTION_UP) {
-			if (scroll == false) {
-				dispatchEventReally(down);
-			}
-			dispatchEventReally(ev);
-			scroll = false;
-			scroll2 = false;
-		}
+		dispatchEventReally(ev);
+		return;
+
+		//		if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+		//			down = MotionEvent.obtain(ev);
+		//		}
+		//		if (ev.getAction() == MotionEvent.ACTION_MOVE) {
+		//			if (scroll2 == false) {
+		//				second = MotionEvent.obtain(ev);
+		//				scroll2 = true;
+		//				return;
+		//			}
+		//			if (scroll == false) {
+		//				scroll = true;
+		//				dispatchEventReally(down);
+		//				dispatchEventReally(second);
+		//				dispatchEventReally(ev);
+		//				Log.i("faxxe", "moove!");
+		//			} else {
+		//				Log.i("faxxe", "moove!");
+		//				dispatchEventReally(ev);
+		//			}
+		//		}
+		//		if (ev.getAction() == MotionEvent.ACTION_UP) {
+		//			if (scroll == false) {
+		//				dispatchEventReally(down);
+		//			}
+		//			dispatchEventReally(ev);
+		//			scroll = false;
+		//			scroll2 = false;
+		//		}
 
 	}
 
@@ -98,6 +105,7 @@ public class ClickDispatcher {
 			currentActivity.dispatchTouchEvent(ev);
 			return;
 		}
+
 		int x = (int) ev.getX();
 		int y = (int) ev.getY();
 
@@ -139,12 +147,24 @@ public class ClickDispatcher {
 		}
 
 		if (currentNotification == Task.Notification.SCRIPTS_ADD_BRICK
-				|| currentNotification == Task.Notification.SCRIPTS_TO_COSTUMES
-				|| currentNotification == Task.Notification.SCRIPTS_TO_SOUNDS) {
+				|| currentNotification == Task.Notification.TAB_COSTUMES
+				|| currentNotification == Task.Notification.TAB_SOUNDS) {
 			if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.ScriptActivity") != 0) {
 				// TODO: This should never ever happen, something went terribly wrong: how to deal with this?
 			}
 			dispatchSkript(ev);
+			return;
+		}
+
+		if (currentNotification == Task.Notification.COSTUMES_ADD_COSTUME
+				|| currentNotification == Task.Notification.COSTUMES_COPY
+				|| currentNotification == Task.Notification.COSTUMES_DELETE
+				|| currentNotification == Task.Notification.COSTUMES_PAINTROID
+				|| currentNotification == Task.Notification.COSTUMES_RENAME) {
+			if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.CostumeActivity") != 0) {
+				// TODO: This should never ever happen, something went terribly wrong: how to deal with this?
+			}
+			dispatchCostumes(ev);
 			return;
 		}
 
@@ -201,33 +221,61 @@ public class ClickDispatcher {
 		}
 	}
 
+	public boolean isScriptsButton(int leftX, int rightX, int topY, int bottomY, MotionEvent ev) {
+		int tabHeigth = topY - bottomY;
+		int tabWidth = rightX - leftX;
+		if ((ev.getX() > leftX) && (ev.getX() < leftX + (tabWidth / 3)) && (ev.getY() > topY)
+				&& (ev.getY() < topY + tabHeigth)) {
+			return (true);
+		} else {
+			return (false);
+		}
+	}
+
+	public boolean isCostumesButton(int leftX, int rightX, int topY, int bottomY, MotionEvent ev) {
+		int tabHeigth = topY - bottomY;
+		int tabWidth = rightX - leftX;
+		if ((ev.getX() > leftX + (tabWidth / 3)) && (ev.getX() < leftX + ((tabWidth / 3) * 2)) && (ev.getY() > topY)
+				&& (ev.getY() < topY + tabHeigth)) {
+			return (true);
+		} else {
+			return (false);
+		}
+	}
+
+	public boolean isSoundsButton(int leftX, int rightX, int topY, int bottomY, MotionEvent ev) {
+		int tabHeigth = topY - bottomY;
+		int tabWidth = rightX - leftX;
+		if ((ev.getX() > leftX + ((tabWidth / 3) * 2)) && (ev.getX() < leftX + tabWidth) && (ev.getY() > topY)
+				&& (ev.getY() < topY + tabHeigth)) {
+			return (true);
+		} else {
+			return (false);
+		}
+	}
+
 	public void dispatchSkript(MotionEvent ev) {
+
 		Activity currentActivity = (Activity) context;
 		Activity parentActivity = currentActivity.getParent();
-		ImageButton lila = (ImageButton) parentActivity.findViewById(R.id.btn_action_add_sprite);
+		ImageButton addSpriteButton = (ImageButton) parentActivity.findViewById(R.id.btn_action_add_sprite);
 
-		int x = lila.getLeft();
-		int y = lila.getTop();
-		int maxx = x + lila.getHeight();
-		int maxy = y + lila.getWidth();
-		Log.i("faxxe", x + " " + y + " " + maxx + " " + maxy);
-		Log.i("faxxe", ev.getX() + " " + ev.getY());
-		Dialog currentDialog = Tutorial.getInstance(null).getDialog();
-		if (currentDialog == null) {
-			parentActivity.dispatchTouchEvent(ev);
-		} else {
-			currentDialog.dispatchTouchEvent(ev);
+		TabHost tabHost = (TabHost) parentActivity.findViewById(android.R.id.tabhost);
+
+		ArrayList<View> tabViews = tabHost.getTouchables();
+		LinearLayout tab1 = (LinearLayout) tabViews.get(0);
+		LinearLayout tab2 = (LinearLayout) tabViews.get(1);
+		LinearLayout tab3 = (LinearLayout) tabViews.get(2);
+
+		if ((currentNotification == Task.Notification.TAB_SCRIPTS) && isLinearLayoutClicked(tab1, ev)) {
+			tabHost.setCurrentTab(0);
 		}
-
-		//		if (ev.getX() > x && ev.getY() > y && ev.getX() < maxx && ev.getY() < maxy && currentDialog == null) {
-		//			dongs.dispatchTouchEvent(ev);
-		//		}
-		//		Log.i("faxxe", "schauma ob a einegeht!");
-		//		if (Tutorial.getInstance(null).getDialog() != null) {
-		//			Log.i("faxxe", "geht eh eine!");
-		//			Tutorial.getInstance(null).getDialog().dispatchTouchEvent(ev);
-		//			//Tutorial.getInstance(null).setDialog(null);
-		//		}
+		if ((currentNotification == Task.Notification.TAB_SOUNDS) && isLinearLayoutClicked(tab3, ev)) {
+			tabHost.setCurrentTab(2);
+		}
+		if ((currentNotification == Task.Notification.TAB_COSTUMES) && isLinearLayoutClicked(tab2, ev)) {
+			tabHost.setCurrentTab(1);
+		}
 	}
 
 	public void dispatchProject(MotionEvent ev) {
@@ -295,6 +343,14 @@ public class ClickDispatcher {
 		//		}
 	}
 
+	public void dispatchCostumes(MotionEvent ev) {
+
+	}
+
+	public void dispatchSounds(MotionEvent ev) {
+
+	}
+
 	public boolean isButtonClicked(MotionEvent event, Button button) {
 		int location[] = new int[2];
 		button.getLocationOnScreen(location);
@@ -317,6 +373,20 @@ public class ClickDispatcher {
 
 		if (event.getX() > location[0] && event.getX() < location[0] + width && event.getY() > location[1]
 				&& event.getY() < location[1] + height) {
+			return (true);
+		} else {
+			return (false);
+		}
+	}
+
+	public boolean isLinearLayoutClicked(LinearLayout linearLayout, MotionEvent event) {
+		int location[] = new int[2];
+		linearLayout.getLocationOnScreen(location);
+		int width = linearLayout.getWidth();
+		int height = linearLayout.getHeight();
+
+		if (event.getX() >= location[0] && event.getX() <= location[0] + width && event.getY() >= location[1]
+				&& event.getY() <= location[1] + height) {
 			return (true);
 		} else {
 			return (false);

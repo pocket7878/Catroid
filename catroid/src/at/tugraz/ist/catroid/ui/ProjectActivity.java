@@ -63,8 +63,6 @@ public class ProjectActivity extends ListActivity {
 	private static final int DIALOG_RENAME_SPRITE = 1;
 	private static final int DIALOG_CONTEXT_MENU = 2;
 
-	private Tutorial tutorial;
-
 	private void initListeners() {
 		spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject().getSpriteList();
 		spriteAdapter = new SpriteAdapter(this, R.layout.activity_project_spritelist_item, R.id.sprite_title,
@@ -74,6 +72,7 @@ public class ProjectActivity extends ListActivity {
 		getListView().setTextFilterEnabled(true);
 
 		getListView().setOnItemClickListener(new ListView.OnItemClickListener() {
+			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				ProjectManager.getInstance().setCurrentSprite(spriteAdapter.getItem(position));
 				Intent intent = new Intent(ProjectActivity.this, ScriptTabActivity.class);
@@ -81,6 +80,7 @@ public class ProjectActivity extends ListActivity {
 			}
 		});
 		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				spriteToEdit = spriteList.get(position);
 
@@ -104,6 +104,7 @@ public class ProjectActivity extends ListActivity {
 				CONTEXT_MENU_ITEM_DELETE);
 
 		iconContextMenu.setOnClickListener(new CustomIconContextMenu.IconContextMenuOnClickListener() {
+			@Override
 			public void onClick(int menuId) {
 				switch (menuId) {
 					case CONTEXT_MENU_ITEM_RENAME:
@@ -144,12 +145,14 @@ public class ProjectActivity extends ListActivity {
 
 		activityHelper.addActionButton(R.id.btn_action_add_sprite, R.drawable.ic_plus_black,
 				new View.OnClickListener() {
+					@Override
 					public void onClick(View v) {
 						showDialog(DIALOG_NEW_SPRITE);
 					}
 				}, false);
 
 		activityHelper.addActionButton(R.id.btn_action_play, R.drawable.ic_play_black, new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(ProjectActivity.this, PreStageActivity.class);
 				startActivityForResult(intent, PreStageActivity.REQUEST_RESOURCES_INIT);
@@ -160,9 +163,9 @@ public class ProjectActivity extends ListActivity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == PreStageActivity.REQUEST_RESOURCES_INIT && resultCode == RESULT_OK) {
-				Intent intent = new Intent(ProjectActivity.this, StageActivity.class);
-				startActivity(intent);
-			}
+			Intent intent = new Intent(ProjectActivity.this, StageActivity.class);
+			startActivity(intent);
+		}
 	}
 
 	@Override

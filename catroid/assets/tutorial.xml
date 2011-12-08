@@ -34,9 +34,13 @@
           <y>300</y>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
         
+        
+        
+        
+        <!-- 
         <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
           <tutorType>CAT</tutorType>
-		  <message>Das Plus drücken sonst gibts 100 Schlaege auf den nackten Euter!</message>
+		  <message>Jetzt tue emol e Spriterle hinzufueche! Desch findesch oben rechtsch beim Plüsele!!</message>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
         
         <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
@@ -47,6 +51,12 @@
           <tutorType>CAT</tutorType>
 		  <message>Sehr fein hast du das gemacht. Do host ein Wursti!</message>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+        -->
+        
+        
+        
+        
+        
         
         <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
           <tutorType>CAT</tutorType>
@@ -58,9 +68,12 @@
           <notificationString>2</notificationString>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
         
+        
+        
+        <!--
         <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
           <tutorType>CAT</tutorType>
-		  <message>Jetzt mal Brick hinzufuegen!</message>
+		  <message>Jetzt tue emol e Brickele hinzufueche! Desch findesch oben rechtsch beim Plüsele!</message>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
         
         <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
@@ -72,6 +85,52 @@
           <tutorType>CAT</tutorType>
 		  <message>Supi supi supi. Du bist so unglaublich spitze.</message>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskSay> 
+        -->
+        
+        
+        
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+          <tutorType>CAT</tutorType>
+		  <message>Tua mol Costumes clickele!</message>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+          <tutorType>CAT</tutorType>
+		  <notificationType>TAB_COSTUMES</notificationType>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+          <tutorType>CAT</tutorType>
+          <x>200</x>
+          <y>300</y>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+          <tutorType>CAT</tutorType>
+		  <message>Jetzt tua mol de Sounds clickele!</message>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+          <tutorType>CAT</tutorType>
+		  <notificationType>TAB_SOUNDS</notificationType>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+          <tutorType>CAT</tutorType>
+          <x>200</x>
+          <y>300</y>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+          <tutorType>CAT</tutorType>
+		  <message>Jetzt tua mol den Sound dazuafügen!</message>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+          <tutorType>CAT</tutorType>
+		  <notificationType>SOUNDS_ADD_SOUND</notificationType>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
         
       </lessonContent>
       <lessonID>0</lessonID>
@@ -85,7 +144,6 @@
           <x>100</x>
           <y>300</y>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear reference="../at.tugraz.ist.catroid.tutorial.tasks.TaskAppear"/>
         <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
           <tutorType>CAT</tutorType>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
@@ -107,7 +165,6 @@
           <x>100</x>
           <y>300</y>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear reference="../at.tugraz.ist.catroid.tutorial.tasks.TaskAppear"/>
         <at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
           <tutorType>DOG</tutorType>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>

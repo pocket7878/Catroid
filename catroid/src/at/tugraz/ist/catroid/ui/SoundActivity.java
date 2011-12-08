@@ -40,6 +40,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
 import at.tugraz.ist.catroid.ui.adapter.SoundAdapter;
 import at.tugraz.ist.catroid.utils.ActivityHelper;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -65,6 +66,7 @@ public class SoundActivity extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		Tutorial.getInstance(this).resumeTutorial();
 		if (!Utils.checkForSdCard(this)) {
 			return;
 		}
@@ -86,6 +88,7 @@ public class SoundActivity extends ListActivity {
 
 	private View.OnClickListener createAddSoundClickListener() {
 		return new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 				intent.setType("audio/*");
@@ -97,6 +100,7 @@ public class SoundActivity extends ListActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		Tutorial.getInstance(this).pauseTutorial();
 		ProjectManager projectManager = ProjectManager.getInstance();
 		if (projectManager.getCurrentProject() != null) {
 			projectManager.saveProject();
@@ -115,6 +119,7 @@ public class SoundActivity extends ListActivity {
 		{
 			final ListView listView = getListView();
 			listView.post(new Runnable() {
+				@Override
 				public void run() {
 					listView.setSelection(listView.getCount() - 1);
 				}

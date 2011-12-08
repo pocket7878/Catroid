@@ -132,6 +132,7 @@ public class CostumeActivity extends ListActivity {
 		{
 			final ListView listView = getListView();
 			listView.post(new Runnable() {
+				@Override
 				public void run() {
 					listView.setSelection(listView.getCount() - 1);
 				}
