@@ -289,7 +289,6 @@ public class ClickDispatcher {
 				currentActivity.dispatchTouchEvent(ev);
 				if (ev.getAction() == MotionEvent.ACTION_UP) {
 					currentNotification = null;
-					Tutorial.getInstance(null).pauseTutorial();
 				}
 			}
 		}
@@ -360,7 +359,6 @@ public class ClickDispatcher {
 				currentActivity.dispatchTouchEvent(ev);
 				if (ev.getAction() == MotionEvent.ACTION_UP) {
 					currentNotification = null;
-					Tutorial.getInstance(null).pauseTutorial();
 				}
 			}
 		}
@@ -377,7 +375,6 @@ public class ClickDispatcher {
 				currentActivity.dispatchTouchEvent(ev);
 				if (ev.getAction() == MotionEvent.ACTION_UP) {
 					currentNotification = null;
-					Tutorial.getInstance(null).pauseTutorial();
 				}
 			}
 		}
