@@ -167,15 +167,10 @@ public class ClickDispatcher {
 			dispatchCostumes(ev);
 			return;
 		}
+		if (currentNotification == Task.Notification.SOUNDS_ADD_SOUND) {
+			dispatchSounds(ev);
+		}
 
-		return;
-	}
-
-	public void dispatchScrollEvent(MotionEvent ev) {
-		Activity currentActivity = (Activity) context;
-		currentActivity.dispatchTouchEvent(ev);
-
-		Log.i("faxxe", "dispatch scrolling event...");
 		return;
 	}
 
@@ -196,9 +191,9 @@ public class ClickDispatcher {
 
 		if (x >= bounds.left && x <= bounds.left + 50) {
 			if (y >= bounds.top && y <= bounds.bottom) {
-				Tutorial.getInstance(null).pauseTutorial();
-				//Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
-				//toast.show();
+				Tutorial.getInstance(null).stopTutorial();
+				//				Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
+				//				toast.show();
 			}
 		}
 
@@ -276,6 +271,13 @@ public class ClickDispatcher {
 		if ((currentNotification == Task.Notification.TAB_COSTUMES) && isLinearLayoutClicked(tab2, ev)) {
 			tabHost.setCurrentTab(1);
 		}
+		if (isImageButtonClicked(ev, addSpriteButton) && currentNotification == Task.Notification.SCRIPTS_ADD_BRICK) {
+			parentActivity.dispatchTouchEvent(ev);
+			if (ev.getAction() == MotionEvent.ACTION_UP) {
+				currentNotification = null;
+			}
+			return;
+		}
 	}
 
 	public void dispatchProject(MotionEvent ev) {
@@ -285,6 +287,10 @@ public class ClickDispatcher {
 			ImageButton addSpriteButton = (ImageButton) currentActivity.findViewById(R.id.btn_action_add_sprite);
 			if (isImageButtonClicked(ev, addSpriteButton)) {
 				currentActivity.dispatchTouchEvent(ev);
+				if (ev.getAction() == MotionEvent.ACTION_UP) {
+					currentNotification = null;
+					Tutorial.getInstance(null).pauseTutorial();
+				}
 			}
 		}
 
@@ -329,7 +335,8 @@ public class ClickDispatcher {
 		Activity currentActivity = (Activity) context;
 		Button currentProjectButton = (Button) currentActivity.findViewById(R.id.current_project_button);
 		Button aboutButton = (Button) currentActivity.findViewById(R.id.about_catroid_button);
-		Button webButton = (Button) currentActivity.findViewById(R.id.web_button);
+		Button webButton = (Button) currentActivity.findViewById(R.id.web_button); //check if event coordinates are the coordinates of the control panel buttons
+
 		Button newProjectButton = (Button) currentActivity.findViewById(R.id.new_project_button);
 
 		if (currentNotification == Task.Notification.CURRENT_PROJECT_BUTTON) {
@@ -345,10 +352,37 @@ public class ClickDispatcher {
 
 	public void dispatchCostumes(MotionEvent ev) {
 
+		Activity currentActivity = (Activity) context;
+		currentActivity = currentActivity.getParent();
+		Log.i("faxxe", "CostumesDispatcher!");
+		if (currentNotification == Task.Notification.COSTUMES_ADD_COSTUME) {
+			ImageButton addSpriteButton = (ImageButton) currentActivity.findViewById(R.id.btn_action_add_sprite);
+			if (isImageButtonClicked(ev, addSpriteButton) && addSpriteButton != null) {
+				currentActivity.dispatchTouchEvent(ev);
+				if (ev.getAction() == MotionEvent.ACTION_UP) {
+					currentNotification = null;
+					Tutorial.getInstance(null).pauseTutorial();
+				}
+			}
+		}
+		return;
 	}
 
 	public void dispatchSounds(MotionEvent ev) {
-
+		Activity currentActivity = (Activity) context;
+		currentActivity = currentActivity.getParent();
+		Log.i("faxxe", "Sounddispatcher!");
+		if (currentNotification == Task.Notification.SOUNDS_ADD_SOUND) {
+			ImageButton addSpriteButton = (ImageButton) currentActivity.findViewById(R.id.btn_action_add_sprite);
+			if (isImageButtonClicked(ev, addSpriteButton) && addSpriteButton != null) {
+				currentActivity.dispatchTouchEvent(ev);
+				if (ev.getAction() == MotionEvent.ACTION_UP) {
+					currentNotification = null;
+					Tutorial.getInstance(null).pauseTutorial();
+				}
+			}
+		}
+		return;
 	}
 
 	public boolean isButtonClicked(MotionEvent event, Button button) {
@@ -376,7 +410,8 @@ public class ClickDispatcher {
 			return (true);
 		} else {
 			return (false);
-		}
+		} //check if event coordinates are the coordinates of the control panel buttons
+
 	}
 
 	public boolean isLinearLayoutClicked(LinearLayout linearLayout, MotionEvent event) {

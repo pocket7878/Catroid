@@ -60,7 +60,7 @@
         
         <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
           <tutorType>CAT</tutorType>
-		  <message>Nun drueck drittes item in Liste</message>
+		  <message>Nun drueck drittes item in Liste!!!</message>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
         
         <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
@@ -70,7 +70,6 @@
         
         
         
-        <!--
         <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
           <tutorType>CAT</tutorType>
 		  <message>Jetzt tue emol e Brickele hinzufueche! Desch findesch oben rechtsch beim Plüsele!</message>
@@ -85,7 +84,6 @@
           <tutorType>CAT</tutorType>
 		  <message>Supi supi supi. Du bist so unglaublich spitze.</message>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskSay> 
-        -->
         
         
         
@@ -105,6 +103,26 @@
           <x>200</x>
           <y>300</y>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+          <tutorType>CAT</tutorType>
+		  <message>Jetzt tua mol den Costume dazuafügen!</message>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+          <tutorType>CAT</tutorType>
+		  <notificationType>COSTUMES_ADD_COSTUME</notificationType>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+          <tutorType>CAT</tutorType>
+		  <message>Jetzt tua mol den Costume dazuafügen!</message>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+          <tutorType>CAT</tutorType>
+		  <notificationType>COSTUMES_ADD_COSTUME</notificationType>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
         
         <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
           <tutorType>CAT</tutorType>
@@ -131,6 +149,18 @@
           <tutorType>CAT</tutorType>
 		  <notificationType>SOUNDS_ADD_SOUND</notificationType>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+        
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+          <tutorType>CAT</tutorType>
+          <x>200</x>
+          <y>300</y>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+          <tutorType>CAT</tutorType>
+		  <message> So, sounds sein jetz a derbei! Toll toll toll!</message>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
         
       </lessonContent>
       <lessonID>0</lessonID>
