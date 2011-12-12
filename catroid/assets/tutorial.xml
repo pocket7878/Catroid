@@ -60,12 +60,12 @@
         
         <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
           <tutorType>CAT</tutorType>
-		  <message>Nun drueck drittes item in Liste</message>
+		  <message>Nun drueck zweites item in Liste</message>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
         
         <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
           <notificationType>PROJECT_LIST_ITEM</notificationType>
-          <notificationString>2</notificationString>
+          <notificationString>1</notificationString>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
         
         
@@ -86,8 +86,6 @@
 		  <message>Supi supi supi. Du bist so unglaublich spitze.</message>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskSay> 
         -->
-        
-        
         
         
         <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>

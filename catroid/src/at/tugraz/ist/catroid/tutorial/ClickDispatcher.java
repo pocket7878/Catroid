@@ -196,7 +196,7 @@ public class ClickDispatcher {
 
 		if (x >= bounds.left && x <= bounds.left + 50) {
 			if (y >= bounds.top && y <= bounds.bottom) {
-				Tutorial.getInstance(null).pauseTutorial();
+				Tutorial.getInstance(null).stopButtonTutorial();
 				//Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
 				//toast.show();
 			}

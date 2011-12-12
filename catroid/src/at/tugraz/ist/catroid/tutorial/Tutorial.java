@@ -29,6 +29,7 @@ import android.graphics.PixelFormat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
+import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Values;
 
 /**
@@ -116,6 +117,7 @@ public class Tutorial {
 	}
 
 	private boolean startTutorial() {
+		ProjectManager.getInstance().loadProject("thumb_tutorial", context, false);
 		tutorialActive = true;
 		showLessonDialog();
 		Log.i("catroid", "starting tutorial...");
@@ -146,6 +148,12 @@ public class Tutorial {
 	public void stopTutorial() {
 		pauseTutorial();
 		tutorialActive = false;
+		ProjectManager.getInstance().loadProject("defaultProject", context, false);
+	}
+
+	public void stopButtonTutorial() {
+		stopTutorial();
+		lessonCollection.resetCurrentLesson();
 	}
 
 	public void pauseTutorial() {

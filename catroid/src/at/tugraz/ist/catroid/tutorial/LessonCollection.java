@@ -11,6 +11,10 @@ public class LessonCollection {
 		this.tutorialOverlay = tutorialOverlay;
 	}
 
+	public void resetCurrentLesson() {
+		lessonArray.get(currentLesson).currentStep = 0;
+	}
+
 	public void cleanAfterXML() {
 		for (int i = 0; i < lessonArray.size(); i++) {
 			lessonArray.get(i).cleanAfterXML();

@@ -143,8 +143,8 @@ public class ControlPanel {
 
 	public void pressPause() throws InterruptedException {
 		active = false;
-		Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
-		toast.show();
+		//Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
+		//toast.show();
 		//		tut.waitForNotification("BubblePlay");
 
 	}
