@@ -96,6 +96,7 @@ public class Tutorial {
 	private void showLessonDialog() {
 
 		//final CharSequence[] items = { "Red", "Green", "Blue" };
+
 		ArrayList<String> lessons = lessonCollection.getLessons();
 		final CharSequence[] items = new CharSequence[lessonCollection.getLastPossibleLessonNumber() + 1];
 		for (int i = 0; i < lessonCollection.getLastPossibleLessonNumber() + 1; i++) {

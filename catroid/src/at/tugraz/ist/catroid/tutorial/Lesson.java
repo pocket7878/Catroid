@@ -13,6 +13,14 @@ public class Lesson {
 	Lesson() {
 	}
 
+	public int getCurrentStep() {
+		return currentStep;
+	}
+
+	public void setCurrentStep(int currentStep) {
+		this.currentStep = currentStep;
+	}
+
 	public void cleanAfterXML() {
 		if (lessonContent.size() > 0) {
 			lessonContent.remove(0);

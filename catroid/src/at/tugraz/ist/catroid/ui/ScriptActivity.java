@@ -119,6 +119,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 
 	private View.OnClickListener createAddBrickClickListener() {
 		return new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				//tutorial.stopTutorial();
 				//tutorial.pauseTutorial();
@@ -135,6 +136,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 		adapter.notifyDataSetChanged();
 	}
 
+	@Override
 	public void onCancel(DialogInterface arg0) {
 		adapter.notifyDataSetChanged();
 	}
