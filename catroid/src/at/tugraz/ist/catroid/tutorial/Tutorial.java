@@ -118,7 +118,7 @@ public class Tutorial {
 	}
 
 	private boolean startTutorial() {
-		ProjectManager.getInstance().loadProject("thumb_tutorial", context, false);
+		ProjectManager.getInstance().initializeThumbTutorialProject(context);
 		tutorialActive = true;
 		showLessonDialog();
 		Log.i("catroid", "starting tutorial...");
@@ -149,7 +149,10 @@ public class Tutorial {
 	public void stopTutorial() {
 		pauseTutorial();
 		tutorialActive = false;
-		ProjectManager.getInstance().loadProject("defaultProject", context, false);
+
+		// TODO: Dont know, maybe reset it to default, but if not: copying the project
+		// so it dont get lost if tutorial is used again, so that the kids dont lose their work
+		//ProjectManager.getInstance().loadProject("defaultProject", context, false);
 	}
 
 	public void stopButtonTutorial() {
