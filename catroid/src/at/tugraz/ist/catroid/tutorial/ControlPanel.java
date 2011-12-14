@@ -52,15 +52,17 @@ public class ControlPanel {
 	Drawable pause;
 	Drawable forward;
 	Drawable backward;
+	Drawable circle;
 	Bitmap playBitmap;
 	Bitmap pauseBitmap;
 	Bitmap forwardBitmap;
 	Bitmap backwardBitmap;
+	Bitmap menuBitmap;
 
 	Rect bounds;
-
+	Rect menuBounds;
 	public static boolean active;
-
+	private boolean open;
 	Tutorial tut;
 
 	public ControlPanel(Resources resources, Context context) {
@@ -72,27 +74,52 @@ public class ControlPanel {
 		pause = resources.getDrawable(R.drawable.pause_tutorial);
 		forward = resources.getDrawable(R.drawable.forward_tutorial);
 		backward = resources.getDrawable(R.drawable.backwards_tutorial);
+		circle = resources.getDrawable(R.drawable.panel_circle);
 
 		bounds = new Rect();
+		menuBounds = new Rect();
 
 		playBitmap = ((BitmapDrawable) play).getBitmap();
 		pauseBitmap = ((BitmapDrawable) pause).getBitmap();
 		forwardBitmap = ((BitmapDrawable) forward).getBitmap();
 		backwardBitmap = ((BitmapDrawable) backward).getBitmap();
-
+		menuBitmap = ((BitmapDrawable) circle).getBitmap();
+		open = false;
 	}
 
 	public void draw(Canvas canvas) {
 		Paint paint = new Paint();
+		if (open) {
+			setBounds(0);
+			canvas.drawBitmap(playBitmap, bounds.left, bounds.top, paint);
+			setBounds(70);
+			canvas.drawBitmap(pauseBitmap, bounds.left, bounds.top, paint);
+			setBounds(140);
+			canvas.drawBitmap(forwardBitmap, bounds.left, bounds.top, paint);
+			setBounds(210);
+			canvas.drawBitmap(backwardBitmap, bounds.left, bounds.top, paint);
+		}
+		setMenuBounds();
+		canvas.drawBitmap(menuBitmap, menuBounds.left, menuBounds.top, paint);
+	}
 
-		setBounds(0);
-		canvas.drawBitmap(playBitmap, bounds.left, bounds.top, paint);
-		setBounds(70);
-		canvas.drawBitmap(pauseBitmap, bounds.left, bounds.top, paint);
-		setBounds(140);
-		canvas.drawBitmap(forwardBitmap, bounds.left, bounds.top, paint);
-		setBounds(210);
-		canvas.drawBitmap(backwardBitmap, bounds.left, bounds.top, paint);
+	public boolean isOpen() {
+		return open;
+	}
+
+	public void open() {
+		open = true;
+	}
+
+	public void close() {
+		open = false;
+	}
+
+	private void setMenuBounds() {
+		menuBounds.left = 0;
+		menuBounds.right = menuBitmap.getWidth();
+		menuBounds.bottom = getScreenHeight();
+		menuBounds.top = getScreenHeight() - menuBitmap.getHeight();
 	}
 
 	private void setBounds(int shift) {
@@ -102,8 +129,8 @@ public class ControlPanel {
 
 		bounds.left = ((width - 260) / 2) + shift;
 		bounds.right = bounds.left + 50;
-		bounds.top = height - 60;
-		bounds.bottom = height - 10;
+		bounds.top = height - 40;
+		bounds.bottom = height;// - 10;
 
 	}
 

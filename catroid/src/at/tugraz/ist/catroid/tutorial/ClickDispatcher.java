@@ -67,7 +67,6 @@ public class ClickDispatcher {
 				|| currentNotification == Task.Notification.WAIT_SECONDS
 				|| currentNotification == Task.Notification.REPEAT
 				|| currentNotification == Task.Notification.REPEAT_TIMES) {
-			Log.i("faxxe", "scrolling to right position!");
 			scrollDialogToPosition(currentNotification);
 		}
 	}
@@ -139,7 +138,6 @@ public class ClickDispatcher {
 	public void dispatchEventReally(MotionEvent ev) {
 
 		if (currentNotification != null) {
-			Log.i("faxxe", ".currentNotification: " + currentNotification.toString());
 		}
 		//Todo:
 		/*
@@ -158,17 +156,30 @@ public class ClickDispatcher {
 		int x = (int) ev.getX();
 		int y = (int) ev.getY();
 
+		//check if event coordinates are the coordinates of the control panel buttons
 		if (panel != null) {
 			Rect bounds = panel.getPanelBounds();
-			//check if event coordinates are the coordinates of the control panel buttons
+			int height = ((Activity) context).getWindowManager().getDefaultDisplay().getHeight();
+			if (x < 50 && y > height - 50) {
+				Log.i("faxxe", "panel dispatched!");
+				if (!panel.isOpen() && ev.getAction() == MotionEvent.ACTION_UP) {
+					panel.open();
+				} else if (panel.isOpen() && ev.getAction() == MotionEvent.ACTION_UP) {
+					panel.close();
+				}
+				return;
+			}
 			if (x >= bounds.left && x <= bounds.right) {
 				if (y >= bounds.top && y <= bounds.bottom) {
 					dispatchPanel(ev);
 					return;
 				}
 			}
-		}
 
+		}
+		if (panel.isOpen()) {
+			panel.close();
+		}
 		if (currentNotification == null) {
 			return;
 		}
@@ -236,7 +247,6 @@ public class ClickDispatcher {
 				|| currentNotification == Task.Notification.BRICK_CATEGORY_MOTION
 				|| currentNotification == Task.Notification.BRICK_CATEGORY_SOUND
 				|| currentNotification == Task.Notification.BRICK_CATEGORY_LOOKS) {
-			Log.i("faxxe", "dispatching brickCategoryDialog " + currentNotification.toString());
 			dispatchBrickCategoryDialog(ev);
 			return;
 		}
@@ -244,11 +254,9 @@ public class ClickDispatcher {
 	}
 
 	public void dispatchAddBrickDialog(MotionEvent ev) {
-		Log.i("faxxe", "Lasset die Spiele beginnen! -- AddBrickDialog");
 		Dialog dialog = Tutorial.getInstance(null).getDialog();
 		ListView lv = (ListView) dialog.findViewById(R.id.toolboxListView);
 		if (lv == null) {
-			Log.i("faxxe", "listview von AddBrickDialog == null --> ERROR");
 			return;
 		}
 		//		lv.smoothScrollToPosition(8);
@@ -261,46 +269,38 @@ public class ClickDispatcher {
 	public void dispatchBrickCategoryDialog(MotionEvent ev) {
 		Dialog dialog = Tutorial.getInstance(null).getDialog();
 		if (dialog == null) {
-			Log.i("faxxe", "dialog==null --- ERROR");
 			//Massive Failure -- should never happen
 			return;
 		}
 		if (dialog.isShowing() == false) {
-			Log.i("faxxe", "dialog not showing --- ERROR");
 			//There is something very wrong
 			return;
 		}
 		ListView lv = (ListView) dialog.findViewById(R.id.categoriesListView);
 		if (lv == null) {
-			Log.i("faxxe", "listview==null!");
 		}
 		switch (currentNotification) {
 			case BRICK_CATEGORY_CONTROL:
 				if (isItemClicked(lv.getChildAt(3), ev)) {
-					Log.i("faxxe", "brick_category_control");
 					dialog.dispatchTouchEvent(ev);
 				}
 				break;
 			case BRICK_CATEGORY_LOOKS:
 				if (isItemClicked(lv.getChildAt(1), ev)) {
-					Log.i("faxxe", "brick_category_looks");
 					dialog.dispatchTouchEvent(ev);
 				}
 				break;
 			case BRICK_CATEGORY_MOTION:
 				if (isItemClicked(lv.getChildAt(0), ev)) {
-					Log.i("faxxe", "brick_category_motion");
 					dialog.dispatchTouchEvent(ev);
 				}
 				break;
 			case BRICK_CATEGORY_SOUND:
 				if (isItemClicked(lv.getChildAt(2), ev)) {
-					Log.i("faxxe", "brick_category_sound");
 					dialog.dispatchTouchEvent(ev);
 				}
 				break;
 			default:
-				Log.i("faxxe", "brickCategoryDialogSwitchDefaultBlock");
 		}
 	}
 
@@ -309,7 +309,6 @@ public class ClickDispatcher {
 		int x = (int) ev.getX();
 		int y = (int) ev.getY();
 		Rect bounds = panel.getPanelBounds();
-
 		//		check if event coordinates are the coordinates of the control panel buttons
 		if (x >= bounds.left && x <= bounds.left + 50) {
 			if (y >= bounds.top && y <= bounds.bottom) {
@@ -347,11 +346,9 @@ public class ClickDispatcher {
 	}
 
 	public boolean isItemClicked(View view, MotionEvent ev) {
-		Log.i("faxxe", "in: isItemClicked");
 		float x = ev.getX();
 		float y = ev.getY();
 		if (view == null) {
-			Log.i("faxxe", "ERROR: view==null");
 			return false;
 		}
 		float leftX = getRelativeLeft(view);
@@ -400,7 +397,6 @@ public class ClickDispatcher {
 
 	public void dispatchSkript(MotionEvent ev) {
 		Activity currentActivity = (Activity) context;
-		Log.i("faxxe", "current context is from: " + currentActivity.getLocalClassName());
 		if (currentActivity.getLocalClassName().compareTo("ui.ScriptActivity") == 0) {
 			currentActivity = currentActivity.getParent();
 		}
@@ -439,7 +435,6 @@ public class ClickDispatcher {
 
 	public void dispatchProjectStageButton(MotionEvent ev) {
 		if (currentNotification == Task.Notification.PROJECT_STAGE_BUTTON) {
-			Log.i("faxxe", ".........................................PROJECT_STAGE_BUTTON");
 			Activity currentActivity = (Activity) context;
 			if (currentActivity.getLocalClassName().compareTo("ui.ScriptActivity") == 0) {
 				currentActivity = currentActivity.getParent();
@@ -494,11 +489,8 @@ public class ClickDispatcher {
 		int x = listView.getChildAt(index).getLeft();
 		int maxx = listView.getChildAt(index).getRight();
 		int maxy = listView.getChildAt(index).getBottom();
-		Log.i("faxxe", "touched!" + x + " " + y + " " + maxx + " " + maxy + " " + event.getX() + " " + event.getY());
 
 		if (event.getX() < maxx && event.getX() > x && event.getY() < maxy && event.getY() > y) {
-			Log.i("faxxe",
-					"irgendwos" + x + " " + y + " " + maxx + " " + maxy + " " + event.getX() + " " + event.getY());
 			listView.dispatchTouchEvent(event);
 		}
 
@@ -506,7 +498,6 @@ public class ClickDispatcher {
 	}
 
 	public void dispatchMainMenu(MotionEvent ev) {
-		Log.i("faxxe", "mainmenudispatcher");
 		Activity currentActivity = (Activity) context;
 		Button currentProjectButton = (Button) currentActivity.findViewById(R.id.current_project_button);
 		Button aboutButton = (Button) currentActivity.findViewById(R.id.about_catroid_button);
@@ -528,7 +519,6 @@ public class ClickDispatcher {
 
 		Activity currentActivity = (Activity) context;
 		currentActivity = currentActivity.getParent();
-		Log.i("faxxe", "CostumesDispatcher!");
 		if (currentNotification == Task.Notification.COSTUMES_ADD_COSTUME) {
 			ImageButton addSpriteButton = (ImageButton) currentActivity.findViewById(R.id.btn_action_add_sprite);
 			if (isImageButtonClicked(ev, addSpriteButton) && addSpriteButton != null) {
@@ -544,7 +534,6 @@ public class ClickDispatcher {
 	public void dispatchSounds(MotionEvent ev) {
 		Activity currentActivity = (Activity) context;
 		currentActivity = currentActivity.getParent();
-		Log.i("faxxe", "Sounddispatcher!");
 		if (currentNotification == Task.Notification.SOUNDS_ADD_SOUND) {
 			ImageButton addSpriteButton = (ImageButton) currentActivity.findViewById(R.id.btn_action_add_sprite);
 			if (isImageButtonClicked(ev, addSpriteButton) && addSpriteButton != null) {
