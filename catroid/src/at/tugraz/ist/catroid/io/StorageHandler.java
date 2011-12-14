@@ -32,7 +32,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Field;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
@@ -425,17 +424,6 @@ public class StorageHandler {
 		this.saveProject(defaultProject);
 
 		return defaultProject;
-	}
-
-	public static int getResId(String variableName, Context context, Class<?> c) {
-
-		try {
-			Field idField = c.getDeclaredField(variableName);
-			return idField.getInt(idField);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return -1;
-		}
 	}
 
 	/**

@@ -25,7 +25,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
@@ -38,6 +40,7 @@ import at.tugraz.ist.catroid.common.Values;
  */
 public class Tutorial {
 	public static final boolean DEBUG = true;
+	private static final String PREF_KEY_POSSIBLE_LESSON = "possibleLesson";
 
 	public volatile ArrayList<String> notifies = new ArrayList<String>();
 	private String currentNotification = "";
@@ -95,6 +98,12 @@ public class Tutorial {
 
 	private void showLessonDialog() {
 
+		if (lessonCollection.getLastPossibleLessonNumber() == 0) {
+			lessonCollection.switchToLesson(0);
+			resumeTutorial();
+			return;
+		}
+
 		//final CharSequence[] items = { "Red", "Green", "Blue" };
 
 		ArrayList<String> lessons = lessonCollection.getLessons();
@@ -120,6 +129,11 @@ public class Tutorial {
 	private boolean startTutorial() {
 		ProjectManager.getInstance().initializeThumbTutorialProject(context);
 		tutorialActive = true;
+
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		int possibleLesson = preferences.getInt(PREF_KEY_POSSIBLE_LESSON, 0);
+		lessonCollection.setLastPossibleLessonNumber(possibleLesson);
+
 		showLessonDialog();
 		Log.i("catroid", "starting tutorial...");
 		return tutorialActive;
@@ -149,6 +163,11 @@ public class Tutorial {
 	public void stopTutorial() {
 		pauseTutorial();
 		tutorialActive = false;
+
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		SharedPreferences.Editor sharedPreferencesEditor = preferences.edit();
+		sharedPreferencesEditor.putInt(PREF_KEY_POSSIBLE_LESSON, lessonCollection.getLastPossibleLessonNumber());
+		sharedPreferencesEditor.commit();
 
 		// TODO: Dont know, maybe reset it to default, but if not: copying the project
 		// so it dont get lost if tutorial is used again, so that the kids dont lose their work
@@ -222,6 +241,10 @@ public class Tutorial {
 					}
 				}
 			} while (lessonCollection.forwardStep() && tutorialThreadRunning);
+		}
+
+		if (!lessonCollection.forwardStep()) {
+			lessonCollection.resetCurrentLesson();
 		}
 
 		if (tutorialThreadRunning) {
