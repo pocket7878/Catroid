@@ -79,7 +79,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		tutorial.pauseTutorial();
+		Tutorial.getInstance(this).pauseTutorial();
 		ProjectManager projectManager = ProjectManager.getInstance();
 		if (projectManager.getCurrentProject() != null) {
 			projectManager.saveProject();
@@ -121,13 +121,9 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 		return new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//tutorial.stopTutorial();
-				//tutorial.pauseTutorial();
-				//tutorial.toggleTutorial();
+				tutorial.pauseTutorial();
 				getParent().showDialog(DIALOG_ADD_BRICK);
-				//tutorial.toggleTutorial();
-				//tutorial.resumeTutorial();
-				//tutorial.setNotification("openDialog");
+				tutorial.resumeTutorial();
 			}
 		};
 	}

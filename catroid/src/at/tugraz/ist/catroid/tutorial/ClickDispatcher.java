@@ -21,6 +21,7 @@ package at.tugraz.ist.catroid.tutorial;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.graphics.Rect;
@@ -50,6 +51,7 @@ public class ClickDispatcher {
 	MotionEvent second;
 	boolean scroll;
 	boolean scroll2;
+	int itemPosition = 0;
 
 	ClickDispatcher(Context context, ControlPanel panel) {
 		this.panel = panel;
@@ -61,6 +63,42 @@ public class ClickDispatcher {
 	public void setCurrentNotification(Task.Notification currentNotification, String notificationValue) {
 		this.currentNotification = currentNotification;
 		this.notificationValue = notificationValue;
+		if (currentNotification == Task.Notification.IF_PROJECT_STARTED || currentNotification == Task.Notification.IF
+				|| currentNotification == Task.Notification.WAIT_SECONDS
+				|| currentNotification == Task.Notification.REPEAT
+				|| currentNotification == Task.Notification.REPEAT_TIMES) {
+			Log.i("faxxe", "scrolling to right position!");
+			scrollDialogToPosition(currentNotification);
+		}
+	}
+
+	public void scrollDialogToPosition(Task.Notification currentNotification) {
+		Dialog dialog = Tutorial.getInstance(null).getDialog();
+		ListView lv = (ListView) dialog.findViewById(R.id.toolboxListView);
+
+		switch (currentNotification) {
+			case IF_PROJECT_STARTED:
+				itemPosition = 0;
+				break;
+			case IF:
+				itemPosition = 1;
+				break;
+			case WAIT_SECONDS:
+				itemPosition = 2;
+				break;
+			case REPEAT:
+				itemPosition = 7;
+				break;
+			case REPEAT_TIMES:
+				itemPosition = 8;
+				break;
+			case SET_COSTUME:
+				itemPosition = 0;
+				break;
+			default:
+				itemPosition = 0;
+		}
+		lv.smoothScrollToPosition(itemPosition);
 	}
 
 	public void dispatchEvent(MotionEvent ev) {
@@ -100,6 +138,17 @@ public class ClickDispatcher {
 
 	public void dispatchEventReally(MotionEvent ev) {
 
+		if (currentNotification != null) {
+			Log.i("faxxe", ".currentNotification: " + currentNotification.toString());
+		}
+		//Todo:
+		/*
+		 * 1. Notification fuern dialog einrichten und obfrogen
+		 * 2. schaun wie des mit die Items im dialog is...
+		 * 3. schaun ob akuteller dialog mit dem this.dialog zompasst
+		 * 4. so mochn dos eh tuat ')
+		 */
+
 		if (scroll == true) {
 			Activity currentActivity = (Activity) context;
 			currentActivity.dispatchTouchEvent(ev);
@@ -136,13 +185,16 @@ public class ClickDispatcher {
 
 		if (currentNotification == Task.Notification.PROJECT_ADD_SPRITE
 				|| currentNotification == Task.Notification.PROJECT_HOME_BUTTON
-				|| currentNotification == Task.Notification.PROJECT_LIST_ITEM
-				|| currentNotification == Task.Notification.PROJECT_STAGE_BUTTON) {
+				|| currentNotification == Task.Notification.PROJECT_LIST_ITEM) {
 			if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.ProjectActivity") != 0) {
 				// TODO: This should never ever happen, something went terribly wrong: how to deal with this?
 				return;
 			}
 			dispatchProject(ev);
+			return;
+		}
+		if (currentNotification == Task.Notification.PROJECT_STAGE_BUTTON) {
+			dispatchProjectStageButton(ev);
 			return;
 		}
 
@@ -171,7 +223,85 @@ public class ClickDispatcher {
 			dispatchSounds(ev);
 		}
 
+		if (currentNotification == Task.Notification.IF_PROJECT_STARTED || currentNotification == Task.Notification.IF
+				|| currentNotification == Task.Notification.WAIT_SECONDS
+				|| currentNotification == Task.Notification.REPEAT
+				|| currentNotification == Task.Notification.REPEAT_TIMES
+				|| currentNotification == Task.Notification.SET_COSTUME) {
+			dispatchAddBrickDialog(ev);
+			return;
+		}
+
+		if (currentNotification == Task.Notification.BRICK_CATEGORY_CONTROL
+				|| currentNotification == Task.Notification.BRICK_CATEGORY_MOTION
+				|| currentNotification == Task.Notification.BRICK_CATEGORY_SOUND
+				|| currentNotification == Task.Notification.BRICK_CATEGORY_LOOKS) {
+			Log.i("faxxe", "dispatching brickCategoryDialog " + currentNotification.toString());
+			dispatchBrickCategoryDialog(ev);
+			return;
+		}
 		return;
+	}
+
+	public void dispatchAddBrickDialog(MotionEvent ev) {
+		Log.i("faxxe", "Lasset die Spiele beginnen! -- AddBrickDialog");
+		Dialog dialog = Tutorial.getInstance(null).getDialog();
+		ListView lv = (ListView) dialog.findViewById(R.id.toolboxListView);
+		if (lv == null) {
+			Log.i("faxxe", "listview von AddBrickDialog == null --> ERROR");
+			return;
+		}
+		//		lv.smoothScrollToPosition(8);
+
+		if (isItemClicked(lv.getChildAt(itemPosition), ev)) {
+			dialog.dispatchTouchEvent(ev);
+		}
+	}
+
+	public void dispatchBrickCategoryDialog(MotionEvent ev) {
+		Dialog dialog = Tutorial.getInstance(null).getDialog();
+		if (dialog == null) {
+			Log.i("faxxe", "dialog==null --- ERROR");
+			//Massive Failure -- should never happen
+			return;
+		}
+		if (dialog.isShowing() == false) {
+			Log.i("faxxe", "dialog not showing --- ERROR");
+			//There is something very wrong
+			return;
+		}
+		ListView lv = (ListView) dialog.findViewById(R.id.categoriesListView);
+		if (lv == null) {
+			Log.i("faxxe", "listview==null!");
+		}
+		switch (currentNotification) {
+			case BRICK_CATEGORY_CONTROL:
+				if (isItemClicked(lv.getChildAt(3), ev)) {
+					Log.i("faxxe", "brick_category_control");
+					dialog.dispatchTouchEvent(ev);
+				}
+				break;
+			case BRICK_CATEGORY_LOOKS:
+				if (isItemClicked(lv.getChildAt(1), ev)) {
+					Log.i("faxxe", "brick_category_looks");
+					dialog.dispatchTouchEvent(ev);
+				}
+				break;
+			case BRICK_CATEGORY_MOTION:
+				if (isItemClicked(lv.getChildAt(0), ev)) {
+					Log.i("faxxe", "brick_category_motion");
+					dialog.dispatchTouchEvent(ev);
+				}
+				break;
+			case BRICK_CATEGORY_SOUND:
+				if (isItemClicked(lv.getChildAt(2), ev)) {
+					Log.i("faxxe", "brick_category_sound");
+					dialog.dispatchTouchEvent(ev);
+				}
+				break;
+			default:
+				Log.i("faxxe", "brickCategoryDialogSwitchDefaultBlock");
+		}
 	}
 
 	public void dispatchPanel(MotionEvent ev) {
@@ -216,6 +346,25 @@ public class ClickDispatcher {
 		}
 	}
 
+	public boolean isItemClicked(View view, MotionEvent ev) {
+		Log.i("faxxe", "in: isItemClicked");
+		float x = ev.getX();
+		float y = ev.getY();
+		if (view == null) {
+			Log.i("faxxe", "ERROR: view==null");
+			return false;
+		}
+		float leftX = getRelativeLeft(view);
+		float topY = getRelativeTop(view);
+		float rightX = leftX + view.getWidth();
+		float bottomY = topY + view.getHeight();
+		if (x > leftX && x < rightX && y > topY && y < bottomY) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public boolean isScriptsButton(int leftX, int rightX, int topY, int bottomY, MotionEvent ev) {
 		int tabHeigth = topY - bottomY;
 		int tabWidth = rightX - leftX;
@@ -250,12 +399,20 @@ public class ClickDispatcher {
 	}
 
 	public void dispatchSkript(MotionEvent ev) {
-
 		Activity currentActivity = (Activity) context;
-		Activity parentActivity = currentActivity.getParent();
-		ImageButton addSpriteButton = (ImageButton) parentActivity.findViewById(R.id.btn_action_add_sprite);
+		Log.i("faxxe", "current context is from: " + currentActivity.getLocalClassName());
+		if (currentActivity.getLocalClassName().compareTo("ui.ScriptActivity") == 0) {
+			currentActivity = currentActivity.getParent();
+		}
+		if (currentActivity.getLocalClassName().compareTo("ui.CostumeActivity") == 0) {
+			currentActivity = currentActivity.getParent();
+		}
+		if (currentActivity.getLocalClassName().compareTo("ui.SoundActivity") == 0) {
+			currentActivity = currentActivity.getParent();
+		}
+		ImageButton addSpriteButton = (ImageButton) currentActivity.findViewById(R.id.btn_action_add_sprite);
 
-		TabHost tabHost = (TabHost) parentActivity.findViewById(android.R.id.tabhost);
+		TabHost tabHost = (TabHost) currentActivity.findViewById(android.R.id.tabhost);
 
 		ArrayList<View> tabViews = tabHost.getTouchables();
 		LinearLayout tab1 = (LinearLayout) tabViews.get(0);
@@ -272,11 +429,34 @@ public class ClickDispatcher {
 			tabHost.setCurrentTab(1);
 		}
 		if (isImageButtonClicked(ev, addSpriteButton) && currentNotification == Task.Notification.SCRIPTS_ADD_BRICK) {
-			parentActivity.dispatchTouchEvent(ev);
 			if (ev.getAction() == MotionEvent.ACTION_UP) {
+				//				Tutorial.getInstance(context).pauseTutorial();
 				currentNotification = null;
 			}
-			return;
+			currentActivity.dispatchTouchEvent(ev);
+		}
+	}
+
+	public void dispatchProjectStageButton(MotionEvent ev) {
+		if (currentNotification == Task.Notification.PROJECT_STAGE_BUTTON) {
+			Log.i("faxxe", ".........................................PROJECT_STAGE_BUTTON");
+			Activity currentActivity = (Activity) context;
+			if (currentActivity.getLocalClassName().compareTo("ui.ScriptActivity") == 0) {
+				currentActivity = currentActivity.getParent();
+			}
+			if (currentActivity.getLocalClassName().compareTo("ui.CostumeActivity") == 0) {
+				currentActivity = currentActivity.getParent();
+			}
+			if (currentActivity.getLocalClassName().compareTo("ui.SoundActivity") == 0) {
+				currentActivity = currentActivity.getParent();
+			}
+			ImageButton actionPlayButton = (ImageButton) currentActivity.findViewById(R.id.btn_action_play);
+			if (isImageButtonClicked(ev, actionPlayButton)) {
+				if (ev.getAction() == MotionEvent.ACTION_UP) {
+					Tutorial.getInstance(null).stopTutorial();
+				}
+				currentActivity.dispatchTouchEvent(ev);
+			}
 		}
 	}
 
@@ -294,10 +474,6 @@ public class ClickDispatcher {
 		}
 
 		if (currentNotification == Task.Notification.PROJECT_HOME_BUTTON) {
-
-		}
-
-		if (currentNotification == Task.Notification.PROJECT_STAGE_BUTTON) {
 
 		}
 
@@ -421,6 +597,24 @@ public class ClickDispatcher {
 			return (true);
 		} else {
 			return (false);
+		}
+	}
+
+	//stolen from: http://stackoverflow.com/questions/3619693/how-to-get-views-position
+
+	private int getRelativeLeft(View myView) {
+		if (myView.getParent() == myView.getRootView()) {
+			return myView.getLeft();
+		} else {
+			return myView.getLeft() + getRelativeLeft((View) myView.getParent());
+		}
+	}
+
+	private int getRelativeTop(View myView) {
+		if (myView.getParent() == myView.getRootView()) {
+			return myView.getTop();
+		} else {
+			return myView.getTop() + getRelativeTop((View) myView.getParent());
 		}
 	}
 

@@ -184,6 +184,7 @@ public class AddBrickDialog extends Dialog {
 
 		ImageButton closeButton = (ImageButton) findViewById(R.id.btn_close_dialog);
 		closeButton.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				dismiss();
 			}
@@ -204,7 +205,9 @@ public class AddBrickDialog extends Dialog {
 
 		listView.setAdapter(adapter);
 
+		Tutorial.getInstance(null).setDialog(this);
 		listView.setOnItemClickListener(new ListView.OnItemClickListener() {
+			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Brick addedBrick = adapter.getItem(position);
 				ProjectManager projectManager = ProjectManager.getInstance();
@@ -264,10 +267,9 @@ public class AddBrickDialog extends Dialog {
 				}
 				scriptTabActivity.dismissDialog(ScriptTabActivity.DIALOG_ADD_BRICK);
 				scriptTabActivity.dismissDialog(ScriptTabActivity.DIALOG_BRICK_CATEGORY);
-
-				Tutorial tutorial = Tutorial.getInstance(scriptTabActivity.getApplicationContext());
-				tutorial.setNotification("DialogDone");
-				//				Tutorial.getInstance(null).setDialog(null);
+				Tutorial tutorial = Tutorial.getInstance(null);
+				tutorial.setNotification("ActivityChange");
+				Tutorial.getInstance(null).setDialog(null);
 			}
 		});
 	}

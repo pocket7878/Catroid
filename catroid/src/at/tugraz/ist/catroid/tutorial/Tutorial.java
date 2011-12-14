@@ -29,7 +29,9 @@ import android.graphics.PixelFormat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
+import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Values;
 
 /**
@@ -117,11 +119,12 @@ public class Tutorial {
 
 	}
 
+	//dismiss dialog tuat nit :(
 	private boolean startTutorial() {
-		ProjectManager.getInstance().loadProject("thumb_tutorial", context, false);
 		tutorialActive = true;
-		showLessonDialog();
+		ProjectManager.getInstance().loadProject("thumb_tutorial", context, false);
 		Log.i("catroid", "starting tutorial...");
+		showLessonDialog();
 		return tutorialActive;
 	}
 
@@ -130,7 +133,14 @@ public class Tutorial {
 			return;
 		}
 		dragViewParameters = createLayoutParameters();
-		windowManager = ((Activity) context).getWindowManager();
+		//windowManager = ((Activity) context).getWindowManager();
+		if (dialog == null) {
+			Activity currentActivity = (Activity) context;
+			windowManager = currentActivity.getWindowManager();
+		}
+		if (dialog != null) {
+			windowManager = dialog.getWindow().getWindowManager();
+		}
 		tutorialOverlay = new TutorialOverlay(context, tutor, tutor_2);
 		windowManager.addView(tutorialOverlay, dragViewParameters);
 
@@ -154,6 +164,7 @@ public class Tutorial {
 
 	public void stopButtonTutorial() {
 		stopTutorial();
+		this.dialog = null;
 		lessonCollection.resetCurrentLesson();
 	}
 
@@ -230,7 +241,12 @@ public class Tutorial {
 	}
 
 	public void waitForNotification(String waitNotification) throws InterruptedException {
-		Log.i("catroid", "waiting for: " + waitNotification);
+		Log.i("faxxe", "waiting for: " + waitNotification);
+		if (waitNotification.compareTo("IF_PROJECT_STARTED") == 0) {
+			ListView lv = (ListView) dialog.findViewById(R.id.toolboxListView);
+			lv.smoothScrollToPosition(8);
+			Log.i("faxxe", "try to scroll to the right position!");
+		}
 		while (tutorialThreadRunning) {
 			for (int i = 0; i < notifies.size(); i++) {
 				currentNotification = notifies.get(i);
