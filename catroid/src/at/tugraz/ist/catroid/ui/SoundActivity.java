@@ -52,6 +52,14 @@ public class SoundActivity extends ListActivity {
 	private final int REQUEST_SELECT_MUSIC = 0;
 
 	@Override
+	public void onBackPressed() {
+		if (Tutorial.getInstance(null).isActive()) {
+			return;
+		}
+		super.onBackPressed();
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 

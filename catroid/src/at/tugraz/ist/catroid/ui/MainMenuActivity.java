@@ -217,6 +217,14 @@ public class MainMenuActivity extends Activity {
 	}
 
 	@Override
+	public void onBackPressed() {
+		if (Tutorial.getInstance(null).isActive()) {
+			return;
+		}
+		super.onBackPressed();
+	}
+
+	@Override
 	public void onPause() {
 		super.onPause();
 		Tutorial.getInstance(this).pauseTutorial();

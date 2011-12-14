@@ -25,6 +25,8 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -76,6 +78,41 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 
 	public void switchToDog() {
 		currentTutor = tutor_2;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.view.View#dispatchKeyEvent(android.view.KeyEvent)
+	 */
+	@Override
+	public boolean dispatchKeyEvent(KeyEvent event) {
+		// TODO Auto-generated method stub
+		Log.i("faxxe", "dispatchKeyEvent");
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.view.View#dispatchKeyEventPreIme(android.view.KeyEvent)
+	 */
+	@Override
+	public boolean dispatchKeyEventPreIme(KeyEvent event) {
+		// TODO Auto-generated method stub
+		Log.i("faxxe", "dispatchKeyEvent");
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.view.View#dispatchKeyShortcutEvent(android.view.KeyEvent)
+	 */
+	@Override
+	public boolean dispatchKeyShortcutEvent(KeyEvent event) {
+		// TODO Auto-generated method stub
+		return super.dispatchKeyShortcutEvent(event);
 	}
 
 	public void switchToCat() {

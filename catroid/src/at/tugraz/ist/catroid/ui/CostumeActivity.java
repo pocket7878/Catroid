@@ -56,6 +56,14 @@ public class CostumeActivity extends ListActivity {
 	public static final int REQUEST_CAM_IMAGE = 3;
 
 	@Override
+	public void onBackPressed() {
+		if (Tutorial.getInstance(null).isActive()) {
+			return;
+		}
+		super.onBackPressed();
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 

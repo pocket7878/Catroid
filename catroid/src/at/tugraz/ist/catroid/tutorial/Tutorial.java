@@ -63,6 +63,10 @@ public class Tutorial {
 	private Tutorial() {
 	}
 
+	public boolean isActive() {
+		return tutorialActive;
+	}
+
 	public void rewindStep() {
 		lessonCollection.rewindStep();
 	}

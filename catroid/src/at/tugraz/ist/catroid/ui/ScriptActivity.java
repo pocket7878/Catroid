@@ -50,6 +50,14 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 	private static final int DIALOG_ADD_BRICK = 2;
 	private Tutorial tutorial;
 
+	@Override
+	public void onBackPressed() {
+		if (Tutorial.getInstance(null).isActive()) {
+			return;
+		}
+		super.onBackPressed();
+	}
+
 	private void initListeners() {
 		sprite = ProjectManager.getInstance().getCurrentSprite();
 		if (sprite == null) {

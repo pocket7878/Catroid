@@ -63,6 +63,14 @@ public class ProjectActivity extends ListActivity {
 	private static final int DIALOG_RENAME_SPRITE = 1;
 	private static final int DIALOG_CONTEXT_MENU = 2;
 
+	@Override
+	public void onBackPressed() {
+		if (Tutorial.getInstance(null).isActive()) {
+			return;
+		}
+		super.onBackPressed();
+	}
+
 	private void initListeners() {
 		spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject().getSpriteList();
 		spriteAdapter = new SpriteAdapter(this, R.layout.activity_project_spritelist_item, R.id.sprite_title,

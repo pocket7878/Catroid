@@ -121,6 +121,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener 
 		activityHelper.addActionButton(R.id.btn_action_add_sprite, R.drawable.ic_plus_black, null, false);
 
 		activityHelper.addActionButton(R.id.btn_action_play, R.drawable.ic_play_black, new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(ScriptTabActivity.this, PreStageActivity.class);
 				startActivityForResult(intent, PreStageActivity.REQUEST_RESOURCES_INIT);
@@ -216,6 +217,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener 
 		dismissDialog(DIALOG_RENAME_COSTUME);
 	}
 
+	@Override
 	public void onDismiss(DialogInterface dialogInterface) {
 		((ScriptActivity) getCurrentActivity()).updateAdapterAfterAddNewBrick(dialogInterface);
 	}
