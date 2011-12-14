@@ -141,7 +141,7 @@ public class Sprite implements Serializable {
 
 					LoopEndBrick loopEndBrick = (LoopEndBrick) scriptCopied.getBrick(brickEnd);
 					((LoopBeginBrick) scriptCopied.getBrickList().get(brickBegin)).setLoopEndBrick(loopEndBrick);
-					loopEndBrick.setLoopBeginBrick((LoopBeginBrick) element);
+					loopEndBrick.setLoopBeginBrick((LoopBeginBrick) scriptCopied.getBrick(brickBegin));
 				}
 
 				if (element.getClass() == ForeverBrick.class) {
