@@ -25,13 +25,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
-import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Values;
 
 /**
@@ -40,6 +40,7 @@ import at.tugraz.ist.catroid.common.Values;
  */
 public class Tutorial {
 	public static final boolean DEBUG = true;
+	private static final String PREF_KEY_POSSIBLE_LESSON = "possibleLesson";
 
 	public volatile ArrayList<String> notifies = new ArrayList<String>();
 	private String currentNotification = "";
@@ -97,6 +98,12 @@ public class Tutorial {
 
 	private void showLessonDialog() {
 
+		if (lessonCollection.getLastPossibleLessonNumber() == 0) {
+			lessonCollection.switchToLesson(0);
+			resumeTutorial();
+			return;
+		}
+
 		//final CharSequence[] items = { "Red", "Green", "Blue" };
 
 		ArrayList<String> lessons = lessonCollection.getLessons();
@@ -119,12 +126,16 @@ public class Tutorial {
 
 	}
 
-	//dismiss dialog tuat nit :(
 	private boolean startTutorial() {
+		ProjectManager.getInstance().initializeThumbTutorialProject(context);
 		tutorialActive = true;
-		ProjectManager.getInstance().loadProject("thumb_tutorial", context, false);
-		Log.i("catroid", "starting tutorial...");
+
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		int possibleLesson = preferences.getInt(PREF_KEY_POSSIBLE_LESSON, 0);
+		lessonCollection.setLastPossibleLessonNumber(possibleLesson);
+
 		showLessonDialog();
+		Log.i("catroid", "starting tutorial...");
 		return tutorialActive;
 	}
 
@@ -133,14 +144,7 @@ public class Tutorial {
 			return;
 		}
 		dragViewParameters = createLayoutParameters();
-		//windowManager = ((Activity) context).getWindowManager();
-		if (dialog == null) {
-			Activity currentActivity = (Activity) context;
-			windowManager = currentActivity.getWindowManager();
-		}
-		if (dialog != null) {
-			windowManager = dialog.getWindow().getWindowManager();
-		}
+		windowManager = ((Activity) context).getWindowManager();
 		tutorialOverlay = new TutorialOverlay(context, tutor, tutor_2);
 		windowManager.addView(tutorialOverlay, dragViewParameters);
 
@@ -159,7 +163,15 @@ public class Tutorial {
 	public void stopTutorial() {
 		pauseTutorial();
 		tutorialActive = false;
-		ProjectManager.getInstance().loadProject("defaultProject", context, false);
+
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		SharedPreferences.Editor sharedPreferencesEditor = preferences.edit();
+		sharedPreferencesEditor.putInt(PREF_KEY_POSSIBLE_LESSON, lessonCollection.getLastPossibleLessonNumber());
+		sharedPreferencesEditor.commit();
+
+		// TODO: Dont know, maybe reset it to default, but if not: copying the project
+		// so it dont get lost if tutorial is used again, so that the kids dont lose their work
+		//ProjectManager.getInstance().loadProject("defaultProject", context, false);
 	}
 
 	public void stopButtonTutorial() {
@@ -232,6 +244,10 @@ public class Tutorial {
 			} while (lessonCollection.forwardStep() && tutorialThreadRunning);
 		}
 
+		if (!lessonCollection.forwardStep()) {
+			lessonCollection.resetCurrentLesson();
+		}
+
 		if (tutorialThreadRunning) {
 			lessonCollection.nextLesson();
 			stopTutorial();
@@ -241,12 +257,7 @@ public class Tutorial {
 	}
 
 	public void waitForNotification(String waitNotification) throws InterruptedException {
-		Log.i("faxxe", "waiting for: " + waitNotification);
-		if (waitNotification.compareTo("IF_PROJECT_STARTED") == 0) {
-			ListView lv = (ListView) dialog.findViewById(R.id.toolboxListView);
-			lv.smoothScrollToPosition(8);
-			Log.i("faxxe", "try to scroll to the right position!");
-		}
+		Log.i("catroid", "waiting for: " + waitNotification);
 		while (tutorialThreadRunning) {
 			for (int i = 0; i < notifies.size(); i++) {
 				currentNotification = notifies.get(i);

@@ -92,7 +92,7 @@ public class LoadProjectDialog extends Dialog {
 		File[] sdFileList = directory.listFiles();
 		for (File file : sdFileList) {
 			if (file.isDirectory()) {
-				if (!file.getName().endsWith(".tutorial")) {
+				if (!file.getName().endsWith("_tutorial")) {
 					searchForProjectFiles(file);
 				}
 			} else if (file.isFile() && file.getName().endsWith(Consts.PROJECT_EXTENTION)) {

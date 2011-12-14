@@ -59,6 +59,7 @@ import at.tugraz.ist.catroid.utils.Utils;
 import com.thoughtworks.xstream.XStream;
 
 public class StorageHandler {
+	private static final String SIMON_TUTORIAL_CAT = "SIMON";
 
 	private static final String NORMAL_CAT = "normalCat";
 	private static final String BANZAI_CAT = "banzaiCat";
@@ -418,6 +419,75 @@ public class StorageHandler {
 		defaultProject.addSprite(sprite);
 		sprite.addScript(startScript);
 		sprite.addScript(whenScript);
+		backgroundSprite.addScript(backgroundStartScript);
+
+		this.saveProject(defaultProject);
+
+		return defaultProject;
+	}
+
+	/**
+	 * Creates the default project and saves it to the file system
+	 * 
+	 * @return the default project object if successful, else null
+	 * @throws IOException
+	 */
+	public Project createThumbTutorialProject(Context context) throws IOException {
+		String projectName = "thumb_tutorial";
+		Project defaultProject = new Project(context, projectName);
+		saveProject(defaultProject);
+		ProjectManager.getInstance().setProject(defaultProject);
+		Sprite sprite = new Sprite("Catroid");
+		Sprite backgroundSprite = defaultProject.getSpriteList().get(0);
+
+		Script backgroundStartScript = new StartScript("stageStartScript", backgroundSprite);
+		Script startScript = new StartScript("startScript", sprite);
+
+		String directoryName = Utils.buildPath(Consts.DEFAULT_ROOT, projectName, Consts.IMAGE_DIRECTORY);
+
+		ArrayList<CostumeData> costumeDataList = sprite.getCostumeDataList();
+
+		for (int count = 1; count < 15; count++) {
+			int drawableId = context.getResources().getIdentifier("simon_tut_" + count, "drawable",
+					"at.tugraz.ist.catroid");
+			File simonTemp = savePictureFromResourceInProject(projectName, SIMON_TUTORIAL_CAT + "_" + count,
+					drawableId, context);
+			File simon = new File(Utils.buildPath(directoryName,
+					Utils.md5Checksum(simonTemp) + "_" + simonTemp.getName()));
+			simonTemp.renameTo(simon);
+			CostumeData simonCostumeData = new CostumeData();
+			simonCostumeData.setCostumeName(SIMON_TUTORIAL_CAT + "_" + count);
+			simonCostumeData.setCostumeFilename(simon.getName());
+			SetCostumeBrick setCostumeBrick = new SetCostumeBrick(sprite);
+			setCostumeBrick.setCostume(simonCostumeData);
+			startScript.addBrick(setCostumeBrick);
+			WaitBrick waitBrick = new WaitBrick(sprite, 200);
+			startScript.addBrick(waitBrick);
+			costumeDataList.add(simonCostumeData);
+		}
+
+		File backgroundTemp = savePictureFromResourceInProject(projectName, BACKGROUND, R.drawable.background_blueish,
+				context);
+
+		File background = new File(Utils.buildPath(directoryName, Utils.md5Checksum(backgroundTemp) + "_"
+				+ backgroundTemp.getName()));
+
+		backgroundTemp.renameTo(background);
+
+		CostumeData backgroundCostumeData = new CostumeData();
+		backgroundCostumeData.setCostumeName(BACKGROUND);
+		backgroundCostumeData.setCostumeFilename(background.getName());
+
+		ArrayList<CostumeData> costumeDataList2 = backgroundSprite.getCostumeDataList();
+		costumeDataList2.add(backgroundCostumeData);
+
+		SetCostumeBrick backgroundBrick = new SetCostumeBrick(backgroundSprite);
+		backgroundBrick.setCostume(backgroundCostumeData);
+
+		backgroundStartScript.addBrick(backgroundBrick);
+
+		defaultProject.addSprite(sprite);
+		sprite.addScript(startScript);
 		backgroundSprite.addScript(backgroundStartScript);
 
 		this.saveProject(defaultProject);

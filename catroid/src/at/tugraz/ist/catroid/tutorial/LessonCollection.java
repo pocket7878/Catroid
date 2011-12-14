@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class LessonCollection {
 	private ArrayList<Lesson> lessonArray;
 	private int currentLesson;
+	private int currentPossibleLesson;
 	private TutorialOverlay tutorialOverlay;
 
 	public void setTutorialOverlay(TutorialOverlay tutorialOverlay) {
@@ -41,19 +42,18 @@ public class LessonCollection {
 		}
 	}
 
-	//	void setNotification(String notification) {
-	//		lessonArray.get(currentLesson).setNotification(notification);
-	//	}
-
 	String executeTask() {
 		return (lessonArray.get(currentLesson).executeTask(tutorialOverlay));
 	}
 
 	boolean nextLesson() {
-		if ((currentLesson + 1) > lessonArray.size()) {
+		if ((currentLesson + 1) >= lessonArray.size()) {
 			return (false);
 		} else {
 			currentLesson++;
+			if (currentPossibleLesson < currentLesson) {
+				currentPossibleLesson = currentLesson;
+			}
 			return (true);
 		}
 	}
@@ -68,7 +68,11 @@ public class LessonCollection {
 	}
 
 	int getLastPossibleLessonNumber() {
-		return currentLesson;
+		return currentPossibleLesson;
+	}
+
+	void setLastPossibleLessonNumber(int value) {
+		currentPossibleLesson = value;
 	}
 
 	ArrayList<String> getLessons() {
