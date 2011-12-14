@@ -25,7 +25,6 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -161,7 +160,6 @@ public class ClickDispatcher {
 			Rect bounds = panel.getPanelBounds();
 			int height = ((Activity) context).getWindowManager().getDefaultDisplay().getHeight();
 			if (x < 50 && y > height - 50) {
-				Log.i("faxxe", "panel dispatched!");
 				if (!panel.isOpen() && ev.getAction() == MotionEvent.ACTION_UP) {
 					panel.open();
 				} else if (panel.isOpen() && ev.getAction() == MotionEvent.ACTION_UP) {
