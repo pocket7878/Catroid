@@ -241,6 +241,7 @@ public class Tutorial {
 				if (notification != null) {
 					try {
 						waitForNotification(notification);
+						Cloud.getInstance(null).clearCloud();
 					} catch (Exception e) {
 
 					}

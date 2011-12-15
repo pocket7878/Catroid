@@ -1,6 +1,7 @@
 package at.tugraz.ist.catroid.tutorial.tasks;
 
 import at.tugraz.ist.catroid.tutorial.ClickDispatcher;
+import at.tugraz.ist.catroid.tutorial.Cloud;
 import at.tugraz.ist.catroid.tutorial.TutorialOverlay;
 
 public class TaskNotification implements Task {
@@ -56,6 +57,8 @@ public class TaskNotification implements Task {
 		if (notificationType == notificationType.SCRIPTS_ADD_BRICK) {
 			return ("DialogDone");
 		}
+
+		Cloud.getInstance(null).setCloud(notificationType);
 
 		// All tasks which result in a switch to another activity, just wait for a dummy
 		// notification, which will be deleted during pause/resume of the Tutorial

@@ -41,7 +41,6 @@ import at.tugraz.ist.catroid.tutorial.tasks.Task;
  * 
  */
 public class ClickDispatcher {
-
 	Context context;
 	ControlPanel panel;
 	Task.Notification currentNotification;
@@ -51,6 +50,11 @@ public class ClickDispatcher {
 	boolean scroll;
 	boolean scroll2;
 	int itemPosition = 0;
+
+	int cloudX1 = -1;
+	int cloudY1 = -1;
+	int cloudX2 = -1;
+	int cloudY2 = -1;
 
 	ClickDispatcher(Context context, ControlPanel panel) {
 		this.panel = panel;
@@ -505,12 +509,9 @@ public class ClickDispatcher {
 		if (currentNotification == Task.Notification.CURRENT_PROJECT_BUTTON) {
 			if (isButtonClicked(ev, currentProjectButton)) {
 				currentActivity.dispatchTouchEvent(ev);
+				Cloud.getInstance(null).clearCloud();
 			}
 		}
-
-		//		if (isButtonClicked(ev, tutorialButton)) {
-		//			currentActivity.dispatchTouchEvent(ev);
-		//		}
 	}
 
 	public void dispatchCostumes(MotionEvent ev) {

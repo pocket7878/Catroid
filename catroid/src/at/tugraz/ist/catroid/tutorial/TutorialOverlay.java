@@ -42,6 +42,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	Tutor currentTutor;
 	ControlPanel panel;
 	Context context;
+	Cloud cloud;
 
 	ClickDispatcher clickDispatcher;
 
@@ -64,6 +65,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		getHolder().addCallback(this);
 		mThread = new AnimationThread(this);
 		this.context = context;
+		cloud = Cloud.getInstance(context);
 	}
 
 	public ClickDispatcher getClickDispatcher() {
@@ -194,6 +196,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 		canvas.drawPaint(paint);
 		postInvalidate();
+		cloud.draw(canvas);
 		tutor.draw(canvas);
 		tutor_2.draw(canvas);
 		panel.draw(canvas);
@@ -202,7 +205,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	public void update() {
 		tutor.update(System.currentTimeMillis());
 		tutor_2.update(System.currentTimeMillis());
-
+		cloud.update(System.currentTimeMillis());
 	}
 
 }
