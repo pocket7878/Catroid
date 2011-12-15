@@ -41,14 +41,23 @@ public class Cloud {
 	int focusX2;
 	int focusY2;
 
+	int originalFocusX1;
+	int originalFocusY1;
+	int originalFocusX2;
+	int originalFocusY2;
+
+	int animationOffsetX;
+	int animationOffsetY;
+	int stateOfAnimation = 0;
+
 	private Drawable drawableInnerPart;
 	private Drawable drawableOuterPartRight;
 	private Drawable drawableOuterPartLeft;
 	private Drawable drawableOuterPartTop;
 	private Drawable drawableOuterPartBottom;
 
-	private int timeOfLastUpdate;
-	private static final int updateAfterMilliseconds = 300;
+	private long timeOfLastUpdate;
+	private static final long updateAfterMilliseconds = 300;
 
 	private Context context;
 
@@ -120,6 +129,11 @@ public class Cloud {
 	}
 
 	void updateCloudPosition() {
+		focusX1 = originalFocusX1 - animationOffsetX;
+		focusY1 = originalFocusY1 - animationOffsetY;
+		focusX2 = originalFocusX2 + animationOffsetX;
+		focusY2 = originalFocusY2 + animationOffsetY;
+
 		Rect bounds = new Rect();
 		bounds.set(focusX1, focusY1, focusX2, focusY2);
 		drawableInnerPart.setBounds(bounds);
@@ -147,30 +161,49 @@ public class Cloud {
 
 		int width = view.getWidth();
 		int height = view.getHeight();
-		focusX1 = location[0];
-		focusY1 = location[1];
-		focusX2 = location[0] + width;
-		focusY2 = location[1] + height;
+		originalFocusX1 = location[0];
+		originalFocusY1 = location[1];
+		originalFocusX2 = location[0] + width;
+		originalFocusY2 = location[1] + height;
 	}
 
 	public void clearCloud() {
-		focusX1 = -1;
-		focusY1 = -1;
-		focusX2 = -1;
-		focusY2 = -1;
+		originalFocusX1 = -1;
+		originalFocusY1 = -1;
+		originalFocusX2 = -1;
+		originalFocusY2 = -1;
 	}
 
 	public void update(long gameTime) {
-		if (focusX1 != -1) {
-			if (updateAfterMilliseconds > (gameTime - timeOfLastUpdate)) {
-				// dann tua mol bissi desn fokus bewegen
+		if (originalFocusX1 != -1) {
+			if (updateAfterMilliseconds < (gameTime - timeOfLastUpdate)) {
+				timeOfLastUpdate = gameTime;
+
+				if (stateOfAnimation == 0) {
+					animationOffsetX = 0;
+					animationOffsetY = 0;
+					stateOfAnimation = 1;
+				} else if (stateOfAnimation == 1) {
+					animationOffsetX = originalFocusX2 - originalFocusX1;
+					animationOffsetX = (animationOffsetX / 100) * 5;
+					animationOffsetY = originalFocusY2 - originalFocusY1;
+					animationOffsetY = (animationOffsetY / 100) * 5;
+					stateOfAnimation = 2;
+				} else if (stateOfAnimation == 2) {
+					animationOffsetX = originalFocusX2 - originalFocusX1;
+					animationOffsetX = (animationOffsetX / 100) * 10;
+					animationOffsetY = originalFocusY2 - originalFocusY1;
+					animationOffsetY = (animationOffsetY / 100) * 10;
+					stateOfAnimation = 0;
+				}
 			}
+			updateCloudPosition();
 		}
 	}
 
 	public void draw(Canvas canvas) {
 
-		if (focusX1 != -1) {
+		if (originalFocusX1 != -1) {
 			drawableInnerPart.draw(canvas);
 			drawableOuterPartRight.draw(canvas);
 			drawableOuterPartLeft.draw(canvas);
