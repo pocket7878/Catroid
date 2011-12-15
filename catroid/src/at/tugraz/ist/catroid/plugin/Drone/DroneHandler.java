@@ -24,7 +24,7 @@ import android.util.Log;
 public class DroneHandler {
 
 	private static DroneHandler droneHandler;
-	private DroneLibraryWrapper droneLibraryWrapper;
+	private IDrone droneLibraryWrapper;
 	private boolean wasAlreadyConnected;
 
 	public static DroneHandler getInstance() {
@@ -50,7 +50,13 @@ public class DroneHandler {
 		return true;
 	}
 
-	public DroneLibraryWrapper getDrone() {
+	public void setIDrone(IDrone idrone) {
+		if (this.droneLibraryWrapper == null) {
+			this.droneLibraryWrapper = idrone;
+		}
+	}
+
+	public IDrone getDrone() {
 		return droneLibraryWrapper;
 	}
 

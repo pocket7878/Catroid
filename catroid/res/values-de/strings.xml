@@ -41,6 +41,9 @@
     <string name="background">Hintergrund</string>
     <string name="stage">Bühne</string>
     <string name="ok">Ok</string>
+    <string name="add">Neu</string>
+    <string name="home">Menü</string>
+    <string name="start">Starten</string>
 
     <!-- Construction site context menu -->
     <string name="new_project">Neues Projekt</string>
@@ -323,7 +326,6 @@
 	
 	<string name="number_to_small">Wert ist zu klein!</string>
 	<string name="number_to_big">Wert ist zu groß!</string>
-	
 	    
 	<!-- Drone Strings -->
     <string name="drone_choose_animation_title">Animation wählen</string>
