@@ -73,7 +73,7 @@ public class ControlPanel {
 		play = resources.getDrawable(R.drawable.play_tutorial);
 		pause = resources.getDrawable(R.drawable.pause_tutorial);
 		forward = resources.getDrawable(R.drawable.forward_tutorial);
-		backward = resources.getDrawable(R.drawable.backwards_tutorial);
+		backward = resources.getDrawable(R.drawable.button_bar_tutorial_play);
 		circle = resources.getDrawable(R.drawable.panel_circle);
 
 		bounds = new Rect();
@@ -90,17 +90,12 @@ public class ControlPanel {
 	public void draw(Canvas canvas) {
 		Paint paint = new Paint();
 		if (open) {
-			setBounds(0);
-			canvas.drawBitmap(playBitmap, bounds.left, bounds.top, paint);
-			setBounds(70);
-			canvas.drawBitmap(pauseBitmap, bounds.left, bounds.top, paint);
-			setBounds(140);
-			canvas.drawBitmap(forwardBitmap, bounds.left, bounds.top, paint);
-			setBounds(210);
-			canvas.drawBitmap(backwardBitmap, bounds.left, bounds.top, paint);
+			setMenuBounds();
+			canvas.drawBitmap(backwardBitmap, menuBounds.left, getScreenHeight() - backwardBitmap.getHeight(), paint);
+		} else {
+			setMenuBounds();
+			canvas.drawBitmap(menuBitmap, menuBounds.left, menuBounds.top, paint);
 		}
-		setMenuBounds();
-		canvas.drawBitmap(menuBitmap, menuBounds.left, menuBounds.top, paint);
 	}
 
 	public boolean isOpen() {

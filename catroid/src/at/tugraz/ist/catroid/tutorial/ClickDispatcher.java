@@ -163,22 +163,19 @@ public class ClickDispatcher {
 		if (panel != null) {
 			Rect bounds = panel.getPanelBounds();
 			int height = ((Activity) context).getWindowManager().getDefaultDisplay().getHeight();
-			if (x < 50 && y > height - 50) {
+			if (x < 50 && y > height - 45) {
 				if (!panel.isOpen() && ev.getAction() == MotionEvent.ACTION_UP) {
 					panel.open();
 				} else if (panel.isOpen() && ev.getAction() == MotionEvent.ACTION_UP) {
 					panel.close();
 				}
 				return;
+			} else if (x > 50 && y >= height - 50) {
+				dispatchPanel(ev);
+				return;
 			}
-			if (x >= bounds.left && x <= bounds.right) {
-				if (y >= bounds.top && y <= bounds.bottom) {
-					dispatchPanel(ev);
-					return;
-				}
-			}
-
 		}
+
 		if (panel.isOpen()) {
 			panel.close();
 		}
@@ -310,41 +307,58 @@ public class ClickDispatcher {
 		//unterscheide buttons play, pause, forward, backward
 		int x = (int) ev.getX();
 		int y = (int) ev.getY();
-		Rect bounds = panel.getPanelBounds();
-		//		check if event coordinates are the coordinates of the control panel buttons
-		if (x >= bounds.left && x <= bounds.left + 50) {
-			if (y >= bounds.top && y <= bounds.bottom) {
-				Tutorial.getInstance(null).resumeTutorial();
-				//panel.pressPlay();
-			}
+
+		if (x > 130 && x < 185) {
+			Tutorial.getInstance(null).stopButtonTutorial();
 		}
-		bounds.left = bounds.left + 70;
+		if (x > 230 && x < 277) {
+			Toast toast = Toast.makeText(context, "1 step back", Toast.LENGTH_SHORT);
+			toast.show();
 
-		if (x >= bounds.left && x <= bounds.left + 50) {
-			if (y >= bounds.top && y <= bounds.bottom) {
-				Tutorial.getInstance(null).stopButtonTutorial();
-				//				Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
-				//				toast.show();
-			}
 		}
+		if (x > 295 && x < 346) {
+			Toast toast = Toast.makeText(context, "1 step forward", Toast.LENGTH_SHORT);
+			toast.show();
 
-		bounds.left = bounds.left + 70;
-
-		if (x >= bounds.left && x <= bounds.left + 50) {
-			if (y >= bounds.top && y <= bounds.bottom) {
-				Toast toast = Toast.makeText(context, "FORWARD", Toast.LENGTH_SHORT);
-				toast.show();
-			}
 		}
-
-		bounds.left = bounds.left + 70;
-
-		if (x >= bounds.left && x <= bounds.left + 50) {
-			if (y >= bounds.top && y <= bounds.bottom) {
-				Toast toast = Toast.makeText(context, "BACKWARD", Toast.LENGTH_SHORT);
-				toast.show();
-			}
-		}
+		return;
+		/*
+		 * Rect bounds = panel.getPanelBounds();
+		 * // check if event coordinates are the coordinates of the control panel buttons
+		 * if (x >= bounds.left && x <= bounds.left + 50) {
+		 * if (y >= bounds.top && y <= bounds.bottom) {
+		 * Tutorial.getInstance(null).resumeTutorial();
+		 * //panel.pressPlay();
+		 * }
+		 * }
+		 * bounds.left = bounds.left + 70;
+		 * 
+		 * if (x >= bounds.left && x <= bounds.left + 50) {
+		 * if (y >= bounds.top && y <= bounds.bottom) {
+		 * Tutorial.getInstance(null).stopButtonTutorial();
+		 * // Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
+		 * // toast.show();
+		 * }
+		 * }
+		 * 
+		 * bounds.left = bounds.left + 70;
+		 * 
+		 * if (x >= bounds.left && x <= bounds.left + 50) {
+		 * if (y >= bounds.top && y <= bounds.bottom) {
+		 * Toast toast = Toast.makeText(context, "FORWARD", Toast.LENGTH_SHORT);
+		 * toast.show();
+		 * }
+		 * }
+		 * 
+		 * bounds.left = bounds.left + 70;
+		 * 
+		 * if (x >= bounds.left && x <= bounds.left + 50) {
+		 * if (y >= bounds.top && y <= bounds.bottom) {
+		 * Toast toast = Toast.makeText(context, "BACKWARD", Toast.LENGTH_SHORT);
+		 * toast.show();
+		 * }
+		 * }
+		 */
 	}
 
 	public boolean isItemClicked(View view, MotionEvent ev) {
