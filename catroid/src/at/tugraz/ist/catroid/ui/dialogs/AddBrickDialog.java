@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -89,6 +88,20 @@ import at.tugraz.ist.catroid.content.bricks.TurnRightBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
 import at.tugraz.ist.catroid.content.bricks.WhenBrick;
 import at.tugraz.ist.catroid.content.bricks.WhenStartedBrick;
+import at.tugraz.ist.catroid.plugin.PluginManager;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneChangeFlyingModeBrick;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneConfigBrick;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLandBrick;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLedAnimationBrick;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneMoveAnimationBrick;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneMoveBrick;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneSaveSnapshotBrick;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStartVideoBrick;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStartVideoRecorderBrick;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopMoveBrick;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoBrick;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoRecorderBrick;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneTakeOffBrick;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.adapter.PrototypeBrickAdapter;
 
@@ -171,6 +184,26 @@ public class AddBrickDialog extends Dialog {
 		legoNXTBrickList.add(new NXTMotorActionBrick(sprite, 0, 100));
 		legoNXTBrickList.add(new NXTPlayToneBrick(sprite, 2000, 1));
 		brickMap.put(context.getString(R.string.category_lego_nxt), legoNXTBrickList);
+
+		if (PluginManager.getInstance().isDroneAddonInstalled()) {
+
+			List<Brick> droneBrickList = new ArrayList<Brick>();
+
+			droneBrickList.add(new DroneTakeOffBrick(sprite));
+			droneBrickList.add(new DroneLandBrick(sprite));
+			droneBrickList.add(new DroneMoveBrick(sprite, 50));
+			droneBrickList.add(new DroneStopMoveBrick(sprite));
+			droneBrickList.add(new DroneMoveAnimationBrick(sprite, 0, 3));
+			droneBrickList.add(new DroneLedAnimationBrick(sprite, 0, 2.5f, 3));
+			droneBrickList.add(new DroneChangeFlyingModeBrick(sprite, 0));
+			droneBrickList.add(new DroneConfigBrick(sprite, 0, 0));
+			droneBrickList.add(new DroneStartVideoBrick(sprite));
+			droneBrickList.add(new DroneStopVideoBrick(sprite));
+			droneBrickList.add(new DroneStartVideoRecorderBrick(sprite));
+			droneBrickList.add(new DroneStopVideoRecorderBrick(sprite));
+			droneBrickList.add(new DroneSaveSnapshotBrick(sprite));
+			brickMap.put(getContext().getString(R.string.drone_category), droneBrickList);
+		}
 
 		return brickMap;
 	}
