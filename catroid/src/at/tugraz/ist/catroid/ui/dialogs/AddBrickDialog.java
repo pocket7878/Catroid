@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -202,7 +203,7 @@ public class AddBrickDialog extends Dialog {
 			droneBrickList.add(new DroneStartVideoRecorderBrick(sprite));
 			droneBrickList.add(new DroneStopVideoRecorderBrick(sprite));
 			droneBrickList.add(new DroneSaveSnapshotBrick(sprite));
-			brickMap.put(getContext().getString(R.string.drone_category), droneBrickList);
+			brickMap.put(context.getString(R.string.drone_category), droneBrickList);
 		}
 
 		return brickMap;
