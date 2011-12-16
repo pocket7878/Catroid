@@ -168,13 +168,33 @@
         <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
           <tutorType>CAT</tutorType>
           <x>100</x>
-          <y>300</y>
+          <y>200</y>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+          <tutorType>CAT</tutorType>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+        
+        
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+          <sleepTime>500</sleepTime>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep> 
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+          <tutorType>DOG</tutorType>
+          <x>300</x>
+          <y>200</y>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+          <tutorType>CAT</tutorType>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
         
         <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
           <tutorType>CAT</tutorType>
-		  <message>Staubsaugich macht Katze wech!</message>
+		  <message>Original Schweizer Kräuterbonbons... nom nom nom!</message>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskSay> 
+        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+          <tutorType>DOG</tutorType>
+		  <message>Tell me more about it! woof woof woof *scratch*</message>
+        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
        
         <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
           <tutorType>CAT</tutorType>

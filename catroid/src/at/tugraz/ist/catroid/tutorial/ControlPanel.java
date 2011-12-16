@@ -73,7 +73,7 @@ public class ControlPanel {
 		play = resources.getDrawable(R.drawable.play_tutorial);
 		pause = resources.getDrawable(R.drawable.pause_tutorial);
 		forward = resources.getDrawable(R.drawable.forward_tutorial);
-		backward = resources.getDrawable(R.drawable.button_bar_tutorial_play);
+		backward = resources.getDrawable(R.drawable.button_bar_tutorial_stop);
 		circle = resources.getDrawable(R.drawable.panel_circle);
 
 		bounds = new Rect();
