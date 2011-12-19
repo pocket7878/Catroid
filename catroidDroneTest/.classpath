@@ -10,7 +10,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/catroidDroneTest/libs/easymock-3.1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="libs/easymock-3.0.jar"/>
 	<classpathentry kind="lib" path="libs/easymock-3.1-javadoc.jar"/>
 	<classpathentry kind="lib" path="libs/easymock-3.1-samples.jar"/>
 	<classpathentry kind="lib" path="libs/easymock-3.1-sources.jar"/>
@@ -18,6 +17,5 @@
 	<classpathentry kind="lib" path="libs/javassist-3.15.0-GA.jar"/>
 	<classpathentry kind="lib" path="libs/junit-4.8.2.jar"/>
 	<classpathentry kind="lib" path="libs/objenesis-1.2.jar"/>
-	<classpathentry kind="lib" path="libs/powermock-easymock-1.4.10-full.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
