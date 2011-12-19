@@ -27,33 +27,48 @@ import org.easymock.EasyMock;
 import android.test.InstrumentationTestCase;
 import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 import at.tugraz.ist.catroid.plugin.Drone.IDrone;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLandBrick;
 import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneTakeOffBrick;
 
 import static org.easymock.EasyMock.*;
 
 //import org.junit.*;
 
-public class TakeOffBrickTest extends InstrumentationTestCase {
+public class BrickBasicFunctionTest extends InstrumentationTestCase {
+
+	IDrone idronemock;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-
+		createDroneMock();
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
+	private void createDroneMock() {
+		idronemock = null;
+		idronemock = EasyMock.createMock(IDrone.class);
+		DroneHandler.getInstance().setIDrone(idronemock);
 	}
 
 	public void testTakeOffBrick() {
-		IDrone idronemock = EasyMock.createMock(IDrone.class);
-		DroneHandler.getInstance().setIDrone(idronemock);
+		createDroneMock();
 		DroneTakeOffBrick takeoffbrick = new DroneTakeOffBrick(null);
 		idronemock.takeoff();
 		EasyMock.expectLastCall().times(1);
 		replay(idronemock);
 		takeoffbrick.execute();
 		verify(idronemock);
+	}
+
+	public void testLandBrick() {
+		createDroneMock();
+		DroneLandBrick landbrick = new DroneLandBrick(null);
+		idronemock.land();
+		EasyMock.expectLastCall().times(1);
+
+		replay(idronemock);
+		landbrick.execute();
+		verify(idronemock);
+
 	}
 }
