@@ -31,12 +31,13 @@ import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.FileChecksumContainer;
+import at.tugraz.ist.catroid.content.BroadcastScript;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.BroadcastBrick;
+import at.tugraz.ist.catroid.content.bricks.BroadcastReceiverBrick;
 import at.tugraz.ist.catroid.content.bricks.BroadcastWaitBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeBrightnessBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeGhostEffectBrick;
@@ -51,6 +52,8 @@ import at.tugraz.ist.catroid.content.bricks.GlideToBrick;
 import at.tugraz.ist.catroid.content.bricks.GoNStepsBackBrick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.IfOnEdgeBounceBrick;
+import at.tugraz.ist.catroid.content.bricks.LoopBeginBrick;
+import at.tugraz.ist.catroid.content.bricks.LoopEndBrick;
 import at.tugraz.ist.catroid.content.bricks.MoveNStepsBrick;
 import at.tugraz.ist.catroid.content.bricks.NextCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.NoteBrick;
@@ -120,7 +123,7 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 		solo.sendKey(Solo.ENTER);
 
 		ListView spritesList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
-		Sprite copiedSprite = ((Sprite) spritesList.getItemAtPosition(5));
+		Sprite copiedSprite = ((Sprite) spritesList.getItemAtPosition(3));
 		Sprite firstSprite = ((Sprite) spritesList.getItemAtPosition(1));
 
 		assertEquals("The first sprite is NOT copied!", copiedSprite.getName(), "blue - Kopie");
@@ -139,22 +142,46 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 					.getClass());
 			brickCounter++;
 		}
-	}
 
-	public void testCopySpriteAddDeleteBricks() throws NameNotFoundException, IOException {
+		//////////////////////
 
-		createTestProject(testProject);
-		solo.clickOnButton(getActivity().getString(R.string.my_projects));
-		solo.clickOnText(testProject);
-		solo.clickLongOnText("blue");
+		assertEquals("Message of BroadcastReceiver Brick is not right!",
+				((BroadcastScript) (firstSprite.getScript(1))).getBroadcastMessage(),
+				((BroadcastScript) (copiedSprite.getScript(1))).getBroadcastMessage());
 
-		solo.sleep(500);
-		solo.clickOnText("Kopieren");
-		solo.sleep(500);
-		solo.sendKey(Solo.ENTER);
-		solo.sleep(500);
+		LoopBeginBrick firstLoopBrick = (LoopBeginBrick) brickListFirstSprite.get(33);
+		LoopBeginBrick copiedLoopBrick = (LoopBeginBrick) brickListCopiedSprite.get(33);
+		LoopEndBrick firstEndBrick = firstLoopBrick.getLoopEndBrick();
+		LoopEndBrick copiedEndBrick = copiedLoopBrick.getLoopEndBrick();
+		assertNotSame("Loop Brick is not copied right!", firstEndBrick, copiedEndBrick);
+		assertNotSame("Loop Brick is not copied right!", firstEndBrick.getLoopBeginBrick(),
+				copiedEndBrick.getLoopBeginBrick());
+		assertEquals("Loop Brick is not copied right!", firstEndBrick.getLoopBeginBrick(), firstLoopBrick);
+		assertEquals("Loop Brick is not copied right!", copiedEndBrick.getLoopBeginBrick(), copiedLoopBrick);
+		assertEquals("Loop Brick is not copied right!", firstLoopBrick.getLoopEndBrick(), firstEndBrick);
+		assertEquals("Loop Brick is not copied right!", copiedLoopBrick.getLoopEndBrick(), copiedEndBrick);
+
+		//////////////////////
+
+		assertNotSame("Sprite is not copied!", firstSprite, copiedSprite);
+		assertNotSame("CustomDataList is not copied!", firstSprite.getCostumeDataList(),
+				copiedSprite.getCostumeDataList());
+		assertNotSame("Script is no copied!", firstSprite.getScript(0), copiedSprite.getScript(0));
+		assertNotSame("Script is no copied!", firstSprite.getScript(1), copiedSprite.getScript(1));
+		assertNotSame("Soundlist is no copied!", firstSprite.getSoundList(), copiedSprite.getSoundList());
+
+		brickListFirstSprite = firstSprite.getScript(0).getBrickList();
+		brickListCopiedSprite = copiedSprite.getScript(0).getBrickList();
+		assertNotSame("Script is not copied!", brickListFirstSprite, brickListCopiedSprite);
+
+		int loopCounter = 0;
+		for (Brick element : brickListFirstSprite) {
+			assertNotSame("Brick is not copied!", element, brickListCopiedSprite.get(loopCounter));
+			loopCounter++;
+		}
+
 		solo.clickOnText("blue - Kopie");
-		solo.sleep(500);
+		solo.sleep(1000);
 
 		Sprite currentSprite = projectMangaer.getCurrentSprite();
 		Script scriptCopied = projectMangaer.getCurrentScript();
@@ -172,7 +199,7 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 		assertEquals("The number of Bricks differs!", scriptCopied.getBrickList().size() + 1, scriptOriginal
 				.getBrickList().size());
 
-		int brickCounter = scriptCopied.getBrickList().size();
+		brickCounter = scriptCopied.getBrickList().size();
 		scriptOriginal.removeBrick(scriptOriginal.getBrickList().get(6));
 		assertEquals("The number of Bricks differs!", scriptCopied.getBrickList().size(), scriptOriginal.getBrickList()
 				.size());
@@ -189,43 +216,6 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 
 		assertEquals("The number of Bricks differs!", projectMangaer.getCurrentScript().getBrickList().size(),
 				brickCounter);
-
-	}
-
-	public void testCopySpriteIDs() throws NameNotFoundException, IOException {
-
-		createTestProject(testProject);
-		solo.clickOnButton(getActivity().getString(R.string.my_projects));
-		solo.clickOnText(testProject);
-		solo.clickLongOnText("blue");
-
-		solo.sleep(500);
-		solo.clickOnText("Kopieren");
-		solo.sleep(500);
-		solo.sendKey(Solo.ENTER);
-		solo.sleep(500);
-
-		ListView spritesList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
-		Sprite copiedSprite = ((Sprite) spritesList.getItemAtPosition(5));
-		Sprite firstSprite = ((Sprite) spritesList.getItemAtPosition(1));
-
-		assertNotSame("Sprite is not copied!", firstSprite, copiedSprite);
-		assertNotSame("CustomDataList is not copied!", firstSprite.getCostumeDataList(),
-				copiedSprite.getCostumeDataList());
-		assertNotSame("Scriptlist is no copied!", firstSprite.getScript(0), copiedSprite.getScript(0));
-		assertNotSame("Script is no copied!", firstSprite.getScript(0), copiedSprite.getScript(0));
-		assertNotSame("Soundlist is no copied!", firstSprite.getSoundList(), copiedSprite.getSoundList());
-
-		ArrayList<Brick> brickListFirstSprite = firstSprite.getScript(0).getBrickList();
-		ArrayList<Brick> brickListCopiedSprite = copiedSprite.getScript(0).getBrickList();
-		assertNotSame("Script is no copied!", brickListFirstSprite, brickListCopiedSprite);
-
-		int loopCounter = 0;
-		for (Brick element : brickListFirstSprite) {
-			assertNotSame("Brick is no copied!", element, brickListCopiedSprite.get(loopCounter));
-			loopCounter++;
-		}
-
 	}
 
 	public void createTestProject(String projectName) {
@@ -234,8 +224,6 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 		Project project = new Project(getActivity(), projectName);
 		Sprite firstSprite = new Sprite("blue");
 		Sprite secondSprite = new Sprite("lila");
-		Sprite thirdSprite = new Sprite("pink");
-		Sprite fourthSprite = new Sprite("yellow");
 
 		Script firstSpriteScript = new StartScript("firstSpriteScript", firstSprite);
 
@@ -255,56 +243,53 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 		brickList.add(new GoNStepsBackBrick(firstSprite, 24));
 		brickList.add(new ComeToFrontBrick(firstSprite));
 
+		brickList.add(new SetCostumeBrick(firstSprite));
+		brickList.add(new SetSizeToBrick(firstSprite, 11));
+		brickList.add(new ChangeSizeByNBrick(firstSprite, 12));
+		brickList.add(new HideBrick(firstSprite));
+		brickList.add(new ShowBrick(firstSprite));
+		brickList.add(new SetGhostEffectBrick(firstSprite, 13));
+		brickList.add(new ChangeGhostEffectBrick(firstSprite, 14));
+		brickList.add(new SetBrightnessBrick(firstSprite, 15));
+		brickList.add(new ChangeBrightnessBrick(firstSprite, 16));
+		brickList.add(new ClearGraphicEffectBrick(firstSprite));
+		brickList.add(new NextCostumeBrick(firstSprite));
+
+		brickList.add(new PlaySoundBrick(firstSprite));
+		brickList.add(new StopAllSoundsBrick(firstSprite));
+		brickList.add(new SetVolumeToBrick(firstSprite, 17));
+		brickList.add(new ChangeVolumeByBrick(firstSprite, 18));
+		brickList.add(new SpeakBrick(firstSprite, "Hallo"));
+
+		brickList.add(new WaitBrick(firstSprite, 19));
+		brickList.add(new BroadcastWaitBrick(firstSprite));
+		brickList.add(new NoteBrick(firstSprite));
+		LoopBeginBrick beginBrick = new ForeverBrick(firstSprite);
+		LoopEndBrick endBrick = new LoopEndBrick(firstSprite, beginBrick);
+		beginBrick.setLoopEndBrick(endBrick);
+		brickList.add(beginBrick);
+		brickList.add(endBrick);
+
+		beginBrick = new RepeatBrick(firstSprite, 20);
+		endBrick = new LoopEndBrick(firstSprite, beginBrick);
+		beginBrick.setLoopEndBrick(endBrick);
+		brickList.add(beginBrick);
+		brickList.add(endBrick);
+
 		for (Brick brick : brickList) {
 			firstSpriteScript.addBrick(brick);
 		}
 
-		Script secondSpriteScript = new StartScript("secondSpriteScript", secondSprite);
-
-		brickList = new ArrayList<Brick>();
-		brickList.add(new SetCostumeBrick(secondSprite));
-		brickList.add(new SetSizeToBrick(secondSprite, 11));
-		brickList.add(new ChangeSizeByNBrick(secondSprite, 12));
-		brickList.add(new HideBrick(secondSprite));
-		brickList.add(new ShowBrick(secondSprite));
-		brickList.add(new SetGhostEffectBrick(secondSprite, 13));
-		brickList.add(new ChangeGhostEffectBrick(secondSprite, 14));
-		brickList.add(new SetBrightnessBrick(secondSprite, 15));
-		brickList.add(new ChangeBrightnessBrick(secondSprite, 16));
-		brickList.add(new ClearGraphicEffectBrick(secondSprite));
-		brickList.add(new NextCostumeBrick(secondSprite));
-
-		for (Brick brick : brickList) {
-			secondSpriteScript.addBrick(brick);
-		}
-
-		Script thirdSpriteScript = new StartScript("thirdSpriteScript", thirdSprite);
-
-		brickList = new ArrayList<Brick>();
-		brickList.add(new PlaySoundBrick(thirdSprite));
-		brickList.add(new StopAllSoundsBrick(thirdSprite));
-		brickList.add(new SetVolumeToBrick(thirdSprite, 17));
-		brickList.add(new ChangeVolumeByBrick(thirdSprite, 18));
-		brickList.add(new SpeakBrick(thirdSprite, "Hallo"));
-
-		brickList.add(new WaitBrick(thirdSprite, 19));
-		brickList.add(new BroadcastBrick(thirdSprite));
-		brickList.add(new BroadcastWaitBrick(thirdSprite));
-		brickList.add(new NoteBrick(thirdSprite));
-		brickList.add(new ForeverBrick(thirdSprite));
-		brickList.add(new RepeatBrick(thirdSprite, 20));
-
-		for (Brick brick : brickList) {
-			thirdSpriteScript.addBrick(brick);
-		}
-
 		firstSprite.addScript(firstSpriteScript);
-		secondSprite.addScript(secondSpriteScript);
-		thirdSprite.addScript(thirdSpriteScript);
+
+		BroadcastScript broadcastScript = new BroadcastScript("name", firstSprite);
+		broadcastScript.setBroadcastMessage("Hallo");
+		BroadcastReceiverBrick brickBroad = new BroadcastReceiverBrick(firstSprite, broadcastScript);
+		firstSprite.addScript(broadcastScript);
+		brickList.add(brickBroad);
+
 		project.addSprite(firstSprite);
 		project.addSprite(secondSprite);
-		project.addSprite(thirdSprite);
-		project.addSprite(fourthSprite);
 
 		projectMangaer.fileChecksumContainer = new FileChecksumContainer();
 		projectMangaer.setProject(project);
