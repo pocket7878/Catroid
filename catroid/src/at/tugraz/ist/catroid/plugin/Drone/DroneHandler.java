@@ -54,10 +54,9 @@ public class DroneHandler {
 		return true;
 	}
 
+	/** only used for testing */
 	public void setIDrone(IDrone idrone) {
-		if (this.droneLibraryWrapper == null) {
-			this.droneLibraryWrapper = idrone;
-		}
+		this.droneLibraryWrapper = idrone;
 	}
 
 	public IDrone getDrone() {
