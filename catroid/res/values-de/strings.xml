@@ -19,9 +19,10 @@
  *  GNU Affero General Public License for more details.
  *   
  *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- -->
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
 <resources>
+
     <!-- General terms -->
     <string name="project">Projekt</string>
     <string name="sprite">Objekt</string>
@@ -32,8 +33,7 @@
     <string name="delete">Löschen</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
-    
-    
+
     <!-- General -->
     <string name="close">Schließen</string>
     <string name="error">Fehler</string>
@@ -45,7 +45,6 @@
     <string name="add">Neu</string>
     <string name="home">Menü</string>
     <string name="start">Starten</string>
-    
 
     <!-- Construction site context menu -->
     <string name="new_project">Neues Projekt</string>
@@ -58,15 +57,23 @@
     <string name="current_project">Aktuelles Projekt:</string>
     <string name="current_project_button">Aktuelles Projekt</string>
     <string name="my_projects">Meine Projekte</string>
-	<string name="tutorial">Anleitung</string>
-	<string name="settings">Einstellungen</string>
-	<string name="web_resources">Internet-Ressourcen</string>
-	
-	<!-- Settings activity -->
-	<string name="pref_category_mindstorm">Mindstorm Einstellungen</string>
-	<string name="pref_enable_ms_bricks">Mindstorm Bausteine aktivieren</string>
-	<string name="pref_descr_ms_bricks">Diese Bausteine werden benötigt um Mindstorm Roboter zu steuern.</string>
-	
+    <string name="tutorial">Anleitung</string>
+    <string name="settings">Einstellungen</string>
+    <string name="web_resources">Internet-Ressourcen</string>
+
+    <!-- Settings activity -->
+    <string name="pref_category_mindstorm">Mindstorm Einstellungen</string>
+    <string name="pref_enable_ms_bricks">Mindstorm Bausteine aktivieren</string>
+    <string name="pref_descr_ms_bricks">Diese Bausteine werden benötigt um Mindstorm Roboter zu steuern.</string>
+
+    <!-- Settings activity (drone) -->
+    <string name="pref_category_drone">Drone Einstellungen</string>
+    <string name="pref_enable_drone_bricks">Drone Bausteine aktivieren</string>
+    <string name="pref_descr_drone_bricks">Diese Bausteine werden benötigt um Parrots Drone	zu steuern.</string>
+    <string name="pref_plugin_drone">Drone Plugin Status</string>
+    <string name="pref_dsl_timeout_drone">Bewegungs Timeout</string>
+    <string name="pref_descr_dsl_timeout_drone">Sekunden nach der die Drone alle Bewegungen stoppt, wenn keine Kommandos gesendet werden. Wir empfehlen ein Timeout von 5 Sekunden um Fly Aways in Folge von Programmierfehlern zu verhindern.</string>
+
     <!-- About Dialog -->
     <string name="about_title">Über Catroid</string>
     <string name="about_text">
@@ -83,12 +90,12 @@
 
     <!-- Sprite activity -->
     <string name="sprite_name">Objekt:</string>
-    
+
     <!-- ScriptTab activity -->
     <string name="scripts">Skripte</string>
     <string name="costumes">Kostüme</string>
     <string name="sounds">Sounds</string>
-    
+
     <!-- Costume activity -->
     <string name="rename_costume_dialog">Kostüm umbenennen</string>
     <string name="edit_costume">editieren</string>
@@ -98,7 +105,7 @@
     <string name="copy_costume_addition">Kopie</string>
     <string name="select_image">Bild auswählen</string>
     <string name="paintroid_not_installed">Paintroid ist nicht installiert!\nJetzt herunterladen?</string>
-    
+
     <!-- Sound activity -->
     <string name="rename_sound_dialog">Sound umbenennen</string>
     <string name="soundname_invalid">Dieser Name ist nicht zulässig</string>
@@ -107,14 +114,14 @@
     <string name="sound_delete">löschen</string>
     <string name="sound_rename">editieren</string>
 
- 	<!-- Script context menu -->
+    <!-- Script context menu -->
     <string name="script_context_menu_title">Script Menü</string>
 
     <!-- New project dialog -->
     <string name="new_project_dialog_button">Erstellen</string>
     <string name="new_project_dialog_title">Name des Projekts</string>
     <string name="new_project_dialog_default_project_name">Projektname</string>
-    
+
     <!-- Rename Dialog -->
     <string name="rename_hint">Name</string>
     <string name="rename_button">umbenennen</string>
@@ -128,18 +135,18 @@
 
     <!-- Load project dialog -->
     <string name="load_project_dialog_title">Projekt laden</string>
-    
-    <!--  Stage menu dialog -->
+
+    <!-- Stage menu dialog -->
     <string name="back">Zurück</string>
-	<string name="resume_current_project">Fortsetzen</string>
-	<string name="restart_current_project">Neu starten</string>
-	<string name="stage_dialog_title">Optionen</string>
-	<string name="stagemenu_screen_size">Maximieren/\nDehnen</string>
+    <string name="resume_current_project">Fortsetzen</string>
+    <string name="restart_current_project">Neu starten</string>
+    <string name="stage_dialog_title">Optionen</string>
+    <string name="stagemenu_screen_size">Maximieren/\nDehnen</string>
     <string name="stagemenu_axes_on">Achsen Ein</string>
     <string name="stagemenu_axes_off">Achsen Aus</string>
     <string name="stagemenu_screenshot">Screenshot</string>
 
-	<!-- Login Register dialog -->
+    <!-- Login Register dialog -->
     <string name="login_register_dialog_title">Einloggen</string>
     <string name="username">Benutzername:</string>
     <string name="password">Passwort:</string>
@@ -148,93 +155,92 @@
     <string name="password_forgotten">Passwort\nvergessen</string>
     <string name="new_user_registered">Neuer Account wurde erstellt</string>
     <string name="register_error">Fehler aufgetreten</string>
-	
-	<!-- Broadcast spinner -->
-	<string name="new_broadcast_message">Neu...</string>
-	<string name="broadcast_nothing_selected">Nichts...</string>
-	
-	<!-- Brick categories -->
-	<string name="categories">Kategorien</string>
-	<string name="category_motion">Bewegung</string>
-	<string name="category_looks">Aussehen</string>
-	<string name="category_sound">Klang</string>
-	<string name="category_control">Steuerung</string>
 
-	<!--  Motion bricks -->
+    <!-- Broadcast spinner -->
+    <string name="new_broadcast_message">Neu...</string>
+    <string name="broadcast_nothing_selected">Nichts...</string>
+
+    <!-- Brick categories -->
+    <string name="categories">Kategorien</string>
+    <string name="category_motion">Bewegung</string>
+    <string name="category_looks">Aussehen</string>
+    <string name="category_sound">Klang</string>
+    <string name="category_control">Steuerung</string>
+
+    <!-- Motion bricks -->
     <string name="brick_place_at">Gehe zu</string>
     <string name="x_label">X:</string>
     <string name="y_label">Y:</string>
-	<string name="brick_set_x">Setze X auf:</string>
-	<string name="brick_set_y">Setze Y auf:</string>
+    <string name="brick_set_x">Setze X auf:</string>
+    <string name="brick_set_y">Setze Y auf:</string>
     <string name="brick_change_x_by">Ändere X um:</string>
-	<string name="brick_change_y_by">Ändere Y um:</string>
+    <string name="brick_change_y_by">Ändere Y um:</string>
     <string name="brick_go_back">Gehe</string>
     <string name="brick_go_back_layers">Ebenen nach hinten</string>
     <string name="brick_come_to_front">Komm nach vorne</string>
-	<string name="brick_if_on_edge_bounce">pralle von Rand ab</string>
-	<string name="brick_move">Gehe</string>
-	<string name="brick_move_n_steps">Schritte</string>
-	<string name="brick_turn_left">Drehe links</string>
-	<string name="brick_turn_left_n_degrees">Grad</string>
-	<string name="brick_turn_right">Drehe rechts</string>
-	<string name="brick_turn_right_n_degrees">Grad</string>
-	<string name="brick_point_in_direction">Zeige in Richtung</string>
-	<string name="brick_point_to">Zeige auf</string>
-	<string name="brick_glide">Gleite</string>
-	<string name="brick_glide_to">zu</string>
-	
-	<!-- Looks bricks -->
+    <string name="brick_if_on_edge_bounce">pralle von Rand ab</string>
+    <string name="brick_move">Gehe</string>
+    <string name="brick_move_n_steps">Schritte</string>
+    <string name="brick_turn_left">Drehe links</string>
+    <string name="brick_turn_left_n_degrees">Grad</string>
+    <string name="brick_turn_right">Drehe rechts</string>
+    <string name="brick_turn_right_n_degrees">Grad</string>
+    <string name="brick_point_in_direction">Zeige in Richtung</string>
+    <string name="brick_point_to">Zeige auf</string>
+    <string name="brick_glide">Gleite</string>
+    <string name="brick_glide_to">zu</string>
+
+    <!-- Looks bricks -->
     <string name="brick_set_costume">Setze Kostüm</string>
     <string name="brick_set_background">Setze Hintergrund</string>
     <string name="brick_set_size_to">Setze Größe auf</string>
     <string name="brick_change_size_by">Ändere Größe um</string>
     <string name="brick_hide">Verstecke dich</string>
     <string name="brick_show">Zeige dich</string>
-	<string name="brick_set_ghost_effect">Setze Durchsichtigkeits-Effekt</string>
-	<string name="brick_change_ghost_effect">Ändere Durchsichtigkeits-Effekt</string>
-	<string name="brick_set_brightness">Setze Helligkeit</string>
-	<string name="brick_change_brightness">Ändere Helligkeit</string>
-	<string name="by_label">um</string>
-	<string name="to_label">auf</string>
-	<string name="brick_clear_graphic_effect">Schalte Grafikeffekte aus</string>
-	<string name="brick_say">Sage</string>
-	<string name="brick_think">Denke</string>
-	<string name="brick_next_costume">Nächstes Kostüm</string>
-	
-	
-	<!-- Sound bricks -->
-  	<string name="brick_play_sound">Spiele Klang</string>
-  	<string name="brick_stop_all_sounds">Stoppe alle Sounds</string>
-	<string name="brick_set_volume_to">Setze Lautstärke auf</string>
-	<string name="brick_change_volume_by">Ändere Lautstärke um</string>
-	<string name="brick_speak">Sprich</string>
-	
-	<!-- Control bricks -->
-  	<string name="brick_when_started">Wenn Projekt gestartet</string>
-	<string name="brick_when">Wenn</string>
-  	<string name="brick_wait">Warte</string>
- 	<string name="seconds">Sekunden</string>
-	<string name="brick_broadcast_receive">Wenn ich empfange:</string>
-	<string name="brick_broadcast">Verschicke an alle:</string>
-  	<string name="brick_broadcast_wait">Verschicke und warte:</string>
-	<string name="brick_note">Notiz</string>
-	<string name="brick_forever">Wiederhole fortlaufend</string>
-	<string name="brick_repeat">Wiederhole</string>
-	<string name="times_label">mal</string>
-	<string name="brick_loop_end">Wiederholen beenden</string>
-	
-	<!-- Actions -->
-  	<string name="action_tapped">Angetippt</string>
-  	<string name="action_doubleTapped">Doppelt angetippt</string>
-  	<string name="action_longPressed">Lang gedrückt</string>
-  	<string name="action_swipeLeft">Nach links gewischt</string> 
-  	<string name="action_swipeRight">Nach rechts gewischt</string>
- 	<string name="action_swipeUp">Nach oben gewischt</string>
-  	<string name="action_swipeDown">Nach unten gewischt</string>    
-    
+    <string name="brick_set_ghost_effect">Setze Durchsichtigkeits-Effekt</string>
+    <string name="brick_change_ghost_effect">Ändere Durchsichtigkeits-Effekt</string>
+    <string name="brick_set_brightness">Setze Helligkeit</string>
+    <string name="brick_change_brightness">Ändere Helligkeit</string>
+    <string name="by_label">um</string>
+    <string name="to_label">auf</string>
+    <string name="brick_clear_graphic_effect">Schalte Grafikeffekte aus</string>
+    <string name="brick_say">Sage</string>
+    <string name="brick_think">Denke</string>
+    <string name="brick_next_costume">Nächstes Kostüm</string>
+
+    <!-- Sound bricks -->
+    <string name="brick_play_sound">Spiele Klang</string>
+    <string name="brick_stop_all_sounds">Stoppe alle Sounds</string>
+    <string name="brick_set_volume_to">Setze Lautstärke auf</string>
+    <string name="brick_change_volume_by">Ändere Lautstärke um</string>
+    <string name="brick_speak">Sprich</string>
+
+    <!-- Control bricks -->
+    <string name="brick_when_started">Wenn Projekt gestartet</string>
+    <string name="brick_when">Wenn</string>
+    <string name="brick_wait">Warte</string>
+    <string name="seconds">Sekunden</string>
+    <string name="brick_broadcast_receive">Wenn ich empfange:</string>
+    <string name="brick_broadcast">Verschicke an alle:</string>
+    <string name="brick_broadcast_wait">Verschicke und warte:</string>
+    <string name="brick_note">Notiz</string>
+    <string name="brick_forever">Wiederhole fortlaufend</string>
+    <string name="brick_repeat">Wiederhole</string>
+    <string name="times_label">mal</string>
+    <string name="brick_loop_end">Wiederholen beenden</string>
+
+    <!-- Actions -->
+    <string name="action_tapped">Angetippt</string>
+    <string name="action_doubleTapped">Doppelt angetippt</string>
+    <string name="action_longPressed">Lang gedrückt</string>
+    <string name="action_swipeLeft">Nach links gewischt</string>
+    <string name="action_swipeRight">Nach rechts gewischt</string>
+    <string name="action_swipeUp">Nach oben gewischt</string>
+    <string name="action_swipeDown">Nach unten gewischt</string>
+
     <!-- defaultValues -->
     <string name="default_project_name">standardProjekt</string>
-    
+
     <!-- Notifications -->
     <string name="notification_invalid_text_entered">
     	Bitte einen Wert eingeben
@@ -290,36 +296,117 @@
     <string name="upload_description">Beschreibung:</string>
     <string name="project_rename">(Das Projekt wird umbenannt.)</string>
     <string name="size_of_project">Größe des Projekts:</string>
-    
+
     <!-- Bluetooth Connection Strings -->
-	
+
     <string name="notification_blueth_err">Bluetooth konnte nicht aktiviert werden, schließe Stage</string>
     <string name="title_paired_devices">Verbundene Geräte</string>
     <string name="title_other_devices">Nicht verbundene Geräte</string>
     <string name="button_scan">Suche Bluetooth Geräte</string>
-	<string name="scanning">Suche</string>
-	<string name="select_device">Wähle dein Mindstorms NXT</string>
-	<string name="connecting_please_wait">Verbinde zum Lego NXT.\nBitte warten...</string>
-	<string name="pairing_message">Nach dem Pairing, verbinde.</string>
-	<string name="problem_at_closing">Problem beim Schließen der Verbindung!</string>
-	<string name="bt_connection_failed">Verbindung zum Gerät fehlgeschlagen!</string>
-	<string name="no_paired_nxt">Kein verbundenes NXT</string>
-	<string name="none_found">Keine nicht verbundenen Geräte gefunden</string>
-	<string name="none_paired">Keine verbundenen Geräte gefunden</string>
-	
+    <string name="scanning">Suche</string>
+    <string name="select_device">Wähle dein Mindstorms NXT</string>
+    <string name="connecting_please_wait">Verbinde zum Lego NXT.\nBitte warten...</string>
+    <string name="pairing_message">Nach dem Pairing, verbinde.</string>
+    <string name="problem_at_closing">Problem beim Schließen der Verbindung!</string>
+    <string name="bt_connection_failed">Verbindung zum Gerät fehlgeschlagen!</string>
+    <string name="no_paired_nxt">Kein verbundenes NXT</string>
+    <string name="none_found">Keine nicht verbundenen Geräte gefunden</string>
+    <string name="none_paired">Keine verbundenen Geräte gefunden</string>
+
     <!-- Lego Mindstorms Strings -->
-	<string name="brick_motor_action">NXT bewege Motor</string>
-	<string name="motor">Motor</string>
-	<string name="motor_duration">Dauer</string>
-	<string name="motor_speed">Geschwindigkeit</string>
-	<string name="brick_motor_turn_angle">NXT rotiere Motor</string>
-	<string name="motor_angle">Winkel</string>
-	<string name="motor_stop">NXT stoppe Motor</string>
-	<string name="nxt_play_tone">NXT Ton abspielen</string>
-	<string name="nxt_tone_frequency">Frequenz</string>
-	<string name="tone_duration">Dauer</string>
-	<string name="nxt_tone_hundred_hz">x100Hz</string>
-	
-	<string name="number_to_small">Wert ist zu klein!</string>
-	<string name="number_to_big">Wert ist zu groß!</string>
+    <string name="brick_motor_action">NXT bewege Motor</string>
+    <string name="motor">Motor</string>
+    <string name="motor_duration">Dauer</string>
+    <string name="motor_speed">Geschwindigkeit</string>
+    <string name="brick_motor_turn_angle">NXT rotiere Motor</string>
+    <string name="motor_angle">Winkel</string>
+    <string name="motor_stop">NXT stoppe Motor</string>
+    <string name="nxt_play_tone">NXT Ton abspielen</string>
+    <string name="nxt_tone_frequency">Frequenz</string>
+    <string name="tone_duration">Dauer</string>
+    <string name="nxt_tone_hundred_hz">x100Hz</string>
+    <string name="number_to_small">Wert ist zu klein!</string>
+    <string name="number_to_big">Wert ist zu groß!</string>
+
+    <!-- Drone Strings -->
+    <string name="drone_choose_animation_title">Animation wählen</string>
+    <string name="drone_brick_led_animation">spiele Led-Animation</string>
+    <string name="drone_brick_take_off">Hebe ab</string>
+    <string name="drone_brick_land">Lande</string>
+    <string name="drone_brick_move_animation">spiele Move-Animation</string>
+    <string name="drone_for">für</string>
+    <string name="drone_choose_animation_frequency_title">Geschwindigkeit wählen</string>
+    <string name="drone_brick_move">Fliege</string>
+    <string name="drone_choose_movement_title">Bewegung wählen</string>
+    <string name="drone_move_to">Fliege nach ...</string>
+    <string name="drone_seconds">Sekunden</string>
+    <string name="drone_to">nach</string>
+    <string name="drone_connect_drone_err">Es konnte keine Verbindung mit der Drone hergestellt werden. Unpair?</string>
+    <string name="drone_connect_drone_success">Mit Drone verbunden!</string>
+    <string name="drone_wifi_connection_title">Drone Verbindungsherstellung</string>
+    <string name="drone_wifi_status_wifi">Aktiviere Wifi.</string>
+    <string name="drone_wifi_status_wifi_scan_for_drone">Suche Drone.</string>
+    <string name="drone_wifi_status_connect_drone">Verbinde zu Drone.</string>
+    <string name="drone_wifi_status_get_navdata">Warte auf NavDaten.</string>
+    <string name="drone_bt_wifi_start">Start</string>
+    <string name="drone_finding_drone_err">Die Drone kann nicht gefunden werden. Eingeschaltet? Unpair?</string>
+    <string name="drone_wifi_connection_description">Stelle sicher, dass deine Drone eingeschalten ist und warte bis die LEDs deiner Drone grün leuchten.\nKlicke dann auf "Start" um eine Verbindung zur Drone aufzubauen. Dieser Vorgang kann einige Sekunden dauern.</string>
+    <string name="drone_connect_drone_cancel">Verbindungsaufbau zu Drone abgebrochen.</string>
+    <string name="drone_wifi_status_enabling">aktiviere Wifi...</string>
+    <string name="drone_wifi_status_enabled">Wifi aktiviert.</string>
+    <string name="drone_wifi_status_scan_for_drone_scanning">suche Drone...</string>
+    <string name="drone_wifi_status_scan_for_drone_scanned">Drone gefunden.</string>
+    <string name="drone_wifi_status_connect_drone_connecting">verbinde zu Drone...</string>
+    <string name="drone_wifi_status_connect_drone_connected">Verbunden mit Drone.</string>
+    <string name="drone_wifi_status_get_navdata_getting">warte auf NavDaten...</string>
+    <string name="drone_wifi_status_get_navdata_got">NavDaten erhalten.</string>
+    <string name="drone_brick_change_flyingstate">ändere Flugmodus</string>
+    <string name="drone_choose_flyingstate_title">Flugmodus wählen</string>
+    <string name="drone_wifi_status_check_config">Überprüfe Config.</string>
+    <string name="drone_wifi_status_checking_config">überprüfe Config...</string>
+    <string name="drone_wifi_status_checked_config">Config überprüft.</string>
+    <string name="drone_wifi_status_check_firmware">Überprüfe Firmware.</string>
+    <string name="drone_wifi_status_checking_firmware">überprüfe Firmware...</string>
+    <string name="drone_wifi_status_checked_firmware">Firmware geprüft.</string>
+    <string name="drone_firmware_err">Die Verbindung zur Drone wurde nicht aufgebaut. Es befindet sich eine veraltete Firmware auf deiner Drone, die nicht unterstützt wird. Gehe zurück ins Hauptmenü > Einstellung > Drone. Folge den Instruktionen um ein Firmwareupdate zu machen.</string>
+    <string name="drone_navdata_err">Es konnten keine NavDaten von der Drone empfangen werden. Versuche es erneut oder schalte die Drone aus und wieder ein.</string>
+    <string name="drone_config_err">Es ist ein Fehler beim Bearbeiten der Configs aufgetreten. Versuche es erneut oder schalte die Drone aus und wieder ein.</string>
+    <string name="drone_scan_err">Es ist ein Fehler beim Netzwerkscan aufgetreten. Es konnten keine Wifi-Netzwerke gefunden werden.</string>
+    <string name="drone_brick_stop_move">stoppe Flugbewegung</string>
+    <string name="drone_brick_config">ändere Config</string>
+    <string name="drone_choose_config_key_title">wähle Config</string>
+    <string name="drone_choose_config_value_title">wähle Wert</string>
+    <string name="drone_pick_drone">Wähle deine Drone</string>
+    <string name="drone_move_forward">vor</string>
+    <string name="drone_move_backward">zurück</string>
+    <string name="drone_move_left">links</string>
+    <string name="drone_move_right">rechts</string>
+    <string name="drone_move_downward">unten</string>
+    <string name="drone_move_upward">oben</string>
+    <string name="drone_move_rotation_left">Rotation\nlinks</string>
+    <string name="drone_move_rotation_right">Rotation\nrechts</string>
+    <string name="drone_not_installed_addon">Das Plugin um Drone Projekte ausfürhen zu können ist nicht installiert. Gehe zu Einstellungen, um es zu installieren.</string>
+    <string name="drone_terms_of_use_title">Lizenzbedingungen English</string>
+    <string name="drone_terms_of_use">Drone is a registered trademark of Parrot SA.. Catroid and Drone Catroid Plugin is open source software licensed under the GNU AGPL v3 and not associated, affiliated, endorsed, or approved by Parrot SA.. The software is strictly experimental and untested, it is provided "as is", without fitness for a particular purpose. In no event shall the authors or copyright holders of the software, Catroid or software created with Catroid be liable for any claim, damages, injuries or other liability, arising from, out of or in connection with the software or the use or other dealings in the software.</string>
+    <string name="drone_tof_not_show_again">Nie wieder anzeigen.</string>
+    <string name="drone_abort_install">Abbruch</string>
+    <string name="drone_not_connected_to_internet">Nicht mit dem Internet verbunden.</string>
+    <string name="drone_donwload_success">Plugin erfolgreich heruntergeladen.</string>
+    <string name="drone_donwload_fail">Herunterladen des Plugins fehlgeschlagen.</string>
+    <string name="drone_brick_start_video">starte Video</string>
+    <string name="drone_brick_stop_video">stoppe Video</string>
+    <string name="drone_brick_save_snapshot">speichere Snapshot</string>
+    <string name="drone_brick_start_video_recorder">starte Video-Recorder</string>
+    <string name="drone_brick_stop_video_recorder">stoppe Video-Recorder</string>
+    <string name="drone_accept_termsofuse_button">Akzeptieren</string>
+    <string name="drone_abort_termsofuse_button">Abbrechen</string>
+    <string name="drone_firmware_update_drone">Bitte mit der Drone verbinden</string>
+    <string name="drone_firmware_update_drone_header">Dronen Software Update</string>
+    <string name="drone_plugin_installed">Das Drone Plugin um Parrots Drone zu steuern ist installiert.</string>
+    <string name="drone_plugin_not_installed">Das Drone Plugin um Parrots Drone zu steuern ist nicht installiert. Klicke hier um das Plugin herunterzuladen und zu installieren.</string>
+    <string name="drone_processing">verarbeite ...</string>
+    <string name="drone_settings_dsl_only_numbers">Es sind nur ganze positive Zahlen erlaubt.</string>
+    <string name="drone_firmware_forceupdate">Erzwinge das Firmwareupdate auf 1.7.4!</string>
+    <string name="drone_category">Drone</string>
+
 </resources>
