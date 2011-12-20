@@ -25,9 +25,14 @@ package at.tugraz.ist.catroid.test.drone;
 import org.easymock.EasyMock;
 
 import android.test.InstrumentationTestCase;
+import android.util.Log;
+import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 import at.tugraz.ist.catroid.plugin.Drone.IDrone;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneChangeFlyingModeBrick;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneConfigBrick;
 import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLandBrick;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLedAnimationBrick;
 import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneTakeOffBrick;
 
 import static org.easymock.EasyMock.*;
@@ -44,31 +49,81 @@ public class BrickBasicFunctionTest extends InstrumentationTestCase {
 		createDroneMock();
 	}
 
+	private void verifytest(Brick brick) {
+		Log.d(this.getName(), "verifytest()");
+		EasyMock.expectLastCall().times(1);
+		replay(idronemock);
+		brick.execute();
+		verify(idronemock);
+		createDroneMock();
+	}
+
 	private void createDroneMock() {
 		idronemock = null;
 		idronemock = EasyMock.createMock(IDrone.class);
 		DroneHandler.getInstance().setIDrone(idronemock);
 	}
 
-	public void testTakeOffBrick() {
-		createDroneMock();
+	public void testDroneTakeOffBrick() {
 		DroneTakeOffBrick takeoffbrick = new DroneTakeOffBrick(null);
 		idronemock.takeoff();
-		EasyMock.expectLastCall().times(1);
-		replay(idronemock);
-		takeoffbrick.execute();
-		verify(idronemock);
+		verifytest((Brick) takeoffbrick);
 	}
 
-	public void testLandBrick() {
-		createDroneMock();
+	public void testDroneLandBrick() {
 		DroneLandBrick landbrick = new DroneLandBrick(null);
 		idronemock.land();
-		EasyMock.expectLastCall().times(1);
+		
+	}
 
-		replay(idronemock);
-		landbrick.execute();
-		verify(idronemock);
+	public void testDroneChangeFlyingModeBrick() {
+		//TODO change int
+		DroneChangeFlyingModeBrick brick = new DroneChangeFlyingModeBrick(null,1);
+		expect(idronemock.changeFlyingMode(1)).andReturn(true);
+		verifytest((Brick) brick);
+	}
+
+	public void testDroneConfigBrick() {
+		//TODO change int
+		DroneConfigBrick landbrick = new DroneConfigBrick(null, 0,0);
+		expect(idronemock.setConfiguration("AT*CONFIG=#SEQ#," + "\"control:altitude_max\",\"1000\"", true)).andReturn(true);
+		verifytest((Brick) landbrick);
+	}
+
+	public void testDroneLedAnimationBrick() {
+		DroneLedAnimationBrick brick = new DroneLedAnimationBrick(null,1,1,1);
+		idronemock.playLedAnimation(1, 1, 1);
+		verifytest((Brick) brick);
+	}
+
+	public void testDroneMoveBrick() {
+		DroneLedAnimationBrick brick = new DroneLedAnimationBrick(null,1,1,1);
+		idronemock.playLedAnimation(1, 1, 1);
+		verifytest((Brick) brick);
+	}
+
+	public void testDroneSaveSnapshotBrick() {
 
 	}
+
+	public void testDroneStopMoveBrick() {
+
+	}
+
+	public void testDroneStartVideoRecorderBrick() {
+
+	}
+
+	public void testDroneStartVideoBrick() {
+
+	}
+
+	public void testDroneStopVideoBrick() {
+
+	}
+
+	// public void test(){
+	//
+	// }
+
 }
