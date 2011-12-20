@@ -164,7 +164,6 @@ public class BroadcastReceiverBrick implements Brick {
 
 	public Brick cloneCopySprite(Sprite sprite) {
 		BroadcastReceiverBrick brick = new BroadcastReceiverBrick(getSprite(), receiveScript);
-		//brick.receiveScript.setBroadcastMessage(this.receiveScript.getBroadcastMessage());
 		brick.sprite = sprite;
 		return brick;
 	}
