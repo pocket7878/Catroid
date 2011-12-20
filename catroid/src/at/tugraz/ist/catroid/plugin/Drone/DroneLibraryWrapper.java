@@ -1,19 +1,23 @@
 /**
  *  Catroid: An on-device graphical programming language for Android devices
- *  Copyright (C) 2010  Catroid development team 
+ *  Copyright (C) 2010-2011 The Catroid Team
  *  (<http://code.google.com/p/catroid/wiki/Credits>)
- *
+ *  
  *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *  
+ *  An additional term exception under section 7 of the GNU Affero
+ *  General Public License, version 3, is available at
+ *  http://www.catroid.org/catroid_license_additional_term
+ *  
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
+ *  GNU Affero General Public License for more details.
+ *   
+ *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package at.tugraz.ist.catroid.plugin.Drone;
@@ -30,21 +34,19 @@ public class DroneLibraryWrapper implements IDrone {
 	private Context droneContext;
 
 	public DroneLibraryWrapper(Context context) throws Exception {
-		droneContext = context.createPackageContext(DroneLibraryWrapper.droneNamespace,
-		        Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
+		droneContext = context.createPackageContext(DroneLibraryWrapper.droneNamespace, Context.CONTEXT_INCLUDE_CODE
+				| Context.CONTEXT_IGNORE_SECURITY);
 
-		Class<?> droneClass = Class.forName(
-		        DroneLibraryWrapper.droneClass, true, droneContext.getClassLoader());
+		Class<?> droneClass = Class.forName(DroneLibraryWrapper.droneClass, true, droneContext.getClassLoader());
 
-		droneInstance = droneClass.getMethod("getInstance", (Class[]) null)
-		        .invoke(null, (Object[]) null);
+		droneInstance = droneClass.getMethod("getInstance", (Class[]) null).invoke(null, (Object[]) null);
 
 	}
 
 	public boolean connect() {
 		try {
 			return (Boolean) this.droneInstance.getClass().getMethod("connect", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -58,7 +60,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public void disconnect() {
 		try {
 			this.droneInstance.getClass().getMethod("disconnect", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -67,7 +69,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public void takeoff() {
 		try {
 			this.droneInstance.getClass().getMethod("takeoff", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -75,8 +77,7 @@ public class DroneLibraryWrapper implements IDrone {
 
 	public void land() {
 		try {
-			this.droneInstance.getClass().getMethod("land", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+			this.droneInstance.getClass().getMethod("land", (Class[]) null).invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -85,7 +86,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public void playLedAnimation(int animation, float frequency, int durationSeconds) {
 		try {
 			this.droneInstance.getClass().getMethod("playLedAnimation", int.class, float.class, int.class)
-			        .invoke(this.droneInstance, animation, frequency, durationSeconds);
+					.invoke(this.droneInstance, animation, frequency, durationSeconds);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -94,7 +95,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public void playMoveAnimation(int animation, int durationSeconds) {
 		try {
 			this.droneInstance.getClass().getMethod("playMoveAnimation", int.class, int.class)
-			        .invoke(this.droneInstance, animation, durationSeconds);
+					.invoke(this.droneInstance, animation, durationSeconds);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -102,9 +103,8 @@ public class DroneLibraryWrapper implements IDrone {
 
 	public void move(double throttle, double roll, double pitch, double yaw) {
 		try {
-			this.droneInstance.getClass()
-			        .getMethod("move", double.class, double.class, double.class, double.class)
-			        .invoke(this.droneInstance, throttle, roll, pitch, yaw);
+			this.droneInstance.getClass().getMethod("move", double.class, double.class, double.class, double.class)
+					.invoke(this.droneInstance, throttle, roll, pitch, yaw);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -113,7 +113,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public boolean changeFlyingMode(int mode) {
 		try {
 			return (Boolean) this.droneInstance.getClass().getMethod("changeFlyingMode", int.class)
-			        .invoke(this.droneInstance, mode);
+					.invoke(this.droneInstance, mode);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -123,7 +123,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public void emergency() {
 		try {
 			this.droneInstance.getClass().getMethod("emergency", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -132,7 +132,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public void emergencyLand() {
 		try {
 			this.droneInstance.getClass().getMethod("emergencyLand", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -141,7 +141,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public boolean doStartUpConfiguration() {
 		try {
 			return (Boolean) this.droneInstance.getClass().getMethod("doStartUpConfiguration", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -150,9 +150,8 @@ public class DroneLibraryWrapper implements IDrone {
 
 	public boolean setConfiguration(String cmd, boolean isIDScmd) {
 		try {
-			return (Boolean) this.droneInstance.getClass()
-			        .getMethod("setConfiguration", String.class, boolean.class)
-			        .invoke(this.droneInstance, cmd, isIDScmd);
+			return (Boolean) this.droneInstance.getClass().getMethod("setConfiguration", String.class, boolean.class)
+					.invoke(this.droneInstance, cmd, isIDScmd);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -161,8 +160,7 @@ public class DroneLibraryWrapper implements IDrone {
 
 	public void setDslTimeout(int seconds) {
 		try {
-			this.droneInstance.getClass().getMethod("setDslTimeout", int.class)
-			        .invoke(this.droneInstance, seconds);
+			this.droneInstance.getClass().getMethod("setDslTimeout", int.class).invoke(this.droneInstance, seconds);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -171,7 +169,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public void startVideo() {
 		try {
 			this.droneInstance.getClass().getMethod("startVideo", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -180,7 +178,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public void stopVideo() {
 		try {
 			this.droneInstance.getClass().getMethod("stopVideo", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -188,8 +186,7 @@ public class DroneLibraryWrapper implements IDrone {
 
 	public void renderVideoFrame(int glHandle) {
 		try {
-			this.droneInstance.getClass().getMethod("renderVideoFrame", int.class)
-			        .invoke(this.droneInstance, glHandle);
+			this.droneInstance.getClass().getMethod("renderVideoFrame", int.class).invoke(this.droneInstance, glHandle);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -197,9 +194,8 @@ public class DroneLibraryWrapper implements IDrone {
 
 	public void startVideoRecorder(String path) {
 		try {
-			this.droneInstance.getClass()
-			        .getMethod("startVideoRecorder", String.class)
-			        .invoke(this.droneInstance, path);
+			this.droneInstance.getClass().getMethod("startVideoRecorder", String.class)
+					.invoke(this.droneInstance, path);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -208,7 +204,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public void stopVideoRecorder() {
 		try {
 			this.droneInstance.getClass().getMethod("stopVideoRecorder", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -216,8 +212,7 @@ public class DroneLibraryWrapper implements IDrone {
 
 	public void saveVideoSnapshot(String path) {
 		try {
-			this.droneInstance.getClass().getMethod("saveVideoSnapshot", String.class)
-			        .invoke(this.droneInstance, path);
+			this.droneInstance.getClass().getMethod("saveVideoSnapshot", String.class).invoke(this.droneInstance, path);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -226,7 +221,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public int getFlyingMode() {
 		try {
 			return (Integer) this.droneInstance.getClass().getMethod("getFlyingMode", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -236,7 +231,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public int getCameraOrientation() {
 		try {
 			return (Integer) this.droneInstance.getClass().getMethod("getCameraOrientation", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -246,7 +241,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public int getBatteryLoad() {
 		try {
 			return (Integer) this.droneInstance.getClass().getMethod("getBatteryLoad", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -256,7 +251,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public boolean isConnected() {
 		try {
 			return (Boolean) this.droneInstance.getClass().getMethod("isConnected", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -266,7 +261,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public String getFirmwareVersion() {
 		try {
 			return (String) this.droneInstance.getClass().getMethod("getFirmwareVersion", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -279,7 +274,7 @@ public class DroneLibraryWrapper implements IDrone {
 		try {
 
 			return (Boolean) this.droneInstance.getClass().getMethod("uploadFirmwareFile", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -289,7 +284,7 @@ public class DroneLibraryWrapper implements IDrone {
 	public boolean restartDrone() {
 		try {
 			return (Boolean) this.droneInstance.getClass().getMethod("restartDrone", (Class[]) null)
-			        .invoke(this.droneInstance, (Object[]) null);
+					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
 			printException(e);
 		}
@@ -298,8 +293,7 @@ public class DroneLibraryWrapper implements IDrone {
 
 	public void setContext(Context context) {
 		try {
-			this.droneInstance.getClass().getMethod("setContext", Context.class)
-			        .invoke(this.droneInstance, context);
+			this.droneInstance.getClass().getMethod("setContext", Context.class).invoke(this.droneInstance, context);
 		} catch (Exception e) {
 			printException(e);
 		}

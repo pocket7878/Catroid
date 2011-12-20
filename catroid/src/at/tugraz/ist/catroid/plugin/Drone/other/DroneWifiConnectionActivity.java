@@ -1,19 +1,23 @@
 /**
  *  Catroid: An on-device graphical programming language for Android devices
- *  Copyright (C) 2010  Catroid development team 
+ *  Copyright (C) 2010-2011 The Catroid Team
  *  (<http://code.google.com/p/catroid/wiki/Credits>)
- *
+ *  
  *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *  
+ *  An additional term exception under section 7 of the GNU Affero
+ *  General Public License, version 3, is available at
+ *  http://www.catroid.org/catroid_license_additional_term
+ *  
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
+ *  GNU Affero General Public License for more details.
+ *   
+ *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package at.tugraz.ist.catroid.plugin.Drone.other;
@@ -140,59 +144,59 @@ public class DroneWifiConnectionActivity extends Activity {
 
 		switch (whichDialog) {
 
-		case DroneConsts.DIALOG_TERMS_OF_USE:
-			dialog = new DroneTermsOfUseDialog(this);
-			dialog.setOnDismissListener(new OnDismissListener() {
-				public void onDismiss(DialogInterface dialog) {
-					if (((DroneTermsOfUseDialog) dialog).accepted()) {
-						changeStatus(DroneConsts.START);
-					} else {
-						changeStatus(DroneConsts.CANCEL);
+			case DroneConsts.DIALOG_TERMS_OF_USE:
+				dialog = new DroneTermsOfUseDialog(this);
+				dialog.setOnDismissListener(new OnDismissListener() {
+					public void onDismiss(DialogInterface dialog) {
+						if (((DroneTermsOfUseDialog) dialog).accepted()) {
+							changeStatus(DroneConsts.START);
+						} else {
+							changeStatus(DroneConsts.CANCEL);
+						}
 					}
+				});
+				break;
+
+			case DroneConsts.SELECT_DRONE_DIALOG:
+				String[] items = new String[wifiConfigs.size()];
+				for (int i = 0; i < wifiConfigs.size(); i++) {
+					items[i] = wifiConfigs.get(i).SSID.replace("\"", "");
 				}
-			});
-			break;
 
-		case DroneConsts.SELECT_DRONE_DIALOG:
-			String[] items = new String[wifiConfigs.size()];
-			for (int i = 0; i < wifiConfigs.size(); i++) {
-				items[i] = wifiConfigs.get(i).SSID.replace("\"", "");
-			}
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle(R.string.drone_pick_drone);
-			builder.setCancelable(false);
-			builder.setItems(items, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int item) {
-					enableDroneNetwork(wifiConfigs.get(item));
-
-				}
-			});
-			dialog = builder.create();
-			break;
-		case DroneConsts.DIALOG_FIRMWAREUPDATE:
-			dialog = new DroneFirmwareUpdateDialog(this, wifiManager);
-			dialog.setOnDismissListener(new OnDismissListener() {
-				public void onDismiss(DialogInterface dialog) {
-					switch (((DroneFirmwareUpdateDialog) dialog).status()) {
-					case DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL:
-						changeStatus(DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL);
-						break;
-
-					case DroneConsts.RESULT_FIRMWARE_UPDATE_ERROR:
-						changeStatus(DroneConsts.RESULT_FIRMWARE_UPDATE_ERROR);
-						break;
-					case DroneConsts.RESULT_FIRMWARE_UPDATE_OK:
-						changeStatus(DroneConsts.RESULT_FIRMWARE_UPDATE_OK);
-
-						break;
-					default:
-						break;
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.drone_pick_drone);
+				builder.setCancelable(false);
+				builder.setItems(items, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int item) {
+						enableDroneNetwork(wifiConfigs.get(item));
 
 					}
-				}
-			});
-			break;
+				});
+				dialog = builder.create();
+				break;
+			case DroneConsts.DIALOG_FIRMWAREUPDATE:
+				dialog = new DroneFirmwareUpdateDialog(this, wifiManager);
+				dialog.setOnDismissListener(new OnDismissListener() {
+					public void onDismiss(DialogInterface dialog) {
+						switch (((DroneFirmwareUpdateDialog) dialog).status()) {
+							case DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL:
+								changeStatus(DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL);
+								break;
+
+							case DroneConsts.RESULT_FIRMWARE_UPDATE_ERROR:
+								changeStatus(DroneConsts.RESULT_FIRMWARE_UPDATE_ERROR);
+								break;
+							case DroneConsts.RESULT_FIRMWARE_UPDATE_OK:
+								changeStatus(DroneConsts.RESULT_FIRMWARE_UPDATE_OK);
+
+								break;
+							default:
+								break;
+
+						}
+					}
+				});
+				break;
 		}
 
 		return dialog;
@@ -217,20 +221,15 @@ public class DroneWifiConnectionActivity extends Activity {
 		ivWifiStatus.setVisibility(ImageView.GONE);
 		ivWifiStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.yes_icon));
 		ivWifiScanStatus.setVisibility(ImageView.GONE);
-		ivWifiScanStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(
-		        R.drawable.yes_icon));
+		ivWifiScanStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.yes_icon));
 		ivDroneConnectStatus.setVisibility(ImageView.GONE);
-		ivDroneConnectStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(
-		        R.drawable.yes_icon));
+		ivDroneConnectStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.yes_icon));
 		ivGetNavdataStatus.setVisibility(ImageView.GONE);
-		ivGetNavdataStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(
-		        R.drawable.yes_icon));
+		ivGetNavdataStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.yes_icon));
 		ivCheckConfigStatus.setVisibility(ImageView.GONE);
-		ivCheckConfigStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(
-		        R.drawable.yes_icon));
+		ivCheckConfigStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.yes_icon));
 		ivCheckFirmwareStatus.setVisibility(ImageView.GONE);
-		ivCheckFirmwareStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(
-		        R.drawable.yes_icon));
+		ivCheckFirmwareStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.yes_icon));
 
 		pbConnectionStatus.setVisibility(ProgressBar.VISIBLE);
 
@@ -270,14 +269,13 @@ public class DroneWifiConnectionActivity extends Activity {
 			// return;
 			// }
 
-			tvWifiStatus.setText(getApplicationContext().getResources().getString(
-			        R.string.drone_wifi_status_enabled));
+			tvWifiStatus.setText(getApplicationContext().getResources().getString(R.string.drone_wifi_status_enabled));
 			ivWifiStatus.setVisibility(ImageView.VISIBLE);
 			tvWifiScanStatus.setText(getApplicationContext().getResources().getString(
-			        R.string.drone_wifi_status_scan_for_drone_scanned));
+					R.string.drone_wifi_status_scan_for_drone_scanned));
 			ivWifiScanStatus.setVisibility(ImageView.VISIBLE);
 			tvDroneConnectStatus.setText(getApplicationContext().getResources().getString(
-			        R.string.drone_wifi_status_connect_drone_connected));
+					R.string.drone_wifi_status_connect_drone_connected));
 			ivDroneConnectStatus.setVisibility(ImageView.VISIBLE);
 			scanned = true;
 			changeStatus(DroneConsts.CHECKING_FIRMWARE);
@@ -285,8 +283,7 @@ public class DroneWifiConnectionActivity extends Activity {
 	}
 
 	public void statusWIFIACTIVATING(Message msg) {
-		tvWifiStatus
-		        .setText(getApplicationContext().getResources().getString(R.string.drone_wifi_status_enabling));
+		tvWifiStatus.setText(getApplicationContext().getResources().getString(R.string.drone_wifi_status_enabling));
 		status = msg.what;
 	}
 
@@ -294,53 +291,53 @@ public class DroneWifiConnectionActivity extends Activity {
 		tvWifiStatus.setText(getApplicationContext().getResources().getString(R.string.drone_wifi_status_enabled));
 		ivWifiStatus.setVisibility(ImageView.VISIBLE);
 		tvWifiScanStatus.setText(getApplicationContext().getResources().getString(
-		        R.string.drone_wifi_status_scan_for_drone_scanning));
+				R.string.drone_wifi_status_scan_for_drone_scanning));
 		status = msg.what;
 	}
 
 	public void statusCONNECTINGTODRONEWIFI(Message msg) {
 		tvWifiScanStatus.setText(getApplicationContext().getResources().getString(
-		        R.string.drone_wifi_status_scan_for_drone_scanned));
+				R.string.drone_wifi_status_scan_for_drone_scanned));
 		ivWifiScanStatus.setVisibility(ImageView.VISIBLE);
 		tvDroneConnectStatus.setText(getApplicationContext().getResources().getString(
-		        R.string.drone_wifi_status_connect_drone_connecting));
+				R.string.drone_wifi_status_connect_drone_connecting));
 		status = msg.what;
 	}
 
 	public void statusCONNECTINGTODRONE(Message msg) {
 		// TODO generate new string
 		tvWifiScanStatus.setText(getApplicationContext().getResources().getString(
-		        R.string.drone_wifi_status_scan_for_drone_scanned));
+				R.string.drone_wifi_status_scan_for_drone_scanned));
 		ivWifiScanStatus.setVisibility(ImageView.VISIBLE);
 		tvDroneConnectStatus.setText(getApplicationContext().getResources().getString(
-		        R.string.drone_wifi_status_connect_drone_connecting));
+				R.string.drone_wifi_status_connect_drone_connecting));
 		status = msg.what;
 	}
 
 	private void statusCHECKINGFIRMWARE(Message msg) {
 		tvDroneConnectStatus.setText(getApplicationContext().getResources().getString(
-		        R.string.drone_wifi_status_connect_drone_connected));
+				R.string.drone_wifi_status_connect_drone_connected));
 		ivDroneConnectStatus.setVisibility(ImageView.VISIBLE);
 		tvCheckFirmwareStatus.setText(getApplicationContext().getResources().getString(
-		        R.string.drone_wifi_status_checking_firmware));
+				R.string.drone_wifi_status_checking_firmware));
 		status = msg.what;
 	}
 
 	private void statusWAITINGFORNAVDATA(Message msg) {
 		tvCheckFirmwareStatus.setText(getApplicationContext().getResources().getString(
-		        R.string.drone_wifi_status_checked_firmware));
+				R.string.drone_wifi_status_checked_firmware));
 		ivCheckFirmwareStatus.setVisibility(ImageView.VISIBLE);
 		tvGetNavdataStatus.setText(getApplicationContext().getResources().getString(
-		        R.string.drone_wifi_status_get_navdata_getting));
+				R.string.drone_wifi_status_get_navdata_getting));
 		status = msg.what;
 	}
 
 	private void statusCHECKINGCONFIG(Message msg) {
 		tvGetNavdataStatus.setText(getApplicationContext().getResources().getString(
-		        R.string.drone_wifi_status_get_navdata_got));
+				R.string.drone_wifi_status_get_navdata_got));
 		ivGetNavdataStatus.setVisibility(ImageView.VISIBLE);
 		tvCheckConfigStatus.setText(getApplicationContext().getResources().getString(
-		        R.string.drone_wifi_status_checking_config));
+				R.string.drone_wifi_status_checking_config));
 		status = msg.what;
 	}
 
@@ -363,7 +360,7 @@ public class DroneWifiConnectionActivity extends Activity {
 
 	private void statusSUCCESS(Message msg) {
 		tvCheckConfigStatus.setText(getApplicationContext().getResources().getString(
-		        R.string.drone_wifi_status_checked_config));
+				R.string.drone_wifi_status_checked_config));
 		ivCheckConfigStatus.setVisibility(ImageView.VISIBLE);
 		setResult(RESULT_OK);
 		if (wifiManager != null) {
@@ -396,69 +393,69 @@ public class DroneWifiConnectionActivity extends Activity {
 
 			switch (msg.what) {
 
-			case DroneConsts.START:
-				statusSTART();
-				break;
-			case DroneConsts.WIFI_ACTIVATING:
-				statusWIFIACTIVATING(msg);
-				break;
+				case DroneConsts.START:
+					statusSTART();
+					break;
+				case DroneConsts.WIFI_ACTIVATING:
+					statusWIFIACTIVATING(msg);
+					break;
 
-			case DroneConsts.SCANNING:
-				statusSCANNING(msg);
-				break;
+				case DroneConsts.SCANNING:
+					statusSCANNING(msg);
+					break;
 
-			case DroneConsts.CONNECTING_TO_DRONE_WIFI:
-				statusCONNECTINGTODRONEWIFI(msg);
-				break;
+				case DroneConsts.CONNECTING_TO_DRONE_WIFI:
+					statusCONNECTINGTODRONEWIFI(msg);
+					break;
 
-			case DroneConsts.CONNECTING_TO_DRONE:
-				statusCONNECTINGTODRONE(msg);
-				break;
+				case DroneConsts.CONNECTING_TO_DRONE:
+					statusCONNECTINGTODRONE(msg);
+					break;
 
-			case DroneConsts.CHECKING_FIRMWARE:
-				statusCHECKINGFIRMWARE(msg);
-				break;
+				case DroneConsts.CHECKING_FIRMWARE:
+					statusCHECKINGFIRMWARE(msg);
+					break;
 
-			case DroneConsts.WAITING_FOR_NAVDATA:
-				statusWAITINGFORNAVDATA(msg);
-				break;
+				case DroneConsts.WAITING_FOR_NAVDATA:
+					statusWAITINGFORNAVDATA(msg);
+					break;
 
-			case DroneConsts.CHECKING_CONFIG:
-				statusCHECKINGCONFIG(msg);
-				break;
+				case DroneConsts.CHECKING_CONFIG:
+					statusCHECKINGCONFIG(msg);
+					break;
 
-			case DroneConsts.SELECT_DRONE_DIALOG:
-				showDialog(DroneConsts.SELECT_DRONE_DIALOG);
-				break;
+				case DroneConsts.SELECT_DRONE_DIALOG:
+					showDialog(DroneConsts.SELECT_DRONE_DIALOG);
+					break;
 
-			case DroneConsts.UPDATING_FIRMWARE:
-				statusUPDATINGFIRMWARE(msg);
-				break;
+				case DroneConsts.UPDATING_FIRMWARE:
+					statusUPDATINGFIRMWARE(msg);
+					break;
 
-			case DroneConsts.RESULT_FIRMWARE_UPDATE_OK:
-				// TODO Reset
-				firmwareUpdateOK();
-				break;
+				case DroneConsts.RESULT_FIRMWARE_UPDATE_OK:
+					// TODO Reset
+					firmwareUpdateOK();
+					break;
 
-			// errors
-			case DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL:
-			case DroneConsts.RESULT_FIRMWARE_UPDATE_ERROR:
-			case DroneConsts.ERROR_SCANNING:
-			case DroneConsts.ERROR_FINDING_DRONE:
-			case DroneConsts.ERROR_CONNECTING_DRONE:
-			case DroneConsts.ERROR_FIRMWARE:
-			case DroneConsts.ERROR_NAVDATA:
-			case DroneConsts.ERROR_CONFIG:
-				handleError(msg.what);
-				break;
+				// errors
+				case DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL:
+				case DroneConsts.RESULT_FIRMWARE_UPDATE_ERROR:
+				case DroneConsts.ERROR_SCANNING:
+				case DroneConsts.ERROR_FINDING_DRONE:
+				case DroneConsts.ERROR_CONNECTING_DRONE:
+				case DroneConsts.ERROR_FIRMWARE:
+				case DroneConsts.ERROR_NAVDATA:
+				case DroneConsts.ERROR_CONFIG:
+					handleError(msg.what);
+					break;
 
-			case DroneConsts.CANCEL:
-				statusCANCEL(msg);
-				break;
+				case DroneConsts.CANCEL:
+					statusCANCEL(msg);
+					break;
 
-			case DroneConsts.SUCCESS:
-				statusSUCCESS(msg);
-				break;
+				case DroneConsts.SUCCESS:
+					statusSUCCESS(msg);
+					break;
 			}
 		}
 	};
@@ -467,8 +464,7 @@ public class DroneWifiConnectionActivity extends Activity {
 		// TODO Deactivate WIFI
 		tvWifiConnectionError.setText("Firmware Update OK!");
 		pbConnectionStatus.setVisibility(ProgressBar.GONE);
-		ivCheckFirmwareStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(
-		        R.drawable.no_icon));
+		ivCheckFirmwareStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.no_icon));
 		ivCheckFirmwareStatus.setVisibility(ImageView.VISIBLE);
 		startButton.setClickable(true);
 		startButton.setEnabled(true);
@@ -480,28 +476,24 @@ public class DroneWifiConnectionActivity extends Activity {
 	}
 
 	private void errorERRORSCANNING() {
-		tvWifiConnectionError.setText(getApplicationContext().getResources().getString(
-		        R.string.drone_scan_err));
-		ivWifiScanStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(
-		        R.drawable.no_icon));
+		tvWifiConnectionError.setText(getApplicationContext().getResources().getString(R.string.drone_scan_err));
+		ivWifiScanStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.no_icon));
 		ivWifiScanStatus.setVisibility(ImageView.VISIBLE);
 		pbConnectionStatus.setVisibility(ProgressBar.GONE);
 	}
 
 	private void errorERRORFINDINGDRONE() {
-		tvWifiConnectionError.setText(getApplicationContext().getResources().getString(
-		        R.string.drone_finding_drone_err));
-		ivWifiScanStatus.setImageDrawable(getApplicationContext().getResources()
-		        .getDrawable(R.drawable.no_icon));
+		tvWifiConnectionError.setText(getApplicationContext().getResources()
+				.getString(R.string.drone_finding_drone_err));
+		ivWifiScanStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.no_icon));
 		ivWifiScanStatus.setVisibility(ImageView.VISIBLE);
 		pbConnectionStatus.setVisibility(ProgressBar.GONE);
 	}
 
 	private void errorERRORCONNECTINGDRONE() {
-		tvWifiConnectionError.setText(getApplicationContext().getResources().getString(
-		        R.string.drone_connect_drone_err));
-		ivDroneConnectStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(
-		        R.drawable.no_icon));
+		tvWifiConnectionError.setText(getApplicationContext().getResources()
+				.getString(R.string.drone_connect_drone_err));
+		ivDroneConnectStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.no_icon));
 		ivDroneConnectStatus.setVisibility(ImageView.VISIBLE);
 		pbConnectionStatus.setVisibility(ProgressBar.GONE);
 
@@ -509,19 +501,15 @@ public class DroneWifiConnectionActivity extends Activity {
 	}
 
 	private void errorERRORFIRMWARE() {
-		tvWifiConnectionError.setText(getApplicationContext().getResources()
-		        .getString(R.string.drone_firmware_err));
-		ivCheckFirmwareStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(
-		        R.drawable.no_icon));
+		tvWifiConnectionError.setText(getApplicationContext().getResources().getString(R.string.drone_firmware_err));
+		ivCheckFirmwareStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.no_icon));
 		ivCheckFirmwareStatus.setVisibility(ImageView.VISIBLE);
 		pbConnectionStatus.setVisibility(ProgressBar.GONE);
 	}
 
 	private void errorERRORNAVDATA() {
-		tvWifiConnectionError.setText(getApplicationContext().getResources()
-		        .getString(R.string.drone_navdata_err));
-		ivGetNavdataStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(
-		        R.drawable.no_icon));
+		tvWifiConnectionError.setText(getApplicationContext().getResources().getString(R.string.drone_navdata_err));
+		ivGetNavdataStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.no_icon));
 		ivGetNavdataStatus.setVisibility(ImageView.VISIBLE);
 		pbConnectionStatus.setVisibility(ProgressBar.GONE);
 	}
@@ -533,8 +521,7 @@ public class DroneWifiConnectionActivity extends Activity {
 		// R.drawable.no_icon));
 		// ivCheckConfigStatus.setVisibility(ImageView.GONE);
 		pbConnectionStatus.setVisibility(ProgressBar.GONE);
-		ivCheckFirmwareStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(
-		        R.drawable.no_icon));
+		ivCheckFirmwareStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.no_icon));
 		ivCheckFirmwareStatus.setVisibility(ImageView.VISIBLE);
 	}
 
@@ -544,16 +531,13 @@ public class DroneWifiConnectionActivity extends Activity {
 		// R.drawable.no_icon));
 		// ivCheckConfigStatus.setVisibility(ImageView.GONE);
 		pbConnectionStatus.setVisibility(ProgressBar.GONE);
-		ivCheckFirmwareStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(
-		        R.drawable.no_icon));
+		ivCheckFirmwareStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.no_icon));
 		ivCheckFirmwareStatus.setVisibility(ImageView.VISIBLE);
 	}
 
 	private void errorERRORCONFIG() {
-		tvWifiConnectionError.setText(getApplicationContext().getResources()
-		        .getString(R.string.drone_config_err));
-		ivCheckConfigStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(
-		        R.drawable.no_icon));
+		tvWifiConnectionError.setText(getApplicationContext().getResources().getString(R.string.drone_config_err));
+		ivCheckConfigStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.no_icon));
 		ivCheckConfigStatus.setVisibility(ImageView.VISIBLE);
 		pbConnectionStatus.setVisibility(ProgressBar.GONE);
 	}
@@ -574,36 +558,36 @@ public class DroneWifiConnectionActivity extends Activity {
 		}
 
 		switch (error) {
-		case DroneConsts.ERROR_SCANNING:
-			errorERRORSCANNING();
-			break;
+			case DroneConsts.ERROR_SCANNING:
+				errorERRORSCANNING();
+				break;
 
-		case DroneConsts.ERROR_FINDING_DRONE:
-			errorERRORFINDINGDRONE();
-			break;
+			case DroneConsts.ERROR_FINDING_DRONE:
+				errorERRORFINDINGDRONE();
+				break;
 
-		case DroneConsts.ERROR_CONNECTING_DRONE:
-			errorERRORCONNECTINGDRONE();
-			break;
+			case DroneConsts.ERROR_CONNECTING_DRONE:
+				errorERRORCONNECTINGDRONE();
+				break;
 
-		case DroneConsts.ERROR_FIRMWARE:
-			errorERRORFIRMWARE();
-			break;
+			case DroneConsts.ERROR_FIRMWARE:
+				errorERRORFIRMWARE();
+				break;
 
-		case DroneConsts.ERROR_NAVDATA:
-			errorERRORNAVDATA();
-			break;
+			case DroneConsts.ERROR_NAVDATA:
+				errorERRORNAVDATA();
+				break;
 
-		case DroneConsts.ERROR_CONFIG:
-			errorERRORCONFIG();
-			break;
-		case DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL:
-			errorFIRMWAREUPDATECANCEL();
-			break;
+			case DroneConsts.ERROR_CONFIG:
+				errorERRORCONFIG();
+				break;
+			case DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL:
+				errorFIRMWAREUPDATECANCEL();
+				break;
 
-		case DroneConsts.RESULT_FIRMWARE_UPDATE_ERROR:
-			errorFIRMWAREUPDATEERROR();
-			break;
+			case DroneConsts.RESULT_FIRMWARE_UPDATE_ERROR:
+				errorFIRMWAREUPDATEERROR();
+				break;
 
 		}
 
@@ -654,7 +638,7 @@ public class DroneWifiConnectionActivity extends Activity {
 			if (intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION) && wifiManager.isWifiEnabled()) {
 				NetworkInfo info = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
 				Log.d(DroneConsts.DroneLogTag, "SUPPLICANT_CONNECTION_CHANGE_ACTION " + info.isConnected() + " "
-				        + wifiManager.getConnectionInfo().getSSID());
+						+ wifiManager.getConnectionInfo().getSSID());
 
 				if (info.isConnected()) {
 					if (checkConnectionToDrone()) {
@@ -854,7 +838,7 @@ public class DroneWifiConnectionActivity extends Activity {
 		Log.d(DroneConsts.DroneLogTag, "checkFirmware()");
 
 		if (checkBoxFirmwareUpdate.isChecked()
-		        || (DroneHandler.getInstance().getDrone().getFirmwareVersion().equals("1.7.4")) == false) {
+				|| (DroneHandler.getInstance().getDrone().getFirmwareVersion().equals("1.7.4")) == false) {
 			Log.d(DroneConsts.DroneLogTag, "checkFirmware() -> Update Firmware");
 
 			return false; // FIRMWARE hast to be updated
@@ -872,97 +856,96 @@ public class DroneWifiConnectionActivity extends Activity {
 				int timeoutCounter = 0;
 				while (runConnectThread) {
 
-					switch (status)
-					{
-					case DroneConsts.WIFI_ACTIVATING:
-						status = DroneConsts.WAITING;
-						if (!wifiManager.isWifiEnabled()) {
-							// BroadcastReceiver is triggerd on result
-							enableWifi();
-						} else {
-							changeStatus(DroneConsts.SCANNING);
-						}
-						break;
+					switch (status) {
+						case DroneConsts.WIFI_ACTIVATING:
+							status = DroneConsts.WAITING;
+							if (!wifiManager.isWifiEnabled()) {
+								// BroadcastReceiver is triggerd on result
+								enableWifi();
+							} else {
+								changeStatus(DroneConsts.SCANNING);
+							}
+							break;
 
-					case DroneConsts.SCANNING:
-						status = DroneConsts.WAITING;
-						if (scan()) {
-							// do nothing, BroadcastReceiver is triggerd on result
-						} else {
-							changeStatus(DroneConsts.ERROR_SCANNING);
-						}
-						break;
-
-					case DroneConsts.CONNECTING_TO_DRONE_WIFI:
-						status = DroneConsts.WAITING;
-						if (connectToDrone()) {
-							// do nothing, BroadcastReceiver is triggerd on result
-						} else {
-							changeStatus(DroneConsts.ERROR_CONNECTING_DRONE);
-						}
-						break;
-
-					case DroneConsts.CHECKING_FIRMWARE:
-						status = DroneConsts.WAITING_FOR_FWCHECK;
-						if (checkFirmware()) {
-							// TODO Change Status to CONNECT2Drone
-							changeStatus(DroneConsts.CONNECTING_TO_DRONE);
-
-						} else {
-							changeStatus(DroneConsts.UPDATING_FIRMWARE);
-						}
-						break;
-
-					case DroneConsts.CONNECTING_TO_DRONE:
-						status = DroneConsts.WAITING;
-						if (DroneHandler.getInstance().getDrone().connect()) {
-							changeStatus(DroneConsts.WAITING_FOR_NAVDATA);
-						} else {
-							changeStatus(DroneConsts.ERROR_CONNECTING_DRONE);
-							return; // TODO necessary?
-						}
-						break;
-
-					case DroneConsts.UPDATING_FIRMWARE:
-						Thread.sleep(100L);
-						Log.e(DroneConsts.DroneLogTag, "Sleeping while Updating Firmware");
-						break;
-
-					case DroneConsts.WAITING_FOR_NAVDATA:
-						status = DroneConsts.WAITING;
-						if (waitForNavData()) {
-							changeStatus(DroneConsts.CHECKING_CONFIG);
-						} else {
-							changeStatus(DroneConsts.ERROR_NAVDATA);
-						}
-						break;
-
-					case DroneConsts.CHECKING_CONFIG:
-						status = DroneConsts.WAITING;
-						if (checkConfig()) {
-							changeStatus(DroneConsts.SUCCESS);
-						} else {
-							changeStatus(DroneConsts.ERROR_CONFIG);
-						}
-						break;
-
-					case DroneConsts.WAITING:
-						Thread.sleep(100L);
-						if (!scanned) {
-							if (timeoutCounter++ > 100) {
+						case DroneConsts.SCANNING:
+							status = DroneConsts.WAITING;
+							if (scan()) {
+								// do nothing, BroadcastReceiver is triggerd on result
+							} else {
 								changeStatus(DroneConsts.ERROR_SCANNING);
 							}
-						}
-						break;
+							break;
 
-					case DroneConsts.WAITING_FOR_FWCHECK:
-						Log.e(DroneConsts.DroneLogTag, "Run Thread Status : WAITING_FOR_FWUPDATE");
-						Thread.sleep(100L);
-						break;
+						case DroneConsts.CONNECTING_TO_DRONE_WIFI:
+							status = DroneConsts.WAITING;
+							if (connectToDrone()) {
+								// do nothing, BroadcastReceiver is triggerd on result
+							} else {
+								changeStatus(DroneConsts.ERROR_CONNECTING_DRONE);
+							}
+							break;
 
-					default:
-						// do nothing
-						break;
+						case DroneConsts.CHECKING_FIRMWARE:
+							status = DroneConsts.WAITING_FOR_FWCHECK;
+							if (checkFirmware()) {
+								// TODO Change Status to CONNECT2Drone
+								changeStatus(DroneConsts.CONNECTING_TO_DRONE);
+
+							} else {
+								changeStatus(DroneConsts.UPDATING_FIRMWARE);
+							}
+							break;
+
+						case DroneConsts.CONNECTING_TO_DRONE:
+							status = DroneConsts.WAITING;
+							if (DroneHandler.getInstance().getDrone().connect()) {
+								changeStatus(DroneConsts.WAITING_FOR_NAVDATA);
+							} else {
+								changeStatus(DroneConsts.ERROR_CONNECTING_DRONE);
+								return; // TODO necessary?
+							}
+							break;
+
+						case DroneConsts.UPDATING_FIRMWARE:
+							Thread.sleep(100L);
+							Log.e(DroneConsts.DroneLogTag, "Sleeping while Updating Firmware");
+							break;
+
+						case DroneConsts.WAITING_FOR_NAVDATA:
+							status = DroneConsts.WAITING;
+							if (waitForNavData()) {
+								changeStatus(DroneConsts.CHECKING_CONFIG);
+							} else {
+								changeStatus(DroneConsts.ERROR_NAVDATA);
+							}
+							break;
+
+						case DroneConsts.CHECKING_CONFIG:
+							status = DroneConsts.WAITING;
+							if (checkConfig()) {
+								changeStatus(DroneConsts.SUCCESS);
+							} else {
+								changeStatus(DroneConsts.ERROR_CONFIG);
+							}
+							break;
+
+						case DroneConsts.WAITING:
+							Thread.sleep(100L);
+							if (!scanned) {
+								if (timeoutCounter++ > 100) {
+									changeStatus(DroneConsts.ERROR_SCANNING);
+								}
+							}
+							break;
+
+						case DroneConsts.WAITING_FOR_FWCHECK:
+							Log.e(DroneConsts.DroneLogTag, "Run Thread Status : WAITING_FOR_FWUPDATE");
+							Thread.sleep(100L);
+							break;
+
+						default:
+							// do nothing
+							break;
 
 					}
 				}
@@ -973,33 +956,32 @@ public class DroneWifiConnectionActivity extends Activity {
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode,
-	        Intent data) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(DroneConsts.DroneLogTag, "AroneWifiConnectionActivity::onActivityResult()");
 		if (requestCode == DroneConsts.FIRMWARE_UPDATE_REQEUST) {
 			switch (resultCode) {
-			case DroneConsts.RESULT_FIRMWARE_UPDATE_OK:
-				tvWifiConnectionError.setText("Firmware update OK!");
-				changeStatus(DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL);
-				break;
+				case DroneConsts.RESULT_FIRMWARE_UPDATE_OK:
+					tvWifiConnectionError.setText("Firmware update OK!");
+					changeStatus(DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL);
+					break;
 
-			case DroneConsts.RESULT_FIRMWARE_UPDATE_ERROR:
-				tvWifiConnectionError.setText("Error during Firmware Update, please try again!");
-				break;
+				case DroneConsts.RESULT_FIRMWARE_UPDATE_ERROR:
+					tvWifiConnectionError.setText("Error during Firmware Update, please try again!");
+					break;
 
-			case DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL:
-				Log.d(DroneConsts.DroneLogTag,
-				        "DroneWifiConnectionActivity::onActivityResult() RESULT_FIRMWARE_UPDATE_CANCEL");
-				tvWifiConnectionError
-				        .setText("Firmware Update cancelled.\n Press \"Start\" to try again or\n Press \"Back\".");
-				// TODO Necessary
-				// changeStatus(START);
-				changeStatus(DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL);
-				break;
+				case DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL:
+					Log.d(DroneConsts.DroneLogTag,
+							"DroneWifiConnectionActivity::onActivityResult() RESULT_FIRMWARE_UPDATE_CANCEL");
+					tvWifiConnectionError
+							.setText("Firmware Update cancelled.\n Press \"Start\" to try again or\n Press \"Back\".");
+					// TODO Necessary
+					// changeStatus(START);
+					changeStatus(DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL);
+					break;
 
-			default:
-				// nothing
-				break;
+				default:
+					// nothing
+					break;
 
 			}
 
