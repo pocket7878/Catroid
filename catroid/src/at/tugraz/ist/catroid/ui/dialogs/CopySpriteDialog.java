@@ -39,6 +39,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -57,13 +58,13 @@ public class CopySpriteDialog {
 
 	public Dialog createDialog(String dialogTitle) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(projectActivity);
-		builder.setTitle("Kopieren");
+		builder.setTitle(R.string.copy_sprite_context_title);
 
 		LayoutInflater inflater = (LayoutInflater) projectActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.dialog_copy_sprite, null);
 
 		input = (EditText) view.findViewById(R.id.dialog_copy_sprite_editText);
-		input.setText(projectActivity.getSpriteToEdit().getName() + " - Kopie");
+		input.setText(projectActivity.getSpriteToEdit().getName() + Consts.SPACE + R.string.copy_sprite_extension);
 
 		buttonPositive = (Button) view.findViewById(R.id.dialog_copy_sprite_ok_button);
 

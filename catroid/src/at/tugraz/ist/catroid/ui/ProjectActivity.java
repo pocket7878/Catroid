@@ -102,7 +102,8 @@ public class ProjectActivity extends ListActivity {
 				CONTEXT_MENU_ITEM_RENAME);
 		iconContextMenu.addItem(resources, this.getString(R.string.delete), R.drawable.ic_context_delete,
 				CONTEXT_MENU_ITEM_DELETE);
-		iconContextMenu.addItem(resources, "Kopieren", R.drawable.ic_context_copy, 3);
+		iconContextMenu
+				.addItem(resources, getString(R.string.copy_sprite_context_title), R.drawable.ic_context_copy, 3);
 
 		iconContextMenu.setOnClickListener(new CustomIconContextMenu.IconContextMenuOnClickListener() {
 			public void onClick(int menuId) {
@@ -233,7 +234,7 @@ public class ProjectActivity extends ListActivity {
 			case 3:
 				if (dialog != null && spriteToEdit != null) {
 					EditText spriteTitleInput = (EditText) dialog.findViewById(R.id.dialog_copy_sprite_editText);
-					spriteTitleInput.setText(spriteToEdit.getName() + " - Kopie");
+					spriteTitleInput.setText(spriteToEdit.getName() + getString(R.string.copy_sprite_extension));
 				}
 				break;
 		}

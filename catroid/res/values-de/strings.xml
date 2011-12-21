@@ -143,6 +143,10 @@
     <string name="password_forgotten">Passwort\nvergessen</string>
     <string name="new_user_registered">Neuer Account wurde erstellt</string>
     <string name="register_error">Fehler aufgetreten</string>
+    
+    <!-- Copy Sprite dialog -->
+    <string name="copy_sprite_context_title">Kopieren</string>
+    <string name="copy_sprite_extension"> - Kopie</string>
 	
 	<!-- Broadcast spinner -->
 	<string name="new_broadcast_message">Neu...</string>

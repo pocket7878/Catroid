@@ -87,8 +87,8 @@ public class Sprite implements Serializable {
 	}
 
 	public Sprite(Sprite spriteToCopy, String newSpriteName) {
-		this.name = newSpriteName;
 
+		this.name = newSpriteName;
 		this.scriptList = new ArrayList<Script>();
 		for (Script element : spriteToCopy.scriptList) {
 
@@ -99,10 +99,9 @@ public class Sprite implements Serializable {
 				broadScript.setBroadcastMessage(scriptToCopy.getBroadcastMessage());
 			}
 			scriptList.add(newScript);
-
 		}
-
 		int numberOfScripts = spriteToCopy.scriptList.size();
+
 		for (int scriptCounter = 0; scriptCounter < numberOfScripts; scriptCounter++) {
 			ArrayList<Brick> brickList = new ArrayList<Brick>();
 			int numberOfBricks = spriteToCopy.scriptList.get(scriptCounter).getBrickList().size();
@@ -154,7 +153,6 @@ public class Sprite implements Serializable {
 				}
 			}
 		}
-
 	}
 
 	public void startWhenScripts(String action) {

@@ -35,6 +35,7 @@ public final class Consts {
 	public static final String SOUND_DIRECTORY = "sounds";
 
 	public static final String NO_MEDIA_FILE = ".nomedia";
+	public static final String SPACE = " ";
 
 	//Web:
 	public static final String TOKEN = "token";
