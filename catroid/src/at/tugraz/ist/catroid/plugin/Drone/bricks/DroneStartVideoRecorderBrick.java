@@ -50,8 +50,14 @@ public class DroneStartVideoRecorderBrick implements Brick {
 	}
 
 	public void execute() {
-		String path = Consts.DEFAULT_ROOT + "/" + ProjectManager.getInstance().getCurrentProject().getName()
-				+ "/video_" + new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()) + ".mp4";
+		String path = null;
+		try {
+			path = Consts.DEFAULT_ROOT + "/" + ProjectManager.getInstance().getCurrentProject().getName() + "/video_"
+					+ new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()) + ".mp4";
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
 		DroneHandler.getInstance().getDrone().startVideoRecorder(path);
 	}
 

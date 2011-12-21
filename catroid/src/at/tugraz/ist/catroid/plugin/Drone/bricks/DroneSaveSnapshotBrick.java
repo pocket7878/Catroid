@@ -49,8 +49,14 @@ public class DroneSaveSnapshotBrick implements Brick {
 	}
 
 	public void execute() {
-		String path = Consts.DEFAULT_ROOT + "/" + ProjectManager.getInstance().getCurrentProject().getName()
-				+ "/snapshot_" + new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()) + ".jpg";
+		String path = null;
+		try {
+			path = Consts.DEFAULT_ROOT + "/" + ProjectManager.getInstance().getCurrentProject().getName()
+					+ "/snapshot_" + new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()) + ".jpg";
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
 		DroneHandler.getInstance().getDrone().saveVideoSnapshot(path);
 	}
 

@@ -49,11 +49,15 @@ public class DroneStartVideoBrick implements Brick {
 
 	public void execute() {
 		DroneHandler.getInstance().getDrone().startVideo();
-		StageActivity.stageListener.removeActor(sprite.costume);
-		sprite.costume.disposeTextures();
-		DroneVideoCostume costume = new DroneVideoCostume(sprite);
-		sprite.costume = costume;
-		StageActivity.stageListener.addActor(sprite.costume);
+		try {
+			StageActivity.stageListener.removeActor(sprite.costume);
+			sprite.costume.disposeTextures();
+			DroneVideoCostume costume = new DroneVideoCostume(sprite);
+			sprite.costume = costume;
+			StageActivity.stageListener.addActor(sprite.costume);
+		} catch (NullPointerException e) {
+			// TODO: handle exception
+		}
 	}
 
 	public Sprite getSprite() {
