@@ -22,18 +22,21 @@
  */
 package at.tugraz.ist.catroid.test.drone;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.easymock.EasyMock;
 
+import android.content.Context;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
+import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 import at.tugraz.ist.catroid.plugin.Drone.IDrone;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneChangeFlyingModeBrick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneConfigBrick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLandBrick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLedAnimationBrick;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneTakeOffBrick;
+import at.tugraz.ist.catroid.plugin.Drone.bricks.*;
+
 
 import static org.easymock.EasyMock.*;
 
@@ -103,27 +106,38 @@ public class BrickBasicFunctionTest extends InstrumentationTestCase {
 	}
 
 	public void testDroneSaveSnapshotBrick() {
-
+		DroneSaveSnapshotBrick brick = new DroneSaveSnapshotBrick(null);
+		idronemock.saveVideoSnapshot(null);
+		verifytest((Brick) brick);
 	}
 
 	public void testDroneStopMoveBrick() {
-
+		DroneStopMoveBrick brick = new DroneStopMoveBrick(null);
+		idronemock.move(0, 0, 0, 0);
+		verifytest((Brick) brick);
 	}
 
 	public void testDroneStartVideoRecorderBrick() {
-
+		//TODO Test correct Path
+		DroneStartVideoRecorderBrick brick = new DroneStartVideoRecorderBrick(null);
+		String path = Consts.DEFAULT_ROOT + "/" + "Standard Projekt"
+				+ "/video_" + new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()) + ".mp4";
+		idronemock.startVideoRecorder(null);
+		verifytest((Brick) brick);
 	}
 
 	public void testDroneStartVideoBrick() {
-
+		//TODO Test correct Path
+		DroneStartVideoBrick brick = new DroneStartVideoBrick(null);
+		idronemock.startVideo();
+		verifytest((Brick) brick);
 	}
 
 	public void testDroneStopVideoBrick() {
-
+		//TODO Test correct Path
+		DroneStopVideoBrick brick = new DroneStopVideoBrick(null);
+		idronemock.stopVideo();
+		verifytest((Brick) brick);
 	}
-
-	// public void test(){
-	//
-	// }
 
 }
