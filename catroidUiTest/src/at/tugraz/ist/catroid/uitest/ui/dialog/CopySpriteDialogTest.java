@@ -117,8 +117,8 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 		solo.clickLongOnText("blue");
 
 		solo.sleep(500);
-		assertEquals("Copy is not in context menu!", true, solo.searchText("Kopieren"));
-		solo.clickOnText("Kopieren");
+		assertEquals("Copy is not in context menu!", true, solo.searchText("Copy"));
+		solo.clickOnText("Copy");
 		solo.sleep(500);
 		solo.sendKey(Solo.ENTER);
 
@@ -126,7 +126,7 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 		Sprite copiedSprite = ((Sprite) spritesList.getItemAtPosition(3));
 		Sprite firstSprite = ((Sprite) spritesList.getItemAtPosition(1));
 
-		assertEquals("The first sprite is NOT copied!", copiedSprite.getName(), "blue - Kopie");
+		assertEquals("The first sprite is NOT copied!", copiedSprite.getName(), "blue - Copy");
 		assertEquals("The first sprite has a new name!", firstSprite.getName(), "blue");
 
 		ArrayList<Brick> brickListCopiedSprite = copiedSprite.getScript(0).getBrickList();
@@ -180,7 +180,7 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 			loopCounter++;
 		}
 
-		solo.clickOnText("blue - Kopie");
+		solo.clickOnText("blue - Copy");
 		solo.sleep(1000);
 
 		Sprite currentSprite = projectMangaer.getCurrentSprite();
@@ -211,7 +211,7 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 		solo.sleep(500);
 		solo.sendKey(Solo.ENTER);
 		solo.sleep(500);
-		solo.clickOnText("blue - Kopie");
+		solo.clickOnText("blue - Copy");
 		solo.sleep(500);
 
 		assertEquals("The number of Bricks differs!", projectMangaer.getCurrentScript().getBrickList().size(),
