@@ -47,11 +47,20 @@ public class PluginManager {
 
 	private PluginManager(Context context) {
 		this.context = context;
-		droneAddonInstalled = DroneHandler.getInstance().createDroneFrameworkWrapper(context);
-		if (droneAddonInstalled) {
+
+		if (checkDroneAddonInstalled()) {
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 			droneTermsOfUseAccepted = prefs.getBoolean(DroneConsts.PREF_DRONE_TOF, false);
 		}
+	}
+
+	private boolean checkDroneAddonInstalled() {
+		droneAddonInstalled = DroneHandler.getInstance().createDroneFrameworkWrapper(this.context);
+		return droneAddonInstalled;
+	}
+
+	public boolean reCheckDroneAddonInstalled() {
+		return checkDroneAddonInstalled();
 	}
 
 	public boolean isDroneAddonInstalled() {
