@@ -58,7 +58,7 @@ public class CopySpriteDialog {
 
 	public Dialog createDialog(String dialogTitle) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(projectActivity);
-		builder.setTitle(R.string.copy_sprite_context_title);
+		builder.setTitle(R.string.copy);
 
 		LayoutInflater inflater = (LayoutInflater) projectActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.dialog_copy_sprite, null);

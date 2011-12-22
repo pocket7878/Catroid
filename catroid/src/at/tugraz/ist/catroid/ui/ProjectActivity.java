@@ -61,9 +61,11 @@ public class ProjectActivity extends ListActivity {
 	private NewSpriteDialog newSpriteDialog;
 	private static final int CONTEXT_MENU_ITEM_RENAME = 0; //or R.id.project_menu_rename
 	private static final int CONTEXT_MENU_ITEM_DELETE = 1; //or R.id.project_menu_delete 
+	private static final int CONTEXT_MENU_ITEM_COPY = 3;
 	private static final int DIALOG_NEW_SPRITE = 0;
 	private static final int DIALOG_RENAME_SPRITE = 1;
 	private static final int DIALOG_CONTEXT_MENU = 2;
+	private static final int DIALOG_COPY_SPRITE = 3;
 
 	private void initListeners() {
 		spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject().getSpriteList();
@@ -104,7 +106,7 @@ public class ProjectActivity extends ListActivity {
 		iconContextMenu.addItem(resources, this.getString(R.string.delete), R.drawable.ic_context_delete,
 				CONTEXT_MENU_ITEM_DELETE);
 		iconContextMenu
-				.addItem(resources, getString(R.string.copy_sprite_context_title), R.drawable.ic_context_copy, 3);
+				.addItem(resources, getString(R.string.copy), R.drawable.ic_context_copy, CONTEXT_MENU_ITEM_COPY);
 
 		iconContextMenu.setOnClickListener(new CustomIconContextMenu.IconContextMenuOnClickListener() {
 			public void onClick(int menuId) {
@@ -120,7 +122,7 @@ public class ProjectActivity extends ListActivity {
 							projectManager.setCurrentSprite(null);
 						}
 						break;
-					case 3:
+					case CONTEXT_MENU_ITEM_COPY:
 						showDialog(3);
 						break;
 				}
@@ -201,7 +203,7 @@ public class ProjectActivity extends ListActivity {
 					dialog = iconContextMenu.createMenu(spriteToEdit.getName());
 				}
 				break;
-			case 3:
+			case DIALOG_COPY_SPRITE:
 				if (spriteToEdit == null) {
 					dialog = null;
 				} else {
@@ -232,7 +234,7 @@ public class ProjectActivity extends ListActivity {
 					buttonPositive.setEnabled(false);
 				}
 				break;
-			case 3:
+			case DIALOG_COPY_SPRITE:
 				if (dialog != null && spriteToEdit != null) {
 					EditText spriteTitleInput = (EditText) dialog.findViewById(R.id.dialog_copy_sprite_editText);
 					spriteTitleInput.setText(spriteToEdit.getName() + Consts.SPACE

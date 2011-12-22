@@ -146,7 +146,7 @@
     <string name="stagemenu_screenshot">Screenshot</string>
     
     <!-- Copy Sprite dialog -->
-    <string name="copy_sprite_context_title">Copy</string>
+    <string name="copy">Copy</string>
     <string name="copy_sprite_extension"> - Copy</string>
 	
 	<!-- Broadcast spinner -->

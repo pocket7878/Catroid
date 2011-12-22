@@ -145,7 +145,7 @@
     <string name="register_error">Fehler aufgetreten</string>
     
     <!-- Copy Sprite dialog -->
-    <string name="copy_sprite_context_title">Kopieren</string>
+    <string name="copy">Kopieren</string>
     <string name="copy_sprite_extension"> - Kopie</string>
 	
 	<!-- Broadcast spinner -->
