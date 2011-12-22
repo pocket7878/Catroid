@@ -45,18 +45,23 @@ import at.tugraz.ist.catroid.bluetooth.BluetoothManager;
 import at.tugraz.ist.catroid.bluetooth.DeviceListActivity;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.plugin.PluginManager;
+import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
+import at.tugraz.ist.catroid.plugin.Drone.other.DroneWifiConnectionActivity;
 
 public class PreStageActivity extends Activity {
 
 	private static final int REQUEST_ENABLE_BT = 2000;
 	private static final int REQUEST_CONNECT_DEVICE = 1000;
 	public static final int REQUEST_RESOURCES_INIT = 0101;
+	private static final int DRONEWIFICONNECTIONACTIVITY = 9000;
 
 	public static StageListener stageListener;
 	private static LegoNXT legoNXT;
 	private ProgressDialog connectingProgressDialog;
 	public static TextToSpeech textToSpeech;
 	private int requiredResourceCounter;
+	private static boolean DronePartOfProject;
 
 	private boolean autoConnect = false;
 
@@ -68,6 +73,7 @@ public class PreStageActivity extends Activity {
 		int mask = 0x1;
 		int value = required_resources;
 		boolean noResources = true;
+		DronePartOfProject = false;
 
 		while (value > 0) {
 			if ((mask & required_resources) > 0) {
@@ -114,7 +120,28 @@ public class PreStageActivity extends Activity {
 
 			}
 		}
+		if ((required_resources & Brick.WIFI_DRONE) > 0) {
 
+			DronePartOfProject = true;
+
+			if (PluginManager.getInstance().isDroneAddonInstalled()) {
+				// check if we are already connected to an Drone
+				if (!DroneHandler.getInstance().wasAlreadyConnected()) {
+					Intent intent = new Intent(this, DroneWifiConnectionActivity.class);
+					startActivityForResult(intent, DRONEWIFICONNECTIONACTIVITY);
+				} else {
+					if (!DroneHandler.getInstance().getDrone().connect()) {
+						Intent intent = new Intent(this, DroneWifiConnectionActivity.class);
+						startActivityForResult(intent, DRONEWIFICONNECTIONACTIVITY);
+					} else {
+						startStage();
+					}
+				}
+			} else {
+				Toast.makeText(PreStageActivity.this, R.string.drone_not_installed_addon, Toast.LENGTH_LONG).show();
+				finish();
+			}
+		}
 		if (noResources == true) {
 			startStage();
 		}
@@ -143,6 +170,10 @@ public class PreStageActivity extends Activity {
 		}
 		if (legoNXT != null) {
 			legoNXT.pauseCommunicator();
+		}
+		if (DronePartOfProject) {
+			DroneHandler.getInstance().getDrone().emergencyLand();
+			DroneHandler.getInstance().getDrone().disconnect();
 		}
 	}
 
@@ -178,8 +209,8 @@ public class PreStageActivity extends Activity {
 	}
 
 	private void startBTComm(boolean autoConnect) {
-		connectingProgressDialog = ProgressDialog.show(this, "", getResources().getString(
-				R.string.connecting_please_wait), true);
+		connectingProgressDialog = ProgressDialog.show(this, "",
+				getResources().getString(R.string.connecting_please_wait), true);
 		Intent serverIntent = new Intent(this, DeviceListActivity.class);
 		serverIntent.putExtra(DeviceListActivity.AUTO_CONNECT, autoConnect);
 		this.startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
@@ -231,6 +262,25 @@ public class PreStageActivity extends Activity {
 						Toast.makeText(PreStageActivity.this, R.string.bt_connection_failed, Toast.LENGTH_LONG).show();
 						//finish();
 						resourceFailed();
+						break;
+				}
+				break;
+
+			case DRONEWIFICONNECTIONACTIVITY:
+				switch (resultCode) {
+					case Activity.RESULT_OK:
+						Toast.makeText(PreStageActivity.this, R.string.drone_connect_drone_success, Toast.LENGTH_LONG)
+								.show();
+						DroneHandler.getInstance().setWasAlreadyConnected();
+						// let drone blink 2 seconds green on success
+						DroneHandler.getInstance().getDrone().playLedAnimation(1, 5.0f, 2);
+						startStage();
+						break;
+
+					case Activity.RESULT_CANCELED:
+						Toast.makeText(PreStageActivity.this, R.string.drone_connect_drone_cancel, Toast.LENGTH_LONG)
+								.show();
+						finish();
 						break;
 				}
 				break;

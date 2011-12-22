@@ -42,6 +42,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.plugin.PluginManager;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.transfers.CheckTokenTask;
@@ -85,6 +86,8 @@ public class MainMenuActivity extends Activity {
 		// Try to load sharedPreferences
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String projectName = prefs.getString(PREF_PROJECTNAME_KEY, null);
+
+		PluginManager.createPluginManager(this);
 
 		if (projectName != null) {
 			projectManager.loadProject(projectName, this, false);
