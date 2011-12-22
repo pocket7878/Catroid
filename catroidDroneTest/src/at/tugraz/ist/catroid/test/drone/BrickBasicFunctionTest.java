@@ -76,7 +76,7 @@ public class BrickBasicFunctionTest extends InstrumentationTestCase {
 	public void testDroneLandBrick() {
 		DroneLandBrick landbrick = new DroneLandBrick(null);
 		idronemock.land();
-		
+		verifytest((Brick) landbrick);
 	}
 
 	public void testDroneChangeFlyingModeBrick() {
