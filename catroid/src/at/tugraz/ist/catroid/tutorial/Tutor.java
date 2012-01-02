@@ -57,7 +57,7 @@ public class Tutor {
 	boolean facingFlipped;
 	Matrix flipMatrix;
 
-	StateController controller;
+	private StateController controller;
 	public TutorType tutorType;
 
 	public Tutor(Resources resources, Context context, TutorType tutorType) {

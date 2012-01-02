@@ -20,9 +20,7 @@ package at.tugraz.ist.catroid.tutorial;
 
 import java.util.Vector;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -32,7 +30,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.NinePatchDrawable;
-import android.view.Display;
+import at.tugraz.ist.catroid.common.Values;
 
 /**
  * @author User
@@ -150,23 +148,10 @@ public class Bubble {
 	}
 
 	public void calculateMaxCharsPerLine() {
-		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
-
-		int orientation = display.getOrientation();
 		Rect boxSize = mSpeechBubble.getBounds();
 		int size = boxSize.width();
-
 		int space = (size / (textSize / 2)) - 4;
-
-		switch (orientation) {
-			case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
-				maximumCharsPerLine = space;
-				break;
-			case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
-				maximumCharsPerLine = space;
-				break;
-		}
-
+		maximumCharsPerLine = space;
 	}
 
 	public void calculateTextCoords() {
@@ -176,20 +161,13 @@ public class Bubble {
 	}
 
 	private int getScreenWidth() {
-		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
-		int screenWidth = display.getWidth();
+		int screenWidth = Values.SCREEN_WIDTH;
 		return screenWidth;
 	}
 
 	public void setBubbleLimits() {
-
 		int screenWidth = getScreenWidth();
-
 		Rect bounds = new Rect();
-
-		//		bounds.top = screenHeight - (screenHeight-y+marginTop+marginBottom);
-		//		bounds.top = y - (marginTop + marginBottom +(textSize * bubbleTextLines.size()));	
-		//		bounds.right = x + marginLeft + marginRight + textWidth;
 
 		if ((screenWidth - x) >= screenWidth / 2) {
 			//Katze
@@ -250,8 +228,6 @@ public class Bubble {
 	}
 
 	public void drawSpeechBubble(Canvas canvas, int pos_x, int pos_y, int offset_x, int offset_y) {
-
-		// Wichtig: Otto davon informieren dass Text fertig!
 		if (!notificated) {
 			Tutorial tut = Tutorial.getInstance(context);
 			tut.setNotification("BubbleDone");

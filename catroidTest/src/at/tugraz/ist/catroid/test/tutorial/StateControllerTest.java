@@ -5,21 +5,34 @@ import java.util.Arrays;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.test.AndroidTestCase;
-import at.tugraz.ist.catroid.tutorial.State;
-import at.tugraz.ist.catroid.tutorial.StateAppear;
-import at.tugraz.ist.catroid.tutorial.StateController;
-import at.tugraz.ist.catroid.tutorial.StateDisappear;
-import at.tugraz.ist.catroid.tutorial.StatePoint;
+import android.test.InstrumentationTestCase;
+import android.test.suitebuilder.annotation.Suppress;
+import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.tutorial.Tutor;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
+import at.tugraz.ist.catroid.tutorial.state.State;
+import at.tugraz.ist.catroid.tutorial.state.StateAppear;
+import at.tugraz.ist.catroid.tutorial.state.StateController;
+import at.tugraz.ist.catroid.tutorial.state.StateDisappear;
+import at.tugraz.ist.catroid.tutorial.state.StatePoint;
 
-public class StateControllerTest extends AndroidTestCase {
+public class StateControllerTest extends InstrumentationTestCase {
 
 	private Context context;
 
+	//	@Override
+	//	protected void setUp() throws Exception {
+	//		context = getTargetContext();
+	//	}
+
+	@Override
+	protected void tearDown() throws Exception {
+	}
+
 	@Override
 	protected void setUp() throws Exception {
-		context = getContext();
+		context = getInstrumentation().getTargetContext();
+		super.setUp();
 	}
 
 	/*
@@ -28,6 +41,7 @@ public class StateControllerTest extends AndroidTestCase {
 	 * the State of an other Tutor got animationUpdates.
 	 */
 	public void testAppearState() {
+		Tutorial tutorial = Tutorial.getInstance(context);
 		Tutor tutorDog = new Tutor(context.getResources(), context, Tutor.TutorType.DOG_TUTOR);
 		Tutor tutorCat = new Tutor(context.getResources(), context, Tutor.TutorType.CAT_TUTOR);
 		StateController stateControllerCat = new StateController(context.getResources(), tutorCat);
@@ -87,10 +101,10 @@ public class StateControllerTest extends AndroidTestCase {
 	 */
 	public void testTalkState() {
 		Tutor tutorCat = new Tutor(context.getResources(), context, Tutor.TutorType.CAT_TUTOR);
-		StateController stateControllerCat = new StateController(context.getResources(), tutorCat);
+		StateController stateController = getStatecontrollerFromTutor(tutorCat);
 		tutorCat.say("This is fancy pancy test text for testing the Statepattern of our little catroid tutors");
 		assertEquals("StateController should go to State Talk, if Tutor has something to say", "StateTalk",
-				stateControllerCat.getState().getStateName());
+				stateController.getState().getStateName());
 
 		// sollte durchrennen in dem State bis von der Bubble befehl kommt in Idle zurueckzugehen
 		// evtl. Test mit Zeit? macht das Sinn in dem Fall? Oder ist das der Test fuer die Bubble?
@@ -121,12 +135,9 @@ public class StateControllerTest extends AndroidTestCase {
 		assertEquals("StateController did not switch back to StateIdle as expected", "StateIdle", nameOfCurrentState);
 	}
 
+	@Suppress
 	public void testPointState() {
-		// Kleiner Versuch
-		long maxHeap = Runtime.getRuntime().maxMemory();
-
-		//
-
+		Tutorial tutorial = Tutorial.getInstance(context);
 		Tutor tutorDog = new Tutor(context.getResources(), context, Tutor.TutorType.DOG_TUTOR);
 		StateController stateControllerDog = new StateController(context.getResources(), tutorDog);
 		stateControllerDog.changeState(StatePoint.enter(stateControllerDog, context.getResources(),
@@ -156,4 +167,12 @@ public class StateControllerTest extends AndroidTestCase {
 
 	}
 
+	private StateController getStatecontrollerFromTutor(Tutor tutor) {
+		StateController stateController = null;
+		try {
+			stateController = (StateController) TestUtils.getPrivateField("controller", tutor, false);
+		} catch (Exception e) {
+		}
+		return stateController;
+	}
 }
