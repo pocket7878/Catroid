@@ -37,7 +37,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
 /**
- * @author gnu
+ * @author Otto
  * 
  */
 public class ClickDispatcher {
