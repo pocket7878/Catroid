@@ -25,7 +25,7 @@ public class AnimationThread extends Thread {
 		Canvas canvas = null;
 		while (mRun) {
 			try {
-				Thread.sleep(50);
+				Thread.yield();
 			} catch (Exception e) {
 				//pfusch
 			}

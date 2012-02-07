@@ -159,7 +159,8 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	public void surfaceCreated(SurfaceHolder holder) {
 		// DEBUG, is nur a test de line
 		try {
-			Thread.sleep(10);
+			//			Thread.sleep(10);
+			Thread.yield();
 		} catch (Exception e) {
 
 		}

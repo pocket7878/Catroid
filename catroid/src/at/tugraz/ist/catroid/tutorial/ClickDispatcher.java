@@ -37,7 +37,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
 /**
- * @author Otto
+ * @author faxxe
  * 
  */
 public class ClickDispatcher {
@@ -310,6 +310,7 @@ public class ClickDispatcher {
 
 		if (x > 130 && x < 185) {
 			Tutorial.getInstance(null).stopButtonTutorial();
+
 		}
 		if (x > 230 && x < 277) {
 			Toast toast = Toast.makeText(context, "1 step back", Toast.LENGTH_SHORT);
