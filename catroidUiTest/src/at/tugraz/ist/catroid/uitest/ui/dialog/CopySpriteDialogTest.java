@@ -218,7 +218,6 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
 		solo.clickOnText(testProject);
 		solo.clickLongOnText("blue");
-
 		solo.sleep(500);
 		assertEquals("Copy is not in context menu!", true, solo.searchText(getActivity().getString(R.string.copy)));
 		solo.clickOnText(getActivity().getString(R.string.copy));
