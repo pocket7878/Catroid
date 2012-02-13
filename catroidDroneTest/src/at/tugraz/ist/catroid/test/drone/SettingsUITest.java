@@ -2,6 +2,8 @@ package at.tugraz.ist.catroid.test.drone;
 
 import java.util.ArrayList;
 
+import org.easymock.EasyMock;
+
 import com.jayway.android.robotium.solo.Solo;
 
 import android.content.Context;
@@ -11,18 +13,29 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.CheckBox;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 import at.tugraz.ist.catroid.plugin.Drone.DroneLibraryWrapper;
+import at.tugraz.ist.catroid.plugin.Drone.IDrone;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 
 public class SettingsUITest extends
 		ActivityInstrumentationTestCase2<MainMenuActivity> {
 	private Solo solo;
 
+	IDrone idronemock;
+
 	private final static String droneNamespaceString = "at.tugraz.ist.droned";
 	private final static String droneClassString = "at.tugraz.ist.droned.Drone";
 
+	private void createDroneMock() {
+		idronemock = null;
+		idronemock = EasyMock.createMock(IDrone.class);
+		DroneHandler.getInstance().setIDrone(idronemock);
+	}
+
 	public SettingsUITest() {
 		super("at.tugraz.ist.catroid", MainMenuActivity.class);
+		createDroneMock();
 	}
 
 	@Override
@@ -87,13 +100,13 @@ public class SettingsUITest extends
 		} catch (Exception e) {
 			dcfInstalled = false;
 		}
-		
+
 		ArrayList<CheckBox> settingsCheckboxes = solo.getCurrentCheckBoxes();
 
 		assertEquals("Drone is installed, Brick settings are not clickable",
 				settingsCheckboxes.get(1).isClickable(), dcfInstalled);
 		solo.sleep(2000);
-		
 	}
-
+		
+		
 }
