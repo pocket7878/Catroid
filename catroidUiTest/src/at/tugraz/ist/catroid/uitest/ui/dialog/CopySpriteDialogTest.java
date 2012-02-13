@@ -30,7 +30,9 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.FileChecksumContainer;
+import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.content.BroadcastScript;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
@@ -109,24 +111,18 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 		super.tearDown();
 	}
 
-	public void testCopySpriteDialog() throws NameNotFoundException, IOException {
+	public int checkNumberOfElements(Sprite firstSprite, Sprite copiedSprite) {
 
-		createTestProject(testProject);
-		solo.clickOnButton(getActivity().getString(R.string.my_projects));
-		solo.clickOnText(testProject);
-		solo.clickLongOnText("blue");
+		ArrayList<SoundInfo> copiedSoundList = copiedSprite.getSoundList();
+		ArrayList<SoundInfo> firstSoundList = firstSprite.getSoundList();
+		assertEquals("The number of sounds differs!", firstSoundList.size(), copiedSoundList.size());
 
-		solo.sleep(500);
-		assertEquals("Copy is not in context menu!", true, solo.searchText("Copy"));
-		solo.clickOnText("Copy");
-		solo.sleep(500);
-		solo.sendKey(Solo.ENTER);
+		ArrayList<CostumeData> copiedCustomeList = copiedSprite.getCostumeDataList();
+		ArrayList<CostumeData> firstCustomeList = firstSprite.getCostumeDataList();
+		assertEquals("The number of customes differs!", firstCustomeList.size(), copiedCustomeList.size());
 
-		ListView spritesList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
-		Sprite copiedSprite = ((Sprite) spritesList.getItemAtPosition(3));
-		Sprite firstSprite = ((Sprite) spritesList.getItemAtPosition(1));
-
-		assertEquals("The first sprite is NOT copied!", copiedSprite.getName(), "blue - Copy");
+		assertEquals("The first sprite is NOT copied!", copiedSprite.getName(),
+				"blue " + getActivity().getString(R.string.copy_sprite_extension));
 		assertEquals("The first sprite has a new name!", firstSprite.getName(), "blue");
 
 		ArrayList<Brick> brickListCopiedSprite = copiedSprite.getScript(0).getBrickList();
@@ -142,12 +138,18 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 					.getClass());
 			brickCounter++;
 		}
+		return brickCounter;
 
-		//////////////////////
+	}
+
+	public void checkSpecialBricks(Sprite firstSprite, Sprite copiedSprite) {
 
 		assertEquals("Message of BroadcastReceiver Brick is not right!",
 				((BroadcastScript) (firstSprite.getScript(1))).getBroadcastMessage(),
 				((BroadcastScript) (copiedSprite.getScript(1))).getBroadcastMessage());
+
+		ArrayList<Brick> brickListCopiedSprite = copiedSprite.getScript(0).getBrickList();
+		ArrayList<Brick> brickListFirstSprite = firstSprite.getScript(0).getBrickList();
 
 		LoopBeginBrick firstLoopBrick = (LoopBeginBrick) brickListFirstSprite.get(33);
 		LoopBeginBrick copiedLoopBrick = (LoopBeginBrick) brickListCopiedSprite.get(33);
@@ -160,8 +162,12 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 		assertEquals("Loop Brick is not copied right!", copiedEndBrick.getLoopBeginBrick(), copiedLoopBrick);
 		assertEquals("Loop Brick is not copied right!", firstLoopBrick.getLoopEndBrick(), firstEndBrick);
 		assertEquals("Loop Brick is not copied right!", copiedLoopBrick.getLoopEndBrick(), copiedEndBrick);
+	}
 
-		//////////////////////
+	public int checkIds(Sprite firstSprite, Sprite copiedSprite) {
+
+		ArrayList<Brick> brickListCopiedSprite = copiedSprite.getScript(0).getBrickList();
+		ArrayList<Brick> brickListFirstSprite = firstSprite.getScript(0).getBrickList();
 
 		assertNotSame("Sprite is not copied!", firstSprite, copiedSprite);
 		assertNotSame("CustomDataList is not copied!", firstSprite.getCostumeDataList(),
@@ -180,13 +186,12 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 			loopCounter++;
 		}
 
-		solo.clickOnText("blue - Copy");
+		solo.clickOnText("blue " + getActivity().getString(R.string.copy_sprite_extension));
 		solo.sleep(1000);
 
 		Sprite currentSprite = projectMangaer.getCurrentSprite();
 		Script scriptCopied = projectMangaer.getCurrentScript();
 		Script scriptOriginal = projectMangaer.getCurrentProject().getSpriteList().get(1).getScript(0);
-
 		scriptCopied.addBrick(new SetXBrick(currentSprite, 10));
 		assertEquals("The number of Bricks differs!", scriptCopied.getBrickList().size() - 1, scriptOriginal
 				.getBrickList().size());
@@ -199,19 +204,43 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 		assertEquals("The number of Bricks differs!", scriptCopied.getBrickList().size() + 1, scriptOriginal
 				.getBrickList().size());
 
-		brickCounter = scriptCopied.getBrickList().size();
 		scriptOriginal.removeBrick(scriptOriginal.getBrickList().get(6));
 		assertEquals("The number of Bricks differs!", scriptCopied.getBrickList().size(), scriptOriginal.getBrickList()
 				.size());
 
+		return scriptCopied.getBrickList().size();
+
+	}
+
+	public void testCopySpriteDialog() throws NameNotFoundException, IOException {
+
+		createTestProject(testProject);
+		solo.clickOnButton(getActivity().getString(R.string.my_projects));
+		solo.clickOnText(testProject);
+		solo.clickLongOnText("blue");
+
+		solo.sleep(500);
+		assertEquals("Copy is not in context menu!", true, solo.searchText(getActivity().getString(R.string.copy)));
+		solo.clickOnText(getActivity().getString(R.string.copy));
+		solo.sleep(500);
+		solo.sendKey(Solo.ENTER);
+
+		ListView spritesList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
+		Sprite copiedSprite = ((Sprite) spritesList.getItemAtPosition(3));
+		Sprite firstSprite = ((Sprite) spritesList.getItemAtPosition(1));
+
+		checkNumberOfElements(firstSprite, copiedSprite);
+		checkSpecialBricks(firstSprite, copiedSprite);
+		int brickCounter = checkIds(firstSprite, copiedSprite);
+
 		solo.goBack();
 		solo.sleep(500);
 		solo.clickLongOnText("blue");
-		solo.clickOnText("Delete");
+		solo.clickOnText(getActivity().getString(R.string.delete));
 		solo.sleep(500);
 		solo.sendKey(Solo.ENTER);
 		solo.sleep(500);
-		solo.clickOnText("blue - Copy");
+		solo.clickOnText("blue " + getActivity().getString(R.string.copy_sprite_extension));
 		solo.sleep(500);
 
 		assertEquals("The number of Bricks differs!", projectMangaer.getCurrentScript().getBrickList().size(),
