@@ -123,7 +123,7 @@ public class PreStageActivity extends Activity {
 		if ((required_resources & Brick.WIFI_DRONE) > 0) {
 
 			DronePartOfProject = true;
-
+			Log.d("Catroid", "Test Null Point");
 			if (PluginManager.getInstance().isDroneAddonInstalled()) {
 				// check if we are already connected to an Drone
 				if (!DroneHandler.getInstance().wasAlreadyConnected()) {
