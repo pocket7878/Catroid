@@ -73,14 +73,29 @@ public class Tutorial {
 		return tutorial;
 	}
 
+	private void initalizeCurrentTutorial() {
+		if (xmlHandler == null) {
+			xmlHandler = new XmlHandler(context);
+		}
+		if (lessonCollection == null) {
+			lessonCollection = xmlHandler.getLessonCollection();
+		}
+		if (tutor == null) {
+			tutor = new Tutor(context.getResources(), context, Tutor.TutorType.CAT_TUTOR);
+		}
+		if (tutor_2 == null) {
+			tutor_2 = new Tutor(context.getResources(), context, Tutor.TutorType.DOG_TUTOR);
+		}
+	}
+
 	private void setDisplayPreferences() {
-		//		if (tutorialActive) {
-		//			tutorial.setOrientationPortaitMode();
-		//			tutorial.setKeepScreenOn();
-		//		} else {
-		//			tutorial.setOrientationSensorMode();
-		//			tutorial.setKeepScreenOff();
-		//		}
+		if (tutorialActive) {
+			tutorial.setOrientationPortaitMode();
+			tutorial.setKeepScreenOn();
+		} else {
+			tutorial.setOrientationSensorMode();
+			tutorial.setKeepScreenOff();
+		}
 	}
 
 	private void setOrientationPortaitMode() {
@@ -126,22 +141,6 @@ public class Tutorial {
 		}
 	}
 
-	private void initalizeCurrentTutorial() {
-		tutorial.setDisplayPreferences();
-		if (xmlHandler == null) {
-			xmlHandler = new XmlHandler(context);
-		}
-		if (lessonCollection == null) {
-			lessonCollection = xmlHandler.getLessonCollection();
-		}
-		if (tutor == null) {
-			tutor = new Tutor(context.getResources(), context, Tutor.TutorType.CAT_TUTOR);
-		}
-		if (tutor_2 == null) {
-			tutor_2 = new Tutor(context.getResources(), context, Tutor.TutorType.DOG_TUTOR);
-		}
-	}
-
 	private void startTutorial() {
 		ProjectManager.getInstance().initializeThumbTutorialProject(context);
 		tutorialActive = true;
@@ -161,7 +160,6 @@ public class Tutorial {
 	}
 
 	private void showLessonDialog() {
-
 		if (lessonCollection.getLastPossibleLessonNumber() != 0) {
 			AlertDialog alert = generateLessonDialog();
 			alert.show();
@@ -196,6 +194,7 @@ public class Tutorial {
 			return; //why do we get here?
 		}
 		prepareForResumeTutorial();
+		setDisplayPreferences();
 		tutorialThread.start();
 	}
 
@@ -285,14 +284,13 @@ public class Tutorial {
 		//ProjectManager.getInstance().loadProject("defaultProject", context, false);
 	}
 
-	public boolean toggleTutorial() {
-
+	public void toggleTutorial() {
 		if (tutorialActive == false) {
 			startTutorial();
 		} else {
 			stopTutorial();
 		}
-		return tutorialActive;
+
 	}
 
 	private WindowManager.LayoutParams createLayoutParameters() {
