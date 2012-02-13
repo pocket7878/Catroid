@@ -67,4 +67,105 @@
 	    <item>No</item>
   	</string-array>
   
+  	    
+  	<!--         DRONE               -->    
+  	    
+	<!-- DON'T MIX ANY ARRAY INDEXES -->
+	<string-array name="drone_move_animations">
+		<item>phi m30 deg</item>
+		<item>phi 30 deg</item>
+		<item>theta m30 deg</item>
+		<item>theta 30 deg</item>
+		<item>theta 20 deg yaw 200 deg</item>
+		<item>theta 20 deg yaw m200 deg</item>
+		<item>turnaround</item>
+		<item>turnaround godown</item>
+		<item>yaw shake</item>
+		<item>yaw dance</item>
+		<item>phi dance</item>
+		<item>theta dance</item>
+		<item>vz dance</item>
+		<item>wave</item>
+		<item>phi theta mixed</item>
+		<item>double phi theta mixed</item>
+	</string-array>
+
+	<!-- DON'T MIX ANY ARRAY INDEXES -->
+	<string-array name="drone_led_animations">
+		<item>blink green-red</item>
+		<item>blink green</item>
+		<item>blink red</item>
+		<item>blink orange</item>
+		<item>animation snake green-red</item>
+		<item>animation fire</item>
+		<item>flash front green, rear red</item>
+		<item>flash red</item>
+		<item>flash green</item>
+		<item>animation snake red</item>
+		<item>turn off leds</item>
+		<item>animation missile right</item>
+		<item>animation missile left</item>
+		<item>animation double missile</item>
+		<item>flash front left green others red</item>
+		<item>flash front richt green others red</item>
+		<item>flash rear right green others red</item>
+		<item>flash rear left green others red</item>
+		<item>flash left green, right red</item>
+		<item>flash left red, right green</item>
+		<item>blink front green, rear red</item>
+	</string-array>
+
+	<!-- DON'T MIX ANY ARRAY INDEXES -->
+	<string-array name="drone_speed">
+		<item>very slow</item>
+		<item>slow</item>
+		<item>normal</item>
+		<item>fast</item>
+		<item>very fast</item>
+	</string-array>
+
+	<!-- DON'T MIX ANY ARRAY INDEXES -->
+	<string-array name="drone_move_directions">
+		<item>forwards</item>
+		<item>backwards</item>
+		<item>left</item>
+		<item>right</item>
+		<item>downwards</item>
+		<item>upwards</item>
+		<item>turnaround left</item>
+		<item>turnaround right</item>
+	</string-array>
+
+	<!-- DON'T MIX ANY ARRAY INDEXES -->
+	<string-array name="drone_flying_modes">
+		<item>free flight</item>
+		<item>hover on top of roundel</item>
+		<item>follow shell-tag</item>
+	</string-array>
+
+	<!-- DON'T MIX ANY ARRAY INDEXES -->
+	<string-array name="drone_config_settings">
+		<item>max altitude</item>
+		<item>course speed</item>
+		<item>vertical speed</item>
+		<item>rotation speed</item>
+		<item>video channel</item>
+	</string-array>
+
+	<!-- DON'T MIX ANY ARRAY INDEXES -->
+	<string-array name="drone_max_altitude">
+		<item>1m</item>
+		<item>2m</item>
+		<item>3m</item>
+		<item>4m</item>
+		<item>5m</item>
+	</string-array>
+
+	<!-- DON'T MIX ANY ARRAY INDEXES -->
+	<string-array name="drone_video_channel">
+		<item>horizontal</item>
+		<item>vertical</item>
+		<item>horizontal (vertical small)</item>
+		<item>vertical (horizontal small)</item>
+	</string-array>
 </resources>
