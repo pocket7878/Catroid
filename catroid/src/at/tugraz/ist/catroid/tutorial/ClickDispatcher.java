@@ -25,6 +25,7 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -305,6 +306,7 @@ public class ClickDispatcher {
 
 	public void dispatchPanel(MotionEvent ev) {
 		//unterscheide buttons play, pause, forward, backward
+		Log.i("faxxe", "x=" + ev.getX() + " y= " + ev.getY());
 		int x = (int) ev.getX();
 		int y = (int) ev.getY();
 

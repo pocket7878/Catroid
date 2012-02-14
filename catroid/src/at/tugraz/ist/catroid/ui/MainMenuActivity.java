@@ -283,7 +283,7 @@ public class MainMenuActivity extends Activity {
 	}
 
 	public void handleTutorialButton(View v) {
-		tutorial.toggleTutorial();
+		Tutorial.getInstance(this).toggleTutorial();
 	}
 
 	public void handleAboutCatroidButton(View v) {

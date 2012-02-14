@@ -19,10 +19,11 @@
 
 package at.tugraz.ist.catroid.uitest.tutorial;
 
-import java.lang.reflect.Field;
+import java.util.ArrayList;
 
+import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.tutorial.Tutorial;
@@ -34,6 +35,8 @@ import com.jayway.android.robotium.solo.Solo;
 public class TutorialMainActivity extends ActivityInstrumentationTestCase2<MainMenuActivity> {
 	private Solo solo;
 	private static final boolean DEBUG = true;
+	private Runnable buttonPressRunnable;
+	private ArrayList<View> actual_views;
 
 	public TutorialMainActivity() {
 		super("at.tugraz.ist.catroid", MainMenuActivity.class);
@@ -57,15 +60,86 @@ public class TutorialMainActivity extends ActivityInstrumentationTestCase2<MainM
 		super.tearDown();
 	}
 
+	public void testTutorialActive() {
+		pressTutorialButton();
+		solo.sleep(3000);
+		boolean isActive = Tutorial.getInstance(null).isActive();
+		solo.sleep(3000);
+		Tutorial.getInstance(null).stopButtonTutorial();
+		solo.sleep(3000);
+		assertTrue("Tutorail: Tutorial not active!", isActive);
+	}
+
+	public void testIfSurfaceView() {
+		pressTutorialButton();
+		solo.sleep(3000);
+		actual_views = solo.getCurrentViews();
+		//		solo.sleep(3000);
+		//		Tutorial.getInstance(null).stopButtonTutorial();
+		//		View surfaceView = null;
+		//		for (View view : actual_views) {
+		//			if (view instanceof TutorialOverlay) {
+		//				surfaceView = view;
+		//			}
+		//		}
+		//		solo.sleep(3000);
+		//		assertNotNull(surfaceView);
+	}
+
+	public void testMenuBar() {
+		Activity activity = solo.getCurrentActivity();
+		int height = activity.getWindow().getWindowManager().getDefaultDisplay().getHeight();
+
+		//pressTutorialButton();
+		//		solo.clickOnButton(R.id.tutorial_button);
+		//		solo.sleep(3000);
+		//		solo.clickOnScreen(180, 764);
+		//		solo.sleep(3000);
+		//		Tutorial.getInstance(null).stopButtonTutorial();
+	}
+
+	//	public void testRotateToPortrait() {
+	//		solo.setActivityOrientation(Solo.LANDSCAPE);//	public void testRotateToPortrait() {
+	//	solo.setActivityOrientation(Solo.LANDSCAPE);
+	//	solo.sleep(3000);
+	//	pressTutorialButton();//	public void testRotateToPortrait() {
+	//	solo.setActivityOrientation(Solo.LANDSCAPE);
+	//	solo.sleep(3000);
+	//	pressTutorialButton();
+	//	solo.sleep(3000);
+	//	int orientation = solo.getActivityMonitor().getLastActivity().getRequestedOrientation();
+	//	Tutorial.getInstance(null).stopButtonTutorial();
+	//	assertTrue("Tutorial: Setting Orientation to Portrait failed!", orientation == Solo.PORTRAIT);
+	//}
+	//	solo.sleep(3000);
+	//	int orientation = solo.getActivityMonitor().getLastActivity().getRequestedOrientation();
+	//	Tutorial.getInstance(null).stopButtonTutorial();
+	//	assertTrue("Tutorial: Setting Orientation to Portrait failed!", orientation == Solo.PORTRAIT);
+	//}
+	//		solo.sleep(3000);
+	//		pressTutorialButton();
+	//		solo.sleep(3000);
+	//		int orientation = solo.getActivityMonitor().getLastActivity().getRequestedOrientation();
+	//		Tutorial.getInstance(null).stopButtonTutorial();
+	//		assertTrue("Tutorial: Setting Orientation to Portrait failed!", orientation == Solo.PORTRAIT);
+	//	}
+
 	private void pressTutorialButton() {
-		getActivity().runOnUiThread(new Runnable() {
+		buttonPressRunnable = new Runnable() {
 			public void run() {
 				Button tutorialButton = (Button) getActivity().findViewById(R.id.tutorial_button);
 				tutorialButton.performClick();
 			}
-		});
+		};
+		getActivity().runOnUiThread(buttonPressRunnable);
 	}
 
+	//	test= new Runnable() {
+	//			public void run() {
+	//				Button tutorialButton = (Button) getActivity().findViewById(R.id.tutorial_button);
+	//				tutorialButton.performClick();
+	//			}
+	//		getActivity().runOnUiThread(test);
 	//	private void pressCurrentProjectButton() {
 	//		getActivity().runOnUiThread(new Runnable() {
 	//			public void run() {
@@ -74,21 +148,17 @@ public class TutorialMainActivity extends ActivityInstrumentationTestCase2<MainM
 	//			}
 	//		});
 	//	}
-
-	private boolean getTutorialActivatedBoolean(boolean valueItShouldNotBe) {
-		Tutorial tut;
-		boolean tutorialActive = valueItShouldNotBe;
-		try {
-			MainMenuActivity act = getActivity();
-			tut = (Tutorial) UiTestUtils.getPrivateField("tutorial", act);
-			Field booli = tut.getClass().getDeclaredField("tutorialActive");
-			booli.setAccessible(true);
-			tutorialActive = booli.getBoolean(tut);
-		} catch (Exception e) {
-			Log.e("maxxle", "Class Cast Exception for Tutorial");
-		}
-		return tutorialActive;
-	}
+	//	public void testAboutCatroid() {
+	//		solo.clickOnButton(getActivity().getString(R.string.about));
+	//		ArrayList<TextView> textViewList = solo.getCurrentTextViews(null);
+	//
+	//		assertEquals("Title is not correct!", getActivity().getString(R.string.about_title), textViewList.get(0)
+	//				.getText().toString());
+	//		assertEquals("About text not correct!", getActivity().getString(R.string.about_text), textViewList.get(1)
+	//				.getText().toString());
+	//		assertEquals("Link text is not correct!", getActivity().getString(R.string.about_link_text), textViewList
+	//				.get(2).getText().toString());
+	//	}
 
 	//	private void setTutorialActivatedBoolean(boolean newValue) {
 	//		Tutorial tutorial;
@@ -106,40 +176,45 @@ public class TutorialMainActivity extends ActivityInstrumentationTestCase2<MainM
 	//	assertTrue("Wrong orientation! Screen height: " + Values.SCREEN_HEIGHT + ", Screen width: "
 	//			+ Values.SCREEN_WIDTH, Values.SCREEN_HEIGHT > Values.SCREEN_WIDTH);
 
-	public void testStartAndStopTutorial() {
-		if (!DEBUG) {
-			solo.sleep(3000);
-			assertFalse("Tutorial active but should not be", getTutorialActivatedBoolean(true));
-			pressTutorialButton();
-			solo.sleep(3000);
-			assertTrue("Tutorial is not active but should be", getTutorialActivatedBoolean(false));
-			pressTutorialButton();
-			solo.sleep(3000);
-			assertFalse("Tutorial active but should not be", getTutorialActivatedBoolean(true));
-		}
+	public boolean isPortrait() {
+
+		return true;
 	}
 
-	public void testLandscapePortraitStart() {
-		if (!DEBUG) {
-			solo.sleep(5000);
-			assertFalse("Tutorial active but should not be", getTutorialActivatedBoolean(true));
-			solo.setActivityOrientation(Solo.LANDSCAPE);
-			solo.sleep(5000);
-			solo.setActivityOrientation(Solo.PORTRAIT);
-			solo.sleep(5000);
-			assertFalse("Tutorial active but should not be", getTutorialActivatedBoolean(true));
-
-			pressTutorialButton();
-
-			solo.sleep(5000);
-
-			assertTrue("Tutorial is not active but should be", getTutorialActivatedBoolean(false));
-
-			pressTutorialButton();
-
-			solo.sleep(5000);
-
-			assertFalse("Tutorial is active but should not be", getTutorialActivatedBoolean(false));
-		}
-	}
+	//	public void testStartAndStopTutorial() {
+	//		if (!DEBUG) {
+	//			solo.sleep(3000);
+	//			assertFalse("Tutorial active but should not be", getTutorialActivatedBoolean(true));
+	//			pressTutorialButton();
+	//			solo.sleep(3000);
+	//			assertTrue("Tutorial is not active but should be", getTutorialActivatedBoolean(false));
+	//			pressTutorialButton();
+	//			solo.sleep(3000);
+	//			assertFalse("Tutorial active but should not be", getTutorialActivatedBoolean(true));
+	//		}
+	//	}
+	//
+	//	public void testLandscapePortraitStart() {
+	//		if (!DEBUG) {
+	//			solo.sleep(5000);
+	//			assertFalse("Tutorial active but should not be", getTutorialActivatedBoolean(true));
+	//			solo.setActivityOrientation(Solo.LANDSCAPE);
+	//			solo.sleep(5000);
+	//			solo.setActivityOrientation(Solo.PORTRAIT);
+	//			solo.sleep(5000);
+	//			assertFalse("Tutorial active but should not be", getTutorialActivatedBoolean(true));
+	//
+	//			pressTutorialButton();
+	//
+	//			solo.sleep(5000);
+	//
+	//			assertTrue("Tutorial is not active but should be", getTutorialActivatedBoolean(false));
+	//
+	//			pressTutorialButton();
+	//
+	//			solo.sleep(5000);
+	//
+	//			assertFalse("Tutorial is active but should not be", getTutorialActivatedBoolean(false));
+	//		}
+	//	}
 }

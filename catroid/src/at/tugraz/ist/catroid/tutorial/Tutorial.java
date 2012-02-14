@@ -134,8 +134,8 @@ public class Tutorial {
 			Activity currentActivity = (Activity) context;
 			View focus = currentActivity.getCurrentFocus();
 			focus.setKeepScreenOn(false);
-			Log.i("faxxe", "KeepScreenOn - checked!");
-		} catch (NullPointerException e) {
+			Log.i("faxxe", "KeepScreenOff - checked!");
+		} catch (Exception e) {
 			Log.i("faxxe", "Cannot set KeepScreenOff");
 			e.printStackTrace();
 		}
