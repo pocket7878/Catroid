@@ -54,19 +54,22 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.res.Resources;
 import android.os.Handler;
+import android.util.Log;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.bluetooth.BTConnectable;
 
 /**
- * This class is for talking to a LEGO NXT robot via bluetooth.
- * The communciation to the robot is done via LCP (LEGO communication protocol).
- * Objects of this class can either be run as standalone thread or controlled
- * by the owners, i.e. calling the send/recive methods by themselves.
+ * This class is for talking to a LEGO NXT robot via bluetooth. The
+ * communciation to the robot is done via LCP (LEGO communication protocol).
+ * Objects of this class can either be run as standalone thread or controlled by
+ * the owners, i.e. calling the send/recive methods by themselves.
  */
 public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 
-	private static final UUID SERIAL_PORT_SERVICE_CLASS_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-	// this is the only OUI registered by LEGO, see http://standards.ieee.org/regauth/oui/index.shtml
+	private static final UUID SERIAL_PORT_SERVICE_CLASS_UUID = UUID
+			.fromString("00001101-0000-1000-8000-00805F9B34FB");
+	// this is the only OUI registered by LEGO, see
+	// http://standards.ieee.org/regauth/oui/index.shtml
 
 	private BluetoothAdapter btAdapter;
 	private BluetoothSocket nxtBTsocket = null;
@@ -76,8 +79,8 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 	private String mMACaddress;
 	private BTConnectable myOwner;
 
-	public LegoNXTBtCommunicator(BTConnectable myOwner, Handler uiHandler, BluetoothAdapter btAdapter,
-			Resources resources) {
+	public LegoNXTBtCommunicator(BTConnectable myOwner, Handler uiHandler,
+			BluetoothAdapter btAdapter, Resources resources) {
 		super(uiHandler, resources);
 
 		this.myOwner = myOwner;
@@ -89,8 +92,8 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 	}
 
 	/**
-	 * Creates the connection, waits for incoming messages and dispatches them. The thread will be terminated
-	 * on closing of the connection.
+	 * Creates the connection, waits for incoming messages and dispatches them.
+	 * The thread will be terminated on closing of the connection.
 	 */
 	@Override
 	public void run() {
@@ -102,7 +105,18 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 
 		while (connected) {
 			try {
-				returnMessage = receiveMessage();
+				returnMessage = receiveMessageFromDevice();
+
+				if (returnMessage.length > 5) {
+					Log.i("lego", "-" + returnMessage[0] + "-"
+							+ returnMessage[1] + "-" + returnMessage[2] + "-"
+							+ returnMessage[3] + "-" + returnMessage[8] + ""
+							+ returnMessage[9]);
+				} else {
+					Log.i("lego", "-" + returnMessage[0] + "-"
+							+ returnMessage[1] + "");
+				}
+
 				if ((returnMessage.length >= 2)
 						&& ((returnMessage[0] == LCPMessage.REPLY_COMMAND) || (returnMessage[0] == LCPMessage.DIRECT_COMMAND_NOREPLY))) {
 					dispatchMessage(returnMessage);
@@ -123,9 +137,8 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 	 * 
 	 * @see <a href=
 	 *      "http://lejos.sourceforge.net/forum/viewtopic.php?t=1991&highlight=android"
-	 *      />
-	 *      On error the method either sends a message to it's owner or creates an exception in the
-	 *      case of no message handler.
+	 *      /> On error the method either sends a message to it's owner or
+	 *      creates an exception in the case of no message handler.
 	 */
 	@Override
 	public void createNXTconnection() throws IOException {
@@ -143,7 +156,8 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 				}
 			}
 
-			nxtBTSocketTemporary = nxtDevice.createRfcommSocketToServiceRecord(SERIAL_PORT_SERVICE_CLASS_UUID);
+			nxtBTSocketTemporary = nxtDevice
+					.createRfcommSocketToServiceRecord(SERIAL_PORT_SERVICE_CLASS_UUID);
 			try {
 
 				nxtBTSocketTemporary.connect();
@@ -151,7 +165,8 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 			} catch (IOException e) {
 				if (myOwner.isPairing()) {
 					if (uiHandler != null) {
-						sendToast(mResources.getString(R.string.pairing_message));
+						sendToast(mResources
+								.getString(R.string.pairing_message));
 						sendState(STATE_CONNECTERROR_PAIRING);
 					} else {
 						throw e;
@@ -159,11 +174,14 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 					return;
 				}
 
-				// try another method for connection, this should work on the HTC desire, credits to Michael Biermann
+				// try another method for connection, this should work on the
+				// HTC desire, credits to Michael Biermann
 				try {
 
-					Method mMethod = nxtDevice.getClass().getMethod("createRfcommSocket", new Class[] { int.class });
-					nxtBTSocketTemporary = (BluetoothSocket) mMethod.invoke(nxtDevice, Integer.valueOf(1));
+					Method mMethod = nxtDevice.getClass().getMethod(
+							"createRfcommSocket", new Class[] { int.class });
+					nxtBTSocketTemporary = (BluetoothSocket) mMethod.invoke(
+							nxtDevice, Integer.valueOf(1));
 					nxtBTSocketTemporary.connect();
 				} catch (Exception e1) {
 					if (uiHandler == null) {
@@ -196,8 +214,9 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 	}
 
 	/**
-	 * Closes the bluetooth connection. On error the method either sends a message
-	 * to it's owner or creates an exception in the case of no message handler.
+	 * Closes the bluetooth connection. On error the method either sends a
+	 * message to it's owner or creates an exception in the case of no message
+	 * handler.
 	 */
 	@Override
 	public void destroyNXTconnection() throws IOException {
@@ -243,7 +262,7 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 	 *            , the message as a byte array
 	 */
 	@Override
-	public void sendMessage(byte[] message) throws IOException {
+	public void sendMessageToDevice(byte[] message) throws IOException {
 
 		if (nxtOutputStream == null) {
 			throw new IOException();
@@ -263,7 +282,7 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 	 * @return the message
 	 */
 	@Override
-	public byte[] receiveMessage() throws IOException {
+	public byte[] receiveMessageFromDevice() throws IOException {
 		if (nxtInputStream == null) {
 			throw new IOException();
 		}
@@ -272,7 +291,7 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 		length = (nxtInputStream.read() << 8) + length;
 		byte[] returnMessage = new byte[length];
 		nxtInputStream.read(returnMessage);
-		//Log.i("bt", returnMessage.toString());
+		// Log.i("bt", returnMessage.toString());
 		return returnMessage;
 	}
 
