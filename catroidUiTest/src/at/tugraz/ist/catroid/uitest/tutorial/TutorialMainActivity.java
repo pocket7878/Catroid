@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import at.tugraz.ist.catroid.R;
@@ -83,18 +84,18 @@ public class TutorialMainActivity extends ActivityInstrumentationTestCase2<MainM
 		assertTrue("Tutorail: Tutorial not active!", isActive);
 	}
 
-	//	public void testCurrentProjectButton() {
-	//		Button cpbutton = solo.getButton(getActivity().getString(R.string.current_project_button));
-	//		int x = cpbutton.getLeft() + 10;
-	//		int y = cpbutton.getTop() + 10;
-	//		pressTutorialButton();
-	//		solo.sleep(20000);
-	//		Log.i("faxxe", "clicking...");
-	//		solo.clickOnScreen(x, y);
-	//		solo.sleep(9000);
-	//
-	//		Tutorial.getInstance(null).stopButtonTutorial();
-	//	}
+	public void testCurrentProjectButton() {
+		Button cpbutton = solo.getButton(getActivity().getString(R.string.current_project_button));
+		int x = cpbutton.getLeft() + 10;
+		int y = cpbutton.getTop() + 10;
+		pressTutorialButton();
+		solo.sleep(20000);
+		Log.i("faxxe", "clicking...");
+		solo.clickOnScreen(x, y);
+		solo.sleep(9000);
+
+		Tutorial.getInstance(null).stopButtonTutorial();
+	}
 
 	public void testMenuBar() {
 		Activity activity = solo.getCurrentActivity();

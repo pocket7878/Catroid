@@ -46,6 +46,7 @@ public class ClickDispatcher {
 	ControlPanel panel;
 	Task.Notification currentNotification;
 	String notificationValue;
+	MotionEvent ev;
 	MotionEvent down;
 	MotionEvent second;
 	boolean scroll;
@@ -105,44 +106,10 @@ public class ClickDispatcher {
 	}
 
 	public void dispatchEvent(MotionEvent ev) {
-		dispatchEventReally(ev);
-		return;
-
-		//		if (ev.getAction() == MotionEvent.ACTION_DOWN) {
-		//			down = MotionEvent.obtain(ev);
-		//		}
-		//		if (ev.getAction() == MotionEvent.ACTION_MOVE) {
-		//			if (scroll2 == false) {
-		//				second = MotionEvent.obtain(ev);
-		//				scroll2 = true;
-		//				return;
-		//			}
-		//			if (scroll == false) {
-		//				scroll = true;
-		//				dispatchEventReally(down);
-		//				dispatchEventReally(second);
-		//				dispatchEventReally(ev);
-		//				Log.i("faxxe", "moove!");
-		//			} else {
-		//				Log.i("faxxe", "moove!");
-		//				dispatchEventReally(ev);
-		//			}
-		//		}
-		//		if (ev.getAction() == MotionEvent.ACTION_UP) {
-		//			if (scroll == false) {
-		//				dispatchEventReally(down);
-		//			}
-		//			dispatchEventReally(ev);
-		//			scroll = false;
-		//			scroll2 = false;
-		//		}
-
-	}
-
-	public void dispatchEventReally(MotionEvent ev) {
 
 		if (currentNotification != null) {
 		}
+		this.ev = ev;
 		//Todo:
 		/*
 		 * 1. Notification fuern dialog einrichten und obfrogen
@@ -150,12 +117,6 @@ public class ClickDispatcher {
 		 * 3. schaun ob akuteller dialog mit dem this.dialog zompasst
 		 * 4. so mochn dos eh tuat ')
 		 */
-
-		if (scroll == true) {
-			Activity currentActivity = (Activity) context;
-			currentActivity.dispatchTouchEvent(ev);
-			return;
-		}
 
 		int x = (int) ev.getX();
 		int y = (int) ev.getY();
@@ -172,7 +133,7 @@ public class ClickDispatcher {
 				}
 				return;
 			} else if (x > 50 && y >= height - 50) {
-				dispatchPanel(ev);
+				dispatchPanel();
 				return;
 			}
 		}
@@ -190,7 +151,7 @@ public class ClickDispatcher {
 				return;
 			}
 
-			dispatchMainMenu(ev);
+			dispatchMainMenu();
 			return;
 		}
 
@@ -201,11 +162,11 @@ public class ClickDispatcher {
 				// TODO: This should never ever happen, something went terribly wrong: how to deal with this?
 				return;
 			}
-			dispatchProject(ev);
+			dispatchProject();
 			return;
 		}
 		if (currentNotification == Task.Notification.PROJECT_STAGE_BUTTON) {
-			dispatchProjectStageButton(ev);
+			dispatchProjectStageButton();
 			return;
 		}
 
@@ -215,7 +176,7 @@ public class ClickDispatcher {
 			if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.ScriptActivity") != 0) {
 				// TODO: This should never ever happen, something went terribly wrong: how to deal with this?
 			}
-			dispatchSkript(ev);
+			dispatchSkript();
 			return;
 		}
 
@@ -227,11 +188,11 @@ public class ClickDispatcher {
 			if (context.getClass().getName().compareTo("at.tugraz.ist.catroid.ui.CostumeActivity") != 0) {
 				// TODO: This should never ever happen, something went terribly wrong: how to deal with this?
 			}
-			dispatchCostumes(ev);
+			dispatchCostumes();
 			return;
 		}
 		if (currentNotification == Task.Notification.SOUNDS_ADD_SOUND) {
-			dispatchSounds(ev);
+			dispatchSounds();
 		}
 
 		if (currentNotification == Task.Notification.IF_PROJECT_STARTED || currentNotification == Task.Notification.IF
@@ -239,7 +200,7 @@ public class ClickDispatcher {
 				|| currentNotification == Task.Notification.REPEAT
 				|| currentNotification == Task.Notification.REPEAT_TIMES
 				|| currentNotification == Task.Notification.SET_COSTUME) {
-			dispatchAddBrickDialog(ev);
+			dispatchAddBrickDialog();
 			return;
 		}
 
@@ -247,13 +208,13 @@ public class ClickDispatcher {
 				|| currentNotification == Task.Notification.BRICK_CATEGORY_MOTION
 				|| currentNotification == Task.Notification.BRICK_CATEGORY_SOUND
 				|| currentNotification == Task.Notification.BRICK_CATEGORY_LOOKS) {
-			dispatchBrickCategoryDialog(ev);
+			dispatchBrickCategoryDialog();
 			return;
 		}
 		return;
 	}
 
-	public void dispatchAddBrickDialog(MotionEvent ev) {
+	public void dispatchAddBrickDialog() {
 		Dialog dialog = Tutorial.getInstance(null).getDialog();
 		ListView lv = (ListView) dialog.findViewById(R.id.toolboxListView);
 		if (lv == null) {
@@ -261,12 +222,12 @@ public class ClickDispatcher {
 		}
 		//		lv.smoothScrollToPosition(8);
 
-		if (isItemClicked(lv.getChildAt(itemPosition), ev)) {
+		if (isItemClicked(lv.getChildAt(itemPosition))) {
 			dialog.dispatchTouchEvent(ev);
 		}
 	}
 
-	public void dispatchBrickCategoryDialog(MotionEvent ev) {
+	public void dispatchBrickCategoryDialog() {
 		Dialog dialog = Tutorial.getInstance(null).getDialog();
 		if (dialog == null) {
 			//Massive Failure -- should never happen
@@ -281,22 +242,22 @@ public class ClickDispatcher {
 		}
 		switch (currentNotification) {
 			case BRICK_CATEGORY_CONTROL:
-				if (isItemClicked(lv.getChildAt(3), ev)) {
+				if (isItemClicked(lv.getChildAt(3))) {
 					dialog.dispatchTouchEvent(ev);
 				}
 				break;
 			case BRICK_CATEGORY_LOOKS:
-				if (isItemClicked(lv.getChildAt(1), ev)) {
+				if (isItemClicked(lv.getChildAt(1))) {
 					dialog.dispatchTouchEvent(ev);
 				}
 				break;
 			case BRICK_CATEGORY_MOTION:
-				if (isItemClicked(lv.getChildAt(0), ev)) {
+				if (isItemClicked(lv.getChildAt(0))) {
 					dialog.dispatchTouchEvent(ev);
 				}
 				break;
 			case BRICK_CATEGORY_SOUND:
-				if (isItemClicked(lv.getChildAt(2), ev)) {
+				if (isItemClicked(lv.getChildAt(2))) {
 					dialog.dispatchTouchEvent(ev);
 				}
 				break;
@@ -304,7 +265,7 @@ public class ClickDispatcher {
 		}
 	}
 
-	public void dispatchPanel(MotionEvent ev) {
+	public void dispatchPanel() {
 		//unterscheide buttons play, pause, forward, backward
 		int x = (int) ev.getX();
 		int y = (int) ev.getY();
@@ -364,7 +325,7 @@ public class ClickDispatcher {
 		 */
 	}
 
-	public boolean isItemClicked(View view, MotionEvent ev) {
+	public boolean isItemClicked(View view) {
 		float x = ev.getX();
 		float y = ev.getY();
 		if (view == null) {
@@ -414,7 +375,7 @@ public class ClickDispatcher {
 		}
 	}
 
-	public void dispatchSkript(MotionEvent ev) {
+	public void dispatchSkript() {
 		Activity currentActivity = (Activity) context;
 		if (currentActivity.getLocalClassName().compareTo("ui.ScriptActivity") == 0) {
 			currentActivity = currentActivity.getParent();
@@ -452,7 +413,7 @@ public class ClickDispatcher {
 		}
 	}
 
-	public void dispatchProjectStageButton(MotionEvent ev) {
+	public void dispatchProjectStageButton() {
 		if (currentNotification == Task.Notification.PROJECT_STAGE_BUTTON) {
 			Activity currentActivity = (Activity) context;
 			if (currentActivity.getLocalClassName().compareTo("ui.ScriptActivity") == 0) {
@@ -474,7 +435,7 @@ public class ClickDispatcher {
 		}
 	}
 
-	public void dispatchProject(MotionEvent ev) {
+	public void dispatchProject() {
 		Activity currentActivity = (Activity) context;
 
 		if (currentNotification == Task.Notification.PROJECT_ADD_SPRITE) {
@@ -496,27 +457,27 @@ public class ClickDispatcher {
 			ListView listView = listActivity.getListView();
 
 			// TODO: There has to be added a possibility to address specific entries of the list
-			if (isListItemClicked(ev, listView, Integer.parseInt(notificationValue)) != -1) {
+			if (isListItemClicked(listView, Integer.parseInt(notificationValue)) != -1) {
 				listView.dispatchTouchEvent(ev);
 			}
 		}
 	}
 
-	public int isListItemClicked(MotionEvent event, ListView listView, int index) {
-		event.setLocation(event.getX(), event.getY() - 100); // please anyone find out the real height of the titlebar!
+	public int isListItemClicked(ListView listView, int index) {
+		ev.setLocation(ev.getX(), ev.getY() - 100); // please anyone find out the real height of the titlebar!
 		int y = listView.getChildAt(index).getTop();
 		int x = listView.getChildAt(index).getLeft();
 		int maxx = listView.getChildAt(index).getRight();
 		int maxy = listView.getChildAt(index).getBottom();
 
-		if (event.getX() < maxx && event.getX() > x && event.getY() < maxy && event.getY() > y) {
-			listView.dispatchTouchEvent(event);
+		if (ev.getX() < maxx && ev.getX() > x && ev.getY() < maxy && ev.getY() > y) {
+			listView.dispatchTouchEvent(ev);
 		}
 
 		return -1;
 	}
 
-	public void dispatchMainMenu(MotionEvent ev) {
+	public void dispatchMainMenu() {
 		Activity currentActivity = (Activity) context;
 		Button currentProjectButton = (Button) currentActivity.findViewById(R.id.current_project_button);
 		Button aboutButton = (Button) currentActivity.findViewById(R.id.about_catroid_button);
@@ -531,7 +492,7 @@ public class ClickDispatcher {
 		}
 	}
 
-	public void dispatchCostumes(MotionEvent ev) {
+	public void dispatchCostumes() {
 
 		Activity currentActivity = (Activity) context;
 		currentActivity = currentActivity.getParent();
@@ -547,7 +508,7 @@ public class ClickDispatcher {
 		return;
 	}
 
-	public void dispatchSounds(MotionEvent ev) {
+	public void dispatchSounds() {
 		Activity currentActivity = (Activity) context;
 		currentActivity = currentActivity.getParent();
 		if (currentNotification == Task.Notification.SOUNDS_ADD_SOUND) {
