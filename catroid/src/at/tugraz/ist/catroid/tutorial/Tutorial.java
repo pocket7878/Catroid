@@ -294,16 +294,13 @@ public class Tutorial {
 	}
 
 	private WindowManager.LayoutParams createLayoutParameters() {
-
 		WindowManager.LayoutParams windowParameters = new WindowManager.LayoutParams();
 		windowParameters.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-
 		windowParameters.height = Values.SCREEN_HEIGHT;
 		windowParameters.width = Values.SCREEN_WIDTH;
 		windowParameters.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 				| WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
 		windowParameters.format = PixelFormat.TRANSLUCENT;
-
 		return windowParameters;
 	}
 
