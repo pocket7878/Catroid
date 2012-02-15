@@ -306,11 +306,11 @@ public class ClickDispatcher {
 
 	public void dispatchPanel(MotionEvent ev) {
 		//unterscheide buttons play, pause, forward, backward
-		Log.i("faxxe", "x=" + ev.getX() + " y= " + ev.getY());
 		int x = (int) ev.getX();
 		int y = (int) ev.getY();
 
 		if (x > 130 && x < 185) {
+			Log.i("faxxe", "stopButtonTutorial pressed!");
 			Tutorial.getInstance(null).stopButtonTutorial();
 
 		}

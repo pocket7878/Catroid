@@ -22,6 +22,7 @@ package at.tugraz.ist.catroid.uitest.tutorial;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.View;
 import android.widget.Button;
@@ -37,6 +38,9 @@ public class TutorialMainActivity extends ActivityInstrumentationTestCase2<MainM
 	private static final boolean DEBUG = true;
 	private Runnable buttonPressRunnable;
 	private ArrayList<View> actual_views;
+	private Activity mainActivity;
+	private float screenWidth;
+	private float screenHeight;
 
 	public TutorialMainActivity() {
 		super("at.tugraz.ist.catroid", MainMenuActivity.class);
@@ -44,8 +48,17 @@ public class TutorialMainActivity extends ActivityInstrumentationTestCase2<MainM
 
 	@Override
 	public void setUp() throws Exception {
-		UiTestUtils.clearAllUtilTestProjects();
 		solo = new Solo(getInstrumentation(), getActivity());
+		String languageToLoad_before = "en";
+
+		Configuration config_before = new Configuration();
+
+		mainActivity = solo.getCurrentActivity();
+		mainActivity.getBaseContext().getResources()
+				.updateConfiguration(config_before, mainActivity.getBaseContext().getResources().getDisplayMetrics());
+
+		screenWidth = solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getWidth();
+		screenHeight = solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getHeight();
 	}
 
 	@Override
@@ -70,47 +83,47 @@ public class TutorialMainActivity extends ActivityInstrumentationTestCase2<MainM
 		assertTrue("Tutorail: Tutorial not active!", isActive);
 	}
 
-	public void testIfSurfaceView() {
-		pressTutorialButton();
-		solo.sleep(3000);
-		actual_views = solo.getCurrentViews();
-		//		solo.sleep(3000);
-		//		Tutorial.getInstance(null).stopButtonTutorial();
-		//		View surfaceView = null;
-		//		for (View view : actual_views) {
-		//			if (view instanceof TutorialOverlay) {
-		//				surfaceView = view;
-		//			}
-		//		}
-		//		solo.sleep(3000);
-		//		assertNotNull(surfaceView);
-	}
+	//	public void testCurrentProjectButton() {
+	//		Button cpbutton = solo.getButton(getActivity().getString(R.string.current_project_button));
+	//		int x = cpbutton.getLeft() + 10;
+	//		int y = cpbutton.getTop() + 10;
+	//		pressTutorialButton();
+	//		solo.sleep(20000);
+	//		Log.i("faxxe", "clicking...");
+	//		solo.clickOnScreen(x, y);
+	//		solo.sleep(9000);
+	//
+	//		Tutorial.getInstance(null).stopButtonTutorial();
+	//	}
 
 	public void testMenuBar() {
 		Activity activity = solo.getCurrentActivity();
 		int height = activity.getWindow().getWindowManager().getDefaultDisplay().getHeight();
-
-		//pressTutorialButton();
-		//		solo.clickOnButton(R.id.tutorial_button);
-		//		solo.sleep(3000);
-		//		solo.clickOnScreen(180, 764);
-		//		solo.sleep(3000);
-		//		Tutorial.getInstance(null).stopButtonTutorial();
+		pressTutorialButton();
+		solo.sleep(3000);
+		solo.clickOnScreen(10, 764);
+		solo.sleep(3000);
+		assertTrue("have you tried turning it off and on again?", Tutorial.getInstance(null).isActive());
+		solo.clickOnScreen(140, 764);
+		solo.sleep(3000);
+		assertFalse("have you tried turning it off and on again?", Tutorial.getInstance(null).isActive());
+		solo.sleep(3000);
 	}
 
-	//	public void testRotateToPortrait() {
-	//		solo.setActivityOrientation(Solo.LANDSCAPE);//	public void testRotateToPortrait() {
-	//	solo.setActivityOrientation(Solo.LANDSCAPE);
-	//	solo.sleep(3000);
-	//	pressTutorialButton();//	public void testRotateToPortrait() {
-	//	solo.setActivityOrientation(Solo.LANDSCAPE);
-	//	solo.sleep(3000);
-	//	pressTutorialButton();
-	//	solo.sleep(3000);
-	//	int orientation = solo.getActivityMonitor().getLastActivity().getRequestedOrientation();
-	//	Tutorial.getInstance(null).stopButtonTutorial();
-	//	assertTrue("Tutorial: Setting Orientation to Portrait failed!", orientation == Solo.PORTRAIT);
-	//}
+	public void testRotateToPortrait() {
+		solo.setActivityOrientation(Solo.LANDSCAPE);//	public void testRotateToPortrait() {
+		solo.setActivityOrientation(Solo.LANDSCAPE);
+		solo.sleep(3000);
+		pressTutorialButton();//	public void testRotateToPortrait() {
+		solo.setActivityOrientation(Solo.LANDSCAPE);
+		solo.sleep(3000);
+		pressTutorialButton();
+		solo.sleep(3000);
+		int orientation = solo.getActivityMonitor().getLastActivity().getRequestedOrientation();
+		Tutorial.getInstance(null).stopButtonTutorial();
+		assertTrue("Tutorial: Setting Orientation to Portrait failed!", orientation == Solo.PORTRAIT);
+	}
+
 	//	solo.sleep(3000);
 	//	int orientation = solo.getActivityMonitor().getLastActivity().getRequestedOrientation();
 	//	Tutorial.getInstance(null).stopButtonTutorial();
