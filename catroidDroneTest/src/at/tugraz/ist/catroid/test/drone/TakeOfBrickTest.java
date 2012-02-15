@@ -22,22 +22,20 @@
  */
 package at.tugraz.ist.catroid.test.drone;
 
-import java.util.ArrayList;
+
+import org.easymock.EasyMock;
 
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.suitebuilder.annotation.Smoke;
 import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
+import at.tugraz.ist.catroid.plugin.Drone.IDrone;
 import at.tugraz.ist.catroid.plugin.Drone.bricks.*;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
-import at.tugraz.ist.catroid.ui.ScriptActivity;
-import at.tugraz.ist.catroid.ui.ScriptTabActivity;
-import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -45,6 +43,7 @@ public class TakeOfBrickTest extends ActivityInstrumentationTestCase2<MainMenuAc
 	private Solo solo;
 	private Project project;
 	private static String projectName = "BrickTest";
+	IDrone droneMock;
 
 	public TakeOfBrickTest() {
 		super("at.tugraz.ist.catroid", MainMenuActivity.class);
@@ -81,7 +80,6 @@ public class TakeOfBrickTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		super.tearDown();
 	}
 
-	@Smoke
 	public void testBroadcastBricks() {
 		
 		solo.clickOnText("New Project");
@@ -105,9 +103,22 @@ public class TakeOfBrickTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		solo.clickOnText("Drone");
 		solo.clickOnText("land");
 		
-		solo.clickOnText("Start");
+		DroneHandler.getInstance().setWasAlreadyConnected();
+		droneMock = EasyMock.createMock(IDrone.class);
 		
+		DroneHandler.getInstance().setIDrone(droneMock);
+		
+		EasyMock.expect(droneMock.getFlyingMode()).andReturn(0);
+		EasyMock.expect(droneMock.connect()).andReturn(true);
+		droneMock.takeoff();
+		droneMock.land();
+		
+		EasyMock.replay(droneMock);	
+		
+		solo.clickOnText("Start");
 		solo.sleep(5000);
+
+		EasyMock.verify(droneMock);
 		
 //		ArrayList<Brick> projectBrickList = project.getSpriteList().get(0).getScript(0).getBrickList();
 //		assertEquals("Incorrect number of bricks.", 2, projectBrickList.size());
