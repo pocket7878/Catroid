@@ -103,9 +103,9 @@ public class SettingsUITest extends
 
 		ArrayList<CheckBox> settingsCheckboxes = solo.getCurrentCheckBoxes();
 
-		assertEquals("Drone is installed, Brick settings are not clickable",
-				settingsCheckboxes.get(1).isClickable(), dcfInstalled);
-		solo.sleep(2000);
+		assertEquals("Drone is installed, Brick settings are not clickable", dcfInstalled, 
+				settingsCheckboxes.get(1).isEnabled());
+//		solo.sleep(2000);
 	}
 		
 		
