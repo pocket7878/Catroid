@@ -24,6 +24,7 @@ public class SettingsUITest extends
 
 	IDrone idronemock;
 
+	private final static String BRICKS_NOT_AVAILABLE = "Drone is installed, Drone Brick settings are not clickable";
 	private final static String droneNamespaceString = "at.tugraz.ist.droned";
 	private final static String droneClassString = "at.tugraz.ist.droned.Drone";
 
@@ -103,10 +104,21 @@ public class SettingsUITest extends
 
 		ArrayList<CheckBox> settingsCheckboxes = solo.getCurrentCheckBoxes();
 
-		assertEquals("Drone is installed, Brick settings are not clickable", dcfInstalled, 
-				settingsCheckboxes.get(1).isEnabled());
-//		solo.sleep(2000);
+		CheckBox droneCheckbox = settingsCheckboxes.get(1);
+
+		boolean droneCheckboxEnabled = droneCheckbox.isEnabled();
+		boolean droneCheckboxChecked = droneCheckbox.isChecked();
+		assertEquals(BRICKS_NOT_AVAILABLE, dcfInstalled, droneCheckboxEnabled);
+
+		if (!droneCheckboxChecked) {
+			solo.clickOnCheckBox(1);
+			solo.sleep(2000);
+		}
+
+		settingsCheckboxes = solo.getCurrentCheckBoxes();
+		droneCheckbox = settingsCheckboxes.get(1);
+		assertTrue("Drone Bricks not enabled", droneCheckbox.isChecked());
+
 	}
-		
-		
+
 }
