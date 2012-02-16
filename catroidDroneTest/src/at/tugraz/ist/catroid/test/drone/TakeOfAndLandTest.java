@@ -19,7 +19,7 @@ import at.tugraz.ist.catroid.plugin.Drone.DroneLibraryWrapper;
 import at.tugraz.ist.catroid.plugin.Drone.IDrone;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 
-public class SettingsUITest extends
+public class TakeOfAndLandTest extends
 		ActivityInstrumentationTestCase2<MainMenuActivity> {
 	private Solo solo;
 
@@ -35,7 +35,7 @@ public class SettingsUITest extends
 		DroneHandler.getInstance().setIDrone(idronemock);
 	}
 
-	public SettingsUITest() {
+	public TakeOfAndLandTest() {
 		super("at.tugraz.ist.catroid", MainMenuActivity.class);
 		createDroneMock();
 	}
