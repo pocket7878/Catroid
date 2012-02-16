@@ -69,8 +69,6 @@ public class LegoNXT implements BTConnectable {
 	private Handler recieverHandler;
 	private Activity activity;
 
-	private static int TONE_COMMAND = 101;
-
 	public LegoNXT(Activity activity, Handler recieverHandler) {
 		this.activity = activity;
 		this.recieverHandler = recieverHandler;
@@ -85,8 +83,8 @@ public class LegoNXT implements BTConnectable {
 			}
 		}
 
-		myNXTCommunicator = new LegoNXTBtCommunicator(this, recieverHandler, BluetoothAdapter.getDefaultAdapter(),
-				activity.getResources());
+		myNXTCommunicator = new LegoNXTBtCommunicator(this, recieverHandler,
+				BluetoothAdapter.getDefaultAdapter(), activity.getResources());
 		btcHandler = myNXTCommunicator.getHandler();
 
 		((LegoNXTBtCommunicator) myNXTCommunicator).setMACAddress(mac_address);
@@ -100,7 +98,8 @@ public class LegoNXT implements BTConnectable {
 	public void destroyCommunicator() {
 
 		if (myNXTCommunicator != null) {
-			//sendBTCMotorMessage(LegoNXTBtCommunicator.NO_DELAY, LegoNXTBtCommunicator.DISCONNECT, 0, 0);
+			// sendBTCMotorMessage(LegoNXTBtCommunicator.NO_DELAY,
+			// LegoNXTBtCommunicator.DISCONNECT, 0, 0);
 			try {
 				myNXTCommunicator.destroyNXTconnection();
 			} catch (IOException e) { // TODO Auto-generated method stub
@@ -116,20 +115,34 @@ public class LegoNXT implements BTConnectable {
 		myNXTCommunicator.stopAllNXTMovement();
 	}
 
-	public static synchronized void sendBTCPlayToneMessage(int frequency, int duration) {
+	public static synchronized void sendBTCTestMessage(int sensor) {
+		Bundle myBundle = new Bundle();
+		myBundle.putInt("sensor", sensor);
+
+		Message myMessage = btcHandler.obtainMessage();
+		myMessage.setData(myBundle);
+		myMessage.what = LegoNXTCommunicator.TEST_COMMAND;
+
+		btcHandler.sendMessage(myMessage);
+
+	}
+
+	public static synchronized void sendBTCPlayToneMessage(int frequency,
+			int duration) {
 		Bundle myBundle = new Bundle();
 		myBundle.putInt("frequency", frequency);
 		myBundle.putInt("duration", duration);
 
 		Message myMessage = btcHandler.obtainMessage();
 		myMessage.setData(myBundle);
-		myMessage.what = TONE_COMMAND;
+		myMessage.what = LegoNXTCommunicator.TONE_COMMAND;
 
 		btcHandler.sendMessage(myMessage);
 
 	}
 
-	public static synchronized void sendBTCMotorMessage(int delay, int motor, int speed, int angle) {
+	public static synchronized void sendBTCMotorMessage(int delay, int motor,
+			int speed, int angle) {
 		Bundle myBundle = new Bundle();
 		myBundle.putInt("motor", motor);
 		myBundle.putInt("speed", speed);
@@ -144,7 +157,7 @@ public class LegoNXT implements BTConnectable {
 			btcHandler.sendMessage(myMessage);
 
 		} else {
-			//btcHandler.removeMessages(motor);
+			// btcHandler.removeMessages(motor);
 			btcHandler.sendMessageDelayed(myMessage, delay);
 
 		}
@@ -154,13 +167,15 @@ public class LegoNXT implements BTConnectable {
 		return btcHandler;
 	}
 
+	@Override
 	public boolean isPairing() {
 		// TODO Auto-generated method stub
 		return pairing;
 	}
 
 	public void connectLegoNXT() {
-		Intent serverIntent = new Intent(this.activity, DeviceListActivity.class);
+		Intent serverIntent = new Intent(this.activity,
+				DeviceListActivity.class);
 		activity.startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
 
 	}

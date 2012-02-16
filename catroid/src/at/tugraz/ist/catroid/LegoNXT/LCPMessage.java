@@ -44,20 +44,23 @@
 package at.tugraz.ist.catroid.LegoNXT;
 
 /**
- * Class for composing the proper messages for simple
- * communication over bluetooth
+ * Class for composing the proper messages for simple communication over
+ * bluetooth
  */
 public class LCPMessage {
 
-	// the folowing constants were taken from the leJOS project (http://www.lejos.org) 
+	// the folowing constants were taken from the leJOS project
+	// (http://www.lejos.org)
 
 	// Command types constants. Indicates type of packet being sent or received.
 
 	public static byte DIRECT_COMMAND_REPLY = 0x00;
 	public static byte SYSTEM_COMMAND_REPLY = 0x01;
 	public static byte REPLY_COMMAND = 0x02;
-	public static byte DIRECT_COMMAND_NOREPLY = (byte) 0x80; // Avoids ~100ms latency
-	public static byte SYSTEM_COMMAND_NOREPLY = (byte) 0x81; // Avoids ~100ms latency
+	public static byte DIRECT_COMMAND_NOREPLY = (byte) 0x80; // Avoids ~100ms
+																// latency
+	public static byte SYSTEM_COMMAND_NOREPLY = (byte) 0x81; // Avoids ~100ms
+																// latency
 
 	// Direct Commands
 	public static final byte START_PROGRAM = 0x00;
@@ -114,7 +117,7 @@ public class LCPMessage {
 	public static final byte NXJ_FIND_NEXT = (byte) 0xB7;
 	public static final byte NXJ_PACKET_MODE = (byte) 0xff;
 
-	// Error codes    
+	// Error codes
 	public static final byte MAILBOX_EMPTY = (byte) 0x40;
 	public static final byte FILE_NOT_FOUND = (byte) 0x86;
 	public static final byte INSUFFICIENT_MEMORY = (byte) 0xFB;
@@ -123,12 +126,14 @@ public class LCPMessage {
 	public static final byte NOT_IMPLEMENTED = (byte) 0xFD;
 
 	// Firmware codes
-	public static byte[] FIRMWARE_VERSION_LEJOSMINDDROID = { 0x6c, 0x4d, 0x49, 0x64 };
+	public static byte[] FIRMWARE_VERSION_LEJOSMINDDROID = { 0x6c, 0x4d, 0x49,
+			0x64 };
 
 	private static boolean requestConfirmFromDevice = false;
 
 	public static void enableRequestConfirmFromDevice() {
-		//this request will only return a small error message, not the actually executed command!
+		// this request will only return a small error message, not the actually
+		// executed command!
 		requestConfirmFromDevice = true;
 	}
 
@@ -217,4 +222,32 @@ public class LCPMessage {
 
 		return message;
 	}
+
+	public static byte[] setSensorInputMode(int sensor) {
+		byte[] message = new byte[5]; // SETINPUTMODE
+
+		if (requestConfirmFromDevice) {
+			message[0] = DIRECT_COMMAND_REPLY;
+		} else {
+			message[0] = DIRECT_COMMAND_NOREPLY;
+		}
+
+		message[1] = 5;
+		message[2] = (byte) sensor;
+		message[3] = 5;
+		message[4] = 0;
+
+		return message;
+	}
+
+	public static byte[] getSensorInputValues(int sensor) {
+
+		byte[] message = new byte[3]; // GETINPUTVALUES
+		message[0] = 0;
+		message[1] = 7;
+		message[2] = (byte) sensor;
+
+		return message;
+	}
+
 }

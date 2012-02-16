@@ -278,20 +278,23 @@
     <string name="no_paired_nxt">No paired NXT found</string>
     <string name="none_found">No unpaired devices found</string>
     <string name="none_paired">No paired devices found</string>
+	
+	<!-- Lego Mindstorms Strings -->
+	<string name="brick_motor_action">NXT move motor</string>
+	<string name="motor">motor</string>
+	<string name="motor_duration">Duration</string>
+	<string name="motor_speed">Speed</string>
+	<string name="brick_motor_turn_angle">NXT turn motor</string>
+	<string name="motor_angle">Angle</string>
+	<string name="motor_stop">NXT stop motor</string>
+	<string name="nxt_play_tone">NXT play tone</string>
+	<string name="nxt_sensor">NXT sensor</string>
+	<string name="nxt_sensor_number">Sensor No.</string>
+	<string name="tone_duration">Duration</string>
+	<string name="nxt_tone_frequency">Frequency</string>
+	<string name="nxt_tone_hundred_hz">x100Hz</string>
+	<string name="number_to_small">Value is too small!</string>
+	<string name="number_to_big">Value is too big!</string>
 
-    <!-- Lego Mindstorms Strings -->
-    <string name="brick_motor_action">NXT move motor</string>
-    <string name="motor">motor</string>
-    <string name="motor_duration">Duration</string>
-    <string name="motor_speed">Speed</string>
-    <string name="brick_motor_turn_angle">NXT turn motor</string>
-    <string name="motor_angle">Angle</string>
-    <string name="motor_stop">NXT stop motor</string>
-    <string name="nxt_play_tone">NXT play tone</string>
-    <string name="tone_duration">Duration</string>
-    <string name="nxt_tone_frequency">Frequency</string>
-    <string name="nxt_tone_hundred_hz">x100Hz</string>
-    <string name="number_to_small">Value is too small!</string>
-    <string name="number_to_big">Value is too big!</string>
 		
 </resources>

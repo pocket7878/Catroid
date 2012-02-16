@@ -67,6 +67,7 @@ import at.tugraz.ist.catroid.content.bricks.NXTMotorActionBrick;
 import at.tugraz.ist.catroid.content.bricks.NXTMotorStopBrick;
 import at.tugraz.ist.catroid.content.bricks.NXTMotorTurnAngleBrick;
 import at.tugraz.ist.catroid.content.bricks.NXTPlayToneBrick;
+import at.tugraz.ist.catroid.content.bricks.NXTSensorBrick;
 import at.tugraz.ist.catroid.content.bricks.NextCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.NoteBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
@@ -171,6 +172,7 @@ public class AddBrickDialog extends Dialog {
 		legoNXTBrickList.add(new NXTMotorStopBrick(sprite, NXTMotorStopBrick.Motor.MOTOR_A));
 		legoNXTBrickList.add(new NXTMotorActionBrick(sprite, NXTMotorActionBrick.Motor.MOTOR_A, 100));
 		legoNXTBrickList.add(new NXTPlayToneBrick(sprite, 200, 1000));
+		legoNXTBrickList.add(new NXTSensorBrick(sprite, 0));
 		brickMap.put(context.getString(R.string.category_lego_nxt), legoNXTBrickList);
 
 		return brickMap;

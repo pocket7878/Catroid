@@ -53,10 +53,10 @@ import android.os.Message;
 import android.util.Log;
 
 /**
- * This class is for talking to a LEGO NXT robot via bluetooth.
- * The communciation to the robot is done via LCP (LEGO communication protocol).
- * Objects of this class can either be run as standalone thread or controlled
- * by the owners, i.e. calling the send/recive methods by themselves.
+ * This class is for talking to a LEGO NXT robot via bluetooth. The
+ * communciation to the robot is done via LCP (LEGO communication protocol).
+ * Objects of this class can either be run as standalone thread or controlled by
+ * the owners, i.e. calling the send/recive methods by themselves.
  */
 public abstract class LegoNXTCommunicator extends Thread {
 	public static final int MOTOR_A = 0;
@@ -91,6 +91,7 @@ public abstract class LegoNXTCommunicator extends Thread {
 	public static final int GENERAL_COMMAND = 100;
 	public static final int MOTOR_COMMAND = 102;
 	public static final int TONE_COMMAND = 101;
+	public static final int TEST_COMMAND = 201;
 
 	protected boolean connected = false;
 	protected Handler uiHandler;
@@ -130,8 +131,8 @@ public abstract class LegoNXTCommunicator extends Thread {
 	}
 
 	/**
-	 * Creates the connection, waits for incoming messages and dispatches them. The thread will be terminated
-	 * on closing of the connection.
+	 * Creates the connection, waits for incoming messages and dispatches them.
+	 * The thread will be terminated on closing of the connection.
 	 */
 	@Override
 	public abstract void run();
@@ -141,15 +142,15 @@ public abstract class LegoNXTCommunicator extends Thread {
 	 * 
 	 * @see <a href=
 	 *      "http://lejos.sourceforge.net/forum/viewtopic.php?t=1991&highlight=android"
-	 *      />
-	 *      On error the method either sends a message to it's owner or creates an exception in the
-	 *      case of no message handler.
+	 *      /> On error the method either sends a message to it's owner or
+	 *      creates an exception in the case of no message handler.
 	 */
 	public abstract void createNXTconnection() throws IOException;
 
 	/**
-	 * Closes the bluetooth connection. On error the method either sends a message
-	 * to it's owner or creates an exception in the case of no message handler.
+	 * Closes the bluetooth connection. On error the method either sends a
+	 * message to it's owner or creates an exception in the case of no message
+	 * handler.
 	 */
 	public abstract void destroyNXTconnection() throws IOException;
 
@@ -159,7 +160,7 @@ public abstract class LegoNXTCommunicator extends Thread {
 	 * @param message
 	 *            , the message as a byte array
 	 */
-	public abstract void sendMessage(byte[] message) throws IOException;
+	public abstract void sendMessageToDevice(byte[] message) throws IOException;
 
 	/**
 	 * Receives a message on the opened InputStream
@@ -167,13 +168,13 @@ public abstract class LegoNXTCommunicator extends Thread {
 	 * @return the message
 	 */
 
-	public abstract byte[] receiveMessage() throws IOException;
+	public abstract byte[] receiveMessageFromDevice() throws IOException;
 
 	public abstract void stopAllNXTMovement();
 
 	/**
-	 * Sends a message on the opened OutputStream. In case of
-	 * an error the state is sent to the handler.
+	 * Sends a message on the opened OutputStream. In case of an error the state
+	 * is sent to the handler.
 	 * 
 	 * @param message
 	 *            , the message as a byte array
@@ -188,7 +189,7 @@ public abstract class LegoNXTCommunicator extends Thread {
 	protected void sendMessageAndState(byte[] message) {
 
 		try {
-			sendMessage(message);
+			sendMessageToDevice(message);
 		} catch (IOException e) {
 			sendState(STATE_SENDERROR);
 		}
@@ -209,32 +210,34 @@ public abstract class LegoNXTCommunicator extends Thread {
 
 	protected void dispatchMessage(byte[] message) {
 
-		//Log.i("bt", "Received response, length: " + message.length);
-		//		for (int i = 0; i < message.length; i++) {
-		//			Log.i("bt", " " + (0x000000FF & message[i]));
-		//		}
+		// Log.i("bt", "Received response, length: " + message.length);
+		// for (int i = 0; i < message.length; i++) {
+		// Log.i("bt", " " + (0x000000FF & message[i]));
+		// }
 
 		switch (message[1]) {
 
-			case LCPMessage.SET_OUTPUT_STATE:
-				//sendState(RECEIVED_MESSAGE, message);
-				analyzeMessageSetOutputState(message);
-				break;
+		case LCPMessage.SET_OUTPUT_STATE:
+			// sendState(RECEIVED_MESSAGE, message);
+			analyzeMessageSetOutputState(message);
+			break;
 
-			case LCPMessage.GET_OUTPUT_STATE:
-				//sendState(RECEIVED_MESSAGE, message);
-				receivedMessages.add(message);
-				analyzeMessageGetOutputState(message);
-				break;
-			default:
-				Log.i("bt", "Unknown Message received by LegoNXTCommunicator over bluetooth " + message.length);
-				receivedMessages.add(message);
-				break;
+		case LCPMessage.GET_OUTPUT_STATE:
+			// sendState(RECEIVED_MESSAGE, message);
+			receivedMessages.add(message);
+			analyzeMessageGetOutputState(message);
+			break;
+		default:
+			Log.i("bt",
+					"Unknown Message received by LegoNXTCommunicator over bluetooth "
+							+ message.length);
+			receivedMessages.add(message);
+			break;
 		}
 	}
 
 	protected void analyzeMessageSetOutputState(byte[] message) {
-		//change command byte0 to DIRECT_COMMAND_REPLY to use!
+		// change command byte0 to DIRECT_COMMAND_REPLY to use!
 		Log.i("bt", "Direct command executed: " + (int) message[0]);
 		Log.i("bt", "executed Command was: " + (int) message[1]);
 		Log.i("bt", "Status: " + (int) message[2]);
@@ -243,29 +246,28 @@ public abstract class LegoNXTCommunicator extends Thread {
 	}
 
 	protected void analyzeMessageGetOutputState(byte[] message) {
-		//See Lego NXT Docu or LCPMessage class for info on numbers!
+		// See Lego NXT Docu or LCPMessage class for info on numbers!
 		Log.i("bt", "Message Length: " + message.length);
 		Log.i("bt", "GetOutputState executed: " + (int) message[0]);
-		//		Log.i("bt", "----- executed Command:  " + (int) message[1]);
-		//		Log.i("bt", "Status: " + (int) message[2]);
-		//		Log.i("bt", "Used Motor: " + (int) message[3]);
-		//		Log.i("bt", "Used Power: " + (int) message[4]);
-		//Log.i("bt", "Mode: " + (int) message[5]);
-		//Log.i("bt", "Regulation: " + (int) message[6]);
-		//Log.i("bt", "Turn Ratio: " + (int) message[7]);
-		//Log.i("bt", "Run State: " + (int) message[8]);
+		// Log.i("bt", "----- executed Command:  " + (int) message[1]);
+		// Log.i("bt", "Status: " + (int) message[2]);
+		// Log.i("bt", "Used Motor: " + (int) message[3]);
+		// Log.i("bt", "Used Power: " + (int) message[4]);
+		// Log.i("bt", "Mode: " + (int) message[5]);
+		// Log.i("bt", "Regulation: " + (int) message[6]);
+		// Log.i("bt", "Turn Ratio: " + (int) message[7]);
+		// Log.i("bt", "Run State: " + (int) message[8]);
 
-		//		int tacholimit = (0x000000FF & message[9]); //unsigned types would be too smart for java, sorry no chance mate!
-		//		tacholimit += ((0x000000FF & message[10]) << 8);
-		//		tacholimit += ((0x000000FF & message[11]) << 16);
-		//		tacholimit += ((0x000000FF & message[12]) << 24);
+		// int tacholimit = (0x000000FF & message[9]); //unsigned types would be
+		// too smart for java, sorry no chance mate!
+		// tacholimit += ((0x000000FF & message[10]) << 8);
+		// tacholimit += ((0x000000FF & message[11]) << 16);
+		// tacholimit += ((0x000000FF & message[12]) << 24);
 
-		//Log.i("bt", "Tacholimit " + tacholimit);
+		// Log.i("bt", "Tacholimit " + tacholimit);
 		/*
-		 * int tachocount = message[13];
-		 * tachocount += (message[14] << 8);
-		 * tachocount += (message[15] << 16);
-		 * tachocount += (message[16] << 24);
+		 * int tachocount = message[13]; tachocount += (message[14] << 8);
+		 * tachocount += (message[15] << 16); tachocount += (message[16] << 24);
 		 * 
 		 * Log.i("bt", "Tachocount " + tachocount);
 		 */
@@ -295,12 +297,24 @@ public abstract class LegoNXTCommunicator extends Thread {
 	protected synchronized void moveMotor(int motor, int speed, int end) {
 		byte[] message = LCPMessage.getMotorMessage(motor, speed, end);
 		sendMessageAndState(message);
-		//Log.i("bto", "Motor " + motor + " speed " + speed);
+		// Log.i("bto", "Motor " + motor + " speed " + speed);
 
 		if (requestConfirmFromDevice) {
 			byte[] test = LCPMessage.getOutputStateMessage(motor);
 			sendMessageAndState(test);
 		}
+	}
+
+	protected synchronized void getSensorData(int sensor) {
+		byte[] message = LCPMessage.getSensorInputValues(sensor);
+		sendMessageAndState(message);
+
+	}
+
+	protected synchronized void setSensorMode(int sensor) {
+		byte[] message = LCPMessage.setSensorInputMode(sensor);
+		sendMessageAndState(message);
+
 	}
 
 	// receive messages from the UI
@@ -309,21 +323,28 @@ public abstract class LegoNXTCommunicator extends Thread {
 		public void handleMessage(Message myMessage) {
 
 			switch (myMessage.what) {
-				case TONE_COMMAND:
-					doBeep(myMessage.getData().getInt("frequency"), myMessage.getData().getInt("duration"));
-					break;
-				case DISCONNECT:
-					break;
-				default:
-					int motor;
-					int speed;
-					int angle;
-					motor = myMessage.getData().getInt("motor");
-					speed = myMessage.getData().getInt("speed");
-					angle = myMessage.getData().getInt("angle");
-					moveMotor(motor, speed, angle);
+			case TONE_COMMAND:
+				doBeep(myMessage.getData().getInt("frequency"), myMessage
+						.getData().getInt("duration"));
+				break;
+			case DISCONNECT:
+				break;
+			case TEST_COMMAND:
+				// For testing sensor feedback...
+				int sensor = myMessage.getData().getInt("sensor");
+				setSensorMode(sensor);
+				getSensorData(sensor);
+				break;
+			default:
+				int motor;
+				int speed;
+				int angle;
+				motor = myMessage.getData().getInt("motor");
+				speed = myMessage.getData().getInt("speed");
+				angle = myMessage.getData().getInt("angle");
+				moveMotor(motor, speed, angle);
 
-					break;
+				break;
 
 			}
 		}
