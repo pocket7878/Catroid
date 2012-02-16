@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
+import android.test.AssertionFailedError;
 import android.widget.CheckBox;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
@@ -57,25 +58,13 @@ public class SettingsUITest extends
 	}
 
 	public void testDroneSettings() {
-		String currentProject = getActivity().getString(
-				R.string.current_project_button);
-		String background = getActivity().getString(R.string.background);
-		String settings = getActivity().getString(R.string.settings);
-		String prefMsBricks = getActivity().getString(
-				R.string.pref_enable_ms_bricks);
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
-
-		// disable mindstorm bricks, if enabled at start
-		if (prefs.getBoolean("setting_mindstorm_bricks", false)) {
-			solo.clickOnText(settings);
-			solo.clickOnText(prefMsBricks);
-			solo.goBack();
-		}
 
 		solo.clickOnText("Settings");
 		solo.sleep(2000);
 
+		/** TODO check Drone shared preferences*/
 		if (prefs.getBoolean("setting_mindstorm_bricks", false)) {
 		}
 
@@ -96,6 +85,9 @@ public class SettingsUITest extends
 			droneInstance = droneClass.getMethod("getInstance", (Class[]) null)
 					.invoke(null, (Object[]) null);
 
+			if ( droneInstance == null){
+				throw new AssertionFailedError();
+			}
 			dcfInstalled = true;
 
 		} catch (Exception e) {

@@ -26,22 +26,16 @@ package at.tugraz.ist.catroid.test.drone;
 import org.easymock.EasyMock;
 
 import android.test.ActivityInstrumentationTestCase2;
-import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.content.Script;
-import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 import at.tugraz.ist.catroid.plugin.Drone.IDrone;
-import at.tugraz.ist.catroid.plugin.Drone.bricks.*;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 
 import com.jayway.android.robotium.solo.Solo;
 
 public class TakeOfBrickTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
 	private Solo solo;
-	private Project project;
 	private static String projectName = "BrickTest";
 	IDrone droneMock;
 
@@ -51,12 +45,7 @@ public class TakeOfBrickTest extends ActivityInstrumentationTestCase2<MainMenuAc
 
 	@Override
 	public void setUp() throws Exception {
-		createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
-		ProjectManager manager = ProjectManager.getInstance();
-		manager.setProject(project);
-		
-		deleteTestProject();
 	}
 	
 	private void deleteTestProject(){
@@ -80,16 +69,15 @@ public class TakeOfBrickTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		super.tearDown();
 	}
 
-	public void testBroadcastBricks() {
+	public void testLiftoffAndLand() {
 		
 		solo.clickOnText("New Project");
 		
 		solo.enterText(0, projectName);
 		
-		solo.sendKey(solo.ENTER);
+		solo.sendKey(Solo.ENTER);
 		
 		solo.clickOnText("Catroid");
-		
 		
 		solo.sleep(1000);
 		
@@ -110,88 +98,24 @@ public class TakeOfBrickTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		
 		EasyMock.expect(droneMock.getFlyingMode()).andReturn(0);
 		EasyMock.expect(droneMock.connect()).andReturn(true);
+		
+		/** expected calls */
 		droneMock.takeoff();
 		droneMock.land();
+		droneMock.emergencyLand();
+		droneMock.disconnect();
 		
 		EasyMock.replay(droneMock);	
 		
 		solo.clickOnText("Start");
-		solo.sleep(5000);
+		solo.sleep(4000);
 
-		EasyMock.verify(droneMock);
+		solo.goBack();
+		solo.sleep(1000);
+		solo.goBack();
 		
-//		ArrayList<Brick> projectBrickList = project.getSpriteList().get(0).getScript(0).getBrickList();
-//		assertEquals("Incorrect number of bricks.", 2, projectBrickList.size());
-//
-//		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getItem(adapter
-//				.getScriptId(groupCount - 1) + 1));
-//
-//		String testString = "test";
-//		String testString2 = "test2";
-//		String testString3 = "test3";
-//
-//		solo.clickOnButton(0);
-//		solo.enterText(0, testString);
-//		solo.sleep(600);
-//
-//		solo.sendKey(Solo.ENTER);
-//		solo.sendKey(Solo.ENTER);
-//
-//		solo.sleep(500);
-//		assertEquals("Wrong selection", testString, (String) solo.getCurrentSpinners().get(0).getSelectedItem());
-//		assertNotSame("Wrong selection", testString, solo.getCurrentSpinners().get(1).getSelectedItem());
-//
-//		solo.pressSpinnerItem(1, 2);
-//		assertEquals("Wrong selection", testString, (String) solo.getCurrentSpinners().get(1).getSelectedItem());
-//
-//		solo.pressSpinnerItem(2, 2);
-//		assertEquals("Wrong selection", testString, (String) solo.getCurrentSpinners().get(2).getSelectedItem());
-//
-//		solo.clickOnButton(1);
-//		solo.enterText(0, testString2);
-//		solo.sleep(600);
-//
-//		solo.sendKey(Solo.ENTER);
-//		solo.sendKey(Solo.ENTER);
-//
-//		solo.sleep(500);
-//
-//		assertEquals("Wrong selection", testString, (String) solo.getCurrentSpinners().get(0).getSelectedItem());
-//		assertEquals("Wrong selection", testString2, (String) solo.getCurrentSpinners().get(1).getSelectedItem());
-//		assertEquals("Wrong selection", testString, (String) solo.getCurrentSpinners().get(2).getSelectedItem());
-//
-//		solo.clickOnButton(2);
-//		solo.enterText(0, testString3);
-//		solo.sleep(600);
-//
-//		solo.sendKey(Solo.ENTER);
-//		solo.sendKey(Solo.ENTER);
-//
-//		solo.sleep(500);
-//
-//		assertEquals("Wrong selection", testString, (String) solo.getCurrentSpinners().get(0).getSelectedItem());
-//		assertEquals("Wrong selection", testString2, (String) solo.getCurrentSpinners().get(1).getSelectedItem());
-//		assertEquals("Wrong selection", testString3, (String) solo.getCurrentSpinners().get(2).getSelectedItem());
-//
-//		solo.pressSpinnerItem(1, 4);
-//		assertEquals("Wrong selection", testString3, (String) solo.getCurrentSpinners().get(1).getSelectedItem());
-
-	}
-
-	private void createProject() {
-		project = new Project(null, "testProject");
-		Sprite sprite = new Sprite("cat");
-		Script script = new StartScript(sprite);
-		DroneLandBrick broadcastBrick = new DroneLandBrick(sprite);
-		DroneTakeOffBrick takeOffBrick = new DroneTakeOffBrick(sprite);
-		script.addBrick(broadcastBrick);
-		script.addBrick(takeOffBrick);
-
-		sprite.addScript(script);
-		project.addSprite(sprite);
-
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
+		EasyMock.verify(droneMock);
+		solo.sleep(1000);
+		
 	}
 }
