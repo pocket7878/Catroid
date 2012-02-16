@@ -55,22 +55,18 @@ public class NXTSensorBrick implements Brick, OnClickListener {
 		this.sensorTest = sensorTest;
 	}
 
-	@Override
 	public int getRequiredResources() {
 		return BLUETOOTH_LEGO_NXT;
 	}
 
-	@Override
 	public void execute() {
 		LegoNXT.sendBTCTestMessage(sensorTest);
 	}
 
-	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
-	@Override
 	public View getPrototypeView(Context context) {
 		View view = View.inflate(context, R.layout.brick_nxt_sensor, null);
 		return view;
@@ -81,7 +77,6 @@ public class NXTSensorBrick implements Brick, OnClickListener {
 		return new NXTSensorBrick(getSprite(), sensorTest);
 	}
 
-	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		View brickView = View.inflate(context, R.layout.brick_nxt_sensor, null);
 
@@ -101,7 +96,6 @@ public class NXTSensorBrick implements Brick, OnClickListener {
 
 	}
 
-	@Override
 	public void onClick(final View view) {
 		final Context context = view.getContext();
 
@@ -109,50 +103,38 @@ public class NXTSensorBrick implements Brick, OnClickListener {
 		final EditText input = new EditText(context);
 		if (view.getId() == R.id.nxt_sensor_edit_text) {
 			input.setText(String.valueOf(sensorTest));
-			input.setInputType(InputType.TYPE_CLASS_NUMBER
-					| InputType.TYPE_NUMBER_FLAG_DECIMAL);
+			input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 		}
 		input.setSelectAllOnFocus(true);
 		dialog.setView(input);
 		dialog.setOnCancelListener((OnCancelListener) context);
-		dialog.setPositiveButton(context.getString(R.string.ok),
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						try {
-							int newVal = (Integer.parseInt(input.getText()
-									.toString()));
-							if (newVal > MAX_SENSOR) {
-								newVal = MAX_SENSOR;
-								Toast.makeText(context, R.string.number_to_big,
-										Toast.LENGTH_SHORT).show();
-							} else if (newVal < MIN_SENSOR) {
-								newVal = MIN_SENSOR;
-								Toast.makeText(context,
-										R.string.number_to_small,
-										Toast.LENGTH_SHORT).show();
-							}
-							sensorTest = newVal;
+		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				try {
+					int newVal = (Integer.parseInt(input.getText().toString()));
+					if (newVal > MAX_SENSOR) {
+						newVal = MAX_SENSOR;
+						Toast.makeText(context, R.string.number_to_big, Toast.LENGTH_SHORT).show();
+					} else if (newVal < MIN_SENSOR) {
+						newVal = MIN_SENSOR;
+						Toast.makeText(context, R.string.number_to_small, Toast.LENGTH_SHORT).show();
+					}
+					sensorTest = newVal;
 
-						} catch (NumberFormatException exception) {
-							Toast.makeText(context,
-									R.string.error_no_number_entered,
-									Toast.LENGTH_SHORT);
-						}
-						dialog.cancel();
-					}
-				});
-		dialog.setNeutralButton(context.getString(R.string.cancel_button),
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				});
+				} catch (NumberFormatException exception) {
+					Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT);
+				}
+				dialog.cancel();
+			}
+		});
+		dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+			}
+		});
 
 		AlertDialog finishedDialog = dialog.create();
-		finishedDialog.setOnShowListener(Utils.getBrickDialogOnClickListener(
-				context, input));
+		finishedDialog.setOnShowListener(Utils.getBrickDialogOnClickListener(context, input));
 
 		finishedDialog.show();
 	}

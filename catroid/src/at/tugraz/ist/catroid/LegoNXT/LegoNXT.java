@@ -68,6 +68,7 @@ public class LegoNXT implements BTConnectable {
 	private static Handler btcHandler;
 	private Handler recieverHandler;
 	private Activity activity;
+	private LegoNXTSensorPoller poller;
 
 	public LegoNXT(Activity activity, Handler recieverHandler) {
 		this.activity = activity;
@@ -83,12 +84,16 @@ public class LegoNXT implements BTConnectable {
 			}
 		}
 
-		myNXTCommunicator = new LegoNXTBtCommunicator(this, recieverHandler,
-				BluetoothAdapter.getDefaultAdapter(), activity.getResources());
+		myNXTCommunicator = new LegoNXTBtCommunicator(this, recieverHandler, BluetoothAdapter.getDefaultAdapter(),
+				activity.getResources());
 		btcHandler = myNXTCommunicator.getHandler();
 
 		((LegoNXTBtCommunicator) myNXTCommunicator).setMACAddress(mac_address);
 		myNXTCommunicator.start();
+
+		poller = new LegoNXTSensorPoller();
+		poller.addSensor(new LegoNXTSensor(0, 0));
+		poller.start();
 	}
 
 	/**
@@ -100,6 +105,7 @@ public class LegoNXT implements BTConnectable {
 		if (myNXTCommunicator != null) {
 			// sendBTCMotorMessage(LegoNXTBtCommunicator.NO_DELAY,
 			// LegoNXTBtCommunicator.DISCONNECT, 0, 0);
+			poller.stopPolling();
 			try {
 				myNXTCommunicator.destroyNXTconnection();
 			} catch (IOException e) { // TODO Auto-generated method stub
@@ -127,8 +133,7 @@ public class LegoNXT implements BTConnectable {
 
 	}
 
-	public static synchronized void sendBTCPlayToneMessage(int frequency,
-			int duration) {
+	public static synchronized void sendBTCPlayToneMessage(int frequency, int duration) {
 		Bundle myBundle = new Bundle();
 		myBundle.putInt("frequency", frequency);
 		myBundle.putInt("duration", duration);
@@ -141,8 +146,7 @@ public class LegoNXT implements BTConnectable {
 
 	}
 
-	public static synchronized void sendBTCMotorMessage(int delay, int motor,
-			int speed, int angle) {
+	public static synchronized void sendBTCMotorMessage(int delay, int motor, int speed, int angle) {
 		Bundle myBundle = new Bundle();
 		myBundle.putInt("motor", motor);
 		myBundle.putInt("speed", speed);
@@ -167,15 +171,13 @@ public class LegoNXT implements BTConnectable {
 		return btcHandler;
 	}
 
-	@Override
 	public boolean isPairing() {
 		// TODO Auto-generated method stub
 		return pairing;
 	}
 
 	public void connectLegoNXT() {
-		Intent serverIntent = new Intent(this.activity,
-				DeviceListActivity.class);
+		Intent serverIntent = new Intent(this.activity, DeviceListActivity.class);
 		activity.startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
 
 	}

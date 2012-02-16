@@ -66,8 +66,7 @@ import at.tugraz.ist.catroid.bluetooth.BTConnectable;
  */
 public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 
-	private static final UUID SERIAL_PORT_SERVICE_CLASS_UUID = UUID
-			.fromString("00001101-0000-1000-8000-00805F9B34FB");
+	private static final UUID SERIAL_PORT_SERVICE_CLASS_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 	// this is the only OUI registered by LEGO, see
 	// http://standards.ieee.org/regauth/oui/index.shtml
 
@@ -79,8 +78,8 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 	private String mMACaddress;
 	private BTConnectable myOwner;
 
-	public LegoNXTBtCommunicator(BTConnectable myOwner, Handler uiHandler,
-			BluetoothAdapter btAdapter, Resources resources) {
+	public LegoNXTBtCommunicator(BTConnectable myOwner, Handler uiHandler, BluetoothAdapter btAdapter,
+			Resources resources) {
 		super(uiHandler, resources);
 
 		this.myOwner = myOwner;
@@ -106,15 +105,12 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 		while (connected) {
 			try {
 				returnMessage = receiveMessageFromDevice();
-
+				//TODO TEST OUTPUT - REMOVE
 				if (returnMessage.length > 5) {
-					Log.i("lego", "-" + returnMessage[0] + "-"
-							+ returnMessage[1] + "-" + returnMessage[2] + "-"
-							+ returnMessage[3] + "-" + returnMessage[8] + ""
-							+ returnMessage[9]);
+					Log.i("lego", "-" + returnMessage[0] + "-" + returnMessage[1] + "-" + returnMessage[2] + "-"
+							+ returnMessage[3] + "-" + returnMessage[8] + "" + returnMessage[9]);
 				} else {
-					Log.i("lego", "-" + returnMessage[0] + "-"
-							+ returnMessage[1] + "");
+					Log.i("lego", "-" + returnMessage[0] + "-" + returnMessage[1] + "");
 				}
 
 				if ((returnMessage.length >= 2)
@@ -156,8 +152,7 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 				}
 			}
 
-			nxtBTSocketTemporary = nxtDevice
-					.createRfcommSocketToServiceRecord(SERIAL_PORT_SERVICE_CLASS_UUID);
+			nxtBTSocketTemporary = nxtDevice.createRfcommSocketToServiceRecord(SERIAL_PORT_SERVICE_CLASS_UUID);
 			try {
 
 				nxtBTSocketTemporary.connect();
@@ -165,8 +160,7 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 			} catch (IOException e) {
 				if (myOwner.isPairing()) {
 					if (uiHandler != null) {
-						sendToast(mResources
-								.getString(R.string.pairing_message));
+						sendToast(mResources.getString(R.string.pairing_message));
 						sendState(STATE_CONNECTERROR_PAIRING);
 					} else {
 						throw e;
@@ -178,10 +172,8 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 				// HTC desire, credits to Michael Biermann
 				try {
 
-					Method mMethod = nxtDevice.getClass().getMethod(
-							"createRfcommSocket", new Class[] { int.class });
-					nxtBTSocketTemporary = (BluetoothSocket) mMethod.invoke(
-							nxtDevice, Integer.valueOf(1));
+					Method mMethod = nxtDevice.getClass().getMethod("createRfcommSocket", new Class[] { int.class });
+					nxtBTSocketTemporary = (BluetoothSocket) mMethod.invoke(nxtDevice, Integer.valueOf(1));
 					nxtBTSocketTemporary.connect();
 				} catch (Exception e1) {
 					if (uiHandler == null) {
@@ -246,9 +238,9 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 
 	@Override
 	public void stopAllNXTMovement() {
-		myHandler.removeMessages(0);
-		myHandler.removeMessages(1);
-		myHandler.removeMessages(2);
+		btcHandler.removeMessages(0);
+		btcHandler.removeMessages(1);
+		btcHandler.removeMessages(2);
 
 		moveMotor(0, 0, 0);
 		moveMotor(1, 0, 0);

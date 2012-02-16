@@ -98,6 +98,7 @@ public abstract class LegoNXTCommunicator extends Thread {
 	private static boolean requestConfirmFromDevice = false;
 
 	protected static ArrayList<byte[]> receivedMessages = new ArrayList<byte[]>();
+	protected static ArrayList<byte[]> receivedSensorMessages = new ArrayList<byte[]>();
 	protected byte[] returnMessage;
 
 	protected Resources mResources;
@@ -107,8 +108,16 @@ public abstract class LegoNXTCommunicator extends Thread {
 		this.mResources = resources;
 	}
 
-	public static ArrayList<byte[]> getReceivedMessageList() {
+	public static ArrayList<byte[]> getReceivedMessageList() { //for testing!
 		return receivedMessages;
+	}
+
+	public static ArrayList<byte[]> getReceivedSensorMessageList() {
+		return receivedSensorMessages;
+	}
+
+	public static void clearSensorMessageList() {
+		receivedSensorMessages.clear();
 	}
 
 	public static void enableRequestConfirmFromDevice(boolean cfd) {
@@ -116,7 +125,7 @@ public abstract class LegoNXTCommunicator extends Thread {
 	}
 
 	public Handler getHandler() {
-		return myHandler;
+		return btcHandler;
 	}
 
 	public byte[] getReturnMessage() {
@@ -203,7 +212,7 @@ public abstract class LegoNXTCommunicator extends Thread {
 	}
 
 	protected void sendBundle(Bundle myBundle) {
-		Message myMessage = myHandler.obtainMessage();
+		Message myMessage = btcHandler.obtainMessage();
 		myMessage.setData(myBundle);
 		uiHandler.sendMessage(myMessage);
 	}
@@ -217,22 +226,25 @@ public abstract class LegoNXTCommunicator extends Thread {
 
 		switch (message[1]) {
 
-		case LCPMessage.SET_OUTPUT_STATE:
-			// sendState(RECEIVED_MESSAGE, message);
-			analyzeMessageSetOutputState(message);
-			break;
+			case LCPMessage.SET_OUTPUT_STATE:
+				// sendState(RECEIVED_MESSAGE, message);
+				analyzeMessageSetOutputState(message);
+				break;
 
-		case LCPMessage.GET_OUTPUT_STATE:
-			// sendState(RECEIVED_MESSAGE, message);
-			receivedMessages.add(message);
-			analyzeMessageGetOutputState(message);
-			break;
-		default:
-			Log.i("bt",
-					"Unknown Message received by LegoNXTCommunicator over bluetooth "
-							+ message.length);
-			receivedMessages.add(message);
-			break;
+			case LCPMessage.GET_OUTPUT_STATE:
+				// sendState(RECEIVED_MESSAGE, message);
+				receivedMessages.add(message);
+				analyzeMessageGetOutputState(message);
+				break;
+			case LCPMessage.GET_INPUT_VALUES:
+				//receivedMessages.add(message);
+				receivedSensorMessages.add(message);
+				break;
+
+			default:
+				Log.i("bt", "Unknown Message received by LegoNXTCommunicator over bluetooth " + message.length);
+				receivedMessages.add(message);
+				break;
 		}
 	}
 
@@ -318,33 +330,32 @@ public abstract class LegoNXTCommunicator extends Thread {
 	}
 
 	// receive messages from the UI
-	final Handler myHandler = new Handler() {
+	final Handler btcHandler = new Handler() {
 		@Override
 		public void handleMessage(Message myMessage) {
 
 			switch (myMessage.what) {
-			case TONE_COMMAND:
-				doBeep(myMessage.getData().getInt("frequency"), myMessage
-						.getData().getInt("duration"));
-				break;
-			case DISCONNECT:
-				break;
-			case TEST_COMMAND:
-				// For testing sensor feedback...
-				int sensor = myMessage.getData().getInt("sensor");
-				setSensorMode(sensor);
-				getSensorData(sensor);
-				break;
-			default:
-				int motor;
-				int speed;
-				int angle;
-				motor = myMessage.getData().getInt("motor");
-				speed = myMessage.getData().getInt("speed");
-				angle = myMessage.getData().getInt("angle");
-				moveMotor(motor, speed, angle);
+				case TONE_COMMAND:
+					doBeep(myMessage.getData().getInt("frequency"), myMessage.getData().getInt("duration"));
+					break;
+				case DISCONNECT:
+					break;
+				case TEST_COMMAND:
+					// For testing sensor feedback...
+					int sensor = myMessage.getData().getInt("sensor");
+					setSensorMode(sensor);
+					getSensorData(sensor);
+					break;
+				default:
+					int motor;
+					int speed;
+					int angle;
+					motor = myMessage.getData().getInt("motor");
+					speed = myMessage.getData().getInt("speed");
+					angle = myMessage.getData().getInt("angle");
+					moveMotor(motor, speed, angle);
 
-				break;
+					break;
 
 			}
 		}
