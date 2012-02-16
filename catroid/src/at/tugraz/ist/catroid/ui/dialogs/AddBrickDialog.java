@@ -90,8 +90,6 @@ import at.tugraz.ist.catroid.content.bricks.TurnRightBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
 import at.tugraz.ist.catroid.content.bricks.WhenBrick;
 import at.tugraz.ist.catroid.content.bricks.WhenStartedBrick;
-import at.tugraz.ist.catroid.ui.ScriptTabActivity;
-import at.tugraz.ist.catroid.ui.adapter.PrototypeBrickAdapter;
 import at.tugraz.ist.catroid.plugin.PluginManager;
 import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneChangeFlyingModeBrick;
 import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneConfigBrick;
@@ -106,6 +104,8 @@ import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopMoveBrick;
 import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoBrick;
 import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoRecorderBrick;
 import at.tugraz.ist.catroid.plugin.Drone.bricks.DroneTakeOffBrick;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid.ui.adapter.PrototypeBrickAdapter;
 
 public class AddBrickDialog extends Dialog {
 
