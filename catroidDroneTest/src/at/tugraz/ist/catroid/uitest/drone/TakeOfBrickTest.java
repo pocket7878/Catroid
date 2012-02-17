@@ -20,10 +20,9 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.tugraz.ist.catroid.test.drone;
+package at.tugraz.ist.catroid.uitest.drone;
 
-
-import org.easymock.EasyMock;
+import static org.easymock.EasyMock.*;
 
 import android.test.ActivityInstrumentationTestCase2;
 import at.tugraz.ist.catroid.content.Project;
@@ -34,7 +33,8 @@ import at.tugraz.ist.catroid.ui.MainMenuActivity;
 
 import com.jayway.android.robotium.solo.Solo;
 
-public class TakeOfBrickTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
+public class TakeOfBrickTest extends
+		ActivityInstrumentationTestCase2<MainMenuActivity> {
 	private Solo solo;
 	private static String projectName = "BrickTest";
 	IDrone droneMock;
@@ -47,13 +47,14 @@ public class TakeOfBrickTest extends ActivityInstrumentationTestCase2<MainMenuAc
 	public void setUp() throws Exception {
 		solo = new Solo(getInstrumentation(), getActivity());
 	}
-	
-	private void deleteTestProject(){
-		if ( StorageHandler.getInstance().projectExists(projectName)){
-			Project delete = StorageHandler.getInstance().loadProject(projectName);
+
+	private void deleteTestProject() {
+		if (StorageHandler.getInstance().projectExists(projectName)) {
+			Project delete = StorageHandler.getInstance().loadProject(
+					projectName);
 			StorageHandler.getInstance().deleteProject(delete);
 			delete = null;
-		}	
+		}
 	}
 
 	@Override
@@ -70,52 +71,52 @@ public class TakeOfBrickTest extends ActivityInstrumentationTestCase2<MainMenuAc
 	}
 
 	public void testLiftoffAndLand() {
-		
+
 		solo.clickOnText("New Project");
-		
+
 		solo.enterText(0, projectName);
-		
+
 		solo.sendKey(Solo.ENTER);
-		
+
 		solo.clickOnText("Catroid");
-		
+
 		solo.sleep(1000);
-		
+
 		solo.clickOnText("Add");
-		
+
 		solo.clickOnText("Drone");
-		
+
 		solo.clickOnText("take off");
-		
+
 		solo.clickOnText("Add");
 		solo.clickOnText("Drone");
 		solo.clickOnText("land");
-		
+
 		DroneHandler.getInstance().setWasAlreadyConnected();
-		droneMock = EasyMock.createMock(IDrone.class);
-		
+		droneMock = createMock(IDrone.class);
+
 		DroneHandler.getInstance().setIDrone(droneMock);
-		
-		EasyMock.expect(droneMock.getFlyingMode()).andReturn(0);
-		EasyMock.expect(droneMock.connect()).andReturn(true);
-		
+
+		expect(droneMock.getFlyingMode()).andReturn(0);
+		expect(droneMock.connect()).andReturn(true);
+
 		/** expected calls */
 		droneMock.takeoff();
 		droneMock.land();
 		droneMock.emergencyLand();
 		droneMock.disconnect();
-		
-		EasyMock.replay(droneMock);	
-		
+
+		replay(droneMock);
+
 		solo.clickOnText("Start");
 		solo.sleep(4000);
 
 		solo.goBack();
 		solo.sleep(1000);
 		solo.goBack();
-		
-		EasyMock.verify(droneMock);
+
+		verify(droneMock);
 		solo.sleep(1000);
-		
+
 	}
 }

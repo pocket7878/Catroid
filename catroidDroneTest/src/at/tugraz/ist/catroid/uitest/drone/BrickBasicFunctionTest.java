@@ -20,25 +20,20 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.tugraz.ist.catroid.test.drone;
+package at.tugraz.ist.catroid.uitest.drone;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.easymock.EasyMock;
+import static org.easymock.EasyMock.*;
 
-import android.content.Context;
 import android.test.InstrumentationTestCase;
 import android.util.Log;
-import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 import at.tugraz.ist.catroid.plugin.Drone.IDrone;
 import at.tugraz.ist.catroid.plugin.Drone.bricks.*;
-
-
-import static org.easymock.EasyMock.*;
 
 //import org.junit.*;
 
@@ -54,7 +49,7 @@ public class BrickBasicFunctionTest extends InstrumentationTestCase {
 
 	private void verifytest(Brick brick) {
 		Log.d(this.getName(), "verifytest()");
-		EasyMock.expectLastCall().times(1);
+		expectLastCall().times(1);
 		replay(idronemock);
 		brick.execute();
 		verify(idronemock);
@@ -63,7 +58,7 @@ public class BrickBasicFunctionTest extends InstrumentationTestCase {
 
 	private void createDroneMock() {
 		idronemock = null;
-		idronemock = EasyMock.createMock(IDrone.class);
+		idronemock = createMock(IDrone.class);
 		DroneHandler.getInstance().setIDrone(idronemock);
 	}
 
@@ -80,27 +75,31 @@ public class BrickBasicFunctionTest extends InstrumentationTestCase {
 	}
 
 	public void testDroneChangeFlyingModeBrick() {
-		//TODO change int
-		DroneChangeFlyingModeBrick brick = new DroneChangeFlyingModeBrick(null,1);
+		// TODO change int
+		DroneChangeFlyingModeBrick brick = new DroneChangeFlyingModeBrick(null,
+				1);
 		expect(idronemock.changeFlyingMode(1)).andReturn(true);
 		verifytest((Brick) brick);
 	}
 
 	public void testDroneConfigBrick() {
-		//TODO change int
-		DroneConfigBrick landbrick = new DroneConfigBrick(null, 0,0);
-		expect(idronemock.setConfiguration("AT*CONFIG=#SEQ#," + "\"control:altitude_max\",\"1000\"", true)).andReturn(true);
+		// TODO change int
+		DroneConfigBrick landbrick = new DroneConfigBrick(null, 0, 0);
+		expect(
+				idronemock.setConfiguration("AT*CONFIG=#SEQ#,"
+						+ "\"control:altitude_max\",\"1000\"", true))
+				.andReturn(true);
 		verifytest((Brick) landbrick);
 	}
 
 	public void testDroneLedAnimationBrick() {
-		DroneLedAnimationBrick brick = new DroneLedAnimationBrick(null,1,1,1);
+		DroneLedAnimationBrick brick = new DroneLedAnimationBrick(null, 1, 1, 1);
 		idronemock.playLedAnimation(1, 1, 1);
 		verifytest((Brick) brick);
 	}
 
 	public void testDroneMoveBrick() {
-		DroneLedAnimationBrick brick = new DroneLedAnimationBrick(null,1,1,1);
+		DroneLedAnimationBrick brick = new DroneLedAnimationBrick(null, 1, 1, 1);
 		idronemock.playLedAnimation(1, 1, 1);
 		verifytest((Brick) brick);
 	}
@@ -118,23 +117,26 @@ public class BrickBasicFunctionTest extends InstrumentationTestCase {
 	}
 
 	public void testDroneStartVideoRecorderBrick() {
-		//TODO Test correct Path
-		DroneStartVideoRecorderBrick brick = new DroneStartVideoRecorderBrick(null);
+		// TODO Test correct Path
+		DroneStartVideoRecorderBrick brick = new DroneStartVideoRecorderBrick(
+				null);
 		String path = Consts.DEFAULT_ROOT + "/" + "Standard Projekt"
-				+ "/video_" + new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date()) + ".mp4";
+				+ "/video_"
+				+ new SimpleDateFormat("ddMMyyyyHHmmss").format(new Date())
+				+ ".mp4";
 		idronemock.startVideoRecorder(null);
 		verifytest((Brick) brick);
 	}
 
 	public void testDroneStartVideoBrick() {
-		//TODO Test correct Path
+		// TODO Test correct Path
 		DroneStartVideoBrick brick = new DroneStartVideoBrick(null);
 		idronemock.startVideo();
 		verifytest((Brick) brick);
 	}
 
 	public void testDroneStopVideoBrick() {
-		//TODO Test correct Path
+		// TODO Test correct Path
 		DroneStopVideoBrick brick = new DroneStopVideoBrick(null);
 		idronemock.stopVideo();
 		verifytest((Brick) brick);

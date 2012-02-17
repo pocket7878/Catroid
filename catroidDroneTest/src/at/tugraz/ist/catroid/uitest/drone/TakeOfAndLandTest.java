@@ -1,8 +1,8 @@
-package at.tugraz.ist.catroid.test.drone;
+package at.tugraz.ist.catroid.uitest.drone;
 
 import java.util.ArrayList;
 
-import org.easymock.EasyMock;
+import static org.easymock.EasyMock.*;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -12,10 +12,7 @@ import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.AssertionFailedError;
 import android.widget.CheckBox;
-import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
-import at.tugraz.ist.catroid.plugin.Drone.DroneLibraryWrapper;
 import at.tugraz.ist.catroid.plugin.Drone.IDrone;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 
@@ -31,7 +28,7 @@ public class TakeOfAndLandTest extends
 
 	private void createDroneMock() {
 		idronemock = null;
-		idronemock = EasyMock.createMock(IDrone.class);
+		idronemock = createMock(IDrone.class);
 		DroneHandler.getInstance().setIDrone(idronemock);
 	}
 
