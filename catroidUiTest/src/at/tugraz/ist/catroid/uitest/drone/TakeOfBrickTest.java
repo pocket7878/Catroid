@@ -109,6 +109,7 @@ public class TakeOfBrickTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		droneMock.emergencyLand();
 		EasyMock.expectLastCall().anyTimes();
 		droneMock.disconnect();
+		EasyMock.expectLastCall().anyTimes();
 
 		replay(droneMock);
 
