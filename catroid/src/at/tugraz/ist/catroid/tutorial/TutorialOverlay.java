@@ -18,6 +18,7 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -42,7 +43,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	Tutor currentTutor;
 	ControlPanel panel;
 	Context context;
-	//	Cloud cloud;
+	Cloud cloud;
 
 	ClickDispatcher clickDispatcher;
 
@@ -65,7 +66,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		getHolder().addCallback(this);
 		mThread = new AnimationThread(this);
 		this.context = context;
-		//		cloud = Cloud.getInstance(context);
+		cloud = Cloud.getInstance(context);
 	}
 
 	public ClickDispatcher getClickDispatcher() {
@@ -74,8 +75,61 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
-		clickDispatcher.dispatchEvent(ev);
+		Activity activity = (Activity) context;
+		boolean retval = false;
+		if (panel.isOpen()) {
+			panel.close();
+		}
+		float displayHeight = activity.getWindowManager().getDefaultDisplay().getHeight();
+		//		clickDispatcher.dispatchEvent(ev);
+		int[] clickableArea = Cloud.getInstance(null).getClickableArea();
+		if (ev.getY() > displayHeight - 100) {
+			dispatchPanel(ev, displayHeight);
+		}
+		if (clickableArea[0] == 0 && clickableArea[1] == 0) {
+			return false;
+		}
+		if (isEVinArea(clickableArea, ev)) {
+			retval = Tutorial.getInstance(null).dispatchTouchEvent(ev);
+		}
+		return retval;
+	}
+
+	public void dispatchPanel(MotionEvent ev, float displayHeight) {
+		//TODO: Dispatch ALL the Panel!
+
+		double x1 = 0;
+		double x2 = ev.getX();
+		double y1 = displayHeight;
+		double y2 = ev.getY();
+		double diffx = ev.getX();
+		double diffy = y1 - y2;
+		double distance = Math.sqrt(diffx * diffx + diffy * diffy);
+		if (distance < 80 && panel != null) {
+			if (!panel.isOpen()) {
+				panel.open();
+			} else {
+				panel.close();
+			}
+		} else if (ev.getY() > displayHeight - 50) {
+			Tutorial.getInstance(null).stopButtonTutorial();
+		}
+	}
+
+	public boolean isEVinArea(int[] area, MotionEvent ev) {
+		float x = ev.getX();
+		float y = ev.getY();
+		float diffx = abs(area[0] - x);
+		float diffy = abs(area[1] - y);
+		if (diffx < area[2] && diffy < area[2]) {
+			return true;
+		}
+
 		return false;
+	}
+
+	public float abs(float fl) {
+		return (fl > 0) ? fl : fl * -1;
 	}
 
 	public void switchToDog() {
@@ -197,7 +251,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 		canvas.drawPaint(paint);
 		postInvalidate();
-		//		cloud.draw(canvas);
+		cloud.draw(canvas);
 		tutor.draw(canvas);
 		tutor_2.draw(canvas);
 		panel.draw(canvas);
@@ -206,7 +260,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	public void update() {
 		tutor.update(System.currentTimeMillis());
 		tutor_2.update(System.currentTimeMillis());
-		//		cloud.update(System.currentTimeMillis());
+		cloud.update(System.currentTimeMillis());
 	}
 
 }

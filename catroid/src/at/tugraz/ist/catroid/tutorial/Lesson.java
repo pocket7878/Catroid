@@ -22,13 +22,13 @@ public class Lesson {
 	}
 
 	public void cleanAfterXML() {
-		if (lessonContent.size() > 0) {
-			lessonContent.remove(0);
-		}
+		//		if (lessonContent.size() > 0) {
+		//			lessonContent.remove(0);
+		//		}
 	}
 
 	boolean forwardStep() {
-		if ((currentStep + 1) >= lessonContent.size()) {
+		if ((currentStep) + 1 >= lessonContent.size()) {
 			// TODO: da ghoert naechste Lesson
 			// TODO: da stimmt was nicht, das +1 sollte nicht noetig sein
 

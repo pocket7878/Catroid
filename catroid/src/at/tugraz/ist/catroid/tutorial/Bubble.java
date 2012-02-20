@@ -103,7 +103,7 @@ public class Bubble {
 				waitAfterText = true;
 			} else if (!notificated) {
 				animationFinished = true;
-				Tutorial tut = Tutorial.getInstance(context);
+				Tutorial tut = Tutorial.getInstance(null);
 				tut.setNotification("BubbleDone");
 				notificated = true;
 			}
@@ -229,7 +229,7 @@ public class Bubble {
 
 	public void drawSpeechBubble(Canvas canvas, int pos_x, int pos_y, int offset_x, int offset_y) {
 		if (!notificated) {
-			Tutorial tut = Tutorial.getInstance(context);
+			Tutorial tut = Tutorial.getInstance(null);
 			tut.setNotification("BubbleDone");
 			notificated = true;
 		}

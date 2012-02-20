@@ -67,7 +67,7 @@ public class ControlPanel {
 
 	public ControlPanel(Resources resources, Context context) {
 		active = true;
-		tut = Tutorial.getInstance(context);
+		tut = Tutorial.getInstance(null);
 		this.resources = resources;
 		this.context = context;
 		play = resources.getDrawable(R.drawable.play_tutorial);

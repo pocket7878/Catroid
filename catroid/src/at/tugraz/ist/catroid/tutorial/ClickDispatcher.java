@@ -406,7 +406,6 @@ public class ClickDispatcher {
 		}
 		if (isImageButtonClicked(ev, addSpriteButton) && currentNotification == Task.Notification.SCRIPTS_ADD_BRICK) {
 			if (ev.getAction() == MotionEvent.ACTION_UP) {
-				//				Tutorial.getInstance(context).pauseTutorial();
 				currentNotification = null;
 			}
 			currentActivity.dispatchTouchEvent(ev);
@@ -478,6 +477,7 @@ public class ClickDispatcher {
 	}
 
 	public void dispatchMainMenu() {
+
 		Activity currentActivity = (Activity) context;
 		Button currentProjectButton = (Button) currentActivity.findViewById(R.id.current_project_button);
 		Button aboutButton = (Button) currentActivity.findViewById(R.id.about_catroid_button);
@@ -487,7 +487,7 @@ public class ClickDispatcher {
 		if (currentNotification == Task.Notification.CURRENT_PROJECT_BUTTON) {
 			if (isButtonClicked(ev, currentProjectButton)) {
 				currentActivity.dispatchTouchEvent(ev);
-				Cloud.getInstance(null).clearCloud();
+				Cloud_old.getInstance(null).clearCloud();
 			}
 		}
 	}

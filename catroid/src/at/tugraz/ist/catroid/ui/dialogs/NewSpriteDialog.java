@@ -94,7 +94,7 @@ public class NewSpriteDialog {
 			return;
 		}
 
-		Tutorial tutorial = Tutorial.getInstance(projectActivity.getApplicationContext());
+		Tutorial tutorial = Tutorial.getInstance(null);
 		tutorial.setNotification("DialogDone");
 
 		Sprite sprite = new Sprite(spriteName);
@@ -118,14 +118,14 @@ public class NewSpriteDialog {
 		});
 
 		builder.setOnKeyListener(new OnKeyListener() {
+			@Override
 			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
 					String newSpriteName = (input.getText().toString()).trim();
 					if (projectManager.spriteExists(newSpriteName)) {
 						Utils.displayErrorMessage(projectActivity,
 								projectActivity.getString(R.string.spritename_already_exists));
-						Tutorial tutorial = Tutorial.getInstance(projectActivity.getApplicationContext());
-						tutorial.setNotification("DialogDone");
+						Tutorial.getInstance(null).setNotification("DialogDone");
 					} else {
 						handleOkButton();
 						return true;
@@ -139,6 +139,7 @@ public class NewSpriteDialog {
 	private void initAlertDialogListener(Dialog dialog) {
 
 		dialog.setOnShowListener(new OnShowListener() {
+			@Override
 			public void onShow(DialogInterface dialog) {
 				InputMethodManager inputManager = (InputMethodManager) projectActivity
 						.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -147,6 +148,7 @@ public class NewSpriteDialog {
 		});
 
 		input.addTextChangedListener(new TextWatcher() {
+			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				if (s.length() == 0 || (s.length() == 1 && s.charAt(0) == '.')) {
 					buttonPositive.setEnabled(false);
@@ -155,9 +157,11 @@ public class NewSpriteDialog {
 				}
 			}
 
+			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 			}
 
+			@Override
 			public void afterTextChanged(Editable s) {
 			}
 		});

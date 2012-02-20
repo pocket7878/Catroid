@@ -34,8 +34,8 @@ import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
 import at.tugraz.ist.catroid.tutorial.tasks.Task.Notification;
 
-public class Cloud {
-	private static Cloud cloud;
+public class Cloud_old {
+	private static Cloud_old cloud;
 	int focusX1;
 	int focusY1;
 	int focusX2;
@@ -61,12 +61,12 @@ public class Cloud {
 
 	private Context context;
 
-	private Cloud() {
+	private Cloud_old() {
 	}
 
-	public static Cloud getInstance(Context context) {
+	public static Cloud_old getInstance(Context context) {
 		if (cloud == null) {
-			cloud = new Cloud();
+			cloud = new Cloud_old();
 		}
 		if (context != null) {
 			cloud.setContext(context);

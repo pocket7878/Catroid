@@ -17,9 +17,9 @@ public class LessonCollection {
 	}
 
 	public void cleanAfterXML() {
-		for (int i = 0; i < lessonArray.size(); i++) {
-			lessonArray.get(i).cleanAfterXML();
-		}
+		//		for (int i = 0; i < lessonArray.size(); i++) {
+		//			lessonArray.get(i).cleanAfterXML();
+		//		}
 	}
 
 	LessonCollection() {

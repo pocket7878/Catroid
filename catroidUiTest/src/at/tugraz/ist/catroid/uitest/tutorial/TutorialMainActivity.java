@@ -102,10 +102,10 @@ public class TutorialMainActivity extends ActivityInstrumentationTestCase2<MainM
 		int height = activity.getWindow().getWindowManager().getDefaultDisplay().getHeight();
 		pressTutorialButton();
 		solo.sleep(3000);
-		solo.clickOnScreen(10, 764);
+		solo.clickOnScreen(10, height - 10);
 		solo.sleep(3000);
 		assertTrue("have you tried turning it off and on again?", Tutorial.getInstance(null).isActive());
-		solo.clickOnScreen(140, 764);
+		solo.clickOnScreen(140, height - 10);
 		solo.sleep(3000);
 		assertFalse("have you tried turning it off and on again?", Tutorial.getInstance(null).isActive());
 		solo.sleep(3000);

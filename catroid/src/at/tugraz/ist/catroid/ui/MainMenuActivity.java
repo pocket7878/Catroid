@@ -246,7 +246,7 @@ public class MainMenuActivity extends Activity {
 			Intent intent = new Intent(MainMenuActivity.this, ProjectActivity.class);
 			startActivity(intent);
 		}
-		tutorial.setNotification("currentProjectButton");
+		//tutorial.setNotification("currentProjectButton");
 	}
 
 	public void handleNewProjectButton(View v) {

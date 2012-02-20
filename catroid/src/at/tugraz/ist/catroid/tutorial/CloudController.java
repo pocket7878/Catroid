@@ -20,25 +20,37 @@ package at.tugraz.ist.catroid.tutorial;
 
 /**
  * @author faxxe
- *
+ * 
  */
-import android.app.Activity;
-import android.os.Bundle;
+public class CloudController {
+	private Cloud cloud;
 
-public class ClearActivity extends Activity {
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public CloudController() {
+		this.cloud = Cloud.getInstance(null);
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
+	public void fadeTo(int x, int y) {
+		cloud.fadeTo(x, y);
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
+	public void jumpTo(int x, int y) {
+		cloud.jumpTo(x, y);
 	}
+
+	public void disapear() {
+		cloud.disappear();
+	}
+
+	public void show() {
+		cloud.show();
+	}
+
+	public void fadeIn() {
+		cloud.fadeIn();
+	}
+
+	public void fadeOut() {
+		cloud.fadeOut();
+	}
+
 }

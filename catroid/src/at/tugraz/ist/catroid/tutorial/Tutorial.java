@@ -31,6 +31,7 @@ import android.graphics.PixelFormat;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import at.tugraz.ist.catroid.ProjectManager;
@@ -61,16 +62,41 @@ public class Tutorial {
 	static LessonCollection lessonCollection;
 	private static Tutor tutor;
 	private static Tutor tutor_2;
+	private boolean tutorialPaused = true;
 
 	private Tutorial() {
 	}
 
-	public static Tutorial getInstance(Context con) {
-		if (con != null) {
-			context = con;
+	public static Tutorial getInstance(Context onlyPassContextWhenActivityChanges) {
+		if (onlyPassContextWhenActivityChanges != null) {
+			context = onlyPassContextWhenActivityChanges;
 		}
-		tutorial.initalizeCurrentTutorial();
+		//		tutorial.initalizeCurrentTutorial();
 		return tutorial;
+	}
+
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		Activity activity = correctActivity((Activity) context);
+		boolean retval;
+		if (dialog == null) {
+			retval = activity.dispatchTouchEvent(ev);
+		} else {
+			retval = dialog.dispatchTouchEvent(ev);
+		}
+		return retval;
+	}
+
+	public Activity correctActivity(Activity currentActivity) {
+		if (currentActivity.getLocalClassName().compareTo("ui.ScriptActivity") == 0) {
+			currentActivity = currentActivity.getParent();
+		}
+		if (currentActivity.getLocalClassName().compareTo("ui.CostumeActivity") == 0) {
+			currentActivity = currentActivity.getParent();
+		}
+		if (currentActivity.getLocalClassName().compareTo("ui.SoundActivity") == 0) {
+			currentActivity = currentActivity.getParent();
+		}
+		return currentActivity;
 	}
 
 	private void initalizeCurrentTutorial() {
@@ -144,6 +170,7 @@ public class Tutorial {
 	private void startTutorial() {
 		ProjectManager.getInstance().initializeThumbTutorialProject(context);
 		tutorialActive = true;
+		initalizeCurrentTutorial();
 		initalizeLessons();
 		showLessonDialog();
 
@@ -190,9 +217,12 @@ public class Tutorial {
 	}
 
 	public void resumeTutorial() {
-		if (!tutorialActive) {
+		if (!tutorialActive || !tutorialPaused) {
 			return; //why do we get here?
 		}
+		initalizeCurrentTutorial();
+		Log.i("faxxe", "resumeTutorial from within: " + ((Activity) context).getLocalClassName());
+		tutorialPaused = false;
 		prepareForResumeTutorial();
 		setDisplayPreferences();
 		tutorialThread.start();
@@ -210,6 +240,11 @@ public class Tutorial {
 		windowManager.addView(tutorialOverlay, dragViewParameters);
 	}
 
+	public void ttOtF() {
+		shutdownOverlay();
+		setupTutorialOverlay();
+	}
+
 	private void generateTutorialThread() {
 		tutorialThreadRunning = true;
 		tutorialThread = new Thread(new Runnable() {
@@ -223,6 +258,7 @@ public class Tutorial {
 	}
 
 	public void stopButtonTutorial() {
+
 		stopTutorial();
 		setKeepScreenOff();
 		setOrientationSensorMode();
@@ -237,9 +273,11 @@ public class Tutorial {
 	}
 
 	public void pauseTutorial() {
-		if (!tutorialActive) {
+		Log.i("faxxe", "pause Tutorial");
+		if (!tutorialActive || tutorialPaused) {
 			return;
 		}
+		tutorialPaused = true;
 		idleTutors();
 		shutdownTutorialThread();
 		shutdownOverlay();
@@ -270,7 +308,6 @@ public class Tutorial {
 			windowManager.removeView(tutorialOverlay);
 			tutorialOverlay = null;
 		} catch (NullPointerException e) {
-			Log.i("faxxe", "Seems that everything has been shut down");
 		}
 	}
 
@@ -304,6 +341,10 @@ public class Tutorial {
 		return windowParameters;
 	}
 
+	public Context getActualContext() {
+		return context;
+	}
+
 	public boolean continueTutorial() {
 		if (tutorialActive) {
 
@@ -313,7 +354,7 @@ public class Tutorial {
 				if (notification != null) {
 					try {
 						waitForNotification(notification);
-						Cloud.getInstance(null).clearCloud();
+						(new CloudController()).disapear();
 					} catch (Exception e) {
 
 					}
@@ -334,14 +375,14 @@ public class Tutorial {
 	}
 
 	private void waitForNotification(String waitNotification) throws InterruptedException {
-		Log.i("catroid", "waiting for: " + waitNotification);
+		Log.i("faxxe", "waiting for: " + waitNotification);
 		while (tutorialThreadRunning) {
 			for (int i = 0; i < notifies.size(); i++) {
 				currentNotification = notifies.get(i);
 				if (currentNotification.compareTo(waitNotification) == 0) {
 					notifies.remove(i);
 					notifies.clear();
-					Log.i("catroid", "waited enough!" + waitNotification);
+					Log.i("faxxe", "waited enough!" + waitNotification);
 					return;
 				}
 
