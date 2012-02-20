@@ -22,7 +22,12 @@
  */
 package at.tugraz.ist.catroid.uitest.drone;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+
+import org.easymock.EasyMock;
 
 import android.test.ActivityInstrumentationTestCase2;
 import at.tugraz.ist.catroid.content.Project;
@@ -33,8 +38,7 @@ import at.tugraz.ist.catroid.ui.MainMenuActivity;
 
 import com.jayway.android.robotium.solo.Solo;
 
-public class TakeOfBrickTest extends
-		ActivityInstrumentationTestCase2<MainMenuActivity> {
+public class TakeOfBrickTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
 	private Solo solo;
 	private static String projectName = "BrickTest";
 	IDrone droneMock;
@@ -50,8 +54,7 @@ public class TakeOfBrickTest extends
 
 	private void deleteTestProject() {
 		if (StorageHandler.getInstance().projectExists(projectName)) {
-			Project delete = StorageHandler.getInstance().loadProject(
-					projectName);
+			Project delete = StorageHandler.getInstance().loadProject(projectName);
 			StorageHandler.getInstance().deleteProject(delete);
 			delete = null;
 		}
@@ -104,6 +107,7 @@ public class TakeOfBrickTest extends
 		droneMock.takeoff();
 		droneMock.land();
 		droneMock.emergencyLand();
+		EasyMock.expectLastCall().anyTimes();
 		droneMock.disconnect();
 
 		replay(droneMock);
@@ -116,6 +120,8 @@ public class TakeOfBrickTest extends
 		solo.goBack();
 
 		verify(droneMock);
+
+		droneMock.emergencyLand();
 		solo.sleep(1000);
 
 	}
