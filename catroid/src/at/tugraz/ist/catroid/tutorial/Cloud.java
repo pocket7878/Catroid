@@ -1,0 +1,149 @@
+/**
+ *  Catroid: An on-device graphical programming language for Android devices
+ *  Copyright (C) 2010  Catroid development team 
+ *  (<http://code.google.com/p/catroid/wiki/Credits>)
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package at.tugraz.ist.catroid.tutorial;
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Path.Direction;
+
+/**
+ * @author faxxe
+ * 
+ */
+public class Cloud {
+	private Paint paint = new Paint();
+	private static Context context;
+	private static Cloud cloud = null;
+	private static int alpha = 255;
+	int radius = 90;
+	int startX = 0;
+	int startY = 0;
+	int targetAlpha = 125;
+	boolean show = false;
+	double actX = 0;
+	double actY = 0;
+	int sollX = 100;
+	int sollY = 100;
+	boolean visible;
+
+	public static Cloud getInstance(Context con) {
+		if (con != null) {
+			context = con;
+			alpha = 255; // not necessary but cool!
+		}
+		if (cloud == null) {
+			cloud = new Cloud();
+		}
+		cloud.fadeIn();
+		return cloud;
+	}
+
+	public void update(long time) {
+
+	}
+
+	public void draw(Canvas canvas) {
+		int height = ((Activity) context).getWindowManager().getDefaultDisplay().getHeight();
+		int width = ((Activity) context).getWindowManager().getDefaultDisplay().getWidth();
+		paint.setColor(Color.GRAY);
+		paint.setAlpha(alpha);
+		Path path = new Path();
+		path.moveTo(0, 0);
+		path.lineTo(width, 0);
+		path.lineTo(width, height);
+		path.lineTo(0, height);
+		path.lineTo(0, 0);
+		if (alpha > targetAlpha) {
+			alpha -= 2;
+		}
+		if (visible) {
+			path.addCircle((int) actX, (int) actY, radius, Direction.CCW);
+		}
+		canvas.drawPath(path, paint);
+
+		updateXY();
+
+	}
+
+	public void updateXY() {
+		//fix the following 6 lines for all directions!
+		float deltax = sollX;
+		float deltay = sollY;
+		double dist = Math.sqrt(sollX * sollX + sollY * sollY);
+		dist /= 7;
+		deltax /= dist;
+		deltay /= dist;
+
+		if (actX < sollX) {
+			actX += deltax;
+		}
+		if (actY < sollY) {
+			actY += deltay;
+		}
+
+	}
+
+	public void fadeTo(int x, int y) {
+		this.sollX = x;
+		this.sollY = y;
+		actX = 0;
+		actY = 0;
+		startX = 0;
+		startY = 0;
+	}
+
+	public void fadeIn() {
+		this.targetAlpha = 125;
+	}
+
+	public void fadeOut() {
+		this.targetAlpha = 255;
+	}
+
+	public void jumpTo(int x, int y) {
+		this.actX = x;
+		this.actY = y;
+		this.startX = x;
+		this.startY = y;
+	}
+
+	public void disappear() {
+		this.visible = false;
+		this.sollX = 0;
+		this.sollY = 0;
+
+	}
+
+	public void show() {
+		this.visible = true;
+	}
+
+	public void setRadius(int radius) {
+		this.radius = radius;
+	}
+
+	public int[] getClickableArea() {
+		int[] retval = { sollX, sollY, radius };
+		return retval;
+	}
+}
