@@ -121,7 +121,6 @@ public class TakeOfBrickTest extends ActivityInstrumentationTestCase2<MainMenuAc
 
 		verify(droneMock);
 
-		droneMock.emergencyLand();
 		solo.sleep(1000);
 
 	}
