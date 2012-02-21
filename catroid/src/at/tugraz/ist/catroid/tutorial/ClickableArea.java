@@ -22,35 +22,20 @@ package at.tugraz.ist.catroid.tutorial;
  * @author faxxe
  * 
  */
-public class CloudController {
-	private Cloud cloud;
+public class ClickableArea {
+	public final int x;
+	public final int y;
+	public final float width;
+	public final float height;
+	public final float centerX;
+	public final float centerY;
 
-	public CloudController() {
-		this.cloud = Cloud.getInstance(null);
+	public ClickableArea(float x, float y, float width, float height) {
+		this.x = (int) x;
+		this.y = (int) y;
+		this.width = width;
+		this.height = height;
+		this.centerX = x + width / 2;
+		this.centerY = y + height / 2;
 	}
-
-	public void fadeTo(ClickableArea ca) {
-		cloud.fadeTo(ca);
-	}
-
-	public void jumpTo(ClickableArea ca) {
-		cloud.jumpTo(ca);
-	}
-
-	public void disapear() {
-		cloud.disappear();
-	}
-
-	public void show() {
-		cloud.show();
-	}
-
-	public void fadeIn() {
-		cloud.fadeIn();
-	}
-
-	public void fadeOut() {
-		cloud.fadeOut();
-	}
-
 }

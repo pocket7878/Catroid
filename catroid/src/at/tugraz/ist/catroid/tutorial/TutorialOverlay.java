@@ -82,11 +82,12 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		}
 		float displayHeight = activity.getWindowManager().getDefaultDisplay().getHeight();
 		//		clickDispatcher.dispatchEvent(ev);
-		int[] clickableArea = Cloud.getInstance(null).getClickableArea();
+		ClickableArea clickableArea = Cloud.getInstance(null).getClickableArea();
+
 		if (ev.getY() > displayHeight - 100) {
 			dispatchPanel(ev, displayHeight);
 		}
-		if (clickableArea[0] == 0 && clickableArea[1] == 0) {
+		if (clickableArea == null || clickableArea.x == 0 && clickableArea.y == 0) {
 			return false;
 		}
 		if (isEVinArea(clickableArea, ev)) {
@@ -105,7 +106,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		double diffx = ev.getX();
 		double diffy = y1 - y2;
 		double distance = Math.sqrt(diffx * diffx + diffy * diffy);
-		if (distance < 80 && panel != null) {
+		if (distance < 70 && panel != null) {
 			if (!panel.isOpen()) {
 				panel.open();
 			} else {
@@ -116,12 +117,11 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		}
 	}
 
-	public boolean isEVinArea(int[] area, MotionEvent ev) {
+	public boolean isEVinArea(ClickableArea area, MotionEvent ev) {
 		float x = ev.getX();
 		float y = ev.getY();
-		float diffx = abs(area[0] - x);
-		float diffy = abs(area[1] - y);
-		if (diffx < area[2] && diffy < area[2]) {
+
+		if (x > area.x && x < area.x + area.width && y > area.y && y < area.y + area.height) {
 			return true;
 		}
 
@@ -260,7 +260,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	public void update() {
 		tutor.update(System.currentTimeMillis());
 		tutor_2.update(System.currentTimeMillis());
-		cloud.update(System.currentTimeMillis());
+		//cloud.update(System.currentTimeMillis());
 	}
 
 }

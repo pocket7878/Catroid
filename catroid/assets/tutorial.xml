@@ -23,7 +23,7 @@
         <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
           <sleepTime>1000</sleepTime>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-        
+       
         <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
           <notificationType>CURRENT_PROJECT_BUTTON</notificationType>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
@@ -38,7 +38,7 @@
           <x>200</x>
           <y>300</y>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-        <!-- 
+        
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
           <tutorType>CAT</tutorType>
 		  <message>New Sprite please!</message>
@@ -52,7 +52,7 @@
           <tutorType>CAT</tutorType>
 		  <message>Nun drueck zweites item in Liste</message>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-        -->
+        
         
         <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
           <notificationType>PROJECT_LIST_ITEM</notificationType>
@@ -65,7 +65,7 @@
           <y>300</y>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
         
-        
+       
         <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
           <tutorType>CAT</tutorType>
 		  <message>Jetzt tue emol e Brickele hinzufueche!</message>
@@ -76,12 +76,13 @@
           <notificationString>2</notificationString>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
         
+ 
         <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
           <tutorType>CAT</tutorType>
           <x>200</x>
           <y>300</y>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-        
+
         <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
           <tutorType>CAT</tutorType>
 		  <message>-->Aussehen!</message>
@@ -89,6 +90,7 @@
         
         <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
           <notificationType>BRICK_CATEGORY_DIALOG</notificationType>
+           <notificationString>100</notificationString>
         </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
         
         <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>

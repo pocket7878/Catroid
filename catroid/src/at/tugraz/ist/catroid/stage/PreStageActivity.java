@@ -43,6 +43,7 @@ import at.tugraz.ist.catroid.bluetooth.BluetoothManager;
 import at.tugraz.ist.catroid.bluetooth.DeviceListActivity;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
 
 public class PreStageActivity extends Activity {
 
@@ -60,6 +61,8 @@ public class PreStageActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.i("faxxe", "stopButtonTutorial called in PreStageActivity");
+		Tutorial.getInstance(null).stopButtonTutorial();
 		super.onCreate(savedInstanceState);
 
 		int required_resources = getRequiredRessources();
@@ -77,6 +80,7 @@ public class PreStageActivity extends Activity {
 		}
 		if ((required_resources & Brick.TEXT_TO_SPEECH) > 0) {
 			textToSpeech = new TextToSpeech(this.getApplicationContext(), new OnInitListener() {
+				@Override
 				public void onInit(int status) {
 					resourceInitialized();
 					if (status == TextToSpeech.ERROR) {

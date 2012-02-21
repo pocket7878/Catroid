@@ -13,6 +13,9 @@ public class Lesson {
 	Lesson() {
 	}
 
+	//	public void insertTask(Task task){
+	//		lessonContent.add(currentStep, task);
+	//	}
 	public int getCurrentStep() {
 		return currentStep;
 	}

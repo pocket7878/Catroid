@@ -107,8 +107,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		tutorial = Tutorial.getInstance(this);
-		tutorial.resumeTutorial();
+		Tutorial.getInstance(this).resumeTutorial();
 		if (!Utils.checkForSdCard(this)) {
 			return;
 		}
@@ -129,9 +128,9 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 		return new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				tutorial.pauseTutorial();
+				Tutorial.getInstance(null).pauseTutorial();
 				getParent().showDialog(DIALOG_ADD_BRICK);
-				tutorial.resumeTutorial();
+				Tutorial.getInstance(null).resumeTutorial();
 			}
 		};
 	}

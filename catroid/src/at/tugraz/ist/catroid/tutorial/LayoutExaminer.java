@@ -21,13 +21,14 @@ package at.tugraz.ist.catroid.tutorial;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ListActivity;
-import android.graphics.Point;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TabHost;
+import at.tugraz.ist.catroid.R;
 
 /**
  * @author faxxe
@@ -41,7 +42,7 @@ public class LayoutExaminer {
 		Log.i("faxxe", "LE: current Activity is " + currentActivity.getLocalClassName());
 	}
 
-	public Point getTabCenterCoordinates(String tab) {
+	public ClickableArea getTabCenterCoordinates(String tab) {
 		int w = 0;
 		int h = 0;
 		correctCurrentActivity();
@@ -52,6 +53,7 @@ public class LayoutExaminer {
 		LinearLayout tab2 = (LinearLayout) tabViews.get(1);
 		LinearLayout tab3 = (LinearLayout) tabViews.get(2);
 		int[] coords = { 0, 0 };
+		int[] coordsXYWH = { 0, 0, 0, 0 };
 		if (tab.compareTo("Costumes") == 0) {
 			tab2.getLocationInWindow(coords);
 			w = tab2.getWidth();
@@ -69,9 +71,12 @@ public class LayoutExaminer {
 		}
 		int x = coords[0];
 		int y = coords[1];
-
-		Point point = new Point(x + w / 2, y + h / 2);
-		return point;
+		coordsXYWH[0] = coords[0];
+		coordsXYWH[1] = coords[1];
+		coordsXYWH[2] = w;
+		coordsXYWH[3] = h;
+		ClickableArea ca = new ClickableArea(x, y, w, h);
+		return ca;
 	}
 
 	public void correctCurrentActivity() {
@@ -86,8 +91,62 @@ public class LayoutExaminer {
 		}
 	}
 
-	public Point getButtonCenterCoordinates(int buttonID) {
+	public ClickableArea examineCategoryBrickDialog(int itemNr) {
+		Dialog dialog = Tutorial.getInstance(null).getDialog();
+		ListView dings = (ListView) dialog.findViewById(R.id.categoriesListView);
+		View tmp = null;
+		if (dings.getChildCount() < itemNr) {
+			Log.i("faxxe", "there is no such Item! -- resetting :)");
+			itemNr = 0;
+		}
+		while (tmp == null) {
+			tmp = dings.getChildAt(itemNr);
+			Log.i("faxxe", "bowling for colombine....");
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		int[] coords = { 0, 0 };
+		tmp.getLocationOnScreen(coords);
+		float x = coords[0];
+		float y = coords[1];
+		return new ClickableArea(x, y, tmp.getWidth(), tmp.getHeight());
+	}
+
+	public ClickableArea examineAddBrickDialog(int itemNr) {
+		Dialog dialog = Tutorial.getInstance(null).getDialog();
+		ListView dings = (ListView) dialog.findViewById(R.id.toolboxListView);
+		View tmp = null;
+		if (dings.getChildCount() < itemNr) {
+			Log.i("faxxe", "LE: There is no such item! in ADD-Brick-- resetting");
+			itemNr = 0;
+		}
+		while (tmp == null) {
+			tmp = dings.getChildAt(itemNr);
+			Log.i("faxxe", "...waitin' for Dialog to come...");
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		int[] coords = { 0, 0 };
+		tmp.getLocationOnScreen(coords);
+		float x = coords[0];
+		float y = coords[1];
+		return new ClickableArea(x, y, tmp.getWidth(), tmp.getHeight());
+	}
+
+	public ClickableArea getButtonCenterCoordinates(int buttonID) {
+		Log.i("faxxe", "current activity: " + currentActivity.getLocalClassName());
 		correctCurrentActivity();
+		Log.i("faxxe", "current activity after corr.: " + currentActivity.getLocalClassName());
 		View buttonView = currentActivity.findViewById(buttonID);
 		int[] coords = { 0, 0 };
 		buttonView.getLocationInWindow(coords);
@@ -95,27 +154,25 @@ public class LayoutExaminer {
 		int y = coords[1];
 		int w = buttonView.getWidth();
 		int h = buttonView.getHeight();
-		Point point = new Point(x + w / 2, y + h / 2);
-		return point;
+		ClickableArea ca = new ClickableArea(x, y, w, h);
+		return ca;
 	}
 
-	public Point getListItemCenter(int itemNr) {
+	public ClickableArea getListItemCenter(int itemNr) {
 		//	if (isListItemClicked(listView, Integer.parseInt(notificationValue)) != -1) {
 
-		Point point;
 		Activity activity = (Activity) Tutorial.getInstance(null).getActualContext();
 		ListActivity listActivity = (ListActivity) activity;
 		ListView listView = listActivity.getListView();
-
 		View child = listView.getChildAt(itemNr);
 		int[] coords = { 0, 0 };
 		child.getLocationInWindow(coords);
-		int x = coords[0];
+		int x = 50;
 		int y = coords[1];
-		int w = child.getWidth();
+		int w = 50;
 		int h = child.getHeight();
-		point = new Point(60, y + h / 2);
-		return point;
+		ClickableArea ca = new ClickableArea(x, y, w, h);
+		return ca;
 	}
 
 }

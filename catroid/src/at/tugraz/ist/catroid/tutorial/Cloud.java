@@ -26,25 +26,22 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Path.Direction;
 
-/**
- * @author faxxe
- * 
- */
 public class Cloud {
 	private Paint paint = new Paint();
 	private static Context context;
 	private static Cloud cloud = null;
 	private static int alpha = 255;
-	int radius = 90;
-	int startX = 0;
-	int startY = 0;
-	int targetAlpha = 125;
+	float radius = 90;
+	float startX = 0;
+	float startY = 0;
+	float targetAlpha = 125;
 	boolean show = false;
 	double actX = 0;
 	double actY = 0;
-	int sollX = 100;
-	int sollY = 100;
+	float sollX = 100;
+	float sollY = 100;
 	boolean visible;
+	ClickableArea clickableArea;
 
 	public static Cloud getInstance(Context con) {
 		if (con != null) {
@@ -103,9 +100,10 @@ public class Cloud {
 
 	}
 
-	public void fadeTo(int x, int y) {
-		this.sollX = x;
-		this.sollY = y;
+	public void fadeTo(ClickableArea ca) {
+		this.clickableArea = ca;
+		this.sollX = ca.centerX;
+		this.sollY = ca.centerY;
 		actX = 0;
 		actY = 0;
 		startX = 0;
@@ -120,11 +118,12 @@ public class Cloud {
 		this.targetAlpha = 255;
 	}
 
-	public void jumpTo(int x, int y) {
-		this.actX = x;
-		this.actY = y;
-		this.startX = x;
-		this.startY = y;
+	public void jumpTo(ClickableArea ca) {
+		this.clickableArea = ca;
+		this.actX = ca.centerX;
+		this.actY = ca.centerY;
+		this.startX = ca.centerX;
+		this.startY = ca.centerY;
 	}
 
 	public void disappear() {
@@ -142,8 +141,7 @@ public class Cloud {
 		this.radius = radius;
 	}
 
-	public int[] getClickableArea() {
-		int[] retval = { sollX, sollY, radius };
-		return retval;
+	public ClickableArea getClickableArea() {
+		return this.clickableArea;
 	}
 }
