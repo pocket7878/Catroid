@@ -347,7 +347,6 @@ public class Tutorial {
 
 	public boolean continueTutorial() {
 		if (tutorialActive) {
-
 			lessonCollection.setTutorialOverlay(tutorialOverlay);
 			do {
 				String notification = lessonCollection.executeTask();

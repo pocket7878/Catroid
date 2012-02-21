@@ -34,7 +34,7 @@ public class Cloud {
 	float radius = 90;
 	float startX = 0;
 	float startY = 0;
-	float targetAlpha = 125;
+	float targetAlpha = 255;
 	boolean show = false;
 	double actX = 0;
 	double actY = 0;
@@ -51,7 +51,7 @@ public class Cloud {
 		if (cloud == null) {
 			cloud = new Cloud();
 		}
-		cloud.fadeIn();
+		//		cloud.fadeIn();
 		return cloud;
 	}
 

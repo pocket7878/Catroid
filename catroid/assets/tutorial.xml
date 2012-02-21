@@ -1,246 +1,309 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <at.tugraz.ist.catroid.tutorial.LessonCollection>
-  <lessonArray>
-    <at.tugraz.ist.catroid.tutorial.Lesson>
-      <lessonName>Daumenkino</lessonName>
-      <lessonContent>
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-          <sleepTime>1000</sleepTime>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-          <tutorType>DOG</tutorType>
-          <x>200</x>
-          <y>300</y>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-          <sleepTime>1000</sleepTime>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-<!-- 
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
-          <tutorType>DOG</tutorType>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
-        -->
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-          <sleepTime>1000</sleepTime>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-       
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-          <notificationType>CURRENT_PROJECT_BUTTON</notificationType>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-          <tutorType>CAT</tutorType>
-          <x>200</x>
-          <y>300</y>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-                <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-          <tutorType>CAT</tutorType>
-          <x>200</x>
-          <y>300</y>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-        
-                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-          <tutorType>CAT</tutorType>
-		  <message>New Sprite please!</message>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-       
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-          <notificationType>PROJECT_ADD_SPRITE</notificationType>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-          <tutorType>CAT</tutorType>
-		  <message>Nun drueck zweites item in Liste</message>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-        
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-          <notificationType>PROJECT_LIST_ITEM</notificationType>
-          <notificationString>1</notificationString>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-          <tutorType>CAT</tutorType>
-          <x>200</x>
-          <y>300</y>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-        
-       
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-          <tutorType>CAT</tutorType>
-		  <message>Jetzt tue emol e Brickele hinzufueche!</message>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-          <notificationType>SCRIPTS_ADD_BRICK</notificationType>
-          <notificationString>2</notificationString>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-        
- 
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-          <tutorType>CAT</tutorType>
-          <x>200</x>
-          <y>300</y>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+	<lessonArray>
+		<at.tugraz.ist.catroid.tutorial.Lesson>
+			<lessonName>Daumenkino</lessonName>
+			<lessonContent>
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+					<sleepTime>1000</sleepTime>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+					<tutorType>DOG</tutorType>
+					<x>100</x>
+					<y>300</y>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+					<tutorType>CAT</tutorType>
+					<x>300</x>
+					<y>300</y>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+					<sleepTime>1000</sleepTime>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
 
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-          <tutorType>CAT</tutorType>
-		  <message>-->Aussehen!</message>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-          <notificationType>BRICK_CATEGORY_DIALOG</notificationType>
-           <notificationString>100</notificationString>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-          <tutorType>CAT</tutorType>
-		  <message>-->Setze Kostuem!</message>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-          <notificationType>BRICK_ADD_DIALOG</notificationType>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-        
-          <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-          <tutorType>CAT</tutorType>
-		  <message>-->Kostuembrick!!</message>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-        
-        
-		  
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-          <sleepTime>500</sleepTime>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep> 
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-          <tutorType>DOG</tutorType>
-		  <message>Supi supi supi. Du bist so unglaublich spitze.</message>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay> 
-        
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-          <sleepTime>500</sleepTime>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep> 
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-          <tutorType>CAT</tutorType>
-          <x>200</x>
-          <y>300</y>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-          <tutorType>CAT</tutorType>
-		  <message>Tua mol Costumes clickele!</message>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-          <tutorType>CAT</tutorType>
-		  <notificationType>TAB_COSTUMES</notificationType>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-          <sleepTime>500</sleepTime>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep> 
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-          <tutorType>CAT</tutorType>
-          <x>200</x>
-          <y>300</y>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-          <tutorType>CAT</tutorType>
-		  <message>Jetzt tua mol de Sounds clickele!</message>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-        
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-          <tutorType>CAT</tutorType>
-		  <notificationType>TAB_SOUNDS</notificationType>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-          <tutorType>CAT</tutorType>
-          <x>200</x>
-          <y>300</y>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-          <tutorType>CAT</tutorType>
-		  <message>Jetzt tua mol den Sound dazuafügen!</message>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-          <tutorType>CAT</tutorType>
-		  <notificationType>SOUNDS_ADD_SOUND</notificationType>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-        
-      </lessonContent>
-      <lessonID>0</lessonID>
-      <currentStep>0</currentStep>
-    </at.tugraz.ist.catroid.tutorial.Lesson>
-    <at.tugraz.ist.catroid.tutorial.Lesson>
-      <lessonName>Multithreading</lessonName>
-      <lessonContent>
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-          <sleepTime>500</sleepTime>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep> 
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-          <tutorType>CAT</tutorType>
-          <x>100</x>
-          <y>200</y>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
-          <tutorType>CAT</tutorType>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
-        
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-          <sleepTime>500</sleepTime>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep> 
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-          <tutorType>DOG</tutorType>
-          <x>300</x>
-          <y>200</y>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
-          <tutorType>CAT</tutorType>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
-        
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-          <tutorType>CAT</tutorType>
-		  <message>Original Schweizer Kräuterbonbons... nom nom nom!</message>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay> 
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-          <tutorType>DOG</tutorType>
-		  <message>Tell me more about it! woof woof woof *scratch*</message>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-       
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-          <tutorType>CAT</tutorType>
-          <sleepTime>1000</sleepTime>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-      </lessonContent>
-      <lessonID>1</lessonID>
-      <currentStep>0</currentStep>
-    </at.tugraz.ist.catroid.tutorial.Lesson>
-    <at.tugraz.ist.catroid.tutorial.Lesson>
-      <lessonName>Daemonenaustreibung mit Catroid</lessonName>
-      <lessonContent>
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-          <tutorType>CAT</tutorType>
-          <x>100</x>
-          <y>300</y>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-        <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-          <tutorType>CAT</tutorType>
-		  <message>ROAR! WOOOAAAAAA! GRRRRRRRRR .... miau</message>
-        </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-      </lessonContent>
-      <lessonID>2</lessonID>
-      <currentStep>0</currentStep>
-    </at.tugraz.ist.catroid.tutorial.Lesson>
-  </lessonArray>
-  <currentLesson>0</currentLesson>
+<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+<!-- 					<tutorType>CAT</tutorType> -->
+<!-- 					<message>HE!, Dummer Hund!!</message> -->
+<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+
+<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskFlip> -->
+<!-- 					<tutorType>DOG</tutorType> -->
+<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskFlip> -->
+
+<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+<!-- 					<tutorType>DOG</tutorType> -->
+<!-- 					<message>Blöde Katz!!</message> -->
+<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+
+<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+<!-- 					<tutorType>CAT</tutorType> -->
+<!-- 					<message>Sag mal, was genau machen wir hier?</message> -->
+<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+
+<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+<!-- 					<tutorType>DOG</tutorType> -->
+<!-- 					<message>Arbeiten! Was sonnst?</message> -->
+<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+
+<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+<!-- 					<tutorType>CAT</tutorType> -->
+<!-- 					<message>Ach wirklich? Schade! Servus Hund!</message> -->
+<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+				
+<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskDisappear> -->
+<!-- 					<tutorType>DOG</tutorType> -->
+<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskDisappear> -->
+				
+<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+<!-- 					<tutorType>CAT</tutorType> -->
+<!-- 					<message>Na gut, dann fangen wir halt an!</message> -->
+<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+				
+<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+<!-- 					<tutorType>CAT</tutorType> -->
+<!-- 					<message>Hallo Kind! Willkommen bei Catroid! Ich werde dich hier mal rumführen. </message> -->
+<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+				
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>CAT</tutorType>
+					<message>!Argl bla fasel</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+			
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>	
+				
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+					<sleepTime>2000</sleepTime>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>	
+				
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+					<sleepTime>2000</sleepTime>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+				
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>	
+				
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+					<notificationType>CURRENT_PROJECT_BUTTON</notificationType>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+					<tutorType>CAT</tutorType>
+					<x>200</x>
+					<y>300</y>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+					<tutorType>CAT</tutorType>
+					<x>200</x>
+					<y>300</y>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>CAT</tutorType>
+					<message>New Sprite please!</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+					<notificationType>PROJECT_ADD_SPRITE</notificationType>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>CAT</tutorType>
+					<message>Nun drueck zweites item in Liste</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+					<notificationType>PROJECT_LIST_ITEM</notificationType>
+					<notificationString>1</notificationString>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+					<tutorType>CAT</tutorType>
+					<x>200</x>
+					<y>300</y>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>CAT</tutorType>
+					<message>Jetzt tue emol e Brickele hinzufueche!</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+					<notificationType>SCRIPTS_ADD_BRICK</notificationType>
+					<notificationString>2</notificationString>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+					<tutorType>CAT</tutorType>
+					<x>200</x>
+					<y>300</y>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>CAT</tutorType>
+					<message>-->Aussehen!</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+					<notificationType>BRICK_CATEGORY_DIALOG</notificationType>
+					<notificationString>100</notificationString>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>CAT</tutorType>
+					<message>-->Setze Kostuem!</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+					<notificationType>BRICK_ADD_DIALOG</notificationType>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>CAT</tutorType>
+					<message>-->Kostuembrick!!</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+					<sleepTime>500</sleepTime>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>DOG</tutorType>
+					<message>Supi supi supi. Du bist so unglaublich spitze.</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+					<sleepTime>500</sleepTime>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+					<tutorType>CAT</tutorType>
+					<x>200</x>
+					<y>300</y>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>CAT</tutorType>
+					<message>Tua mol Costumes clickele!</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+					<tutorType>CAT</tutorType>
+					<notificationType>TAB_COSTUMES</notificationType>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+					<sleepTime>500</sleepTime>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+					<tutorType>CAT</tutorType>
+					<x>200</x>
+					<y>300</y>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>CAT</tutorType>
+					<message>Jetzt tua mol de Sounds clickele!</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+					<tutorType>CAT</tutorType>
+					<notificationType>TAB_SOUNDS</notificationType>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+					<tutorType>CAT</tutorType>
+					<x>200</x>
+					<y>300</y>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>CAT</tutorType>
+					<message>Jetzt tua mol den Sound dazuafügen!</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+					<tutorType>CAT</tutorType>
+					<notificationType>SOUNDS_ADD_SOUND</notificationType>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+			</lessonContent>
+			<lessonID>0</lessonID>
+			<currentStep>0</currentStep>
+		</at.tugraz.ist.catroid.tutorial.Lesson>
+		<at.tugraz.ist.catroid.tutorial.Lesson>
+			<lessonName>Multithreading</lessonName>
+			<lessonContent>
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+					<sleepTime>500</sleepTime>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+					<tutorType>CAT</tutorType>
+					<x>100</x>
+					<y>200</y>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+					<tutorType>CAT</tutorType>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+					<sleepTime>500</sleepTime>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+					<tutorType>DOG</tutorType>
+					<x>300</x>
+					<y>200</y>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+					<tutorType>CAT</tutorType>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>CAT</tutorType>
+					<message>Original Schweizer Kräuterbonbons... nom nom nom!
+					</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>DOG</tutorType>
+					<message>Tell me more about it! woof woof woof *scratch*</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+					<tutorType>CAT</tutorType>
+					<sleepTime>1000</sleepTime>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+			</lessonContent>
+			<lessonID>1</lessonID>
+			<currentStep>0</currentStep>
+		</at.tugraz.ist.catroid.tutorial.Lesson>
+		<at.tugraz.ist.catroid.tutorial.Lesson>
+			<lessonName>Daemonenaustreibung mit Catroid</lessonName>
+			<lessonContent>
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+					<tutorType>CAT</tutorType>
+					<x>100</x>
+					<y>300</y>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>CAT</tutorType>
+					<message>ROAR! WOOOAAAAAA! GRRRRRRRRR .... miau</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+			</lessonContent>
+			<lessonID>2</lessonID>
+			<currentStep>0</currentStep>
+		</at.tugraz.ist.catroid.tutorial.Lesson>
+	</lessonArray>
+	<currentLesson>0</currentLesson>
 </at.tugraz.ist.catroid.tutorial.LessonCollection>

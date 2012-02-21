@@ -18,10 +18,8 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
-import android.app.Activity;
 import android.util.Log;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.tutorial.tasks.Task;
 import at.tugraz.ist.catroid.tutorial.tasks.TaskNotification;
 
 /**
@@ -29,22 +27,14 @@ import at.tugraz.ist.catroid.tutorial.tasks.TaskNotification;
  * 
  */
 public class ClickDispatcherV2 {
-	private Activity activity;
-	private Task.Notification currentNotification;
-
 	private LayoutExaminer le;
 
 	public ClickDispatcherV2() {
 		le = new LayoutExaminer();
 	}
 
-	/**
-	 * 
-	 */
-	public ClickDispatcherV2(String str) {
-		// TODO Auto-generated constructor stub
-
-	}
+	//big fat & ugly switch/case...
+	//don't know how to clean up yet...
 
 	public void processNotification(TaskNotification task) {
 		switch (task.getNotificationType()) {

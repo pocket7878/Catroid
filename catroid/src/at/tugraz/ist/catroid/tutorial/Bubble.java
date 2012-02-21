@@ -179,7 +179,7 @@ public class Bubble {
 		} else {
 			//Hund
 			bounds.left = marginLeft;
-			bounds.top = y - (2 * marginTop + 2 * marginBottom + (textSize * maxLines)); //immer 4 lines
+			bounds.top = y - (2 * marginTop + 2 * marginBottom + (textSize * maxLines)); //immer 4 lines //why?
 			bounds.right = x;
 			bounds.bottom = y;
 		}
