@@ -16,51 +16,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.tugraz.ist.catroid.tutorial.tasks;
+package at.tugraz.ist.catroid.tutorial;
 
-import java.util.HashMap;
-
-import at.tugraz.ist.catroid.tutorial.CloudController;
-import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
+import android.graphics.Canvas;
 
 /**
  * @author faxxe
  * 
  */
-public class FadeOut implements Task {
+public interface SurfaceObject {
+	public void draw(Canvas canvas);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.tutorial.tasks.Task#getType()
-	 */
-	@Override
-	public Type getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.tutorial.tasks.Task#getTutorType()
-	 */
-	@Override
-	public Tutor getTutorType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.tutorial.tasks.Task#execute(java.util.HashMap)
-	 */
-	@Override
-	public String execute(HashMap<Tutor, SurfaceObjectTutor> tutors) {
-		CloudController co = new CloudController();
-		co.fadeOut();
-		return null;
-	}
-
+	public void update(long gameTime);
 }

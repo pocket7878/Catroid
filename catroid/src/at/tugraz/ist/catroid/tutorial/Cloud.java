@@ -26,7 +26,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Path.Direction;
 
-public class Cloud {
+public class Cloud implements SurfaceObject {
 	private Paint paint = new Paint();
 	private static Context context;
 	private static Cloud cloud = null;
@@ -51,15 +51,18 @@ public class Cloud {
 		if (cloud == null) {
 			cloud = new Cloud();
 		}
-		//		cloud.fadeIn();
+		cloud.fadeIn();
 		return cloud;
 	}
 
+	@Override
 	public void update(long time) {
 
 	}
 
+	@Override
 	public void draw(Canvas canvas) {
+		//		Log.i("faxxe", "Cloud: draw!" + alpha);
 		int height = ((Activity) context).getWindowManager().getDefaultDisplay().getHeight();
 		int width = ((Activity) context).getWindowManager().getDefaultDisplay().getWidth();
 		paint.setColor(Color.GRAY);

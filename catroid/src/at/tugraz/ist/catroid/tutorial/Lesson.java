@@ -1,6 +1,7 @@
 package at.tugraz.ist.catroid.tutorial;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
@@ -52,8 +53,9 @@ public class Lesson {
 		}
 	}
 
-	String executeTask(TutorialOverlay tutorialOverlay) {
-		return (lessonContent.get(currentStep).execute(tutorialOverlay));
+	//	String executeTask(NewTutorialOverlay tutorialOverlay) {
+	String executeTask(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
+		return (lessonContent.get(currentStep).execute(tutors));
 		//		if (notification != null) {
 		//			try {
 		//				waitForNotification(notification);

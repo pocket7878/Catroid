@@ -1,6 +1,8 @@
 package at.tugraz.ist.catroid.tutorial.tasks;
 
-import at.tugraz.ist.catroid.tutorial.TutorialOverlay;
+import java.util.HashMap;
+
+import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 
 public class TaskSleep implements Task {
 	private Tutor tutorType;
@@ -29,7 +31,7 @@ public class TaskSleep implements Task {
 	}
 
 	@Override
-	public String execute(TutorialOverlay tutorialOverlay) {
+	public String execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		try {
 			Thread.sleep(sleepTime);
 		} catch (Exception e) {

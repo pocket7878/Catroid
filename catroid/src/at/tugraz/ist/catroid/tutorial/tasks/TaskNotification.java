@@ -1,7 +1,9 @@
 package at.tugraz.ist.catroid.tutorial.tasks;
 
+import java.util.HashMap;
+
 import at.tugraz.ist.catroid.tutorial.ClickDispatcherV2;
-import at.tugraz.ist.catroid.tutorial.TutorialOverlay;
+import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 
 public class TaskNotification implements Task {
 	private Tutor tutorType;
@@ -39,7 +41,7 @@ public class TaskNotification implements Task {
 	}
 
 	@Override
-	public String execute(TutorialOverlay tutorialOverlay) {
+	public String execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		//		ClickDispatcher clickDispatcher = tutorialOverlay.getClickDispatcher();
 		//		clickDispatcher.setCurrentNotification(notificationType, null);
 		ClickDispatcherV2 clickDispatcher = new ClickDispatcherV2();

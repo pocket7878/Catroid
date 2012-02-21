@@ -19,6 +19,7 @@
 package at.tugraz.ist.catroid.tutorial;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -36,6 +37,7 @@ import android.view.View;
 import android.view.WindowManager;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Values;
+import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
 /**
  * @author faxxe
@@ -60,9 +62,12 @@ public class Tutorial {
 	private Dialog dialog;
 	WindowManager windowManager;
 	static LessonCollection lessonCollection;
-	private static Tutor tutor;
-	private static Tutor tutor_2;
+
+	private static SurfaceObjectTutor tutor;
+	private static SurfaceObjectTutor tutor_2;
 	private boolean tutorialPaused = true;
+	private HashMap<Task.Tutor, SurfaceObjectTutor> tutors;
+	private ArrayList<SurfaceObject> tutors_arrayList;
 
 	private Tutorial() {
 	}
@@ -71,7 +76,6 @@ public class Tutorial {
 		if (onlyPassContextWhenActivityChanges != null) {
 			context = onlyPassContextWhenActivityChanges;
 		}
-		//		tutorial.initalizeCurrentTutorial();
 		return tutorial;
 	}
 
@@ -100,6 +104,10 @@ public class Tutorial {
 	}
 
 	private void initalizeCurrentTutorial() {
+		if (tutors == null) {
+			tutors = new HashMap<Task.Tutor, SurfaceObjectTutor>();
+			tutors_arrayList = new ArrayList<SurfaceObject>();
+		}
 		if (xmlHandler == null) {
 			xmlHandler = new XmlHandler(context);
 		}
@@ -107,10 +115,14 @@ public class Tutorial {
 			lessonCollection = xmlHandler.getLessonCollection();
 		}
 		if (tutor == null) {
-			tutor = new Tutor(context.getResources(), context, Tutor.TutorType.CAT_TUTOR);
+			tutor = new TutorCat(context, tutorialOverlay);
+			tutors.put(tutor.tutorType, tutor);
+			tutors_arrayList.add(tutor);
 		}
 		if (tutor_2 == null) {
-			tutor_2 = new Tutor(context.getResources(), context, Tutor.TutorType.DOG_TUTOR);
+			tutor_2 = new TutorDog(context, tutorialOverlay);
+			tutors_arrayList.add(tutor_2);
+			tutors.put(tutor_2.tutorType, tutor_2);
 		}
 	}
 
@@ -220,7 +232,6 @@ public class Tutorial {
 		if (!tutorialActive || !tutorialPaused) {
 			return; //why do we get here?
 		}
-		initalizeCurrentTutorial();
 		Log.i("faxxe", "resumeTutorial from within: " + ((Activity) context).getLocalClassName());
 		tutorialPaused = false;
 		prepareForResumeTutorial();
@@ -231,13 +242,18 @@ public class Tutorial {
 	private void prepareForResumeTutorial() {
 		setupTutorialOverlay();
 		generateTutorialThread();
+		initalizeCurrentTutorial();
 	}
 
 	private void setupTutorialOverlay() {
 		dragViewParameters = createLayoutParameters();
 		windowManager = ((Activity) context).getWindowManager();
-		tutorialOverlay = new TutorialOverlay(context, tutor, tutor_2);
+		tutorialOverlay = new TutorialOverlay(context);//, tutor, tutor_2);
 		windowManager.addView(tutorialOverlay, dragViewParameters);
+	}
+
+	public ArrayList<SurfaceObject> getTutors() {
+		return tutors_arrayList;
 	}
 
 	public void ttOtF() {
@@ -348,6 +364,7 @@ public class Tutorial {
 	public boolean continueTutorial() {
 		if (tutorialActive) {
 			lessonCollection.setTutorialOverlay(tutorialOverlay);
+			lessonCollection.setTutors(tutors);
 			do {
 				String notification = lessonCollection.executeTask();
 				if (notification != null) {

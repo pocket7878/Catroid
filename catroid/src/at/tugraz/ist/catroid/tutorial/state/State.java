@@ -19,12 +19,11 @@
 package at.tugraz.ist.catroid.tutorial.state;
 
 import android.graphics.Bitmap;
-import at.tugraz.ist.catroid.tutorial.Tutor;
-import at.tugraz.ist.catroid.tutorial.Tutor.TutorType;
+import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
 public interface State {
 
-	public Bitmap updateAnimation(Tutor.TutorType tutorType);
+	public Bitmap updateAnimation(Task.Tutor tutorType);
 
 	public void resetState();
 

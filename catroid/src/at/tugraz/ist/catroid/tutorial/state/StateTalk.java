@@ -25,7 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.tutorial.Tutor;
+import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
 /**
  * @author Max
@@ -37,19 +37,19 @@ public class StateTalk implements State {
 	int frameCount;
 	Bitmap bitmaps_talk[];
 	Resources resources;
-	private static HashMap<Tutor.TutorType, StateTalk> instances;
+	private static HashMap<Task.Tutor, StateTalk> instances;
 
 	@Override
 	public String getStateName() {
 		return (this.getClass().getSimpleName());
 	}
 
-	private StateTalk(StateController controller, Resources resources, Tutor.TutorType tutorType) {
+	private StateTalk(StateController controller, Resources resources, Task.Tutor tutorType) {
 		this.resources = resources;
 		//this.controller = controller;
 		bitmaps_talk = new Bitmap[3];
 
-		if (tutorType.compareTo(Tutor.TutorType.CAT_TUTOR) == 0) {
+		if (tutorType.compareTo(Task.Tutor.CAT) == 0) {
 			bitmaps_talk[0] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_1);
 			bitmaps_talk[1] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_2);
 			bitmaps_talk[2] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_3);
@@ -67,10 +67,10 @@ public class StateTalk implements State {
 		frameCount = 3;
 	}
 
-	public static State enter(StateController controller, Resources resources, Tutor.TutorType tutorType) {
+	public static State enter(StateController controller, Resources resources, Task.Tutor tutorType) {
 		Log.i("catroid", "State Talk");
 		if (instances == null) {
-			instances = new HashMap<Tutor.TutorType, StateTalk>();
+			instances = new HashMap<Task.Tutor, StateTalk>();
 		}
 		if (!instances.containsKey(tutorType)) {
 			instances.put(tutorType, new StateTalk(controller, resources, tutorType));
@@ -80,7 +80,7 @@ public class StateTalk implements State {
 	}
 
 	@Override
-	public Bitmap updateAnimation(Tutor.TutorType tutorType) {
+	public Bitmap updateAnimation(Task.Tutor tutorType) {
 		if (currentFrame < (frameCount - 1)) {
 			currentFrame++;
 		} else {

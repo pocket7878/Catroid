@@ -1,10 +1,12 @@
 package at.tugraz.ist.catroid.tutorial.tasks;
 
-import at.tugraz.ist.catroid.tutorial.TutorialOverlay;
+import java.util.HashMap;
+
+import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 
 public interface Task {
 
-	public enum Type {
+	public static enum Type {
 		JUMP, APPEAR, DISAPPEAR, SAY, FLIP, POINT, NOTIFICATION, SLEEP
 	}
 
@@ -30,7 +32,7 @@ public interface Task {
 		IF_PROJECT_STARTED, WAIT_SECONDS, IF, REPEAT, REPEAT_TIMES, SET_COSTUME
 	}
 
-	public String execute(TutorialOverlay tutorialOverlay);
+	public String execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors);
 
 	public Type getType();
 

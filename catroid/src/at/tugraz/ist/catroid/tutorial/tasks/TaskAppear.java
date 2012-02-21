@@ -1,6 +1,9 @@
 package at.tugraz.ist.catroid.tutorial.tasks;
 
-import at.tugraz.ist.catroid.tutorial.TutorialOverlay;
+import java.util.HashMap;
+
+import android.util.Log;
+import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 
 public class TaskAppear implements Task {
 	private int x;
@@ -38,13 +41,12 @@ public class TaskAppear implements Task {
 	}
 
 	@Override
-	public String execute(TutorialOverlay tutorialOverlay) {
-		if (tutorType == Tutor.CAT) {
-			tutorialOverlay.switchToCat();
-		} else {
-			tutorialOverlay.switchToDog();
+	public String execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
+		SurfaceObjectTutor tutor = tutors.get(tutorType);
+		if (tutor != null) {
+			Log.i("faxxe", "Lesson: tutor exists!");
+			tutor.appear(x, y);
 		}
-		tutorialOverlay.appear(x, y);
 		return ("AppearDone");
 	}
 }

@@ -18,8 +18,10 @@
  */
 package at.tugraz.ist.catroid.tutorial.tasks;
 
+import java.util.HashMap;
+
 import at.tugraz.ist.catroid.tutorial.CloudController;
-import at.tugraz.ist.catroid.tutorial.TutorialOverlay;
+import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 
 /**
  * @author faxxe
@@ -33,7 +35,7 @@ public class TaskFadeIn implements Task {
 	 * @see at.tugraz.ist.catroid.tutorial.tasks.Task#execute(at.tugraz.ist.catroid.tutorial.TutorialOverlay)
 	 */
 	@Override
-	public String execute(TutorialOverlay tutorialOverlay) {
+	public String execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		// TODO Auto-generated method stub
 		CloudController co = new CloudController();
 		co.fadeIn();

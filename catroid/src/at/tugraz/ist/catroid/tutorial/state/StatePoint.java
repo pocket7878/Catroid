@@ -25,7 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.tutorial.Tutor;
+import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
 /**
  * @author Max
@@ -38,7 +38,7 @@ public class StatePoint implements State {
 	Bitmap bitmaps_point[];
 	private StateController controller;
 	Resources resources;
-	private static HashMap<Tutor.TutorType, StatePoint> instances;
+	private static HashMap<Task.Tutor, StatePoint> instances;
 	boolean animationDirectionToBody;
 
 	@Override
@@ -46,11 +46,11 @@ public class StatePoint implements State {
 		return (this.getClass().getSimpleName());
 	}
 
-	private StatePoint(StateController controller, Resources resources, Tutor.TutorType tutorType) {
+	private StatePoint(StateController controller, Resources resources, Task.Tutor tutorType) {
 		this.resources = resources;
 		this.controller = controller;
 		bitmaps_point = new Bitmap[6];
-		if (tutorType.compareTo(Tutor.TutorType.CAT_TUTOR) == 0) {
+		if (tutorType.compareTo(Task.Tutor.CAT) == 0) {
 			bitmaps_point[0] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_point_1);
 			bitmaps_point[1] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_point_2);
 			bitmaps_point[2] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_point_3);
@@ -75,10 +75,10 @@ public class StatePoint implements State {
 		animationDirectionToBody = true;
 	}
 
-	public static State enter(StateController controller, Resources resources, Tutor.TutorType tutorType) {
+	public static State enter(StateController controller, Resources resources, Task.Tutor tutorType) {
 		Log.i("catroid", "State Point");
 		if (instances == null) {
-			instances = new HashMap<Tutor.TutorType, StatePoint>();
+			instances = new HashMap<Task.Tutor, StatePoint>();
 		}
 		if (!instances.containsKey(tutorType)) {
 			instances.put(tutorType, new StatePoint(controller, resources, tutorType));
@@ -88,7 +88,7 @@ public class StatePoint implements State {
 	}
 
 	@Override
-	public Bitmap updateAnimation(Tutor.TutorType tutorType) {
+	public Bitmap updateAnimation(Task.Tutor tutorType) {
 		if (animationDirectionToBody) {
 			if (currentFrame < (frameCount - 1)) {
 				currentFrame++;

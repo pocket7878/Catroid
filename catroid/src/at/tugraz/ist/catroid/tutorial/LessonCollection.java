@@ -1,12 +1,16 @@
 package at.tugraz.ist.catroid.tutorial;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
 public class LessonCollection {
 	private ArrayList<Lesson> lessonArray;
 	private int currentLesson;
 	private int currentPossibleLesson;
 	private TutorialOverlay tutorialOverlay;
+	private HashMap<Task.Tutor, SurfaceObjectTutor> tutors;
 
 	public void setTutorialOverlay(TutorialOverlay tutorialOverlay) {
 		this.tutorialOverlay = tutorialOverlay;
@@ -43,7 +47,8 @@ public class LessonCollection {
 	}
 
 	String executeTask() {
-		return (lessonArray.get(currentLesson).executeTask(tutorialOverlay));
+		//		return (lessonArray.get(currentLesson).executeTask(tutorialOverlay));
+		return (lessonArray.get(currentLesson).executeTask(tutors));
 	}
 
 	boolean nextLesson() {
@@ -89,6 +94,10 @@ public class LessonCollection {
 
 	boolean forwardStep() {
 		return (lessonArray.get(currentLesson).forwardStep());
+	}
+
+	public void setTutors(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
+		this.tutors = tutors;
 	}
 
 }

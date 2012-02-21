@@ -21,48 +21,39 @@
 					<sleepTime>1000</sleepTime>
 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
 
-<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
-<!-- 					<tutorType>CAT</tutorType> -->
-<!-- 					<message>HE!, Dummer Hund!!</message> -->
-<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>CAT</tutorType>
+					<message>HE!, Dummer Hund!!</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 
-<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskFlip> -->
-<!-- 					<tutorType>DOG</tutorType> -->
-<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskFlip> -->
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+					<tutorType>DOG</tutorType>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
 
-<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
-<!-- 					<tutorType>DOG</tutorType> -->
-<!-- 					<message>Blöde Katz!!</message> -->
-<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>DOG</tutorType>
+					<message>Blöde Katz!!</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 
-<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
-<!-- 					<tutorType>CAT</tutorType> -->
-<!-- 					<message>Sag mal, was genau machen wir hier?</message> -->
-<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>CAT</tutorType>
+					<message>Sag mal, was genau machen wir hier?</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 
-<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
-<!-- 					<tutorType>DOG</tutorType> -->
-<!-- 					<message>Arbeiten! Was sonnst?</message> -->
-<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>DOG</tutorType>
+					<message>Arbeiten! Was sonnst?</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 
-<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
-<!-- 					<tutorType>CAT</tutorType> -->
-<!-- 					<message>Ach wirklich? Schade! Servus Hund!</message> -->
-<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+					<tutorType>CAT</tutorType>
+					<message>Ach wirklich? Schade! Servus Hund!</message>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 				
-<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskDisappear> -->
-<!-- 					<tutorType>DOG</tutorType> -->
-<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskDisappear> -->
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskDisappear>
+					<tutorType>DOG</tutorType>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskDisappear>
 				
-<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
-<!-- 					<tutorType>CAT</tutorType> -->
-<!-- 					<message>Na gut, dann fangen wir halt an!</message> -->
-<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
-				
-<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
-<!-- 					<tutorType>CAT</tutorType> -->
-<!-- 					<message>Hallo Kind! Willkommen bei Catroid! Ich werde dich hier mal rumführen. </message> -->
-<!-- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
 				
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 					<tutorType>CAT</tutorType>

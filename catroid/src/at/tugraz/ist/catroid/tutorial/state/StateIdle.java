@@ -25,7 +25,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.tutorial.Tutor;
+import at.tugraz.ist.catroid.tutorial.tasks.Task;
+import at.tugraz.ist.catroid.tutorial.tasks.Task.Tutor;
 
 /**
  * @author User
@@ -33,7 +34,7 @@ import at.tugraz.ist.catroid.tutorial.Tutor;
  */
 public class StateIdle implements State {
 	public String stateName = this.getClass().getSimpleName();
-	private static HashMap<Tutor.TutorType, StateIdle> instances;
+	private static HashMap<Task.Tutor, StateIdle> instances;
 	Bitmap bitmap;
 
 	int currentFrame;
@@ -44,9 +45,9 @@ public class StateIdle implements State {
 		return (this.getClass().getSimpleName());
 	}
 
-	private StateIdle(StateController controller, Resources resources, Tutor.TutorType tutorType) {
+	private StateIdle(StateController controller, Resources resources, Task.Tutor tutorType) {
 		//this.controller = controller;
-		if (tutorType.compareTo(Tutor.TutorType.CAT_TUTOR) == 0) {
+		if (tutorType.compareTo(Tutor.CAT) == 0) {
 			bitmap = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_3);
 		} else {
 			bitmap = BitmapFactory.decodeResource(resources, R.drawable.tutor_dog_talk_1);
@@ -60,10 +61,10 @@ public class StateIdle implements State {
 
 	}
 
-	public static State enter(StateController controller, Resources resources, Tutor.TutorType tutorType) {
+	public static State enter(StateController controller, Resources resources, Task.Tutor tutorType) {
 		Log.i("catroid", "State Idle");
 		if (instances == null) {
-			instances = new HashMap<Tutor.TutorType, StateIdle>();
+			instances = new HashMap<Task.Tutor, StateIdle>();
 		}
 		if (!instances.containsKey(tutorType)) {
 			instances.put(tutorType, new StateIdle(controller, resources, tutorType));
@@ -73,7 +74,7 @@ public class StateIdle implements State {
 	}
 
 	@Override
-	public Bitmap updateAnimation(Tutor.TutorType tutorType) {
+	public Bitmap updateAnimation(Tutor tutorType) {
 		if (currentFrame < frameCount) {
 			currentFrame++;
 			return (this.bitmap);

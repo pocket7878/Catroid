@@ -1,6 +1,8 @@
 package at.tugraz.ist.catroid.tutorial.tasks;
 
-import at.tugraz.ist.catroid.tutorial.TutorialOverlay;
+import java.util.HashMap;
+
+import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 
 public class TaskJump implements Task {
 	private int x;
@@ -38,13 +40,11 @@ public class TaskJump implements Task {
 	}
 
 	@Override
-	public String execute(TutorialOverlay tutorialOverlay) {
-		if (tutorType == Tutor.CAT) {
-			tutorialOverlay.switchToCat();
-		} else {
-			tutorialOverlay.switchToDog();
+	public String execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
+		SurfaceObjectTutor tutor = tutors.get(tutorType);
+		if (tutor != null) {
+			tutor.jumpTo(x, y);
 		}
-		tutorialOverlay.jumpTo(x, y);
 		return ("JumpDone");
 	}
 }
