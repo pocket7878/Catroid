@@ -281,7 +281,6 @@
     <!-- Lego Mindstorms Strings -->
     <string name="brick_motor_action">NXT move motor</string>
     <string name="motor">motor</string>
-    <string name="motor_duration">Duration</string>
     <string name="motor_speed">Speed</string>
     <string name="brick_motor_turn_angle">NXT turn motor</string>
     <string name="motor_angle">Angle</string>

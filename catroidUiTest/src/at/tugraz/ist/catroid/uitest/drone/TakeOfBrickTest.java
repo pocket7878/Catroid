@@ -123,6 +123,7 @@ public class TakeOfBrickTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		verify(droneMock);
 
 		solo.sleep(1000);
-
+		//just for file tests: assertions are covered by verifytest(...)
+		assertTrue("should not fail", true);
 	}
 }
