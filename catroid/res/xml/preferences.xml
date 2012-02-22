@@ -37,5 +37,21 @@
 
 	</PreferenceCategory>
 
+	<PreferenceCategory android:title="@string/pref_category_drone">
+		<Preference
+		    android:key="setting_drone_plugin"
+		    android:title="@string/pref_plugin_drone"
+		/>
+		<CheckBoxPreference
+			android:key="setting_drone_bricks"
+			android:title="@string/pref_enable_drone_bricks"
+			android:summary="@string/pref_descr_drone_bricks"
+			android:defaultValue="false" />
+		<EditTextPreference
+			android:key="setting_drone_dsl_timeout"
+			android:title="@string/pref_dsl_timeout_drone"
+			android:summary="@string/pref_descr_dsl_timeout_drone"
+			android:defaultValue="5" />
+	</PreferenceCategory>
   
 </PreferenceScreen>

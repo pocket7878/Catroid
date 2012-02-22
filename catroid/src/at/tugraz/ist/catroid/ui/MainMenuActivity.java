@@ -41,6 +41,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.plugin.PluginManager;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.transfers.CheckTokenTask;
@@ -81,6 +82,8 @@ public class MainMenuActivity extends Activity {
 		projectManager = ProjectManager.getInstance();
 
 		Utils.loadProjectIfNeeded(this);
+
+		PluginManager.createPluginManager(this);
 
 		if (projectManager.getCurrentProject() == null) {
 			findViewById(R.id.current_project_button).setEnabled(false);
