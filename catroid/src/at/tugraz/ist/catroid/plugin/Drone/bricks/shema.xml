@@ -1,46 +1,49 @@
-<!-- Sample Schema -->
-<xs:complexType name="glideToBrick">
-	<xs:complexContent>
-		<xs:extension base="brick">
-			<xs:sequence>
-				<xs:element name="durationInMilliSeconds" type="xs:int" />
-				<!-- ab hier ist zu ändern -->
-				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
-				<xs:element name="xDestination" type="xs:int" />
-				<xs:element name="yDestination" type="xs:int" />
-				<!-- bis hier ändern -->
-			</xs:sequence>
-		</xs:extension>
-	</xs:complexContent>
-</xs:complexType>
+<!-- <!-- Sample Schema -->
+-->
+<!-- <xs:complexType name="glideToBrick"> -->
+<!-- <xs:complexContent> -->
+<!-- <xs:extension base="brick"> -->
+<!-- <xs:sequence> -->
+<!-- <xs:element name="durationInMilliSeconds" type="xs:int" /> -->
+<!-- ab hier ist zu ändern -->
+<!-- <xs:element name="sprite" type="spriteRef" minOccurs="0" /> -->
+<!-- <xs:element name="xDestination" type="xs:int" /> -->
+<!-- <xs:element name="yDestination" type="xs:int" /> -->
+<!-- bis hier ändern -->
+<!-- </xs:sequence> -->
+<!-- </xs:extension> -->
+<!-- </xs:complexContent> -->
+<!-- </xs:complexType> -->
 
-<!-- Sample Schema -->
-<xs:complexType name="changeXByBrick">
-	<xs:complexContent>
-		<xs:extension base="brick">
-			<xs:sequence>
-				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
-				<xs:element name="xMovement" type="xs:int" />
-			</xs:sequence>
-		</xs:extension>
-	</xs:complexContent>
-</xs:complexType>
+<!-- <!-- Sample Schema -->
+-->
+<!-- <xs:complexType name="changeXByBrick"> -->
+<!-- <xs:complexContent> -->
+<!-- <xs:extension base="brick"> -->
+<!-- <xs:sequence> -->
+<!-- <xs:element name="sprite" type="spriteRef" minOccurs="0" /> -->
+<!-- <xs:element name="xMovement" type="xs:int" /> -->
+<!-- </xs:sequence> -->
+<!-- </xs:extension> -->
+<!-- </xs:complexContent> -->
+<!-- </xs:complexType> -->
 
-<!-- Sample Schema -->
-<xs:complexType name="glideToBrick">
-	<xs:complexContent>
-		<xs:extension base="brick">
-			<xs:sequence>
-				<xs:element name="durationInMilliSeconds" type="xs:int" />
-				<!-- ab hier ist zu ändern -->
-				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
-				<xs:element name="xDestination" type="xs:int" />
-				<xs:element name="yDestination" type="xs:int" />
-				<!-- bis hier ändern -->
-			</xs:sequence>
-		</xs:extension>
-	</xs:complexContent>
-</xs:complexType>
+<!-- <!-- Sample Schema -->
+-->
+<!-- <xs:complexType name="glideToBrick"> -->
+<!-- <xs:complexContent> -->
+<!-- <xs:extension base="brick"> -->
+<!-- <xs:sequence> -->
+<!-- <xs:element name="durationInMilliSeconds" type="xs:int" /> -->
+<!-- ab hier ist zu ändern -->
+<!-- <xs:element name="sprite" type="spriteRef" minOccurs="0" /> -->
+<!-- <xs:element name="xDestination" type="xs:int" /> -->
+<!-- <xs:element name="yDestination" type="xs:int" /> -->
+<!-- bis hier ändern -->
+<!-- </xs:sequence> -->
+<!-- </xs:extension> -->
+<!-- </xs:complexContent> -->
+<!-- </xs:complexType> -->
 
 <!-- Drone Bricks -->
 <!-- DroneChangeFlyingModeBrick -->
@@ -67,8 +70,8 @@
 			<xs:sequence>
 				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
 				<xs:element name="configKey" type="xs:int" />
-				<xs:element name="configValue" type="xs:float" />	
-				
+				<xs:element name="configValue" type="xs:float" />
+
 				<!-- TODO not here in unconfigured brick BEGIN -->
 				<xs:element name="configKeyTitle" type="xs:String" />
 				<!-- TODO not here in unconfigured brick END -->
@@ -140,18 +143,24 @@
 				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
 
 				<!-- TODO how configure a array -->
-				<xs:element name="options" type="xs:boolean" />
+				<xs:element name="options" type="options" />
+
+				<!-- <xs:complexType name="options"> -->
+				<!-- 	<xs:sequence> -->
+				<!-- 		<xs:element name="boolean" type="xs:boolean" minOccurs="8" maxOccurs="8"/> -->
+				<!-- 	</xs:sequence> -->
+				<!-- </xs:complexType> -->
 
 				<!-- Array in the Project file BEGIN -->
 				<!-- <options> -->
-				<!-- 	<boolean>false</boolean> -->
-				<!-- 	<boolean>false</boolean> -->
-				<!-- 	<boolean>false</boolean> -->
-				<!-- 	<boolean>false</boolean> -->
-				<!-- 	<boolean>false</boolean> -->
-				<!-- 	<boolean>false</boolean> -->
-				<!-- 	<boolean>false</boolean> -->
-				<!-- 	<boolean>false</boolean> -->
+				<!-- <boolean>false</boolean> -->
+				<!-- <boolean>false</boolean> -->
+				<!-- <boolean>false</boolean> -->
+				<!-- <boolean>false</boolean> -->
+				<!-- <boolean>false</boolean> -->
+				<!-- <boolean>false</boolean> -->
+				<!-- <boolean>false</boolean> -->
+				<!-- <boolean>false</boolean> -->
 				<!-- </options> -->
 				<!-- Array in the Project file END -->
 
