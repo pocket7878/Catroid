@@ -70,31 +70,32 @@ public class DroneMoveBrick implements Brick, OnSeekBarChangeListener, OnDismiss
 		double throttle = 0, roll = 0, pitch = 0, yaw = 0;
 		double constant = (double) velocity / 100;
 
-		if (options[0] == true) {
-			pitch -= constant;
+		if (options != null) {
+			if (options[0] == true) {
+				pitch -= constant;
+			}
+			if (options[1] == true) {
+				pitch += constant;
+			}
+			if (options[2] == true) {
+				roll -= constant;
+			}
+			if (options[3] == true) {
+				roll += constant;
+			}
+			if (options[4] == true) {
+				throttle -= constant;
+			}
+			if (options[5] == true) {
+				throttle += constant;
+			}
+			if (options[6] == true) {
+				yaw -= constant;
+			}
+			if (options[7] == true) {
+				yaw += constant;
+			}
 		}
-		if (options[1] == true) {
-			pitch += constant;
-		}
-		if (options[2] == true) {
-			roll -= constant;
-		}
-		if (options[3] == true) {
-			roll += constant;
-		}
-		if (options[4] == true) {
-			throttle -= constant;
-		}
-		if (options[5] == true) {
-			throttle += constant;
-		}
-		if (options[6] == true) {
-			yaw -= constant;
-		}
-		if (options[7] == true) {
-			yaw += constant;
-		}
-
 		DroneHandler.getInstance().getDrone().move(throttle, roll, pitch, yaw);
 	}
 
