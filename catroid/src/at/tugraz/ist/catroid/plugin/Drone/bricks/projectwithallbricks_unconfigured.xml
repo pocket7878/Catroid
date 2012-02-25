@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<Content.Project>
+	<androidVersion>10</androidVersion>
+	<catroidVersionCode>10</catroidVersionCode>
+	<catroidVersionName>0.5.6a</catroidVersionName>
+	<deviceName>Desire HD</deviceName>
+	<projectName>droneunconf</projectName>
+	<screenHeight>800</screenHeight>
+	<screenWidth>480</screenWidth>
+	<spriteList>
+		<Content.Sprite>
+			<costumeDataList>
+				<Common.CostumeData>
+					<fileName>B978398F6E8D16B857AA81618F3EF879_background</fileName>
+					<name>background</name>
+				</Common.CostumeData>
+			</costumeDataList>
+			<name>Background</name>
+			<scriptList />
+			<soundList />
+		</Content.Sprite>
+		<Content.Sprite>
+			<costumeDataList />
+			<name>123</name>
+			<scriptList>
+				<Content.StartScript>
+					<brickList>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneTakeOffBrick>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneTakeOffBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLandBrick>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLandBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneMoveBrick>
+							<options>
+								<boolean>false</boolean>
+								<boolean>false</boolean>
+								<boolean>false</boolean>
+								<boolean>false</boolean>
+								<boolean>false</boolean>
+								<boolean>false</boolean>
+								<boolean>false</boolean>
+								<boolean>false</boolean>
+							</options>
+							<sprite reference="../../../../.." />
+							<velocity>50</velocity>
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneMoveBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopMoveBrick>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopMoveBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneMoveAnimationBrick>
+							<animation>0</animation>
+							<durationSeconds>3</durationSeconds>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneMoveAnimationBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLedAnimationBrick>
+							<animation>0</animation>
+							<durationSeconds>3</durationSeconds>
+							<frequency>2.5</frequency>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLedAnimationBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneChangeFlyingModeBrick>
+							<flyingMode>0</flyingMode>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneChangeFlyingModeBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneConfigBrick>
+							<configKey>0</configKey>
+							<configValue>0.0</configValue>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneConfigBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStartVideoBrick>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStartVideoBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoBrick>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStartVideoRecorderBrick>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStartVideoRecorderBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoRecorderBrick>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoRecorderBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneSaveSnapshotBrick>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneSaveSnapshotBrick>
+					</brickList>
+					<sprite reference="../../.." />
+				</Content.StartScript>
+			</scriptList>
+			<soundList />
+		</Content.Sprite>
+	</spriteList>
+</Content.Project>
