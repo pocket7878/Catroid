@@ -38,6 +38,8 @@ public interface Brick extends Serializable {
 	public static final int BLUETOOTH_LEGO_NXT = 0x4;
 	public static final int BLUETOOTH_ARDUINO = 0x8;
 
+	public static final int WIFI_DRONE = 0x10;
+
 	public void execute();
 
 	public Sprite getSprite();

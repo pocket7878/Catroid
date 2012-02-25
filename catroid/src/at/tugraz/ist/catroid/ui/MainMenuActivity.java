@@ -41,6 +41,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.plugin.PluginManager;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.transfers.CheckTokenTask;
@@ -55,6 +56,7 @@ import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class MainMenuActivity extends Activity {
+	private static final String PREF_PROJECTNAME_KEY = "projectName";
 	private static final String PROJECTNAME_TAG = "fname=";
 	private ProjectManager projectManager;
 	private ActivityHelper activityHelper;
@@ -81,6 +83,17 @@ public class MainMenuActivity extends Activity {
 		projectManager = ProjectManager.getInstance();
 
 		Utils.loadProjectIfNeeded(this);
+		// Try to load sharedPreferences
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String projectName = prefs.getString(PREF_PROJECTNAME_KEY, null);
+
+		PluginManager.createPluginManager(this);
+
+		if (projectName != null) {
+			projectManager.loadProject(projectName, this, false);
+		} else {
+			projectManager.initializeDefaultProject(this);
+		}
 
 		if (projectManager.getCurrentProject() == null) {
 			findViewById(R.id.current_project_button).setEnabled(false);
@@ -90,7 +103,7 @@ public class MainMenuActivity extends Activity {
 		if (projectDownloadUrl == null || projectDownloadUrl.length() <= 0) {
 			return;
 		}
-		String projectName = getProjectName(projectDownloadUrl);
+		String projectName1 = getProjectName(projectDownloadUrl);
 
 		this.getIntent().setData(null);
 		new ProjectDownloadTask(this, projectDownloadUrl, projectName).execute();
