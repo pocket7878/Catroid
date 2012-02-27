@@ -20,12 +20,35 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.tugraz.ist.catroid.common;
+package at.tugraz.ist.catroid.stage;
 
-public class Values {
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
-	public static boolean NATIVE_DESKTOP_PLAYER = false;
+public class Client {
+	Socket requestSocket;
+	ObjectOutputStream out;
+	String message;
 
-	public static int SCREEN_WIDTH;
-	public static int SCREEN_HEIGHT;
+	public void connect() {
+		try {
+			requestSocket = new Socket("10.0.2.2", 22000);
+			System.out.println("Connected to localhost in port 2005");
+			out = new ObjectOutputStream(requestSocket.getOutputStream());
+			out.flush();
+		} catch (Exception e) {
+			System.out.println("Exception while trying to connect");
+		}
+	}
+
+	void sendMessage(String msg) {
+		try {
+			out.writeObject(msg);
+			out.flush();
+			System.out.println("client>" + msg);
+		} catch (Exception e) {
+			System.out.println("Exception while sending Message");
+		}
+	}
+
 }

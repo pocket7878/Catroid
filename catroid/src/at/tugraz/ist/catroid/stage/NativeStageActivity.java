@@ -20,12 +20,30 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.tugraz.ist.catroid.common;
+package at.tugraz.ist.catroid.stage;
 
-public class Values {
+import android.app.Activity;
+import android.os.Bundle;
+import at.tugraz.ist.catroid.ProjectManager;
 
-	public static boolean NATIVE_DESKTOP_PLAYER = false;
+public class NativeStageActivity extends Activity {
+	Client client;
 
-	public static int SCREEN_WIDTH;
-	public static int SCREEN_HEIGHT;
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		//setContentView(R.layout.main);
+		sendMessage();
+	}
+
+	public void sendMessage() {
+		client = new Client();
+		client.connect();
+		try {
+			Thread.sleep(2000);
+		} catch (Exception e) {
+		}
+		System.out.println("project name. " + ProjectManager.getInstance().getCurrentProject().getName());
+		client.sendMessage("Project-" + ProjectManager.getInstance().getCurrentProject().getName());
+	}
 }
