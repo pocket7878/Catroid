@@ -71,7 +71,7 @@ public class MoveNStepsBrickTest extends ActivityInstrumentationTestCase2<Script
 		stepsToMove = 23.0;
 		project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
-		Script script = new StartScript("script", sprite);
+		Script script = new StartScript(sprite);
 		moveNStepsBrick = new MoveNStepsBrick(sprite, 0);
 		script.addBrick(moveNStepsBrick);
 
@@ -110,4 +110,10 @@ public class MoveNStepsBrickTest extends ActivityInstrumentationTestCase2<Script
 		assertEquals("Value in Brick is not updated.", stepsToMove + "", solo.getEditText(0).getText().toString());
 	}
 
+	public void testResizeInputField() {
+		UiTestUtils.testDoubleEditText(solo, 0, 1.1, 50, true);
+		UiTestUtils.testDoubleEditText(solo, 0, 12345.6789, 50, true);
+		UiTestUtils.testDoubleEditText(solo, 0, -0.1, 50, true);
+		UiTestUtils.testDoubleEditText(solo, 0, -12345.6789, 50, false);
+	}
 }

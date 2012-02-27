@@ -35,6 +35,7 @@ import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.RepeatBrick;
 import at.tugraz.ist.catroid.ui.ScriptActivity;
+import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -79,10 +80,17 @@ public class RepeatBrickTest extends ActivityInstrumentationTestCase2<ScriptActi
 		assertNotNull("TextView does not exist", solo.getText(getActivity().getString(R.string.brick_repeat)));
 	}
 
+	public void testResizeInputField() {
+		UiTestUtils.testIntegerEditText(solo, 0, 1, 75, true);
+		UiTestUtils.testIntegerEditText(solo, 0, 1234567891, 75, true);
+		UiTestUtils.testIntegerEditText(solo, 0, 123, 75, true);
+		UiTestUtils.testIntegerEditText(solo, 0, -1234567891, 75, false);
+	}
+
 	private void createProject() {
 		project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
-		Script script = new StartScript("script", sprite);
+		Script script = new StartScript(sprite);
 		script.addBrick(new RepeatBrick(sprite, 3));
 
 		sprite.addScript(script);
