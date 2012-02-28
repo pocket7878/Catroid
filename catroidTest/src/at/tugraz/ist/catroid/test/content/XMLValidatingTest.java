@@ -42,6 +42,7 @@ import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.WhenScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.plugin.PluginManager;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.test.utils.XMLValidationUtil;
 import at.tugraz.ist.catroid.ui.dialogs.AddBrickDialog;
@@ -88,6 +89,11 @@ public class XMLValidatingTest extends AndroidTestCase {
 
 		Method[] methods = AddBrickDialog.class.getDeclaredMethods();
 		HashMap<String, List<Brick>> brickMap = null;
+
+		if (PluginManager.getInstance() == null) {
+			PluginManager.createPluginManager(getContext());
+		}
+
 		for (Method method : methods) {
 			if (method.getName().equalsIgnoreCase("setupBrickMap")) {
 				method.setAccessible(true);
@@ -105,6 +111,7 @@ public class XMLValidatingTest extends AndroidTestCase {
 		assertTrue("no bricks added to the start script", startScript.getBrickList().size() > 0);
 		StorageHandler.getInstance().saveProject(project);
 
+		//TODO adapt for Drone Bricks
 		XMLValidationUtil.sendProjectXMLToServerForValidating(project);
 	}
 
