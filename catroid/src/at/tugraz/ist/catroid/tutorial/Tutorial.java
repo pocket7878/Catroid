@@ -18,26 +18,11 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.graphics.PixelFormat;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.WindowManager;
 import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.common.Values;
-import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
 /**
  * @author faxxe
@@ -45,379 +30,108 @@ import at.tugraz.ist.catroid.tutorial.tasks.Task;
  */
 public class Tutorial {
 	public static final boolean DEBUG = true;
-	private static final String PREF_KEY_POSSIBLE_LESSON = "possibleLesson";
-
-	public volatile ArrayList<String> notifies = new ArrayList<String>();
-	private String currentNotification = "";
-
-	private Thread tutorialThread;
-
-	private static final Tutorial tutorial = new Tutorial();
-	private static boolean tutorialActive = false;
+	private static Tutorial tutorial = new Tutorial();
+	private boolean tutorialActive;
 	private static Context context;
-	private static XmlHandler xmlHandler;
-	boolean tutorialThreadRunning = true;
-	private static WindowManager.LayoutParams dragViewParameters;
-	public TutorialOverlay tutorialOverlay;
-	private Dialog dialog;
-	WindowManager windowManager;
-	static LessonCollection lessonCollection;
 
-	private static SurfaceObjectTutor tutor;
-	private static SurfaceObjectTutor tutor_2;
-	private boolean tutorialPaused = true;
-	private HashMap<Task.Tutor, SurfaceObjectTutor> tutors;
-	private ArrayList<SurfaceObject> tutors_arrayList;
+	TutorialController tutorialController = new TutorialController();
 
 	private Tutorial() {
 	}
 
+	public void clear() {
+		tutorial = null;
+		context = null;
+
+		tutorialController = null;
+	}
+
 	public static Tutorial getInstance(Context onlyPassContextWhenActivityChanges) {
+		if (tutorial == null) {
+			tutorial = new Tutorial();
+		}
 		if (onlyPassContextWhenActivityChanges != null) {
-			context = onlyPassContextWhenActivityChanges;
+			tutorial.setContextIfActivityHasChanged(onlyPassContextWhenActivityChanges);
 		}
 		return tutorial;
 	}
 
-	public boolean dispatchTouchEvent(MotionEvent ev) {
-		Activity activity = correctActivity((Activity) context);
-		boolean retval;
-		if (dialog == null) {
-			retval = activity.dispatchTouchEvent(ev);
-		} else {
-			retval = dialog.dispatchTouchEvent(ev);
-		}
-		return retval;
-	}
-
-	public Activity correctActivity(Activity currentActivity) {
-		if (currentActivity.getLocalClassName().compareTo("ui.ScriptActivity") == 0) {
-			currentActivity = currentActivity.getParent();
-		}
-		if (currentActivity.getLocalClassName().compareTo("ui.CostumeActivity") == 0) {
-			currentActivity = currentActivity.getParent();
-		}
-		if (currentActivity.getLocalClassName().compareTo("ui.SoundActivity") == 0) {
-			currentActivity = currentActivity.getParent();
-		}
-		return currentActivity;
-	}
-
-	private void initalizeCurrentTutorial() {
-		if (tutors == null) {
-			tutors = new HashMap<Task.Tutor, SurfaceObjectTutor>();
-			tutors_arrayList = new ArrayList<SurfaceObject>();
-		}
-		if (xmlHandler == null) {
-			xmlHandler = new XmlHandler(context);
-		}
-		if (lessonCollection == null) {
-			lessonCollection = xmlHandler.getLessonCollection();
-		}
-		if (tutor == null) {
-			tutor = new TutorCat(context, tutorialOverlay);
-			tutors.put(tutor.tutorType, tutor);
-			tutors_arrayList.add(tutor);
-		}
-		if (tutor_2 == null) {
-			tutor_2 = new TutorDog(context, tutorialOverlay);
-			tutors_arrayList.add(tutor_2);
-			tutors.put(tutor_2.tutorType, tutor_2);
+	public void setContextIfActivityHasChanged(Context con) {
+		if (con != null && context != con) {
+			context = con;
+			tutorialController.setActivityChanged(context);
 		}
 	}
 
-	private void setDisplayPreferences() {
-		if (tutorialActive) {
-			tutorial.setOrientationPortaitMode();
-			tutorial.setKeepScreenOn();
-		} else {
-			tutorial.setOrientationSensorMode();
-			tutorial.setKeepScreenOff();
-		}
-	}
-
-	private void setOrientationPortaitMode() {
-		try {
-			Activity currentActivity = (Activity) context;
-			currentActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		} catch (NullPointerException e) {
-			Log.i("faxxe", "Cannot set Portrait-Mode");
-			e.printStackTrace();
-		}
-	}
-
-	private void setOrientationSensorMode() {
-		try {
-			Activity currentActivity = (Activity) context;
-			currentActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
-		} catch (NullPointerException e) {
-			Log.i("faxxe", "Cannot set Sensor-Mode");
-			e.printStackTrace();
-		}
-	}
-
-	private void setKeepScreenOn() {
-		try {
-			Activity currentActivity = (Activity) context;
-			View focus = currentActivity.getCurrentFocus();
-			focus.setKeepScreenOn(true);
-		} catch (NullPointerException e) {
-			Log.i("faxxe", "Cannot set KeepScreenOn");
-			e.printStackTrace();
-		}
-	}
-
-	private void setKeepScreenOff() {
-		try {
-			Activity currentActivity = (Activity) context;
-			View focus = currentActivity.getCurrentFocus();
-			focus.setKeepScreenOn(false);
-			Log.i("faxxe", "KeepScreenOff - checked!");
-		} catch (Exception e) {
-			Log.i("faxxe", "Cannot set KeepScreenOff");
-			e.printStackTrace();
-		}
-	}
-
-	private void startTutorial() {
-		ProjectManager.getInstance().initializeThumbTutorialProject(context);
+	private void setTutorialActive() {
 		tutorialActive = true;
-		initalizeCurrentTutorial();
-		initalizeLessons();
-		showLessonDialog();
+		tutorialController.setTutorialActive(true);
+	}
 
-		Log.i("catroid", "starting tutorial...");
-		//resumeTutorial(); //moved to: OnClickHandler in generateLessonDialog();
+	private void setTutorialNotActive() {
+		tutorialActive = false;
+		tutorialController.setTutorialActive(false);
+	}
+
+	public void startTutorial() {
+		ProjectManager.getInstance().initializeThumbTutorialProject(context);
+		setTutorialActive();
+		tutorialController.initalizeLessonCollection();
+		tutorialController.initalizeLessons();
+		tutorialController.showLessonDialog();
 		return;
 	}
 
-	private void initalizeLessons() {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-		int possibleLesson = preferences.getInt(PREF_KEY_POSSIBLE_LESSON, 0);
-		lessonCollection.setLastPossibleLessonNumber(possibleLesson);
-		lessonCollection.switchToLesson(0);
-	}
-
-	private void showLessonDialog() {
-		if (lessonCollection.getLastPossibleLessonNumber() != 0) {
-			AlertDialog alert = generateLessonDialog();
-			alert.show();
-		} else {
-			resumeTutorial();
-		}
-	}
-
-	private AlertDialog generateLessonDialog() {
-		ArrayList<String> lessons = lessonCollection.getLessons();
-		final CharSequence[] items = new CharSequence[lessonCollection.getLastPossibleLessonNumber() + 1];
-		for (int i = 0; i < lessonCollection.getLastPossibleLessonNumber() + 1; i++) {
-			items[i] = lessons.get(i);
-		}
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("choose lesson:");
-		builder.setItems(items, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int item) {
-				lessonCollection.switchToLesson(item);
-				resumeTutorial();
-			}
-
-		});
-		AlertDialog alert = builder.create();
-		return alert;
-	}
-
-	public void resumeTutorial() {
-		if (!tutorialActive || !tutorialPaused) {
-			return; //why do we get here?
-		}
-		Log.i("faxxe", "resumeTutorial from within: " + ((Activity) context).getLocalClassName());
-		tutorialPaused = false;
-		prepareForResumeTutorial();
-		setDisplayPreferences();
-		tutorialThread.start();
-	}
-
-	private void prepareForResumeTutorial() {
-		setupTutorialOverlay();
-		generateTutorialThread();
-		initalizeCurrentTutorial();
-	}
-
-	private void setupTutorialOverlay() {
-		dragViewParameters = createLayoutParameters();
-		windowManager = ((Activity) context).getWindowManager();
-		tutorialOverlay = new TutorialOverlay(context);//, tutor, tutor_2);
-		windowManager.addView(tutorialOverlay, dragViewParameters);
-	}
-
-	public ArrayList<SurfaceObject> getTutors() {
-		return tutors_arrayList;
-	}
-
-	public void ttOtF() {
-		shutdownOverlay();
-		setupTutorialOverlay();
-	}
-
-	private void generateTutorialThread() {
-		tutorialThreadRunning = true;
-		tutorialThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				continueTutorial();
-				return;
-			}
-		});
-		tutorialThread.setName("TutorialThread");
+	public void destroyTutorial() {
+		tutorial = null;
 	}
 
 	public void stopButtonTutorial() {
 
 		stopTutorial();
-		setKeepScreenOff();
-		setOrientationSensorMode();
-		this.dialog = null;
-		lessonCollection.resetCurrentLesson();
+		tutorialController.stopButtonTutorial();
+		clear();
+		System.gc();
+		Log.i("faxxe", "stopButtonTutorial: calling finalisation");
+		System.runFinalization();
+
+	}
+
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		return tutorialController.dispatchTouchEvent(ev);
+	}
+
+	public void resumeTutorial() {
+		if (tutorialActive) {
+			tutorialController.resumeTutorial();
+		}
 	}
 
 	public void stopTutorial() {
 		pauseTutorial();
-		tutorialActive = false;
-		setSharedPreferences();
+		setTutorialNotActive();
+		tutorialController.stopThread();
+		tutorialController.setSharedPreferences();
 	}
 
 	public void pauseTutorial() {
 		Log.i("faxxe", "pause Tutorial");
-		if (!tutorialActive || tutorialPaused) {
+		if (!tutorialActive) {
 			return;
 		}
-		tutorialPaused = true;
-		idleTutors();
-		shutdownTutorialThread();
-		shutdownOverlay();
-
-		notifies.clear();
-	}
-
-	private void idleTutors() {
-		tutor.idle();
-		tutor_2.idle();
-	}
-
-	private void shutdownTutorialThread() {
-		tutorialThreadRunning = false;
-		boolean retry = true;
-		while (retry) {
-			try {
-				tutorialThread.join(1);
-				retry = false;
-			} catch (InterruptedException e) {
-				// we will try it again and again...
-			}
-		}
-	}
-
-	private void shutdownOverlay() {
-		try {
-			windowManager.removeView(tutorialOverlay);
-			tutorialOverlay = null;
-		} catch (NullPointerException e) {
-		}
-	}
-
-	private void setSharedPreferences() {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-		SharedPreferences.Editor sharedPreferencesEditor = preferences.edit();
-		sharedPreferencesEditor.putInt(PREF_KEY_POSSIBLE_LESSON, lessonCollection.getLastPossibleLessonNumber());
-		sharedPreferencesEditor.commit();
-		// TODO: Dont know, maybe reset it to default, but if not: copying the project
-		// so it dont get lost if tutorial is used again, so that the kids dont lose their work
-		//ProjectManager.getInstance().loadProject("defaultProject", context, false);
-	}
-
-	public void toggleTutorial() {
-		if (tutorialActive == false) {
-			startTutorial();
-		} else {
-			stopTutorial();
-		}
-
-	}
-
-	private WindowManager.LayoutParams createLayoutParameters() {
-		WindowManager.LayoutParams windowParameters = new WindowManager.LayoutParams();
-		windowParameters.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-		windowParameters.height = Values.SCREEN_HEIGHT;
-		windowParameters.width = Values.SCREEN_WIDTH;
-		windowParameters.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-				| WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
-		windowParameters.format = PixelFormat.TRANSLUCENT;
-		return windowParameters;
+		tutorialController.setTutorialPaused(true);
+		tutorialActive = true;
+		tutorialController.idleTutors();
+		tutorialController.removeOverlayFromWindow();
 	}
 
 	public Context getActualContext() {
 		return context;
 	}
 
-	public boolean continueTutorial() {
-		if (tutorialActive) {
-			lessonCollection.setTutorialOverlay(tutorialOverlay);
-			lessonCollection.setTutors(tutors);
-			do {
-				String notification = lessonCollection.executeTask();
-				if (notification != null) {
-					try {
-						waitForNotification(notification);
-						(new CloudController()).disapear();
-					} catch (Exception e) {
-
-					}
-				}
-			} while (lessonCollection.forwardStep() && tutorialThreadRunning);
-		}
-
-		if (!lessonCollection.forwardStep()) {
-			lessonCollection.resetCurrentLesson();
-		}
-
-		if (tutorialThreadRunning) {
-			lessonCollection.nextLesson();
-			stopTutorial();
-		}
-
-		return tutorialActive;
-	}
-
-	private void waitForNotification(String waitNotification) throws InterruptedException {
-		Log.i("faxxe", "waiting for: " + waitNotification);
-		while (tutorialThreadRunning) {
-			for (int i = 0; i < notifies.size(); i++) {
-				currentNotification = notifies.get(i);
-				if (currentNotification.compareTo(waitNotification) == 0) {
-					notifies.remove(i);
-					notifies.clear();
-					Log.i("faxxe", "waited enough!" + waitNotification);
-					return;
-				}
-
-				try {
-					Thread.sleep(50);
-				} catch (Exception e) {
-
-				}
-
-				//				synchronized (this) {
-				//					wait(100);
-				//				}
-			}
-		}
-	}
-
 	public void setNotification(String notification) {
-		Log.i("catroid", "setting Notification " + notification);
-		notifies.add(notification);
+		Log.i("faxxe", "TutorialS: " + notification);
+		tutorialController.notifyThread();
 	}
 
 	public boolean isActive() {
@@ -425,14 +139,69 @@ public class Tutorial {
 	}
 
 	public void rewindStep() {
-		lessonCollection.rewindStep();
+		tutorialController.rewindStep();
 	}
 
 	public void setDialog(Dialog dialog) {
-		this.dialog = dialog;
+		tutorialController.setDialog(dialog);
 	}
 
 	public Dialog getDialog() {
-		return this.dialog;
+		return tutorialController.getDialog();
 	}
+
+	//
+	//	private void setDisplayPreferences() {
+	//		if (tutorialActive) {
+	//			//			tutorial.setOrientationPortaitMode();
+	//			//			tutorial.setKeepScreenOn();
+	//		} else {
+	//			//			tutorial.setOrientationSensorMode();
+	//			//			tutorial.setKeepScreenOff();
+	//		}
+	//	}
+	//
+	//	private void setOrientationPortaitMode() {
+	//		try {
+	//			Activity currentActivity = (Activity) context;
+	//			currentActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+	//		} catch (NullPointerException e) {
+	//			Log.i("faxxe", "Cannot set Portrait-Mode");
+	//			e.printStackTrace();
+	//		}
+	//	}
+	//
+	//	private void setOrientationSensorMode() {
+	//		try {
+	//			Activity currentActivity = (Activity) context;
+	//			currentActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+	//		} catch (NullPointerException e) {
+	//			Log.i("faxxe", "Cannot set Sensor-Mode");
+	//			e.printStackTrace();
+	//		}
+	//	}
+	//
+	//	private void setKeepScreenOn() {
+	//		try {
+	//			Activity currentActivity = (Activity) context;
+	//			View focus = currentActivity.getCurrentFocus();
+	//			focus.setKeepScreenOn(true);
+	//		} catch (NullPointerException e) {
+	//			Log.i("faxxe", "Cannot set KeepScreenOn");
+	//			e.printStackTrace();
+	//		}
+	//	}
+	//
+	//	private void setKeepScreenOff() {
+	//		try {
+	//			Activity currentActivity = (Activity) context;
+	//			View focus = currentActivity.getCurrentFocus();
+	//			focus.setKeepScreenOn(false);
+	//			Log.i("faxxe", "KeepScreenOff - checked!");
+	//		} catch (Exception e) {
+	//			Log.i("faxxe", "Cannot set KeepScreenOff");
+	//			e.printStackTrace();
+	//		}
+	//	}
+
 }

@@ -46,6 +46,7 @@ public class StateController {
 
 	public void changeState(State state) {
 		Log.i("catroid", "change State to: " + state.getStateName() + "on Tutor: " + tutor.tutorType.toString());
+		this.state = null;
 		this.state = state;
 		this.state.resetState();
 	}

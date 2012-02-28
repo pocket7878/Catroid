@@ -14,6 +14,11 @@ public class Lesson {
 	Lesson() {
 	}
 
+	public void clean() {
+		lessonContent.clear();
+
+	}
+
 	//	public void insertTask(Task task){
 	//		lessonContent.add(currentStep, task);
 	//	}
@@ -54,7 +59,7 @@ public class Lesson {
 	}
 
 	//	String executeTask(NewTutorialOverlay tutorialOverlay) {
-	String executeTask(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
+	boolean executeTask(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		return (lessonContent.get(currentStep).execute(tutors));
 		//		if (notification != null) {
 		//			try {

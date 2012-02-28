@@ -61,7 +61,6 @@ public class PreStageActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Log.i("faxxe", "stopButtonTutorial called in PreStageActivity");
 		Tutorial.getInstance(null).stopButtonTutorial();
 		super.onCreate(savedInstanceState);
 

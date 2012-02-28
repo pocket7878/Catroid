@@ -6,7 +6,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.view.SurfaceHolder;
 
-public class AnimationThread extends Thread {
+public class AnimationThread extends Thread implements Runnable {
 	private TutorialOverlay mOverlay;
 	private SurfaceHolder mHolder;
 	private volatile boolean mRun = false;
@@ -24,19 +24,13 @@ public class AnimationThread extends Thread {
 	public void run() {
 		Canvas canvas = null;
 		while (mRun) {
-			try {
-				Thread.yield();
-			} catch (Exception e) {
-				//pfusch
-			}
 			canvas = mHolder.lockCanvas();
 			synchronized (mHolder) {
 				if (canvas != null) {
 					canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-					mOverlay.update();
 					mOverlay.onDraw(canvas);
-					mHolder.unlockCanvasAndPost(canvas);
 				}
+				mHolder.unlockCanvasAndPost(canvas);
 			}
 		}
 

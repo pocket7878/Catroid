@@ -188,8 +188,7 @@ public class MainMenuActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		tutorial = Tutorial.getInstance(this);
-		tutorial.resumeTutorial();
+		Tutorial.getInstance(this).resumeTutorial();
 		if (!Utils.checkForSdCard(this)) {
 			return;
 		}
@@ -246,21 +245,17 @@ public class MainMenuActivity extends Activity {
 			Intent intent = new Intent(MainMenuActivity.this, ProjectActivity.class);
 			startActivity(intent);
 		}
-		//tutorial.setNotification("currentProjectButton");
 	}
 
 	public void handleNewProjectButton(View v) {
-		tutorial.setNotification("NewProjectButton");
 		showDialog(DIALOG_NEW_PROJECT);
 	}
 
 	public void handleLoadProjectButton(View v) {
-		tutorial.setNotification("LoadProjectButton");
 		showDialog(DIALOG_LOAD_PROJECT);
 	}
 
 	public void handleUploadProjectButton(View v) {
-		tutorial.setNotification("UploadProjectButton");
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		String token = preferences.getString(Consts.TOKEN, null);
 
@@ -277,13 +272,12 @@ public class MainMenuActivity extends Activity {
 	}
 
 	public void handleSettingsButton(View v) {
-		tutorial.setNotification("SettingsButton");
 		Intent intent = new Intent(MainMenuActivity.this, SettingsActivity.class);
 		startActivity(intent);
 	}
 
 	public void handleTutorialButton(View v) {
-		Tutorial.getInstance(this).toggleTutorial();
+		Tutorial.getInstance(this).startTutorial();
 	}
 
 	public void handleAboutCatroidButton(View v) {

@@ -3,6 +3,7 @@ package at.tugraz.ist.catroid.tutorial;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.util.Log;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
 public class LessonCollection {
@@ -46,7 +47,7 @@ public class LessonCollection {
 		}
 	}
 
-	String executeTask() {
+	boolean executeTask() {
 		//		return (lessonArray.get(currentLesson).executeTask(tutorialOverlay));
 		return (lessonArray.get(currentLesson).executeTask(tutors));
 	}
@@ -98,6 +99,22 @@ public class LessonCollection {
 
 	public void setTutors(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		this.tutors = tutors;
+	}
+
+	public void clean() {
+		Log.i("faxxe", "LessonCollection: clean called!");
+		for (Lesson lesson : lessonArray) {
+			lesson.clean();
+		}
+		tutors.clear();
+		tutors = null;
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		// TODO Auto-generated method stub
+		Log.i("faxxe", "LessonCollection: finalize called!");
+		super.finalize();
 	}
 
 }

@@ -43,6 +43,14 @@ public class Cloud implements SurfaceObject {
 	boolean visible;
 	ClickableArea clickableArea;
 
+	private Cloud() {
+
+	}
+
+	public void clear() {
+		cloud = null;
+	}
+
 	public static Cloud getInstance(Context con) {
 		if (con != null) {
 			context = con;
@@ -60,9 +68,13 @@ public class Cloud implements SurfaceObject {
 
 	}
 
+	public void addYourselfToTutorialOverlay(TutorialOverlay tutorialOverlay) {
+		tutorialOverlay.addCloud(this);
+	}
+
 	@Override
 	public void draw(Canvas canvas) {
-		//		Log.i("faxxe", "Cloud: draw!" + alpha);
+		//	Log.i("faxxe", "Cloud: draw!" + alpha);
 		int height = ((Activity) context).getWindowManager().getDefaultDisplay().getHeight();
 		int width = ((Activity) context).getWindowManager().getDefaultDisplay().getWidth();
 		paint.setColor(Color.GRAY);

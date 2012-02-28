@@ -28,4 +28,5 @@ public interface SurfaceObject {
 	public void draw(Canvas canvas);
 
 	public void update(long gameTime);
+
 }

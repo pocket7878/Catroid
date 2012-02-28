@@ -39,7 +39,6 @@ public class LayoutExaminer {
 
 	public LayoutExaminer() {
 		currentActivity = (Activity) Tutorial.getInstance(null).getActualContext();
-		Log.i("faxxe", "LE: current Activity is " + currentActivity.getLocalClassName());
 	}
 
 	public ClickableArea getTabCenterCoordinates(String tab) {
@@ -96,7 +95,6 @@ public class LayoutExaminer {
 		ListView dings = (ListView) dialog.findViewById(R.id.categoriesListView);
 		View tmp = null;
 		if (dings.getChildCount() < itemNr) {
-			Log.i("faxxe", "there is no such Item! -- resetting :)");
 			itemNr = 0;
 		}
 		while (tmp == null) {
@@ -144,9 +142,8 @@ public class LayoutExaminer {
 	}
 
 	public ClickableArea getButtonCenterCoordinates(int buttonID) {
-		Log.i("faxxe", "current activity: " + currentActivity.getLocalClassName());
+		Log.i("faxxe", "LE: getButtenCenterCoordinates: " + currentActivity.getLocalClassName());
 		correctCurrentActivity();
-		Log.i("faxxe", "current activity after corr.: " + currentActivity.getLocalClassName());
 		View buttonView = currentActivity.findViewById(buttonID);
 		int[] coords = { 0, 0 };
 		buttonView.getLocationInWindow(coords);

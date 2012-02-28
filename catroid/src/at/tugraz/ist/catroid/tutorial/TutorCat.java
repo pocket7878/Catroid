@@ -25,7 +25,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.util.Log;
-import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.tutorial.state.StateAppear;
 import at.tugraz.ist.catroid.tutorial.state.StateController;
 import at.tugraz.ist.catroid.tutorial.state.StateDisappear;
@@ -34,7 +33,6 @@ import at.tugraz.ist.catroid.tutorial.state.StateJump;
 import at.tugraz.ist.catroid.tutorial.state.StatePoint;
 import at.tugraz.ist.catroid.tutorial.state.StateTalk;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
-import at.tugraz.ist.catroid.tutorial.tasks.Task.Tutor;
 
 /**
  * @author faxxe
@@ -60,6 +58,7 @@ public class TutorCat extends SurfaceObjectTutor {
 	int yPortTo = 0;
 	boolean facingFlipped;
 	Matrix flipMatrix;
+	TutorialOverlay tutorialOverlay;
 
 	private StateController controller;
 
@@ -74,6 +73,10 @@ public class TutorCat extends SurfaceObjectTutor {
 		frameTicker = 0l;
 		facingFlipped = false;
 		controller = new StateController(resources, this);
+		this.tutorialOverlay = tutorialOverlay;
+
+		//		NewTutor tutor = new NewTutor(R.drawable.cat_tutor);
+		//		tutor.register(tutorialOverlay);
 
 	}
 
@@ -150,13 +153,20 @@ public class TutorCat extends SurfaceObjectTutor {
 	@Override
 	public void say(String text) {
 		controller.changeState(StateTalk.enter(controller, resources, tutorType));
+		//
+		//		if (tutorType.equals(Tutor.DOG)) {
+		//			tutorBubble = new Bubble(text, resources.getDrawable(R.drawable.bubble_up), this.x, this.y, context);
+		//
+		//		} else if (tutorType.equals(Tutor.CAT)) {
+		//			tutorBubble = new Bubble(text, resources.getDrawable(R.drawable.bubble), this.x, this.y, context);
+		//		}
+		new NewBubble(text, tutorialOverlay, this);
 
-		if (tutorType.equals(Tutor.DOG)) {
-			tutorBubble = new Bubble(text, resources.getDrawable(R.drawable.bubble_up), this.x, this.y, context);
+	}
 
-		} else if (tutorType.equals(Tutor.CAT)) {
-			tutorBubble = new Bubble(text, resources.getDrawable(R.drawable.bubble), this.x, this.y, context);
-		}
+	@Override
+	public void sayFinished() {
+
 	}
 
 	@Override
@@ -196,5 +206,14 @@ public class TutorCat extends SurfaceObjectTutor {
 
 	public Bubble getTutorBubble() {
 		return tutorBubble;
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		// TODO Auto-generated method stub
+		Log.i("faxxe", "TutorCat: finalize called!");
+
+		controller = null;
+		super.finalize();
 	}
 }

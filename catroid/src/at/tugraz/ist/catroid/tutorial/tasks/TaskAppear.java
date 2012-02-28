@@ -41,12 +41,12 @@ public class TaskAppear implements Task {
 	}
 
 	@Override
-	public String execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
+	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		SurfaceObjectTutor tutor = tutors.get(tutorType);
 		if (tutor != null) {
 			Log.i("faxxe", "Lesson: tutor exists!");
 			tutor.appear(x, y);
 		}
-		return ("AppearDone");
+		return true;
 	}
 }

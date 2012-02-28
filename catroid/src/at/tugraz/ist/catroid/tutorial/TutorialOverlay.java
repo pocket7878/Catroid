@@ -19,6 +19,10 @@
 package at.tugraz.ist.catroid.tutorial;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import android.app.Activity;
 import android.content.Context;
@@ -38,17 +42,39 @@ import android.view.SurfaceView;
  */
 public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callback {
 	private Context context;
-	private ArrayList<SurfaceObject> surfaceObjects;
-	private AnimationThread animationThread;
-
-	/**
-	 * @param context
-	 */
+	//	private ArrayList<SurfaceObject> surfaceObjects;
+	List<SurfaceObject> surfaceObjects = Collections.synchronizedList(new ArrayList<SurfaceObject>());
+	//	private AnimationThread animationThread;
 	private Cloud cloud;
+	private CloudController co;
 	private ControlPanel panel;
+	private final Lock mutex = new ReentrantLock(true);
 
-	//	//		mThread = new AnimationThread(this);
-	//	this.context = context;
+	@Override
+	protected void finalize() throws Throwable {
+		getHolder().removeCallback(this);
+		mutex.lock();
+		surfaceObjects.clear();
+		surfaceObjects = null;
+		mutex.unlock();
+		cloud = null;
+		co = null;
+		super.finalize();
+
+	};
+
+	public void clean() {
+		mutex.lock();
+		getHolder().removeCallback(this);
+		surfaceObjects.clear();
+		surfaceObjects = null;
+		cloud = null;
+		co = null;
+		panel = null;
+		context = null;
+		mutex.unlock();
+	}
+
 	public TutorialOverlay(Context context) {
 		super(context);
 		this.context = context;
@@ -56,24 +82,13 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		this.setZOrderOnTop(true); //necessary
 		getHolder().setFormat(PixelFormat.TRANSPARENT);
 		getHolder().addCallback(this);
-		animationThread = new AnimationThread(this);
+		//		animationThread = new AnimationThread(this);
 		surfaceObjects = new ArrayList<SurfaceObject>();
-		surfaceObjects = Tutorial.getInstance(null).getTutors();
-		cloud = Cloud.getInstance(context);
 		panel = new ControlPanel(context);
+		mutex.lock();
 		surfaceObjects.add(panel);
-	}
-
-	public void addSurfaceObject(SurfaceObject surfaceObject) {
-		if (!surfaceObjects.contains(surfaceObject)) {
-			surfaceObjects.add(surfaceObject);
-		}
-	}
-
-	public void removeSurfaceObject(SurfaceObject surfaceViewObject) {
-		if (surfaceObjects.contains(surfaceViewObject)) {
-			surfaceObjects.remove(surfaceViewObject);
-		}
+		mutex.unlock();
+		co = new CloudController();
 	}
 
 	@Override
@@ -82,63 +97,65 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 		canvas.drawPaint(paint);
 		postInvalidate();
-		cloud.draw(canvas);
-		for (SurfaceObject tmp : surfaceObjects) {
-			tmp.draw(canvas);
+		//	Cloud.getInstance(context).draw(canvas);
+		if (cloud != null) {
+			cloud.draw(canvas);
 		}
-
-		//              cloud.draw(canvas);
-		//        tutor.draw(canvas);
-		//        tutor_2.draw(canvas);
-		//        panel.draw(canvas);
-
-	}
-
-	public void update() {
-		for (SurfaceObject tmp : surfaceObjects) {
-			tmp.update(System.currentTimeMillis());
+		if (surfaceObjects != null) {
+			synchronized (surfaceObjects) {
+				for (SurfaceObject tmp : surfaceObjects) {
+					if (tmp != null) {
+						tmp.update(System.currentTimeMillis());
+						tmp.draw(canvas);
+					}
+				}
+			}
 		}
+		//		mutex.unlock();
 	}
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-		// TODO Auto-generated method stub
-
+		getHolder().addCallback(this);
+		cloud = Cloud.getInstance(context);
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		try {
-			//			Thread.sleep(10);
-			Thread.yield();
-		} catch (Exception e) {
-
-		}
-
-		if (!animationThread.isAlive()) {
-			animationThread = new AnimationThread(this);
-			animationThread.setRunning(true);
-			animationThread.setName("AnimationThread");
-			animationThread.start();
-		}
-
+		getHolder().addCallback(this);
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		// simply copied from sample application LunarLander:
-		// we have to tell thread to shut down & wait for it to finish, or else
-		// it might touch the Surface after we return and explode
-		boolean retry = true;
-		animationThread.setRunning(false);
-		while (retry) {
-			try {
-				animationThread.join();
-				retry = false;
-			} catch (InterruptedException e) {
-				// we will try it again and again...
+		getHolder().removeCallback(this);
+	}
+
+	public void addSurfaceObject(SurfaceObject surfaceObject) {
+		if (!surfaceObjects.contains(surfaceObject)) {
+			synchronized (surfaceObjects) {
+				//			mutex.lock();
+				surfaceObjects.add(surfaceObject);
+				//			mutex.unlock();
 			}
 		}
+	}
+
+	public void removeSurfaceObject(SurfaceObject surfaceViewObject) {
+		if (surfaceObjects.contains(surfaceViewObject)) {
+			//			mutex.lock();
+			synchronized (surfaceObjects) {
+				surfaceObjects.remove(surfaceViewObject);
+			}
+			//			mutex.unlock();
+		}
+	}
+
+	public void addCloud(Cloud cloud) {
+		this.cloud = cloud;
+	}
+
+	public void removeCloud() {
+		this.cloud = null;
 	}
 
 	@Override
@@ -160,6 +177,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		}
 		if (isEVinArea(clickableArea, ev)) {
 			retval = Tutorial.getInstance(null).dispatchTouchEvent(ev);
+			co.disapear();
 		}
 		return retval;
 	}
@@ -167,8 +185,6 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	public void dispatchPanel(MotionEvent ev, float displayHeight) {
 		//TODO: Dispatch ALL the Panel!
 
-		double x1 = 0;
-		double x2 = ev.getX();
 		double y1 = displayHeight;
 		double y2 = ev.getY();
 		double diffx = ev.getX();

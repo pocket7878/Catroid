@@ -18,8 +18,6 @@
  */
 package at.tugraz.ist.catroid.tutorial.state;
 
-import java.util.HashMap;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -35,7 +33,7 @@ import at.tugraz.ist.catroid.tutorial.tasks.Task.Tutor;
  */
 public class StateAppear implements State {
 	private StateController controller;
-	private static HashMap<Task.Tutor, StateAppear> instances;
+	private static StateAppear instance;
 	private Resources resources;
 	Bitmap bitmaps_portal[];
 
@@ -76,14 +74,11 @@ public class StateAppear implements State {
 
 	public static State enter(StateController controller, Resources resources, Task.Tutor tutorType) {
 		Log.i("catroid", "State Appear");
-		if (instances == null) {
-			instances = new HashMap<Task.Tutor, StateAppear>();
-		}
-		if (!instances.containsKey(tutorType)) {
-			instances.put(tutorType, new StateAppear(controller, resources, tutorType));
+		if (instance == null) {
+			instance = new StateAppear(controller, resources, tutorType);
 		}
 		controller.setDisappeared(false);
-		return (instances.get(tutorType));
+		return instance;
 	}
 
 	@Override
@@ -97,6 +92,8 @@ public class StateAppear implements State {
 			Tutorial tut = Tutorial.getInstance(null);
 			tut.setNotification("AppearDone");
 			controller.setDisappeared(false);
+			resetState();
+			return (bitmaps_portal[currentFrame]);
 		}
 		return (bitmaps_portal[currentFrame]);
 	}

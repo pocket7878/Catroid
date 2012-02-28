@@ -22,11 +22,11 @@ public class TaskPoint implements Task {
 	}
 
 	@Override
-	public String execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
+	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		SurfaceObjectTutor tutor = tutors.get(tutorType);
 		if (tutor != null) {
 			tutor.point();
 		}
-		return (null);
+		return false;
 	}
 }

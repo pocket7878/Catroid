@@ -18,8 +18,6 @@
  */
 package at.tugraz.ist.catroid.tutorial.state;
 
-import java.util.HashMap;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -35,7 +33,7 @@ import at.tugraz.ist.catroid.tutorial.tasks.Task;
 public class StateJump implements State {
 	public String stateName = this.getClass().getSimpleName();
 	private StateController controller;
-	private static HashMap<Task.Tutor, StateJump> instances;
+	private static StateJump instance;
 	private Resources resources;
 	Bitmap bitmaps_portal[];
 
@@ -79,14 +77,11 @@ public class StateJump implements State {
 
 	public static State enter(StateController controller, Resources resources, Task.Tutor tutorType) {
 		Log.i("catroid", "State Appear");
-		if (instances == null) {
-			instances = new HashMap<Task.Tutor, StateJump>();
-		}
-		if (!instances.containsKey(tutorType)) {
-			instances.put(tutorType, new StateJump(controller, resources, tutorType));
+		if (instance == null) {
+			instance = new StateJump(controller, resources, tutorType);
 		}
 		controller.setDisappeared(false);
-		return (instances.get(tutorType));
+		return instance;
 	}
 
 	@Override
@@ -105,6 +100,7 @@ public class StateJump implements State {
 				controller.changeState(StateIdle.enter(controller, resources, tutorType));
 				Tutorial tut = Tutorial.getInstance(null);
 				tut.setNotification("JumpDone");
+				resetState();
 			}
 		}
 		return (bitmaps_portal[currentFrame]);

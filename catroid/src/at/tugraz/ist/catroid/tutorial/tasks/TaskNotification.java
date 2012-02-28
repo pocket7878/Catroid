@@ -41,7 +41,7 @@ public class TaskNotification implements Task {
 	}
 
 	@Override
-	public String execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
+	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		//		ClickDispatcher clickDispatcher = tutorialOverlay.getClickDispatcher();
 		//		clickDispatcher.setCurrentNotification(notificationType, null);
 		ClickDispatcherV2 clickDispatcher = new ClickDispatcherV2();
@@ -49,7 +49,7 @@ public class TaskNotification implements Task {
 		// TODO: Maybe Problem: User presses ProjectListItem between setting Notification at
 		// begin of execute and the specific setCurrentNotification with the notificationString
 		if (notificationType == notificationType.PROJECT_ADD_SPRITE) {
-			return ("DialogDone");
+			return true;
 		}
 
 		//		if (notificationType == notificationType.PROJECT_LIST_ITEM) {
@@ -63,7 +63,7 @@ public class TaskNotification implements Task {
 		//			return ("DIALOG");
 		//		}
 		if (notificationType == notificationType.BRICK_ADD_DIALOG) {
-			return ("DIALOG");
+			return true;
 		}
 		//		if (notificationType == notificationType.BRICK_DIALOG_DONE) {
 		//			return ("BRICK_DIALOG_DONE");
@@ -73,6 +73,6 @@ public class TaskNotification implements Task {
 
 		// All tasks which result in a switch to another activity, just wait for a dummy
 		// notification, which will be deleted during pause/resume of the Tutorial
-		return ("ActivityChange");
+		return true;
 	}
 }

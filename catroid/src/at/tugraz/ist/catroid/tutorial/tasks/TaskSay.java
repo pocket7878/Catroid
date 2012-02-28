@@ -31,11 +31,13 @@ public class TaskSay implements Task {
 	}
 
 	@Override
-	public String execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
+	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		SurfaceObjectTutor tutor = tutors.get(tutorType);
 		if (tutor != null) {
 			tutor.say(message);
 		}
-		return ("BubbleDone");
+		//		NewBubble bubble = new NewBubble("");
+
+		return true;
 	}
 }

@@ -42,7 +42,7 @@ public abstract class SurfaceObjectTutor implements SurfaceObject {
 	public SurfaceObjectTutor(Context context, TutorialOverlay tutorialOverlay) {
 		this.context = context;
 		this.tutorialOverlay = tutorialOverlay;
-		//		tutorialOverlay.addSurfaceObject(this);
+		tutorialOverlay.addSurfaceObject(this);
 	}
 
 	@Override
@@ -72,5 +72,7 @@ public abstract class SurfaceObjectTutor implements SurfaceObject {
 	public abstract void point();
 
 	public abstract void setNewPositionAfterPort();
+
+	public abstract void sayFinished();
 
 }

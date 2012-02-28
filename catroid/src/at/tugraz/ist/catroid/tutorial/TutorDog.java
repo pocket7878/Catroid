@@ -197,4 +197,11 @@ public class TutorDog extends SurfaceObjectTutor {
 	public Bubble getTutorBubble() {
 		return tutorBubble;
 	}
+
+	@Override
+	public void sayFinished() {
+
+		idle();
+	}
+
 }

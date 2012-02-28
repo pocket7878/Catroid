@@ -22,11 +22,11 @@ public class TaskFlip implements Task {
 	}
 
 	@Override
-	public String execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
+	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		SurfaceObjectTutor tutor = tutors.get(tutorType);
 		if (tutor != null) {
 			tutor.flip();
 		}
-		return (null);
+		return false;
 	}
 }

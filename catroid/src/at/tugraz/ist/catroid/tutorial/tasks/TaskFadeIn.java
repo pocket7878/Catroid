@@ -20,6 +20,7 @@ package at.tugraz.ist.catroid.tutorial.tasks;
 
 import java.util.HashMap;
 
+import android.util.Log;
 import at.tugraz.ist.catroid.tutorial.CloudController;
 import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 
@@ -35,11 +36,12 @@ public class TaskFadeIn implements Task {
 	 * @see at.tugraz.ist.catroid.tutorial.tasks.Task#execute(at.tugraz.ist.catroid.tutorial.TutorialOverlay)
 	 */
 	@Override
-	public String execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
+	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		// TODO Auto-generated method stub
+		Log.i("faxxe", "TaskFadeIn: Cloud is fading in!");
 		CloudController co = new CloudController();
 		co.fadeIn();
-		return null;
+		return false;
 	}
 
 	/*

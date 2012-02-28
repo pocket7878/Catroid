@@ -18,8 +18,6 @@
  */
 package at.tugraz.ist.catroid.tutorial.state;
 
-import java.util.HashMap;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -34,7 +32,7 @@ import at.tugraz.ist.catroid.tutorial.tasks.Task.Tutor;
  */
 public class StateIdle implements State {
 	public String stateName = this.getClass().getSimpleName();
-	private static HashMap<Task.Tutor, StateIdle> instances;
+	private static StateIdle instance;
 	Bitmap bitmap;
 
 	int currentFrame;
@@ -63,14 +61,10 @@ public class StateIdle implements State {
 
 	public static State enter(StateController controller, Resources resources, Task.Tutor tutorType) {
 		Log.i("catroid", "State Idle");
-		if (instances == null) {
-			instances = new HashMap<Task.Tutor, StateIdle>();
+		if (instance == null) {
+			instance = new StateIdle(controller, resources, tutorType);
 		}
-		if (!instances.containsKey(tutorType)) {
-			instances.put(tutorType, new StateIdle(controller, resources, tutorType));
-		}
-
-		return (instances.get(tutorType));
+		return instance;
 	}
 
 	@Override

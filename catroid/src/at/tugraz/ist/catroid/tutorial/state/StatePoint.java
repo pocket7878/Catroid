@@ -18,8 +18,6 @@
  */
 package at.tugraz.ist.catroid.tutorial.state;
 
-import java.util.HashMap;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,7 +36,7 @@ public class StatePoint implements State {
 	Bitmap bitmaps_point[];
 	private StateController controller;
 	Resources resources;
-	private static HashMap<Task.Tutor, StatePoint> instances;
+	private static StatePoint instance;
 	boolean animationDirectionToBody;
 
 	@Override
@@ -77,14 +75,11 @@ public class StatePoint implements State {
 
 	public static State enter(StateController controller, Resources resources, Task.Tutor tutorType) {
 		Log.i("catroid", "State Point");
-		if (instances == null) {
-			instances = new HashMap<Task.Tutor, StatePoint>();
-		}
-		if (!instances.containsKey(tutorType)) {
-			instances.put(tutorType, new StatePoint(controller, resources, tutorType));
+		if (instance == null) {
+			instance = new StatePoint(controller, resources, tutorType);
 		}
 		controller.setDisappeared(false);
-		return (instances.get(tutorType));
+		return instance;
 	}
 
 	@Override

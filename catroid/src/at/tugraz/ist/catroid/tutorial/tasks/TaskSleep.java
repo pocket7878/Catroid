@@ -31,12 +31,12 @@ public class TaskSleep implements Task {
 	}
 
 	@Override
-	public String execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
+	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		try {
 			Thread.sleep(sleepTime);
 		} catch (Exception e) {
 
 		}
-		return (null);
+		return false;
 	}
 }

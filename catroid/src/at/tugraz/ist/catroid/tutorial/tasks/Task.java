@@ -32,7 +32,7 @@ public interface Task {
 		IF_PROJECT_STARTED, WAIT_SECONDS, IF, REPEAT, REPEAT_TIMES, SET_COSTUME
 	}
 
-	public String execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors);
+	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors);
 
 	public Type getType();
 

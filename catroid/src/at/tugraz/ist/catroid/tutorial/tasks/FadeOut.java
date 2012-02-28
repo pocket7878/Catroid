@@ -57,10 +57,10 @@ public class FadeOut implements Task {
 	 * @see at.tugraz.ist.catroid.tutorial.tasks.Task#execute(java.util.HashMap)
 	 */
 	@Override
-	public String execute(HashMap<Tutor, SurfaceObjectTutor> tutors) {
+	public boolean execute(HashMap<Tutor, SurfaceObjectTutor> tutors) {
 		CloudController co = new CloudController();
 		co.fadeOut();
-		return null;
+		return false;
 	}
 
 }
