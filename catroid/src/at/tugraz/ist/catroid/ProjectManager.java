@@ -87,6 +87,15 @@ public class ProjectManager {
 		}
 	}
 
+	public boolean canLoadProject(String projectName) {
+		Project project = StorageHandler.getInstance().loadProject(projectName);
+		if (project == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	public void saveProject() {
 		if (project == null) {
 			return;
@@ -154,6 +163,10 @@ public class ProjectManager {
 
 		boolean fileRenamed = oldProjectFile.renameTo(newProjectFile);
 		boolean directoryRenamed = oldProjectDirectory.renameTo(newProjectDirectory);
+
+		if (directoryRenamed && fileRenamed) {
+			this.saveProject();
+		}
 
 		return (directoryRenamed && fileRenamed);
 	}
