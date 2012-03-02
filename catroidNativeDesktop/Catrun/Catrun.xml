@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<Content.Project>
+  <androidVersion>8</androidVersion>
+  <catroidVersionCode>437</catroidVersionCode>
+  <catroidVersionName>0.5a-437-debug</catroidVersionName>
+  <deviceName>GT-P1000</deviceName>
+  <projectName>Catrun</projectName>
+  <screenHeight>1024</screenHeight>
+  <screenWidth>600</screenWidth>
+  <spriteList>
+    <Content.Sprite>
+      <costumeDataList>
+        <Common.CostumeData>
+          <fileName>B3165D36BCCD122CF15970BC9DA4B760_parkett.jpg</fileName>
+          <name>parkett.jpg</name>
+        </Common.CostumeData>
+      </costumeDataList>
+      <name>Hintergrund</name>
+      <scriptList>
+        <Content.StartScript>
+          <brickList>
+            <Bricks.SetCostumeBrick>
+              <costumeData reference="../../../../../costumeDataList/Common.CostumeData"/>
+              <sprite reference="../../../../.."/>
+            </Bricks.SetCostumeBrick>
+          </brickList>
+          <sprite reference="../../.."/>
+        </Content.StartScript>
+      </scriptList>
+      <soundList/>
+    </Content.Sprite>
+    <Content.Sprite>
+      <costumeDataList>
+        <Common.CostumeData>
+          <fileName>95C9461634657596455C8182E1655490_cat2.gif</fileName>
+          <name>cat2.gif</name>
+        </Common.CostumeData>
+      </costumeDataList>
+      <name>Katze</name>
+      <scriptList>
+        <Content.StartScript>
+          <brickList>
+            <Bricks.SetCostumeBrick>
+              <costumeData reference="../../../../../costumeDataList/Common.CostumeData"/>
+              <sprite reference="../../../../.."/>
+            </Bricks.SetCostumeBrick>
+          </brickList>
+          <sprite reference="../../.."/>
+        </Content.StartScript>
+        <Content.WhenScript>
+          <brickList>
+            <Bricks.ForeverBrick>
+              <loopEndBrick>
+                <loopBeginBrick class="Bricks.ForeverBrick" reference="../.."/>
+                <sprite reference="../../../../../.."/>
+              </loopEndBrick>
+              <sprite reference="../../../../.."/>
+            </Bricks.ForeverBrick>
+            <Bricks.MoveNStepsBrick>
+              <sprite reference="../../../../.."/>
+              <steps>10.0</steps>
+            </Bricks.MoveNStepsBrick>
+            <Bricks.IfOnEdgeBounceBrick>
+              <sprite reference="../../../../.."/>
+            </Bricks.IfOnEdgeBounceBrick>
+            <Bricks.LoopEndBrick reference="../Bricks.ForeverBrick/loopEndBrick"/>
+          </brickList>
+          <sprite reference="../../.."/>
+          <action>Tapped</action>
+        </Content.WhenScript>
+      </scriptList>
+      <soundList/>
+    </Content.Sprite>
+  </spriteList>
+</Content.Project>

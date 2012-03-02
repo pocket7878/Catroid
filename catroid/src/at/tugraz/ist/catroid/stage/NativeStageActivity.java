@@ -24,26 +24,15 @@ package at.tugraz.ist.catroid.stage;
 
 import android.app.Activity;
 import android.os.Bundle;
-import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.R;
 
 public class NativeStageActivity extends Activity {
-	Client client;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//setContentView(R.layout.main);
-		sendMessage();
+		setContentView(R.layout.activity_native_stage);
+
 	}
 
-	public void sendMessage() {
-		client = new Client();
-		client.connect();
-		try {
-			Thread.sleep(2000);
-		} catch (Exception e) {
-		}
-		System.out.println("project name. " + ProjectManager.getInstance().getCurrentProject().getName());
-		client.sendMessage("Project-" + ProjectManager.getInstance().getCurrentProject().getName());
-	}
 }
