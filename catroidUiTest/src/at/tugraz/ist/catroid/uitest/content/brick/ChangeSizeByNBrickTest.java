@@ -95,10 +95,17 @@ public class ChangeSizeByNBrickTest extends ActivityInstrumentationTestCase2<Scr
 		assertEquals("Text not updated", newSize, Double.parseDouble(solo.getEditText(0).getText().toString()));
 	}
 
+	public void testResizeInputField() {
+		UiTestUtils.testDoubleEditText(solo, 0, 1.0, 60, true);
+		UiTestUtils.testDoubleEditText(solo, 0, 100.55, 60, true);
+		UiTestUtils.testDoubleEditText(solo, 0, -0.1, 60, true);
+		UiTestUtils.testDoubleEditText(solo, 0, 1000.55, 60, false);
+	}
+
 	private void createProject() {
 		project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
-		Script script = new StartScript("script", sprite);
+		Script script = new StartScript(sprite);
 		changeSizeByNBrick = new ChangeSizeByNBrick(sprite, 20);
 		script.addBrick(changeSizeByNBrick);
 

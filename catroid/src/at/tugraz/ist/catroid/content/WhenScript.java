@@ -35,11 +35,12 @@ public class WhenScript extends Script {
 	private static final String[] actions = { TAPPED, DOUBLETAPPED, LONGPRESSED, SWIPEUP, SWIPEDOWN, SWIPELEFT,
 			SWIPERIGHT };
 	private String action;
-	private int position;
+	private transient int position;
 
-	public WhenScript(String name, Sprite sprite) {
-		super(name, sprite);
+	public WhenScript(Sprite sprite) {
+		super(sprite);
 		super.isFinished = true;
+		this.position = 0;
 		this.action = TAPPED;
 	}
 
@@ -64,13 +65,13 @@ public class WhenScript extends Script {
 	}
 
 	@Override
-	public Script clone(String name, Sprite sprite) {
-		return new WhenScript(name, sprite);
+	public Script clone(Sprite sprite) {
+		return new WhenScript(sprite);
 	}
 
 	@Override
-	public Script cloneCopySprite(String name, Sprite sprite) {
-		WhenScript script = new WhenScript(name, sprite);
+	public Script cloneCopySprite(Sprite sprite) {
+		WhenScript script = new WhenScript(sprite);
 		script.action = this.action;
 		return script;
 	}

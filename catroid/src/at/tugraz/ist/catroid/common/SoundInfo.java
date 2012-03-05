@@ -27,10 +27,10 @@ import at.tugraz.ist.catroid.utils.Utils;
 
 public class SoundInfo implements Comparable<SoundInfo> {
 
-	private String title;
+	private String name;
 	private String fileName;
-	public boolean isPlaying;
-	public boolean isPaused;
+	public transient boolean isPlaying = false;
+	public transient boolean isPaused = false;
 
 	public SoundInfo() {
 		isPlaying = false;
@@ -46,11 +46,11 @@ public class SoundInfo implements Comparable<SoundInfo> {
 	}
 
 	public String getTitle() {
-		return title;
+		return name;
 	}
 
 	public void setTitle(String title) {
-		this.title = title;
+		this.name = title;
 	}
 
 	public void setSoundFileName(String fileName) {
@@ -74,11 +74,11 @@ public class SoundInfo implements Comparable<SoundInfo> {
 	}
 
 	public int compareTo(SoundInfo soundInfo) {
-		return title.compareTo(soundInfo.title);
+		return name.compareTo(soundInfo.name);
 	}
 
 	@Override
 	public String toString() {
-		return title;
+		return name;
 	}
 }

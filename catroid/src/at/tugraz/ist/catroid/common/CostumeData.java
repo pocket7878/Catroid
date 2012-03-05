@@ -30,8 +30,8 @@ import at.tugraz.ist.catroid.utils.Utils;
 
 public class CostumeData {
 
-	private String costumeName;
-	private String costumeFileName;
+	private String name;
+	private String fileName;
 	private transient Bitmap thumbnailBitmap;
 	private transient Integer width;
 	private transient Integer height;
@@ -39,42 +39,42 @@ public class CostumeData {
 	private transient static final int THUMBNAIL_HEIGHT = 150;
 
 	public String getAbsolutePath() {
-		if (costumeFileName != null) {
-			return Utils.buildPath(getPathWithoutFileName(), costumeFileName);
+		if (fileName != null) {
+			return Utils.buildPath(getPathWithoutFileName(), fileName);
 		} else {
 			return null;
 		}
 	}
 
 	public String getInternalPath() {
-		if (costumeFileName != null) {
-			return Consts.IMAGE_DIRECTORY + "/" + costumeFileName;
+		if (fileName != null) {
+			return Consts.IMAGE_DIRECTORY + "/" + fileName;
 		} else {
 			return null;
 		}
 	}
 
 	public String getCostumeName() {
-		return costumeName;
+		return name;
 	}
 
 	public void setCostumeName(String name) {
-		this.costumeName = name;
+		this.name = name;
 	}
 
 	public void setCostumeFilename(String fileName) {
-		this.costumeFileName = fileName;
+		this.fileName = fileName;
 	}
 
 	public String getCostumeFileName() {
-		return costumeFileName;
+		return fileName;
 	}
 
 	public String getChecksum() {
-		if (costumeFileName == null) {
+		if (fileName == null) {
 			return null;
 		}
-		return costumeFileName.substring(0, 32);
+		return fileName.substring(0, 32);
 	}
 
 	public String getPathWithoutFileName() {
@@ -84,7 +84,7 @@ public class CostumeData {
 
 	public Bitmap getThumbnailBitmap() {
 		if (thumbnailBitmap == null) {
-			thumbnailBitmap = ImageEditing.getScaledBitmap(getAbsolutePath(), THUMBNAIL_HEIGHT, THUMBNAIL_WIDTH);
+			thumbnailBitmap = ImageEditing.getScaledBitmapFromPath(getAbsolutePath(), THUMBNAIL_HEIGHT, THUMBNAIL_WIDTH, false);
 		}
 		return thumbnailBitmap;
 	}
@@ -108,6 +108,6 @@ public class CostumeData {
 
 	@Override
 	public String toString() {
-		return costumeName;
+		return name;
 	}
 }

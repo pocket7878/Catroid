@@ -61,7 +61,6 @@ import at.tugraz.ist.catroid.content.bricks.NextCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.NoteBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaySoundBrick;
-import at.tugraz.ist.catroid.content.bricks.PointInDirectionBrick;
 import at.tugraz.ist.catroid.content.bricks.PointToBrick;
 import at.tugraz.ist.catroid.content.bricks.RepeatBrick;
 import at.tugraz.ist.catroid.content.bricks.SetBrightnessBrick;
@@ -253,7 +252,7 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 		Sprite firstSprite = new Sprite("blue");
 		Sprite secondSprite = new Sprite("lila");
 
-		Script firstSpriteScript = new StartScript("firstSpriteScript", firstSprite);
+		Script firstSpriteScript = new StartScript(firstSprite);
 
 		ArrayList<Brick> brickList = new ArrayList<Brick>();
 		brickList.add(new PlaceAtBrick(firstSprite, 11, 12));
@@ -265,7 +264,6 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 		brickList.add(new MoveNStepsBrick(firstSprite, 17));
 		brickList.add(new TurnLeftBrick(firstSprite, 18));
 		brickList.add(new TurnRightBrick(firstSprite, 19));
-		brickList.add(new PointInDirectionBrick(firstSprite, 20));
 		brickList.add(new PointToBrick(firstSprite, secondSprite));
 		brickList.add(new GlideToBrick(firstSprite, 21, 22, 23));
 		brickList.add(new GoNStepsBackBrick(firstSprite, 24));
@@ -310,7 +308,7 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 
 		firstSprite.addScript(firstSpriteScript);
 
-		BroadcastScript broadcastScript = new BroadcastScript("name", firstSprite);
+		BroadcastScript broadcastScript = new BroadcastScript(firstSprite);
 		broadcastScript.setBroadcastMessage("Hallo");
 		BroadcastReceiverBrick brickBroad = new BroadcastReceiverBrick(firstSprite, broadcastScript);
 		firstSprite.addScript(broadcastScript);

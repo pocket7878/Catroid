@@ -34,6 +34,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
@@ -49,6 +50,7 @@ import at.tugraz.ist.catroid.ui.dialogs.BrickCategoryDialog;
 import at.tugraz.ist.catroid.ui.dialogs.RenameCostumeDialog;
 import at.tugraz.ist.catroid.ui.dialogs.RenameSoundDialog;
 import at.tugraz.ist.catroid.utils.ActivityHelper;
+import at.tugraz.ist.catroid.utils.Utils;
 
 public class ScriptTabActivity extends TabActivity implements OnDismissListener {
 	protected ActivityHelper activityHelper;
@@ -73,6 +75,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scripttab);
+		Utils.loadProjectIfNeeded(this);
 
 		setupTabHost();
 		tabHost.getTabWidget().setDividerDrawable(R.drawable.tab_divider);
@@ -80,19 +83,22 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener 
 		Intent intent; // Reusable Intent for each tab
 
 		intent = new Intent().setClass(this, ScriptActivity.class);
-		setupTab(R.drawable.ic_tab_scripts, this.getString(R.string.scripts), intent);
+		setupTab(R.drawable.ic_tab_scripts_selector, this.getString(R.string.scripts), intent);
 		intent = new Intent().setClass(this, CostumeActivity.class);
 		int costumeIcon;
+		String costumeLabel;
 
 		Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
 		if (ProjectManager.getInstance().getCurrentProject().getSpriteList().indexOf(currentSprite) == 0) {
-			costumeIcon = R.drawable.ic_tab_background;
+			costumeIcon = R.drawable.ic_tab_background_selector;
+			costumeLabel = this.getString(R.string.backgrounds);
 		} else {
-			costumeIcon = R.drawable.ic_tab_costumes;
+			costumeIcon = R.drawable.ic_tab_costumes_selector;
+			costumeLabel = this.getString(R.string.costumes);
 		}
-		setupTab(costumeIcon, this.getString(R.string.costumes), intent);
+		setupTab(costumeIcon, costumeLabel, intent);
 		intent = new Intent().setClass(this, SoundActivity.class);
-		setupTab(R.drawable.ic_tab_sounds, this.getString(R.string.sounds), intent);
+		setupTab(R.drawable.ic_tab_sounds_selector, this.getString(R.string.sounds), intent);
 
 		setUpActionBar();
 		if (getLastNonConfigurationInstance() != null) {
@@ -118,14 +124,15 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener 
 				+ ProjectManager.getInstance().getCurrentSprite().getName();
 		activityHelper.setupActionBar(false, title);
 
-		activityHelper.addActionButton(R.id.btn_action_add_sprite, R.drawable.ic_plus_black, null, false);
+		activityHelper.addActionButton(R.id.btn_action_add_sprite, R.drawable.ic_plus_black, R.string.add, null, false);
 
-		activityHelper.addActionButton(R.id.btn_action_play, R.drawable.ic_play_black, new View.OnClickListener() {
-			public void onClick(View v) {
-				Intent intent = new Intent(ScriptTabActivity.this, PreStageActivity.class);
-				startActivityForResult(intent, PreStageActivity.REQUEST_RESOURCES_INIT);
-			}
-		}, false);
+		activityHelper.addActionButton(R.id.btn_action_play, R.drawable.ic_play_black, R.string.start,
+				new View.OnClickListener() {
+					public void onClick(View v) {
+						Intent intent = new Intent(ScriptTabActivity.this, PreStageActivity.class);
+						startActivityForResult(intent, PreStageActivity.REQUEST_RESOURCES_INIT);
+					}
+				}, false);
 	}
 
 	@Override
@@ -146,10 +153,13 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener 
 
 	private static View createTabView(Integer id, final Context context, final String text) {
 		View view = LayoutInflater.from(context).inflate(R.layout.activity_tabscriptactivity_tabs, null);
-		TextView tv = (TextView) view.findViewById(R.id.tabsText);
-		tv.setText(text);
+		TextView tabTextView = (TextView) view.findViewById(R.id.tabsText);
+		ImageView tabImageView = (ImageView) view.findViewById(R.id.tabsIcon);
+		tabTextView.setText(text);
 		if (id != null) {
-			tv.setCompoundDrawablesWithIntrinsicBounds(id, 0, 0, 0);
+			tabImageView.setImageResource(id);
+			tabImageView.setVisibility(ImageView.VISIBLE);
+			tabImageView.setTag(id);
 		}
 		return view;
 	}

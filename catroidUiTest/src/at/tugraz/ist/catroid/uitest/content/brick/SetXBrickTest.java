@@ -94,11 +94,18 @@ public class SetXBrickTest extends ActivityInstrumentationTestCase2<ScriptActivi
 		assertEquals("Value in Brick is not updated.", setX + "", solo.getEditText(0).getText().toString());
 	}
 
+	public void testResizeInputField() {
+		UiTestUtils.testIntegerEditText(solo, 0, 1, 50, true);
+		UiTestUtils.testIntegerEditText(solo, 0, 123456, 50, true);
+		UiTestUtils.testIntegerEditText(solo, 0, -1, 50, true);
+		UiTestUtils.testIntegerEditText(solo, 0, 1234567, 50, false);
+	}
+
 	private void createProject() {
 		setX = 17;
 		project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
-		Script script = new StartScript("script", sprite);
+		Script script = new StartScript(sprite);
 		setXBrick = new SetXBrick(sprite, 0);
 		script.addBrick(setXBrick);
 

@@ -61,7 +61,7 @@ public class PlaySoundBrickTest extends ActivityInstrumentationTestCase2<ScriptT
 		ProjectManager projectManager = ProjectManager.getInstance();
 		Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 		Sprite firstSprite = new Sprite("cat");
-		Script testScript = new StartScript("testscript", firstSprite);
+		Script testScript = new StartScript(firstSprite);
 
 		PlaySoundBrick playSoundBrick = new PlaySoundBrick(firstSprite);
 		testScript.addBrick(playSoundBrick);
@@ -75,13 +75,13 @@ public class PlaySoundBrickTest extends ActivityInstrumentationTestCase2<ScriptT
 		soundInfoList = projectManager.getCurrentSprite().getSoundList();
 
 		soundFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "longsound.mp3",
-				RESOURCE_SOUND, getInstrumentation().getContext(), UiTestUtils.TYPE_SOUND_FILE);
+				RESOURCE_SOUND, getInstrumentation().getContext(), UiTestUtils.FileTypes.SOUND);
 		SoundInfo soundInfo = new SoundInfo();
 		soundInfo.setSoundFileName(soundFile.getName());
 		soundInfo.setTitle(soundName);
 
 		soundFile2 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "testsoundui.mp3",
-				RESOURCE_SOUND2, getInstrumentation().getContext(), UiTestUtils.TYPE_SOUND_FILE);
+				RESOURCE_SOUND2, getInstrumentation().getContext(), UiTestUtils.FileTypes.SOUND);
 		SoundInfo soundInfo2 = new SoundInfo();
 		soundInfo2.setSoundFileName(soundFile2.getName());
 		soundInfo2.setTitle(soundName2);
@@ -172,7 +172,7 @@ public class PlaySoundBrickTest extends ActivityInstrumentationTestCase2<ScriptT
 		solo.goBack();
 		solo.clickOnText(getActivity().getString(R.string.sounds));
 		solo.sleep(300);
-		solo.clickOnButton(getActivity().getString(R.string.sound_rename));
+		solo.clickOnView(solo.getView(R.id.sound_name));
 		solo.sleep(100);
 		solo.clearEditText(0);
 		solo.enterText(0, newName);

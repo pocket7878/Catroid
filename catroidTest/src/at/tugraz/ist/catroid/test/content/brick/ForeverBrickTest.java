@@ -22,6 +22,7 @@
  */
 package at.tugraz.ist.catroid.test.content.brick;
 
+import android.test.FlakyTest;
 import android.test.InstrumentationTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
@@ -47,7 +48,7 @@ public class ForeverBrickTest extends InstrumentationTestCase {
 		final int twentyIsAlmostForever = 20;
 
 		testSprite.removeAllScripts();
-		testScript = new StartScript("foo", testSprite);
+		testScript = new StartScript(testSprite);
 
 		foreverBrick = new ForeverBrick(testSprite);
 		loopEndBrick = new LoopEndBrick(testSprite, foreverBrick);
@@ -74,12 +75,13 @@ public class ForeverBrickTest extends InstrumentationTestCase {
 		assertEquals("Wrong number of times to repeat", forever, timesToRepeat);
 	}
 
+	@FlakyTest(tolerance = 3)
 	public void testLoopDelay() throws InterruptedException {
 		final int deltaY = -10;
 		final int repeatTimes = 15;
 
 		testSprite.removeAllScripts();
-		testScript = new StartScript("foo", testSprite);
+		testScript = new StartScript(testSprite);
 
 		foreverBrick = new ForeverBrick(testSprite);
 		loopEndBrick = new LoopEndBrick(testSprite, foreverBrick);
@@ -97,6 +99,8 @@ public class ForeverBrickTest extends InstrumentationTestCase {
 
 		Thread.sleep(expectedDelay * repeatTimes);
 
+		final long endTime = System.currentTimeMillis();
+
 		assertEquals("Loop delay did not work!", repeatTimes * deltaY, (int) testSprite.costume.getYPosition());
 
 		/*
@@ -104,7 +108,6 @@ public class ForeverBrickTest extends InstrumentationTestCase {
 		 * http://code.google.com/p/catroid/issues/detail?id=28
 		 */
 		final long delayByContract = 20;
-		final long endTime = System.currentTimeMillis();
-		assertEquals("Loop delay did was not 20ms!", delayByContract * repeatTimes, endTime - startTime, 15);
+		assertEquals("Loop delay was not 20ms!", delayByContract * repeatTimes, endTime - startTime, 15);
 	}
 }

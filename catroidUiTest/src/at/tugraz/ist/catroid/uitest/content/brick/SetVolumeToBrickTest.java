@@ -35,6 +35,7 @@ import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.SetVolumeToBrick;
 import at.tugraz.ist.catroid.ui.ScriptActivity;
+import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -42,7 +43,7 @@ public class SetVolumeToBrickTest extends ActivityInstrumentationTestCase2<Scrip
 	private Solo solo;
 	private Project project;
 	private SetVolumeToBrick setVolumeToBrick;
-	private double volume;
+	private float volume;
 
 	public SetVolumeToBrickTest() {
 		super("at.tugraz.ist.catroid", ScriptActivity.class);
@@ -91,11 +92,18 @@ public class SetVolumeToBrickTest extends ActivityInstrumentationTestCase2<Scrip
 		assertEquals("Value in Brick is not updated.", volume + "", solo.getEditText(0).getText().toString());
 	}
 
+	public void testResizeInputField() {
+		UiTestUtils.testDoubleEditText(solo, 0, 1.0, 60, true);
+		UiTestUtils.testDoubleEditText(solo, 0, 100.0, 60, true);
+		UiTestUtils.testDoubleEditText(solo, 0, 12.5, 60, true);
+		UiTestUtils.testDoubleEditText(solo, 0, 100.12, 60, false);
+	}
+
 	private void createProject() {
-		volume = 50.0;
+		volume = 50.0f;
 		project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
-		Script script = new StartScript("script", sprite);
+		Script script = new StartScript(sprite);
 		setVolumeToBrick = new SetVolumeToBrick(sprite, 0);
 		script.addBrick(setVolumeToBrick);
 

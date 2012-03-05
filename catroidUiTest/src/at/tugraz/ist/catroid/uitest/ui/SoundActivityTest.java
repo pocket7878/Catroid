@@ -58,13 +58,13 @@ public class SoundActivityTest extends ActivityInstrumentationTestCase2<ScriptTa
 		soundInfoList = ProjectManager.getInstance().getCurrentSprite().getSoundList();
 
 		soundFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "longsound.mp3",
-				RESOURCE_SOUND, getInstrumentation().getContext(), UiTestUtils.TYPE_SOUND_FILE);
+				RESOURCE_SOUND, getInstrumentation().getContext(), UiTestUtils.FileTypes.SOUND);
 		SoundInfo soundInfo = new SoundInfo();
 		soundInfo.setSoundFileName(soundFile.getName());
 		soundInfo.setTitle(soundName);
 
 		soundFile2 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "testsoundui.mp3",
-				RESOURCE_SOUND2, getInstrumentation().getContext(), UiTestUtils.TYPE_SOUND_FILE);
+				RESOURCE_SOUND2, getInstrumentation().getContext(), UiTestUtils.FileTypes.SOUND);
 		SoundInfo soundInfo2 = new SoundInfo();
 		soundInfo2.setSoundFileName(soundFile2.getName());
 		soundInfo2.setTitle(soundName2);
@@ -110,7 +110,7 @@ public class SoundActivityTest extends ActivityInstrumentationTestCase2<ScriptTa
 		String newName = "newSoundName";
 		solo.clickOnText(getActivity().getString(R.string.sounds));
 		solo.sleep(500);
-		solo.clickOnButton(getActivity().getString(R.string.sound_rename));
+		solo.clickOnView(solo.getView(R.id.sound_name));
 		assertTrue("wrong title of dialog", solo.searchText(soundName));
 		solo.setActivityOrientation(Solo.PORTRAIT);
 		solo.sleep(300);
@@ -170,7 +170,7 @@ public class SoundActivityTest extends ActivityInstrumentationTestCase2<ScriptTa
 		solo.clickOnText(getActivity().getString(R.string.sounds));
 		solo.sleep(1000);
 		String newName = "newTestName";
-		solo.clickOnButton(getActivity().getString(R.string.sound_rename));
+		solo.clickOnView(solo.getView(R.id.sound_name));
 		assertTrue("Dialog is not visible", solo.searchText(getActivity().getString(R.string.ok)));
 		solo.setActivityOrientation(Solo.LANDSCAPE);
 		solo.sleep(300);

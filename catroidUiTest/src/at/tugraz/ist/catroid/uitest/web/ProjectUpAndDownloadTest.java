@@ -77,7 +77,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		super.tearDown();
 	}
 
-	private void startProjectUploadTask() throws Throwable {
+	private void setServerURLToTestUrl() throws Throwable {
 		runTestOnUiThread(new Runnable() {
 			public void run() {
 				ServerCalls.useTestUrl = true;
@@ -86,7 +86,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 	}
 
 	public void testUploadProjectSuccess() throws Throwable {
-		startProjectUploadTask();
+		setServerURLToTestUrl();
 
 		createTestProject(testProject);
 		addABrickToProject();
@@ -110,7 +110,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		solo.clickOnButton(getActivity().getString(R.string.new_project));
 		solo.enterText(0, projectToCreate);
 		solo.goBack();
-		solo.clickOnButton(getActivity().getString(R.string.new_project_dialog_button));
+		solo.clickOnButton(0);
 		solo.sleep(2000);
 
 		File file = new File(Consts.DEFAULT_ROOT + "/" + projectToCreate + "/" + projectToCreate
@@ -121,7 +121,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 	private void addABrickToProject() {
 		solo.clickInList(0);
 		UiTestUtils.addNewBrickAndScrollDown(solo, R.string.brick_wait);
-		UiTestUtils.clickOnImageButton(solo, R.id.btn_action_home);
+		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_home);
 	}
 
 	private void uploadProject() {

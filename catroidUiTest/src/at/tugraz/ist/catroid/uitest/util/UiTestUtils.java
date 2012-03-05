@@ -23,6 +23,8 @@
 package at.tugraz.ist.catroid.uitest.util;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -39,12 +41,10 @@ import java.util.List;
 import junit.framework.Assert;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Log;
-import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
@@ -79,9 +79,10 @@ public class UiTestUtils {
 	public static final String PROJECTNAME1 = "testproject1";
 	public static final String PROJECTNAME2 = "testproject2";
 	public static final String PROJECTNAME3 = "testproject3";
-	public static final String PROJECTNAME4 = "testproject4";
-	public static final int TYPE_IMAGE_FILE = 0;
-	public static final int TYPE_SOUND_FILE = 1;
+
+	public static enum FileTypes {
+		IMAGE, SOUND
+	};
 
 	public static void enterText(Solo solo, int editTextIndex, String text) {
 		solo.sleep(50);
@@ -199,7 +200,7 @@ public class UiTestUtils {
 	}
 
 	public static void addNewBrickAndScrollDown(Solo solo, int categoryStringId, int brickStringId) {
-		UiTestUtils.clickOnImageButton(solo, R.id.btn_action_add_sprite);
+		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_add_sprite);
 		solo.clickOnText(solo.getCurrentActivity().getString(categoryStringId));
 		solo.clickOnText(solo.getCurrentActivity().getString(brickStringId));
 
@@ -216,7 +217,7 @@ public class UiTestUtils {
 		Project project = new Project(null, DEFAULT_TEST_PROJECT_NAME);
 		Sprite firstSprite = new Sprite("cat");
 
-		Script testScript = new StartScript("testscript", firstSprite);
+		Script testScript = new StartScript(firstSprite);
 
 		ArrayList<Brick> brickList = new ArrayList<Brick>();
 		brickList.add(new HideBrick(firstSprite));
@@ -245,7 +246,7 @@ public class UiTestUtils {
 	public static void createEmptyProject() {
 		Project project = new Project(null, DEFAULT_TEST_PROJECT_NAME);
 		Sprite firstSprite = new Sprite("cat");
-		Script testScript = new StartScript("testscript", firstSprite);
+		Script testScript = new StartScript(firstSprite);
 
 		firstSprite.addScript(testScript);
 		project.addSprite(firstSprite);
@@ -272,17 +273,17 @@ public class UiTestUtils {
 	 * @return the file
 	 * @throws IOException
 	 */
-	public static File saveFileToProject(String project, String name, int fileID, Context context, int type) {
+	public static File saveFileToProject(String project, String name, int fileID, Context context, FileTypes type) {
 
 		String filePath;
 		if (project == null || project.equalsIgnoreCase("")) {
 			filePath = Consts.DEFAULT_ROOT + "/";
 		} else {
 			switch (type) {
-				case TYPE_IMAGE_FILE:
+				case IMAGE:
 					filePath = Consts.DEFAULT_ROOT + "/" + project + "/" + Consts.IMAGE_DIRECTORY + "/";
 					break;
-				case TYPE_SOUND_FILE:
+				case SOUND:
 					filePath = Consts.DEFAULT_ROOT + "/" + project + "/" + Consts.SOUND_DIRECTORY + "/";
 					break;
 				default:
@@ -358,11 +359,6 @@ public class UiTestUtils {
 			UtilFile.deleteDirectory(directory);
 		}
 
-		directory = new File(Consts.DEFAULT_ROOT + "/" + PROJECTNAME4);
-		if (directory.exists()) {
-			UtilFile.deleteDirectory(directory);
-		}
-
 		directory = new File(Consts.DEFAULT_ROOT + "/" + DEFAULT_TEST_PROJECT_NAME);
 		if (directory.exists()) {
 			UtilFile.deleteDirectory(directory);
@@ -388,37 +384,6 @@ public class UiTestUtils {
 			Assert.fail(e.getClass().getName() + " when accessing " + fieldName);
 		}
 		return null;
-	}
-
-	public static void clickOnImageButton(Solo solo, int imageButtonId) {
-		solo.waitForView(ImageButton.class);
-		ImageButton imageButton = (ImageButton) solo.getView(imageButtonId);
-		solo.clickOnView(imageButton);
-	}
-
-	public static File createTestMediaFile(String filePath, int fileID, Context context) throws IOException {
-
-		File testImage = new File(filePath);
-
-		if (!testImage.exists()) {
-			testImage.createNewFile();
-		}
-
-		InputStream in = context.getResources().openRawResource(fileID);
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(testImage), Consts.BUFFER_8K);
-
-		byte[] buffer = new byte[Consts.BUFFER_8K];
-		int length = 0;
-
-		while ((length = in.read(buffer)) > 0) {
-			out.write(buffer, 0, length);
-		}
-
-		in.close();
-		out.flush();
-		out.close();
-
-		return testImage;
 	}
 
 	public static void setPrivateField(String fieldName, Object object, Object value, boolean ofSuperclass) {
@@ -447,6 +412,37 @@ public class UiTestUtils {
 		}
 	}
 
+	public static void clickOnLinearLayout(Solo solo, int imageButtonId) {
+		solo.waitForView(LinearLayout.class);
+		LinearLayout linearLayout = (LinearLayout) solo.getView(imageButtonId);
+		solo.clickOnView(linearLayout);
+	}
+
+	public static File createTestMediaFile(String filePath, int fileID, Context context) throws IOException {
+
+		File testImage = new File(filePath);
+
+		if (!testImage.exists()) {
+			testImage.createNewFile();
+		}
+
+		InputStream in = context.getResources().openRawResource(fileID);
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(testImage), Consts.BUFFER_8K);
+
+		byte[] buffer = new byte[Consts.BUFFER_8K];
+		int length = 0;
+
+		while ((length = in.read(buffer)) > 0) {
+			out.write(buffer, 0, length);
+		}
+
+		in.close();
+		out.flush();
+		out.close();
+
+		return testImage;
+	}
+
 	public static void createValidUser(Context context) {
 		try {
 			String testUser = "testUser" + System.currentTimeMillis();
@@ -459,32 +455,16 @@ public class UiTestUtils {
 
 			assert (userRegistered);
 
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-			prefs.edit().putString(Consts.TOKEN, token).commit();
+			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+			sharedPreferences.edit().putString(Consts.TOKEN, token).commit();
 
 		} catch (WebconnectionException e) {
 			e.printStackTrace();
-			assert (false);
+			assertEquals("Error creating test User. ", true, false);
 		}
 	}
 
 	// Stage methods
-	public static void compareResWithArray(int fileId, byte[] screenArray, Context context) {
-		Bitmap file = BitmapFactory.decodeResource(context.getResources(), fileId);
-		byte[] fileByteArray = new byte[file.getWidth() * file.getHeight() * 4];
-		int counter = 0;
-		for (int y = 0; y < file.getHeight(); y++) {
-			for (int x = 0; x < file.getWidth(); x++) {
-				int pixel = file.getPixel(x, y);
-				fileByteArray[counter++] = (byte) ((pixel >> 24) & 0xff);
-				fileByteArray[counter++] = (byte) ((pixel >> 16) & 0xff);
-				fileByteArray[counter++] = (byte) ((pixel >> 8) & 0xff);
-				fileByteArray[counter++] = (byte) (pixel & 0xff);
-			}
-		}
-		compareByteArrays(fileByteArray, screenArray);
-	}
-
 	public static void compareByteArrays(byte[] firstArray, byte[] secondArray) {
 		assertEquals("Length of byte arrays not equal", firstArray.length, secondArray.length);
 		assertEquals("Arrays don't have same content.", firstArray[0], secondArray[0], 10);
@@ -506,5 +486,29 @@ public class UiTestUtils {
 		assertEquals("Pixels don't have same content.", pixelArray[1], screenPixel[1], 10);
 		assertEquals("Pixels don't have same content.", pixelArray[2], screenPixel[2], 10);
 		assertEquals("Pixels don't have same content.", pixelArray[3], screenPixel[3], 10);
+	}
+
+	public static void testIntegerEditText(Solo solo, int editTextIndex, int value, int editTextMinWidth, boolean assertMode) {
+		insertIntegerIntoEditText(solo, editTextIndex, value);
+		testEditText(solo, editTextIndex, value + "", editTextMinWidth, assertMode);
+	}
+
+	public static void testDoubleEditText(Solo solo, int editTextIndex, double value, int editTextMinWidth, boolean assertMode) {
+		insertDoubleIntoEditText(solo, editTextIndex, value);
+		testEditText(solo, editTextIndex, value + "", editTextMinWidth, assertMode);
+	}
+
+	private static void testEditText(Solo solo, int editTextIndex, String value, int editTextMinWidth, boolean assertMode) {
+		solo.clickOnButton(0);
+		solo.sleep(100);
+		int width = 0;
+		if (assertMode) {
+			assertTrue("EditText not resized - value not (fully) visible", solo.searchText(value));
+			width = solo.getEditText(editTextIndex).getWidth();
+			assertTrue("Minwidth of EditText should be " + editTextMinWidth + " dpi",
+					width >= Utils.getPhysicalPixels(editTextMinWidth, solo.getCurrentActivity().getBaseContext()));
+		} else {
+			assertFalse("Number too long - should not be resized and fully visible", solo.searchText(value));
+		}
 	}
 }

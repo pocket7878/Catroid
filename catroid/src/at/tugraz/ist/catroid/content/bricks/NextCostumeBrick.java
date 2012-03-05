@@ -48,7 +48,7 @@ public class NextCostumeBrick implements Brick {
 		final ArrayList<CostumeData> costumeDataList = sprite.getCostumeDataList();
 		int costumeDataListSize = costumeDataList.size();
 
-		if (costumeDataListSize > 0) {
+		if (costumeDataListSize > 0 && sprite.costume.getCostumeData() != null) {
 			CostumeData currentCostumeData = sprite.costume.getCostumeData();
 			CostumeData finalCostumeData = costumeDataList.get(costumeDataListSize - 1);
 			boolean executeOnce = true;
@@ -80,7 +80,7 @@ public class NextCostumeBrick implements Brick {
 
 	public View getPrototypeView(Context context) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View view = inflater.inflate(R.layout.toolbox_brick_next_costume, null);
+		View view = inflater.inflate(R.layout.brick_next_costume, null);
 		return view;
 	}
 
@@ -96,7 +96,7 @@ public class NextCostumeBrick implements Brick {
 
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
-			view = View.inflate(context, R.layout.toolbox_brick_next_costume, null);
+			view = View.inflate(context, R.layout.brick_next_costume, null);
 		}
 
 		return view;

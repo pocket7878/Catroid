@@ -26,8 +26,8 @@ public class StartScript extends Script {
 
 	private static final long serialVersionUID = 1L;
 
-	public StartScript(String name, Sprite sprite) {
-		super(name, sprite);
+	public StartScript(Sprite sprite) {
+		super(sprite);
 		super.isFinished = false;
 	}
 
@@ -39,12 +39,12 @@ public class StartScript extends Script {
 	}
 
 	@Override
-	public Script clone(String name, Sprite sprite) {
-		return new StartScript(name, sprite);
+	public Script clone(Sprite sprite) {
+		return new StartScript(sprite);
 	}
 
 	@Override
-	public Script cloneCopySprite(String name, Sprite sprite) {
-		return new StartScript(name, sprite);
+	public Script cloneCopySprite(Sprite sprite) {
+		return new StartScript(sprite);
 	}
 }

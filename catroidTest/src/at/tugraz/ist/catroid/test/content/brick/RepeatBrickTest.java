@@ -22,6 +22,7 @@
  */
 package at.tugraz.ist.catroid.test.content.brick;
 
+import android.test.FlakyTest;
 import android.test.InstrumentationTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
@@ -46,7 +47,7 @@ public class RepeatBrickTest extends InstrumentationTestCase {
 
 	public void testRepeatBrick() throws InterruptedException {
 		testSprite.removeAllScripts();
-		testScript = new StartScript("foo", testSprite);
+		testScript = new StartScript(testSprite);
 
 		repeatBrick = new RepeatBrick(testSprite, REPEAT_TIMES);
 		loopEndBrick = new LoopEndBrick(testSprite, repeatBrick);
@@ -72,9 +73,10 @@ public class RepeatBrickTest extends InstrumentationTestCase {
 				(int) testSprite.costume.getYPosition());
 	}
 
+	@FlakyTest(tolerance = 3)
 	public void testLoopDelay() throws InterruptedException {
 		testSprite.removeAllScripts();
-		testScript = new StartScript("foo", testSprite);
+		testScript = new StartScript(testSprite);
 
 		repeatBrick = new RepeatBrick(testSprite, REPEAT_TIMES);
 		loopEndBrick = new LoopEndBrick(testSprite, repeatBrick);
@@ -107,7 +109,7 @@ public class RepeatBrickTest extends InstrumentationTestCase {
 
 	public void testNegativeRepeats() throws InterruptedException {
 		testSprite.removeAllScripts();
-		testScript = new StartScript("foo", testSprite);
+		testScript = new StartScript(testSprite);
 
 		repeatBrick = new RepeatBrick(testSprite, -1);
 		loopEndBrick = new LoopEndBrick(testSprite, repeatBrick);
@@ -137,7 +139,7 @@ public class RepeatBrickTest extends InstrumentationTestCase {
 
 	public void testZeroRepeats() throws InterruptedException {
 		testSprite.removeAllScripts();
-		testScript = new StartScript("foo", testSprite);
+		testScript = new StartScript(testSprite);
 
 		repeatBrick = new RepeatBrick(testSprite, 0);
 		loopEndBrick = new LoopEndBrick(testSprite, repeatBrick);
