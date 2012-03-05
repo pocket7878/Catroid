@@ -150,8 +150,8 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 		ArrayList<Brick> brickListCopiedSprite = copiedSprite.getScript(0).getBrickList();
 		ArrayList<Brick> brickListFirstSprite = firstSprite.getScript(0).getBrickList();
 
-		LoopBeginBrick firstLoopBrick = (LoopBeginBrick) brickListFirstSprite.get(33);
-		LoopBeginBrick copiedLoopBrick = (LoopBeginBrick) brickListCopiedSprite.get(33);
+		LoopBeginBrick firstLoopBrick = (LoopBeginBrick) brickListFirstSprite.get(32);
+		LoopBeginBrick copiedLoopBrick = (LoopBeginBrick) brickListCopiedSprite.get(32);
 		LoopEndBrick firstEndBrick = firstLoopBrick.getLoopEndBrick();
 		LoopEndBrick copiedEndBrick = copiedLoopBrick.getLoopEndBrick();
 		assertNotSame("Loop Brick is not copied right!", firstEndBrick, copiedEndBrick);
@@ -318,11 +318,9 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 		project.addSprite(secondSprite);
 
 		projectMangaer.fileChecksumContainer = new FileChecksumContainer();
-		projectMangaer.setProject(project);
 		projectMangaer.setCurrentSprite(firstSprite);
 		projectMangaer.setCurrentScript(firstSpriteScript);
 
-		projectMangaer.setProject(project);
 		storageHandler.saveProject(project);
 	}
 }
