@@ -76,11 +76,13 @@ public class ComplexStageTest extends ActivityInstrumentationTestCase2<StageActi
 
 	public void testShowTexture() {
 		byte[] redPixel = { (byte) 237, 28, 36, (byte) 255 };
-		byte[] redBrightnessPixel = { (byte) 118, 14, 18, (byte) 255 };
+		byte[] redBrightnessPixel = { (byte) 109, 0, 0, (byte) 255 };
 		byte[] greenPixel = { 34, (byte) 177, 76, (byte) 255 };
 		byte[] yellowPixel = { (byte) 255, (byte) 242, 0, (byte) 255 };
 		byte[] bluePixel = { 0, (byte) 162, (byte) 232, (byte) 255 };
 		byte[] whitePixel = { (byte) 255, (byte) 255, (byte) 255, (byte) 255 };
+		byte[] blackPixel = { (byte) 0, (byte) 0, (byte) 0, (byte) 255 };
+		byte[] blackBrightnessPixel = { (byte) 127, (byte) 127, (byte) 127, (byte) 255 };
 
 		solo.waitForActivity("StageActivity");
 		solo.sleep(2000);
@@ -99,6 +101,8 @@ public class ComplexStageTest extends ActivityInstrumentationTestCase2<StageActi
 		UiTestUtils.comparePixelArrayWithPixelScreenArray(yellowPixel, screenArray, -21, 21, screenWidth, screenHeight);
 
 		UiTestUtils.comparePixelArrayWithPixelScreenArray(whitePixel, screenArray, 0, 0, screenWidth, screenHeight);
+
+		UiTestUtils.comparePixelArrayWithPixelScreenArray(blackPixel, screenArray, -80, -80, screenWidth, screenHeight);
 
 		solo.clickOnScreen((screenWidth / 2) + 21, (screenHeight / 2) - 21);
 		solo.sleep(2000);
@@ -138,6 +142,12 @@ public class ComplexStageTest extends ActivityInstrumentationTestCase2<StageActi
 		UiTestUtils.comparePixelArrayWithPixelScreenArray(greenPixel, screenArray, 1, -41, screenWidth, screenHeight);
 		UiTestUtils.comparePixelArrayWithPixelScreenArray(greenPixel, screenArray, 40, -41, screenWidth, screenHeight);
 		UiTestUtils.comparePixelArrayWithPixelScreenArray(bluePixel, screenArray, 21, 21, screenWidth, screenHeight);
+
+		solo.clickOnScreen((screenWidth / 2) - 50, (screenHeight / 2) - 50);
+		solo.sleep(3000);
+		screenArray = StageActivity.stageListener.getPixels(0, 0, screenWidth, screenHeight);
+		UiTestUtils.comparePixelArrayWithPixelScreenArray(blackBrightnessPixel, screenArray, -54, 55, screenWidth,
+				screenHeight);
 		assertTrue("Just for FileTest", true);
 	}
 
@@ -243,6 +253,32 @@ public class ComplexStageTest extends ActivityInstrumentationTestCase2<StageActi
 
 		redSprite.addScript(redWhenScript);
 
+		// black Sprite
+		Sprite blackSprite = new Sprite("blackSprite");
+		StartScript blackStartScript = new StartScript(blackSprite);
+		SetCostumeBrick blackCostumeBrick = new SetCostumeBrick(blackSprite);
+		CostumeData blackCostumeData = new CostumeData();
+		String blackImageName = "black_image.bmp";
+
+		blackCostumeData.setCostumeName(blackImageName);
+
+		blackSprite.getCostumeDataList().add(blackCostumeData);
+
+		blackCostumeBrick.setCostume(blackCostumeData);
+		blackStartScript.addBrick(blackCostumeBrick);
+		blackStartScript.addBrick(new PlaceAtBrick(blackSprite, -50, 50));
+
+		blackSprite.addScript(blackStartScript);
+
+		WhenScript blackWhenScript = new WhenScript(blackSprite);
+		ComeToFrontBrick blackComeToFrontBrick = new ComeToFrontBrick(blackSprite);
+		SetBrightnessBrick blackSetBrightnessBrick = new SetBrightnessBrick(blackSprite, 150d);
+		blackWhenScript.addBrick(blackComeToFrontBrick);
+		blackWhenScript.addBrick(blackSetBrightnessBrick);
+
+		blackSprite.addScript(blackWhenScript);
+
+		project.addSprite(blackSprite);
 		project.addSprite(yellowSprite);
 		project.addSprite(redSprite);
 		project.addSprite(greenSprite);
@@ -262,10 +298,14 @@ public class ComplexStageTest extends ActivityInstrumentationTestCase2<StageActi
 		File redImageFile = UiTestUtils.saveFileToProject(project.getName(), redImageName,
 				at.tugraz.ist.catroid.uitest.R.raw.red_image, getInstrumentation().getContext(),
 				UiTestUtils.FileTypes.IMAGE);
+		File blackImageFile = UiTestUtils.saveFileToProject(project.getName(), blackImageName,
+				at.tugraz.ist.catroid.uitest.R.raw.black_image, getInstrumentation().getContext(),
+				UiTestUtils.FileTypes.IMAGE);
 		yellowCostumeData.setCostumeFilename(yellowImageFile.getName());
 		greenCostumeData.setCostumeFilename(greenImageFile.getName());
 		blueCostumeData.setCostumeFilename(blueImageFile.getName());
 		redCostumeData.setCostumeFilename(redImageFile.getName());
+		blackCostumeData.setCostumeFilename(blackImageFile.getName());
 
 		StorageHandler.getInstance().saveProject(project);
 

@@ -46,7 +46,6 @@ import at.tugraz.ist.catroid.ui.adapter.ProjectAdapter;
 import at.tugraz.ist.catroid.ui.dialogs.CustomIconContextMenu;
 import at.tugraz.ist.catroid.ui.dialogs.NewProjectDialog;
 import at.tugraz.ist.catroid.ui.dialogs.RenameProjectDialog;
-import at.tugraz.ist.catroid.ui.dialogs.SetDescriptionDialog;
 import at.tugraz.ist.catroid.utils.ActivityHelper;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -64,9 +63,11 @@ public class MyProjectsActivity extends ListActivity {
 	private static final int DIALOG_CONTEXT_MENU = 1;
 	private static final int CONTEXT_MENU_ITEM_RENAME = 2;
 	private static final int CONTEXT_MENU_ITEM_DELETE = 3;
-	private static final int CONTEXT_MENU_ITEM_DESCRIPTION = 4;
+	// temporarily removed - because of upcoming release, and bad performance of projectdescription	
+	//	private static final int CONTEXT_MENU_ITEM_DESCRIPTION = 4;
 	public static final int DIALOG_RENAME_PROJECT = 5;
-	public static final int DIALOG_SET_DESCRIPTION = 6;
+	// temporarily removed - because of upcoming release, and bad performance of projectdescription	
+	//	public static final int DIALOG_SET_DESCRIPTION = 6;
 	public static final int DIALOG_CONTEXT_MENU2 = 7;
 
 	@Override
@@ -127,8 +128,8 @@ public class MyProjectsActivity extends ListActivity {
 	private void initClickListener() {
 		getListView().setOnItemClickListener(new ListView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (!ProjectManager.getInstance().loadProject(
-						Utils.getProjectName((adapter.getItem(position)).getName()), MyProjectsActivity.this, true)) {
+				if (!ProjectManager.getInstance().loadProject((adapter.getItem(position)).getName(),
+						MyProjectsActivity.this, true)) {
 					return; // error message already in ProjectManager
 							// loadProject
 				}
@@ -142,7 +143,7 @@ public class MyProjectsActivity extends ListActivity {
 				if (projectToEdit == null) {
 					return true;
 				}
-				if (!ProjectManager.getInstance().canLoadProject(Utils.getProjectName((projectToEdit.getName())))) {
+				if (!ProjectManager.getInstance().canLoadProject((projectToEdit.getName()))) {
 					removeDialog(DIALOG_CONTEXT_MENU2);
 					showDialog(DIALOG_CONTEXT_MENU2);
 					return true;
@@ -159,8 +160,9 @@ public class MyProjectsActivity extends ListActivity {
 		iconContextMenu = new CustomIconContextMenu(this, DIALOG_CONTEXT_MENU);
 		iconContextMenu.addItem(resources, this.getString(R.string.rename), R.drawable.ic_context_rename,
 				CONTEXT_MENU_ITEM_RENAME);
-		iconContextMenu.addItem(resources, this.getString(R.string.set_description), R.drawable.ic_menu_description,
-				CONTEXT_MENU_ITEM_DESCRIPTION);
+		// temporarily removed - because of upcoming release, and bad performance of projectdescription
+		//		iconContextMenu.addItem(resources, this.getString(R.string.set_description), R.drawable.ic_menu_description,
+		//				CONTEXT_MENU_ITEM_DESCRIPTION);
 		iconContextMenu.addItem(resources, this.getString(R.string.delete), R.drawable.ic_context_delete,
 				CONTEXT_MENU_ITEM_DELETE);
 
@@ -170,9 +172,10 @@ public class MyProjectsActivity extends ListActivity {
 					case CONTEXT_MENU_ITEM_RENAME:
 						showDialog(DIALOG_RENAME_PROJECT);
 						break;
-					case CONTEXT_MENU_ITEM_DESCRIPTION:
-						showDialog(DIALOG_SET_DESCRIPTION);
-						break;
+					// temporarily removed - because of upcoming release, and bad performance of projectdescription						
+					//					case CONTEXT_MENU_ITEM_DESCRIPTION:
+					//						showDialog(DIALOG_SET_DESCRIPTION);
+					//						break;
 					case CONTEXT_MENU_ITEM_DELETE:
 						deleteProject();
 						break;
@@ -199,7 +202,7 @@ public class MyProjectsActivity extends ListActivity {
 		ProjectManager projectManager = ProjectManager.getInstance();
 		Project currentProject = projectManager.getCurrentProject();
 
-		String project = Utils.getProjectName((projectToEdit.getName()));
+		String project = (projectToEdit.getName());
 		UtilFile.deleteDirectory(new File(Utils.buildPath(Consts.DEFAULT_ROOT, project)));
 
 		if (!(currentProject != null && currentProject.getName().equalsIgnoreCase(project))) {
@@ -211,8 +214,7 @@ public class MyProjectsActivity extends ListActivity {
 		if (projectList.size() == 0) { // no projects left
 			projectManager.initializeDefaultProject(MyProjectsActivity.this);
 		} else {
-			projectManager.loadProject(Utils.getProjectName((projectList.get(0)).getName()), MyProjectsActivity.this,
-					false);
+			projectManager.loadProject((projectList.get(0)).getName(), MyProjectsActivity.this, false);
 			projectManager.saveProject();
 			Utils.saveToPreferences(MyProjectsActivity.this, Consts.PREF_PROJECTNAME_KEY, projectManager
 					.getCurrentProject().getName());
@@ -227,7 +229,7 @@ public class MyProjectsActivity extends ListActivity {
 		Dialog dialog = null;
 		String project = "";
 		if (projectToEdit != null) {
-			project = Utils.getProjectName((projectToEdit.getName()));
+			project = (projectToEdit.getName());
 		}
 		switch (id) {
 			case DIALOG_CONTEXT_MENU:
@@ -245,11 +247,12 @@ public class MyProjectsActivity extends ListActivity {
 					dialog = (new RenameProjectDialog(this, project)).dialog;
 				}
 				break;
-			case DIALOG_SET_DESCRIPTION:
-				if (projectToEdit != null) {
-					dialog = (new SetDescriptionDialog(this)).dialog;
-				}
-				break;
+			// temporarily removed - because of upcoming release, and bad performance of projectdescription
+			//			case DIALOG_SET_DESCRIPTION:
+			//				if (projectToEdit != null) {
+			//					dialog = (new SetDescriptionDialog(this)).dialog;
+			//				}
+			//				break;
 			case DIALOG_NEW_PROJECT:
 				dialog = (new NewProjectDialog(this)).dialog;
 				break;
@@ -265,27 +268,28 @@ public class MyProjectsActivity extends ListActivity {
 		super.onPrepareDialog(id, dialog);
 		String project = "";
 		if (projectToEdit != null) {
-			project = Utils.getProjectName((projectToEdit.getName()));
+			project = projectToEdit.getName();
 		}
 		switch (id) {
 			case DIALOG_RENAME_PROJECT:
 				EditText renameProjectEditText = (EditText) dialog.findViewById(R.id.dialog_text_EditText);
 				renameProjectEditText.setText(project);
 				break;
-			case DIALOG_SET_DESCRIPTION:
-				EditText descriptionEditText = (EditText) dialog.findViewById(R.id.dialog_text_EditText);
-
-				ProjectManager projectManager = ProjectManager.getInstance();
-				String currentProjectName = projectManager.getCurrentProject().getName();
-
-				if (project.equalsIgnoreCase(currentProjectName)) {
-					descriptionEditText.setText(projectManager.getCurrentProject().description);
-				} else {
-					projectManager.loadProject(project, this, false); //TODO: check something
-					descriptionEditText.setText(projectManager.getCurrentProject().description);
-					projectManager.loadProject(currentProjectName, this, false);
-				}
-				break;
+			// temporarily removed - because of upcoming release, and bad performance of projectdescription
+			//			case DIALOG_SET_DESCRIPTION:
+			//				EditText descriptionEditText = (EditText) dialog.findViewById(R.id.dialog_text_EditText);
+			//
+			//				ProjectManager projectManager = ProjectManager.getInstance();
+			//				String currentProjectName = projectManager.getCurrentProject().getName();
+			//
+			//				if (project.equalsIgnoreCase(currentProjectName)) {
+			//					descriptionEditText.setText(projectManager.getCurrentProject().description);
+			//				} else {
+			//					projectManager.loadProject(project, this, false); //TODO: check something
+			//					descriptionEditText.setText(projectManager.getCurrentProject().description);
+			//					projectManager.loadProject(currentProjectName, this, false);
+			//				}
+			//				break;
 			case DIALOG_NEW_PROJECT:
 				EditText newProjectEditText = (EditText) dialog.findViewById(R.id.dialog_text_EditText);
 				newProjectEditText.setText("");
@@ -295,7 +299,7 @@ public class MyProjectsActivity extends ListActivity {
 
 	public boolean projectAlreadyExists(String projectName) {
 		for (File project : projectList) {
-			if (projectName.equalsIgnoreCase(Utils.getProjectName(project.getName()))) {
+			if (projectName.equalsIgnoreCase(project.getName())) {
 				return true;
 			}
 		}
