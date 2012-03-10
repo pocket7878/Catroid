@@ -34,7 +34,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Color;
-import android.util.Log;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.common.Values;
@@ -229,7 +228,7 @@ public class StageListener implements ApplicationListener {
 			}
 		}
 		StageRecorder recorder = StageRecorder.getInstance();
-		Log.e("!!!!!!!!!!!!", " " + recorder.getXml());
+		recorder.updateVolume(SoundManager.getInstance().getVolume());
 		File file = new File("/sdcard/ololo.xml");
 		FileOutputStream filecon;
 		try {
