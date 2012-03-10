@@ -23,9 +23,7 @@
 package at.tugraz.ist.catroid.test.utiltests;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -71,38 +69,6 @@ public class UtilsTest extends TestCase {
 		if (copiedFile != null && copiedFile.exists()) {
 			copiedFile.delete();
 		}
-	}
-
-	public void testCopyFile() throws InterruptedException {
-		String newpath = mTestFile.getParent() + "/copiedFile.txt";
-		Utils.copyFile(mTestFile.getAbsolutePath(), newpath, null, false);
-		Thread.sleep(1000); // Wait for thread to write file
-		copiedFile = new File(newpath);
-
-		assertTrue("File was not copied correctly", copiedFile.exists());
-
-		FileReader fReader;
-		String newContent = "";
-
-		try {
-			fReader = new FileReader(copiedFile);
-
-			int read;
-			while ((read = fReader.read()) != -1) {
-				newContent = newContent + (char) read;
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		assertEquals("Unexpected content of test file", testFileContent, newContent);
-	}
-
-	public void testDeleteFile() {
-		Utils.deleteFile(mTestFile.getAbsolutePath());
-		assertFalse("File still exists after delete", mTestFile.exists());
 	}
 
 	public void testMD5CheckSumOfFile() {
@@ -171,7 +137,7 @@ public class UtilsTest extends TestCase {
 		Log.v(TAG, secretFloat.toString());
 		assertEquals("Getting private float failed!", new Float(3.1415f), secretFloat);
 	}
-	
+
 	public void testBuildPath() {
 		String first = "/abc/abc";
 		String second = "/def/def/";
@@ -193,7 +159,6 @@ public class UtilsTest extends TestCase {
 		result = "/abc/abc/def/def";
 		assertEquals(Utils.buildPath(first, second), result);
 	}
-	
 
 	public void testUniqueName() {
 		String first = Utils.getUniqueName();
@@ -202,5 +167,30 @@ public class UtilsTest extends TestCase {
 		assertFalse("Same unique name!", first.equals(second));
 		assertFalse("Same unique name!", first.equals(third));
 		assertFalse("Same unique name!", second.equals(third));
+	}
+
+	public void testInvokeMethod() {
+		class Test {
+			@SuppressWarnings("unused")
+			private String testMethod1() {
+				return "Called testMethod1!";
+			};
+
+			@SuppressWarnings("unused")
+			private String testMethod2(String param1, String param2) {
+				return param1 + " " + param2;
+			};
+		}
+
+		String testString1 = (String) TestUtils.invokeMethod(new Test(), "testMethod1", null, null);
+		assertEquals("Calling private method without arguments failed!", "Called testMethod1!", testString1);
+
+		String test1 = "Calling method";
+		String test2 = "with parameters!";
+		Class<?> methodParams[] = new Class[] { String.class, String.class };
+		Object methodArgs[] = new Object[] { test1, test2 };
+
+		String testString2 = (String) TestUtils.invokeMethod(new Test(), "testMethod2", methodParams, methodArgs);
+		assertEquals("Calling private method with arguments failed!", test1 + " " + test2, testString2);
 	}
 }

@@ -24,10 +24,17 @@ package at.tugraz.ist.catroid.test.utiltests;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.util.List;
 
 import android.test.InstrumentationTestCase;
+import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
+import at.tugraz.ist.catroid.utils.Utils;
 
 public class UtilFileTest extends InstrumentationTestCase {
 	private File testDirectory;
@@ -35,10 +42,13 @@ public class UtilFileTest extends InstrumentationTestCase {
 	private File file1;
 	private File file2;
 
+	private String projectName = "project1";
+
 	@Override
 	protected void setUp() throws Exception {
 		final String catroidDirectory = "/sdcard/catroid";
 		UtilFile.deleteDirectory(new File(catroidDirectory + "/testDirectory"));
+		TestUtils.clearProject(projectName);
 
 		testDirectory = new File(catroidDirectory + "/testDirectory");
 		testDirectory.mkdir();
@@ -55,6 +65,7 @@ public class UtilFileTest extends InstrumentationTestCase {
 	@Override
 	protected void tearDown() throws Exception {
 		UtilFile.deleteDirectory(testDirectory);
+		TestUtils.clearProject(projectName);
 	}
 
 	public void testClearDirectory() {
@@ -74,25 +85,60 @@ public class UtilFileTest extends InstrumentationTestCase {
 	}
 
 	public void testFileSize() throws IOException {
-
 		for (int i = 0; i < 2; i++) {
 			UtilFile.saveFileToProject("testDirectory", i + "testsound.mp3",
 					at.tugraz.ist.catroid.test.R.raw.longtestsound, getInstrumentation().getContext(),
 					UtilFile.TYPE_SOUND_FILE);
 		}
-		assertEquals("the byte count is not correct", 86188, UtilFile.getSizeOfDirectoryInByte(testDirectory));
-		assertEquals("not the expected string", "84 KB", UtilFile.getSizeAsString(testDirectory));
+		assertEquals("not the expected string", "84.2 KB", UtilFile.getSizeAsString(testDirectory));
 
 		for (int i = 2; i < 48; i++) {
 			UtilFile.saveFileToProject("testDirectory", i + "testsound.mp3",
 					at.tugraz.ist.catroid.test.R.raw.longtestsound, getInstrumentation().getContext(),
 					UtilFile.TYPE_SOUND_FILE);
 		}
-		assertEquals("the byte count is not correct", 2068512, UtilFile.getSizeOfDirectoryInByte(testDirectory));
-		DecimalFormat decimalFormat = new DecimalFormat("#.00");
-		String expected = decimalFormat.format(1.97) + " MB";
+		DecimalFormat decimalFormat = new DecimalFormat("#.0");
+		String expected = decimalFormat.format(2.0) + " MB";
 		assertEquals("not the expected string", expected, UtilFile.getSizeAsString(testDirectory));
 
+		PrintWriter printWriter = null;
+
+		File testFile = new File(Utils.buildPath(testDirectory.getAbsolutePath(), "catroid.txt"));
+
+		try {
+			testFile.createNewFile();
+
+			printWriter = new PrintWriter(testFile);
+			printWriter.print("catroid");
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (printWriter != null) {
+				printWriter.close();
+			}
+		}
+
+		assertEquals("Unexpected Filesize!", "7 Byte", UtilFile.getSizeAsString(testFile));
+
 		UtilFile.deleteDirectory(testDirectory);
+	}
+
+	public void testGetProjectFiles() {
+		Project project = new Project(null, projectName);
+		ProjectManager.getInstance().setProject(project);
+		Sprite sprite = new Sprite("new sprite");
+		project.addSprite(sprite);
+		ProjectManager.getInstance().saveProject();
+
+		String catroidDirectoryPath = "/sdcard/catroid";
+		File catroidDirectory = new File(catroidDirectoryPath);
+		File project1Directory = new File(catroidDirectory + "/" + projectName);
+
+		List<File> projectList = UtilFile.getProjectFiles(catroidDirectory);
+
+		assertTrue("project1 should be in Projectlist - is a valid Catroid project",
+				projectList.contains(project1Directory));
+		assertFalse("testDirectory should not be in Projectlist - not a Catroid project",
+				projectList.contains(testDirectory));
 	}
 }

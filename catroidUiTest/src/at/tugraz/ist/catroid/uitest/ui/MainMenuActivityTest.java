@@ -90,11 +90,12 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		assertTrue("EditText field got cleared after changing orientation", solo.searchText(testProject));
 		solo.sleep(600);
 		solo.setActivityOrientation(Solo.PORTRAIT);
-		solo.goBack();
-		solo.clickOnButton(0);
 		solo.sleep(200);
+		//solo.goBack();
+		solo.clickOnButton(0);
+		solo.sleep(400);
 
-		File file = new File(Consts.DEFAULT_ROOT + "/" + testProject + "/" + testProject + Consts.PROJECT_EXTENTION);
+		File file = new File(Consts.DEFAULT_ROOT + "/" + testProject + "/" + Consts.PROJECTCODE_NAME);
 		assertTrue(testProject + " was not created!", file.exists());
 	}
 
@@ -112,7 +113,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		solo.sleep(600);
 		solo.setActivityOrientation(Solo.PORTRAIT);
 		solo.goBack();
-		solo.clickOnButton(0);
+		solo.sendKey(Solo.ENTER);
 		solo.sleep(100);
 
 		assertTrue("No error message was displayed upon creating a project with an empty name.",
@@ -155,7 +156,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		solo.setActivityOrientation(Solo.LANDSCAPE);
 		solo.sleep(600);
 		solo.setActivityOrientation(Solo.PORTRAIT);
-		solo.goBack();
+		//solo.goBack();
 		solo.clickOnButton(0);
 		solo.sleep(100);
 
@@ -273,8 +274,8 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		Sprite secondSprite = new Sprite("dog");
 		Sprite thirdSprite = new Sprite("horse");
 		Sprite fourthSprite = new Sprite("pig");
-		Script testScript = new StartScript("testScript", firstSprite);
-		Script otherScript = new StartScript("otherScript", secondSprite);
+		Script testScript = new StartScript(firstSprite);
+		Script otherScript = new StartScript(secondSprite);
 		HideBrick hideBrick = new HideBrick(firstSprite);
 		ShowBrick showBrick = new ShowBrick(firstSprite);
 		SetSizeToBrick setSizeToBrick = new SetSizeToBrick(secondSprite, size);

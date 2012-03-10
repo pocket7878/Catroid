@@ -35,7 +35,6 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
-import at.tugraz.ist.catroid.ui.DownloadActivity;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
@@ -78,7 +77,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		super.tearDown();
 	}
 
-	private void startProjectUploadTask() throws Throwable {
+	private void setServerURLToTestUrl() throws Throwable {
 		runTestOnUiThread(new Runnable() {
 			public void run() {
 				ServerCalls.useTestUrl = true;
@@ -87,7 +86,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 	}
 
 	public void testUploadProjectSuccess() throws Throwable {
-		startProjectUploadTask();
+		setServerURLToTestUrl();
 
 		createTestProject(testProject);
 		addABrickToProject();
@@ -111,18 +110,17 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		solo.clickOnButton(getActivity().getString(R.string.new_project));
 		solo.enterText(0, projectToCreate);
 		solo.goBack();
-		solo.clickOnButton(getActivity().getString(R.string.new_project_dialog_button));
+		solo.clickOnButton(0);
 		solo.sleep(2000);
 
-		File file = new File(Consts.DEFAULT_ROOT + "/" + projectToCreate + "/" + projectToCreate
-				+ Consts.PROJECT_EXTENTION);
+		File file = new File(Consts.DEFAULT_ROOT + "/" + projectToCreate + "/" + Consts.PROJECTCODE_NAME);
 		assertTrue(projectToCreate + " was not created!", file.exists());
 	}
 
 	private void addABrickToProject() {
 		solo.clickInList(0);
-		UiTestUtils.addNewBrickAndScrollDown(solo, R.string.brick_wait);
-		UiTestUtils.clickOnImageButton(solo, R.id.btn_action_home);
+		UiTestUtils.addNewBrick(solo, R.string.brick_wait);
+		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_home);
 	}
 
 	private void uploadProject() {
@@ -159,19 +157,21 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 	private void downloadProject() {
 		String downloadUrl = TEST_FILE_DOWNLOAD_URL + serverProjectId + Consts.CATROID_EXTENTION;
 		downloadUrl += "?fname=" + newTestProject;
-		Intent intent = new Intent(getActivity(), DownloadActivity.class);
+
+		Intent intent = new Intent(getActivity(), MainMenuActivity.class);
 		intent.setAction(Intent.ACTION_VIEW);
 		intent.setData(Uri.parse(downloadUrl));
-		launchActivityWithIntent("at.tugraz.ist.catroid", DownloadActivity.class, intent);
+		launchActivityWithIntent("at.tugraz.ist.catroid", MainMenuActivity.class, intent);
 
 		boolean waitResult = solo.waitForActivity("MainMenuActivity", 10000);
 		assertTrue("Download takes too long.", waitResult);
+		assertTrue("Testproject2 not loaded.", solo.searchText(newTestProject));
 		assertNotNull("Download not successful.",
 				solo.searchText(getActivity().getString(R.string.success_project_download)));
 
 		String projectPath = Consts.DEFAULT_ROOT + "/" + newTestProject;
 		File downloadedDirectory = new File(projectPath);
-		File downloadedProjectFile = new File(projectPath + "/" + newTestProject + Consts.PROJECT_EXTENTION);
+		File downloadedProjectFile = new File(projectPath + "/" + Consts.PROJECTCODE_NAME);
 		assertTrue("Downloaded Directory does not exist.", downloadedDirectory.exists());
 		assertTrue("Project File does not exist.", downloadedProjectFile.exists());
 

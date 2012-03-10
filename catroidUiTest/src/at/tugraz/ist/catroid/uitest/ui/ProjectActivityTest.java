@@ -22,11 +22,10 @@
  */
 package at.tugraz.ist.catroid.uitest.ui;
 
-import java.util.List;
-
+import android.graphics.Bitmap;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.KeyEvent;
-import android.widget.ImageButton;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.ProjectManager;
@@ -68,7 +67,7 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 
 	private void addNewSprite(String spriteName) {
 		solo.sleep(500);
-		UiTestUtils.clickOnImageButton(solo, R.id.btn_action_add_sprite);
+		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_add_sprite);
 
 		solo.sleep(200);
 		solo.enterText(0, spriteName);
@@ -76,7 +75,7 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 		assertTrue("EditText field got cleared after changing orientation", solo.searchText(spriteName));
 		solo.sleep(600);
 		solo.setActivityOrientation(Solo.PORTRAIT);
-		solo.goBack();
+		//solo.goBack();
 		solo.clickOnButton(0);
 		solo.sleep(100);
 	}
@@ -94,7 +93,7 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 		assertTrue("EditText field got cleared after changing orientation", solo.searchText(sometext));
 		solo.sleep(600);
 		solo.setActivityOrientation(Solo.PORTRAIT);
-		solo.goBack();
+		//solo.goBack();
 		solo.clickOnButton(0);
 		solo.sleep(100);
 
@@ -150,7 +149,7 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 		solo.setActivityOrientation(Solo.LANDSCAPE);
 		solo.sleep(500);
 		solo.setActivityOrientation(Solo.PORTRAIT);
-		solo.goBack();
+		//solo.goBack();
 		solo.clickOnButton(0);
 		solo.sleep(50);
 
@@ -177,7 +176,7 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 	public void testMainMenuButton() {
 		solo.clickOnButton(getActivity().getString(R.string.current_project_button));
 
-		UiTestUtils.clickOnImageButton(solo, R.id.btn_action_home);
+		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_home);
 
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
 
@@ -218,7 +217,7 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 		assertTrue("EditText field got cleared after changing orientation", solo.searchText(testText));
 		solo.setActivityOrientation(Solo.PORTRAIT);
 		solo.sleep(600);
-		solo.goBack();
+		//solo.goBack();
 		solo.clickOnButton(0);
 		solo.sleep(100);
 		assertTrue("Sprite wasnt renamed", solo.searchText(testText));
@@ -229,7 +228,7 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 		int expectedLineCount = 2;
 		solo.clickOnButton(getActivity().getString(R.string.current_project_button));
 		addNewSprite(spriteName);
-		TextView textView = solo.getText(2);
+		TextView textView = solo.getText(5);
 		assertEquals("linecount is wrong - ellipsize failed", expectedLineCount, textView.getLineCount());
 		solo.clickLongOnText(spriteName);
 		TextView textView2 = solo.getText(0);
@@ -252,7 +251,7 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 		solo.setActivityOrientation(Solo.PORTRAIT);
 		assertTrue("EditText field got cleared after changing orientation", solo.searchText(spriteName1));
 		solo.sleep(300);
-		solo.goBack();
+		//solo.goBack();
 		solo.clickOnButton(0);
 		solo.sleep(300);
 
@@ -280,7 +279,7 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 		assertTrue("EditText field got cleared after changing orientation", solo.searchText(spriteName));
 		solo.sleep(600);
 		solo.setActivityOrientation(Solo.PORTRAIT);
-		solo.goBack();
+		//solo.goBack();
 		solo.clickOnButton(0);
 
 		solo.sleep(800);
@@ -294,7 +293,7 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 		assertTrue("EditText field got cleared after changing orientation", solo.searchText(spriteName));
 		solo.sleep(600);
 		solo.setActivityOrientation(Solo.PORTRAIT);
-		solo.goBack();
+		//solo.goBack();
 		solo.clickOnButton(0);
 
 		assertTrue("ErrorMessage not visible",
@@ -339,7 +338,7 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 		assertTrue("EditText field got cleared after changing orientation", solo.searchText(spriteName));
 		solo.sleep(600);
 		solo.setActivityOrientation(Solo.PORTRAIT);
-		solo.goBack();
+		//solo.goBack();
 		solo.clickOnButton(0);
 
 		solo.sleep(200);
@@ -371,15 +370,52 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 
 	}
 
-	private void openNewSpriteDialog() {
-		solo.sleep(200);
-		List<ImageButton> btnList = solo.getCurrentImageButtons();
-		for (int i = 0; i < btnList.size(); i++) {
-			ImageButton btn = btnList.get(i);
-			if (btn.getId() == R.id.btn_action_add_sprite) {
-				solo.clickOnImageButton(i);
+	public void testDivider() {
+		String spriteName = "Sprite1";
+		String spriteName2 = "Sprite2";
+		String spriteName3 = "Sprite3";
+		solo.clickOnButton(getActivity().getString(R.string.current_project_button));
+		addNewSprite(spriteName);
+		addNewSprite(spriteName2);
+		addNewSprite(spriteName3);
+
+		assertTrue("ListView divider should be null", solo.getCurrentListViews().get(0).getDivider() == null);
+		assertTrue("Listview dividerheight should be 0", solo.getCurrentListViews().get(0).getDividerHeight() == 0);
+
+		int dividerID = R.id.sprite_divider;
+		int currentViewID;
+		boolean isBackground = true;
+		Bitmap viewBitmap;
+		int pixelColor;
+		int colorDivider;
+
+		for (View viewToTest : solo.getCurrentViews()) {
+			currentViewID = viewToTest.getId();
+			if (dividerID == currentViewID) {
+				viewToTest.buildDrawingCache();
+				viewBitmap = viewToTest.getDrawingCache();
+				if (isBackground) {
+					pixelColor = viewBitmap.getPixel(1, 3);
+					viewToTest.destroyDrawingCache();
+					assertTrue("Background divider should have 4px height", viewToTest.getHeight() == 4);
+					colorDivider = solo.getCurrentActivity().getResources().getColor(R.color.gray);
+					assertEquals("Divider color for background should be gray", pixelColor, colorDivider);
+					isBackground = false;
+				} else {
+					pixelColor = viewBitmap.getPixel(1, 1);
+					viewToTest.destroyDrawingCache();
+					assertTrue("Normal Sprite divider should have 2px height", viewToTest.getHeight() == 2);
+					colorDivider = solo.getCurrentActivity().getResources().getColor(R.color.egg_yellow);
+					assertEquals("Divider color for normal sprite should be eggyellow", pixelColor, colorDivider);
+				}
 			}
 		}
+
+	}
+
+	private void openNewSpriteDialog() {
+		solo.sleep(200);
+		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_add_sprite);
 		solo.sleep(50);
 	}
 

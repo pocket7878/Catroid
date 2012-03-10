@@ -42,11 +42,9 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 
 	private Sprite sprite;
-	private double volume;
+	private float volume;
 
-	private transient View view;
-
-	public SetVolumeToBrick(Sprite sprite, double volume) {
+	public SetVolumeToBrick(Sprite sprite, float volume) {
 		this.sprite = sprite;
 		this.volume = volume;
 	}
@@ -56,12 +54,13 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 	}
 
 	public void execute() {
-		if (volume < 0.0) {
-			volume = 0.0;
-		} else if (volume > 100.0) {
-			volume = 100.0;
+		if (volume < 0.0f) {
+			volume = 0.0f;
+		} else if (volume > 100.0f) {
+			volume = 100.0f;
 		}
-		SoundManager.getInstance().setVolume(getVolume());
+
+		SoundManager.getInstance().setVolume(volume);
 		StageRecorder recorder = StageRecorder.getInstance();
 		recorder.updateVolume(volume);
 	}
@@ -70,14 +69,10 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 		return this.sprite;
 	}
 
-	public double getVolume() {
-		return volume;
-	}
-
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
-		view = View.inflate(context, R.layout.toolbox_brick_set_volume_to, null);
+		View view = View.inflate(context, R.layout.brick_set_volume_to, null);
 
-		EditText edit = (EditText) view.findViewById(R.id.toolbox_brick_set_volume_to_edit_text);
+		EditText edit = (EditText) view.findViewById(R.id.brick_set_volume_to_edit_text);
 		edit.setText(String.valueOf(volume));
 
 		edit.setOnClickListener(this);
@@ -86,12 +81,12 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 	}
 
 	public View getPrototypeView(Context context) {
-		return View.inflate(context, R.layout.toolbox_brick_set_volume_to, null);
+		return View.inflate(context, R.layout.brick_set_volume_to, null);
 	}
 
 	@Override
 	public Brick clone() {
-		return new SetVolumeToBrick(getSprite(), getVolume());
+		return new SetVolumeToBrick(getSprite(), volume);
 	}
 
 	public void onClick(View view) {
@@ -107,9 +102,9 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				try {
-					volume = Double.parseDouble(input.getText().toString());
+					volume = Float.parseFloat(input.getText().toString());
 				} catch (NumberFormatException exception) {
-					Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT);
+					Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 				}
 				dialog.cancel();
 			}

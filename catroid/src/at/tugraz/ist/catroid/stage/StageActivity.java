@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
 
@@ -83,17 +82,6 @@ public class StageActivity extends AndroidApplication {
 		finish();
 	}
 
-	public void changeScreenSize() {
-		switch (stageListener.screenMode) {
-			case Consts.MAXIMIZE:
-				stageListener.screenMode = Consts.STRETCH;
-				break;
-			case Consts.STRETCH:
-				stageListener.screenMode = Consts.MAXIMIZE;
-				break;
-		}
-	}
-
 	public void toggleAxes() {
 		if (stageListener.axesOn) {
 			stageListener.axesOn = false;
@@ -113,8 +101,9 @@ public class StageActivity extends AndroidApplication {
 	}
 
 	private void calculateScreenSizes() {
-		int virtualScreenWidth = ProjectManager.getInstance().getCurrentProject().VIRTUAL_SCREEN_WIDTH;
-		int virtualScreenHeight = ProjectManager.getInstance().getCurrentProject().VIRTUAL_SCREEN_HEIGHT;
+		ifLandscapeSwitchWidthAndHeight();
+		int virtualScreenWidth = ProjectManager.getInstance().getCurrentProject().virtualScreenWidth;
+		int virtualScreenHeight = ProjectManager.getInstance().getCurrentProject().virtualScreenHeight;
 		if (virtualScreenWidth == Values.SCREEN_WIDTH && virtualScreenHeight == Values.SCREEN_HEIGHT) {
 			resizePossible = false;
 			return;
@@ -128,6 +117,14 @@ public class StageActivity extends AndroidApplication {
 
 		stageListener.maximizeViewPortX = (Values.SCREEN_WIDTH - stageListener.maximizeViewPortWidth) / 2;
 		stageListener.maximizeViewPortY = (Values.SCREEN_HEIGHT - stageListener.maximizeViewPortHeight) / 2;
+	}
+
+	private void ifLandscapeSwitchWidthAndHeight() {
+		if (Values.SCREEN_WIDTH > Values.SCREEN_HEIGHT) {
+			int tmp = Values.SCREEN_HEIGHT;
+			Values.SCREEN_HEIGHT = Values.SCREEN_WIDTH;
+			Values.SCREEN_WIDTH = tmp;
+		}
 	}
 
 	public void makeToast(String text) {

@@ -29,6 +29,7 @@ import android.content.Context;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.common.FileChecksumContainer;
 import at.tugraz.ist.catroid.common.MessageContainer;
+import at.tugraz.ist.catroid.common.StandardProjectHandler;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -41,7 +42,6 @@ public class ProjectManager {
 	private Script currentScript;
 	private Sprite currentSprite;
 	private static ProjectManager instance;
-	private String lastFileSaved;
 
 	public FileChecksumContainer fileChecksumContainer;
 	public MessageContainer messageContainer;
@@ -65,13 +65,14 @@ public class ProjectManager {
 
 			project = StorageHandler.getInstance().loadProject(projectName);
 			if (project == null) {
-				project = StorageHandler.getInstance().createDefaultProject(context);
+				project = StandardProjectHandler.createAndSaveStandardProject(context);
 				if (errorMessage) {
 					Utils.displayErrorMessage(context, context.getString(R.string.error_load_project));
 					return false;
 				}
 			}
-			//adapt name of background sprite to the current language and place on lowest layer
+			// adapt name of background sprite to the current language and place
+			// on lowest layer
 			project.getSpriteList().get(0).setName(context.getString(R.string.background));
 			project.getSpriteList().get(0).costume.zPosition = Integer.MIN_VALUE;
 
@@ -81,6 +82,15 @@ public class ProjectManager {
 		} catch (Exception e) {
 			Utils.displayErrorMessage(context, context.getString(R.string.error_load_project));
 			return false;
+		}
+	}
+
+	public boolean canLoadProject(String projectName) {
+		Project project = StorageHandler.getInstance().loadProject(projectName);
+		if (project == null) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 
@@ -95,7 +105,7 @@ public class ProjectManager {
 		try {
 			fileChecksumContainer = new FileChecksumContainer();
 			messageContainer = new MessageContainer();
-			project = StorageHandler.getInstance().createDefaultProject(context);
+			project = StandardProjectHandler.createAndSaveStandardProject(context);
 			currentSprite = null;
 			currentScript = null;
 			return true;
@@ -109,7 +119,7 @@ public class ProjectManager {
 	public void initializeNewProject(String projectName, Context context) throws IOException {
 		fileChecksumContainer = new FileChecksumContainer();
 		messageContainer = new MessageContainer();
-		project = StorageHandler.getInstance().createDefaultProject(projectName, context);
+		project = StandardProjectHandler.createAndSaveStandardProject(projectName, context);
 
 		currentSprite = null;
 		currentScript = null;
@@ -140,17 +150,19 @@ public class ProjectManager {
 		}
 
 		File oldProjectDirectory = new File(Utils.buildPath(Consts.DEFAULT_ROOT, project.getName()));
-		File oldProjectFile = new File(Utils.buildPath(Consts.DEFAULT_ROOT, project.getName(), project.getName()
-				+ Consts.PROJECT_EXTENTION));
+		File oldProjectFile = new File(Utils.buildPath(Consts.DEFAULT_ROOT, project.getName(), Consts.PROJECTCODE_NAME));
 
 		File newProjectDirectory = new File(Utils.buildPath(Consts.DEFAULT_ROOT, newProjectName));
-		File newProjectFile = new File(Utils.buildPath(Consts.DEFAULT_ROOT, project.getName(), newProjectName
-				+ Consts.PROJECT_EXTENTION));
+		File newProjectFile = new File(Utils.buildPath(Consts.DEFAULT_ROOT, project.getName(), Consts.PROJECTCODE_NAME));
 
 		project.setName(newProjectName);
 
 		boolean fileRenamed = oldProjectFile.renameTo(newProjectFile);
 		boolean directoryRenamed = oldProjectDirectory.renameTo(newProjectDirectory);
+
+		if (directoryRenamed && fileRenamed) {
+			this.saveProject();
+		}
 
 		return (directoryRenamed && fileRenamed);
 	}
@@ -228,13 +240,4 @@ public class ProjectManager {
 
 		return true;
 	}
-
-	public String getLastFilePath() {
-		return lastFileSaved;
-	}
-
-	public void setLastFilePath(String fd) {
-		lastFileSaved = fd;
-	}
-
 }

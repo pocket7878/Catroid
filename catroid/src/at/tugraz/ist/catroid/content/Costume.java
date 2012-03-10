@@ -24,6 +24,7 @@ package at.tugraz.ist.catroid.content;
 
 import java.util.concurrent.Semaphore;
 
+import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.utils.Utils;
 
 import com.badlogic.gdx.Gdx;
@@ -42,7 +43,7 @@ public class Costume extends Image implements Cloneable {
 	protected Semaphore brightnessLock = new Semaphore(1);
 	protected Semaphore disposeTexturesLock = new Semaphore(1);
 	protected boolean imageChanged = false;
-	protected String imagePath;
+	protected CostumeData costumeData;
 	protected Pixmap currentAlphaPixmap;
 	protected Sprite sprite;
 	protected float alphaValue;
@@ -68,7 +69,6 @@ public class Costume extends Image implements Cloneable {
 		this.height = 0f;
 		this.touchable = true;
 		this.show = true;
-		this.imagePath = "";
 		this.currentAlphaPixmap = null;
 		this.zPosition = 0;
 		this.internalPath = false;
@@ -120,7 +120,7 @@ public class Costume extends Image implements Cloneable {
 		if (imageChanged) {
 			this.disposeTextures();
 			currentAlphaPixmap = null;
-			if (imagePath.equals("")) {
+			if (costumeData == null) {
 				xYWidthHeightLock.acquireUninterruptibly();
 				this.x += this.width / 2f;
 				this.y += this.height / 2f;
@@ -135,9 +135,9 @@ public class Costume extends Image implements Cloneable {
 
 			Pixmap pixmap;
 			if (internalPath) {
-				pixmap = new Pixmap(Gdx.files.internal(imagePath));
+				pixmap = new Pixmap(Gdx.files.internal(costumeData.getAbsolutePath()));
 			} else {
-				pixmap = new Pixmap(Gdx.files.absolute(imagePath));
+				pixmap = new Pixmap(Gdx.files.absolute(costumeData.getAbsolutePath()));
 			}
 
 			xYWidthHeightLock.acquireUninterruptibly();
@@ -175,9 +175,9 @@ public class Costume extends Image implements Cloneable {
 		for (int y = 0; y < currentPixmap.getHeight(); y++) {
 			for (int x = 0; x < currentPixmap.getWidth(); x++) {
 				int pixel = currentPixmap.getPixel(x, y);
-				int r = (int) (((pixel >> 24) & 0xff) * brightnessValue);
-				int g = (int) (((pixel >> 16) & 0xff) * brightnessValue);
-				int b = (int) (((pixel >> 8) & 0xff) * brightnessValue);
+				int r = (int) (((pixel >> 24) & 0xff) + (255 * (brightnessValue - 1)));
+				int g = (int) (((pixel >> 16) & 0xff) + (255 * (brightnessValue - 1)));
+				int b = (int) (((pixel >> 8) & 0xff) + (255 * (brightnessValue - 1)));
 				int a = pixel & 0xff;
 
 				if (r > 255) {
@@ -266,24 +266,18 @@ public class Costume extends Image implements Cloneable {
 		xYWidthHeightLock.release();
 	}
 
-	public void setImagePath(String path) {
-		if (path == null) {
-			path = "";
-		}
+	public void setCostumeData(CostumeData costumeData) {
 		imageLock.acquireUninterruptibly();
-		imagePath = path;
+		this.costumeData = costumeData;
 		imageChanged = true;
 		imageLock.release();
 		costumeChanged = true;
 	}
 
-	public void setImagePathInternal(String path) {
-		if (path == null) {
-			path = "";
-		}
+	public void setCostumeDataInternal(CostumeData costumeData) {
 		imageLock.acquireUninterruptibly();
 		internalPath = true;
-		imagePath = path;
+		this.costumeData = costumeData;
 		imageChanged = true;
 		imageLock.release();
 		costumeChanged = true;
@@ -291,7 +285,14 @@ public class Costume extends Image implements Cloneable {
 
 	public String getImagePath() {
 		imageLock.acquireUninterruptibly();
-		String path = this.imagePath;
+		String path;
+		if (this.costumeData == null) {
+			path = "";
+		} else if (internalPath) {
+			path = this.costumeData.getInternalPath();
+		} else {
+			path = this.costumeData.getAbsolutePath();
+		}
 		imageLock.release();
 		return path;
 	}
@@ -380,5 +381,9 @@ public class Costume extends Image implements Cloneable {
 	@Override
 	public Costume clone() throws CloneNotSupportedException {
 		return (Costume) super.clone();
+	}
+
+	public CostumeData getCostumeData() {
+		return costumeData;
 	}
 }

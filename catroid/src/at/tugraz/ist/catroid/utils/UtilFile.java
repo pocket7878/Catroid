@@ -25,10 +25,9 @@ package at.tugraz.ist.catroid.utils;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,65 +38,38 @@ public class UtilFile {
 	public static final int TYPE_IMAGE_FILE = 0;
 	public static final int TYPE_SOUND_FILE = 1;
 
-	static public List<File> getFilesFromDirectoryByExtension(File directory, String extension) {
-		String[] extensions = { extension };
-		return getFilesFromDirectoryByExtension(directory, extensions);
-	}
-
-	static public List<File> getFilesFromDirectoryByExtension(File directory, final String[] extensions) {
-		List<File> filesFound = new ArrayList<File>();
-		File[] contents = directory.listFiles(new FileFilter() {
-			public boolean accept(File pathname) {
-				for (String extension : extensions) {
-					if (pathname.getName().endsWith(extension)) {
-						return true;
-					}
-				}
-				return (pathname.isDirectory() && !pathname.getName().equals("gen"));
-			}
-		});
-
-		for (File file : contents) {
-			if (file.isDirectory()) {
-				filesFound.addAll(getFilesFromDirectoryByExtension(file, extensions));
-			} else {
-				filesFound.add(file);
-			}
+	static private long getSizeOfFileOrDirectoryInByte(File fileOrDirectory) {
+		if (!fileOrDirectory.exists()) {
+			return 0;
+		}
+		if (fileOrDirectory.isFile()) {
+			return fileOrDirectory.length();
 		}
 
-		return filesFound;
-	}
-
-	static public long getSizeOfDirectoryInByte(File directory) {
-		if (!directory.isDirectory()) {
-			return directory.length();
-		}
-		File[] contents = directory.listFiles();
+		File[] contents = fileOrDirectory.listFiles();
 		long size = 0;
 		for (File file : contents) {
-			if (file.isDirectory()) {
-				size += getSizeOfDirectoryInByte(file);
-			} else {
-				size += file.length();
-			}
+			size += file.isDirectory() ? getSizeOfFileOrDirectoryInByte(file) : file.length();
 		}
 		return size;
 	}
 
-	static public String getSizeAsString(File directory) {
-		float sizeInKB = UtilFile.getSizeOfDirectoryInByte(directory) / 1024;
+	static public String getSizeAsString(File fileOrDirectory) {
+		final int UNIT = 1024;
+		long bytes = UtilFile.getSizeOfFileOrDirectoryInByte(fileOrDirectory);
 
-		String fileSizeString;
-		DecimalFormat decimalFormat = new DecimalFormat("#.00");
-
-		if (sizeInKB > 1048576) {
-			fileSizeString = decimalFormat.format(sizeInKB / 1048576) + " GB";
-		} else if (sizeInKB > 1024) {
-			fileSizeString = decimalFormat.format(sizeInKB / 1024) + " MB";
-		} else {
-			fileSizeString = Long.toString((long) sizeInKB) + " KB";
+		if (bytes < UNIT) {
+			return bytes + " Byte";
 		}
-		return fileSizeString;
+
+		/*
+		 * Logarithm of "bytes" to base "unit"
+		 * log(a) / log(b) == logarithm of a to the base of b
+		 */
+		int exponent = (int) (Math.log(bytes) / Math.log(UNIT));
+		char prefix = ("KMGTPE").charAt(exponent - 1);
+
+		return String.format("%.1f %sB", bytes / Math.pow(UNIT, exponent), prefix);
 	}
 
 	static public boolean clearDirectory(File path) {
@@ -161,6 +133,36 @@ public class UtilFile {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	/**
+	 * returns a list of strings of all projectnames in the catroid folder
+	 */
+	public static List<String> getProjectNames(File directory) {
+		List<String> projectList = new ArrayList<String>();
+		File[] sdFileList = directory.listFiles();
+		for (File file : sdFileList) {
+			if (file.isDirectory()) {
+				projectList.add(file.getName());
+			}
+		}
+		return projectList;
+	}
+
+	public static List<File> getProjectFiles(File directory) {
+		List<File> projectList = new ArrayList<File>();
+		File[] sdFileList = directory.listFiles();
+		FilenameFilter filenameFilter = new FilenameFilter() {
+			public boolean accept(File dir, String filename) {
+				return filename.contentEquals(Consts.PROJECTCODE_NAME);
+			}
+		};
+		for (File file : sdFileList) {
+			if (file.isDirectory() && file.list(filenameFilter).length != 0) {
+				projectList.add(file);
+			}
+		}
+		return projectList;
 	}
 
 }
