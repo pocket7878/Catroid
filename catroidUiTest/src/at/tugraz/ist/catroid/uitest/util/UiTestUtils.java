@@ -194,19 +194,15 @@ public class UiTestUtils {
 		return brickCategoryMap.get(brickStringId);
 	}
 
-	public static void addNewBrickAndScrollDown(Solo solo, int brickStringId) {
+	public static void addNewBrick(Solo solo, int brickStringId) {
 		int categoryStringId = getBrickCategory(solo, brickStringId);
-		addNewBrickAndScrollDown(solo, categoryStringId, brickStringId);
+		addNewBrick(solo, categoryStringId, brickStringId);
 	}
 
-	public static void addNewBrickAndScrollDown(Solo solo, int categoryStringId, int brickStringId) {
+	public static void addNewBrick(Solo solo, int categoryStringId, int brickStringId) {
 		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_add_sprite);
 		solo.clickOnText(solo.getCurrentActivity().getString(categoryStringId));
 		solo.clickOnText(solo.getCurrentActivity().getString(brickStringId));
-
-		while (solo.scrollDown()) {
-			;
-		}
 	}
 
 	public static List<Brick> createTestProject() {
@@ -488,18 +484,23 @@ public class UiTestUtils {
 		assertEquals("Pixels don't have same content.", pixelArray[3], screenPixel[3], 10);
 	}
 
-	public static void testIntegerEditText(Solo solo, int editTextIndex, int value, int editTextMinWidth, boolean assertMode) {
+	public static void testIntegerEditText(Solo solo, int editTextIndex, int value, int editTextMinWidth,
+			boolean assertMode) {
 		insertIntegerIntoEditText(solo, editTextIndex, value);
 		testEditText(solo, editTextIndex, value + "", editTextMinWidth, assertMode);
 	}
 
-	public static void testDoubleEditText(Solo solo, int editTextIndex, double value, int editTextMinWidth, boolean assertMode) {
+	public static void testDoubleEditText(Solo solo, int editTextIndex, double value, int editTextMinWidth,
+			boolean assertMode) {
 		insertDoubleIntoEditText(solo, editTextIndex, value);
 		testEditText(solo, editTextIndex, value + "", editTextMinWidth, assertMode);
 	}
 
-	private static void testEditText(Solo solo, int editTextIndex, String value, int editTextMinWidth, boolean assertMode) {
-		solo.clickOnButton(0);
+	private static void testEditText(Solo solo, int editTextIndex, String value, int editTextMinWidth,
+			boolean assertMode) {
+		String buttonOKText = solo.getCurrentActivity().getString(R.string.ok);
+		solo.waitForText(buttonOKText);
+		solo.clickOnText(buttonOKText);
 		solo.sleep(100);
 		int width = 0;
 		if (assertMode) {
