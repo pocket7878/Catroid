@@ -54,7 +54,6 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.res.Resources;
 import android.os.Handler;
-import android.util.Log;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.bluetooth.BTConnectable;
 
@@ -106,12 +105,12 @@ public class LegoNXTBtCommunicator extends LegoNXTCommunicator {
 			try {
 				returnMessage = receiveMessageFromDevice();
 				//TODO TEST OUTPUT - REMOVE
-				if (returnMessage.length > 5) {
-					Log.i("lego", "-" + returnMessage[0] + "-" + returnMessage[1] + "-" + returnMessage[2] + "-"
-							+ returnMessage[3] + "-" + returnMessage[8] + "" + returnMessage[9]);
-				} else {
-					Log.i("lego", "-" + returnMessage[0] + "-" + returnMessage[1] + "");
-				}
+				//				if (returnMessage.length > 5) {
+				//					Log.i("lego", "-" + returnMessage[0] + "-" + returnMessage[1] + "-" + returnMessage[2] + "-"
+				//							+ returnMessage[3] + "-" + returnMessage[8] + "" + returnMessage[9]);
+				//				} else {
+				//					Log.i("lego", "-" + returnMessage[0] + "-" + returnMessage[1] + "");
+				//				}
 
 				if ((returnMessage.length >= 2)
 						&& ((returnMessage[0] == LCPMessage.REPLY_COMMAND) || (returnMessage[0] == LCPMessage.DIRECT_COMMAND_NOREPLY))) {

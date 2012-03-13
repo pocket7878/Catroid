@@ -239,6 +239,11 @@ public abstract class LegoNXTCommunicator extends Thread {
 			case LCPMessage.GET_INPUT_VALUES:
 				//receivedMessages.add(message);
 				receivedSensorMessages.add(message);
+				String mess = "";
+				for (int i = 0; i < message.length; i++) {
+					mess += message[i];
+				}
+				Log.i("lego", mess);
 				break;
 
 			default:

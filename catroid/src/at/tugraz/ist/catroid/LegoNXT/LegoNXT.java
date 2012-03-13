@@ -68,7 +68,8 @@ public class LegoNXT implements BTConnectable {
 	private static Handler btcHandler;
 	private Handler recieverHandler;
 	private Activity activity;
-	private LegoNXTSensorPoller poller;
+
+	//private LegoNXTSensorPoller poller;
 
 	public LegoNXT(Activity activity, Handler recieverHandler) {
 		this.activity = activity;
@@ -91,9 +92,9 @@ public class LegoNXT implements BTConnectable {
 		((LegoNXTBtCommunicator) myNXTCommunicator).setMACAddress(mac_address);
 		myNXTCommunicator.start();
 
-		poller = new LegoNXTSensorPoller();
-		poller.addSensor(new LegoNXTSensor(0, 0));
-		poller.start();
+		//poller = new LegoNXTSensorPoller();
+		//poller.addSensor(new LegoNXTSensor(0, 0));
+		//poller.start();
 	}
 
 	/**
@@ -105,7 +106,7 @@ public class LegoNXT implements BTConnectable {
 		if (myNXTCommunicator != null) {
 			// sendBTCMotorMessage(LegoNXTBtCommunicator.NO_DELAY,
 			// LegoNXTBtCommunicator.DISCONNECT, 0, 0);
-			poller.stopPolling();
+			//poller.stopPolling();
 			try {
 				myNXTCommunicator.destroyNXTconnection();
 			} catch (IOException e) { // TODO Auto-generated method stub
