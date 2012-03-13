@@ -108,4 +108,5 @@ public class CostumeTest extends InstrumentationTestCase {
 		costume.changeBrightnessValueBy(0.2f);
 		assertEquals("Wrong brightness value!", 0.62f, costume.getBrightnessValue());
 	}
+
 }

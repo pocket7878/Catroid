@@ -74,7 +74,8 @@ public class ScriptActivityTest extends ActivityInstrumentationTestCase2<ScriptT
 		int brickCountInView = solo.getCurrentListViews().get(0).getCount();
 		int brickCountInList = brickListToCheck.size();
 
-		UiTestUtils.addNewBrickAndScrollDown(solo, R.string.brick_wait);
+		UiTestUtils.addNewBrick(solo, R.string.brick_wait);
+		solo.clickOnText(getActivity().getString(R.string.brick_when_started));
 		solo.sleep(100);
 
 		assertTrue("Wait brick is not in List", solo.searchText(getActivity().getString(R.string.brick_wait)));
@@ -166,6 +167,7 @@ public class ScriptActivityTest extends ActivityInstrumentationTestCase2<ScriptT
 		String categoryLooks = getActivity().getString(R.string.category_looks);
 		String categoryMotion = getActivity().getString(R.string.category_motion);
 		String setBackground = getActivity().getString(R.string.brick_set_background);
+		String nextBackground = getActivity().getString(R.string.brick_next_background);
 		String comeToFront = getActivity().getString(R.string.brick_come_to_front);
 		String goNStepsBack = getActivity().getString(R.string.brick_go_back_layers);
 
@@ -177,7 +179,14 @@ public class ScriptActivityTest extends ActivityInstrumentationTestCase2<ScriptT
 		solo.clickOnText(categoryLooks);
 		assertTrue("SetCostumeBrick was not renamed for background sprite", solo.searchText(setBackground));
 		solo.clickOnText(setBackground);
+		solo.clickOnText(getActivity().getString(R.string.brick_when_started));
 		assertTrue("SetCostumeBrick was not renamed for background sprite", solo.searchText(setBackground));
+		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_add_sprite);
+		solo.clickOnText(categoryLooks);
+		assertTrue("NextCostumeBrick was not renamed for background sprite", solo.searchText(nextBackground));
+		solo.clickOnText(nextBackground);
+		solo.clickOnText(getActivity().getString(R.string.brick_when_started));
+		assertTrue("NextCostumeBrick was not renamed for background sprite", solo.searchText(nextBackground));
 
 		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_add_sprite);
 		solo.clickOnText(categoryMotion);

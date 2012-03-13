@@ -173,9 +173,9 @@ public class Costume extends Image {
 		for (int y = 0; y < currentPixmap.getHeight(); y++) {
 			for (int x = 0; x < currentPixmap.getWidth(); x++) {
 				int pixel = currentPixmap.getPixel(x, y);
-				int r = (int) (((pixel >> 24) & 0xff) * brightnessValue);
-				int g = (int) (((pixel >> 16) & 0xff) * brightnessValue);
-				int b = (int) (((pixel >> 8) & 0xff) * brightnessValue);
+				int r = (int) (((pixel >> 24) & 0xff) + (255 * (brightnessValue - 1)));
+				int g = (int) (((pixel >> 16) & 0xff) + (255 * (brightnessValue - 1)));
+				int b = (int) (((pixel >> 8) & 0xff) + (255 * (brightnessValue - 1)));
 				int a = pixel & 0xff;
 
 				if (r > 255) {
@@ -369,4 +369,5 @@ public class Costume extends Image {
 	public CostumeData getCostumeData() {
 		return costumeData;
 	}
+
 }

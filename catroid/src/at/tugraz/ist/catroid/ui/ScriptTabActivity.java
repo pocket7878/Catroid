@@ -28,12 +28,14 @@ import android.app.Dialog;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
@@ -49,11 +51,14 @@ import at.tugraz.ist.catroid.ui.dialogs.BrickCategoryDialog;
 import at.tugraz.ist.catroid.ui.dialogs.RenameCostumeDialog;
 import at.tugraz.ist.catroid.ui.dialogs.RenameSoundDialog;
 import at.tugraz.ist.catroid.utils.ActivityHelper;
+import at.tugraz.ist.catroid.utils.Utils;
 
-public class ScriptTabActivity extends TabActivity implements OnDismissListener {
+public class ScriptTabActivity extends TabActivity implements OnDismissListener, OnCancelListener {
 	protected ActivityHelper activityHelper;
 
 	private TabHost tabHost;
+	private boolean addScript;
+	private boolean isCanceled;
 	public SoundInfo selectedSoundInfo;
 	private RenameSoundDialog renameSoundDialog;
 	public CostumeData selectedCostumeData;
@@ -63,6 +68,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener 
 	public static final int DIALOG_RENAME_SOUND = 1;
 	public static final int DIALOG_BRICK_CATEGORY = 2;
 	public static final int DIALOG_ADD_BRICK = 3;
+	private boolean dontcreateNewBrick;
 
 	private void setupTabHost() {
 		tabHost = (TabHost) findViewById(android.R.id.tabhost);
@@ -72,7 +78,12 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		addScript = false;
+		isCanceled = false;
+		dontcreateNewBrick = false;
+
 		setContentView(R.layout.activity_scripttab);
+		Utils.loadProjectIfNeeded(this);
 
 		setupTabHost();
 		tabHost.getTabWidget().setDividerDrawable(R.drawable.tab_divider);
@@ -80,22 +91,22 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener 
 		Intent intent; // Reusable Intent for each tab
 
 		intent = new Intent().setClass(this, ScriptActivity.class);
-		setupTab(R.drawable.ic_tab_scripts, this.getString(R.string.scripts), intent);
+		setupTab(R.drawable.ic_tab_scripts_selector, this.getString(R.string.scripts), intent);
 		intent = new Intent().setClass(this, CostumeActivity.class);
 		int costumeIcon;
 		String costumeLabel;
 
 		Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
 		if (ProjectManager.getInstance().getCurrentProject().getSpriteList().indexOf(currentSprite) == 0) {
-			costumeIcon = R.drawable.ic_tab_background;
+			costumeIcon = R.drawable.ic_tab_background_selector;
 			costumeLabel = this.getString(R.string.backgrounds);
 		} else {
-			costumeIcon = R.drawable.ic_tab_costumes;
+			costumeIcon = R.drawable.ic_tab_costumes_selector;
 			costumeLabel = this.getString(R.string.costumes);
 		}
 		setupTab(costumeIcon, costumeLabel, intent);
 		intent = new Intent().setClass(this, SoundActivity.class);
-		setupTab(R.drawable.ic_tab_sounds, this.getString(R.string.sounds), intent);
+		setupTab(R.drawable.ic_tab_sounds_selector, this.getString(R.string.sounds), intent);
 
 		setUpActionBar();
 		if (getLastNonConfigurationInstance() != null) {
@@ -150,10 +161,13 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener 
 
 	private static View createTabView(Integer id, final Context context, final String text) {
 		View view = LayoutInflater.from(context).inflate(R.layout.activity_tabscriptactivity_tabs, null);
-		TextView textView = (TextView) view.findViewById(R.id.tabsText);
-		textView.setText(text);
+		TextView tabTextView = (TextView) view.findViewById(R.id.tabsText);
+		ImageView tabImageView = (ImageView) view.findViewById(R.id.tabsIcon);
+		tabTextView.setText(text);
 		if (id != null) {
-			textView.setCompoundDrawablesWithIntrinsicBounds(id, 0, 0, 0);
+			tabImageView.setImageResource(id);
+			tabImageView.setVisibility(ImageView.VISIBLE);
+			tabImageView.setTag(id);
 		}
 		return view;
 	}
@@ -177,6 +191,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener 
 			case DIALOG_BRICK_CATEGORY:
 				dialog = new BrickCategoryDialog(this);
 				dialog.setOnDismissListener(this);
+				dialog.setOnCancelListener(this);
 				break;
 			case DIALOG_ADD_BRICK:
 				if (selectedCategory != null) {
@@ -221,7 +236,32 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener 
 	}
 
 	public void onDismiss(DialogInterface dialogInterface) {
-		((ScriptActivity) getCurrentActivity()).updateAdapterAfterAddNewBrick(dialogInterface);
+
+		if (!dontcreateNewBrick) {
+			if (!isCanceled) {
+				if (addScript) {
+
+					((ScriptActivity) getCurrentActivity()).setAddNewScript();
+					addScript = false;
+				}
+
+				((ScriptActivity) getCurrentActivity()).updateAdapterAfterAddNewBrick(dialogInterface);
+
+			}
+			isCanceled = false;
+		}
+		dontcreateNewBrick = false;
 	}
 
+	public void onCancel(DialogInterface dialog) {
+		isCanceled = true;
+	}
+
+	public void setNewScript() {
+		addScript = true;
+	}
+
+	public void setDontcreateNewBrick() {
+		dontcreateNewBrick = true;
+	}
 }

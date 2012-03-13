@@ -110,17 +110,16 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		solo.clickOnButton(getActivity().getString(R.string.new_project));
 		solo.enterText(0, projectToCreate);
 		solo.goBack();
-		solo.clickOnButton(getActivity().getString(R.string.new_project_dialog_button));
+		solo.clickOnButton(0);
 		solo.sleep(2000);
 
-		File file = new File(Consts.DEFAULT_ROOT + "/" + projectToCreate + "/" + projectToCreate
-				+ Consts.PROJECT_EXTENTION);
+		File file = new File(Consts.DEFAULT_ROOT + "/" + projectToCreate + "/" + Consts.PROJECTCODE_NAME);
 		assertTrue(projectToCreate + " was not created!", file.exists());
 	}
 
 	private void addABrickToProject() {
 		solo.clickInList(0);
-		UiTestUtils.addNewBrickAndScrollDown(solo, R.string.brick_wait);
+		UiTestUtils.addNewBrick(solo, R.string.brick_wait);
 		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_home);
 	}
 
@@ -172,7 +171,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 
 		String projectPath = Consts.DEFAULT_ROOT + "/" + newTestProject;
 		File downloadedDirectory = new File(projectPath);
-		File downloadedProjectFile = new File(projectPath + "/" + newTestProject + Consts.PROJECT_EXTENTION);
+		File downloadedProjectFile = new File(projectPath + "/" + Consts.PROJECTCODE_NAME);
 		assertTrue("Downloaded Directory does not exist.", downloadedDirectory.exists());
 		assertTrue("Project File does not exist.", downloadedProjectFile.exists());
 

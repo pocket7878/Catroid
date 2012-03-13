@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import android.content.Context;
 import android.util.Log;
@@ -116,8 +117,7 @@ public class TestUtils {
 	}
 
 	public static String getProjectfileAsString(String projectName) {
-		File projectFile = new File(Consts.DEFAULT_ROOT + "/" + projectName + "/" + projectName
-				+ Consts.PROJECT_EXTENTION);
+		File projectFile = new File(Consts.DEFAULT_ROOT + "/" + projectName + "/" + Consts.PROJECTCODE_NAME);
 		if (!projectFile.exists()) {
 			return null;
 		}
@@ -166,5 +166,19 @@ public class TestUtils {
 		}
 
 		return field;
+	}
+
+	public static Object invokeMethod(Object classObject, String methodName, Class<?>[] methodParams,
+			Object[] methodArgs) {
+		try {
+			Class<?> currentClass = classObject.getClass();
+			Method currentMethod = currentClass.getDeclaredMethod(methodName, methodParams);
+			currentMethod.setAccessible(true);
+			Object returnObject = currentMethod.invoke(classObject, methodArgs);
+			return returnObject;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

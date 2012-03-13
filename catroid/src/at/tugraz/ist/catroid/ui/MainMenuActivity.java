@@ -29,7 +29,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -55,12 +54,11 @@ import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class MainMenuActivity extends Activity {
-	private static final String PREF_PROJECTNAME_KEY = "projectName";
 	private static final String PROJECTNAME_TAG = "fname=";
 	private ProjectManager projectManager;
 	private ActivityHelper activityHelper;
 	private TextView titleText;
-	private static final int DIALOG_NEW_PROJECT = 0;
+	public static final int DIALOG_NEW_PROJECT = 0;
 	private static final int DIALOG_LOAD_PROJECT = 1;
 	public static final int DIALOG_UPLOAD_PROJECT = 2;
 	private static final int DIALOG_ABOUT = 3;
@@ -81,15 +79,7 @@ public class MainMenuActivity extends Activity {
 		setContentView(R.layout.activity_main_menu);
 		projectManager = ProjectManager.getInstance();
 
-		// Try to load sharedPreferences
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		String projectName = prefs.getString(PREF_PROJECTNAME_KEY, null);
-
-		if (projectName != null) {
-			projectManager.loadProject(projectName, this, false);
-		} else {
-			projectManager.initializeDefaultProject(this);
-		}
+		Utils.loadProjectIfNeeded(this);
 
 		if (projectManager.getCurrentProject() == null) {
 			findViewById(R.id.current_project_button).setEnabled(false);
@@ -99,7 +89,7 @@ public class MainMenuActivity extends Activity {
 		if (projectDownloadUrl == null || projectDownloadUrl.length() <= 0) {
 			return;
 		}
-		projectName = getProjectName(projectDownloadUrl);
+		String projectName = getProjectName(projectDownloadUrl);
 
 		this.getIntent().setData(null);
 		new ProjectDownloadTask(this, projectDownloadUrl, projectName).execute();
@@ -147,7 +137,7 @@ public class MainMenuActivity extends Activity {
 
 		switch (id) {
 			case DIALOG_NEW_PROJECT:
-				dialog = new NewProjectDialog(this);
+				dialog = new NewProjectDialog(this).dialog;
 				break;
 			case DIALOG_LOAD_PROJECT:
 				dialog = new LoadProjectDialog(this);
@@ -239,10 +229,7 @@ public class MainMenuActivity extends Activity {
 		// also when you switch activities
 		if (projectManager.getCurrentProject() != null) {
 			projectManager.saveProject();
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-			Editor edit = prefs.edit();
-			edit.putString(PREF_PROJECTNAME_KEY, projectManager.getCurrentProject().getName());
-			edit.commit();
+			Utils.saveToPreferences(this, Consts.PREF_PROJECTNAME_KEY, projectManager.getCurrentProject().getName());
 		}
 	}
 
@@ -258,7 +245,8 @@ public class MainMenuActivity extends Activity {
 	}
 
 	public void handleLoadProjectButton(View v) {
-		showDialog(DIALOG_LOAD_PROJECT);
+		Intent intent = new Intent(MainMenuActivity.this, MyProjectsActivity.class);
+		startActivity(intent);
 	}
 
 	public void handleUploadProjectButton(View v) {
