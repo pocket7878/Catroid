@@ -50,6 +50,7 @@ public class ProjectManager {
 		messageContainer = new MessageContainer();
 	}
 
+	/* This is an evil comment! */
 	public static ProjectManager getInstance() {
 		if (instance == null) {
 			instance = new ProjectManager();
