@@ -55,6 +55,7 @@ public class ProjectManager {
 		if (instance == null) {
 			instance = new ProjectManager();
 		}
+		// test
 		return instance;
 	}
 
