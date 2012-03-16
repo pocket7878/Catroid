@@ -23,8 +23,6 @@
 package at.tugraz.ist.catroid.stage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Comparator;
@@ -32,8 +30,8 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Bitmap.Config;
+import android.graphics.Color;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.common.Values;
@@ -51,8 +49,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -234,21 +232,7 @@ public class StageListener implements ApplicationListener {
 				sprite.finish();
 			}
 		}
-		StageRecorder recorder = StageRecorder.getInstance();
-		recorder.updateVolume(SoundManager.getInstance().getVolume());
-		File file = new File("/sdcard/ololo.xml");
-		FileOutputStream filecon;
-		try {
-			filecon = new FileOutputStream(file);
-			filecon.write(recorder.getXml().getBytes());
-			filecon.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		StageRecorder.getInstance().finish();
 	}
 
 	public void render() {
