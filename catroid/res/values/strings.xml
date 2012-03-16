@@ -20,7 +20,7 @@
  *   
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+
 -->
 <resources>
 
@@ -52,7 +52,6 @@
     <string name="current_project">Current project:</string>
     <string name="current_project_button">Current Project</string>
     <string name="my_projects">My Projects</string>
-    <string name="tutorial">Tutorial</string>
     <string name="settings">Settings</string>
     <string name="web_resources">Web Resources</string>
     <string name="forum">Forum</string>
