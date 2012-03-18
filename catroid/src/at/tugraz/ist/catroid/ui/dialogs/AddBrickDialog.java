@@ -76,7 +76,9 @@ import at.tugraz.ist.catroid.content.bricks.RepeatBrick;
 import at.tugraz.ist.catroid.content.bricks.SetBrightnessBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetGhostEffectBrick;
+import at.tugraz.ist.catroid.content.bricks.SetGravityBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
+import at.tugraz.ist.catroid.content.bricks.SetVelocityBrick;
 import at.tugraz.ist.catroid.content.bricks.SetVolumeToBrick;
 import at.tugraz.ist.catroid.content.bricks.SetXBrick;
 import at.tugraz.ist.catroid.content.bricks.SetYBrick;
@@ -112,6 +114,8 @@ public class AddBrickDialog extends Dialog {
 
 		List<Brick> motionBrickList = new ArrayList<Brick>();
 		motionBrickList.add(new PlaceAtBrick(sprite, 0, 0));
+		motionBrickList.add(new SetGravityBrick(sprite));
+		motionBrickList.add(new SetVelocityBrick(sprite));
 		motionBrickList.add(new SetXBrick(sprite, 0));
 		motionBrickList.add(new SetYBrick(sprite, 0));
 		motionBrickList.add(new ChangeXByBrick(sprite, 100));
