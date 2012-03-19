@@ -70,9 +70,11 @@ public class ProjectManager {
 					return false;
 				}
 			}
-			// adapt name of background sprite to the current language and place
-			// on lowest layer
-			project.getSpriteList().get(0).setName(context.getString(R.string.background));
+			//adapt name of background sprite to the current language and place on lowest layer
+			//project.getSpriteList().get(0).setName(context.getString(R.string.background));
+			if (context != null) {
+				project.getSpriteList().get(0).setName(context.getString(R.string.background));
+			}
 			project.getSpriteList().get(0).costume.zPosition = Integer.MIN_VALUE;
 
 			currentSprite = null;

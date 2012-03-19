@@ -38,6 +38,7 @@ import android.util.Log;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.common.FileChecksumContainer;
+import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.stage.NativeAppActivity;
 import at.tugraz.ist.catroid.utils.ImageEditing;
@@ -64,7 +65,8 @@ public class StorageHandler {
 		xstream.aliasPackage("Common", "at.tugraz.ist.catroid.common");
 		xstream.aliasPackage("Content", "at.tugraz.ist.catroid.content");
 
-		if (!Utils.hasSdCard()) {
+		//if (!Utils.hasSdCard()) {
+		if (!Values.NATIVE_DESKTOP_PLAYER && !Utils.hasSdCard()) {
 			throw new IOException("Could not read external storage");
 		}
 		createCatroidRoot();
