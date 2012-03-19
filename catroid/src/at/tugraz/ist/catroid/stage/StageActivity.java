@@ -34,6 +34,9 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 
 public class StageActivity extends AndroidApplication {
 
+	public static final int REQUEST_UPLOAD_REPLAY = 1001;
+	public static final int RESULT_UPLOAD_REPLAY = 1002;
+
 	private boolean stagePlaying = true;
 	public static StageListener stageListener;
 	private boolean resizePossible;

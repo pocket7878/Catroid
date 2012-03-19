@@ -30,6 +30,7 @@ import android.widget.Button;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.stage.StageListener;
+import at.tugraz.ist.catroid.stage.StageRecorder;
 import at.tugraz.ist.catroid.utils.Utils;
 
 /**
@@ -103,6 +104,15 @@ public class StageDialog extends Dialog {
 				} else {
 					Utils.displayToast(stageActivity, stageActivity.getString(R.string.error_screenshot_failed));
 				}
+			}
+		});
+
+		Button saveReplayButton = (Button) findViewById(R.id.save_replay_button);
+		saveReplayButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				StageRecorder.getInstance().finishAndSave();
+				stageActivity.setResult(StageActivity.RESULT_UPLOAD_REPLAY);
+				exitStage();
 			}
 		});
 	}

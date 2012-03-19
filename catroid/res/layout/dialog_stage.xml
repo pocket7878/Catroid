@@ -102,6 +102,16 @@
 				android:background="@null"
 				android:drawableTop="@drawable/screenshot_selector"
 				android:paddingTop="20dip"
+			></Button>
+			<Button
+				android:id="@+id/save_replay_button"
+				android:text="@string/stagemenu_save_replay"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_gravity="center_horizontal"
+				android:background="@null"
+				android:drawableTop="@drawable/screenshot_selector"
+				android:paddingTop="20dip"
 				android:paddingBottom="10dip"
 			></Button>
 		</LinearLayout>

@@ -75,7 +75,7 @@ public class StageRecorder {
 	}
 
 	public void pause() {
-		if (pausedTime != 0) {
+		if (pausedTime == 0) {
 			pausedTime = System.currentTimeMillis();
 		}
 	}
@@ -87,7 +87,7 @@ public class StageRecorder {
 		pausedTime = 0;
 	}
 
-	public void finish() {
+	public void finishAndSave() {
 		updateVolume(SoundManager.getInstance().getVolume());
 
 		String currentProject = ProjectManager.getInstance().getCurrentProject().getName();
@@ -103,7 +103,7 @@ public class StageRecorder {
 
 	public void updateCostume(Costume costume) {
 		try {
-			projectExecutionList.add(new Pair<Costume, Long>(costume.clone(), System.currentTimeMillis() - startTime));
+			projectExecutionList.add(new Pair<Costume, Long>(costume.clone(), getTime()));
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
@@ -111,24 +111,34 @@ public class StageRecorder {
 
 	public void updateSound(SoundInfo soundInfo) {
 		try {
-			projectExecutionList.add(new Pair<SoundInfo, Long>(soundInfo.clone(), System.currentTimeMillis()
-					- startTime));
+			projectExecutionList.add(new Pair<SoundInfo, Long>(soundInfo.clone(), getTime()));
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void updateVolume(double volume) {
-		projectExecutionList.add(new Pair<Volume, Long>(new Volume(volume), System.currentTimeMillis() - startTime));
+		projectExecutionList.add(new Pair<Volume, Long>(new Volume(volume), getTime()));
 	}
 
-}
+	public ArrayList<Pair> getProjectExecutionList() {
+		return projectExecutionList;
+	}
 
-class Volume {
-	private double volume;
+	public long getTime() {
+		return System.currentTimeMillis() - startTime;
+	}
 
-	Volume(double volume) {
-		this.volume = volume;
+	public long getStartTime() {
+		return startTime;
+	}
+
+	public class Volume {
+		public double volume;
+
+		public Volume(double volume) {
+			this.volume = volume;
+		}
 	}
 }
 
@@ -154,7 +164,6 @@ class SoundInfoConverter implements Converter {
 	}
 
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

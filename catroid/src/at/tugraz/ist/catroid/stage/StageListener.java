@@ -160,8 +160,7 @@ public class StageListener implements ApplicationListener {
 
 		background = new Texture(Gdx.files.internal("stage/white_pixel.bmp"));
 		axes = new Texture(Gdx.files.internal("stage/red_pixel.bmp"));
-		StageRecorder recorder = StageRecorder.getInstance();
-		recorder.start();
+		StageRecorder.getInstance().start();
 	}
 
 	public void menuResume() {
@@ -210,6 +209,7 @@ public class StageListener implements ApplicationListener {
 		for (Sprite sprite : sprites) {
 			sprite.costume.refreshTextures();
 		}
+		StageRecorder.getInstance().resume();
 	}
 
 	public void pause() {
@@ -222,6 +222,7 @@ public class StageListener implements ApplicationListener {
 				sprite.pause();
 			}
 		}
+		StageRecorder.getInstance().pause();
 	}
 
 	public void finish() {
@@ -232,7 +233,6 @@ public class StageListener implements ApplicationListener {
 				sprite.finish();
 			}
 		}
-		StageRecorder.getInstance().finish();
 	}
 
 	public void render() {

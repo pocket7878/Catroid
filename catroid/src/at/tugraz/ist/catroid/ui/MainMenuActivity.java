@@ -123,7 +123,10 @@ public class MainMenuActivity extends Activity {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == PreStageActivity.REQUEST_RESOURCES_INIT && resultCode == RESULT_OK) {
 			Intent intent = new Intent(MainMenuActivity.this, StageActivity.class);
-			startActivity(intent);
+			startActivityForResult(intent, StageActivity.REQUEST_UPLOAD_REPLAY);
+		} else if (requestCode == StageActivity.REQUEST_UPLOAD_REPLAY
+				&& resultCode == StageActivity.RESULT_UPLOAD_REPLAY) {
+			handleUploadProjectButton(null);
 		}
 	}
 
