@@ -27,7 +27,6 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.physics.PhysicWorld;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -49,7 +48,7 @@ public class SetVelocityBrick implements Brick {
 	}
 
 	public void execute() {
-		PhysicWorld.getInstance().setVelocity(sprite, 10, 10);
+		//PhysicWorld.getInstance().setVelocity(sprite, 10, 10);
 	}
 
 	public Sprite getSprite() {
