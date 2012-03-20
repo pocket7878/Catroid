@@ -47,6 +47,7 @@ public class ShowBrick implements Brick {
 
 	public void execute() {
 		sprite.costume.show = true;
+		sprite.costume.costumeChanged = true;
 	}
 
 	public Sprite getSprite() {

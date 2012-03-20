@@ -59,6 +59,7 @@ public class GoNStepsBackBrick implements Brick, OnClickListener {
 		} else {
 			sprite.costume.zPosition -= steps;
 		}
+		sprite.costume.costumeChanged = true;
 	}
 
 	public Sprite getSprite() {

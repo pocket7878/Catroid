@@ -66,7 +66,7 @@ public class ScreenRecorderTest extends InstrumentationTestCase {
 		volumeValue = 50;
 	};
 
-	public void testReorder() throws InterruptedException {
+	public void testRecorder() throws InterruptedException {
 		assertEquals("Recorder started before start().", 0, recorder.getStartTime());
 		recorder.start();
 		Thread.sleep(500);

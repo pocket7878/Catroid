@@ -64,6 +64,7 @@ public class ComeToFrontBrick implements Brick {
 		} else {
 			sprite.costume.zPosition = highestPosition + 1;
 		}
+		sprite.costume.costumeChanged = true;
 	}
 
 	public Sprite getSprite() {

@@ -47,6 +47,7 @@ public class HideBrick implements Brick {
 
 	public void execute() {
 		sprite.costume.show = false;
+		sprite.costume.costumeChanged = true;
 	}
 
 	public Sprite getSprite() {

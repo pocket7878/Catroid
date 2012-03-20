@@ -54,13 +54,13 @@ class Costume:
         self.rotation = float(rotation)
         self.scaleX = float(scaleX)
         self.scaleY = float(scaleY)
-        self.visible = bool(visible)
+        self.visible = visible == 'true'
         self.x = int(float(x))
         self.y = int(float(y))
         self.z = int(float(z))
         self.filename = filename
         self.image = Image.open(os.path.join(path_to_project, 'images', self.filename))
-        self.show = bool(show)
+        self.show = show == 'true'
         self.brightness = float(brightness)
         self.alpha = float(alpha)
         self.timestamp = int(timestamp)
@@ -146,19 +146,23 @@ def write_video(stageEvents, path_to_project):
 
 def update_screen(screen_elements):
     blank_image = Image.new("RGB", (480, 800))
+    screen_elements.sort(key = lambda element: element.z)
     for element in screen_elements:
-        img = element.image.resize((int(element.image.size[0]*element.scaleX), int(element.image.size[1]*element.scaleY)))
-        img = img.rotate(element.rotation, expand = True)
-        if len(img.getbands()) > 3:
-            b, a = element.brightness, element.alpha
-            img.putdata(map(lambda x: (int(x[0]*b), int(x[1]*b), int(x[2]*b), int(x[3]*a)), list(img.getdata())))
-            blank_image.paste(img, (element.x+240, element.y+400), img)
-        else:
-            if element.brightness != 1 or element.alpha != 1:
-                img = img.convert('RGB')
-                img = img.point(lambda x: x*element.brightness)
-                img.putalpha(int(element.alpha*255))
-            blank_image.paste(img, (element.x+240, element.y+400))
+        if element.visible and element.show:
+            img = element.image.resize((int(element.image.size[0]*element.scaleX), int(element.image.size[1]*element.scaleY)))
+            img = img.rotate(element.rotation, expand = True)
+            xPos = int(element.x + (element.image.size[0] - element.image.size[0]*element.scaleX)/2)
+            yPos = int(element.y + (element.image.size[1] - element.image.size[1]*element.scaleY)/2)
+            if len(img.getbands()) > 3:
+                b, a = element.brightness, element.alpha
+                img.putdata(map(lambda x: (int(x[0]*b), int(x[1]*b), int(x[2]*b), int(x[3]*a)), list(img.getdata())))
+                blank_image.paste(img, (xPos+240, yPos+400), img)
+            else:
+                if element.brightness != 1 or element.alpha != 1:
+                    img = img.convert('RGB')
+                    img = img.point(lambda x: x*element.brightness)
+                    img.putalpha(int(element.alpha*255))
+                blank_image.paste(img, (xPos+240, yPos+400))
     
     cv_img = cv.CreateImageHeader(blank_image.size, cv.IPL_DEPTH_8U, 3)
     cv.SetData(cv_img, blank_image.tostring(), blank_image.size[0]*3)
@@ -181,15 +185,16 @@ def add_sound(stageEvents, video_length, path_to_project):
                 else:
                     sounds.append((stageEvents[i].filename, stageEvents[i].timestamp, video_length))
 
-    sound_mix_command = 'sox --combine mix-power '
+    if len(sounds) > 0:
+        sound_mix_command = 'sox --combine mix-power '
 
-    for s in sounds:
-        sound_mix_command += ' "|sox \'{0}\' -r 44100 -p trim 0 {1} pad {2} 0" '\
-                            .format( os.path.join(path_to_project, 'sounds', s[0]), str((s[2] - s[1])/1000.0), str(s[1]/1000.0) )
-    
-    sound_mix_command += '\'' + os.path.join(path_to_project, 'soundtrack.mp3') + '\''
-    os.system(sound_mix_command)
-    os.system('ffmpeg -i "{0}" -i "{1}" "{2}"'.format(os.path.join(path_to_project, 'soundtrack.mp3'), os.path.join(path_to_project, 'out.avi'), os.path.join(path_to_project, 'result.avi')))
+        for s in sounds:
+            sound_mix_command += ' "|sox \'{0}\' -r 44100 -p trim 0 {1} pad {2} 0" '\
+                                .format( os.path.join(path_to_project, 'sounds', s[0]), str((s[2] - s[1])/1000.0), str(s[1]/1000.0) )
+        
+        sound_mix_command += '\'' + os.path.join(path_to_project, 'soundtrack.mp3') + '\''
+        os.system(sound_mix_command)
+        os.system('ffmpeg -i "{0}" -i "{1}" "{2}"'.format(os.path.join(path_to_project, 'soundtrack.mp3'), os.path.join(path_to_project, 'out.avi'), os.path.join(path_to_project, 'out.avi')))
 
 def upload(path_to_project):
     DEV_KEY = 'AI39si5FEjazuKSkgPMH_1cppVPzUiNLl19UnfzkhvjrFwwbQc4wueHT7CR1oWA__WA5L27INddl9m6UigdcFZaTmvp7h8yUPQ'
@@ -222,7 +227,7 @@ Content-Type: {2}
 Content-Transfer-Encoding: binary
 
 {3}
---{0}--'''.format(boundary_string, api_xml_request, 'video/x-msvideo', open(os.path.join(path_to_project, 'result.avi'), 'rb').read())
+--{0}--'''.format(boundary_string, api_xml_request, 'video/x-msvideo', open(os.path.join(path_to_project, 'out.avi'), 'rb').read())
 
     req = urllib2.Request('https://www.google.com/accounts/ClientLogin')
     req.add_header('Content-Type', 'application/x-www-form-urlencoded')
@@ -235,7 +240,7 @@ Content-Transfer-Encoding: binary
     req.add_header('Authorization', 'GoogleLogin Auth={0}'.format(auth))
     req.add_header('GData-Version', '2')
     req.add_header('X-GData-Key', 'key=' + DEV_KEY)
-    req.add_header('Slug', 'result.avi')
+    req.add_header('Slug', 'out.avi')
     req.add_header('Content-Type', 'multipart/related; boundary="{0}"'.format(boundary_string))
     req.add_data(post_content)
 

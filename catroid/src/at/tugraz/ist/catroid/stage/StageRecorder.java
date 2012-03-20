@@ -94,7 +94,7 @@ public class StageRecorder {
 		File outputFile = new File(Utils.buildPath(Consts.DEFAULT_ROOT, currentProject), "record.xml");
 		try {
 			FileOutputStream outputstream = new FileOutputStream(outputFile);
-			outputstream.write(xStream.toXML(projectExecutionList.toArray()).getBytes());
+			outputstream.write(xStream.toXML(projectExecutionList).getBytes());
 			outputstream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -133,7 +133,7 @@ public class StageRecorder {
 		return startTime;
 	}
 
-	public class Volume {
+	public static class Volume {
 		public double volume;
 
 		public Volume(double volume) {
