@@ -198,7 +198,7 @@ public class PhysicWorld extends Thread {
 		}
 	}
 
-	public void setGravity(Sprite sprite, float x, float y) {
+	public void setGravity(Sprite sprite, Vector2 gravity) {
 
 		//Vector2 screen = new Vector2(Values.SCREEN_WIDTH, Values.SCREEN_HEIGHT);
 		//Vector2 gravity = new Vector2(x, y);

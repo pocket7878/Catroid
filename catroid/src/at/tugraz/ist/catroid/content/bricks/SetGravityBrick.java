@@ -22,26 +22,35 @@
  */
 package at.tugraz.ist.catroid.content.bricks;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.text.InputType;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
+import at.tugraz.ist.catroid.utils.Utils;
 
+import com.badlogic.gdx.math.Vector2;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-public class SetGravityBrick implements Brick {
+public class SetGravityBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
-	//private int velocity;
 	private Sprite sprite;
+	private Vector2 gravity;
 
 	@XStreamOmitField
 	private transient View view;
 
-	public SetGravityBrick(Sprite sprite) { //, int xPosition) {
+	public SetGravityBrick(Sprite sprite, float x, float y) {
 		this.sprite = sprite;
-		//this.xPosition = xPosition;
+		this.gravity = new Vector2(x, y);
 	}
 
 	public int getRequiredResources() {
@@ -49,7 +58,7 @@ public class SetGravityBrick implements Brick {
 	}
 
 	public void execute() {
-		PhysicWorld.getInstance().setGravity(sprite, 0, -10);
+		PhysicWorld.getInstance().setGravity(sprite, gravity);
 	}
 
 	public Sprite getSprite() {
@@ -57,13 +66,17 @@ public class SetGravityBrick implements Brick {
 	}
 
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
-
 		view = View.inflate(context, R.layout.brick_set_gravity, null);
 
-		//		EditText editX = (EditText) view.findViewById(R.id.brick_set_x_edit_text);
-		//		editX.setText(String.valueOf(xPosition));
+		EditText editX = (EditText) view.findViewById(R.id.brick_set_gravity_x_edit_text);
+		editX.setText(String.valueOf(gravity.x));
 
-		//		editX.setOnClickListener(this);
+		editX.setOnClickListener(this);
+
+		EditText editY = (EditText) view.findViewById(R.id.brick_set_gravity_y_edit_text);
+		editY.setText(String.valueOf(gravity.y));
+
+		editY.setOnClickListener(this);
 
 		return view;
 	}
@@ -74,6 +87,48 @@ public class SetGravityBrick implements Brick {
 
 	@Override
 	public Brick clone() {
-		return new SetGravityBrick(getSprite()); //, xPosition);
+		return new SetGravityBrick(sprite, gravity.x, gravity.y);
+	}
+
+	public void onClick(final View view) {
+		final Context context = view.getContext();
+
+		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+		final EditText input = new EditText(context);
+		if (view.getId() == R.id.brick_set_gravity_x_edit_text) {
+			input.setText(String.valueOf(gravity.x));
+		} else if (view.getId() == R.id.brick_set_gravity_y_edit_text) {
+			input.setText(String.valueOf(gravity.y));
+		}
+		input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED
+				| InputType.TYPE_NUMBER_FLAG_DECIMAL);
+		input.setSelectAllOnFocus(true);
+		dialog.setView(input);
+		dialog.setOnCancelListener((OnCancelListener) context);
+		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				try {
+					if (view.getId() == R.id.brick_set_gravity_x_edit_text) {
+						gravity.x = Float.parseFloat(input.getText().toString());
+					} else if (view.getId() == R.id.brick_set_gravity_y_edit_text) {
+						gravity.y = Float.parseFloat(input.getText().toString());
+					}
+				} catch (NumberFormatException exception) {
+					Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
+				}
+				dialog.cancel();
+			}
+		});
+		dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+			}
+		});
+
+		AlertDialog finishedDialog = dialog.create();
+		finishedDialog.setOnShowListener(Utils.getBrickDialogOnClickListener(context, input));
+
+		finishedDialog.show();
+
 	}
 }
