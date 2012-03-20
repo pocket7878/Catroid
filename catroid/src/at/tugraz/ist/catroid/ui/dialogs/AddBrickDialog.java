@@ -176,6 +176,10 @@ public class AddBrickDialog extends Dialog {
 		legoNXTBrickList.add(new NXTPlayToneBrick(sprite, 200, 1000));
 		brickMap.put(context.getString(R.string.category_lego_nxt), legoNXTBrickList);
 
+		List<Brick> physicBrickList = new ArrayList<Brick>();
+		physicBrickList.add(new SetGravityBrick(sprite));
+		brickMap.put(context.getString(R.string.category_physic), physicBrickList);
+
 		return brickMap;
 	}
 

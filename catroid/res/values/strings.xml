@@ -173,6 +173,7 @@
     <string name="category_looks">Looks</string>
     <string name="category_sound">Sound</string>
     <string name="category_control">Control</string>
+    <string name="category_physic">Physic</string>
 
     <!-- Motion bricks -->
     <string name="brick_place_at">Place at</string>
