@@ -234,6 +234,10 @@
     <string name="brick_repeat">Repeat</string>
     <string name="times_label">times</string>
     <string name="brick_loop_end">End of loop</string>
+    
+    <!-- Physics -->
+    <string name="brick_set_velocity">Set velocity</string>
+    <string name="brick_set_gravity">Set gravity</string>
 
     <!-- Actions -->
     <string name="action_tapped">tapped</string>
@@ -305,7 +309,5 @@
     <string name="nxt_tone_hundred_hz">x100Hz</string>
     <string name="number_to_small">Value is too small!</string>
     <string name="number_to_big">Value is too big!</string>
-    <string name="brick_set_velocity">Setze Geschwindigkeit</string>
-    <string name="brick_set_gravity">Setze Gravitation</string>
 
 </resources>
