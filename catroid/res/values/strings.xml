@@ -237,8 +237,8 @@
     <string name="brick_loop_end">End of loop</string>
     
     <!-- Physics -->
-    <string name="brick_set_velocity">Set velocity</string>
     <string name="brick_set_gravity">Set gravity</string>
+    <string name="brick_set_velocity">Set velocity</string>
 
     <!-- Actions -->
     <string name="action_tapped">tapped</string>

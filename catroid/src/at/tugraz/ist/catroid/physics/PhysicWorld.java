@@ -151,11 +151,12 @@ public class PhysicWorld extends Thread {
 
 			}
 
-			sprite.costume.aquireXYWidthHeightLock();
-			sprite.costume.x = (int) catroidCoords.x;
-			sprite.costume.y = (int) catroidCoords.y;
-			sprite.costume.releaseXYWidthHeightLock();
-
+			if (catroidCoords != null) {
+				sprite.costume.aquireXYWidthHeightLock();
+				sprite.costume.x = (int) catroidCoords.x;
+				sprite.costume.y = (int) catroidCoords.y;
+				sprite.costume.releaseXYWidthHeightLock();
+			}
 		}
 	}
 

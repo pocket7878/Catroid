@@ -19,8 +19,7 @@
  *  GNU Affero General Public License for more details.
  *   
  *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -80,10 +79,19 @@
             android:minWidth="60dip"
             android:text="0" >
         </EditText>
+<!-- 
+        <TextView
+            android:id="@+id/TextView03"
+            style="@style/brick_text_style"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"
+            android:text="@string/per_square_seconds" >
+        </TextView>
+-->
     </LinearLayout>
 
     <TextView
-        android:id="@+id/ValueTextViewXY"
+        android:id="@+id/ValueTextViewSetGravity"
         style="@style/brick_text_style"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
