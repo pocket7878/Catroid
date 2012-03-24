@@ -1,0 +1,37 @@
+<Recording>
+  <costumeList>
+    <Pair>
+      <first class="Costume">
+        <name>costumeName</name>
+        <rotation>0.0</rotation>
+        <scaleX>1.0</scaleX>
+        <scaleY>1.0</scaleY>
+        <visible>true</visible>
+        <x>200.0</x>
+        <y>300.0</y>
+        <costumeData>
+          <fileName>costumeFileName</fileName>
+          <name>costumeName</name>
+        </costumeData>
+        <show>true</show>
+        <brightnessValue>1.0</brightnessValue>
+        <alphaValue>1.0</alphaValue>
+        <zPosition>0</zPosition>
+      </first>
+      <second class="long">100</second>
+    </Pair>
+  </costumeList>
+  <soundList>
+    <Pair>
+      <first class="SoundInfo">
+        <name>soundName</name>
+        <fileName>soundFileName.mp3</fileName>
+        <isPlaying>true</isPlaying>
+      </first>
+      <second class="long">200</second>
+    </Pair>
+  </soundList>
+  <duration>500</duration>
+  <screenWidth>480</screenWidth>
+  <screenHeight>800</screenHeight>
+</Recording>
