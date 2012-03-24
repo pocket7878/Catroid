@@ -62,7 +62,7 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 			try {
 				tempSoundInfo = soundInfo.clone();
 				tempSoundInfo.isPlaying = true;
-				recorder.updateSound(tempSoundInfo);
+				recorder.recordSound(tempSoundInfo);
 			} catch (CloneNotSupportedException e) {
 				e.printStackTrace();
 			}

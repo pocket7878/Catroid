@@ -160,7 +160,6 @@ public class StageListener implements ApplicationListener {
 
 		background = new Texture(Gdx.files.internal("stage/white_pixel.bmp"));
 		axes = new Texture(Gdx.files.internal("stage/red_pixel.bmp"));
-		StageRecorder.getInstance().start();
 	}
 
 	public void menuResume() {
@@ -286,6 +285,7 @@ public class StageListener implements ApplicationListener {
 		this.drawRectangle();
 
 		if (firstStart) {
+			StageRecorder.getInstance().start();
 			for (Sprite sprite : sprites) {
 				sprite.startStartScripts();
 			}
@@ -343,7 +343,7 @@ public class StageListener implements ApplicationListener {
 		StageRecorder recorder = StageRecorder.getInstance();
 		for (Sprite sprite : sprites) {
 			if (sprite.costume.costumeChanged) {
-				recorder.updateCostume(sprite.costume);
+				recorder.recordCostume(sprite.costume);
 				sprite.costume.costumeChanged = false;
 			}
 		}

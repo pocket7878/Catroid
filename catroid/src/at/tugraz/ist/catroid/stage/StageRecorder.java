@@ -4,13 +4,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import android.speech.tts.TextToSpeech;
 import android.util.Pair;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.common.SoundInfo;
+import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Costume;
-import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.utils.Utils;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -25,7 +27,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 public class StageRecorder {
 
 	private static StageRecorder instance;
-	private ArrayList<Pair> projectExecutionList = new ArrayList<Pair>();
+	private Recording recording;
 	private long startTime;
 	private long pausedTime;
 	private XStream xStream;
@@ -33,10 +35,10 @@ public class StageRecorder {
 	private StageRecorder() {
 		xStream = new XStream();
 		xStream.setMode(XStream.NO_REFERENCES);
+		xStream.alias("Recording", Recording.class);
 		xStream.alias("Pair", Pair.class);
 		xStream.alias("Costume", Costume.class);
 		xStream.alias("SoundInfo", SoundInfo.class);
-		xStream.alias("Volume", Volume.class);
 		xStream.omitField(Actor.class, "actions");
 		xStream.omitField(Actor.class, "color");
 		xStream.omitField(Actor.class, "parent");
@@ -59,7 +61,6 @@ public class StageRecorder {
 		xStream.omitField(Costume.class, "internalPath");
 		xStream.omitField(Costume.class, "costumeChanged");
 		xStream.registerConverter(new SoundInfoConverter());
-		pausedTime = 0;
 	}
 
 	public static StageRecorder getInstance() {
@@ -71,7 +72,10 @@ public class StageRecorder {
 
 	public void start() {
 		startTime = System.currentTimeMillis();
-		projectExecutionList.clear();
+		pausedTime = 0;
+		recording = new Recording();
+		recording.screenWidth = Values.SCREEN_WIDTH;
+		recording.screenHeight = Values.SCREEN_HEIGHT;
 	}
 
 	public void pause() {
@@ -87,42 +91,52 @@ public class StageRecorder {
 		pausedTime = 0;
 	}
 
-	public void finishAndSave() {
-		updateVolume(SoundManager.getInstance().getVolume());
+	public String finishAndSave() {
+		recording.duration = getTime();
+		String xml = xStream.toXML(recording);
 
 		String currentProject = ProjectManager.getInstance().getCurrentProject().getName();
 		File outputFile = new File(Utils.buildPath(Consts.DEFAULT_ROOT, currentProject), "record.xml");
 		try {
 			FileOutputStream outputstream = new FileOutputStream(outputFile);
-			outputstream.write(xStream.toXML(projectExecutionList).getBytes());
+			outputstream.write(xml.getBytes());
 			outputstream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return xml;
 	}
 
-	public void updateCostume(Costume costume) {
+	public void recordCostume(Costume costume) {
 		try {
-			projectExecutionList.add(new Pair<Costume, Long>(costume.clone(), getTime()));
+			recording.costumeList.add(new Pair<Costume, Long>(costume.clone(), getTime()));
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void updateSound(SoundInfo soundInfo) {
+	public void recordSound(SoundInfo soundInfo) {
 		try {
-			projectExecutionList.add(new Pair<SoundInfo, Long>(soundInfo.clone(), getTime()));
+			recording.soundList.add(new Pair<SoundInfo, Long>(soundInfo.clone(), getTime()));
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void updateVolume(double volume) {
-		projectExecutionList.add(new Pair<Volume, Long>(new Volume(volume), getTime()));
+	public void recordTts(TextToSpeech textToSpeech, String text, HashMap<String, String> speakParameter) {
+		String filename = "TTS_" + text.hashCode() + ".wav";
+		SoundInfo soundInfo = new SoundInfo();
+		soundInfo.setSoundFileName(filename);
+		soundInfo.setTitle(filename);
+		soundInfo.isPlaying = true;
+		textToSpeech.synthesizeToFile(text, speakParameter, Consts.DEFAULT_ROOT + "/"
+				+ ProjectManager.getInstance().getCurrentProject().getName() + "/" + Consts.SOUND_DIRECTORY + "/"
+				+ filename);
+		recordSound(soundInfo);
 	}
 
-	public ArrayList<Pair> getProjectExecutionList() {
-		return projectExecutionList;
+	public Recording getRecording() {
+		return recording;
 	}
 
 	public long getTime() {
@@ -133,12 +147,12 @@ public class StageRecorder {
 		return startTime;
 	}
 
-	public static class Volume {
-		public double volume;
-
-		public Volume(double volume) {
-			this.volume = volume;
-		}
+	public static class Recording {
+		public int screenWidth;
+		public int screenHeight;
+		public long duration;
+		public ArrayList<Pair<Costume, Long>> costumeList = new ArrayList<Pair<Costume, Long>>();
+		public ArrayList<Pair<SoundInfo, Long>> soundList = new ArrayList<Pair<SoundInfo, Long>>();
 	}
 }
 

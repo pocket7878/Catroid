@@ -280,9 +280,11 @@ public class PreStageActivity extends Activity {
 
 	public static void textToSpeech(String text, OnUtteranceCompletedListener listener,
 			HashMap<String, String> speakParameter) {
-
 		textToSpeech.setOnUtteranceCompletedListener(listener);
 		textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, speakParameter);
+
+		StageRecorder.getInstance().recordTts(textToSpeech, text, speakParameter);
+
 	}
 
 	//messages from Lego NXT device can be handled here

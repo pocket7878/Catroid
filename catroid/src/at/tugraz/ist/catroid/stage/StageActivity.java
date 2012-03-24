@@ -34,8 +34,8 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 
 public class StageActivity extends AndroidApplication {
 
-	public static final int REQUEST_UPLOAD_REPLAY = 1001;
-	public static final int RESULT_UPLOAD_REPLAY = 1002;
+	//	public static final int REQUEST_UPLOAD_REPLAY = 1001;
+	//	public static final int RESULT_UPLOAD_REPLAY = 1002;
 
 	private boolean stagePlaying = true;
 	public static StageListener stageListener;
@@ -45,7 +45,6 @@ public class StageActivity extends AndroidApplication {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		stageListener = new StageListener();
 		stageDialog = new StageDialog(this, stageListener, R.style.stage_dialog);

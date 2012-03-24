@@ -56,7 +56,7 @@ public class StopAllSoundsBrick implements Brick {
 		StageRecorder recorder = StageRecorder.getInstance();
 		for (Sprite sprite : projectManager.getCurrentProject().getSpriteList()) {
 			for (SoundInfo soundInfo : sprite.getSoundList()) {
-				recorder.updateSound(soundInfo);
+				recorder.recordSound(soundInfo);
 			}
 		}
 	}
