@@ -39,25 +39,19 @@ import com.badlogic.gdx.physics.box2d.World;
  * @author Philipp
  * 
  */
-public class PhysicWorld extends Thread {
+public class PhysicWorld {
 
 	static final float timeStep = 1.0f / 40.0f;
 	static final int velocityIterations = 5;
 	static final int positionIterations = 5;
-
-	private static PhysicWorld instance = null;
-	private static boolean run = false;
 
 	private World world;
 
 	private Map<Sprite, Body> bodys;
 	private Map<Sprite, DummyBody> dummys;
 
-	private PhysicWorld() {
-		this.run = true;
-		// 2. Define gravity
+	public PhysicWorld() {
 		Vector2 gravity = new Vector2(0, -10);
-		// 3. Ignore sleeping objects ?
 		boolean ignoreSleeping = false;
 
 		world = new World(gravity, ignoreSleeping);
@@ -96,36 +90,7 @@ public class PhysicWorld extends Thread {
 		return box;
 	}
 
-	public static PhysicWorld getInstance() {
-
-		if (instance == null) {
-			instance = new PhysicWorld();
-			instance.start();
-		}
-
-		return instance;
-	}
-
-	@Override
-	public void run() {
-		while (run) {
-			PhysicWorld.getInstance().step();
-		}
-		//clearWorld();
-	}
-
-	public boolean isActive() {
-		return run;
-	}
-
-	public void clearWorld() {
-		run = false;
-		instance.destroy();
-		instance = null;
-	}
-
-	private void step() {
-		// PhysicWorldStep.........
+	public void step() {
 		world.step(timeStep, velocityIterations, positionIterations);
 		refreshCooordsOfSprites();
 	}

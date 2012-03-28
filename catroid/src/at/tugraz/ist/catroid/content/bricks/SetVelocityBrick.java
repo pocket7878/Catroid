@@ -42,13 +42,15 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 public class SetVelocityBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
+	private PhysicWorld physicWorld;
 	private Sprite sprite;
 	private Vector2 velocity;
 
 	@XStreamOmitField
 	private transient View view;
 
-	public SetVelocityBrick(Sprite sprite, float x, float y) {
+	public SetVelocityBrick(PhysicWorld physicWorld, Sprite sprite, float x, float y) {
+		this.physicWorld = physicWorld;
 		this.sprite = sprite;
 		this.velocity = new Vector2(x, y);
 	}
@@ -58,7 +60,7 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 	}
 
 	public void execute() {
-		PhysicWorld.getInstance().setVelocity(sprite, velocity);
+		physicWorld.setVelocity(sprite, velocity);
 	}
 
 	public Sprite getSprite() {
@@ -87,7 +89,7 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new SetVelocityBrick(sprite, velocity.x, velocity.y);
+		return new SetVelocityBrick(physicWorld, sprite, velocity.x, velocity.y);
 	}
 
 	public void onClick(final View view) {

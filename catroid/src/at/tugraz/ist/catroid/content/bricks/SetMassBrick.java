@@ -41,13 +41,15 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 public class SetMassBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
+	private PhysicWorld physicWorld;
 	private Sprite sprite;
 	private float mass;
 
 	@XStreamOmitField
 	private transient View view;
 
-	public SetMassBrick(Sprite sprite, float mass) {
+	public SetMassBrick(PhysicWorld physicWorld, Sprite sprite, float mass) {
+		this.physicWorld = physicWorld;
 		this.sprite = sprite;
 		this.mass = mass;
 	}
@@ -57,7 +59,7 @@ public class SetMassBrick implements Brick, OnClickListener {
 	}
 
 	public void execute() {
-		PhysicWorld.getInstance().setMass(sprite, mass);
+		physicWorld.setMass(sprite, mass);
 	}
 
 	public Sprite getSprite() {
@@ -80,7 +82,7 @@ public class SetMassBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new SetMassBrick(getSprite(), mass);
+		return new SetMassBrick(physicWorld, getSprite(), mass);
 	}
 
 	public void onClick(View view) {
