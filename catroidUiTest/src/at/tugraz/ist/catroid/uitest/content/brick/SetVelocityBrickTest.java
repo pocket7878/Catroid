@@ -11,21 +11,22 @@ import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.SetMassBrick;
+import at.tugraz.ist.catroid.content.bricks.SetVelocityBrick;
 import at.tugraz.ist.catroid.ui.ScriptActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
+import com.badlogic.gdx.math.Vector2;
 import com.jayway.android.robotium.solo.Solo;
 
 /*
- * TODO: Test doesn' work correctly.
+ * TODO: Test doesn't work correctly.
  */
-public class SetMassTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
+public class SetVelocityBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
 	private Solo solo;
 	private Project project;
-	private SetMassBrick setMassBrick;
+	private SetVelocityBrick setVelocityBrick;
 
-	public SetMassTest() {
+	public SetVelocityBrickTest() {
 		super("at.tugraz.ist.catroid", ScriptActivity.class);
 	}
 
@@ -48,7 +49,7 @@ public class SetMassTest extends ActivityInstrumentationTestCase2<ScriptActivity
 	}
 
 	@Smoke
-	public void testSetMassByBrick() {
+	public void testSetGravityByBrick() {
 		int childrenCount = getActivity().getAdapter().getChildCountFromLastGroup();
 		int groupCount = getActivity().getAdapter().getGroupCount();
 
@@ -60,29 +61,36 @@ public class SetMassTest extends ActivityInstrumentationTestCase2<ScriptActivity
 
 		assertEquals("Wrong Brick instance.", projectBrickList.get(0),
 				getActivity().getAdapter().getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist", solo.getText(getActivity().getString(R.string.brick_set_mass)));
+		assertNotNull("TextView does not exist", solo.getText(getActivity().getString(R.string.brick_set_velocity)));
 
-		float mass = 1.234f;
+		Vector2 velocity = new Vector2(1.2f, -3.4f);
 
-		UiTestUtils.clickEnterClose(solo, 0, Float.toString(mass));
-		float actualMass = (Float) UiTestUtils.getPrivateField("mass", setMassBrick);
-		assertEquals("Text not updated", Float.toString(mass), solo.getEditText(0).getText().toString());
-		assertEquals("Value in Brick is not updated", mass, actualMass);
+		UiTestUtils.clickEnterClose(solo, 0, Float.toString(velocity.x));
+		Vector2 actualVelocity = (Vector2) UiTestUtils.getPrivateField("velocity", setVelocityBrick);
+		assertEquals("Text not updated", Float.toString(velocity.x), solo.getEditText(0).getText().toString());
+		assertEquals("Value in Brick is not updated", velocity.x, actualVelocity.x);
+
+		UiTestUtils.clickEnterClose(solo, 1, Float.toString(velocity.y));
+		actualVelocity = (Vector2) UiTestUtils.getPrivateField("velocity", setVelocityBrick);
+		assertEquals("Text not updated", Float.toString(velocity.y), solo.getEditText(1).getText().toString());
+		assertEquals("Value in Brick is not updated", velocity.y, actualVelocity.y);
 	}
 
-	//		public void testResizeInputField() {
-	//			UiTestUtils.testDoubleEditText(solo, 0, 12345.0, 50, false);
-	//			UiTestUtils.testDoubleEditText(solo, 0, 1.0, 50, true);
-	//			UiTestUtils.testDoubleEditText(solo, 0, 1234.0, 50, true);
-	//			UiTestUtils.testDoubleEditText(solo, 0, -1, 50, true);
+	//	public void testResizeInputField() {
+	//		for (int editTextIndex = 0; editTextIndex < 2; editTextIndex++) {
+	//			UiTestUtils.testDoubleEditText(solo, editTextIndex, 1234.0, 50, false);
+	//			UiTestUtils.testDoubleEditText(solo, editTextIndex, 1.0, 50, true);
+	//			UiTestUtils.testDoubleEditText(solo, editTextIndex, 123.0, 50, true);
+	//			UiTestUtils.testDoubleEditText(solo, editTextIndex, -1, 50, true);
 	//		}
+	//	}
 
 	private void createProject() {
 		project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		setMassBrick = new SetMassBrick(sprite, 0.0f);
-		script.addBrick(setMassBrick);
+		setVelocityBrick = new SetVelocityBrick(sprite, 0.0f, 0.0f);
+		script.addBrick(setVelocityBrick);
 
 		sprite.addScript(script);
 		project.addSprite(sprite);

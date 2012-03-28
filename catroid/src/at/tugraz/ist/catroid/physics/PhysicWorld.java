@@ -252,7 +252,7 @@ public class PhysicWorld extends Thread {
 		return circle;
 	}
 
-	public void setVelocity(Sprite sprite, float x, float y) {
+	public void setVelocity(Sprite sprite, Vector2 velocity) {
 
 		// only for testing
 

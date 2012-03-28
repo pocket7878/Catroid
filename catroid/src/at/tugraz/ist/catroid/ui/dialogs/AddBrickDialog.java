@@ -79,6 +79,7 @@ import at.tugraz.ist.catroid.content.bricks.SetGhostEffectBrick;
 import at.tugraz.ist.catroid.content.bricks.SetGravityBrick;
 import at.tugraz.ist.catroid.content.bricks.SetMassBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
+import at.tugraz.ist.catroid.content.bricks.SetVelocityBrick;
 import at.tugraz.ist.catroid.content.bricks.SetVolumeToBrick;
 import at.tugraz.ist.catroid.content.bricks.SetXBrick;
 import at.tugraz.ist.catroid.content.bricks.SetYBrick;
@@ -175,8 +176,9 @@ public class AddBrickDialog extends Dialog {
 		brickMap.put(context.getString(R.string.category_lego_nxt), legoNXTBrickList);
 
 		List<Brick> physicBrickList = new ArrayList<Brick>();
-		physicBrickList.add(new SetGravityBrick(sprite, 0.0f, 0.0f));
 		physicBrickList.add(new SetMassBrick(sprite, 1.0f));
+		physicBrickList.add(new SetGravityBrick(sprite, 0.0f, 0.0f));
+		physicBrickList.add(new SetVelocityBrick(sprite, 0.0f, 0.0f));
 		brickMap.put(context.getString(R.string.category_physic), physicBrickList);
 
 		return brickMap;
