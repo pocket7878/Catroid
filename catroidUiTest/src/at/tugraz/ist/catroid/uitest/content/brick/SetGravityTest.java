@@ -89,7 +89,7 @@ public class SetGravityTest extends ActivityInstrumentationTestCase2<ScriptActiv
 		project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		setGravityBrick = new SetGravityBrick(sprite, 0.0f, 0.0f);
+		setGravityBrick = new SetGravityBrick(null, sprite, 0.0f, 0.0f);
 		script.addBrick(setGravityBrick);
 
 		sprite.addScript(script);

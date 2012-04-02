@@ -180,6 +180,7 @@ public class UiTestUtils {
 		brickCategoryMap.put(R.string.brick_repeat, R.string.category_control);
 
 		brickCategoryMap.put(R.string.brick_set_gravity, R.string.category_physic);
+		brickCategoryMap.put(R.string.brick_set_mass, R.string.category_physic);
 	}
 
 	public static int getBrickCategory(Solo solo, int brickStringId) {

@@ -89,7 +89,7 @@ public class SetVelocityBrickTest extends ActivityInstrumentationTestCase2<Scrip
 		project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		setVelocityBrick = new SetVelocityBrick(sprite, 0.0f, 0.0f);
+		setVelocityBrick = new SetVelocityBrick(null, sprite, 0.0f, 0.0f);
 		script.addBrick(setVelocityBrick);
 
 		sprite.addScript(script);

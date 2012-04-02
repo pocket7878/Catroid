@@ -18,8 +18,10 @@
  */
 package at.tugraz.ist.catroid.physics;
 
-public class PhysicThread extends Thread {
+public class PhysicThread implements Runnable {
 	private final PhysicWorld world;
+
+	private final Thread thread = new Thread(this);
 	private boolean active = false;
 	private boolean running = false;
 
@@ -27,18 +29,17 @@ public class PhysicThread extends Thread {
 		this.world = world;
 	}
 
-	@Override
-	public synchronized void start() {
+	public void start() {
 		active = true;
 		running = true;
-		super.start();
+		thread.start();
 	}
 
 	public void pause() {
 		running = false;
 	}
 
-	public void resumE() {
+	public void resume() {
 		running = true;
 	}
 
@@ -47,7 +48,6 @@ public class PhysicThread extends Thread {
 		running = false;
 	}
 
-	@Override
 	public void run() {
 		while (active) {
 			if (running) {

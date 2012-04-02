@@ -172,7 +172,7 @@ public class StageListener implements ApplicationListener {
 		}
 		paused = false;
 		SoundManager.getInstance().resume();
-		physicThread.resumE();
+		physicThread.resume();
 		for (Sprite sprite : sprites) {
 			sprite.resume();
 		}
@@ -207,7 +207,7 @@ public class StageListener implements ApplicationListener {
 	public void resume() {
 		if (!paused) {
 			SoundManager.getInstance().resume();
-			physicThread.resumE();
+			physicThread.resume();
 			for (Sprite sprite : sprites) {
 				sprite.resume();
 			}
