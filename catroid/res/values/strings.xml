@@ -173,6 +173,7 @@
     <string name="category_looks">Looks</string>
     <string name="category_sound">Sound</string>
     <string name="category_control">Control</string>
+    <string name="category_physic">Physic</string>
 
     <!-- Motion bricks -->
     <string name="brick_place_at">Place at</string>
@@ -234,6 +235,11 @@
     <string name="brick_repeat">Repeat</string>
     <string name="times_label">times</string>
     <string name="brick_loop_end">End of loop</string>
+    
+    <!-- Physics -->
+    <string name="brick_set_mass">Set mass to</string>
+    <string name="brick_set_gravity">Set gravity to</string>
+    <string name="brick_set_velocity">Set velocity to</string>
 
     <!-- Actions -->
     <string name="action_tapped">tapped</string>
@@ -246,12 +252,6 @@
 
     <!-- defaultValues -->
     <string name="default_project_name">My first project</string>
-    <string name="default_project_sprites_catroid_name">Catroid</string>
-    <string name="default_project_sprites_catroid_normalcat">normalCat</string>
-    <string name="default_project_sprites_catroid_banzaicat">banzaiCat</string>
-    <string name="default_project_sprites_catroid_chesirecat">chesireCat</string>
-    <string name="default_project_backgroundname">background</string>
-    <string name="default_project_backgroundcolor">#604fff</string>
 
     <!-- Notifications -->
     <string name="notification_invalid_text_entered">Please enter a value</string>

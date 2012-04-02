@@ -76,7 +76,10 @@ import at.tugraz.ist.catroid.content.bricks.RepeatBrick;
 import at.tugraz.ist.catroid.content.bricks.SetBrightnessBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetGhostEffectBrick;
+import at.tugraz.ist.catroid.content.bricks.SetGravityBrick;
+import at.tugraz.ist.catroid.content.bricks.SetMassBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
+import at.tugraz.ist.catroid.content.bricks.SetVelocityBrick;
 import at.tugraz.ist.catroid.content.bricks.SetVolumeToBrick;
 import at.tugraz.ist.catroid.content.bricks.SetXBrick;
 import at.tugraz.ist.catroid.content.bricks.SetYBrick;
@@ -88,6 +91,7 @@ import at.tugraz.ist.catroid.content.bricks.TurnRightBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
 import at.tugraz.ist.catroid.content.bricks.WhenBrick;
 import at.tugraz.ist.catroid.content.bricks.WhenStartedBrick;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.adapter.PrototypeBrickAdapter;
 
@@ -141,6 +145,7 @@ public class AddBrickDialog extends Dialog {
 		looksBrickList.add(new SetBrightnessBrick(sprite, 0));
 		looksBrickList.add(new ChangeBrightnessBrick(sprite, 25));
 		looksBrickList.add(new ClearGraphicEffectBrick(sprite));
+		looksBrickList.add(new NextCostumeBrick(sprite));
 
 		brickMap.put(context.getString(R.string.category_looks), looksBrickList);
 
@@ -170,6 +175,13 @@ public class AddBrickDialog extends Dialog {
 		legoNXTBrickList.add(new NXTMotorActionBrick(sprite, NXTMotorActionBrick.Motor.MOTOR_A, 100));
 		legoNXTBrickList.add(new NXTPlayToneBrick(sprite, 200, 1000));
 		brickMap.put(context.getString(R.string.category_lego_nxt), legoNXTBrickList);
+
+		PhysicWorld physicWorld = ProjectManager.getInstance().getCurrentProject().getPhysicWorld();
+		List<Brick> physicBrickList = new ArrayList<Brick>();
+		physicBrickList.add(new SetMassBrick(physicWorld, sprite, 1.0f));
+		physicBrickList.add(new SetGravityBrick(physicWorld, sprite, 0.0f, 0.0f));
+		physicBrickList.add(new SetVelocityBrick(physicWorld, sprite, 0.0f, 0.0f));
+		brickMap.put(context.getString(R.string.category_physic), physicBrickList);
 
 		return brickMap;
 	}

@@ -37,6 +37,7 @@ import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.SoundManager;
+import at.tugraz.ist.catroid.physics.PhysicThread;
 import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -113,6 +114,8 @@ public class StageListener implements ApplicationListener {
 
 	private StageDialog stageDialog;
 
+	private PhysicThread physicThread;
+
 	public StageListener() {
 	}
 
@@ -159,6 +162,8 @@ public class StageListener implements ApplicationListener {
 
 		background = new Texture(Gdx.files.internal("stage/white_pixel.bmp"));
 		axes = new Texture(Gdx.files.internal("stage/red_pixel.bmp"));
+
+		physicThread = new PhysicThread(project.getPhysicWorld());
 	}
 
 	public void menuResume() {
@@ -167,6 +172,7 @@ public class StageListener implements ApplicationListener {
 		}
 		paused = false;
 		SoundManager.getInstance().resume();
+		physicThread.resume();
 		for (Sprite sprite : sprites) {
 			sprite.resume();
 		}
@@ -178,6 +184,7 @@ public class StageListener implements ApplicationListener {
 		}
 		paused = true;
 		SoundManager.getInstance().pause();
+		physicThread.pause();
 		for (Sprite sprite : sprites) {
 			sprite.pause();
 		}
@@ -200,6 +207,7 @@ public class StageListener implements ApplicationListener {
 	public void resume() {
 		if (!paused) {
 			SoundManager.getInstance().resume();
+			physicThread.resume();
 			for (Sprite sprite : sprites) {
 				sprite.resume();
 			}
@@ -215,6 +223,7 @@ public class StageListener implements ApplicationListener {
 		}
 		if (!paused) {
 			SoundManager.getInstance().pause();
+			physicThread.pause();
 			for (Sprite sprite : sprites) {
 				sprite.pause();
 			}
@@ -224,6 +233,7 @@ public class StageListener implements ApplicationListener {
 	public void finish() {
 		finished = true;
 		SoundManager.getInstance().clear();
+		physicThread.finish();
 		if (sprites != null) {
 			for (Sprite sprite : sprites) {
 				sprite.finish();
@@ -285,6 +295,7 @@ public class StageListener implements ApplicationListener {
 			for (Sprite sprite : sprites) {
 				sprite.startStartScripts();
 			}
+			physicThread.start();
 			firstStart = false;
 		}
 		if (!paused) {
