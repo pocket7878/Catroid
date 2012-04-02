@@ -21,6 +21,7 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 -->
 <resources>
 
@@ -52,7 +53,6 @@
     <string name="current_project">Aktuelles Projekt:</string>
     <string name="current_project_button">Aktuelles Projekt</string>
     <string name="my_projects">Meine Projekte</string>
-    <string name="tutorial">Anleitung</string>
     <string name="settings">Einstellungen</string>
     <string name="web_resources">Internet-Ressourcen</string>
     <string name="forum">Forum</string>
@@ -113,16 +113,16 @@
     <string name="soundrecorder_recording">Aufnahme gestartet...</string>
     <string name="soundrecorder_error">Aufnahme fehlgeschlagen</string>
     <string name="soundrecorder_recorded_filename">Aufnahme</string>
-    
+
     <!-- PreStage activity -->
     <string name="text_to_speech_engine_not_installed">Text-to-Speech Modul nicht installiert!\nJetzt herunterladen?</string>
-    
+
     <!-- My Projects activity -->
     <string name="last_changed">Zuletzt geändert:</string>
     <string name="description">Beschreibung:</string>
     <string name="set_description">Beschreibung</string>
     <string name="rename_project">Projeckt umbenennen</string>
-        
+
     <!-- Script context menu -->
     <string name="script_context_menu_title">Script Menü</string>
 
@@ -248,6 +248,12 @@
 
     <!-- defaultValues -->
     <string name="default_project_name">Mein erstes Projekt</string>
+    <string name="default_project_sprites_catroid_name">Catroid</string>
+    <string name="default_project_sprites_catroid_normalcat">Katze normal</string>
+    <string name="default_project_sprites_catroid_banzaicat">Banzai-Katze</string>
+    <string name="default_project_sprites_catroid_chesirecat">Grinsekatze</string>
+    <string name="default_project_backgroundname">Hintergrund</string>
+    <string name="default_project_backgroundcolor">#604fff</string>
 
     <!-- Notifications -->
     <string name="notification_invalid_text_entered">Bitte einen Wert eingeben</string>
