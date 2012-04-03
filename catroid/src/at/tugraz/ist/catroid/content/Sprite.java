@@ -98,6 +98,8 @@ public class Sprite implements Serializable {
 	public Sprite(Sprite spriteToCopy, String newSpriteName) {
 
 		this.name = newSpriteName;
+		this.activeThreads = new HashMap<Thread, Boolean>();
+		this.activeScripts = new HashMap<Script, List<Thread>>();
 		this.scriptList = new ArrayList<Script>();
 		for (Script element : spriteToCopy.scriptList) {
 
@@ -361,6 +363,9 @@ public class Sprite implements Serializable {
 	}
 
 	public synchronized boolean isAlive(Thread thread) {
+		if (activeThreads == null) {
+			return true;
+		}
 		if (activeThreads.containsKey(thread)) {
 			return activeThreads.get(thread);
 		} else {
@@ -370,6 +375,9 @@ public class Sprite implements Serializable {
 	}
 
 	public synchronized void setInactive(Thread thread) {
+		if (activeThreads == null) {
+			return;
+		}
 		if (activeThreads.containsKey(thread)) {
 			activeThreads.remove(thread);
 		}

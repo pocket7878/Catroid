@@ -214,7 +214,8 @@ public class ProjectActivity extends ListActivity {
 					dialog = null;
 				} else {
 					copyDialog = new CopySpriteDialog(this);
-					dialog = copyDialog.createDialog(spriteToEdit.getName());
+					//dialog = copyDialog.dialog(spriteToEdit.getName());
+					dialog = copyDialog.dialog;
 				}
 				break;
 			default:
@@ -242,9 +243,13 @@ public class ProjectActivity extends ListActivity {
 				break;
 			case DIALOG_COPY_SPRITE:
 				if (dialog != null && spriteToEdit != null) {
-					EditText spriteTitleInput = (EditText) dialog.findViewById(R.id.dialog_copy_sprite_editText);
+					EditText spriteTitleInput = (EditText) dialog.findViewById(R.id.dialog_text_EditText);
 					spriteTitleInput.setText(spriteToEdit.getName() + Consts.SPACE
 							+ getString(R.string.copy_sprite_extension));
+					//EditText spriteTitleInput = (EditText) dialog.findViewById(R.id.dialog_copy_sprite_editText);
+					//spriteTitleInput.setText(spriteToEdit.getName() + Consts.SPACE
+					//		+ getString(R.string.copy_sprite_extension));
+					//spriteTitleInput.setText(spriteToEdit.getName());
 				}
 				break;
 		}
@@ -297,7 +302,7 @@ public class ProjectActivity extends ListActivity {
 	}
 
 	public void handleNegativeButtonCopySprite(View v) {
-		copyDialog.copyDialog.cancel();
+		copyDialog.dialog.cancel();
 	}
 
 	public void handlePositiveButtonNewSprite(View v) {
