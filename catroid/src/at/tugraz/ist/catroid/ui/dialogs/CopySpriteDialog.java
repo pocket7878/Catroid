@@ -37,7 +37,7 @@ public class CopySpriteDialog extends TextDialog {
 	protected ProjectActivity projectActivity;
 
 	public CopySpriteDialog(ProjectActivity projectActivity) {
-		super(projectActivity, projectActivity.getString(R.string.copy), projectActivity
+		super(projectActivity, projectActivity.getString(R.string.copy_title), projectActivity
 				.getString(R.string.new_sprite_dialog_default_sprite_name));
 		initKeyListener();
 		this.projectActivity = projectActivity;

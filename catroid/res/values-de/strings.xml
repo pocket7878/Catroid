@@ -167,6 +167,7 @@
     
     <!-- Copy Sprite dialog -->
     <string name="copy">Kopieren</string>
+    <string name="copy_title">Objekt Kopieren</string>
     <string name="copy_sprite_extension"> - Kopie</string>
 	
 

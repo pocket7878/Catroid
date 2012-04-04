@@ -167,6 +167,7 @@
     
     <!-- Copy Sprite dialog -->
     <string name="copy">Copy</string>
+    <string name="copy_title">Copy Sprite</string>
     <string name="copy_sprite_extension"> - Copy</string>
 
     <!-- Broadcast spinner -->
