@@ -138,7 +138,6 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 			brickCounter++;
 		}
 		return brickCounter;
-
 	}
 
 	public void checkSpecialBricks(Sprite firstSprite, Sprite copiedSprite) {
