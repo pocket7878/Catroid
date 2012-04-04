@@ -96,13 +96,37 @@ public class Sprite implements Serializable {
 	}
 
 	public Sprite(Sprite spriteToCopy, String newSpriteName) {
-
+		this.init();
 		this.name = newSpriteName;
-		this.activeThreads = new HashMap<Thread, Boolean>();
-		this.activeScripts = new HashMap<Script, List<Thread>>();
+		this.costumeDataList = new ArrayList<CostumeData>(spriteToCopy.costumeDataList);
+		this.soundList = new ArrayList<SoundInfo>(spriteToCopy.soundList);
 		this.scriptList = new ArrayList<Script>();
-		for (Script element : spriteToCopy.scriptList) {
+		deepCopyScripts(spriteToCopy.scriptList);
+		deepCopyBricks(spriteToCopy.scriptList);
 
+		checkLoopsInSprite(spriteToCopy);
+	}
+
+	private void deepCopyBricks(List<Script> scriptListToCopy) {
+		int numberOfScripts = scriptListToCopy.size();
+		for (int scriptCounter = 0; scriptCounter < numberOfScripts; scriptCounter++) {
+
+			ArrayList<Brick> brickList = new ArrayList<Brick>();
+			int numberOfBricks = scriptListToCopy.get(scriptCounter).getBrickList().size();
+			scriptList.get(scriptCounter).setBrickList(null);
+
+			for (int brickCounter = 0; brickCounter < numberOfBricks; brickCounter++) {
+				Brick brick = scriptListToCopy.get(scriptCounter).getBrickList().get(brickCounter)
+						.cloneCopySprite(this);
+				brickList.add(brick);
+			}
+			scriptList.get(scriptCounter).setBrickList(brickList);
+			scriptList.get(scriptCounter).setSprite(this);
+		}
+	}
+
+	public void deepCopyScripts(List<Script> scriptListToCopy) {
+		for (Script element : scriptListToCopy) {
 			Script newScript = element.clone(this);
 			if (newScript.getClass() == BroadcastScript.class) {
 				BroadcastScript broadScript = (BroadcastScript) newScript;
@@ -111,40 +135,16 @@ public class Sprite implements Serializable {
 			}
 			scriptList.add(newScript);
 		}
-		int numberOfScripts = spriteToCopy.scriptList.size();
-
-		for (int scriptCounter = 0; scriptCounter < numberOfScripts; scriptCounter++) {
-			ArrayList<Brick> brickList = new ArrayList<Brick>();
-			int numberOfBricks = spriteToCopy.scriptList.get(scriptCounter).getBrickList().size();
-			this.scriptList.get(scriptCounter).setBrickList(null);
-
-			for (int brickCounter = 0; brickCounter < numberOfBricks; brickCounter++) {
-				Brick brick = spriteToCopy.scriptList.get(scriptCounter).getBrickList().get(brickCounter)
-						.cloneCopySprite(this);
-				brickList.add(brick);
-			}
-			this.scriptList.get(scriptCounter).setBrickList(brickList);
-			this.scriptList.get(scriptCounter).setSprite(this);
-		}
-
-		this.costumeDataList = new ArrayList<CostumeData>(spriteToCopy.costumeDataList);
-		this.soundList = new ArrayList<SoundInfo>(spriteToCopy.soundList);
-		this.costume = new Costume(this);
-		isPaused = false;
-		isFinished = false;
-		checkLoopsCopy(spriteToCopy);
 	}
 
-	public void checkLoopsCopy(Sprite spriteToCopy) {
+	public void checkLoopsInSprite(Sprite spriteToCopy) {
 		int brickBegin = 0;
 		int brickEnd = 0;
 		Script scriptCopied = null;
 
 		for (Script scriptToCopy : spriteToCopy.scriptList) {
-
 			scriptCopied = this.getScript(spriteToCopy.getScriptIndex(scriptToCopy));
 			for (Brick element : scriptToCopy.getBrickList()) {
-
 				if (element.getClass() == RepeatBrick.class) {
 					brickBegin = scriptToCopy.getBrickList().indexOf(element);
 					brickEnd = scriptToCopy.getBrickList().indexOf(((LoopBeginBrick) element).getLoopEndBrick());
@@ -153,7 +153,6 @@ public class Sprite implements Serializable {
 					((LoopBeginBrick) scriptCopied.getBrickList().get(brickBegin)).setLoopEndBrick(loopEndBrick);
 					loopEndBrick.setLoopBeginBrick((LoopBeginBrick) scriptCopied.getBrick(brickBegin));
 				}
-
 				if (element.getClass() == ForeverBrick.class) {
 					brickBegin = scriptToCopy.getBrickList().indexOf(element);
 					brickEnd = scriptToCopy.getBrickList().indexOf(((LoopBeginBrick) element).getLoopEndBrick());
