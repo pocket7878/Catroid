@@ -196,13 +196,19 @@ def add_sound(soundEvents, duration, path_to_project):
                     sounds.append((soundEvents[i].filename, soundEvents[i].timestamp, duration))
 
     if len(sounds) > 0:
-        sound_mix_command = 'sox -V1 --combine mix-power '
+        if len(sounds) >= 2:
+            sound_mix_command = 'sox -V1 --combine mix-power '
 
-        for s in sounds:
-            sound_mix_command += ' "|sox -V1 \'{0}\' -r 44100 -p trim 0 {1} pad {2} 0" '\
-                                .format( os.path.join(path_to_project, 'sounds', s[0]), str((s[2] - s[1])/1000.0), str(s[1]/1000.0) )
+            for s in sounds:
+                sound_mix_command += ' "|sox -V1 \'{0}\' -r 44100 -p trim 0 {1} pad {2} 0" '\
+                                    .format( os.path.join(path_to_project, 'sounds', s[0]), str((s[2] - s[1])/1000.0), str(s[1]/1000.0) )
+            sound_mix_command += '\'' + os.path.join(path_to_project, 'soundtrack.mp3') + '\''
+
+        elif len(sounds) == 1:
+            sound_mix_command = 'sox -V1 \'{0}\' -r 44100 {3} trim 0 {1} pad {2} 0 '\
+                                    .format( os.path.join(path_to_project, 'sounds', sounds[0][0]), str((sounds[0][2] - sounds[0][1])/1000.0), str(sounds[0][1]/1000.0), '\'' + os.path.join(path_to_project, 'soundtrack.mp3') + '\'' )
+
         
-        sound_mix_command += '\'' + os.path.join(path_to_project, 'soundtrack.mp3') + '\''
         os.system(sound_mix_command)
         os.system('ffmpeg -loglevel panic -i "{0}" -i "{1}" "{2}"'.format(os.path.join(path_to_project, 'soundtrack.mp3'), os.path.join(path_to_project, 'video.avi'), os.path.join(path_to_project, 'out.avi')))
 
