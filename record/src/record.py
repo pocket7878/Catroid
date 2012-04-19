@@ -28,7 +28,6 @@ import xml.dom.minidom
 import urllib2
 sys.path.append('/usr/lib/pymodules/python2.6')
 import cv
-import numpy as np
 from PIL import Image
 
 '''
