@@ -117,6 +117,7 @@ public class PointToBrick implements Brick {
 			}
 		}
 		sprite.costume.rotation = (-(float) rotationDegrees) + 90f;
+		sprite.costume.costumeChanged = true;
 	}
 
 	public View getView(final Context context, int brickId, BaseAdapter adapter) {

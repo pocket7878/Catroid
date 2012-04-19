@@ -36,6 +36,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.transfers.RegistrationTask;
 import at.tugraz.ist.catroid.web.ServerCalls;
 
@@ -69,6 +70,14 @@ public class LoginRegisterDialog extends Dialog implements OnClickListener {
 				InputMethodManager inputManager = (InputMethodManager) activity
 						.getSystemService(Context.INPUT_METHOD_SERVICE);
 				inputManager.showSoftInput(usernameEditText, InputMethodManager.SHOW_IMPLICIT);
+			}
+		});
+
+		this.setOnCancelListener(new OnCancelListener() {
+			public void onCancel(DialogInterface dialog) {
+				if (activity instanceof StageActivity) {
+					((StageActivity) activity).manageLoadAndFinish();
+				}
 			}
 		});
 

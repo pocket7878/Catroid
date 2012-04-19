@@ -55,6 +55,7 @@ public class TurnLeftBrick implements Brick, OnClickListener {
 
 	public void execute() {
 		sprite.costume.rotation = (sprite.costume.rotation % 360) + (float) degrees;
+		sprite.costume.costumeChanged = true;
 	}
 
 	public Sprite getSprite() {

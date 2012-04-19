@@ -26,7 +26,9 @@ import fileinput
 import hashlib
 import xml.dom.minidom
 import urllib2
-import numpy as np, cv
+sys.path.append('/usr/lib/pymodules/python2.6')
+import cv
+import numpy as np
 from PIL import Image
 
 '''
@@ -73,10 +75,13 @@ def parse_xml(path_to_project):
     for node in doc.getElementsByTagName('Pair'):
         for child in node.childNodes:
             if child.nodeName == 'first':
-                if child.attributes.item(0).value == 'Costume':
-                    costumeEvents.append(getCostume(node, path_to_project))
-                elif child.attributes.item(0).value == 'SoundInfo':
-                    soundsEvents.append(getSoundInfo(node))
+                try:
+                    if child.attributes.item(0).value == 'Costume':
+                        costumeEvents.append(getCostume(node, path_to_project))
+                    elif child.attributes.item(0).value == 'SoundInfo':
+                        soundsEvents.append(getSoundInfo(node))
+                except:
+                    pass
 
     for node in doc.getElementsByTagName('Recording'):
         for child in node.childNodes:
@@ -156,7 +161,7 @@ def update_screen(screen_elements, screenWidth, screenHeight):
     for element in screen_elements:
         if element.visible and element.show:
             img = element.image.resize((int(element.image.size[0]*element.scaleX), int(element.image.size[1]*element.scaleY)))
-            img = img.rotate(element.rotation, expand = True)
+            img = img.rotate(-(element.rotation), expand = True)
             xPos = int(element.x + (element.image.size[0] - element.image.size[0]*element.scaleX)/2)
             yPos = int(element.y + (element.image.size[1] - element.image.size[1]*element.scaleY)/2)
             if len(img.getbands()) > 3:
@@ -191,15 +196,15 @@ def add_sound(soundEvents, duration, path_to_project):
                     sounds.append((soundEvents[i].filename, soundEvents[i].timestamp, duration))
 
     if len(sounds) > 0:
-        sound_mix_command = 'sox --combine mix-power '
+        sound_mix_command = 'sox -V1 --combine mix-power '
 
         for s in sounds:
-            sound_mix_command += ' "|sox \'{0}\' -r 44100 -p trim 0 {1} pad {2} 0" '\
+            sound_mix_command += ' "|sox -V1 \'{0}\' -r 44100 -p trim 0 {1} pad {2} 0" '\
                                 .format( os.path.join(path_to_project, 'sounds', s[0]), str((s[2] - s[1])/1000.0), str(s[1]/1000.0) )
         
         sound_mix_command += '\'' + os.path.join(path_to_project, 'soundtrack.mp3') + '\''
         os.system(sound_mix_command)
-        os.system('ffmpeg -i "{0}" -i "{1}" "{2}"'.format(os.path.join(path_to_project, 'soundtrack.mp3'), os.path.join(path_to_project, 'video.avi'), os.path.join(path_to_project, 'out.avi')))
+        os.system('ffmpeg -loglevel panic -i "{0}" -i "{1}" "{2}"'.format(os.path.join(path_to_project, 'soundtrack.mp3'), os.path.join(path_to_project, 'video.avi'), os.path.join(path_to_project, 'out.avi')))
 
 def upload(path_to_project, title, description):
     DEV_KEY = 'AI39si5FEjazuKSkgPMH_1cppVPzUiNLl19UnfzkhvjrFwwbQc4wueHT7CR1oWA__WA5L27INddl9m6UigdcFZaTmvp7h8yUPQ'

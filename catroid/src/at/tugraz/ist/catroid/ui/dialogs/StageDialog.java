@@ -111,8 +111,8 @@ public class StageDialog extends Dialog {
 		saveReplayButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				StageRecorder.getInstance().finishAndSave();
-//				stageActivity.setResult(StageActivity.RESULT_UPLOAD_REPLAY);
-				exitStage();
+				stageActivity.uploadRecordedStage();
+				dismiss();
 			}
 		});
 	}
