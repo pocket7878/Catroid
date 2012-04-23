@@ -27,6 +27,7 @@ import hashlib
 import xml.dom.minidom
 import urllib2
 sys.path.append('/usr/lib/pymodules/python2.6')
+sys.path.append('/usr/lib/python2.5/site-packages/')
 import cv
 from PIL import Image
 
@@ -209,7 +210,7 @@ def add_sound(soundEvents, duration, path_to_project):
 
         
         os.system(sound_mix_command)
-        os.system('ffmpeg -loglevel panic -i "{0}" -i "{1}" "{2}"'.format(os.path.join(path_to_project, 'soundtrack.mp3'), os.path.join(path_to_project, 'video.avi'), os.path.join(path_to_project, 'out.avi')))
+        os.system('ffmpeg -i "{0}" -i "{1}" "{2}"'.format(os.path.join(path_to_project, 'soundtrack.mp3'), os.path.join(path_to_project, 'video.avi'), os.path.join(path_to_project, 'out.avi')))
 
 def upload(path_to_project, title, description):
     DEV_KEY = 'AI39si5FEjazuKSkgPMH_1cppVPzUiNLl19UnfzkhvjrFwwbQc4wueHT7CR1oWA__WA5L27INddl9m6UigdcFZaTmvp7h8yUPQ'
