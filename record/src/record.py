@@ -57,11 +57,70 @@ class Costume:
         self.y = int(float(y))
         self.z = int(float(z))
         self.filename = filename
-        self.image = Image.open(os.path.join(path_to_project, 'images', self.filename))
         self.show = show == 'true'
         self.brightness = float(brightness)
         self.alpha = float(alpha)
         self.timestamp = int(timestamp)
+
+    def init(self):
+        self.load_image()
+        self.update_image()
+        self.update_draw_x()
+        self.update_draw_y()
+
+    def update_draw_x(self):
+        self.drawX = int(self.x+Consts.screenWidth/2 + (self.image.size[0] - self.image.size[0]*self.scaleX)/2)
+
+    def update_draw_y(self):
+        self.drawY = int(-self.y+Consts.screenHeight/2 - self.image.size[1] + (self.image.size[1] - self.image.size[1]*self.scaleY)/2)
+
+    def load_image(self):
+        self.image = Image.open(os.path.join(Consts.path_to_project, 'images', self.filename))
+        if len(self.image.getbands()) <= 3:
+            self.image = self.image.convert('RGBA')
+        self.drawImage = self.image
+
+    def update_image(self):
+        brightness, alpha = self.brightness, self.alpha
+        self.drawImage = self.image.resize((int(self.image.size[0]*self.scaleX), int(self.image.size[1]*self.scaleY))).rotate(-(self.rotation), expand = True)
+        self.drawImage.putdata(map(lambda x: (int(x[0]*brightness), int(x[1]*brightness), int(x[2]*brightness), int(x[3]*alpha)), list(self.drawImage.getdata())))
+
+
+    def update(self, new_costume):
+        self.timestamp = new_costume.timestamp
+
+        if new_costume.filename != self.filename:
+            self.filename = new_costume.filename
+            self.load_image()
+            self.update_image()
+
+        if new_costume.brightness != self.brightness or new_costume.alpha != self.alpha or new_costume.scaleX != self.scaleX or new_costume.scaleY != self.scaleY or new_costume.rotation != self.rotation:
+            self.brightness = new_costume.brightness
+            self.alpha = new_costume.alpha
+            self.scaleX = new_costume.scaleX
+            self.scaleY = new_costume.scaleY
+            self.rotation = new_costume.rotation
+            self.update_image()
+
+        if new_costume.x != self.x:
+            self.x = new_costume.x
+            self.update_draw_x()
+
+        if new_costume.y != self.y:
+            self.y = new_costume.y
+            self.update_draw_y()
+
+        if new_costume.z != self.z:
+            self.z = new_costume.z
+
+        if new_costume.show != self.show:
+            self.show = new_costume.show
+
+        if new_costume.visible != self.visible:
+            self.visible = new_costume.visible
+
+class Consts:
+    pass
 
 def unzip_project(archive_name):
     project_name = os.path.splitext(archive_name)[0]
@@ -72,6 +131,17 @@ def parse_xml(path_to_project):
     costumeEvents = []
     soundsEvents = []
 
+    for node in doc.getElementsByTagName('Recording'):
+        for child in node.childNodes:
+            if child.nodeName == 'duration':
+                duration = int(child.firstChild.nodeValue)
+            elif child.nodeName == 'screenHeight':
+                screenHeight = int(child.firstChild.nodeValue)
+                Consts.screenHeight = screenHeight
+            elif child.nodeName == 'screenWidth':
+                screenWidth = int(child.firstChild.nodeValue)
+                Consts.screenWidth = screenWidth
+
     for node in doc.getElementsByTagName('Pair'):
         for child in node.childNodes:
             if child.nodeName == 'first':
@@ -80,17 +150,9 @@ def parse_xml(path_to_project):
                         costumeEvents.append(getCostume(node, path_to_project))
                     elif child.attributes.item(0).value == 'SoundInfo':
                         soundsEvents.append(getSoundInfo(node))
-                except:
-                    pass
+                except IndexError:
+                    pass #Costume without a filename
 
-    for node in doc.getElementsByTagName('Recording'):
-        for child in node.childNodes:
-            if child.nodeName == 'duration':
-                duration = int(child.firstChild.nodeValue)
-            elif child.nodeName == 'screenHeight':
-                screenHeight = int(child.firstChild.nodeValue)
-            elif child.nodeName == 'screenWidth':
-                screenWidth = int(child.firstChild.nodeValue)
 
     return costumeEvents, soundsEvents, duration, screenWidth, screenHeight
 
@@ -123,32 +185,26 @@ def write_video(costumeEvents, duration, screenWidth, screenHeight, path_to_proj
     current_timestamp = 0
     writer = cv.CreateVideoWriter(os.path.join(path_to_project, 'video.avi'), cv.CV_FOURCC('X','V','I','D'), 30\
                                 ,(screenWidth,screenHeight), 1)
+    
     for event in costumeEvents:
         while current_timestamp < event.timestamp:
             cv.WriteFrame(writer, screen_frame)
             current_timestamp += 33.33333
         if isinstance(event, Costume):
             if screen_elements == []:
+                event.init()
                 screen_elements.append(event)
                 screen_frame = update_screen(screen_elements, screenWidth, screenHeight)
             else:
                 for element in screen_elements:
                     if element.name == event.name:
-                        screen_elements[screen_elements.index(element)] = event
+                        screen_elements[screen_elements.index(element)].update(event)
                         screen_frame = update_screen(screen_elements, screenWidth, screenHeight)
                         break
                 else:
-                    for i in range(len(screen_elements)):
-                        if screen_elements[i].z > event.z:
-                            screen_elements.insert(i, event)
-                            break
-                        elif i == len(screen_elements) - 1:
-                            screen_elements.append(event)
-                            screen_frame = update_screen(screen_elements, screenWidth, screenHeight)
-                            break
-                    else:
-                        screen_elements.append(event)
-                        screen_frame = update_screen(screen_elements, screenWidth, screenHeight)
+                    event.init()
+                    screen_elements.append(event)
+                    screen_frame = update_screen(screen_elements, screenWidth, screenHeight)
     while current_timestamp < duration:
             cv.WriteFrame(writer, screen_frame)
             current_timestamp += 33.33333
@@ -160,20 +216,7 @@ def update_screen(screen_elements, screenWidth, screenHeight):
     screen_elements.sort(key = lambda element: element.z)
     for element in screen_elements:
         if element.visible and element.show:
-            img = element.image.resize((int(element.image.size[0]*element.scaleX), int(element.image.size[1]*element.scaleY)))
-            img = img.rotate(-(element.rotation), expand = True)
-            xPos = int(element.x + (element.image.size[0] - element.image.size[0]*element.scaleX)/2)
-            yPos = int(element.y + (element.image.size[1] - element.image.size[1]*element.scaleY)/2)
-            if len(img.getbands()) > 3:
-                b, a = element.brightness, element.alpha
-                img.putdata(map(lambda x: (int(x[0]*b), int(x[1]*b), int(x[2]*b), int(x[3]*a)), list(img.getdata())))
-                blank_image.paste(img, (xPos+screenWidth/2, yPos+screenHeight/2), img)
-            else:
-                if element.brightness != 1 or element.alpha != 1:
-                    img = img.convert('RGB')
-                    img = img.point(lambda x: x*element.brightness)
-                    img.putalpha(int(element.alpha*255))
-                blank_image.paste(img, (xPos+screenWidth/2, yPos+screenHeight/2))
+            blank_image.paste(element.drawImage, (element.drawX, element.drawY), element.drawImage)
     cv_img = cv.CreateImageHeader(blank_image.size, cv.IPL_DEPTH_8U, 3)
     cv.SetData(cv_img, blank_image.tostring(), blank_image.size[0]*3)
     cv.CvtColor(cv_img, cv_img, cv.CV_BGR2RGB)
@@ -210,7 +253,10 @@ def add_sound(soundEvents, duration, path_to_project):
 
         
         os.system(sound_mix_command)
-        os.system('ffmpeg -i "{0}" -i "{1}" "{2}"'.format(os.path.join(path_to_project, 'soundtrack.mp3'), os.path.join(path_to_project, 'video.avi'), os.path.join(path_to_project, 'out.avi')))
+        if os.path.exists(os.path.join(path_to_project, 'soundtrack.mp3')):
+            os.system('ffmpeg -i "{0}" -i "{1}" "{2}"'.format(os.path.join(path_to_project, 'soundtrack.mp3'), os.path.join(path_to_project, 'video.avi'), os.path.join(path_to_project, 'out.avi')))
+        else:
+            os.rename(os.path.join(path_to_project, 'video.avi'), os.path.join(path_to_project, 'out.avi'))
 
 def upload(path_to_project, title, description):
     DEV_KEY = 'AI39si5FEjazuKSkgPMH_1cppVPzUiNLl19UnfzkhvjrFwwbQc4wueHT7CR1oWA__WA5L27INddl9m6UigdcFZaTmvp7h8yUPQ'
@@ -279,6 +325,7 @@ def main():
         shutil.rmtree(os.path.join(path_to_project, project_filename))
     unzip_project(os.path.join(path_to_project, archive_name))
     path_to_project = os.path.join(path_to_project, project_filename)
+    Consts.path_to_project = path_to_project
     costumeEvents, soundEvents, duration, screenWidth, screenHeight = parse_xml(path_to_project)
     costumeEvents.sort(key = lambda x: x.timestamp)
     soundEvents.sort(key = lambda x: x.timestamp)
