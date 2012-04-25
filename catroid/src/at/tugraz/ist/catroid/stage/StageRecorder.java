@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.speech.tts.TextToSpeech;
-import android.util.Pair;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.common.SoundInfo;
@@ -15,14 +14,7 @@ import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Costume;
 import at.tugraz.ist.catroid.utils.Utils;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.actors.Image;
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.converters.Converter;
-import com.thoughtworks.xstream.converters.MarshallingContext;
-import com.thoughtworks.xstream.converters.UnmarshallingContext;
-import com.thoughtworks.xstream.io.HierarchicalStreamReader;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
 public class StageRecorder {
 
@@ -36,31 +28,8 @@ public class StageRecorder {
 		xStream = new XStream();
 		xStream.setMode(XStream.NO_REFERENCES);
 		xStream.alias("Recording", Recording.class);
-		xStream.alias("Pair", Pair.class);
-		xStream.alias("Costume", Costume.class);
-		xStream.alias("SoundInfo", SoundInfo.class);
-		xStream.omitField(Actor.class, "actions");
-		xStream.omitField(Actor.class, "color");
-		xStream.omitField(Actor.class, "parent");
-		xStream.omitField(Actor.class, "touchable");
-		xStream.omitField(Actor.class, "originX");
-		xStream.omitField(Actor.class, "originY");
-		xStream.omitField(Actor.class, "toRemove");
-		xStream.omitField(Actor.class, "width");
-		xStream.omitField(Actor.class, "height");
-		xStream.omitField(Image.class, "region");
-		xStream.omitField(Costume.class, "xYWidthHeightLock");
-		xStream.omitField(Costume.class, "imageLock");
-		xStream.omitField(Costume.class, "scaleLock");
-		xStream.omitField(Costume.class, "alphaValueLock");
-		xStream.omitField(Costume.class, "brightnessLock");
-		xStream.omitField(Costume.class, "disposeTexturesLock");
-		xStream.omitField(Costume.class, "imageChanged");
-		xStream.omitField(Costume.class, "sprite");
-		xStream.omitField(Costume.class, "currentAlphaPixmap");
-		xStream.omitField(Costume.class, "internalPath");
-		xStream.omitField(Costume.class, "costumeChanged");
-		xStream.registerConverter(new SoundInfoConverter());
+		xStream.alias("RecordedCostume", RecordedCostume.class);
+		xStream.alias("RecordedSound", RecordedSound.class);
 	}
 
 	public static StageRecorder getInstance() {
@@ -108,19 +77,14 @@ public class StageRecorder {
 	}
 
 	public void recordCostume(Costume costume) {
-		try {
-			recording.costumeList.add(new Pair<Costume, Long>(costume.clone(), getTime()));
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
+		recording.costumeList.add(new RecordedCostume(costume.name, costume.rotation, costume.scaleX, costume.scaleY,
+				costume.visible, costume.show, costume.x, costume.y, costume.getCostumeData() != null ? costume
+						.getCostumeData().getCostumeFileName() : null, costume.getBrightnessValue(), costume
+						.getAlphaValue(), costume.zPosition, getTime()));
 	}
 
 	public void recordSound(SoundInfo soundInfo) {
-		try {
-			recording.soundList.add(new Pair<SoundInfo, Long>(soundInfo.clone(), getTime()));
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
+		recording.soundList.add(new RecordedSound(soundInfo.getSoundFileName(), soundInfo.isPlaying, getTime()));
 	}
 
 	public void recordTts(TextToSpeech textToSpeech, String text, HashMap<String, String> speakParameter) {
@@ -151,34 +115,52 @@ public class StageRecorder {
 		public int screenWidth;
 		public int screenHeight;
 		public long duration;
-		public ArrayList<Pair<Costume, Long>> costumeList = new ArrayList<Pair<Costume, Long>>();
-		public ArrayList<Pair<SoundInfo, Long>> soundList = new ArrayList<Pair<SoundInfo, Long>>();
+		public ArrayList<RecordedCostume> costumeList = new ArrayList<RecordedCostume>();
+		public ArrayList<RecordedSound> soundList = new ArrayList<RecordedSound>();
 	}
 }
 
-class SoundInfoConverter implements Converter {
+class RecordedCostume {
+	String name;
+	float rotation;
+	float scaleX;
+	float scaleY;
+	boolean visible;
+	boolean show;
+	float x;
+	float y;
+	String fileName;
+	float brightnessValue;
+	float alphaValue;
+	int zPosition;
+	long timestamp;
 
-	public boolean canConvert(Class type) {
-		return type.equals(SoundInfo.class);
+	public RecordedCostume(String name, float rotation, float scaleX, float scaleY, boolean visible, boolean show,
+			float x, float y, String fileName, float brightnessValue, float alphaValue, int zPosition, long timestamp) {
+		this.name = name;
+		this.rotation = rotation;
+		this.scaleX = scaleX;
+		this.scaleY = scaleY;
+		this.visible = visible;
+		this.show = show;
+		this.x = x;
+		this.y = y;
+		this.fileName = fileName;
+		this.brightnessValue = brightnessValue;
+		this.alphaValue = alphaValue;
+		this.zPosition = zPosition;
+		this.timestamp = timestamp;
 	}
+}
 
-	public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-		SoundInfo soundInfo = (SoundInfo) source;
-		writer.startNode("name");
-		writer.setValue(soundInfo.getTitle());
-		writer.endNode();
+class RecordedSound {
+	String fileName;
+	boolean isPlaying;
+	long timestamp;
 
-		writer.startNode("fileName");
-		writer.setValue(soundInfo.getSoundFileName());
-		writer.endNode();
-
-		writer.startNode("isPlaying");
-		writer.setValue("" + soundInfo.isPlaying);
-		writer.endNode();
+	public RecordedSound(String fileName, boolean isPlaying, long timestamp) {
+		this.fileName = fileName;
+		this.isPlaying = isPlaying;
+		this.timestamp = timestamp;
 	}
-
-	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-		return null;
-	}
-
 }

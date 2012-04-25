@@ -82,7 +82,7 @@ class Costume:
 
     def update_image(self):
         brightness, alpha = self.brightness, self.alpha
-        self.drawImage = self.image.resize((int(self.image.size[0]*self.scaleX), int(self.image.size[1]*self.scaleY))).rotate(-(self.rotation), expand = True)
+        self.drawImage = self.image.resize((int(self.image.size[0]*self.scaleX), int(self.image.size[1]*self.scaleY))).rotate(self.rotation, expand = True)
         self.drawImage.putdata(map(lambda x: (int(x[0]*brightness), int(x[1]*brightness), int(x[2]*brightness), int(x[3]*alpha)), list(self.drawImage.getdata())))
 
 
@@ -142,16 +142,19 @@ def parse_xml(path_to_project):
                 screenWidth = int(child.firstChild.nodeValue)
                 Consts.screenWidth = screenWidth
 
-    for node in doc.getElementsByTagName('Pair'):
+    for node in doc.getElementsByTagName('costumeList'):
         for child in node.childNodes:
-            if child.nodeName == 'first':
+            if child.nodeName == 'RecordedCostume':
                 try:
-                    if child.attributes.item(0).value == 'Costume':
-                        costumeEvents.append(getCostume(node, path_to_project))
-                    elif child.attributes.item(0).value == 'SoundInfo':
-                        soundsEvents.append(getSoundInfo(node))
+                    costumeEvents.append(getCostume(child, path_to_project))
                 except IndexError:
                     pass #Costume without a filename
+
+
+    for node in doc.getElementsByTagName('soundList'):
+        for child in node.childNodes:
+            if child.nodeName == 'RecordedSound':
+                soundsEvents.append(getSoundInfo(child))
 
 
     return costumeEvents, soundsEvents, duration, screenWidth, screenHeight
@@ -170,13 +173,13 @@ def getCostume(node, path_to_project):
                    node.getElementsByTagName('show')[0].firstChild.nodeValue,\
                    node.getElementsByTagName('brightnessValue')[0].firstChild.nodeValue,\
                    node.getElementsByTagName('alphaValue')[0].firstChild.nodeValue,\
-                   node.getElementsByTagName('second')[0].firstChild.nodeValue,\
+                   node.getElementsByTagName('timestamp')[0].firstChild.nodeValue,\
                    path_to_project)
 
 def getSoundInfo(node):
     return SoundInfo(node.getElementsByTagName('fileName')[0].firstChild.nodeValue,\
                      node.getElementsByTagName('isPlaying')[0].firstChild.nodeValue,\
-                     node.getElementsByTagName('second')[0].firstChild.nodeValue)
+                     node.getElementsByTagName('timestamp')[0].firstChild.nodeValue)
     
 
 def write_video(costumeEvents, duration, screenWidth, screenHeight, path_to_project):
