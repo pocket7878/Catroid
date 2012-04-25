@@ -36,7 +36,7 @@ import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class ProjectManager {
-
+	//this comment should be gone after backout
 	private Project project;
 	private Script currentScript;
 	private Sprite currentSprite;
