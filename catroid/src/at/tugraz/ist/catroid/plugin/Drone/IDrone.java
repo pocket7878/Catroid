@@ -22,8 +22,6 @@
  */
 package at.tugraz.ist.catroid.plugin.Drone;
 
-import android.content.Context;
-
 public interface IDrone {
 
 	public abstract boolean connect();
@@ -77,7 +75,5 @@ public interface IDrone {
 	public abstract boolean uploadFirmwareFile();
 
 	public abstract boolean restartDrone();
-
-	public abstract void setContext(Context context);
 
 }

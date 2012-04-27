@@ -269,10 +269,7 @@ public class DroneLibraryWrapper implements IDrone {
 	}
 
 	public boolean uploadFirmwareFile() {
-		this.setContext(this.droneContext);
-
 		try {
-
 			return (Boolean) this.droneInstance.getClass().getMethod("uploadFirmwareFile", (Class[]) null)
 					.invoke(this.droneInstance, (Object[]) null);
 		} catch (Exception e) {
@@ -289,13 +286,5 @@ public class DroneLibraryWrapper implements IDrone {
 			printException(e);
 		}
 		return false;
-	}
-
-	public void setContext(Context context) {
-		try {
-			this.droneInstance.getClass().getMethod("setContext", Context.class).invoke(this.droneInstance, context);
-		} catch (Exception e) {
-			printException(e);
-		}
 	}
 }
