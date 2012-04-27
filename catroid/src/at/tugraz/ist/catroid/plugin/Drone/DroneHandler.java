@@ -67,6 +67,7 @@ public class DroneHandler {
 		if (DroneHandler.getInstance().getDrone().getFlyingMode() == -1) {
 			return false;
 		}
+
 		return wasAlreadyConnected;
 	}
 
