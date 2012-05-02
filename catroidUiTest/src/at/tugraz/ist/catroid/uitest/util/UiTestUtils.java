@@ -178,6 +178,9 @@ public class UiTestUtils {
 		brickCategoryMap.put(R.string.brick_note, R.string.category_control);
 		brickCategoryMap.put(R.string.brick_forever, R.string.category_control);
 		brickCategoryMap.put(R.string.brick_repeat, R.string.category_control);
+
+		brickCategoryMap.put(R.string.brick_set_gravity, R.string.category_physic);
+		brickCategoryMap.put(R.string.brick_set_mass, R.string.category_physic);
 	}
 
 	public static int getBrickCategory(Solo solo, int brickStringId) {
@@ -201,7 +204,7 @@ public class UiTestUtils {
 	}
 
 	public static void addNewBrick(Solo solo, int categoryStringId, int brickStringId) {
-		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_add_sprite);
+		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_add_button);
 		solo.clickOnText(solo.getCurrentActivity().getString(categoryStringId));
 		solo.clickOnText(solo.getCurrentActivity().getString(brickStringId));
 	}

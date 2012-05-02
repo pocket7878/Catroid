@@ -37,22 +37,21 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.utils.Utils;
 
-import com.badlogic.gdx.math.Vector2;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-public class SetVelocityBrick implements Brick, OnClickListener {
+public class SetMassBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private PhysicWorld physicWorld;
 	private Sprite sprite;
-	private Vector2 velocity;
+	private float mass;
 
 	@XStreamOmitField
 	private transient View view;
 
-	public SetVelocityBrick(PhysicWorld physicWorld, Sprite sprite, float x, float y) {
+	public SetMassBrick(PhysicWorld physicWorld, Sprite sprite, float mass) {
 		this.physicWorld = physicWorld;
 		this.sprite = sprite;
-		this.velocity = new Vector2(x, y);
+		this.mass = mass;
 	}
 
 	public int getRequiredResources() {
@@ -60,7 +59,7 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 	}
 
 	public void execute() {
-		physicWorld.setVelocity(sprite, velocity);
+		physicWorld.setMass(sprite, mass);
 	}
 
 	public Sprite getSprite() {
@@ -68,53 +67,39 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 	}
 
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
-		view = View.inflate(context, R.layout.brick_set_velocity, null);
+		view = View.inflate(context, R.layout.brick_set_mass, null);
 
-		EditText editX = (EditText) view.findViewById(R.id.brick_set_velocity_x_edit_text);
-		editX.setText(String.valueOf(velocity.x));
-
+		EditText editX = (EditText) view.findViewById(R.id.brick_set_mass_edit_text);
+		editX.setText(String.valueOf(mass));
 		editX.setOnClickListener(this);
-
-		EditText editY = (EditText) view.findViewById(R.id.brick_set_velocity_y_edit_text);
-		editY.setText(String.valueOf(velocity.y));
-
-		editY.setOnClickListener(this);
 
 		return view;
 	}
 
 	public View getPrototypeView(Context context) {
-		return View.inflate(context, R.layout.brick_set_velocity, null);
+		return View.inflate(context, R.layout.brick_set_mass, null);
 	}
 
 	@Override
 	public Brick clone() {
-		return new SetVelocityBrick(physicWorld, sprite, velocity.x, velocity.y);
+		return new SetMassBrick(physicWorld, getSprite(), mass);
 	}
 
-	public void onClick(final View view) {
+	public void onClick(View view) {
 		final Context context = view.getContext();
 
 		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
 		final EditText input = new EditText(context);
-		if (view.getId() == R.id.brick_set_velocity_x_edit_text) {
-			input.setText(String.valueOf(velocity.x));
-		} else if (view.getId() == R.id.brick_set_velocity_y_edit_text) {
-			input.setText(String.valueOf(velocity.y));
-		}
-		input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED
-				| InputType.TYPE_NUMBER_FLAG_DECIMAL);
+		input.setText(String.valueOf(mass));
+		input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
+				| InputType.TYPE_NUMBER_FLAG_SIGNED);
 		input.setSelectAllOnFocus(true);
 		dialog.setView(input);
 		dialog.setOnCancelListener((OnCancelListener) context);
 		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				try {
-					if (view.getId() == R.id.brick_set_velocity_x_edit_text) {
-						velocity.x = Float.parseFloat(input.getText().toString());
-					} else if (view.getId() == R.id.brick_set_velocity_y_edit_text) {
-						velocity.y = Float.parseFloat(input.getText().toString());
-					}
+					mass = Float.parseFloat(input.getText().toString());
 				} catch (NumberFormatException exception) {
 					Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 				}
