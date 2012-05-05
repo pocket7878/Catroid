@@ -36,7 +36,10 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.StartScript;
+import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.MyProjectsActivity.ProjectData;
@@ -262,13 +265,17 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.sleep(500);
 		solo.clickInList(0);
 		solo.sleep(200);
-		solo.clickOnText("cat");
-		//solo.clickOnText(getActivity().getString(R.string.scripts));
-		solo.sleep(20000);
-		//solo.clickOnText(getActivity().getString(R.string.start));
-		//solo.sleep(1000);
-		//solo.goBack();
-		//solo.goBack();
+		//solo.clickOnText("cat");
+		solo.clickInList(0);
+
+		//		solo.clickOnText(getActivity().getString(R.string.start));
+		//		solo.sleep(5000);
+		//		solo.goBack();
+		//		solo.goBack();
+		//		solo.goBack();
+		//		solo.goBack();
+		//
+		//		solo.clickOnButton(getActivity().getString(R.string.my_projects));
 
 		//solo.sleep(1000);
 		//solo.goBack();
@@ -600,26 +607,43 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		ProjectManager projectManager = ProjectManager.getInstance();
 
 		UiTestUtils.clearAllUtilTestProjects();
-		UiTestUtils.createTestProject();
-		File imageFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "catroid_sunglasses.png",
-				RESOURCE_IMAGE, getActivity(), UiTestUtils.FileTypes.IMAGE);
-		File imageFile2 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "catroid_banzai.png",
-				RESOURCE_IMAGE2, getActivity(), UiTestUtils.FileTypes.IMAGE);
+		UiTestUtils.createEmptyProject();
 
-		File paintroidImageFile = UiTestUtils.createTestMediaFile(Consts.DEFAULT_ROOT + "/testFile.png",
-				R.drawable.catroid_banzai, getActivity());
+		SetCostumeBrick setBackgroundBrick = new SetCostumeBrick(projectManager.getCurrentSprite());
+		projectManager.getCurrentScript().addBrick(setBackgroundBrick);
+
+		Sprite sprite = new Sprite("cat");
+		projectManager.setCurrentSprite(sprite);
+
+		int RESOURCE_IMAGE_COSTUME1 = R.drawable.catroid_sunglasses;
+		int RESOURCE_IMAGE_COSTUME2 = R.drawable.catroid_banzai;
+
+		File imageFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "catroid_sunglasses.png",
+				RESOURCE_IMAGE_COSTUME1, getActivity(), UiTestUtils.FileTypes.IMAGE);
+		File imageFile2 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "catroid_banzai.png",
+				RESOURCE_IMAGE_COSTUME2, getActivity(), UiTestUtils.FileTypes.IMAGE);
 
 		ArrayList<CostumeData> costumeDataList = projectManager.getCurrentSprite().getCostumeDataList();
-		CostumeData costumeData = new CostumeData();
-		costumeData.setCostumeFilename(imageFile.getName());
-		costumeData.setCostumeName(costumeName);
-		costumeDataList.add(costumeData);
-		projectManager.fileChecksumContainer.addChecksum(costumeData.getChecksum(), costumeData.getAbsolutePath());
-		costumeData = new CostumeData();
-		costumeData.setCostumeFilename(imageFile2.getName());
-		costumeData.setCostumeName("costumeNameTest2");
-		costumeDataList.add(costumeData);
-		projectManager.fileChecksumContainer.addChecksum(costumeData.getChecksum(), costumeData.getAbsolutePath());
+		CostumeData costumeData1 = new CostumeData();
+		costumeData1.setCostumeFilename(imageFile.getName());
+		costumeData1.setCostumeName("costumeNameTest");
+		costumeDataList.add(costumeData1);
+		projectManager.fileChecksumContainer.addChecksum(costumeData1.getChecksum(), costumeData1.getAbsolutePath());
+
+		CostumeData costumeData2 = new CostumeData();
+		costumeData2.setCostumeFilename(imageFile2.getName());
+		costumeData2.setCostumeName("costumeNameTest2");
+		costumeDataList.add(costumeData2);
+		projectManager.fileChecksumContainer.addChecksum(costumeData2.getChecksum(), costumeData2.getAbsolutePath());
+
+		Script script = new StartScript(sprite);
+		SetCostumeBrick setCostumeBrick = new SetCostumeBrick(sprite);
+		script.addBrick(setCostumeBrick);
+
+		sprite.addScript(script);
+		projectManager.addSprite(sprite);
+		setCostumeBrick.setCostume(costumeData1);
+
 		Display display = getActivity().getWindowManager().getDefaultDisplay();
 		projectManager.getCurrentProject().virtualScreenHeight = display.getHeight();
 		projectManager.getCurrentProject().virtualScreenWidth = display.getWidth();
