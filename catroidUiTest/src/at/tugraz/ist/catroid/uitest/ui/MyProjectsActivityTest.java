@@ -34,8 +34,13 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.common.CostumeData;
+import at.tugraz.ist.catroid.common.FileChecksumContainer;
 import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.StartScript;
+import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.MyProjectsActivity.ProjectData;
@@ -253,6 +258,56 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 				}
 			}
 		}
+	}
+
+	public void testScreenshotUpdate() {
+		createProjectWithCostumes();
+		solo.clickOnButton(getActivity().getString(R.string.my_projects));
+		solo.sleep(500);
+		solo.clickInList(0);
+		solo.sleep(200);
+		solo.clickOnText("cat");
+		//solo.clickOnText(getActivity().getString(R.string.scripts));
+		solo.sleep(20000);
+		//solo.clickOnText(getActivity().getString(R.string.start));
+		//solo.sleep(1000);
+		//solo.goBack();
+		//solo.goBack();
+
+		//solo.sleep(1000);
+		//solo.goBack();
+		//solo.clickOnButton(getActivity().getString(R.string.my_projects));
+
+		//				solo.sleep(200);
+		//				int currentViewID;
+		//				int imageViewID = R.id.my_projects_activity_project_image;
+		//				int newImageViewID;
+		//		
+		//				for (View viewToTest : solo.getCurrentViews()) {
+		//					currentViewID = viewToTest.getId();
+		//					if (imageViewID == currentViewID) {
+		//		
+		//						solo.clickInList(0);
+		//						solo.sleep(100);
+		//		
+		//						solo.clickOnText(getActivity().getString(R.string.background));
+		//						solo.clickOnText(getActivity().getString(R.string.backgrounds));
+		//						solo.clickOnButton(getActivity().getString(R.string.sound_delete));
+		//						solo.clickOnText("costumeNameTest2");
+		//		
+		//						EditText editTextCostumeName = (EditText) solo.getView(R.id.dialog_rename_costume_editText);
+		//						solo.clearEditText(editTextCostumeName);
+		//						solo.enterText(editTextCostumeName, "costumeNameTest");
+		//						solo.goBack();
+		//						String buttonOKText = solo.getCurrentActivity().getString(R.string.ok);
+		//						solo.clickOnButton(buttonOKText);
+		//						solo.waitForDialogToClose(1000);
+		//		
+		//					}
+		//				}
+
+		solo.sleep(5000);
+
 	}
 
 	public void testDeleteProject() {
@@ -542,5 +597,55 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 
 		UiTestUtils.saveFileToProject(UiTestUtils.PROJECTNAME1, "screenshot.png", IMAGE_RESOURCE_3,
 				getInstrumentation().getContext(), UiTestUtils.FileTypes.ROOT);
+	}
+
+	private void createProjectWithCostumes() {
+
+		ProjectManager projectManager = ProjectManager.getInstance();
+		Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+
+		Sprite firstSprite = new Sprite("cat");
+
+		Script testScript = new StartScript(firstSprite);
+
+		ArrayList<Brick> brickList = new ArrayList<Brick>();
+		brickList.add(new SetCostumeBrick(firstSprite));
+
+		for (Brick brick : brickList) {
+			testScript.addBrick(brick);
+		}
+
+		firstSprite.addScript(testScript);
+		project.addSprite(firstSprite);
+
+		projectManager.setCurrentSprite(firstSprite);
+		projectManager.setCurrentScript(testScript);
+
+		int RESOURCE_IMAGE = R.drawable.catroid_sunglasses;
+		int RESOURCE_IMAGE2 = R.drawable.catroid_banzai;
+
+		File imageFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "catroid_sunglasses.png",
+				RESOURCE_IMAGE, getActivity(), UiTestUtils.FileTypes.IMAGE);
+		File imageFile2 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "catroid_banzai.png",
+				RESOURCE_IMAGE2, getActivity(), UiTestUtils.FileTypes.IMAGE);
+
+		//						File paintroidImageFile = UiTestUtils.createTestMediaFile(Consts.DEFAULT_ROOT + "/testFile.png",
+		//								R.drawable.catroid_banzai, getActivity());
+
+		ArrayList<CostumeData> costumeDataList = projectManager.getCurrentSprite().getCostumeDataList();
+		CostumeData costumeData = new CostumeData();
+		costumeData.setCostumeFilename(imageFile.getName());
+		costumeData.setCostumeName("costumeNametest");
+		costumeDataList.add(costumeData);
+		projectManager.fileChecksumContainer.addChecksum(costumeData.getChecksum(), costumeData.getAbsolutePath());
+		costumeData = new CostumeData();
+		costumeData.setCostumeFilename(imageFile2.getName());
+		costumeData.setCostumeName("costumeNameTest2");
+		costumeDataList.add(costumeData);
+		projectManager.fileChecksumContainer.addChecksum(costumeData.getChecksum(), costumeData.getAbsolutePath());
+
+		projectManager.fileChecksumContainer = new FileChecksumContainer();
+		projectManager.setProject(project);
+
 	}
 }
