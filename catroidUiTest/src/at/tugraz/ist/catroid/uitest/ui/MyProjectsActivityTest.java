@@ -28,19 +28,15 @@ import java.util.ArrayList;
 
 import android.graphics.Bitmap;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.Display;
 import android.view.View;
 import android.widget.EditText;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.common.CostumeData;
-import at.tugraz.ist.catroid.common.FileChecksumContainer;
 import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.content.StartScript;
-import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.MyProjectsActivity.ProjectData;
@@ -602,40 +598,21 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 	private void createProjectWithCostumes() {
 
 		ProjectManager projectManager = ProjectManager.getInstance();
-		Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 
-		Sprite firstSprite = new Sprite("cat");
-
-		Script testScript = new StartScript(firstSprite);
-
-		ArrayList<Brick> brickList = new ArrayList<Brick>();
-		brickList.add(new SetCostumeBrick(firstSprite));
-
-		for (Brick brick : brickList) {
-			testScript.addBrick(brick);
-		}
-
-		firstSprite.addScript(testScript);
-		project.addSprite(firstSprite);
-
-		projectManager.setCurrentSprite(firstSprite);
-		projectManager.setCurrentScript(testScript);
-
-		int RESOURCE_IMAGE = R.drawable.catroid_sunglasses;
-		int RESOURCE_IMAGE2 = R.drawable.catroid_banzai;
-
+		UiTestUtils.clearAllUtilTestProjects();
+		UiTestUtils.createTestProject();
 		File imageFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "catroid_sunglasses.png",
 				RESOURCE_IMAGE, getActivity(), UiTestUtils.FileTypes.IMAGE);
 		File imageFile2 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "catroid_banzai.png",
 				RESOURCE_IMAGE2, getActivity(), UiTestUtils.FileTypes.IMAGE);
 
-		//						File paintroidImageFile = UiTestUtils.createTestMediaFile(Consts.DEFAULT_ROOT + "/testFile.png",
-		//								R.drawable.catroid_banzai, getActivity());
+		File paintroidImageFile = UiTestUtils.createTestMediaFile(Consts.DEFAULT_ROOT + "/testFile.png",
+				R.drawable.catroid_banzai, getActivity());
 
 		ArrayList<CostumeData> costumeDataList = projectManager.getCurrentSprite().getCostumeDataList();
 		CostumeData costumeData = new CostumeData();
 		costumeData.setCostumeFilename(imageFile.getName());
-		costumeData.setCostumeName("costumeNametest");
+		costumeData.setCostumeName(costumeName);
 		costumeDataList.add(costumeData);
 		projectManager.fileChecksumContainer.addChecksum(costumeData.getChecksum(), costumeData.getAbsolutePath());
 		costumeData = new CostumeData();
@@ -643,9 +620,9 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		costumeData.setCostumeName("costumeNameTest2");
 		costumeDataList.add(costumeData);
 		projectManager.fileChecksumContainer.addChecksum(costumeData.getChecksum(), costumeData.getAbsolutePath());
-
-		projectManager.fileChecksumContainer = new FileChecksumContainer();
-		projectManager.setProject(project);
+		Display display = getActivity().getWindowManager().getDefaultDisplay();
+		projectManager.getCurrentProject().virtualScreenHeight = display.getHeight();
+		projectManager.getCurrentProject().virtualScreenWidth = display.getWidth();
 
 	}
 }
