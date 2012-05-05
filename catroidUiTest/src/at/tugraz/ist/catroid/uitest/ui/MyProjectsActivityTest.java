@@ -265,49 +265,28 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.sleep(500);
 		solo.clickInList(0);
 		solo.sleep(200);
-		//solo.clickOnText("cat");
+
+		solo.clickOnText(getActivity().getString(R.string.start));
+		solo.sleep(5000);
+		solo.goBack();
+		solo.goBack();
+		solo.goBack();
+
+		solo.clickOnButton(getActivity().getString(R.string.my_projects));
+		solo.sleep(200);
 		solo.clickInList(0);
+		solo.sleep(100);
+		solo.clickOnText("cat");
+		solo.clickOnText(getActivity().getString(R.string.costumes));
+		solo.clickOnButton(getActivity().getString(R.string.sound_delete));
 
-		//		solo.clickOnText(getActivity().getString(R.string.start));
-		//		solo.sleep(5000);
-		//		solo.goBack();
-		//		solo.goBack();
-		//		solo.goBack();
-		//		solo.goBack();
-		//
-		//		solo.clickOnButton(getActivity().getString(R.string.my_projects));
-
-		//solo.sleep(1000);
-		//solo.goBack();
-		//solo.clickOnButton(getActivity().getString(R.string.my_projects));
-
-		//				solo.sleep(200);
-		//				int currentViewID;
-		//				int imageViewID = R.id.my_projects_activity_project_image;
-		//				int newImageViewID;
-		//		
-		//				for (View viewToTest : solo.getCurrentViews()) {
-		//					currentViewID = viewToTest.getId();
-		//					if (imageViewID == currentViewID) {
-		//		
-		//						solo.clickInList(0);
-		//						solo.sleep(100);
-		//		
-		//						solo.clickOnText(getActivity().getString(R.string.background));
-		//						solo.clickOnText(getActivity().getString(R.string.backgrounds));
-		//						solo.clickOnButton(getActivity().getString(R.string.sound_delete));
-		//						solo.clickOnText("costumeNameTest2");
-		//		
-		//						EditText editTextCostumeName = (EditText) solo.getView(R.id.dialog_rename_costume_editText);
-		//						solo.clearEditText(editTextCostumeName);
-		//						solo.enterText(editTextCostumeName, "costumeNameTest");
-		//						solo.goBack();
-		//						String buttonOKText = solo.getCurrentActivity().getString(R.string.ok);
-		//						solo.clickOnButton(buttonOKText);
-		//						solo.waitForDialogToClose(1000);
-		//		
-		//					}
-		//				}
+		solo.clickOnText("costumeNameTest2");
+		EditText editTextCostumeName = (EditText) solo.getView(R.id.dialog_rename_costume_editText);
+		solo.clearEditText(editTextCostumeName);
+		solo.enterText(editTextCostumeName, "costumeNameTest");
+		//	solo.sleep(200);
+		//	solo.clickOnButton(R.string.ok);
+		//	solo.waitForDialogToClose(1000);
 
 		solo.sleep(5000);
 
@@ -609,12 +588,6 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		UiTestUtils.clearAllUtilTestProjects();
 		UiTestUtils.createEmptyProject();
 
-		SetCostumeBrick setBackgroundBrick = new SetCostumeBrick(projectManager.getCurrentSprite());
-		projectManager.getCurrentScript().addBrick(setBackgroundBrick);
-
-		Sprite sprite = new Sprite("cat");
-		projectManager.setCurrentSprite(sprite);
-
 		int RESOURCE_IMAGE_COSTUME1 = R.drawable.catroid_sunglasses;
 		int RESOURCE_IMAGE_COSTUME2 = R.drawable.catroid_banzai;
 
@@ -622,6 +595,22 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 				RESOURCE_IMAGE_COSTUME1, getActivity(), UiTestUtils.FileTypes.IMAGE);
 		File imageFile2 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "catroid_banzai.png",
 				RESOURCE_IMAGE_COSTUME2, getActivity(), UiTestUtils.FileTypes.IMAGE);
+		File imageFile3 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "screenshot.png",
+				IMAGE_RESOURCE_3, getInstrumentation().getContext(), UiTestUtils.FileTypes.IMAGE);
+
+		ArrayList<CostumeData> backgroundsList = projectManager.getCurrentSprite().getCostumeDataList();
+		CostumeData background = new CostumeData();
+		background.setCostumeFilename(imageFile3.getName());
+		background.setCostumeName("background");
+		backgroundsList.add(background);
+		projectManager.fileChecksumContainer.addChecksum(background.getChecksum(), background.getAbsolutePath());
+
+		SetCostumeBrick setBackgroundBrick = new SetCostumeBrick(projectManager.getCurrentSprite());
+		projectManager.getCurrentScript().addBrick(setBackgroundBrick);
+		setBackgroundBrick.setCostume(background);
+
+		Sprite sprite = new Sprite("cat");
+		projectManager.setCurrentSprite(sprite);
 
 		ArrayList<CostumeData> costumeDataList = projectManager.getCurrentSprite().getCostumeDataList();
 		CostumeData costumeData1 = new CostumeData();
