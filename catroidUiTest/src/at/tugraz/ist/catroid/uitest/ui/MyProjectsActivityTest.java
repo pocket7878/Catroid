@@ -271,8 +271,11 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.goBack();
 		solo.goBack();
 		solo.goBack();
-
+		solo.sleep(200);
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
+		solo.sleep(200);
+		View originalScreenshot = solo.getView(R.id.my_projects_activity_project_image);
+
 		solo.sleep(200);
 		solo.clickInList(0);
 		solo.sleep(100);
@@ -280,13 +283,22 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.clickOnText(getActivity().getString(R.string.costumes));
 		solo.clickOnButton(getActivity().getString(R.string.sound_delete));
 
+		//TODO: this should be adapted to the delete dialog
+
 		solo.clickOnText("costumeNameTest2");
 		EditText editTextCostumeName = (EditText) solo.getView(R.id.dialog_rename_costume_editText);
 		solo.clearEditText(editTextCostumeName);
-		solo.enterText(editTextCostumeName, "costumeNameTest");
-		//	solo.sleep(200);
-		//	solo.clickOnButton(R.string.ok);
-		//	solo.waitForDialogToClose(1000);
+		UiTestUtils.enterText(solo, 0, "costumeNameTest");
+		solo.goBack();
+		solo.clickOnText(getActivity().getString(R.string.ok), 1, true);
+
+		solo.goBack();
+		solo.goBack();
+		solo.clickOnButton(getActivity().getString(R.string.my_projects));
+
+		View newScreenshot = solo.getView(R.id.my_projects_activity_project_image);
+
+		//assertEquals("The screenshot has not been changed", newScreenshot, originalScreenshot);
 
 		solo.sleep(5000);
 
