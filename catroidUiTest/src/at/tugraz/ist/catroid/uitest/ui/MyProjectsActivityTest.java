@@ -31,6 +31,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.view.Display;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
@@ -262,7 +263,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 	public void testScreenshotUpdate() {
 		createProjectWithCostumes();
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
-		solo.sleep(500);
+		solo.sleep(200);
 		solo.clickInList(0);
 		solo.sleep(200);
 
@@ -274,7 +275,16 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.sleep(200);
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
 		solo.sleep(200);
-		View originalScreenshot = solo.getView(R.id.my_projects_activity_project_image);
+
+		ImageView originalScreenshot = null;
+		for (ImageView viewToTest : solo.getCurrentImageViews()) {
+			if (viewToTest.getId() == R.id.my_projects_activity_project_image) {
+				originalScreenshot = viewToTest;
+			}
+
+		}
+
+		assertNotNull("The screenshot ImageView has not been retrieved", originalScreenshot);
 
 		solo.sleep(200);
 		solo.clickInList(0);
@@ -296,9 +306,30 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.goBack();
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
 
-		View newScreenshot = solo.getView(R.id.my_projects_activity_project_image);
+		solo.sleep(200);
+		solo.clickInList(0);
+		solo.sleep(200);
 
-		//assertEquals("The screenshot has not been changed", newScreenshot, originalScreenshot);
+		solo.clickOnText(getActivity().getString(R.string.start));
+		solo.sleep(5000);
+		solo.goBack();
+		solo.goBack();
+		solo.goBack();
+		solo.sleep(200);
+		solo.clickOnButton(getActivity().getString(R.string.my_projects));
+		solo.sleep(200);
+
+		ImageView newScreenshot = null;
+		for (ImageView viewToTest : solo.getCurrentImageViews()) {
+			if (viewToTest.getId() == R.id.my_projects_activity_project_image) {
+				newScreenshot = viewToTest;
+			}
+
+		}
+
+		assertNotNull("The screenshot ImageView has not been retrieved", newScreenshot);
+
+		assertNotSame("The screenshot has not been changed", newScreenshot, originalScreenshot);
 
 		solo.sleep(5000);
 
