@@ -31,15 +31,12 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.view.Display;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
@@ -276,60 +273,54 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
 		solo.sleep(200);
 
-		ImageView originalScreenshot = null;
-		for (ImageView viewToTest : solo.getCurrentImageViews()) {
-			if (viewToTest.getId() == R.id.my_projects_activity_project_image) {
-				originalScreenshot = viewToTest;
-			}
+		Bitmap viewBitmap;
+		int screenshotID = R.id.my_projects_activity_project_image;
+		int pixelOriginal = -1;
+		for (View viewToTest : solo.getCurrentViews()) {
+			if (viewToTest.getId() == screenshotID) {
+				viewToTest.buildDrawingCache();
+				viewBitmap = viewToTest.getDrawingCache();
+				pixelOriginal = viewBitmap.getPixel(1, 1);
+				viewToTest.destroyDrawingCache();
 
+			}
 		}
 
-		assertNotNull("The screenshot ImageView has not been retrieved", originalScreenshot);
+		assertFalse("The pixel has not been initialised", pixelOriginal == -1);
 
 		solo.sleep(200);
 		solo.clickInList(0);
 		solo.sleep(100);
-		solo.clickOnText("cat");
-		solo.clickOnText(getActivity().getString(R.string.costumes));
-		solo.clickOnButton(getActivity().getString(R.string.sound_delete));
+		solo.clickOnText(getActivity().getString(R.string.background));
 
-		//TODO: this should be adapted to the delete dialog
-
-		solo.clickOnText("costumeNameTest2");
-		EditText editTextCostumeName = (EditText) solo.getView(R.id.dialog_rename_costume_editText);
-		solo.clearEditText(editTextCostumeName);
-		UiTestUtils.enterText(solo, 0, "costumeNameTest");
-		solo.goBack();
-		solo.clickOnText(getActivity().getString(R.string.ok), 1, true);
-
-		solo.goBack();
-		solo.goBack();
-		solo.clickOnButton(getActivity().getString(R.string.my_projects));
-
-		solo.sleep(200);
-		solo.clickInList(0);
-		solo.sleep(200);
+		solo.clickOnText("backgroundWhite");
+		solo.clickOnText("backgroundBlack");
 
 		solo.clickOnText(getActivity().getString(R.string.start));
-		solo.sleep(5000);
+		solo.sleep(8000);
+
+		solo.goBack();
 		solo.goBack();
 		solo.goBack();
 		solo.goBack();
 		solo.sleep(200);
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
-		solo.sleep(200);
 
-		ImageView newScreenshot = null;
-		for (ImageView viewToTest : solo.getCurrentImageViews()) {
-			if (viewToTest.getId() == R.id.my_projects_activity_project_image) {
-				newScreenshot = viewToTest;
+		Bitmap newViewBitmap;
+		int pixelNew = -1;
+		for (View viewToTest : solo.getCurrentViews()) {
+			if (viewToTest.getId() == screenshotID) {
+				viewToTest.buildDrawingCache();
+				newViewBitmap = viewToTest.getDrawingCache();
+				pixelNew = newViewBitmap.getPixel(1, 1);
+				viewToTest.destroyDrawingCache();
+
 			}
-
 		}
 
-		assertNotNull("The screenshot ImageView has not been retrieved", newScreenshot);
+		assertFalse("The pixel has not been initialised", pixelNew == -1);
 
-		assertNotSame("The screenshot has not been changed", newScreenshot, originalScreenshot);
+		assertFalse("The bitmap has not been changed", pixelOriginal == pixelNew);
 
 		solo.sleep(5000);
 
@@ -631,50 +622,29 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		UiTestUtils.clearAllUtilTestProjects();
 		UiTestUtils.createEmptyProject();
 
-		int RESOURCE_IMAGE_COSTUME1 = R.drawable.catroid_sunglasses;
-		int RESOURCE_IMAGE_COSTUME2 = R.drawable.catroid_banzai;
-
-		File imageFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "catroid_sunglasses.png",
-				RESOURCE_IMAGE_COSTUME1, getActivity(), UiTestUtils.FileTypes.IMAGE);
-		File imageFile2 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "catroid_banzai.png",
-				RESOURCE_IMAGE_COSTUME2, getActivity(), UiTestUtils.FileTypes.IMAGE);
-		File imageFile3 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "screenshot.png",
+		File imageFile1 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "screenshot.png",
+				IMAGE_RESOURCE_2, getInstrumentation().getContext(), UiTestUtils.FileTypes.IMAGE);
+		File imageFile2 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "screenshot.png",
 				IMAGE_RESOURCE_3, getInstrumentation().getContext(), UiTestUtils.FileTypes.IMAGE);
 
 		ArrayList<CostumeData> backgroundsList = projectManager.getCurrentSprite().getCostumeDataList();
-		CostumeData background = new CostumeData();
-		background.setCostumeFilename(imageFile3.getName());
-		background.setCostumeName("background");
-		backgroundsList.add(background);
-		projectManager.fileChecksumContainer.addChecksum(background.getChecksum(), background.getAbsolutePath());
+		CostumeData backgroundWhite = new CostumeData();
+		backgroundWhite.setCostumeFilename(imageFile1.getName());
+		backgroundWhite.setCostumeName("backgroundWhite");
+		backgroundsList.add(backgroundWhite);
+		projectManager.fileChecksumContainer.addChecksum(backgroundWhite.getChecksum(),
+				backgroundWhite.getAbsolutePath());
+
+		CostumeData backgroundBlack = new CostumeData();
+		backgroundBlack.setCostumeFilename(imageFile2.getName());
+		backgroundBlack.setCostumeName("backgroundBlack");
+		backgroundsList.add(backgroundBlack);
+		projectManager.fileChecksumContainer.addChecksum(backgroundBlack.getChecksum(),
+				backgroundBlack.getAbsolutePath());
 
 		SetCostumeBrick setBackgroundBrick = new SetCostumeBrick(projectManager.getCurrentSprite());
 		projectManager.getCurrentScript().addBrick(setBackgroundBrick);
-		setBackgroundBrick.setCostume(background);
-
-		Sprite sprite = new Sprite("cat");
-		projectManager.setCurrentSprite(sprite);
-
-		ArrayList<CostumeData> costumeDataList = projectManager.getCurrentSprite().getCostumeDataList();
-		CostumeData costumeData1 = new CostumeData();
-		costumeData1.setCostumeFilename(imageFile.getName());
-		costumeData1.setCostumeName("costumeNameTest");
-		costumeDataList.add(costumeData1);
-		projectManager.fileChecksumContainer.addChecksum(costumeData1.getChecksum(), costumeData1.getAbsolutePath());
-
-		CostumeData costumeData2 = new CostumeData();
-		costumeData2.setCostumeFilename(imageFile2.getName());
-		costumeData2.setCostumeName("costumeNameTest2");
-		costumeDataList.add(costumeData2);
-		projectManager.fileChecksumContainer.addChecksum(costumeData2.getChecksum(), costumeData2.getAbsolutePath());
-
-		Script script = new StartScript(sprite);
-		SetCostumeBrick setCostumeBrick = new SetCostumeBrick(sprite);
-		script.addBrick(setCostumeBrick);
-
-		sprite.addScript(script);
-		projectManager.addSprite(sprite);
-		setCostumeBrick.setCostume(costumeData1);
+		setBackgroundBrick.setCostume(backgroundWhite);
 
 		Display display = getActivity().getWindowManager().getDefaultDisplay();
 		projectManager.getCurrentProject().virtualScreenHeight = display.getHeight();
