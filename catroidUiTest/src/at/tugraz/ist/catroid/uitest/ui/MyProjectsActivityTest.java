@@ -258,7 +258,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 	}
 
 	public void testScreenshotUpdate() {
-		createProjectWithCostumes();
+		createProjectWithBackgrounds();
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
 		solo.sleep(200);
 		solo.clickInList(0);
@@ -615,7 +615,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 				getInstrumentation().getContext(), UiTestUtils.FileTypes.ROOT);
 	}
 
-	private void createProjectWithCostumes() {
+	private void createProjectWithBackgrounds() {
 
 		ProjectManager projectManager = ProjectManager.getInstance();
 
