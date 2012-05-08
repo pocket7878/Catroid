@@ -54,6 +54,8 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 	private final int IMAGE_RESOURCE_1 = at.tugraz.ist.catroid.uitest.R.drawable.catroid_sunglasses;
 	private final int IMAGE_RESOURCE_2 = at.tugraz.ist.catroid.uitest.R.drawable.background_white;
 	private final int IMAGE_RESOURCE_3 = at.tugraz.ist.catroid.uitest.R.drawable.background_black;
+	private final int IMAGE_RESOURCE_4 = at.tugraz.ist.catroid.uitest.R.drawable.background_green;
+	private final int IMAGE_RESOURCE_5 = at.tugraz.ist.catroid.uitest.R.drawable.background_red;
 	private Solo solo;
 	private final String ZIPFILE_NAME = "testzip";
 	private File renameDirectory = null;
@@ -265,7 +267,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.sleep(200);
 
 		solo.clickOnText(getActivity().getString(R.string.start));
-		solo.sleep(5000);
+		solo.sleep(8000);
 		solo.goBack();
 		solo.goBack();
 		solo.goBack();
@@ -294,30 +296,30 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.sleep(100);
 		solo.clickOnText(getActivity().getString(R.string.background));
 
-		solo.clickOnText("backgroundWhite");
-		solo.clickOnText("backgroundBlack");
+		solo.clickOnText("backgroundGreen");
+		solo.clickOnText("backgroundRed");
 
 		solo.clickOnText(getActivity().getString(R.string.start));
-		solo.sleep(3000);
-		solo.goBack();
-		solo.clickOnText("Screenshot");
 		solo.sleep(5000);
 
 		//solo.goBack();
+		//solo.clickOnText("Screenshot");
+		//solo.sleep(300);
+
+		solo.goBack();
 		solo.goBack();
 		solo.goBack();
 		solo.goBack();
 		solo.sleep(200);
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
 
-		Bitmap newViewBitmap;
+		Bitmap newViewBitmap = null;
 		int pixelNew = -1;
 
 		for (View viewToTest : solo.getCurrentViews()) {
 			if (viewToTest.getId() == screenshotID) {
 				viewToTest.buildDrawingCache();
 				newViewBitmap = viewToTest.getDrawingCache();
-
 				pixelNew = newViewBitmap.getPixel(1, 1);
 				viewToTest.destroyDrawingCache();
 
@@ -629,28 +631,27 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		UiTestUtils.createEmptyProject();
 
 		File imageFile1 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "screenshot.png",
-				IMAGE_RESOURCE_2, getInstrumentation().getContext(), UiTestUtils.FileTypes.IMAGE);
+				IMAGE_RESOURCE_4, getInstrumentation().getContext(), UiTestUtils.FileTypes.IMAGE);
 		File imageFile2 = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "screenshot.png",
-				IMAGE_RESOURCE_3, getInstrumentation().getContext(), UiTestUtils.FileTypes.IMAGE);
+				IMAGE_RESOURCE_5, getInstrumentation().getContext(), UiTestUtils.FileTypes.IMAGE);
 
 		ArrayList<CostumeData> backgroundsList = projectManager.getCurrentSprite().getCostumeDataList();
-		CostumeData backgroundWhite = new CostumeData();
-		backgroundWhite.setCostumeFilename(imageFile1.getName());
-		backgroundWhite.setCostumeName("backgroundWhite");
-		backgroundsList.add(backgroundWhite);
-		projectManager.fileChecksumContainer.addChecksum(backgroundWhite.getChecksum(),
-				backgroundWhite.getAbsolutePath());
+		CostumeData backgroundGreen = new CostumeData();
+		backgroundGreen.setCostumeFilename(imageFile1.getName());
+		backgroundGreen.setCostumeName("backgroundGreen");
+		backgroundsList.add(backgroundGreen);
+		projectManager.fileChecksumContainer.addChecksum(backgroundGreen.getChecksum(),
+				backgroundGreen.getAbsolutePath());
 
-		CostumeData backgroundBlack = new CostumeData();
-		backgroundBlack.setCostumeFilename(imageFile2.getName());
-		backgroundBlack.setCostumeName("backgroundBlack");
-		backgroundsList.add(backgroundBlack);
-		projectManager.fileChecksumContainer.addChecksum(backgroundBlack.getChecksum(),
-				backgroundBlack.getAbsolutePath());
+		CostumeData backgroundRed = new CostumeData();
+		backgroundRed.setCostumeFilename(imageFile2.getName());
+		backgroundRed.setCostumeName("backgroundRed");
+		backgroundsList.add(backgroundRed);
+		projectManager.fileChecksumContainer.addChecksum(backgroundRed.getChecksum(), backgroundRed.getAbsolutePath());
 
 		SetCostumeBrick setBackgroundBrick = new SetCostumeBrick(projectManager.getCurrentSprite());
 		projectManager.getCurrentScript().addBrick(setBackgroundBrick);
-		setBackgroundBrick.setCostume(backgroundWhite);
+		setBackgroundBrick.setCostume(backgroundGreen);
 
 		Display display = getActivity().getWindowManager().getDefaultDisplay();
 		projectManager.getCurrentProject().virtualScreenHeight = display.getHeight();

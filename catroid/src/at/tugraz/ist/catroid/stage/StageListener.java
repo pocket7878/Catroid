@@ -65,16 +65,7 @@ public class StageListener implements ApplicationListener {
 	private boolean finished = false;
 	private boolean firstStart = true;
 	private boolean reloadProject = false;
-
 	private boolean makeFirstScreenshot = true;
-
-	/**
-	 * @param makeFirstScreenshot
-	 *            the makeFirstScreenshot to set
-	 */
-	public void setMakeFirstScreenshot(boolean makeFirstScreenshot) {
-		this.makeFirstScreenshot = makeFirstScreenshot;
-	}
 
 	private String pathForScreenshot;
 	private int screenshotWidth;
@@ -316,7 +307,7 @@ public class StageListener implements ApplicationListener {
 				}
 				this.makeThumbnail();
 			}
-			//makeFirstScreenshot = false;
+			makeFirstScreenshot = true;
 		}
 
 		if (makeScreenshot) {
