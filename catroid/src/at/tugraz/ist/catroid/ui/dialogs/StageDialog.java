@@ -100,6 +100,8 @@ public class StageDialog extends Dialog {
 			public void onClick(View v) {
 				if (stageListener.makeScreenshot()) {
 					Utils.displayToast(stageActivity, stageActivity.getString(R.string.notification_screenshot_ok));
+					stageListener.setMakeFirstScreenshot(false);
+					//TODO: set the proper flag here in order not to make screenshots automatically
 				} else {
 					Utils.displayToast(stageActivity, stageActivity.getString(R.string.error_screenshot_failed));
 				}

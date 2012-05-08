@@ -87,7 +87,6 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 
 		setupTabHost();
 		tabHost.getTabWidget().setDividerDrawable(R.drawable.tab_divider);
-
 		Intent intent; // Reusable Intent for each tab
 
 		intent = new Intent().setClass(this, ScriptActivity.class);
@@ -139,6 +138,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 					public void onClick(View v) {
 						Intent intent = new Intent(ScriptTabActivity.this, PreStageActivity.class);
 						startActivityForResult(intent, PreStageActivity.REQUEST_RESOURCES_INIT);
+
 					}
 				}, false);
 	}

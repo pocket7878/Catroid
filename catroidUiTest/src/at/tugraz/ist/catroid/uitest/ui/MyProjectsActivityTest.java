@@ -276,6 +276,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		Bitmap viewBitmap;
 		int screenshotID = R.id.my_projects_activity_project_image;
 		int pixelOriginal = -1;
+
 		for (View viewToTest : solo.getCurrentViews()) {
 			if (viewToTest.getId() == screenshotID) {
 				viewToTest.buildDrawingCache();
@@ -297,9 +298,12 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.clickOnText("backgroundBlack");
 
 		solo.clickOnText(getActivity().getString(R.string.start));
-		solo.sleep(8000);
-
+		solo.sleep(3000);
 		solo.goBack();
+		solo.clickOnText("Screenshot");
+		solo.sleep(5000);
+
+		//solo.goBack();
 		solo.goBack();
 		solo.goBack();
 		solo.goBack();
@@ -308,10 +312,12 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 
 		Bitmap newViewBitmap;
 		int pixelNew = -1;
+
 		for (View viewToTest : solo.getCurrentViews()) {
 			if (viewToTest.getId() == screenshotID) {
 				viewToTest.buildDrawingCache();
 				newViewBitmap = viewToTest.getDrawingCache();
+
 				pixelNew = newViewBitmap.getPixel(1, 1);
 				viewToTest.destroyDrawingCache();
 
