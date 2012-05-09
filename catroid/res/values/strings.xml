@@ -319,5 +319,6 @@
     <string name="number_to_big">Value is too big!</string>
     <string name="press_keyboard_button">Press keyboard key</string>
     <string name="category_hid">HID</string>
+    <string name="brick_key_combo">Key Combo</string>
 
 </resources>

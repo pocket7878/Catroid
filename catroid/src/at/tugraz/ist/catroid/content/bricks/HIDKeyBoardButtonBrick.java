@@ -32,7 +32,7 @@ import android.widget.Spinner;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 
-public class HIDKeyBoardButtonBrick implements Brick, OnItemSelectedListener {
+public class HIDKeyBoardButtonBrick implements Brick, KeyBrickInterface, OnItemSelectedListener {
 	private static final long serialVersionUID = 1L;
 
 	//public static final int REQUIRED_RESSOURCES = BLUETOOTH_LEGO_NXT;
@@ -116,6 +116,10 @@ public class HIDKeyBoardButtonBrick implements Brick, OnItemSelectedListener {
 
 	public void onNothingSelected(AdapterView<?> arg0) {
 
+	}
+
+	public String getKeyCode() {
+		return keyCode;
 	}
 
 }
