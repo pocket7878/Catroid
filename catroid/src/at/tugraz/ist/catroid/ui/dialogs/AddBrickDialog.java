@@ -58,6 +58,7 @@ import at.tugraz.ist.catroid.content.bricks.ComeToFrontBrick;
 import at.tugraz.ist.catroid.content.bricks.ForeverBrick;
 import at.tugraz.ist.catroid.content.bricks.GlideToBrick;
 import at.tugraz.ist.catroid.content.bricks.GoNStepsBackBrick;
+import at.tugraz.ist.catroid.content.bricks.HIDKeyBoardButtonBrick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.IfOnEdgeBounceBrick;
 import at.tugraz.ist.catroid.content.bricks.MoveNStepsBrick;
@@ -170,6 +171,10 @@ public class AddBrickDialog extends Dialog {
 		legoNXTBrickList.add(new NXTMotorActionBrick(sprite, NXTMotorActionBrick.Motor.MOTOR_A, 100));
 		legoNXTBrickList.add(new NXTPlayToneBrick(sprite, 200, 1000));
 		brickMap.put(context.getString(R.string.category_lego_nxt), legoNXTBrickList);
+
+		List<Brick> hidBrickList = new ArrayList<Brick>();
+		hidBrickList.add(new HIDKeyBoardButtonBrick(sprite, HIDKeyBoardButtonBrick.KeyboardKey.MOTOR_A));
+		brickMap.put(context.getString(R.string.category_hid), hidBrickList);
 
 		return brickMap;
 	}
