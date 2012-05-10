@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.stage.StageListener;
@@ -97,10 +98,13 @@ public class StageDialog extends Dialog {
 
 		Button snapshotButton = (Button) findViewById(R.id.screenshot_button);
 		snapshotButton.setOnClickListener(new View.OnClickListener() {
+			ProjectManager projectManager = ProjectManager.getInstance();
+
 			public void onClick(View v) {
 				if (stageListener.makeScreenshot()) {
 					Utils.displayToast(stageActivity, stageActivity.getString(R.string.notification_screenshot_ok));
-					//stageListener.setMakeFirstScreenshot(false);
+					projectManager.getCurrentProject().setManualScreenshot(true);
+					projectManager.saveProject();
 				} else {
 					Utils.displayToast(stageActivity, stageActivity.getString(R.string.error_screenshot_failed));
 				}

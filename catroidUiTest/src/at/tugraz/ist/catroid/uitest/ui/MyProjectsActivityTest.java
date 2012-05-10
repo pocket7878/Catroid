@@ -39,6 +39,7 @@ import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.MyProjectsActivity.ProjectData;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
@@ -261,13 +262,17 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 
 	public void testScreenshotUpdate() {
 		createProjectWithBackgrounds();
+
+		//play the project for the first time in order to set the screenshot automaticaly
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
 		solo.sleep(200);
 		solo.clickInList(0);
 		solo.sleep(200);
 
 		solo.clickOnText(getActivity().getString(R.string.start));
-		solo.sleep(8000);
+		solo.waitForActivity(StageActivity.class.getSimpleName());
+		solo.sleep(5000);
+
 		solo.goBack();
 		solo.goBack();
 		solo.goBack();
@@ -275,21 +280,28 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
 		solo.sleep(200);
 
-		Bitmap viewBitmap;
-		int screenshotID = R.id.my_projects_activity_project_image;
-		int pixelOriginal = -1;
+		Bitmap viewBitmap1;
+		int currentViewID;
+		int imageViewID = R.id.my_projects_activity_project_image;
+		int pixel1 = -1;
 
 		for (View viewToTest : solo.getCurrentViews()) {
-			if (viewToTest.getId() == screenshotID) {
+			currentViewID = viewToTest.getId();
+			if (currentViewID == imageViewID) {
 				viewToTest.buildDrawingCache();
-				viewBitmap = viewToTest.getDrawingCache();
-				pixelOriginal = viewBitmap.getPixel(1, 1);
+				viewBitmap1 = viewToTest.getDrawingCache();
+				pixel1 = viewBitmap1.getPixel(1, 1);
 				viewToTest.destroyDrawingCache();
 
 			}
 		}
 
-		assertFalse("The pixel has not been initialised", pixelOriginal == -1);
+		String greenHexValue = "ff00ff00";
+		String pixelHexValue = Integer.toHexString(pixel1);
+
+		assertEquals("The extracted pixel was not green", greenHexValue, pixelHexValue);
+
+		//now play the project again in order to see if the screenshot will be updated
 
 		solo.sleep(200);
 		solo.clickInList(0);
@@ -300,11 +312,8 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.clickOnText("backgroundRed");
 
 		solo.clickOnText(getActivity().getString(R.string.start));
+		solo.waitForActivity(StageActivity.class.getSimpleName());
 		solo.sleep(5000);
-
-		//solo.goBack();
-		//solo.clickOnText("Screenshot");
-		//solo.sleep(300);
 
 		solo.goBack();
 		solo.goBack();
@@ -313,24 +322,110 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.sleep(200);
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
 
-		Bitmap newViewBitmap = null;
-		int pixelNew = -1;
+		Bitmap viewBitmap2;
+		int pixel2 = -1;
 
 		for (View viewToTest : solo.getCurrentViews()) {
-			if (viewToTest.getId() == screenshotID) {
+			currentViewID = viewToTest.getId();
+			if (currentViewID == imageViewID) {
 				viewToTest.buildDrawingCache();
-				newViewBitmap = viewToTest.getDrawingCache();
-				pixelNew = newViewBitmap.getPixel(1, 1);
+				viewBitmap2 = viewToTest.getDrawingCache();
+				pixel2 = viewBitmap2.getPixel(1, 1);
 				viewToTest.destroyDrawingCache();
 
 			}
 		}
 
-		assertFalse("The pixel has not been initialised", pixelNew == -1);
+		String redHexValue = "ffff0000";
+		pixelHexValue = Integer.toHexString(pixel2);
 
-		assertFalse("The bitmap has not been changed", pixelOriginal == pixelNew);
+		assertEquals("The extracted pixel was not red", redHexValue, pixelHexValue);
 
+		assertFalse("The screenshot has not been changed", pixel1 == pixel2);
+
+		//now set the screenshot automaticaly
+
+		solo.sleep(200);
+		solo.clickInList(0);
+		solo.sleep(100);
+		solo.clickOnText(getActivity().getString(R.string.background));
+
+		solo.clickOnText("backgroundRed");
+		solo.clickOnText("backgroundGreen");
+
+		solo.clickOnText(getActivity().getString(R.string.start));
+		solo.waitForActivity(StageActivity.class.getSimpleName());
 		solo.sleep(5000);
+
+		solo.goBack();
+		solo.clickOnText("Screenshot");
+
+		solo.goBack();
+		solo.goBack();
+		solo.goBack();
+		solo.sleep(200);
+		solo.clickOnButton(getActivity().getString(R.string.my_projects));
+
+		Bitmap viewBitmap3;
+		int pixel3 = -1;
+
+		for (View viewToTest : solo.getCurrentViews()) {
+			currentViewID = viewToTest.getId();
+			if (currentViewID == imageViewID) {
+				viewToTest.buildDrawingCache();
+				viewBitmap3 = viewToTest.getDrawingCache();
+				pixel3 = viewBitmap3.getPixel(1, 1);
+				viewToTest.destroyDrawingCache();
+
+			}
+		}
+
+		pixelHexValue = Integer.toHexString(pixel3);
+
+		assertEquals("The extracted pixel was not green", greenHexValue, pixelHexValue);
+
+		assertTrue("The screenshot has not been changed", pixel1 == pixel3);
+
+		// test if screenshot has been automaticaly changed after setting it manualy
+
+		solo.sleep(200);
+		solo.clickInList(0);
+		solo.sleep(100);
+		solo.clickOnText(getActivity().getString(R.string.background));
+
+		solo.clickOnText("backgroundGreen");
+		solo.clickOnText("backgroundRed");
+
+		solo.clickOnText(getActivity().getString(R.string.start));
+		solo.waitForActivity(StageActivity.class.getSimpleName());
+		solo.sleep(5000);
+
+		solo.goBack();
+		solo.goBack();
+		solo.goBack();
+		solo.goBack();
+		solo.sleep(200);
+		solo.clickOnButton(getActivity().getString(R.string.my_projects));
+
+		Bitmap viewBitmap4;
+		int pixel4 = -1;
+
+		for (View viewToTest : solo.getCurrentViews()) {
+			currentViewID = viewToTest.getId();
+			if (currentViewID == imageViewID) {
+				viewToTest.buildDrawingCache();
+				viewBitmap4 = viewToTest.getDrawingCache();
+				pixel4 = viewBitmap4.getPixel(1, 1);
+				viewToTest.destroyDrawingCache();
+
+			}
+		}
+
+		pixelHexValue = Integer.toHexString(pixel4);
+
+		assertEquals("The extracted pixel was not green", greenHexValue, pixelHexValue);
+
+		assertTrue("The screenshot has not been changed", pixel1 == pixel3);
 
 	}
 

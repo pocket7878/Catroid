@@ -38,6 +38,7 @@ public class StageActivity extends AndroidApplication {
 	public static StageListener stageListener;
 	private boolean resizePossible;
 	private StageDialog stageDialog;
+	private ProjectManager projectManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,11 @@ public class StageActivity extends AndroidApplication {
 		stageDialog = new StageDialog(this, stageListener, R.style.stage_dialog);
 		this.calculateScreenSizes();
 		initialize(stageListener, true);
+		projectManager = ProjectManager.getInstance();
+
+		if (projectManager.getCurrentProject().isManualScreenshot()) {
+			stageListener.setMakeFirstScreenshot(false);
+		}
 
 	}
 
@@ -71,9 +77,9 @@ public class StageActivity extends AndroidApplication {
 
 		PreStageActivity.shutdownResources();
 
-		ProjectManager projectManager = ProjectManager.getInstance();
 		int currentSpritePos = projectManager.getCurrentSpritePosition();
 		int currentScriptPos = projectManager.getCurrentScriptPosition();
+
 		projectManager.loadProject(projectManager.getCurrentProject().getName(), this, false);
 		projectManager.setCurrentSpriteWithPosition(currentSpritePos);
 		projectManager.setCurrentScriptWithPosition(currentScriptPos);

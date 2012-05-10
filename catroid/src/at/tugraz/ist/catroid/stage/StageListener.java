@@ -89,6 +89,10 @@ public class StageListener implements ApplicationListener {
 	private float virtualWidth;
 	private float virtualHeight;
 
+	public void setMakeFirstScreenshot(boolean makeFirstScreenshot) {
+		this.makeFirstScreenshot = makeFirstScreenshot;
+	}
+
 	enum ScreenModes {
 		STRETCH, MAXIMIZE
 	};
@@ -297,17 +301,21 @@ public class StageListener implements ApplicationListener {
 
 		if (makeFirstScreenshot && !NativeAppActivity.isRunning()) {
 			File file = new File(pathForScreenshot + SCREENSHOT_FILE_NAME);
-			if (!file.exists()) {
-				File noMediaFile = new File(pathForScreenshot + ".nomedia");
-				try {
-					file.createNewFile();
-					noMediaFile.createNewFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				this.makeThumbnail();
+			if (file.exists()) {
+				file.delete();
 			}
-			makeFirstScreenshot = true;
+
+			file = new File(pathForScreenshot + SCREENSHOT_FILE_NAME);
+			File noMediaFile = new File(pathForScreenshot + ".nomedia");
+			try {
+				file.createNewFile();
+				noMediaFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			this.makeThumbnail();
+
+			makeFirstScreenshot = false;
 		}
 
 		if (makeScreenshot) {
