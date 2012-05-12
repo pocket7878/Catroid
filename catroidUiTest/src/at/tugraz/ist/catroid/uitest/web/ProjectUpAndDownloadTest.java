@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.uitest.web;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,9 +34,13 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
+import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
+import at.tugraz.ist.catroid.common.CostumeData;
+import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.common.StandardProjectHandler;
+import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
@@ -50,6 +55,10 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 	private String saveToken;
 	private int serverProjectId;
 	private static final String TEST_FILE_DOWNLOAD_URL = "http://catroidtest.ist.tugraz.at/catroid/download/";
+	private final int RESOURCE_SOUND = at.tugraz.ist.catroid.uitest.R.raw.longsound;
+	private final int RESOURCE_IMAGE = at.tugraz.ist.catroid.uitest.R.drawable.catroid_sunglasses;
+	private Project defaultProject;
+	private ProjectManager projectManager = ProjectManager.getInstance();
 
 	public ProjectUpAndDownloadTest() {
 		super("at.tugraz.ist.catroid", MainMenuActivity.class);
@@ -109,8 +118,8 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 	public void testUploadDefaultProject() throws Throwable {
 		setServerURLToTestUrl();
 		UiTestUtils.createValidUser(getActivity());
-		StandardProjectHandler.createAndSaveStandardProject(getActivity().getString(R.string.default_project_name),
-				getInstrumentation().getTargetContext());
+		defaultProject = StandardProjectHandler.createAndSaveStandardProject(
+				getActivity().getString(R.string.default_project_name), getInstrumentation().getTargetContext());
 
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
 		solo.sleep(500);
@@ -124,8 +133,63 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		solo.clearEditText(0);
 		solo.enterText(0, testProject);
 
-		solo.sleep(5000);
+		solo.clickOnButton(getActivity().getString(R.string.upload_button));
+		solo.waitForDialogToClose(10000);
+		assertTrue("Upload of the default project suceeded",
+				solo.searchText(getActivity().getString(R.string.error_default_project)));
 
+		solo.clickOnButton(getActivity().getString(R.string.close));
+		solo.clickOnButton(getActivity().getString(R.string.cancel_button));
+		solo.clickOnButton(getActivity().getString(R.string.current_project_button));
+		solo.clickOnText("Catroid");
+
+		//		addCostumeToDefaultProject();
+		//		assertFalse("The default flag is stil set after adding a costume", defaultProject.isDefault());
+		//
+		//		resetDefaultFlag();
+		//		addSoundToDefaultProject();
+		//		assertFalse("The default flag is stil set after adding a sound", defaultProject.isDefault());
+		//
+		//		solo.clickOnText(getActivity().getString(R.string.upload_project));
+		//		solo.sleep(500);
+		//		solo.clearEditText(0);
+		//		solo.enterText(0, testProject);
+		//		solo.clickOnButton(getActivity().getString(R.string.upload_button));
+		//		solo.waitForDialogToClose(10000);
+		//		assertTrue("Upload of the default project suceeded",
+		//				solo.searchText(getActivity().getString(R.string.success_project_upload)));
+		//
+		//		solo.clickOnButton(getActivity().getString(R.string.ok));
+
+	}
+
+	public void resetDefaultFlag() {
+		defaultProject.setDefault(true);
+		assertTrue("The default flag was not set", defaultProject.isDefault());
+	}
+
+	public void addCostumeToDefaultProject() {
+		solo.clickOnText(getActivity().getString(R.string.costumes));
+		ArrayList<CostumeData> costumeDataList = projectManager.getCurrentSprite().getCostumeDataList();
+		File imageFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "catroid_sunglasses.png",
+				RESOURCE_IMAGE, getActivity(), UiTestUtils.FileTypes.IMAGE);
+		CostumeData costumeData = new CostumeData();
+		costumeData.setCostumeFilename(imageFile.getName());
+		costumeData.setCostumeName("costumeNametest");
+		costumeDataList.add(costumeData);
+		projectManager.fileChecksumContainer.addChecksum(costumeData.getChecksum(), costumeData.getAbsolutePath());
+	}
+
+	public void addSoundToDefaultProject() {
+		solo.clickOnText(getActivity().getString(R.string.sounds));
+		ArrayList<SoundInfo> soundInfoList = projectManager.getCurrentSprite().getSoundList();
+		File soundFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "longsound.mp3",
+				RESOURCE_SOUND, getInstrumentation().getContext(), UiTestUtils.FileTypes.SOUND);
+		SoundInfo soundInfo = new SoundInfo();
+		soundInfo.setSoundFileName(soundFile.getName());
+		soundInfo.setTitle("testSound1");
+		soundInfoList.add(soundInfo);
+		projectManager.fileChecksumContainer.addChecksum(soundInfo.getChecksum(), soundInfo.getAbsolutePath());
 	}
 
 	private void createTestProject(String projectToCreate) {

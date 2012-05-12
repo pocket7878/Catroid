@@ -42,6 +42,7 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
+import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.transfers.ProjectUploadTask;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -129,6 +130,7 @@ public class UploadProjectDialog extends Dialog implements OnClickListener {
 
 	public void onClick(View v) {
 		ProjectManager projectManager = ProjectManager.getInstance();
+		Project project = projectManager.getCurrentProject();
 
 		switch (v.getId()) {
 			case R.id.upload_button:
@@ -139,13 +141,16 @@ public class UploadProjectDialog extends Dialog implements OnClickListener {
 				} else if (uploadName.equals(context.getString(R.string.default_project_name))) {
 					Utils.displayErrorMessage(context, context.getString(R.string.error_default_project_name));
 					return;
+				} else if (project.isDefault()) {
+					Utils.displayErrorMessage(context, context.getString(R.string.error_default_project));
+					return;
+
 				} else if (!uploadName.equals(currentProjectName)) {
 					projectRename.setVisibility(View.VISIBLE);
 					boolean renamed = projectManager.renameProject(newProjectName, context);
 					if (!renamed) {
 						break;
 					}
-
 				}
 
 				projectManager.getCurrentProject().setDeviceData(context);
@@ -163,7 +168,6 @@ public class UploadProjectDialog extends Dialog implements OnClickListener {
 
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 				String token = prefs.getString(Constants.TOKEN, "0");
-
 				new ProjectUploadTask(context, uploadName, projectDescription, projectPath, token).execute();
 				break;
 

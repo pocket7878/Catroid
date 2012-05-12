@@ -135,6 +135,8 @@ public class StandardProjectHandler {
 		sprite.addScript(whenScript);
 		backgroundSprite.addScript(backgroundStartScript);
 
+		defaultProject.setDefault(true);
+
 		StorageHandler.getInstance().saveProject(defaultProject);
 
 		return defaultProject;
@@ -179,7 +181,8 @@ public class StandardProjectHandler {
 	private static File savePictureFromResourceInProject(String project, String outputName, int fileId, Context context)
 			throws IOException {
 
-		final String imagePath = Utils.buildPath(Utils.buildProjectPath(project), Constants.IMAGE_DIRECTORY, outputName);
+		final String imagePath = Utils
+				.buildPath(Utils.buildProjectPath(project), Constants.IMAGE_DIRECTORY, outputName);
 		File testImage = new File(imagePath);
 		if (!testImage.exists()) {
 			testImage.createNewFile();

@@ -105,7 +105,7 @@ public class DeleteDialogTest extends ActivityInstrumentationTestCase2<ScriptTab
 		projectManager.getCurrentProject().virtualScreenHeight = display.getHeight();
 		projectManager.getCurrentProject().virtualScreenWidth = display.getWidth();
 
-		soundInfoList = ProjectManager.getInstance().getCurrentSprite().getSoundList();
+		soundInfoList = projectManager.getCurrentSprite().getSoundList();
 
 		soundFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "longsound.mp3",
 				RESOURCE_SOUND, getInstrumentation().getContext(), UiTestUtils.FileTypes.SOUND);
@@ -121,10 +121,8 @@ public class DeleteDialogTest extends ActivityInstrumentationTestCase2<ScriptTab
 
 		soundInfoList.add(soundInfo);
 		soundInfoList.add(soundInfo2);
-		ProjectManager.getInstance().fileChecksumContainer.addChecksum(soundInfo.getChecksum(),
-				soundInfo.getAbsolutePath());
-		ProjectManager.getInstance().fileChecksumContainer.addChecksum(soundInfo2.getChecksum(),
-				soundInfo2.getAbsolutePath());
+		projectManager.fileChecksumContainer.addChecksum(soundInfo.getChecksum(), soundInfo.getAbsolutePath());
+		projectManager.fileChecksumContainer.addChecksum(soundInfo2.getChecksum(), soundInfo2.getAbsolutePath());
 
 	}
 

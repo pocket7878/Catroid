@@ -46,6 +46,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.CostumeData;
+import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.adapter.CostumeAdapter;
@@ -55,6 +56,7 @@ import at.tugraz.ist.catroid.utils.Utils;
 
 public class CostumeActivity extends ListActivity {
 	private ArrayList<CostumeData> costumeDataList;
+	private Project currentProject = ProjectManager.getInstance().getCurrentProject();
 
 	public static final int REQUEST_SELECT_IMAGE = 0;
 	public static final int REQUEST_PAINTROID_EDIT_IMAGE = 1;
@@ -268,6 +270,11 @@ public class CostumeActivity extends ListActivity {
 		scriptTabActivity.selectedCostumeData = costumeDataList.get(position);
 		scriptTabActivity.selectedPosition = position;
 		scriptTabActivity.showDialog(ScriptTabActivity.DIALOG_DELETE_COSTUME);
+
+		if (currentProject.isDefault()) {
+			currentProject.setDefault(false);
+		}
+
 	}
 
 	public void handleRenameCostumeButton(View v) {
