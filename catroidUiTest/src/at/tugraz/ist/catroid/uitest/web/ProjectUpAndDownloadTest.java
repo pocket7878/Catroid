@@ -35,6 +35,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
+import at.tugraz.ist.catroid.common.StandardProjectHandler;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
@@ -103,6 +104,28 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		UiTestUtils.clearAllUtilTestProjects();
 
 		downloadProject();
+	}
+
+	public void testUploadDefaultProject() throws Throwable {
+		setServerURLToTestUrl();
+		UiTestUtils.createValidUser(getActivity());
+		StandardProjectHandler.createAndSaveStandardProject(getActivity().getString(R.string.default_project_name),
+				getInstrumentation().getTargetContext());
+
+		solo.clickOnText(getActivity().getString(R.string.upload_project));
+		solo.sleep(500);
+		solo.clickOnButton(getActivity().getString(R.string.upload_button));
+		solo.waitForDialogToClose(10000);
+		assertTrue("Upload of the project with default name suceeded",
+				solo.searchText(getActivity().getString(R.string.error_default_project_name)));
+		solo.clickOnButton(getActivity().getString(R.string.close));
+
+		solo.scrollUp();
+		solo.clearEditText(0);
+		solo.enterText(0, testProject);
+
+		solo.sleep(5000);
+
 	}
 
 	private void createTestProject(String projectToCreate) {

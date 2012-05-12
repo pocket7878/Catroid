@@ -31,9 +31,9 @@ import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -136,12 +136,16 @@ public class UploadProjectDialog extends Dialog implements OnClickListener {
 				if (uploadName.length() == 0) {
 					Utils.displayErrorMessage(context, context.getString(R.string.error_no_name_entered));
 					return;
+				} else if (uploadName.equals(context.getString(R.string.default_project_name))) {
+					Utils.displayErrorMessage(context, context.getString(R.string.error_default_project_name));
+					return;
 				} else if (!uploadName.equals(currentProjectName)) {
 					projectRename.setVisibility(View.VISIBLE);
 					boolean renamed = projectManager.renameProject(newProjectName, context);
 					if (!renamed) {
 						break;
 					}
+
 				}
 
 				projectManager.getCurrentProject().setDeviceData(context);
@@ -159,6 +163,7 @@ public class UploadProjectDialog extends Dialog implements OnClickListener {
 
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 				String token = prefs.getString(Constants.TOKEN, "0");
+
 				new ProjectUploadTask(context, uploadName, projectDescription, projectPath, token).execute();
 				break;
 
