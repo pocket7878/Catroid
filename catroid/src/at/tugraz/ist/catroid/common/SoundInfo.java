@@ -35,6 +35,11 @@ public class SoundInfo implements Comparable<SoundInfo> {
 	public SoundInfo() {
 		isPlaying = false;
 		isPaused = false;
+
+		if (ProjectManager.getInstance().getCurrentProject().isDefault()) {
+			ProjectManager.getInstance().getCurrentProject().setDefault(false);
+		}
+
 	}
 
 	public String getAbsolutePath() {

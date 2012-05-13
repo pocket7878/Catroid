@@ -38,6 +38,15 @@ public class CostumeData {
 	private transient static final int THUMBNAIL_WIDTH = 150;
 	private transient static final int THUMBNAIL_HEIGHT = 150;
 
+	public CostumeData() {
+		super();
+
+		if (ProjectManager.getInstance().getCurrentProject().isDefault()) {
+			ProjectManager.getInstance().getCurrentProject().setDefault(false);
+		}
+
+	}
+
 	public String getAbsolutePath() {
 		if (fileName != null) {
 			return Utils.buildPath(getPathToImageDirectory(), fileName);

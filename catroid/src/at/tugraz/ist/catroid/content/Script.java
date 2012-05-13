@@ -25,6 +25,7 @@ package at.tugraz.ist.catroid.content;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 
 public abstract class Script implements Serializable {
@@ -76,12 +77,19 @@ public abstract class Script implements Serializable {
 	public void addBrick(Brick brick) {
 		if (brick != null) {
 			brickList.add(brick);
+			if (ProjectManager.getInstance().getCurrentProject().isDefault()) {
+				ProjectManager.getInstance().getCurrentProject().setDefault(false);
+			}
+
 		}
 	}
 
 	public void addBrick(int position, Brick brick) {
 		if (brick != null) {
 			brickList.add(position, brick);
+			if (ProjectManager.getInstance().getCurrentProject().isDefault()) {
+				ProjectManager.getInstance().getCurrentProject().setDefault(false);
+			}
 		}
 	}
 
