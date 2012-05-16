@@ -29,6 +29,6 @@
 
     <TextView
         style="@style/brick_text_style"
-        android:text="@string/brick_loop_end" />
+        android:text="@string/brick_key_combo_end" />
 
 </LinearLayout>

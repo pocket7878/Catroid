@@ -39,6 +39,8 @@ import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.WhenScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.BroadcastReceiverBrick;
+import at.tugraz.ist.catroid.content.bricks.HIDComboBrick;
+import at.tugraz.ist.catroid.content.bricks.HIDComboEndBrick;
 import at.tugraz.ist.catroid.content.bricks.LoopBeginBrick;
 import at.tugraz.ist.catroid.content.bricks.LoopEndBrick;
 import at.tugraz.ist.catroid.content.bricks.WhenBrick;
@@ -369,8 +371,14 @@ public class BrickAdapter extends BaseAdapter implements DragAndDropListener {
 		} else if (draggedBrick instanceof LoopBeginBrick) {
 			if (insertLoop) {
 				if (toLastScript) {
-					LoopEndBrick loopEndBrick = new LoopEndBrick(ProjectManager.getInstance().getCurrentSprite(),
-							(LoopBeginBrick) draggedBrick);
+					LoopEndBrick loopEndBrick;
+					if (draggedBrick instanceof HIDComboBrick) {
+						loopEndBrick = new HIDComboEndBrick(ProjectManager.getInstance().getCurrentSprite(),
+								(LoopBeginBrick) draggedBrick);
+					} else {
+						loopEndBrick = new LoopEndBrick(ProjectManager.getInstance().getCurrentSprite(),
+								(LoopBeginBrick) draggedBrick);
+					}
 
 					int del = -1;
 					int nrScripts = sprite.getNumberOfScripts();
@@ -398,8 +406,14 @@ public class BrickAdapter extends BaseAdapter implements DragAndDropListener {
 					insertLoop = false;
 
 				} else {
-					LoopEndBrick loopEndBrick = new LoopEndBrick(ProjectManager.getInstance().getCurrentSprite(),
-							(LoopBeginBrick) draggedBrick);
+					LoopEndBrick loopEndBrick;
+					if (draggedBrick instanceof HIDComboBrick) {
+						loopEndBrick = new HIDComboEndBrick(ProjectManager.getInstance().getCurrentSprite(),
+								(LoopBeginBrick) draggedBrick);
+					} else {
+						loopEndBrick = new LoopEndBrick(ProjectManager.getInstance().getCurrentSprite(),
+								(LoopBeginBrick) draggedBrick);
+					}
 
 					int sId = getScriptId(to);
 					int bId = ProjectManager.getInstance().getCurrentSprite().getScript(sId).getBrickList()

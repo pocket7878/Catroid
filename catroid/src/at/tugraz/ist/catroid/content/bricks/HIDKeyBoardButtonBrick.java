@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -35,17 +36,13 @@ import at.tugraz.ist.catroid.content.Sprite;
 public class HIDKeyBoardButtonBrick implements Brick, KeyBrickInterface, OnItemSelectedListener {
 	private static final long serialVersionUID = 1L;
 
-	//public static final int REQUIRED_RESSOURCES = BLUETOOTH_LEGO_NXT;
-
 	public static enum KeyboardKey {
-		MOTOR_A, MOTOR_B, MOTOR_C, MOTOR_A_C, ALL_MOTORS
+		KEY_A, KEY_B, KEY_C, KEY_D, KEY_E, KEY_F, KEY_G, KEY_H, KEY_I, KEY_J, KEY_K, KEY_L, KEY_M, KEY_N, KEY_O, KEY_P, KEY_Q, KEY_R, KEY_S, KEY_T, KEY_U, KEY_V, KEY_W, KEY_X, KEY_Y, KEY_Z, KEY_SHIFT
 	}
 
 	private Sprite sprite;
 	private transient KeyboardKey keyEnum;
 	private String keyCode;
-
-	// private static final int NO_DELAY = 0;
 
 	protected Object readResolve() {
 		if (keyCode != null) {
@@ -61,21 +58,11 @@ public class HIDKeyBoardButtonBrick implements Brick, KeyBrickInterface, OnItemS
 	}
 
 	public int getRequiredResources() {
-		//return BLUETOOTH_LEGO_NXT;
 		return NO_RESOURCES;
 	}
 
 	public void execute() {
-		//		if (motorEnum.equals(KeyboardKey.ALL_MOTORS)) {
-		//			LegoNXT.sendBTCMotorMessage(NO_DELAY, KeyboardKey.MOTOR_A.ordinal(), 0, 0);
-		//			LegoNXT.sendBTCMotorMessage(NO_DELAY, KeyboardKey.MOTOR_B.ordinal(), 0, 0);
-		//			LegoNXT.sendBTCMotorMessage(NO_DELAY, KeyboardKey.MOTOR_C.ordinal(), 0, 0);
-		//		} else if (motorEnum.equals(KeyboardKey.MOTOR_A_C)) {
-		//			LegoNXT.sendBTCMotorMessage(NO_DELAY, KeyboardKey.MOTOR_A.ordinal(), 0, 0);
-		//			LegoNXT.sendBTCMotorMessage(NO_DELAY, KeyboardKey.MOTOR_C.ordinal(), 0, 0);
-		//		} else {
-		//			LegoNXT.sendBTCMotorMessage(NO_DELAY, motorEnum.ordinal(), 0, 0);
-		//		}
+		Log.i("HID KeyBoard Key Brick", "KeyCode: " + getKeyCode());
 
 	}
 
@@ -96,7 +83,7 @@ public class HIDKeyBoardButtonBrick implements Brick, KeyBrickInterface, OnItemS
 		View brickView = View.inflate(context, R.layout.brick_hid_keyboard_button_press, null);
 
 		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context,
-				R.array.nxt_stop_motor_chooser, android.R.layout.simple_spinner_item);
+				R.array.hid_keyboard_key_chooser, android.R.layout.simple_spinner_item);
 		motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		Spinner motorSpinner = (Spinner) brickView.findViewById(R.id.keyboard_button_spinner);
