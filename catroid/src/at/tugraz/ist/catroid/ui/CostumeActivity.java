@@ -25,6 +25,7 @@ package at.tugraz.ist.catroid.ui;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.app.Activity;
@@ -40,6 +41,7 @@ import android.database.CursorIndexOutOfBoundsException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
@@ -67,6 +69,7 @@ public class CostumeActivity extends ListActivity {
 		costumeDataList = ProjectManager.getInstance().getCurrentSprite().getCostumeDataList();
 
 		setListAdapter(new CostumeAdapter(this, R.layout.activity_costume_costumelist_item, costumeDataList));
+
 	}
 
 	@Override
@@ -93,8 +96,19 @@ public class CostumeActivity extends ListActivity {
 				addButtonIcon = R.drawable.ic_actionbar_shirt;
 			}
 			activityHelper.changeButtonIcon(R.id.btn_action_add_button, addButtonIcon);
+
+			logCostumeData();
 		}
 
+	}
+
+	public void logCostumeData() {
+		Iterator<CostumeData> itr = costumeDataList.iterator();
+		CostumeData next;
+		while (itr.hasNext()) {
+			next = itr.next();
+			Log.d("Costume data", "Name: " + next.getCostumeName() + " Path: " + next.getInternalPath());
+		}
 	}
 
 	@Override
@@ -258,6 +272,8 @@ public class CostumeActivity extends ListActivity {
 				intent.putExtras(bundleForPaintroid);
 				Intent chooser = Intent.createChooser(intent, getString(R.string.select_image));
 				startActivityForResult(chooser, REQUEST_SELECT_IMAGE);
+
+				logCostumeData();
 			}
 		};
 	}
@@ -268,6 +284,7 @@ public class CostumeActivity extends ListActivity {
 		scriptTabActivity.selectedCostumeData = costumeDataList.get(position);
 		scriptTabActivity.selectedPosition = position;
 		scriptTabActivity.showDialog(ScriptTabActivity.DIALOG_DELETE_COSTUME);
+		logCostumeData();
 	}
 
 	public void handleRenameCostumeButton(View v) {
