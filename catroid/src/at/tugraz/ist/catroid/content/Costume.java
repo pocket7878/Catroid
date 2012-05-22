@@ -266,6 +266,7 @@ public class Costume extends Image {
 		this.costumeData = costumeData;
 		imageChanged = true;
 		imageLock.release();
+
 	}
 
 	public void setCostumeDataInternal(CostumeData costumeData) {

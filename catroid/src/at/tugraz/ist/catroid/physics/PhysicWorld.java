@@ -18,9 +18,11 @@
  */
 package at.tugraz.ist.catroid.physics;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Sprite;
 
@@ -30,46 +32,41 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 
-public class PhysicWorld {
+public class PhysicWorld implements Serializable {
+	private static final long serialVersionUID = -9103964560286141267L;
 	static {
 		GdxNativesLoader.load();
 	}
 
-	static final float timeStep = 1.0f / 60.0f;
-	static final int velocityIterations = 5;
-	static final int positionIterations = 5;
-	static final int defaultmass = 10;
-	static final Vector2 defaultgravity = new Vector2(0, -10);
-	static final boolean ignoreSleepingObjects = false;
-
-	private World world;
-	private Map<Sprite, Body> bodys;
+	private transient World world;
+	private transient Map<Sprite, Body> bodys;
 
 	public PhysicWorld() {
-		world = new World(defaultgravity, ignoreSleepingObjects);
-		world = null;
+		world = new World(PhysicWorldSetting.defaultgravity, PhysicWorldSetting.ignoreSleepingObjects);
 		bodys = new HashMap<Sprite, Body>();
+		CreateBox();
 	}
 
-	public void step() {
-		world.step(timeStep, velocityIterations, positionIterations);
-		refreshCooordsOfSprites();
+	public void step(float deltaTime) {
+		world.step(deltaTime, PhysicWorldSetting.velocityIterations, PhysicWorldSetting.positionIterations);
+		refreshCoordsOfSprites();
 	}
 
-	private void refreshCooordsOfSprites() {
+	private void refreshCoordsOfSprites() {
 		for (Sprite sprite : bodys.keySet()) {
 
 			Body body = bodys.get(sprite);
-			Vector2 catroidCoords = PhysicWorldConverter.CoordsFromBox2DToCatroid(body.getPosition().x,
+			Vector2 catrobatCoords = PhysicWorldConverter.CoordsFromBox2DToCatroid(body.getPosition().x,
 					body.getPosition().y);
-			sprite.costume.aquireXYWidthHeightLock();
-			sprite.costume.x = (int) catroidCoords.x;
-			sprite.costume.y = (int) catroidCoords.y;
+			sprite.costume.aquireXYWidthHeightLock(); // Sinn ?
+			sprite.costume.setXYPosition(catrobatCoords.x, catrobatCoords.y);
 			sprite.costume.releaseXYWidthHeightLock();
+			System.out.println("x:" + sprite.costume.x + "  y:" + sprite.costume.y);
 		}
 	}
 
@@ -80,12 +77,7 @@ public class PhysicWorld {
 	 * @param gravity
 	 */
 	public void setGravity(Sprite sprite, Vector2 gravity) {
-		Body body;
-		if (bodys.containsKey(sprite)) {
-			world.setGravity(PhysicWorldConverter.VetorFromCatroidToBox2D(gravity));
-		} else {
-			world.setGravity(PhysicWorldConverter.VetorFromCatroidToBox2D(gravity));
-		}
+		world.setGravity(PhysicWorldConverter.VectorFromCatroidToBox2D(gravity));
 	}
 
 	/**
@@ -93,16 +85,8 @@ public class PhysicWorld {
 	 * @param velocity
 	 */
 	public void setVelocity(Sprite sprite, Vector2 velocity) {
-		Body body;
-		if (bodys.containsKey(sprite)) {
-			Body b = bodys.get(sprite);
-			if (BodyType.DynamicBody == b.getType()) {
-				b.applyLinearImpulse(velocity, b.getPosition());
-			}
-		} else {
-			// add new Body
-
-		}
+		Body body = getBody(sprite);
+		body.applyLinearImpulse(PhysicWorldConverter.Vector2FromCatroidToBox2D(velocity), body.getPosition());
 	}
 
 	/**
@@ -110,13 +94,30 @@ public class PhysicWorld {
 	 * @param mass
 	 */
 	public void setMass(Sprite sprite, float mass) {
-		Body body;
-		if (bodys.containsKey(sprite)) {
+		Body body = getBody(sprite);
+		MassData mdata = new MassData();
+		mdata.mass = mass;
+		body.setMassData(mdata);
+	}
 
-		} else {
-
+	private Body getBody(Sprite sprite) {
+		Body body = bodys.get(sprite);
+		if (null == body) {
+			body = createBody(sprite);
+			bodys.put(sprite, body);
 		}
+		return body;
+	}
 
+	private Body createBody(Sprite sprite) {
+		CostumeData costumeData = sprite.costume.getCostumeData();
+		int[] resulution = costumeData.getResolution();
+		//		float r = (sprite.costume.getHeight() > sprite.costume.getWidth()) ? sprite.costume.getHeight() / 2
+		//				: sprite.costume.getWidth() / 2;
+		float r = (resulution[0] > resulution[1]) ? resulution[0] / 2f : resulution[1] / 2f;
+		System.out.println("r:" + r);
+		Vector2 pos = new Vector2(sprite.costume.getXPosition(), sprite.costume.getYPosition());
+		return createDynamicCircle(r, pos, sprite.costume.rotation);
 	}
 
 	// #############################################################################

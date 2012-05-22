@@ -59,7 +59,7 @@ public class PhysicThread implements Runnable {
 	public void run() {
 		while (active) {
 			if (running) {
-				world.step();
+				//world.step();
 			} else {
 				Thread.yield();
 			}
