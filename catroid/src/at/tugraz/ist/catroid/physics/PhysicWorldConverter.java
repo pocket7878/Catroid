@@ -8,8 +8,6 @@ class PhysicWorldConverter {
 	private static float RATIO = 40;
 
 	public static Vector2 VectorFromCatroidToBox2D(Vector2 catroidVec) {
-		float x = catroidVec.x / RATIO;
-		float y = catroidVec.y / RATIO;
 		return new Vector2(catroidVec.x / RATIO, catroidVec.y / RATIO);
 	}
 

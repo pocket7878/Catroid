@@ -20,13 +20,13 @@ package at.tugraz.ist.catroid.physics;
 
 public class PhysicThread implements Runnable {
 
-	private final PhysicWorld world;
+	//private final PhysicWorld world;
 	private final Thread thread = new Thread(this);
 	private boolean active = false;
 	private boolean running = false;
 
 	public PhysicThread(PhysicWorld world) {
-		this.world = world;
+		//this.world = world;
 	}
 
 	public void start() {
