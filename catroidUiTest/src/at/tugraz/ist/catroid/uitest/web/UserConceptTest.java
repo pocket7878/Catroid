@@ -22,12 +22,14 @@
  */
 package at.tugraz.ist.catroid.uitest.web;
 
+import junit.framework.AssertionFailedError;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
+import android.widget.EditText;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import at.tugraz.ist.catroid.web.ServerCalls;
@@ -48,13 +50,13 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 	public void setUp() throws Exception {
 		solo = new Solo(getInstrumentation(), getActivity());
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		saveToken = prefs.getString(Consts.TOKEN, "0");
+		saveToken = prefs.getString(Constants.TOKEN, "0");
 	}
 
 	@Override
 	public void tearDown() throws Exception {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		prefs.edit().putString(Consts.TOKEN, saveToken).commit();
+		prefs.edit().putString(Constants.TOKEN, saveToken).commit();
 		UiTestUtils.setPrivateField("emailForUiTests", ServerCalls.getInstance(), null, false);
 		try {
 			solo.finalize();
@@ -69,7 +71,7 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 	public void testRegisterNewUser() throws Throwable {
 		setTestUrl();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		prefs.edit().putString(Consts.TOKEN, null).commit();
+		prefs.edit().putString(Constants.TOKEN, null).commit();
 
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
 		solo.sleep(1000);
@@ -97,7 +99,7 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		setTestUrl();
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		prefs.edit().putString(Consts.TOKEN, "").commit();
+		prefs.edit().putString(Constants.TOKEN, "").commit();
 
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
 		solo.sleep(1000);
@@ -119,7 +121,7 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		setTestUrl();
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		prefs.edit().putString(Consts.TOKEN, "wrong_token").commit();
+		prefs.edit().putString(Constants.TOKEN, "wrong_token").commit();
 
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
 		solo.sleep(4000);
@@ -134,7 +136,7 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		setTestUrl();
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		prefs.edit().putString(Consts.TOKEN, null).commit();
+		prefs.edit().putString(Constants.TOKEN, null).commit();
 
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
 		solo.sleep(1000);
@@ -153,15 +155,25 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		String testText2 = "testText2";
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		prefs.edit().putString(Consts.TOKEN, null).commit();
+		prefs.edit().putString(Constants.TOKEN, null).commit();
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
 		solo.sleep(500);
 		solo.clearEditText(0);
 		solo.enterText(0, testText1);
 		solo.setActivityOrientation(Solo.LANDSCAPE);
 		assertTrue("EditTextField got cleared after changing orientation", solo.searchText(testText1));
-		solo.clickOnEditText(1);
-		solo.clearEditText(1);
+		EditText passwordField = (EditText) solo.getView(R.id.password);
+		// sometimes, the keyboard overlaps the password textview
+		// if the click cannot be performed, an AssertionFailedError is thrown
+		// goBack makes the keyboard disappear, and then the click should work
+		// could be a workaround for other unstable tests - then this would be moved to UiTestUitls
+		try {
+			solo.clickOnView(passwordField);
+		} catch (AssertionFailedError e) {
+			solo.goBack();
+			solo.clickOnView(passwordField);
+		}
+		solo.clearEditText(passwordField);
 		solo.enterText(1, testText2);
 		solo.setActivityOrientation(Solo.PORTRAIT);
 		assertTrue("EditTextField got cleared after changing orientation", solo.searchText(testText1));
