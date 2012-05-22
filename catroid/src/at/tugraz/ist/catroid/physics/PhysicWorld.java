@@ -18,9 +18,7 @@
  */
 package at.tugraz.ist.catroid.physics;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import at.tugraz.ist.catroid.common.Values;
@@ -34,104 +32,98 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.GdxNativesLoader;
 
-public class PhysicWorld extends Thread {
+public class PhysicWorld {
+	static {
+		GdxNativesLoader.load();
+	}
 
 	static final float timeStep = 1.0f / 60.0f;
 	static final int velocityIterations = 5;
 	static final int positionIterations = 5;
-
-	private static PhysicWorld instance = null;
-	private static boolean run = false;
+	static final int defaultmass = 10;
+	static final Vector2 defaultgravity = new Vector2(0, -10);
+	static final boolean ignoreSleepingObjects = false;
 
 	private World world;
-
 	private Map<Sprite, Body> bodys;
-	private Map<Sprite, DummyBody> dummys;
 
-	private List<Sprite> tooadd;
-
-	private PhysicWorld() {
-		this.run = true;
-		// 2. Define gravity
-		Vector2 gravity = new Vector2(0, -10);
-		// 3. Ignore sleeping objects ?
-		boolean ignoreSleeping = false;
-		world = new World(gravity, ignoreSleeping);
+	public PhysicWorld() {
+		world = new World(defaultgravity, ignoreSleepingObjects);
+		world = null;
 		bodys = new HashMap<Sprite, Body>();
-		dummys = new HashMap<Sprite, DummyBody>();
-		tooadd = new ArrayList<Sprite>();
-		CreateBox();
 	}
 
-	public static PhysicWorld getInstance() {
-
-		if (instance == null) {
-			instance = new PhysicWorld();
-			instance.start();
-		}
-
-		return instance;
-	}
-
-	@Override
-	public void run() {
-		while (run) {
-			PhysicWorld.getInstance().step();
-		}
-		//clearWorld();
-	}
-
-	private void step() {
-		Add();
+	public void step() {
 		world.step(timeStep, velocityIterations, positionIterations);
 		refreshCooordsOfSprites();
 	}
 
 	private void refreshCooordsOfSprites() {
-
-		try {
-			Thread.currentThread().sleep(10);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		for (Sprite sprite : bodys.keySet()) {
 
-			Body tempbody = bodys.get(sprite);
-			Vector2 catroidCoords = Convert
-					.CoordsFromBox2DToCatroid(tempbody.getPosition().x, tempbody.getPosition().y);
-
+			Body body = bodys.get(sprite);
+			Vector2 catroidCoords = PhysicWorldConverter.CoordsFromBox2DToCatroid(body.getPosition().x,
+					body.getPosition().y);
 			sprite.costume.aquireXYWidthHeightLock();
 			sprite.costume.x = (int) catroidCoords.x;
 			sprite.costume.y = (int) catroidCoords.y;
 			sprite.costume.releaseXYWidthHeightLock();
+		}
+	}
+
+	// #############################################################################
+
+	/**
+	 * @param sprite
+	 * @param gravity
+	 */
+	public void setGravity(Sprite sprite, Vector2 gravity) {
+		Body body;
+		if (bodys.containsKey(sprite)) {
+			world.setGravity(PhysicWorldConverter.VetorFromCatroidToBox2D(gravity));
+		} else {
+			world.setGravity(PhysicWorldConverter.VetorFromCatroidToBox2D(gravity));
+		}
+	}
+
+	/**
+	 * @param sprite
+	 * @param velocity
+	 */
+	public void setVelocity(Sprite sprite, Vector2 velocity) {
+		Body body;
+		if (bodys.containsKey(sprite)) {
+			Body b = bodys.get(sprite);
+			if (BodyType.DynamicBody == b.getType()) {
+				b.applyLinearImpulse(velocity, b.getPosition());
+			}
+		} else {
+			// add new Body
 
 		}
 	}
 
-	public void setGravity(Sprite sprite, float x, float y) {
+	/**
+	 * @param sprite
+	 * @param mass
+	 */
+	public void setMass(Sprite sprite, float mass) {
+		Body body;
+		if (bodys.containsKey(sprite)) {
 
-		tooadd.add(sprite);
-	}
+		} else {
 
-	public void Add() {
-		for (Object s : tooadd.toArray()) {
-			Sprite sprite = (Sprite) s;
-			float with = sprite.costume.width;
-			float height = sprite.costume.height;
-			Vector2 pos_catdroid_center = new Vector2(sprite.costume.x + with / 2f, sprite.costume.y + height / 2f);
-
-			Body body = createDynamicCircle(with / 2, pos_catdroid_center, 0);
-			bodys.put(sprite, body);
 		}
-		tooadd.clear();
+
 	}
 
-	public Body createDynamicCircle(float radius, Vector2 pos, float angle_rad) {
-		float r = Convert.LengthFromCatroidToBox2D(radius);
-		Vector2 p = Convert.Vector2FromCatroidToBox2D(pos);
+	// #############################################################################
+
+	private Body createDynamicCircle(float radius, Vector2 pos, float angle_rad) {
+		float r = PhysicWorldConverter.LengthFromCatroidToBox2D(radius);
+		Vector2 p = PhysicWorldConverter.Vector2FromCatroidToBox2D(pos);
 		Body body = createCircle(BodyType.DynamicBody, r, 2.0f);
 		body.setTransform(p, angle_rad);
 		return body;
@@ -152,71 +144,6 @@ public class PhysicWorld extends Thread {
 		poly.dispose();
 
 		return circle;
-	}
-
-	class DummyBody {
-		float mass;
-		Vector2 gravity;
-		Vector2 velocity;
-
-		public DummyBody() {
-		}
-	}
-
-	private static class Convert {
-
-		// Ratio of pixels to meters
-		private static int RATIO = 40;
-
-		public static Vector2 CoordsFromBox2DToCatroid(float x, float y) {
-			Vector2 coords = new Vector2(x * 40, y * 40);
-
-			return coords;
-		}
-
-		public static float LengthFromCatroidToBox2D(float x) {
-			return x / RATIO;
-		}
-
-		public static Vector2 Vector2FromCatroidToBox2D(Vector2 x) {
-			return new Vector2(x.x / RATIO, x.y / RATIO);
-		}
-
-		public static Vector2 Vector2FromBox2DToCatroid(Vector2 x) {
-			return new Vector2(x.x * RATIO, x.y * RATIO);
-		}
-	}
-
-	// #############################################################################
-	// #############################################################################
-	// #############################################################################
-
-	//	private void admitDummytoPhysicsWorld(Sprite sprite, DummyBody dummy) {
-	//
-	//	}
-	//	
-	//	private boolean spriteIsValide(Sprite sprite) {
-	//		boolean isvalid = true;
-	//		// isPhysical Object ?
-	//		// if(sprite.isPhysicalObject)
-	//
-	//		// has a Costume ?
-	//		if (null == sprite.costume) {
-	//			isvalid = false;
-	//		}
-	//
-	//		return isvalid;
-	//	}
-	//	
-
-	public void clearWorld() {
-		run = false;
-		instance.destroy();
-		instance = null;
-	}
-
-	public boolean isActive() {
-		return run;
 	}
 
 	private Body createstaticBox(float width, float height, float density) {
@@ -246,57 +173,4 @@ public class PhysicWorld extends Thread {
 		createStaticBody(460, 10, new Vector2(0, -Values.SCREEN_HEIGHT / 2 + 5), 0);
 		createStaticBody(460, 10, new Vector2(0, Values.SCREEN_HEIGHT / 2 - 5), 0);
 	}
-	//
-	//	public void setVelocity(Sprite sprite, float x, float y) {
-	//
-	//		// only for testing
-	//
-	//		//		if (bodys.containsKey(sprite)) {
-	//		//			setBodysVelocity(bodys.get(sprite));
-	//		//		} else if (dummys.containsKey(sprite)) {
-	//		//			dummys.get(sprite).velocity = new Vector2(x, y);
-	//		//			if (spriteIsValide(sprite)) {
-	//		//				admitDummytoPhysicsWorld(sprite, dummys.get(sprite));
-	//		//			}
-	//		//		} else {
-	//		//			DummyBody new_dummybody = new DummyBody();
-	//		//			new_dummybody.velocity = new Vector2(x, y);
-	//		//			dummys.put(sprite, new_dummybody);
-	//		//		}
-	//		//
-	//		//		sprite.costume.x += 20;
-	//		//		sprite.costume.y += 20;
-	//
-	//	}
-	//
-	//	public void addNewBodyToWorld() {
-	//
-	//	}
-	//
-	//	// TODO
-	//	private void setBodysGravity(Body body) {
-	//	}
-	//
-	//	// TODO
-	//	private void setBodysVelocity(Body body) {
-	//	};
-	//
-	//	public void setMass(Sprite sprite, float mass) {
-	//
-	//		if (bodys.containsKey(sprite)) {
-	//			MassData data = new MassData();
-	//			data.mass = mass;
-	//			bodys.get(sprite).setMassData(data);
-	//		} else if (dummys.containsKey(sprite)) {
-	//			dummys.get(sprite).mass = mass;
-	//			if (spriteIsValide(sprite)) {
-	//				admitDummytoPhysicsWorld(sprite, dummys.get(sprite));
-	//			}
-	//		} else {
-	//			DummyBody new_dummybody = new DummyBody();
-	//			new_dummybody.mass = mass;
-	//			dummys.put(sprite, new_dummybody);
-	//		}
-	//	}
-
 }

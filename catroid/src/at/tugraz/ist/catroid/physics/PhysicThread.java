@@ -19,8 +19,8 @@
 package at.tugraz.ist.catroid.physics;
 
 public class PhysicThread implements Runnable {
-	private final PhysicWorld world;
 
+	private final PhysicWorld world;
 	private final Thread thread = new Thread(this);
 	private boolean active = false;
 	private boolean running = false;
@@ -46,6 +46,14 @@ public class PhysicThread implements Runnable {
 	public void finish() {
 		active = false;
 		running = false;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public boolean isRunning() {
+		return running;
 	}
 
 	public void run() {

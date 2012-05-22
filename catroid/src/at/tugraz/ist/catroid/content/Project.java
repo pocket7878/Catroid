@@ -40,7 +40,7 @@ public class Project implements Serializable {
 	private List<Sprite> spriteList = new ArrayList<Sprite>();
 	private String projectName;
 
-	private PhysicWorld physicWorld = new PhysicWorld();
+	private PhysicWorld physicWorld;
 
 	// Only used for Catroid website
 	@SuppressWarnings("unused")
@@ -71,6 +71,7 @@ public class Project implements Serializable {
 			return;
 		}
 
+		physicWorld = new PhysicWorld();
 		Sprite background = new Sprite(context.getString(R.string.background));
 		background.costume.zPosition = Integer.MIN_VALUE;
 		addSprite(background);
@@ -121,6 +122,6 @@ public class Project implements Serializable {
 	}
 
 	public PhysicWorld getPhysicWorld() {
-		return physicWorld;
+		return this.physicWorld;
 	}
 }
