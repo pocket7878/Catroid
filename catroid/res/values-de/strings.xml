@@ -316,5 +316,8 @@
     <string name="number_to_small">Wert ist zu klein!</string>
     <string name="number_to_big">Wert ist zu groß!</string>
     <string name="press_keyboard_button">Drücke Tastatur Taste</string>
+    <string name="category_hid">HID</string>
+    <string name="brick_key_combo">Tastenkombination</string>
+    <string name="brick_key_combo_end">Tastenkombination Ende</string>
 
 </resources>
