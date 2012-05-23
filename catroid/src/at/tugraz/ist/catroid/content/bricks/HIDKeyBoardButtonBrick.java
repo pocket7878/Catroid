@@ -36,25 +36,16 @@ import at.tugraz.ist.catroid.content.Sprite;
 public class HIDKeyBoardButtonBrick implements Brick, KeyBrickInterface, OnItemSelectedListener {
 	private static final long serialVersionUID = 1L;
 
-	public static enum KeyboardKey {
-		KEY_A, KEY_B, KEY_C, KEY_D, KEY_E, KEY_F, KEY_G, KEY_H, KEY_I, KEY_J, KEY_K, KEY_L, KEY_M, KEY_N, KEY_O, KEY_P, KEY_Q, KEY_R, KEY_S, KEY_T, KEY_U, KEY_V, KEY_W, KEY_X, KEY_Y, KEY_Z, KEY_SHIFT
-	}
-
 	private Sprite sprite;
-	private transient KeyboardKey keyEnum;
-	private String keyCode;
+	private int keyCode;
 
 	protected Object readResolve() {
-		if (keyCode != null) {
-			keyEnum = KeyboardKey.valueOf(keyCode);
-		}
 		return this;
 	}
 
-	public HIDKeyBoardButtonBrick(Sprite sprite, KeyboardKey defaultKey) {
+	public HIDKeyBoardButtonBrick(Sprite sprite) {
 		this.sprite = sprite;
-		this.keyEnum = defaultKey;
-		this.keyCode = keyEnum.name();
+		this.keyCode = 0;
 	}
 
 	public int getRequiredResources() {
@@ -76,7 +67,7 @@ public class HIDKeyBoardButtonBrick implements Brick, KeyBrickInterface, OnItemS
 
 	@Override
 	public Brick clone() {
-		return new HIDKeyBoardButtonBrick(getSprite(), keyEnum);
+		return new HIDKeyBoardButtonBrick(getSprite());
 	}
 
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
@@ -91,21 +82,20 @@ public class HIDKeyBoardButtonBrick implements Brick, KeyBrickInterface, OnItemS
 		motorSpinner.setClickable(true);
 		motorSpinner.setEnabled(true);
 		motorSpinner.setAdapter(motorAdapter);
-		motorSpinner.setSelection(keyEnum.ordinal());
+		motorSpinner.setSelection(keyCode);
 
 		return brickView;
 	}
 
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		keyEnum = KeyboardKey.values()[position];
-		keyCode = keyEnum.name();
+		keyCode = position;
 	}
 
 	public void onNothingSelected(AdapterView<?> arg0) {
 
 	}
 
-	public String getKeyCode() {
+	public int getKeyCode() {
 		return keyCode;
 	}
 

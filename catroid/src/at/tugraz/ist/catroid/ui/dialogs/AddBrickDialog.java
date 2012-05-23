@@ -174,7 +174,7 @@ public class AddBrickDialog extends Dialog {
 		brickMap.put(context.getString(R.string.category_lego_nxt), legoNXTBrickList);
 
 		List<Brick> hidBrickList = new ArrayList<Brick>();
-		hidBrickList.add(new HIDKeyBoardButtonBrick(sprite, HIDKeyBoardButtonBrick.KeyboardKey.KEY_A));
+		hidBrickList.add(new HIDKeyBoardButtonBrick(sprite));
 		hidBrickList.add(new HIDComboBrick(sprite, 1));
 		brickMap.put(context.getString(R.string.category_hid), hidBrickList);
 

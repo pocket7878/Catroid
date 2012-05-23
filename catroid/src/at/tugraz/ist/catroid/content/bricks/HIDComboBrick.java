@@ -60,7 +60,7 @@ public class HIDComboBrick extends LoopBeginBrick implements OnClickListener {
 
 		Script script = loopEndBrick.getScript();
 		int end = script.getBrickList().indexOf(loopEndBrick);
-		Collection<String> keyCodes = new ArrayList<String>();
+		Collection<Integer> keyCodes = new ArrayList<Integer>();
 
 		for (int begin = script.getBrickList().indexOf(this) + 1; begin != end; begin++) {
 			try {
@@ -75,8 +75,8 @@ public class HIDComboBrick extends LoopBeginBrick implements OnClickListener {
 		}
 
 		// TODO Interface.send(keyCodes);
-		for (String s : keyCodes) {
-			Log.i("HIDComboBrick", s);
+		for (Integer i : keyCodes) {
+			Log.i("HIDComboBrick", i + "");
 		}
 
 		script.setExecutingBrickIndex(script.getBrickList().indexOf(loopEndBrick));

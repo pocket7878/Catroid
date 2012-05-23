@@ -38,7 +38,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:paddingRight="10dip"
-            android:text="@string/press_keyboard_button" >
+            android:text="@string/hid_press_keyboard_button" >
         </TextView>
 
         <LinearLayout

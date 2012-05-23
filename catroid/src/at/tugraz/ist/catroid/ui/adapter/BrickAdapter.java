@@ -41,6 +41,7 @@ import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.BroadcastReceiverBrick;
 import at.tugraz.ist.catroid.content.bricks.HIDComboBrick;
 import at.tugraz.ist.catroid.content.bricks.HIDComboEndBrick;
+import at.tugraz.ist.catroid.content.bricks.HIDKeyBoardButtonBrick;
 import at.tugraz.ist.catroid.content.bricks.LoopBeginBrick;
 import at.tugraz.ist.catroid.content.bricks.LoopEndBrick;
 import at.tugraz.ist.catroid.content.bricks.WhenBrick;
@@ -129,9 +130,27 @@ public class BrickAdapter extends BaseAdapter implements DragAndDropListener {
 						|| getScriptPosition(from, scriptFrom) <= brickList.indexOf(loopBeginBrick)) {
 					return;
 				}
+			} else if (!(draggedBrick instanceof HIDKeyBoardButtonBrick)) {
+				ArrayList<Brick> brickListTo = sprite.getScript(getScriptId(to)).getBrickList();
+
+				for (int i = to; i < brickListTo.size(); i++) {
+					Brick currBrick;
+					if (from > to) {
+						currBrick = brickListTo.get(i - 2);
+					} else {
+						currBrick = brickListTo.get(i - 1);
+					}
+
+					if (currBrick instanceof HIDComboEndBrick) {
+						return;
+					} else if (currBrick instanceof HIDComboBrick) {
+						break;
+					}
+				}
 			}
 
 			if (from != to) {
+
 				sprite.getScript(scriptFrom).removeBrick(draggedBrick);
 
 				sprite.getScript(scriptTo).addBrick(getScriptPosition(to, scriptTo), draggedBrick);
@@ -423,6 +442,18 @@ public class BrickAdapter extends BaseAdapter implements DragAndDropListener {
 
 					((LoopBeginBrick) draggedBrick).setLoopEndBrick(loopEndBrick);
 					insertLoop = false;
+				}
+			}
+		} else if (!(draggedBrick instanceof HIDKeyBoardButtonBrick)) {
+			ArrayList<Brick> brickListTo = sprite.getScript(getScriptId(to)).getBrickList();
+			Log.i("before:", to + "");
+			for (int i = to; i < brickListTo.size(); i++) {
+				Brick currBrick = brickListTo.get(i - 1);
+				if (currBrick instanceof HIDComboEndBrick) {
+					sprite.getScript(getScriptId(to)).removeBrick(draggedBrick);
+					sprite.getScript(getScriptId(to)).addBrick(i, draggedBrick);
+				} else if (currBrick instanceof HIDComboBrick) {
+					break;
 				}
 			}
 		} else {
