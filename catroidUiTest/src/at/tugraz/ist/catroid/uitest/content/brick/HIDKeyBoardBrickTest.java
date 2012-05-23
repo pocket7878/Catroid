@@ -100,7 +100,7 @@ public class HIDKeyBoardBrickTest extends ActivityInstrumentationTestCase2<Scrip
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
 
-		keyBoardButtonBrick = new HIDKeyBoardButtonBrick(sprite, HIDKeyBoardButtonBrick.KeyboardKey.KEY_A);
+		keyBoardButtonBrick = new HIDKeyBoardButtonBrick(sprite);
 
 		script.addBrick(keyBoardButtonBrick);
 
