@@ -172,9 +172,10 @@ public class StorageHandler {
 		return true;
 	}
 
-	public File copySoundFile(String path) throws IOException {
+	public File copySoundFile(String path) throws IOException, InterruptedException {
 		String currentProject = ProjectManager.getInstance().getCurrentProject().getName();
-		File soundDirectory = new File(Utils.buildPath(Utils.buildProjectPath(currentProject), Constants.SOUND_DIRECTORY));
+		File soundDirectory = new File(Utils.buildPath(Utils.buildProjectPath(currentProject),
+				Constants.SOUND_DIRECTORY));
 
 		File inputFile = new File(path);
 		if (!inputFile.exists() || !inputFile.canRead()) {
@@ -270,8 +271,12 @@ public class StorageHandler {
 	}
 
 	private File copyFile(File destinationFile, File sourceFile, File directory) throws IOException {
+		Log.d("Catroid", "Source file exists: " + sourceFile.exists());
+		Log.d("Catroid", "Destination file exists: " + destinationFile.exists());
+
 		FileChannel inputChannel = new FileInputStream(sourceFile).getChannel();
-		FileChannel outputChannel = new FileOutputStream(destinationFile).getChannel();
+		FileOutputStream outputStream = new FileOutputStream(destinationFile);
+		FileChannel outputChannel = outputStream.getChannel();
 
 		String checksumSource = Utils.md5Checksum(sourceFile);
 		FileChecksumContainer fileChecksumContainer = ProjectManager.getInstance().fileChecksumContainer;
