@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+ *  Catroid: An on-device graphical programming language for Android devices
+ *  Copyright (C) 2010-2011 The Catroid Team
+ *  (<http://code.google.com/p/catroid/wiki/Credits>)
+ *  
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *  
+ *  An additional term exception under section 7 of the GNU Affero
+ *  General Public License, version 3, is available at
+ *  http://www.catroid.org/catroid_license_additional_term
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *   
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+	
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/drone_backrepeat"
+    android:orientation="vertical">
+
+    
+ <ScrollView android:id="@+id/scroll" android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+    
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical" android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:orientation="horizontal" android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:paddingTop="15px"
+			android:paddingBottom="5px">
+			<TextView android:id="@+id/tvWifiConnectionTitle"
+				android:text="@string/drone_wifi_connection_title"
+				android:layout_width="match_parent" android:layout_height="match_parent"
+				android:textSize="30px" android:textColor="#ff0000"
+				android:layout_marginLeft="10px" android:layout_centerVertical="true">
+			</TextView>
+		</LinearLayout>
+
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:orientation="vertical" android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:paddingTop="5px"
+			android:paddingBottom="5px">
+			<TextView android:id="@+id/tvWifiConnectionDescription"
+				android:text="@string/drone_wifi_connection_description"
+				android:layout_width="wrap_content" android:layout_height="match_parent"
+				android:textSize="24px" android:textColor="#ffffff"
+				android:layout_marginLeft="10px" android:layout_centerVertical="true">
+			</TextView>
+		</LinearLayout>
+
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:orientation="vertical" android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:paddingTop="30px"
+			android:paddingBottom="5px">
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:orientation="horizontal" android:layout_width="match_parent"
+				android:layout_height="match_parent" android:gravity="center">
+				<ProgressBar android:id="@+id/pb_connection_status"
+					style="@android:style/Widget.ProgressBar.Small"
+					android:layout_width="wrap_content" android:layout_height="match_parent"
+					android:visibility="gone">
+				</ProgressBar>
+				<TextView android:id="@+id/tvWifiConnectionTitle"
+					android:text="@string/drone_wifi_connection_title"
+					android:layout_width="wrap_content" android:layout_height="match_parent"
+					android:textSize="22px" android:textColor="#ffffff"
+					android:layout_marginLeft="10px" android:layout_centerVertical="true">
+				</TextView>
+			</LinearLayout>
+
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:orientation="horizontal" android:layout_width="match_parent"
+				android:layout_height="match_parent" android:paddingTop="10px"
+				android:gravity="center">
+				<ImageView android:id="@+id/iv_status_wifi" android:src="@drawable/yes_icon"
+					android:layout_height="match_parent" android:layout_width="wrap_content"
+					android:gravity="center" android:visibility="gone">
+				</ImageView>
+				<TextView android:id="@+id/tv_status_wifi" android:text="@string/drone_wifi_status_wifi"
+					android:layout_width="wrap_content" android:layout_height="match_parent"
+					android:gravity="center" android:textSize="18px" android:textColor="#ffffff"
+					android:layout_marginLeft="10px" android:layout_centerVertical="true">
+				</TextView>
+			</LinearLayout>
+
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:orientation="horizontal" android:layout_width="match_parent"
+				android:layout_height="match_parent" android:gravity="center">
+				<ImageView android:id="@+id/iv_status_wifi_scan_for_drone"
+					android:src="@drawable/yes_icon" android:layout_height="wrap_content"
+					android:layout_width="wrap_content" android:gravity="center"
+					android:visibility="gone">
+				</ImageView>
+				<TextView android:id="@+id/tv_status_wifi_scan_for_drone"
+					android:text="@string/drone_wifi_status_wifi_scan_for_drone"
+					android:layout_width="wrap_content" android:layout_height="match_parent"
+					android:gravity="center" android:textSize="18px" android:textColor="#ffffff"
+					android:layout_marginLeft="10px" android:layout_centerVertical="true">
+				</TextView>
+			</LinearLayout>
+
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:orientation="horizontal" android:layout_width="match_parent"
+				android:layout_height="match_parent" android:gravity="center">
+				<ImageView android:id="@+id/iv_status_connect_drone"
+					android:src="@drawable/yes_icon" android:layout_height="wrap_content"
+					android:layout_width="wrap_content" android:gravity="center"
+					android:visibility="gone">
+				</ImageView>
+				<TextView android:id="@+id/tv_status_connect_drone"
+					android:text="@string/drone_wifi_status_connect_drone"
+					android:layout_width="wrap_content" android:layout_height="match_parent"
+					android:gravity="center" android:textSize="18px" android:textColor="#ffffff"
+					android:layout_marginLeft="10px" android:layout_centerVertical="true">
+				</TextView>
+			</LinearLayout>
+
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:orientation="horizontal" android:layout_width="match_parent"
+				android:layout_height="match_parent" android:gravity="center">
+				<ImageView android:id="@+id/iv_status_check_firmware"
+					android:src="@drawable/yes_icon" android:layout_height="wrap_content"
+					android:layout_width="wrap_content" android:gravity="center"
+					android:visibility="gone">
+				</ImageView>
+				<TextView android:id="@+id/tv_status_check_firmware"
+					android:text="@string/drone_wifi_status_check_firmware"
+					android:layout_width="wrap_content" android:layout_height="match_parent"
+					android:gravity="center" android:textSize="18px" android:textColor="#ffffff"
+					android:layout_marginLeft="10px" android:layout_centerVertical="true">
+				</TextView>
+			</LinearLayout>
+
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:orientation="horizontal" android:layout_width="match_parent"
+				android:layout_height="match_parent" android:gravity="center">
+				<ImageView android:id="@+id/iv_status_get_navdata"
+					android:src="@drawable/yes_icon" android:layout_height="wrap_content"
+					android:layout_width="wrap_content" android:gravity="center"
+					android:visibility="gone">
+				</ImageView>
+				<TextView android:id="@+id/tv_status_get_navdata"
+					android:text="@string/drone_wifi_status_get_navdata"
+					android:layout_width="wrap_content" android:layout_height="match_parent"
+					android:gravity="center" android:textSize="18px" android:textColor="#ffffff"
+					android:layout_marginLeft="10px" android:layout_centerVertical="true">
+				</TextView>
+			</LinearLayout>
+
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:orientation="horizontal" android:layout_width="match_parent"
+				android:layout_height="match_parent" android:gravity="center">
+				<ImageView android:id="@+id/iv_status_check_config"
+					android:src="@drawable/yes_icon" android:layout_height="wrap_content"
+					android:layout_width="wrap_content" android:gravity="center"
+					android:visibility="gone">
+				</ImageView>
+				<TextView android:id="@+id/tv_status_check_config"
+					android:text="@string/drone_wifi_status_check_config"
+					android:layout_width="wrap_content" android:layout_height="match_parent"
+					android:gravity="center" android:textSize="18px" android:textColor="#ffffff"
+					android:layout_marginLeft="10px" android:layout_centerVertical="true">
+				</TextView>
+			</LinearLayout>
+
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:orientation="horizontal" android:layout_width="match_parent"
+				android:layout_height="match_parent" android:paddingTop="30px"
+				android:gravity="center">
+				<Button android:id="@+id/buttonStart" android:text="@string/drone_bt_wifi_start"
+					android:gravity="center" android:layout_width="wrap_content"
+					android:layout_height="match_parent" android:paddingLeft="100px"
+					android:paddingRight="100px">
+				</Button>
+			</LinearLayout>
+			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:orientation="horizontal" android:layout_width="match_parent"
+				android:layout_height="match_parent" android:paddingTop="30px"
+				android:gravity="center">
+
+				<CheckBox
+				    android:id="@+id/checkBoxUpdateFirmware"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:text="@string/drone_firmware_forceupdate" android:textColor="@color/white"/>
+
+			</LinearLayout>
+		</LinearLayout>
+
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:orientation="vertical" android:layout_width="match_parent"
+			android:layout_height="match_parent" android:paddingTop="30px">
+			<!-- <ScrollView android:layout_width="match_parent"
+				android:layout_height="150px">                       
+				 -->
+				<TextView android:id="@+id/tv_wifi_connection_error"
+					android:text="" android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:textSize="24px"
+					android:textColor="#ff0000" android:layout_marginLeft="10px"
+					android:layout_centerVertical="true">
+				</TextView>
+				<!--
+			</ScrollView>
+			-->
+		</LinearLayout>
+
+	</LinearLayout>
+	</ScrollView>>
+</LinearLayout>

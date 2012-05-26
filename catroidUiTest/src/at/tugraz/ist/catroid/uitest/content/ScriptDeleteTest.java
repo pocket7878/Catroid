@@ -35,6 +35,7 @@ import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
+import at.tugraz.ist.catroid.plugin.PluginManager;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
@@ -70,6 +71,9 @@ public class ScriptDeleteTest extends ActivityInstrumentationTestCase2<ScriptTab
 	}
 
 	public void testAddLooksCategoryBrick() {
+		if (PluginManager.getInstance() == null) {
+			PluginManager.createPluginManager(this.getInstrumentation().getContext());
+		}
 		UiTestUtils.addNewBrick(solo, R.string.brick_set_costume);
 		solo.clickOnText(getActivity().getString(R.string.brick_when_started));
 		assertTrue("Set costume brick was not added",

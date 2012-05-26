@@ -85,6 +85,9 @@ public class BrickCategoryDialog extends Dialog {
 		if (prefs.getBoolean("setting_mindstorm_bricks", false)) {
 			categories.add(inflater.inflate(R.layout.brick_category_lego_nxt, null));
 		}
+		if (prefs.getBoolean("setting_drone_bricks", false)) {
+			categories.add(inflater.inflate(R.layout.brick_category_drone, null));
+		}
 		adapter = new BrickCategoryAdapter(categories);
 		listView.setAdapter(adapter);
 	}

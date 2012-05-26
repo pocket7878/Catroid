@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+ *  Catroid: An on-device graphical programming language for Android devices
+ *  Copyright (C) 2010-2011 The Catroid Team
+ *  (<http://code.google.com/p/catroid/wiki/Credits>)
+ *  
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *  
+ *  An additional term exception under section 7 of the GNU Affero
+ *  General Public License, version 3, is available at
+ *  http://www.catroid.org/catroid_license_additional_term
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *   
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+
+<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneMoveBrick>
+	<options>
+		<!-- TODO Hier ist nicht ganz klar welche options das sind. -->
+		<boolean>false</boolean>
+		<!-- TODO Vielleicht wäre es hier besser jede option zu benennen. -->
+		<boolean>false</boolean>
+		<!-- TODO Also: -->
+		<boolean>false</boolean>
+		<optionx>true</optionx>
+		<boolean>false</boolean>
+		<optiony>false</optiony>
+		<!-- TODO usw -->
+		<boolean>false</boolean>
+		<boolean>false</boolean>
+		<boolean>false</boolean>
+		<boolean>false</boolean>
+	</options>
+	<sprite reference="../../../../.." />
+	<velocity>50</velocity>
+</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneMoveBrick>
+<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopMoveBrick>
+	<sprite reference="../../../../.." />
+</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopMoveBrick>
+<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneMoveAnimationBrick>
+	<animation>0</animation>
+	<!-- TODO Das schaut nach einer magic number aus -->
+	<durationSeconds>3</durationSeconds>
+	<sprite reference="../../../../.." />
+</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneMoveAnimationBrick>
+<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLedAnimationBrick>
+	<animation>0</animation>
+	<!-- TODO Das schaut nach einer magic number aus -->
+	<durationSeconds>3</durationSeconds>
+	<frequency>2.5</frequency>
+	<sprite reference="../../../../.." />
+</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLedAnimationBrick>
+<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneChangeFlyingModeBrick>
+	<flyingMode>0</flyingMode>
+	<sprite reference="../../../../.." />
+	<title>free flight</title>
+</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneChangeFlyingModeBrick>
+<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneConfigBrick>
+	<configKey>1</configKey>
+	<!-- TODO Sind alle diese Dinge notwendig im XML? -->
+	<configKeyTitle>course speed</configKeyTitle>
+	<configValue>2.0</configValue>
+	<configValueTitle>normal</configValueTitle>
+	<sprite reference="../../../../.." />
+</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneConfigBrick>
+<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStartVideoBrick>
+	<sprite reference="../../../../.." />
+</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStartVideoBrick>
+<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoBrick>
+	<sprite reference="../../../../.." />
+</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoBrick>
+<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStartVideoRecorderBrick>
+	<sprite reference="../../../../.." />
+</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStartVideoRecorderBrick>
+<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoRecorderBrick>
+	<sprite reference="../../../../.." />
+</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoRecorderBrick>
+
+
+
+
+<!-- <!-- Sample Schema -->
+-->
+<!-- <xs:complexType name="glideToBrick"> -->
+<!-- <xs:complexContent> -->
+<!-- <xs:extension base="brick"> -->
+<!-- <xs:sequence> -->
+<!-- <xs:element name="durationInMilliSeconds" type="xs:int" /> -->
+<!-- ab hier ist zu ändern -->
+<!-- <xs:element name="sprite" type="spriteRef" minOccurs="0" /> -->
+<!-- <xs:element name="xDestination" type="xs:int" /> -->
+<!-- <xs:element name="yDestination" type="xs:int" /> -->
+<!-- bis hier ändern -->
+<!-- </xs:sequence> -->
+<!-- </xs:extension> -->
+<!-- </xs:complexContent> -->
+<!-- </xs:complexType> -->
+
+<!-- <!-- Sample Schema -->
+-->
+<!-- <xs:complexType name="changeXByBrick"> -->
+<!-- <xs:complexContent> -->
+<!-- <xs:extension base="brick"> -->
+<!-- <xs:sequence> -->
+<!-- <xs:element name="sprite" type="spriteRef" minOccurs="0" /> -->
+<!-- <xs:element name="xMovement" type="xs:int" /> -->
+<!-- </xs:sequence> -->
+<!-- </xs:extension> -->
+<!-- </xs:complexContent> -->
+<!-- </xs:complexType> -->
+
+<!-- <!-- Sample Schema -->
+-->
+<!-- <xs:complexType name="glideToBrick"> -->
+<!-- <xs:complexContent> -->
+<!-- <xs:extension base="brick"> -->
+<!-- <xs:sequence> -->
+<!-- <xs:element name="durationInMilliSeconds" type="xs:int" /> -->
+<!-- ab hier ist zu ändern -->
+<!-- <xs:element name="sprite" type="spriteRef" minOccurs="0" /> -->
+<!-- <xs:element name="xDestination" type="xs:int" /> -->
+<!-- <xs:element name="yDestination" type="xs:int" /> -->
+<!-- bis hier ändern -->
+<!-- </xs:sequence> -->
+<!-- </xs:extension> -->
+<!-- </xs:complexContent> -->
+<!-- </xs:complexType> -->
+
+<!-- Drone Bricks -->
+<!-- DroneChangeFlyingModeBrick -->
+<xs:complexType name="DroneChangeFlyingModeBrick">
+	<xs:complexContent>
+		<xs:extension base="brick">
+			<xs:sequence>
+				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
+
+				<!-- TODO not here in unconfigured brick BEGIN -->
+				<xs:element name="title" type="xs:String" />
+				<!-- TODO not here in unconfigured brick END -->
+
+				<xs:element name="flyingMode" type="xs:int" />
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<!-- DroneConfigBrick -->
+<xs:complexType name="DroneConfigBrick">
+	<xs:complexContent>
+		<xs:extension base="brick">
+			<xs:sequence>
+				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
+				<xs:element name="configKey" type="xs:int" />
+				<xs:element name="configValue" type="xs:float" />
+
+				<!-- TODO not here in unconfigured brick BEGIN -->
+				<xs:element name="configKeyTitle" type="xs:String" />
+				<!-- TODO not here in unconfigured brick END -->
+
+				<!-- TODO not here in unconfigured brick BEGIN -->
+				<xs:element name="configValueTitle" type="xs:String" />
+				<!-- TODO not here in unconfigured brick END -->
+
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<!-- DroneLandBrick -->
+<xs:complexType name="DroneLandBrick">
+	<xs:complexContent>
+		<xs:extension base="brick">
+			<xs:sequence>
+				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<!-- DroneLedAnimationBrick -->
+<!-- private String animationTitle; -->
+<!-- private String animationFrequencyTitle; -->
+<!-- private int animation; -->
+<!-- private float frequency; -->
+<!-- private int durationSeconds; -->
+<xs:complexType name="DroneLedAnimationBrick">
+	<xs:complexContent>
+		<xs:extension base="brick">
+			<xs:sequence>
+				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
+				<xs:element name="animation" type="xs:int" />
+				<xs:element name="durationSeconds" type="xs:int" />
+				<xs:element name="frequency" type="xs:float" />
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<!-- DroneMoveAnimationBrick -->
+<!-- private Sprite sprite; -->
+<!-- private String title; -->
+<!-- private int animation; -->
+<!-- private int durationSeconds; -->
+<xs:complexType name="DroneMoveAnimationBrick">
+	<xs:complexContent>
+		<xs:extension base="brick">
+			<xs:sequence>
+				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
+				<xs:element name="animation" type="xs:int" />
+				<xs:element name="durationSeconds" type="xs:int" />
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<!-- DroneMoveBrick -->
+<!-- private Sprite sprite; -->
+<!-- private boolean[] options; -->
+<!-- private int velocity; -->
+<xs:complexType name="DroneMoveBrick">
+	<xs:complexContent>
+		<xs:extension base="brick">
+			<xs:sequence>
+				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
+
+				<!-- TODO how configure a array -->
+				<xs:element name="options" type="options" />
+
+				<!-- <xs:complexType name="options"> -->
+				<!-- <xs:sequence> -->
+				<!-- <xs:element name="boolean" type="xs:boolean" minOccurs="8" maxOccurs="8"/> -->
+				<!-- </xs:sequence> -->
+				<!-- </xs:complexType> -->
+
+				<!-- Array in the Project file BEGIN -->
+				<!-- <options> -->
+				<!-- <boolean>false</boolean> -->
+				<!-- <boolean>false</boolean> -->
+				<!-- <boolean>false</boolean> -->
+				<!-- <boolean>false</boolean> -->
+				<!-- <boolean>false</boolean> -->
+				<!-- <boolean>false</boolean> -->
+				<!-- <boolean>false</boolean> -->
+				<!-- <boolean>false</boolean> -->
+				<!-- </options> -->
+				<!-- Array in the Project file END -->
+
+				<xs:element name="velocity" type="xs:int" />
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<!-- DroneSaveSnapshotBrick -->
+<xs:complexType name="DroneSaveSnapshotBrick">
+	<xs:complexContent>
+		<xs:extension base="brick">
+			<xs:sequence>
+				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<!-- DroneStartVideoBrick -->
+<xs:complexType name="DroneStartVideoBrick">
+	<xs:complexContent>
+		<xs:extension base="brick">
+			<xs:sequence>
+				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<!-- DroneStartVideoRecorderBrick -->
+<xs:complexType name="DroneStartVideoRecorderBrick">
+	<xs:complexContent>
+		<xs:extension base="brick">
+			<xs:sequence>
+				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<!-- DroneStopMoveBrick -->
+<xs:complexType name="DroneStopMoveBrick">
+	<xs:complexContent>
+		<xs:extension base="brick">
+			<xs:sequence>
+				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<!-- DroneStopVideoBrick -->
+<xs:complexType name="DroneStopVideoBrick">
+	<xs:complexContent>
+		<xs:extension base="brick">
+			<xs:sequence>
+				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+
+<!-- DroneStopVideoRecorderBrick -->
+<xs:complexType name="DroneStopVideoRecorderBrick">
+	<xs:complexContent>
+		<xs:extension base="brick">
+			<xs:sequence>
+				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
+<!-- DroneTakeOffBrick -->
+<xs:complexType name="DroneTakeOffBrick">
+	<xs:complexContent>
+		<xs:extension base="brick">
+			<xs:sequence>
+				<xs:element name="sprite" type="spriteRef" minOccurs="0" />
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>

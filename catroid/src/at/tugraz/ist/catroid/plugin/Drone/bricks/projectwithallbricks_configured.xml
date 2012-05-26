@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+ *  Catroid: An on-device graphical programming language for Android devices
+ *  Copyright (C) 2010-2011 The Catroid Team
+ *  (<http://code.google.com/p/catroid/wiki/Credits>)
+ *  
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *  
+ *  An additional term exception under section 7 of the GNU Affero
+ *  General Public License, version 3, is available at
+ *  http://www.catroid.org/catroid_license_additional_term
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *   
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+<Content.Project>
+	<androidVersion>10</androidVersion>
+	<catroidVersionCode>10</catroidVersionCode>
+	<catroidVersionName>0.5.6a</catroidVersionName>
+	<deviceName>Desire HD</deviceName>
+	<projectName>drone</projectName>
+	<screenHeight>800</screenHeight>
+	<screenWidth>480</screenWidth>
+	<spriteList>
+		<Content.Sprite>
+			<costumeDataList>
+				<Common.CostumeData>
+					<fileName>B978398F6E8D16B857AA81618F3EF879_background</fileName>
+					<name>background</name>
+				</Common.CostumeData>
+			</costumeDataList>
+			<name>Background</name>
+			<scriptList />
+			<soundList />
+		</Content.Sprite>
+		<Content.Sprite>
+			<costumeDataList />
+			<name>123</name>
+			<scriptList>
+				<Content.StartScript>
+					<brickList>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneTakeOffBrick>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneTakeOffBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLandBrick>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLandBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneMoveBrick>
+							<options>
+								<boolean>false</boolean>
+								<boolean>false</boolean>
+								<boolean>false</boolean>
+								<boolean>false</boolean>
+								<boolean>false</boolean>
+								<boolean>false</boolean>
+								<boolean>false</boolean>
+								<boolean>false</boolean>
+							</options>
+							<sprite reference="../../../../.." />
+							<velocity>50</velocity>
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneMoveBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopMoveBrick>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopMoveBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneMoveAnimationBrick>
+							<animation>0</animation>
+							<durationSeconds>3</durationSeconds>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneMoveAnimationBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLedAnimationBrick>
+							<animation>0</animation>
+							<durationSeconds>3</durationSeconds>
+							<frequency>2.5</frequency>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneLedAnimationBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneChangeFlyingModeBrick>
+							<flyingMode>0</flyingMode>
+							<sprite reference="../../../../.." />
+							<title>free flight</title>
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneChangeFlyingModeBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneConfigBrick>
+							<configKey>1</configKey>
+							<configKeyTitle>course speed</configKeyTitle>
+							<configValue>2.0</configValue>
+							<configValueTitle>normal</configValueTitle>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneConfigBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStartVideoBrick>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStartVideoBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoBrick>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStartVideoRecorderBrick>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStartVideoRecorderBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoRecorderBrick>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneStopVideoRecorderBrick>
+						<at.tugraz.ist.catroid.plugin.Drone.bricks.DroneSaveSnapshotBrick>
+							<sprite reference="../../../../.." />
+						</at.tugraz.ist.catroid.plugin.Drone.bricks.DroneSaveSnapshotBrick>
+					</brickList>
+					<sprite reference="../../.." />
+				</Content.StartScript>
+			</scriptList>
+			<soundList />
+		</Content.Sprite>
+	</spriteList>
+</Content.Project>

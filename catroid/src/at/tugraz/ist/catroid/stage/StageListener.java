@@ -425,6 +425,14 @@ public class StageListener implements ApplicationListener {
 		return testPixels;
 	}
 
+	public void addActor(Actor costume) {
+		stage.addActor(costume);
+	}
+
+	public void removeActor(Actor costume) {
+		stage.removeActor(costume);
+	}
+
 	public void changeScreenSize() {
 		switch (screenMode) {
 			case MAXIMIZE:
