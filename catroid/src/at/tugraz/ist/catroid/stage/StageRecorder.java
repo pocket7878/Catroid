@@ -40,6 +40,11 @@ public class StageRecorder {
 	}
 
 	public void start() {
+		String currentProject = ProjectManager.getInstance().getCurrentProject().getName();
+		File recordedFile = new File(Utils.buildPath(Consts.DEFAULT_ROOT, currentProject), "record.xml");
+		if (recordedFile.exists()) {
+			recordedFile.delete();
+		}
 		startTime = System.currentTimeMillis();
 		pausedTime = 0;
 		recording = new Recording();

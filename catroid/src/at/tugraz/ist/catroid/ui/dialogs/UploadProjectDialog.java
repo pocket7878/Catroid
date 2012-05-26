@@ -42,7 +42,6 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Consts;
-import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.transfers.ProjectUploadTask;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -121,14 +120,6 @@ public class UploadProjectDialog extends Dialog implements OnClickListener {
 				InputMethodManager inputManager = (InputMethodManager) context
 						.getSystemService(Context.INPUT_METHOD_SERVICE);
 				inputManager.showSoftInput(projectUploadName, InputMethodManager.SHOW_IMPLICIT);
-			}
-		});
-
-		this.setOnDismissListener(new OnDismissListener() {
-			public void onDismiss(DialogInterface dialog) {
-				if (context instanceof StageActivity) {
-					((StageActivity) context).manageLoadAndFinish();
-				}
 			}
 		});
 

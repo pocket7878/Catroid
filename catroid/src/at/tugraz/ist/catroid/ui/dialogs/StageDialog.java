@@ -112,7 +112,6 @@ public class StageDialog extends Dialog {
 			public void onClick(View v) {
 				StageRecorder.getInstance().finishAndSave();
 				stageActivity.uploadRecordedStage();
-				dismiss();
 			}
 		});
 	}
