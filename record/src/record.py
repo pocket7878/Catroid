@@ -256,10 +256,10 @@ def add_sound(soundEvents, duration, path_to_project):
 
         
         os.system(sound_mix_command)
-        if os.path.exists(os.path.join(path_to_project, 'soundtrack.mp3')):
-            os.system('ffmpeg -i "{0}" -i "{1}" "{2}"'.format(os.path.join(path_to_project, 'soundtrack.mp3'), os.path.join(path_to_project, 'video.avi'), os.path.join(path_to_project, 'out.avi')))
-        else:
-            os.rename(os.path.join(path_to_project, 'video.avi'), os.path.join(path_to_project, 'out.avi'))
+    if os.path.exists(os.path.join(path_to_project, 'soundtrack.mp3')):
+        os.system('ffmpeg -i "{0}" -i "{1}" "{2}"'.format(os.path.join(path_to_project, 'soundtrack.mp3'), os.path.join(path_to_project, 'video.avi'), os.path.join(path_to_project, 'out.avi')))
+    else:
+        os.rename(os.path.join(path_to_project, 'video.avi'), os.path.join(path_to_project, 'out.avi'))
 
 def upload(path_to_project, title, description):
     DEV_KEY = 'AI39si5FEjazuKSkgPMH_1cppVPzUiNLl19UnfzkhvjrFwwbQc4wueHT7CR1oWA__WA5L27INddl9m6UigdcFZaTmvp7h8yUPQ'
