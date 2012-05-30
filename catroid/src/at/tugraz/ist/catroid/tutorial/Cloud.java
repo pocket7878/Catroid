@@ -126,7 +126,7 @@ public class Cloud implements SurfaceObject {
 	}
 
 	public void fadeIn() {
-		this.targetAlpha = 125;
+		this.targetAlpha = 175;
 	}
 
 	public void fadeOut() {

@@ -2,7 +2,7 @@ package at.tugraz.ist.catroid.tutorial.tasks;
 
 import java.util.HashMap;
 
-import at.tugraz.ist.catroid.tutorial.ClickDispatcherV2;
+import at.tugraz.ist.catroid.tutorial.ClickDispatcher;
 import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 
 public class TaskNotification implements Task {
@@ -44,7 +44,7 @@ public class TaskNotification implements Task {
 	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		//		ClickDispatcher clickDispatcher = tutorialOverlay.getClickDispatcher();
 		//		clickDispatcher.setCurrentNotification(notificationType, null);
-		ClickDispatcherV2 clickDispatcher = new ClickDispatcherV2();
+		ClickDispatcher clickDispatcher = new ClickDispatcher();
 		clickDispatcher.processNotification(this);
 		// TODO: Maybe Problem: User presses ProjectListItem between setting Notification at
 		// begin of execute and the specific setCurrentNotification with the notificationString

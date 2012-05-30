@@ -21,8 +21,6 @@ package at.tugraz.ist.catroid.tutorial;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import android.app.Activity;
 import android.content.Context;
@@ -48,23 +46,23 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	private Cloud cloud;
 	private CloudController co;
 	private ControlPanel panel;
-	private final Lock mutex = new ReentrantLock(true);
 
 	@Override
 	protected void finalize() throws Throwable {
 		getHolder().removeCallback(this);
-		mutex.lock();
 		surfaceObjects.clear();
 		surfaceObjects = null;
-		mutex.unlock();
 		cloud = null;
 		co = null;
 		super.finalize();
 
 	};
 
+	public void playIntro(SurfaceObject intro) {
+
+	}
+
 	public void clean() {
-		mutex.lock();
 		getHolder().removeCallback(this);
 		surfaceObjects.clear();
 		surfaceObjects = null;
@@ -72,7 +70,6 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		co = null;
 		panel = null;
 		context = null;
-		mutex.unlock();
 	}
 
 	public TutorialOverlay(Context context) {
@@ -82,12 +79,9 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		this.setZOrderOnTop(true); //necessary
 		getHolder().setFormat(PixelFormat.TRANSPARENT);
 		getHolder().addCallback(this);
-		//		animationThread = new AnimationThread(this);
 		surfaceObjects = new ArrayList<SurfaceObject>();
 		panel = new ControlPanel(context);
-		mutex.lock();
 		surfaceObjects.add(panel);
-		mutex.unlock();
 		co = new CloudController();
 	}
 
@@ -97,10 +91,10 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 		canvas.drawPaint(paint);
 		postInvalidate();
-		//	Cloud.getInstance(context).draw(canvas);
-		if (cloud != null) {
-			cloud.draw(canvas);
+		if (cloud == null) {
+			cloud = Cloud.getInstance(getContext());
 		}
+		cloud.draw(canvas);
 		if (surfaceObjects != null) {
 			synchronized (surfaceObjects) {
 				for (SurfaceObject tmp : surfaceObjects) {
@@ -111,7 +105,6 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 				}
 			}
 		}
-		//		mutex.unlock();
 	}
 
 	@Override
@@ -133,20 +126,16 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	public void addSurfaceObject(SurfaceObject surfaceObject) {
 		if (!surfaceObjects.contains(surfaceObject)) {
 			synchronized (surfaceObjects) {
-				//			mutex.lock();
 				surfaceObjects.add(surfaceObject);
-				//			mutex.unlock();
 			}
 		}
 	}
 
 	public void removeSurfaceObject(SurfaceObject surfaceViewObject) {
 		if (surfaceObjects.contains(surfaceViewObject)) {
-			//			mutex.lock();
 			synchronized (surfaceObjects) {
 				surfaceObjects.remove(surfaceViewObject);
 			}
-			//			mutex.unlock();
 		}
 	}
 

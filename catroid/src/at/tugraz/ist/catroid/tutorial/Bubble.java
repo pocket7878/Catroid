@@ -18,267 +18,88 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
-import java.util.Vector;
-
-import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Paint.Align;
-import android.graphics.PorterDuff;
 import android.graphics.Rect;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.NinePatchDrawable;
-import at.tugraz.ist.catroid.common.Values;
+import at.tugraz.ist.catroid.R;
 
 /**
- * @author User
+ * @author faxxe
  * 
  */
-public class Bubble {
-
-	boolean pause = false;
-
-	NinePatchDrawable mSpeechBubble;
-	Paint textPaint;
-	int textSize = 22;
-	int textWidth = 200; // noch zu berechnen aus der breitesten Line
-	int x; // defined by Tutor
-	int y; // defined by Tutor
-	int lineBreakYOffset = 0;
-
-	int maximumCharsPerLine = 15;
-	int maxLines = 4;
-
-	int height;
-	int width;
-
-	int xText;
-	int yText;
-
-	int marginTop = 5;
-	int marginLeft = 25;
-	int marginRight = 20;
-	int marginBottom = 20;
-
-	boolean notificated = false;
-	Context context;
-
-	// Bubbletext related
-	String bubbleTextRaw;
-	Vector<String> bubbleTextWords;
-	Vector<String> bubbleTextLines;
-
-	// Update related
-	private long frameTicker; // the time of the last frame update
-	private int framePeriod; // milliseconds between each frame (1000/fps)
-	public boolean animationFinished = false; // do muss ma no wos ueberlegen, das hier: totales ende
-	public boolean textFinished = false; // nur ende vom tippen -> Katze muss Mund still halten
-	private boolean waitAfterText = true;
-	private boolean waitedAfterText = false;
-	private int waitTimeAfterText = 1000;
+public class Bubble implements SurfaceObject {
+	private String text = " So, donn woll !";
+	private int currentPosition = 0;
+	private int frames = 0;
+	private NinePatchDrawable speechBubble;
+	private TutorialOverlay tutorialOverlay;
+	private SurfaceObjectTutor tutor;
+	private Bitmap bubble;
+	private Rect bounds;
+	private String textToDraw = "";
+	private String[] textArray = { "", "", "", "", "", "", "", "", "" };
 	private int currentLine = 0;
-	private int currentChar = 1;
+	private int minWidth = 100;
+	private int x = 0;
+	private int y = 0;
+	private int textSize = 16;
 
-	public void update(long gameTime) {
-		if (waitAfterText) {
-			if (gameTime > frameTicker + waitTimeAfterText) {
-				waitAfterText = false;
-			}
-		} else if (gameTime > frameTicker + framePeriod) {
-			frameTicker = gameTime;
-			currentChar++;
+	public Bubble(String text, TutorialOverlay tutorialOverlay, SurfaceObjectTutor tutor, int x, int y) {
+		this.tutor = tutor;
+		this.text = text;
+		this.x = x;
+		this.y = y;
+		tutorialOverlay.addSurfaceObject(this);
+		this.tutorialOverlay = tutorialOverlay;
+		speechBubble = (NinePatchDrawable) Tutorial.getInstance(null).getActualContext().getResources()
+				.getDrawable(R.drawable.bubble);
 
-			if (currentLine < bubbleTextLines.size()) {
-
-				if (currentChar > bubbleTextLines.get(currentLine).length()) {
-					currentLine++;
-					currentChar = 1;
-				}
-
-			} else if (!waitedAfterText) {
-				textFinished = true;
-				waitedAfterText = true;
-				waitAfterText = true;
-			} else if (!notificated) {
-				animationFinished = true;
-				Tutorial tut = Tutorial.getInstance(null);
-				tut.setNotification("BubbleDone");
-				notificated = true;
-			}
-		}
+		bounds = new Rect();
+		bounds.top = y;
+		bounds.left = x;
+		//		bounds.bottom = ;
+		bounds.right = bounds.left + minWidth;
+		speechBubble.setBounds(bounds);
 	}
 
-	Bubble(String bubbleText, Drawable bubbleDrawable, int posxTutor, int posyTutor, Context context) {
-
-		bubbleTextWords = new Vector<String>();
-		bubbleTextLines = new Vector<String>();
-		this.context = context;
-		this.bubbleTextRaw = bubbleText;
-
-		mSpeechBubble = (NinePatchDrawable) bubbleDrawable;
-		setSpeechBubblePaint();
-		animationFinished = false;
-
-		int screenWidth = getScreenWidth();
-
-		if ((screenWidth - posxTutor) >= 150) {
-			this.x = posxTutor + 70;
-			this.y = posyTutor - 30;
-		} else {
-			this.x = posxTutor + 50;
-			this.y = posyTutor + 280;
-		}
-
-		notificated = false;
-
-		framePeriod = 50; // alle 200 ms neues Zeichen
-		frameTicker = 0;
-
-		prepareTextForOutput(bubbleText);
-	}
-
-	public void prepareTextForOutput(String text) {
-		setBubbleLimits();
-		calculateMaxCharsPerLine();
-		bubbleTextWrap();
-		buildTextLines();
-		calculateTextCoords();
-	}
-
-	public void calculateMaxCharsPerLine() {
-		Rect boxSize = mSpeechBubble.getBounds();
-		int size = boxSize.width();
-		int space = (size / (textSize / 2)) - 4;
-		maximumCharsPerLine = space;
-	}
-
-	public void calculateTextCoords() {
-		Rect bounds = mSpeechBubble.getBounds();
-		xText = bounds.left + marginLeft;
-		yText = y - marginBottom - (textSize * maxLines);
-	}
-
-	private int getScreenWidth() {
-		int screenWidth = Values.SCREEN_WIDTH;
-		return screenWidth;
-	}
-
-	public void setBubbleLimits() {
-		int screenWidth = getScreenWidth();
-		Rect bounds = new Rect();
-
-		if ((screenWidth - x) >= screenWidth / 2) {
-			//Katze
-			bounds.left = x;
-			bounds.top = y - (marginTop + marginBottom + (textSize * maxLines)); //immer 4 lines
-			bounds.right = screenWidth - marginRight;
-			bounds.bottom = y + marginBottom;
-
-		} else {
-			//Hund
-			bounds.left = marginLeft;
-			bounds.top = y - (2 * marginTop + 2 * marginBottom + (textSize * maxLines)); //immer 4 lines //why?
-			bounds.right = x;
-			bounds.bottom = y;
-		}
-
-		mSpeechBubble.setBounds(bounds);
-
-	}
-
+	@Override
 	public void draw(Canvas canvas) {
-		mSpeechBubble.draw(canvas);
+		Paint paint = new Paint();
+		paint.setFakeBoldText(true);
+		paint.setTextSize(textSize);
+		if (currentLine < 4) {
+			if (bounds.right < bounds.left + 10 * textArray[currentLine].length()) {
+				bounds.right = bounds.left + 10 * textArray[currentLine].length();
+			}
+			bounds.bottom = 70 + bounds.top + 14 * currentLine + 1;
+			speechBubble.setBounds(bounds);
+			speechBubble.draw(canvas);
+			for (int i = 0; i < 8; i++) {
+				canvas.drawText(textArray[i], x + textSize, y + 20 + i * textSize, paint);
+			}
+		}
+	}
 
-		if (bubbleTextLines.size() >= maxLines) {
-			drawText(canvas, maxLines);
-
-			if (currentLine > maxLines) {
-				for (int i = 0; i < maxLines; i++) {
-					bubbleTextLines.remove(0);
+	@Override
+	public void update(long gameTime) {
+		frames++;
+		if (currentPosition < text.length() && currentLine < 8) {
+			if (frames % 6 == 0) {
+				if (currentPosition > 20 * (currentLine + 1) && text.charAt(currentPosition) == ' ') {
+					currentLine++;
 				}
-				currentLine = 0;
-				canvas.drawColor(0, PorterDuff.Mode.CLEAR);
-			}
 
-		}
-
-		if (bubbleTextLines.size() < maxLines) {
-			drawText(canvas, bubbleTextLines.size());
-		}
-
-	}
-
-	public void drawText(Canvas canvas, int limit) {
-		for (int i = 0; i < limit; i++) {
-			if (i == currentLine) {
-				int charsToShow = currentChar;
-				if (currentChar >= bubbleTextLines.get(i).length()) {
-					charsToShow = bubbleTextLines.get(i).length() - 1;
-				}
-				int yTextFinal = yText + (textSize * (i + 1));
-				canvas.drawText(bubbleTextLines.get(i).substring(0, charsToShow), xText, yTextFinal, textPaint);
-			} else if (i < currentLine) {
-				int yTextFinal = yText + (textSize * (i + 1));
-				canvas.drawText(bubbleTextLines.get(i), xText, yTextFinal, textPaint);
+				textArray[currentLine] = textArray[currentLine] + text.charAt(currentPosition);
+				currentPosition++;
 			}
 		}
-
-	}
-
-	public void drawSpeechBubble(Canvas canvas, int pos_x, int pos_y, int offset_x, int offset_y) {
-		if (!notificated) {
-			Tutorial tut = Tutorial.getInstance(null);
-			tut.setNotification("BubbleDone");
-			notificated = true;
-		}
-	}
-
-	private void buildTextLines() {
-
-		String stringForOutput = "";
-		// Speziallfall: leerer Textstring
-		String stringLastLine = bubbleTextWords.get(0);
-
-		//Spezialfall: ein Wort > 20 Zeichen
-		for (int i = 1; i < bubbleTextWords.size(); i++) {
-			if (bubbleTextWords.get(i).length() + stringLastLine.length() < maximumCharsPerLine) {
-				stringLastLine += " ";
-				stringLastLine += bubbleTextWords.get(i);
-			} else {
-				bubbleTextLines.add(stringLastLine);
-				stringLastLine = bubbleTextWords.get(i);
-			}
-		}
-		bubbleTextLines.add(stringLastLine);
-	}
-
-	private void bubbleTextWrap() {
-		//Spezialfall: nur ein Wort
-		if (!bubbleTextRaw.contains(" ")) {
-			bubbleTextWords.add(bubbleTextRaw);
+		if (frames == 15 * text.length()) {
+			tutor.idle();
+			tutorialOverlay.removeSurfaceObject(this);
+			Tutorial.getInstance(null).setNotification("Bubble finished!");
 		}
 
-		while (bubbleTextRaw.contains(" ")) {
-			bubbleTextRaw = bubbleTextRaw.trim();
-			if (bubbleTextRaw.contains(" ")) {
-				bubbleTextWords.add(bubbleTextRaw.substring(0, bubbleTextRaw.indexOf(" ")));
-				bubbleTextRaw = bubbleTextRaw.substring(bubbleTextRaw.indexOf(" "));
-			} else {
-				bubbleTextWords.add(bubbleTextRaw);
-				bubbleTextRaw = "";
-			}
-		}
 	}
-
-	public void setSpeechBubblePaint() {
-		textPaint = new Paint();
-		textPaint.setColor(Color.BLACK);
-		textPaint.setTextSize(textSize);
-		textPaint.setFakeBoldText(true);
-		textPaint.setTypeface(Typeface.SANS_SERIF);
-		textPaint.setTextAlign(Align.LEFT);
-	}
-
 }

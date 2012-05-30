@@ -73,8 +73,8 @@ public class ControlPanel implements SurfaceObject {
 		play = resources.getDrawable(R.drawable.play_tutorial);
 		pause = resources.getDrawable(R.drawable.pause_tutorial);
 		forward = resources.getDrawable(R.drawable.forward_tutorial);
-		backward = resources.getDrawable(R.drawable.button_bar_tutorial_stop);
-		circle = resources.getDrawable(R.drawable.panel_circle);
+		backward = resources.getDrawable(R.drawable.tutorial_menu_open_inactive);
+		circle = resources.getDrawable(R.drawable.circle_panel);
 
 		bounds = new Rect();
 		menuBounds = new Rect();

@@ -132,12 +132,12 @@ public class TutorialController {
 		}
 		if (tutor == null) {
 			//			tutor = new TutorCat(context, tutorialOverlay);
-			tutor = new NewTutor(R.drawable.cat_tutor, tutorialOverlay, 100, 100, Task.Tutor.CAT);
+			tutor = new Tutor(R.drawable.cat_tutor, tutorialOverlay, 100, 100, Task.Tutor.CAT);
 			tutors.put(tutor.tutorType, tutor);
 		}
 		if (tutor_2 == null) {
 			//			tutor_2 = new TutorDog(context, tutorialOverlay);
-			tutor_2 = new NewTutor(R.drawable.dog_tutor, tutorialOverlay, 400, 400, Task.Tutor.DOG);
+			tutor_2 = new Tutor(R.drawable.dog_tutor, tutorialOverlay, 400, 400, Task.Tutor.DOG);
 			tutors.put(tutor_2.tutorType, tutor_2);
 		}
 		lessonCollection.setTutors(tutors);

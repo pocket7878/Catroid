@@ -86,6 +86,7 @@ public class TutorialThread extends Thread implements Runnable {
 			if (notification == true) {
 				synchronized (this) {
 					try {
+						Log.i("faxxe", " waiting for notification");
 						wait();
 					} catch (InterruptedException e) {
 						Log.i("faxxe", "TutorialThread: wait() failed!");

@@ -3,6 +3,7 @@ package at.tugraz.ist.catroid.tutorial;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.util.Log;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
 public class Lesson {
@@ -60,6 +61,7 @@ public class Lesson {
 
 	//	String executeTask(NewTutorialOverlay tutorialOverlay) {
 	boolean executeTask(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
+		Log.i("faxxe", "executing: " + lessonContent.get(currentStep).toString());
 		return (lessonContent.get(currentStep).execute(tutors));
 		//		if (notification != null) {
 		//			try {
