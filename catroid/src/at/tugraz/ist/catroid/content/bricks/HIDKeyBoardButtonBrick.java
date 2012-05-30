@@ -49,7 +49,7 @@ public class HIDKeyBoardButtonBrick implements Brick, KeyBrickInterface, OnItemS
 	}
 
 	public int getRequiredResources() {
-		return NO_RESOURCES;
+		return BLUETOOTH_HID;
 	}
 
 	public void execute() {

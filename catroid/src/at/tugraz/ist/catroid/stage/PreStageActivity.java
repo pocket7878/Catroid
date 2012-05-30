@@ -85,7 +85,7 @@ public class PreStageActivity extends Activity {
 			checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
 			startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
 		}
-		if ((required_resources & Brick.BLUETOOTH_LEGO_NXT) > 0) {
+		if ((required_resources & Brick.BLUETOOTH_LEGO_NXT) > 0 || (required_resources & Brick.BLUETOOTH_HID) > 0) {
 			BluetoothManager bluetoothManager = new BluetoothManager(this);
 
 			int bluetoothState = bluetoothManager.activateBluetooth();
