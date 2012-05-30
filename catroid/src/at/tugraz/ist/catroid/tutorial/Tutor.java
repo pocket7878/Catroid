@@ -53,7 +53,9 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		super(Tutorial.getInstance(null).getActualContext(), tutorialOverlay);
 		context = Tutorial.getInstance(null).getActualContext();
 		ressources = context.getResources();
-		bitmap = BitmapFactory.decodeResource(ressources, drawable);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inScaled = false;
+                bitmap = BitmapFactory.decodeResource(ressources, drawable, options);
 		paint = new Paint();
 		this.tutorialOverlay = tutorialOverlay;
 	}
@@ -62,7 +64,9 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		super(Tutorial.getInstance(null).getActualContext(), tutorialOverlay);
 		context = Tutorial.getInstance(null).getActualContext();
 		ressources = context.getResources();
-		bitmap = BitmapFactory.decodeResource(ressources, drawable);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inScaled = false;
+                bitmap = BitmapFactory.decodeResource(ressources, drawable, options);
 		paint = new Paint();
 		this.tutorialOverlay = tutorialOverlay;
 		this.targetX = x;
