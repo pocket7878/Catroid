@@ -28,7 +28,7 @@
 
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 					<tutorType>CAT</tutorType>
-					<message>HE!, Dummer Hund!!</message>
+					<message>Hallo,  Hund!!</message>
 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>
@@ -40,7 +40,7 @@
 
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 					<tutorType>DOG</tutorType>
-					<message>Blöde Katz!!</message>
+					<message>Hallo,  Katz!!</message>
 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
@@ -68,7 +68,7 @@
 				
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 					<tutorType>CAT</tutorType>
-					<message>!Argl bla fasel</message>
+					<message>Some text to be said</message>
 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 			
 				
