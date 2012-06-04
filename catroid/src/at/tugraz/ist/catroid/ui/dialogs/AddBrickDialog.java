@@ -16,7 +16,7 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Affero General Public License for more details.
- *   
+ *  
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,6 +28,7 @@ import java.util.List;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -88,6 +89,7 @@ import at.tugraz.ist.catroid.content.bricks.TurnRightBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
 import at.tugraz.ist.catroid.content.bricks.WhenBrick;
 import at.tugraz.ist.catroid.content.bricks.WhenStartedBrick;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.adapter.PrototypeBrickAdapter;
 
@@ -185,6 +187,7 @@ public class AddBrickDialog extends Dialog {
 
 		ImageButton closeButton = (ImageButton) findViewById(R.id.btn_close_dialog);
 		closeButton.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				abort();
 				dismiss();
@@ -206,15 +209,21 @@ public class AddBrickDialog extends Dialog {
 	@Override
 	protected void onStart() {
 		super.onStart();
-
+		Tutorial.getInstance(null).setDialog(this);
+		Log.i("faxxe", " onStart() im AddBrickDialog");
 		listView = (ListView) findViewById(R.id.addBrickDialogListView);
 		brickMap = setupBrickMap(ProjectManager.getInstance().getCurrentSprite(), scriptTabActivity);
 		adapter = new PrototypeBrickAdapter(this.scriptTabActivity, brickMap.get(category));
 
 		listView.setAdapter(adapter);
 
+		Tutorial.getInstance(null).setDialog(this);
 		listView.setOnItemClickListener(new ListView.OnItemClickListener() {
+			//<<<<<<< HEAD
 
+			//=======
+			@Override
+			//>>>>>>> tutorial_otto
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Brick addedBrick = adapter.getItem(position);
 				ProjectManager projectManager = ProjectManager.getInstance();
@@ -288,6 +297,9 @@ public class AddBrickDialog extends Dialog {
 				}
 				scriptTabActivity.dismissDialog(ScriptTabActivity.DIALOG_ADD_BRICK);
 				scriptTabActivity.dismissDialog(ScriptTabActivity.DIALOG_BRICK_CATEGORY);
+				//Tutorial tutorial = Tutorial.getInstance(null);
+				Tutorial.getInstance(null).setNotification("DIALOG");
+				Tutorial.getInstance(null).setDialog(null);
 			}
 		});
 	}

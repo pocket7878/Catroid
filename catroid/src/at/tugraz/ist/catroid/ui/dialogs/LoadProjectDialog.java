@@ -65,6 +65,7 @@ public class LoadProjectDialog extends Dialog {
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new ListView.OnItemClickListener() {
 
+			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if (!ProjectManager.getInstance().loadProject(adapter.getItem(position), context, true)) {
 					return; // error message already in ProjectManager loadProject
@@ -90,8 +91,16 @@ public class LoadProjectDialog extends Dialog {
 		File[] sdFileList = directory.listFiles();
 		for (File file : sdFileList) {
 			if (file.isDirectory()) {
+<<<<<<< HEAD
 				//searchForProjectFiles(file);
 				adapterFileList.add(file.getName());
+=======
+				if (!file.getName().endsWith("_tutorial")) {
+					searchForProjectFiles(file);
+				}
+			} else if (file.isFile() && file.getName().endsWith(Consts.PROJECT_EXTENTION)) {
+				adapterFileList.add(Utils.getProjectName(file.getName()));
+>>>>>>> tutorial_otto
 			}
 		}
 	}

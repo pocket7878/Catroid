@@ -1,4 +1,5 @@
 /**
+
  *  Catroid: An on-device graphical programming language for Android devices
  *  Copyright (C) 2010-2011 The Catroid Team
  *  (<http://code.google.com/p/catroid/wiki/Credits>)
@@ -36,6 +37,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
 import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
 import at.tugraz.ist.catroid.ui.dragndrop.DragAndDropListView;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -47,6 +49,15 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 	private Script scriptToEdit;
 	private boolean addNewScript;
 	private static final int DIALOG_ADD_BRICK = 2;
+	private Tutorial tutorial;
+
+	@Override
+	public void onBackPressed() {
+		if (Tutorial.getInstance(null).isActive()) {
+			return;
+		}
+		super.onBackPressed();
+	}
 
 	private void initListeners() {
 		sprite = ProjectManager.getInstance().getCurrentSprite();
@@ -78,7 +89,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
-
+		Tutorial.getInstance(this).pauseTutorial();
 		ProjectManager projectManager = ProjectManager.getInstance();
 		if (projectManager.getCurrentProject() != null) {
 			projectManager.saveProject();
@@ -98,6 +109,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		Tutorial.getInstance(this).resumeTutorial();
 		if (!Utils.checkForSdCard(this)) {
 			return;
 		}
@@ -116,8 +128,11 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 
 	private View.OnClickListener createAddBrickClickListener() {
 		return new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
+				Tutorial.getInstance(null).pauseTutorial();
 				getParent().showDialog(DIALOG_ADD_BRICK);
+				Tutorial.getInstance(null).resumeTutorial();
 			}
 		};
 	}
@@ -142,6 +157,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 		adapter.notifyDataSetChanged();
 	}
 
+	@Override
 	public void onCancel(DialogInterface arg0) {
 		adapter.notifyDataSetChanged();
 	}

@@ -142,6 +142,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 
 		activityHelper.addActionButton(R.id.btn_action_add_button, R.drawable.ic_plus_black, R.string.add, null, false);
 
+<<<<<<< HEAD
 		activityHelper.addActionButton(R.id.btn_action_play, R.drawable.ic_play_black, R.string.start,
 				new View.OnClickListener() {
 					public void onClick(View v) {
@@ -149,6 +150,15 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 						startActivityForResult(intent, PreStageActivity.REQUEST_RESOURCES_INIT);
 					}
 				}, false);
+=======
+		activityHelper.addActionButton(R.id.btn_action_play, R.drawable.ic_play_black, new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(ScriptTabActivity.this, PreStageActivity.class);
+				startActivityForResult(intent, PreStageActivity.REQUEST_RESOURCES_INIT);
+			}
+		}, false);
+>>>>>>> tutorial_otto
 	}
 
 	@Override
@@ -255,6 +265,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 		dismissDialog(DIALOG_RENAME_COSTUME);
 	}
 
+<<<<<<< HEAD
 	public void handlePositiveButtonDeleteCostume(View v) {
 		deleteCostumeDialog.handleOkButton();
 	}
@@ -271,6 +282,9 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 		dismissDialog(DIALOG_DELETE_SOUND);
 	}
 
+=======
+	@Override
+>>>>>>> tutorial_otto
 	public void onDismiss(DialogInterface dialogInterface) {
 
 		if (!dontcreateNewBrick) {

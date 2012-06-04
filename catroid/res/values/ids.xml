@@ -22,7 +22,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources>
-
     <!-- action bar buttons -->
     <item name="btn_action_add_button" type="id"/>
     <item name="btn_action_play" type="id"/>
@@ -30,5 +29,5 @@
     <item name="btn_action_main" type="id"/>
     <item name="btn_home" type="id"/>
     <item name="btn_cam" type="id"/>
-
 </resources>
+

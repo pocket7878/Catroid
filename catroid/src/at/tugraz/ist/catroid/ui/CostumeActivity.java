@@ -48,6 +48,7 @@ import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
 import at.tugraz.ist.catroid.ui.adapter.CostumeAdapter;
 import at.tugraz.ist.catroid.utils.ActivityHelper;
 import at.tugraz.ist.catroid.utils.ImageEditing;
@@ -58,6 +59,14 @@ public class CostumeActivity extends ListActivity {
 
 	public static final int REQUEST_SELECT_IMAGE = 0;
 	public static final int REQUEST_PAINTROID_EDIT_IMAGE = 1;
+
+	@Override
+	public void onBackPressed() {
+		if (Tutorial.getInstance(null).isActive()) {
+			return;
+		}
+		super.onBackPressed();
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +81,7 @@ public class CostumeActivity extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		Tutorial.getInstance(this).resumeTutorial();
 		if (!Utils.checkForSdCard(this)) {
 			return;
 		}
@@ -97,8 +107,26 @@ public class CostumeActivity extends ListActivity {
 
 	}
 
+	private View.OnClickListener createAddCostumeClickListener() {
+		return new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+
+				Bundle bundleForPaintroid = new Bundle();
+				bundleForPaintroid.putString(CostumeActivity.this.getString(R.string.extra_picture_path_paintroid), "");
+
+				intent.setType("image/*");
+				intent.putExtras(bundleForPaintroid);
+				Intent chooser = Intent.createChooser(intent, getString(R.string.select_image));
+				startActivityForResult(chooser, REQUEST_SELECT_IMAGE);
+			}
+		};
+	}
+
 	@Override
 	protected void onPause() {
+		Tutorial.getInstance(this).pauseTutorial();
 		super.onPause();
 		ProjectManager projectManager = ProjectManager.getInstance();
 		if (projectManager.getCurrentProject() != null) {
@@ -115,8 +143,10 @@ public class CostumeActivity extends ListActivity {
 		((CostumeAdapter) getListAdapter()).notifyDataSetChanged();
 
 		//scroll down the list to the new item:
+
 		final ListView listView = getListView();
 		listView.post(new Runnable() {
+			@Override
 			public void run() {
 				listView.setSelection(listView.getCount() - 1);
 			}
@@ -246,6 +276,7 @@ public class CostumeActivity extends ListActivity {
 
 	private View.OnClickListener createAddCostumeClickListener() {
 		return new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 
@@ -304,12 +335,14 @@ public class CostumeActivity extends ListActivity {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setMessage(getString(R.string.paintroid_not_installed)).setCancelable(false)
 					.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int id) {
 							Intent downloadPaintroidIntent = new Intent(Intent.ACTION_VIEW, Uri
 									.parse(Constants.PAINTROID_DOWNLOAD_LINK));
 							startActivity(downloadPaintroidIntent);
 						}
 					}).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog, int id) {
 							dialog.cancel();
 						}
