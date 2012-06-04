@@ -510,7 +510,7 @@ public class StorageHandler {
 	private File savePictureFromResourceInProject(String project, String name, int fileId, Context context)
 			throws IOException {
 
-		final String imagePath = Utils.buildPath(Consts.DEFAULT_ROOT, project, Constants.IMAGE_DIRECTORY, name);
+		final String imagePath = Utils.buildPath(Constants.DEFAULT_ROOT, project, Constants.IMAGE_DIRECTORY, name);
 		File testImage = new File(imagePath);
 		if (!testImage.exists()) {
 			testImage.createNewFile();
