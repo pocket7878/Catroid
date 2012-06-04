@@ -40,12 +40,9 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private int state = -1;
 	private int currentFrame = 0;
 	private int currentStep = 0;
-	private int maxSteps = 0;
-	private long timeStamp = 0;
 	private Paint paint;
 	private int sizeX = 110;
 	private int sizeY = 94;
-	private int line = 0;
 	private int targetX;
 	private int targetY;
 
@@ -53,9 +50,9 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		super(Tutorial.getInstance(null).getActualContext(), tutorialOverlay);
 		context = Tutorial.getInstance(null).getActualContext();
 		ressources = context.getResources();
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inScaled = false;
-                bitmap = BitmapFactory.decodeResource(ressources, drawable, options);
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inScaled = false;
+		bitmap = BitmapFactory.decodeResource(ressources, drawable, options);
 		paint = new Paint();
 		this.tutorialOverlay = tutorialOverlay;
 	}
@@ -64,9 +61,9 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		super(Tutorial.getInstance(null).getActualContext(), tutorialOverlay);
 		context = Tutorial.getInstance(null).getActualContext();
 		ressources = context.getResources();
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inScaled = false;
-                bitmap = BitmapFactory.decodeResource(ressources, drawable, options);
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inScaled = false;
+		bitmap = BitmapFactory.decodeResource(ressources, drawable, options);
 		paint = new Paint();
 		this.tutorialOverlay = tutorialOverlay;
 		this.targetX = x;

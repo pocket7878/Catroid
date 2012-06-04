@@ -18,7 +18,6 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -37,9 +36,7 @@ public class NewBubble implements SurfaceObject {
 	private NinePatchDrawable speechBubble;
 	private TutorialOverlay tutorialOverlay;
 	private SurfaceObjectTutor tutor;
-	private Bitmap bubble;
 	private Rect bounds;
-	private String textToDraw = "";
 	private String[] textArray = { "", "", "", "", "", "", "", "", "" };
 	private int currentLine = 0;
 

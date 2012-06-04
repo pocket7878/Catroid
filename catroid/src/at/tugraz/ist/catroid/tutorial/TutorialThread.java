@@ -29,9 +29,7 @@ import android.util.Log;
 public class TutorialThread extends Thread implements Runnable {
 	private LessonCollection lessonCollection;
 	public boolean tutorialThreadRunning = true;
-	private boolean threadWait = true;
 	private volatile ArrayList<String> notifies = new ArrayList<String>();
-	private String currentNotification;
 
 	public TutorialThread() {
 		Thread thisThread = new Thread(this);
@@ -77,7 +75,6 @@ public class TutorialThread extends Thread implements Runnable {
 	}
 
 	public void waitThread() {
-		threadWait = true;
 	}
 
 	private void runTutorial() {

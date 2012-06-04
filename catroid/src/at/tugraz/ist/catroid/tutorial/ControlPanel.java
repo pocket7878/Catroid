@@ -118,17 +118,17 @@ public class ControlPanel implements SurfaceObject {
 		menuBounds.top = getScreenHeight() - menuBitmap.getHeight();
 	}
 
-	private void setBounds(int shift) {
-		int height = getScreenHeight();
-		int width = getScreenWidth();
-		//abstand zwischen buttons = 20
-
-		bounds.left = ((width - 260) / 2) + shift;
-		bounds.right = bounds.left + 50;
-		bounds.top = height - 40;
-		bounds.bottom = height;// - 10;
-
-	}
+	//	private void setBounds(int shift) {
+	//		int height = getScreenHeight();
+	//		int width = getScreenWidth();
+	//		//abstand zwischen buttons = 20
+	//
+	//		bounds.left = ((width - 260) / 2) + shift;
+	//		bounds.right = bounds.left + 50;
+	//		bounds.top = height - 40;
+	//		bounds.bottom = height;// - 10;
+	//
+	//	}
 
 	private int getScreenHeight() {
 		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
@@ -136,11 +136,11 @@ public class ControlPanel implements SurfaceObject {
 		return screenHeight;
 	}
 
-	private int getScreenWidth() {
-		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
-		int screenWidth = display.getWidth();
-		return screenWidth;
-	}
+	//	private int getScreenWidth() {
+	//		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+	//		int screenWidth = display.getWidth();
+	//		return screenWidth;
+	//	}
 
 	public Rect getPanelBounds() {
 		//coordinaten von gesamten panel mit 4 button

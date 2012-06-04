@@ -48,7 +48,7 @@ public class TaskNotification implements Task {
 		clickDispatcher.processNotification(this);
 		// TODO: Maybe Problem: User presses ProjectListItem between setting Notification at
 		// begin of execute and the specific setCurrentNotification with the notificationString
-		if (notificationType == notificationType.PROJECT_ADD_SPRITE) {
+		if (notificationType == Notification.PROJECT_ADD_SPRITE) {
 			return true;
 		}
 
@@ -62,7 +62,7 @@ public class TaskNotification implements Task {
 		//		if (notificationType == notificationType.BRICK_CATEGORY_DIALOG) {
 		//			return ("DIALOG");
 		//		}
-		if (notificationType == notificationType.BRICK_ADD_DIALOG) {
+		if (notificationType == Notification.BRICK_ADD_DIALOG) {
 			return true;
 		}
 		//		if (notificationType == notificationType.BRICK_DIALOG_DONE) {

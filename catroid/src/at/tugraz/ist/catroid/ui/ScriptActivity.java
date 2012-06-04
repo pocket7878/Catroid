@@ -49,7 +49,6 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 	private Script scriptToEdit;
 	private boolean addNewScript;
 	private static final int DIALOG_ADD_BRICK = 2;
-	private Tutorial tutorial;
 
 	@Override
 	public void onBackPressed() {

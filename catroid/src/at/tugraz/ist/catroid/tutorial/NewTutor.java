@@ -40,12 +40,8 @@ public class NewTutor extends SurfaceObjectTutor implements SurfaceObject {
 	private int state = -1;
 	private int currentFrame = 0;
 	private int currentStep = 0;
-	private int maxSteps = 0;
-	private long timeStamp = 0;
 	private Paint paint;
 	private int sizeX = 100;
-	private int sizeY = 100;
-	private int line = 0;
 	private int targetX;
 	private int targetY;
 

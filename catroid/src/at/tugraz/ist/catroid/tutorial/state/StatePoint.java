@@ -34,7 +34,6 @@ public class StatePoint implements State {
 	int currentFrame;
 	int frameCount;
 	Bitmap bitmaps_point[];
-	private StateController controller;
 	Resources resources;
 	private static StatePoint instance;
 	boolean animationDirectionToBody;
@@ -46,7 +45,6 @@ public class StatePoint implements State {
 
 	private StatePoint(StateController controller, Resources resources, Task.Tutor tutorType) {
 		this.resources = resources;
-		this.controller = controller;
 		bitmaps_point = new Bitmap[6];
 		if (tutorType.compareTo(Task.Tutor.CAT) == 0) {
 			bitmaps_point[0] = BitmapFactory.decodeResource(resources, R.drawable.simons_cat_point_1);

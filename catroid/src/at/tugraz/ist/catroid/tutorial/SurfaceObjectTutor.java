@@ -32,7 +32,6 @@ public abstract class SurfaceObjectTutor implements SurfaceObject {
 
 	public Task.Tutor tutorType;
 	private TutorialOverlay tutorialOverlay;
-	private Context context;
 
 	//	public SurfaceObjectTutor(NewTutorialOverlay tutorialOverlay) {
 	//		this.tutorialOverlay = tutorialOverlay;
@@ -40,7 +39,6 @@ public abstract class SurfaceObjectTutor implements SurfaceObject {
 	//	}
 
 	public SurfaceObjectTutor(Context context, TutorialOverlay tutorialOverlay) {
-		this.context = context;
 		this.tutorialOverlay = tutorialOverlay;
 		tutorialOverlay.addSurfaceObject(this);
 	}
