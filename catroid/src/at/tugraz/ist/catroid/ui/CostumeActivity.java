@@ -107,22 +107,22 @@ public class CostumeActivity extends ListActivity {
 
 	}
 
-	private View.OnClickListener createAddCostumeClickListener() {
-		return new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-
-				Bundle bundleForPaintroid = new Bundle();
-				bundleForPaintroid.putString(CostumeActivity.this.getString(R.string.extra_picture_path_paintroid), "");
-
-				intent.setType("image/*");
-				intent.putExtras(bundleForPaintroid);
-				Intent chooser = Intent.createChooser(intent, getString(R.string.select_image));
-				startActivityForResult(chooser, REQUEST_SELECT_IMAGE);
-			}
-		};
-	}
+	//	private View.OnClickListener createAddCostumeClickListener() {
+	//		return new View.OnClickListener() {
+	//			@Override
+	//			public void onClick(View v) {
+	//				Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+	//
+	//				Bundle bundleForPaintroid = new Bundle();
+	//				bundleForPaintroid.putString(Constants.EXTRA_PICTURE_PATH_PAINTROID, "");
+	//
+	//				intent.setType("image/*");
+	//				intent.putExtras(bundleForPaintroid);
+	//				Intent chooser = Intent.createChooser(intent, getString(R.string.select_image));
+	//				startActivityForResult(chooser, REQUEST_SELECT_IMAGE);
+	//			}
+	//		};
+	//	}
 
 	@Override
 	protected void onPause() {

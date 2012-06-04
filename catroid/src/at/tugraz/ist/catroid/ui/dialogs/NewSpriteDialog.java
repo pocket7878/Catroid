@@ -23,7 +23,6 @@
 package at.tugraz.ist.catroid.ui.dialogs;
 
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnKeyListener;
 import android.view.KeyEvent;
 import android.view.View;
@@ -67,36 +66,37 @@ public class NewSpriteDialog extends TextDialog {
 		activity.dismissDialog(ProjectActivity.DIALOG_NEW_SPRITE);
 	}
 
-<<<<<<< HEAD
+	//<<<<<<< HEAD
 	private void initKeyAndClickListener() {
 		dialog.setOnKeyListener(new OnKeyListener() {
-=======
-	private void initKeyListener(AlertDialog.Builder builder) {
-		builder.setOnCancelListener(new OnCancelListener() {
-
+			//=======
+			//	private void initKeyListener(AlertDialog.Builder builder) {
+			//		builder.setOnCancelListener(new OnCancelListener() {
+			//
+			//			@Override
+			//			public void onCancel(DialogInterface dialog) {
+			//				Tutorial tutorial = Tutorial.getInstance(projectActivity.getApplicationContext());
+			//				tutorial.rewindStep();
+			//				tutorial.rewindStep();
+			//				tutorial.setNotification("DialogDone");
+			//			}
+			//		});
+			//
+			//		builder.setOnKeyListener(new OnKeyListener() {
+			//			@Override
+			//>>>>>>> tutorial_otto
 			@Override
-			public void onCancel(DialogInterface dialog) {
-				Tutorial tutorial = Tutorial.getInstance(projectActivity.getApplicationContext());
-				tutorial.rewindStep();
-				tutorial.rewindStep();
-				tutorial.setNotification("DialogDone");
-			}
-		});
-
-		builder.setOnKeyListener(new OnKeyListener() {
-			@Override
->>>>>>> tutorial_otto
 			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
 					String newSpriteName = (input.getText().toString()).trim();
 					if (projectManager.spriteExists(newSpriteName)) {
-<<<<<<< HEAD
+						//<<<<<<< HEAD
 						Utils.displayErrorMessage(activity, activity.getString(R.string.spritename_already_exists));
-=======
-						Utils.displayErrorMessage(projectActivity,
-								projectActivity.getString(R.string.spritename_already_exists));
-						Tutorial.getInstance(null).setNotification("DialogDone");
->>>>>>> tutorial_otto
+						//=======
+						//						Utils.displayErrorMessage(projectActivity,
+						//								projectActivity.getString(R.string.spritename_already_exists));
+						//						Tutorial.getInstance(null).setNotification("DialogDone");
+						//>>>>>>> tutorial_otto
 					} else {
 						handleOkButton();
 						return true;
@@ -106,44 +106,46 @@ public class NewSpriteDialog extends TextDialog {
 			}
 		});
 
-<<<<<<< HEAD
+		//<<<<<<< HEAD
 		buttonPositive.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				handleOkButton();
 			}
 		});
 
 		buttonNegative.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				input.setText(null);
 				activity.dismissDialog(ProjectActivity.DIALOG_NEW_SPRITE);
-=======
-		dialog.setOnShowListener(new OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				InputMethodManager inputManager = (InputMethodManager) projectActivity
-						.getSystemService(Context.INPUT_METHOD_SERVICE);
-				inputManager.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
-			}
-		});
-
-		input.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				if (s.length() == 0 || (s.length() == 1 && s.charAt(0) == '.')) {
-					buttonPositive.setEnabled(false);
-				} else {
-					buttonPositive.setEnabled(true);
-				}
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
->>>>>>> tutorial_otto
+				//=======
+				//		dialog.setOnShowListener(new OnShowListener() {
+				//			@Override
+				//			public void onShow(DialogInterface dialog) {
+				//				InputMethodManager inputManager = (InputMethodManager) projectActivity
+				//						.getSystemService(Context.INPUT_METHOD_SERVICE);
+				//				inputManager.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
+				//			}
+				//		});
+				//
+				//		input.addTextChangedListener(new TextWatcher() {
+				//			@Override
+				//			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				//				if (s.length() == 0 || (s.length() == 1 && s.charAt(0) == '.')) {
+				//					buttonPositive.setEnabled(false);
+				//				} else {
+				//					buttonPositive.setEnabled(true);
+				//				}
+				//			}
+				//
+				//			@Override
+				//			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				//			}
+				//
+				//			@Override
+				//			public void afterTextChanged(Editable s) {
+				//>>>>>>> tutorial_otto
 			}
 		});
 	}

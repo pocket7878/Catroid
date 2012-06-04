@@ -40,6 +40,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.util.Log;
 import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.FileChecksumContainer;
@@ -47,6 +48,7 @@ import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
+import at.tugraz.ist.catroid.content.WhenScript;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
 import at.tugraz.ist.catroid.stage.NativeAppActivity;
@@ -66,6 +68,12 @@ public class StorageHandler {
 	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>\n";
 
 	private static final String BACKGROUND = null;
+
+	private static final String NORMAL_CAT = null;
+
+	private static final String BANZAI_CAT = null;
+
+	private static final String CHESHIRE_CAT = null;
 	private static StorageHandler instance;
 	private XStream xstream;
 
@@ -187,7 +195,8 @@ public class StorageHandler {
 
 	public File copySoundFile(String path) throws IOException {
 		String currentProject = ProjectManager.getInstance().getCurrentProject().getName();
-		File soundDirectory = new File(Utils.buildPath(Utils.buildProjectPath(currentProject), Constants.SOUND_DIRECTORY));
+		File soundDirectory = new File(Utils.buildPath(Utils.buildProjectPath(currentProject),
+				Constants.SOUND_DIRECTORY));
 
 		File inputFile = new File(path);
 		if (!inputFile.exists() || !inputFile.canRead()) {
@@ -318,8 +327,6 @@ public class StorageHandler {
 		}
 	}
 
-<<<<<<< HEAD
-=======
 	/**
 	 * Creates the default project and saves it to the filesystem
 	 * 
@@ -344,9 +351,9 @@ public class StorageHandler {
 		Sprite sprite = new Sprite("Catroid");
 		Sprite backgroundSprite = defaultProject.getSpriteList().get(0);
 
-		Script backgroundStartScript = new StartScript("stageStartScript", backgroundSprite);
-		Script startScript = new StartScript("startScript", sprite);
-		Script whenScript = new WhenScript("whenScript", sprite);
+		Script backgroundStartScript = new StartScript(backgroundSprite);
+		Script startScript = new StartScript(sprite);
+		Script whenScript = new WhenScript(sprite);
 
 		File normalCatTemp = savePictureFromResourceInProject(projectName, NORMAL_CAT, R.drawable.catroid, context);
 		File banzaiCatTemp = savePictureFromResourceInProject(projectName, BANZAI_CAT, R.drawable.catroid_banzai,
@@ -356,7 +363,7 @@ public class StorageHandler {
 		File backgroundTemp = savePictureFromResourceInProject(projectName, BACKGROUND, R.drawable.background_blueish,
 				context);
 
-		String directoryName = Utils.buildPath(Consts.DEFAULT_ROOT, projectName, Consts.IMAGE_DIRECTORY);
+		String directoryName = Utils.buildPath(Constants.DEFAULT_ROOT, projectName, Constants.IMAGE_DIRECTORY);
 		File normalCat = new File(Utils.buildPath(directoryName,
 				Utils.md5Checksum(normalCatTemp) + "_" + normalCatTemp.getName()));
 		File banzaiCat = new File(Utils.buildPath(directoryName,
@@ -522,5 +529,4 @@ public class StorageHandler {
 
 		return testImage;
 	}
->>>>>>> tutorial_otto
 }
