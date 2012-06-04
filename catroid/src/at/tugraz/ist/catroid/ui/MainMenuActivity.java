@@ -44,6 +44,7 @@ import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.transfers.CheckTokenTask;
 import at.tugraz.ist.catroid.transfers.ProjectDownloadTask;
+import at.tugraz.ist.catroid.tutorial.Tutorial;
 import at.tugraz.ist.catroid.ui.dialogs.AboutDialog;
 import at.tugraz.ist.catroid.ui.dialogs.LoadProjectDialog;
 import at.tugraz.ist.catroid.ui.dialogs.LoginRegisterDialog;
@@ -278,6 +279,10 @@ public class MainMenuActivity extends Activity {
 
 	public void handleAboutCatroidButton(View v) {
 		showDialog(DIALOG_ABOUT);
+	}
+
+	public void handleTutorialButton(View v) {
+		Tutorial.getInstance(this).startTutorial();
 	}
 
 	private String getProjectName(String zipUrl) {
