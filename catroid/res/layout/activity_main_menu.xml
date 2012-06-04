@@ -78,12 +78,19 @@
             android:onClick="handleSettingsButton"
             android:text="@string/settings" />
 
-        <Button
+<!--         <Button
             android:id="@+id/forum_button"
             style="@style/DashboardButton"
             android:drawableTop="@drawable/forum_selector"
             android:onClick="handleForumButton"
-            android:text="@string/forum" />
+            android:text="@string/forum" /> -->
+        
+        <Button
+            android:id="@+id/tutorial_button"
+            style="@style/DashboardButton"
+            android:drawableTop="@drawable/ic_tutorial"
+            android:onClick="handleTutorialButton"
+            android:text="@string/tutorial" />
 
         <Button
             android:id="@+id/about_catroid_button"
