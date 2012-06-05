@@ -42,7 +42,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private int currentStep = 0;
 	private Paint paint;
 	private int sizeX = 110;
-	private int sizeY = 94;
+	private int sizeY = 105;
 	private int targetX;
 	private int targetY;
 
@@ -79,14 +79,14 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void idle() {
-		state = 3;
+		state = 1;
 	}
 
 	@Override
 	public void say(String text) {
 		Log.i("faxxe", "NewTutor: " + text);
 		new Bubble(text, tutorialOverlay, this, targetX - 20, targetY - 90);
-		state = 1;
+		state = 2;
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	@Override
 	public void disappear() {
 		Log.i("faxxe", "disappearing...");
-		state = 2;
+		state = 3;
 	}
 
 	@Override
@@ -127,48 +127,47 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void draw(Canvas canvas) {
-		Bitmap todraw = Bitmap.createBitmap(bitmap, 0, 0, 100, 100);
-		if (currentStep >= 6) {
+		Bitmap todraw = Bitmap.createBitmap(bitmap, 0, 0, sizeX, sizeY);
+		if (currentStep > 9) {
 			currentStep = 0;
 		}
 		switch (state) {
-			case 1:
-
-				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-				break;
-			case 0:
-				if (currentStep == 5) {
-					state = 3;
+			case 0: //APPEARING
+				if (currentStep == 9) {
+					state = 1;
 					Tutorial.getInstance(null).setNotification("appear done!");
 				}
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 				break;
-			case 9:
-				if (currentStep == 6) {
+			case 1: //IDLE
+				if (currentStep == 9) {
 					currentStep = 0;
 				}
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+				Log.i("HERB", "TUTOR: " + this.tutorType + " - idle!");
 				break;
-			case 3:
-				if (currentStep == 6) {
-					currentStep = 0;
-				}
+			case 2: //SAYING
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 				break;
-			case 2:
-				if (currentStep == 5) {
+			case 3: //DISAPPEARING
+				if (currentStep == 9) {
 					currentStep = 0;
 					state = 92;
 					Tutorial.getInstance(null).setNotification("disappear done!");
 					break;
 				}
-				Log.i("faxxe", "at diaperation..");
+				Log.i("HERB", "TUTOR-died!");
+				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+				break;
+			case 9:
+				if (currentStep == 9) {
+					currentStep = 0;
+				}
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 				break;
 
 			default:
 				return;
-
 		}
 		canvas.drawBitmap(todraw, targetX, targetY, paint);
 
