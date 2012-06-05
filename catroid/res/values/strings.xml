@@ -58,6 +58,7 @@
     <string name="new_project">New Project</string>
     <string name="load">Load</string>
     <string name="about">About Catroid</string>
+    <string name="tutorial">Tutorial</string>
     <string name="upload_project">Upload Project</string>
 
     <!-- Settings activity -->

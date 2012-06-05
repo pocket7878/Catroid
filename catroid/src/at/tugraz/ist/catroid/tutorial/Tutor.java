@@ -84,7 +84,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void say(String text) {
-		Log.i("faxxe", "NewTutor: " + text);
+		Log.i("herb", "NewTutor: " + text);
 		new Bubble(text, tutorialOverlay, this, targetX - 20, targetY - 90);
 		state = 2;
 	}
@@ -100,13 +100,13 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	public void appear(int x, int y) {
 		targetX = x;
 		targetY = y;
-		Log.i("faxxe", " appear!");
+		Log.i("herb", " appear!");
 		state = 0;
 	}
 
 	@Override
 	public void disappear() {
-		Log.i("faxxe", "disappearing...");
+		Log.i("herb", "disappearing...");
 		state = 3;
 	}
 
@@ -152,20 +152,13 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 			case 3: //DISAPPEARING
 				if (currentStep == 9) {
 					currentStep = 0;
-					state = 92;
+					state = 100;
 					Tutorial.getInstance(null).setNotification("disappear done!");
 					break;
 				}
 				Log.i("HERB", "TUTOR-died!");
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 				break;
-			case 9:
-				if (currentStep == 9) {
-					currentStep = 0;
-				}
-				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-				break;
-
 			default:
 				return;
 		}
@@ -178,7 +171,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		currentFrame++;
 		if (currentFrame % 5 == 0) {
 			currentStep++;
-
 		}
 
 	}
