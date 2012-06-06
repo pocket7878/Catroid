@@ -39,6 +39,7 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.hid.KeyCode;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class HIDComboBrick extends LoopBeginBrick implements OnClickListener {
@@ -60,12 +61,12 @@ public class HIDComboBrick extends LoopBeginBrick implements OnClickListener {
 
 		Script script = loopEndBrick.getScript();
 		int end = script.getBrickList().indexOf(loopEndBrick);
-		Collection<Integer> keyCodes = new ArrayList<Integer>();
+		Collection<KeyCode> keyCodes = new ArrayList<KeyCode>();
 
 		for (int begin = script.getBrickList().indexOf(this) + 1; begin != end; begin++) {
 			try {
 				// TODO find better solution!!!
-				KeyBrickInterface brick = (KeyBrickInterface) script.getBrick(begin);
+				HIDBrick brick = (HIDBrick) script.getBrick(begin);
 				keyCodes.add(brick.getKeyCode());
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -75,9 +76,9 @@ public class HIDComboBrick extends LoopBeginBrick implements OnClickListener {
 		}
 
 		// TODO Interface.send(keyCodes);
-		for (Integer i : keyCodes) {
-			Log.i("HIDComboBrick", i + "");
-		}
+		//		for (Integer i : keyCodes) {
+		//			Log.i("HIDComboBrick", i + "");
+		//		}
 
 		script.setExecutingBrickIndex(script.getBrickList().indexOf(loopEndBrick));
 	}

@@ -32,12 +32,14 @@ import android.widget.BaseAdapter;
 import android.widget.Spinner;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.hid.KeyCode;
 
-public class HIDKeyBoardButtonBrick implements Brick, KeyBrickInterface, OnItemSelectedListener {
+public class HIDKeyBoardButtonBrick implements HIDBrick, OnItemSelectedListener {
 	private static final long serialVersionUID = 1L;
 
 	private Sprite sprite;
-	private int keyCode;
+	private KeyCode keyCode;
+	private int xmlKeysArray;
 
 	protected Object readResolve() {
 		return this;
@@ -45,7 +47,7 @@ public class HIDKeyBoardButtonBrick implements Brick, KeyBrickInterface, OnItemS
 
 	public HIDKeyBoardButtonBrick(Sprite sprite) {
 		this.sprite = sprite;
-		this.keyCode = 0;
+		this.keyCode = null; // TODO Call key Mapping
 	}
 
 	public int getRequiredResources() {
@@ -73,30 +75,29 @@ public class HIDKeyBoardButtonBrick implements Brick, KeyBrickInterface, OnItemS
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		View brickView = View.inflate(context, R.layout.brick_hid_keyboard_button_press, null);
 
-		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context,
-				R.array.hid_keyboard_key_chooser, android.R.layout.simple_spinner_item);
-		motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ArrayAdapter<CharSequence> keyAdapter = ArrayAdapter.createFromResource(context, xmlKeysArray,
+				android.R.layout.simple_spinner_item);
+		keyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		Spinner motorSpinner = (Spinner) brickView.findViewById(R.id.keyboard_button_spinner);
-		motorSpinner.setOnItemSelectedListener(this);
-		motorSpinner.setClickable(true);
-		motorSpinner.setEnabled(true);
-		motorSpinner.setAdapter(motorAdapter);
-		motorSpinner.setSelection(keyCode);
+		Spinner keySpinner = (Spinner) brickView.findViewById(R.id.keyboard_button_spinner);
+		keySpinner.setOnItemSelectedListener(this);
+		keySpinner.setClickable(true);
+		keySpinner.setEnabled(true);
+		keySpinner.setAdapter(keyAdapter);
+		keySpinner.setSelection(R.array.hid_keyboard_key_chooser);
 
 		return brickView;
 	}
 
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		keyCode = position;
+		keyCode = null; // TODO Call KeyCode Mapper
 	}
 
 	public void onNothingSelected(AdapterView<?> arg0) {
 
 	}
 
-	public int getKeyCode() {
+	public KeyCode getKeyCode() {
 		return keyCode;
 	}
-
 }

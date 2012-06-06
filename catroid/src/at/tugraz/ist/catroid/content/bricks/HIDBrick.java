@@ -18,12 +18,10 @@
  */
 package at.tugraz.ist.catroid.content.bricks;
 
-/**
- * @author martin
- * 
- */
-public interface KeyBrickInterface {
+import at.tugraz.ist.catroid.hid.KeyCode;
 
-	public int getKeyCode();
+public interface HIDBrick extends Brick {
+
+	public KeyCode getKeyCode();
 
 }
