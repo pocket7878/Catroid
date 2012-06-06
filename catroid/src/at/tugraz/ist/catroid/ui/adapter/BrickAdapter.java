@@ -137,12 +137,7 @@ public class BrickAdapter extends BaseAdapter implements DragAndDropListener {
 				for (int i = 0; i < toScriptId; i++) {
 					startBrickIdFromToScript += getBrickCount(i) + 1;
 				}
-
-				System.out.println("ScriptId: " + toScriptId);
 				ArrayList<Brick> brickListTo = sprite.getScript(getScriptId(to)).getBrickList();
-				System.out.println("From: " + from);
-				System.out.println("To: " + to);
-				System.out.println("StartBrickIDFrom ...: " + startBrickIdFromToScript);
 				for (int i = to - startBrickIdFromToScript; i < brickListTo.size(); i++) {
 					Brick currBrick;
 
@@ -456,17 +451,24 @@ public class BrickAdapter extends BaseAdapter implements DragAndDropListener {
 				}
 			}
 		} else if (!(draggedBrick instanceof HIDKeyBoardButtonBrick)) {
+
+			int toScriptId = getScriptId(to);
+			int startBrickIdFromToScript = 0;
+
+			for (int i = 0; i < toScriptId; i++) {
+				startBrickIdFromToScript += getBrickCount(i) + 1;
+			}
 			ArrayList<Brick> brickListTo = sprite.getScript(getScriptId(to)).getBrickList();
-			Log.i("before:", to + "");
-			for (int i = to; i < brickListTo.size(); i++) {
+			for (int i = to - startBrickIdFromToScript; i < brickListTo.size(); i++) {
 				Brick currBrick = brickListTo.get(i - 1);
 				if (currBrick instanceof HIDComboEndBrick) {
 					sprite.getScript(getScriptId(to)).removeBrick(draggedBrick);
-					sprite.getScript(getScriptId(to)).addBrick(i, draggedBrick);
+					sprite.getScript(getScriptId(to)).addBrick(i - 1, draggedBrick);
 				} else if (currBrick instanceof HIDComboBrick) {
 					break;
 				}
 			}
+
 		} else {
 
 			if (toLastScript) {
