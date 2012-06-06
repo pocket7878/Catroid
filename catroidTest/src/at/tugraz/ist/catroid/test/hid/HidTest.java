@@ -23,23 +23,25 @@ public class HidTest extends AndroidTestCase {
 	 * }
 	 */
 
-	public void testInterpretKey() {
-
-		Integer keyCode = Integer.valueOf(0);
-		int spinnerIndex = 3;
-		int keyXmlId = 0x7f070008;
-
-		boolean ret = hid.interpretKey(keyCode, spinnerIndex, keyXmlId);
-
-		assertEquals("Key is no modifier", false, ret);
-		assertEquals("Wrong keycode", 6, keyCode.intValue());
-
-		keyCode = Integer.valueOf(0);
-		spinnerIndex = 36;
-
-		ret = hid.interpretKey(keyCode, spinnerIndex, keyXmlId);
-
-		assertEquals("Key is modifier", true, ret);
-		assertEquals("Wrong keycode", 224, keyCode.intValue());
-	}
+	/*
+	 * public void testInterpretKey() {
+	 * 
+	 * Integer keyCode = Integer.valueOf(0);
+	 * int spinnerIndex = 3;
+	 * int keyXmlId = 0x7f070008;
+	 * 
+	 * boolean ret = hid.interpretKey(keyCode, spinnerIndex, keyXmlId);
+	 * 
+	 * assertEquals("Key is no modifier", false, ret);
+	 * assertEquals("Wrong keycode", 6, keyCode.intValue());
+	 * 
+	 * keyCode = Integer.valueOf(0);
+	 * spinnerIndex = 36;
+	 * 
+	 * ret = hid.interpretKey(keyCode, spinnerIndex, keyXmlId);
+	 * 
+	 * assertEquals("Key is modifier", true, ret);
+	 * assertEquals("Wrong keycode", 224, keyCode.intValue());
+	 * }
+	 */
 }
