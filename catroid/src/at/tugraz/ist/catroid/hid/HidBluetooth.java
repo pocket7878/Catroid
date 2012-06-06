@@ -18,6 +18,10 @@
  */
 package at.tugraz.ist.catroid.hid;
 
+import java.util.Collection;
+
+import android.content.Context;
+
 /**
  * @author dominik
  * 
@@ -36,39 +40,46 @@ public class HidBluetooth implements IHid {
 		return instance;
 	}
 
-	public void send(int spinnerIndex, int keyXmlId) {
+	public void send(KeyCode key) {
 
 	}
 
-	public void send(int[] spinnerIndex, int keyXmlId) {
-		int key = 0;
-		int modifier = 0;
-		boolean invalidCombo = false;
-
-		for (int i = 0; i < spinnerIndex.length - 1; i++) {
-			Integer keyCode = new Integer(0);
-			boolean mod = interpretKey(keyCode, spinnerIndex[i], keyXmlId);
-			if (mod) {
-				modifier = modifier | keyCode.intValue();
-			} else {
-				if (invalidCombo) {
-
-				}
-				key = keyCode.intValue();
-				invalidCombo = true;
-			}
-		}
+	public void send(Collection<KeyCode> keys) {
+		/*
+		 * int key = 0;
+		 * int modifier = 0;
+		 * boolean invalidCombo = false;
+		 * 
+		 * for (int index : spinnerIndices) {
+		 * 
+		 * Integer keyCode = new Integer(0);
+		 * boolean mod = interpretKey(keyCode, index, keyXmlId);
+		 * if (mod) {
+		 * modifier = modifier | keyCode.intValue();
+		 * } else {
+		 * if (invalidCombo) {
+		 * 
+		 * }
+		 * key = keyCode.intValue();
+		 * invalidCombo = true;
+		 * }
+		 * }
+		 */
 		//buildHIDCode(..)
 		//sending the code
 
 	}
 
-	private boolean interpretKey(Integer keyCode, int spinnerIndex, int keyXmlId) {
+	public KeyCode interpretKey(Context context, int spinnerIndex, int keyXmlId) {
 
-		return true;
+		String[] hidRes = context.getResources().getStringArray(keyXmlId);
+
+		KeyCode blub = new KeyCode(false, 1);
+
+		return blub;
 	}
 
-	private int generateHidCode() {
+	public int generateHidCode() {
 		return 0;
 	}
 

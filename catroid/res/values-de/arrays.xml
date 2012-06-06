@@ -19,39 +19,136 @@
  *  GNU Affero General Public License for more details.
  *   
  *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- -->
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
 <resources>
-  <!-- Point in direction spinner -->
-  <string-array name="point_in_direction_strings">
-    <item>(90) rechts</item>
-    <item>(-90) links</item>
-    <item>(0) oben</item>
-    <item>(180) unten</item>
-  </string-array>
-  
-  <!-- Mindroid motors spinner -->
- 	<string-array name="nxt_stop_motor_chooser">
-	  <item>A</item>
-	  <item>B</item>
-	  <item>C</item>
-	  <item>A+C</item>
-	  <item>Alle</item>
-	</string-array>
-	
- 	<string-array name="fancy_directions_chooser">
-    <item>links (45°)</item>
-    <item>links (90°)</item>
-    <item>rechts  (45°)</item>
-    <item>rechts  (90°)</item>
-    <item>umdrehen (180°)</item>
-    <item>ganz Drehen (360°)</item>
- 	</string-array>
-  	
-	
-	<string-array name="yes_no_array">
-	  <item>Ja</item>
-	  <item>Nein</item>
-  </string-array>
-  
+
+    <!-- Point in direction spinner -->
+    <string-array name="point_in_direction_values">
+        <item>90</item>
+        <item>-90</item>
+        <item>0</item>
+        <item>180</item>
+    </string-array>
+    <string-array name="point_in_direction_strings">
+        <item>(90) right</item>
+        <item>(-90) left</item>
+        <item>(0) up</item>
+        <item>(180) down</item>
+    </string-array>
+
+    <!-- Mindroid motors spinner -->
+    <string-array name="nxt_motor_chooser">
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>A+C</item>
+    </string-array>
+    <string-array name="nxt_stop_motor_chooser">
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>A+C</item>
+        <item>All</item>
+    </string-array>
+    <string-array name="fancy_directions_chooser">
+        <item>right (45°)</item>
+        <item>right (90°)</item>
+        <item>left  (45°)</item>
+        <item>left  (90°)</item>
+        <item>turn (180°)</item>
+        <item>spin (360°)</item>
+    </string-array>
+    <string-array name="yes_no_array">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+    <string-array name="hid_keyboard_key_chooser">
+        <item>a</item>
+        <item>b</item>
+        <item>c</item>
+        <item>d</item>
+        <item>e</item>
+        <item>f</item>
+        <item>g</item>
+        <item>h</item>
+        <item>i</item>
+        <item>j</item>
+        <item>k</item>
+        <item>l</item>
+        <item>m</item>
+        <item>n</item>
+        <item>o</item>
+        <item>p</item>
+        <item>q</item>
+        <item>r</item>
+        <item>s</item>
+        <item>t</item>
+        <item>u</item>
+        <item>v</item>
+        <item>w</item>
+        <item>x</item>
+        <item>y</item>
+        <item>z</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>0</item>
+        <item>STRG</item>
+        <item>SHIFT_LEFT</item>
+        <item>SHIFT_RIGHT</item>
+        <item>ALT_LEFT</item>
+        <item>ALT_RIGHT</item>
+    </string-array>
+    <string-array name="key_array"></string-array>
+    <string-array name="key_code_array">
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>224|mod</item>
+        <item>225|mod</item>
+        <item>229|mod</item>
+        <item>226|mod</item>
+        <item>230|mod</item>
+    </string-array>
+
 </resources>

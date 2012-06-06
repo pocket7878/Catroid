@@ -18,10 +18,12 @@
  */
 package at.tugraz.ist.catroid.hid;
 
+import java.util.Collection;
+
 public interface IHid {
 
-	public void send(int spinnerIndex, int keyXmlId);
+	public void send(KeyCode key);
 
-	public void send(int[] spinnerIndex, int keyXmlId);
+	public void send(Collection<KeyCode> keys);
 
 }
