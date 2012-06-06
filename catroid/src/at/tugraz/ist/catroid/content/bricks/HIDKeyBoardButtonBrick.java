@@ -39,7 +39,6 @@ public class HIDKeyBoardButtonBrick implements HIDBrick, OnItemSelectedListener 
 
 	private Sprite sprite;
 	private KeyCode keyCode;
-	private int xmlKeysArray;
 
 	protected Object readResolve() {
 		return this;
@@ -75,8 +74,8 @@ public class HIDKeyBoardButtonBrick implements HIDBrick, OnItemSelectedListener 
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		View brickView = View.inflate(context, R.layout.brick_hid_keyboard_button_press, null);
 
-		ArrayAdapter<CharSequence> keyAdapter = ArrayAdapter.createFromResource(context, xmlKeysArray,
-				android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> keyAdapter = ArrayAdapter.createFromResource(context,
+				R.array.hid_keyboard_key_chooser, android.R.layout.simple_spinner_item);
 		keyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 		Spinner keySpinner = (Spinner) brickView.findViewById(R.id.keyboard_button_spinner);
@@ -84,7 +83,7 @@ public class HIDKeyBoardButtonBrick implements HIDBrick, OnItemSelectedListener 
 		keySpinner.setClickable(true);
 		keySpinner.setEnabled(true);
 		keySpinner.setAdapter(keyAdapter);
-		keySpinner.setSelection(R.array.hid_keyboard_key_chooser);
+		keySpinner.setSelection(0);
 
 		return brickView;
 	}
