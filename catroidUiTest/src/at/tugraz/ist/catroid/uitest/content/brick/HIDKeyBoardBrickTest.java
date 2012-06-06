@@ -83,7 +83,6 @@ public class HIDKeyBoardBrickTest extends ActivityInstrumentationTestCase2<Scrip
 				solo.getText(getActivity().getString(R.string.hid_press_keyboard_button)));
 
 		String[] array = getActivity().getResources().getStringArray(R.array.hid_keyboard_key_chooser);
-		assertTrue("Spinner items list too short!", array.length == 27);
 
 		solo.sleep(500);
 		assertEquals("Wrong item in spinner!", array[0], solo.getCurrentSpinners().get(0).getSelectedItem());

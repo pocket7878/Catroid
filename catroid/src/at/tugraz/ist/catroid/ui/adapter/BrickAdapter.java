@@ -131,14 +131,25 @@ public class BrickAdapter extends BaseAdapter implements DragAndDropListener {
 					return;
 				}
 			} else if (!(draggedBrick instanceof HIDKeyBoardButtonBrick)) {
-				ArrayList<Brick> brickListTo = sprite.getScript(getScriptId(to)).getBrickList();
+				int toScriptId = getScriptId(to);
+				int startBrickIdFromToScript = 0;
 
-				for (int i = to; i < brickListTo.size(); i++) {
+				for (int i = 0; i < toScriptId; i++) {
+					startBrickIdFromToScript += getBrickCount(i) + 1;
+				}
+
+				System.out.println("ScriptId: " + toScriptId);
+				ArrayList<Brick> brickListTo = sprite.getScript(getScriptId(to)).getBrickList();
+				System.out.println("From: " + from);
+				System.out.println("To: " + to);
+				System.out.println("StartBrickIDFrom ...: " + startBrickIdFromToScript);
+				for (int i = to - startBrickIdFromToScript; i < brickListTo.size(); i++) {
 					Brick currBrick;
-					if (from > to) {
-						currBrick = brickListTo.get(i - 2);
-					} else {
+
+					if (to < from) {
 						currBrick = brickListTo.get(i - 1);
+					} else {
+						currBrick = brickListTo.get(i);
 					}
 
 					if (currBrick instanceof HIDComboEndBrick) {
