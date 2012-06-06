@@ -695,7 +695,7 @@ public class DroneWifiConnectionActivity extends Activity {
 		Log.d(DroneConsts.DroneLogTag, "foundDrone()");
 		List<ScanResult> result = wifiManager.getScanResults();
 		for (ScanResult element : result) {
-			if (element.SSID.contains("ardrone_")) {
+			if (element.SSID.contains("ardrone_") || element.SSID.contains("ardrone2_")) {
 				return true;
 			}
 		}
@@ -711,7 +711,7 @@ public class DroneWifiConnectionActivity extends Activity {
 		int foundDrones = 0;
 		wifiConfigs = new LinkedList<WifiConfiguration>();
 		for (ScanResult element : result) {
-			if (element.SSID.contains("ardrone_")) {
+			if (element.SSID.contains("ardrone_") || element.SSID.contains("ardrone2_")) {
 				WifiConfiguration wifiConfig = new WifiConfiguration();
 				wifiConfig.BSSID = element.BSSID;
 				wifiConfig.SSID = "\"".concat(element.SSID).concat("\"");
@@ -797,7 +797,7 @@ public class DroneWifiConnectionActivity extends Activity {
 		WifiInfo info = wifiManager.getConnectionInfo();
 		String ssid = info.getSSID();
 		if (ssid != null) {
-			if (ssid.contains("ardrone_") && wifiManager.pingSupplicant()) {
+			if ((ssid.contains("ardrone_") || ssid.contains("ardrone2_")) && wifiManager.pingSupplicant()) {
 				return true;
 			}
 		}
