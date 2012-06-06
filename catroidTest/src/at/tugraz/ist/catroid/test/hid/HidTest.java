@@ -13,13 +13,15 @@ public class HidTest extends AndroidTestCase {
 
 	}
 
-	public void testResources() {
-		Integer keyCode = new Integer(0);
-		System.out.println(keyCode.intValue());
-		hid.interpretKey(keyCode, 0, 1);
-
-		//assertEquals("was isch los?", 4, keyCode.intValue());
-	}
+	/*
+	 * public void testResources() {
+	 * Integer keyCode = new Integer(0);
+	 * System.out.println(keyCode.intValue());
+	 * hid.interpretKey(keyCode, 0, 1);
+	 * 
+	 * //assertEquals("was isch los?", 4, keyCode.intValue());
+	 * }
+	 */
 
 	public void testInterpretKey() {
 
