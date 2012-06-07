@@ -45,6 +45,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private int sizeY = 102;
 	private int targetX;
 	private int targetY;
+	private boolean flip = false;
 
 	public Tutor(int drawable, TutorialOverlay tutorialOverlay) {
 		super(Tutorial.getInstance(null).getActualContext(), tutorialOverlay);
@@ -74,19 +75,33 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void flip() {
-
+		if (flip) {
+			flip = false;
+		} else {
+			flip = true;
+		}
+		state = 8;
 	}
 
 	@Override
 	public void idle() {
-		state = 1;
+		if (!flip) {
+			state = 1;
+		} else {
+			state = 5;
+		}
 	}
 
 	@Override
 	public void say(String text) {
 		Log.i("herb", "NewTutor: " + text);
 		new Bubble(text, tutorialOverlay, this, targetX - 20, targetY - 90);
-		state = 2;
+
+		if (!flip) {
+			state = 2;
+		} else {
+			state = 6;
+		}
 	}
 
 	@Override
@@ -101,13 +116,23 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		targetX = x;
 		targetY = y;
 		Log.i("herb", " appear!");
-		state = 0;
+
+		if (!flip) {
+			state = 0;
+		} else {
+			state = 4;
+		}
 	}
 
 	@Override
 	public void disappear() {
 		Log.i("herb", "disappearing...");
-		state = 3;
+
+		if (!flip) {
+			state = 3;
+		} else {
+			state = 7;
+		}
 	}
 
 	@Override
@@ -131,6 +156,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		if (currentStep > 9) {
 			currentStep = 0;
 		}
+
 		switch (state) {
 			case 0: //APPEARING
 				if (currentStep == 9) {
@@ -157,8 +183,27 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 					Tutorial.getInstance(null).setNotification("disappear done!");
 					break;
 				}
-				Log.i("HERB", "TUTOR-died!");
+				Log.i("HERB", "TUTOR-disappeared!");
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+				break;
+
+			/**
+			 * Todo: Impement flipping procedure
+			 */
+			case 8: //FLIP
+				if (currentStep == 9) {
+					currentStep = 0;
+					if (flip) {
+						state = 4;
+					} else {
+						state = 1;
+					}
+				}
+				if (currentStep < 5) {
+					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, (state) * sizeY, sizeX, sizeY);
+				} else if (currentStep > 4 && currentStep < 10) {
+					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+				}
 				break;
 			default:
 				return;
@@ -170,7 +215,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	@Override
 	public void update(long gameTime) {
 		currentFrame++;
-		if (currentFrame % 10 == 0) {
+		if (currentFrame % 7 == 0) {
 			currentStep++;
 		}
 
