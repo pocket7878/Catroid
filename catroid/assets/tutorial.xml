@@ -9,7 +9,7 @@
 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
 					<tutorType>DOG</tutorType>
-					<x>100</x>
+					<x>80</x>
 					<y>300</y>
 				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
 				
@@ -19,29 +19,40 @@
 				
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
 					<tutorType>CAT</tutorType>
-					<x>300</x>
+					<x>280</x>
 					<y>300</y>
 				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
 					<sleepTime>1000</sleepTime>
 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
 
-				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 					<tutorType>CAT</tutorType>
 					<message>Hallo,  Hund!!</message>
-				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
 
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>
 				</at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>	
-				
-				<at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
-					<tutorType>DOG</tutorType>
-				</at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
 
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-					<tutorType>DOG</tutorType>
-					<message>Hallo,  Katz!!</message>
-				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CAT</tutorType>
+                    <message>Hallo! Darf ich mich vorstellen....</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CAT</tutorType>
+                    <message>Mein Name ist CATRO. Und wer bist du?</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>DOG</tutorType>
+                    <message>Hi CATRO. Ich bin MIAUS...narf.</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>DOG</tutorType>
+                    <message>...was machst du den so hier?</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 					<tutorType>CAT</tutorType>

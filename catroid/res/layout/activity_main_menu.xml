@@ -88,7 +88,7 @@
         <Button
             android:id="@+id/tutorial_button"
             style="@style/DashboardButton"
-            android:drawableTop="@drawable/ic_tutorial"
+            android:drawableTop="@drawable/tutorial_selector"
             android:onClick="handleTutorialButton"
             android:text="@string/tutorial" />
 

@@ -137,6 +137,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 					state = 1;
 					Tutorial.getInstance(null).setNotification("appear done!");
 				}
+				Log.i("HERB", "TUTOR: " + this.tutorType + " - appearing!");
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 				break;
 			case 1: //IDLE
@@ -169,7 +170,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	@Override
 	public void update(long gameTime) {
 		currentFrame++;
-		if (currentFrame % 5 == 0) {
+		if (currentFrame % 10 == 0) {
 			currentStep++;
 		}
 
