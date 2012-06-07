@@ -42,7 +42,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private int currentStep = 0;
 	private Paint paint;
 	private int sizeX = 110;
-	private int sizeY = 105;
+	private int sizeY = 102;
 	private int targetX;
 	private int targetY;
 
