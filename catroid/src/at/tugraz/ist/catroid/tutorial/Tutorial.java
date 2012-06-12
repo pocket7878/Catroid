@@ -87,7 +87,6 @@ public class Tutorial {
 	}
 
 	public void stopButtonTutorial() {
-
 		stopTutorial();
 		tutorialController.stopButtonTutorial();
 		clear();

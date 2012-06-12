@@ -275,7 +275,6 @@ public class TutorialController {
 			tutorialOverlay = new TutorialOverlay(context);
 			windowManager.addView(tutorialOverlay, dragViewParameters);
 		} else {
-			//			tutorialOverlay = new TutorialOverlay(context);
 			Log.i("faxxe", "Tutorial: Adding Overlay again!");
 			dragViewParameters = createLayoutParameters();
 			windowManager = ((Activity) context).getWindowManager();

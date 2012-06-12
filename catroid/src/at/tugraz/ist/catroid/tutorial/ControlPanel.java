@@ -21,12 +21,10 @@ package at.tugraz.ist.catroid.tutorial;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.graphics.drawable.NinePatchDrawable;
 import android.view.Display;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
@@ -45,57 +43,57 @@ public class ControlPanel implements SurfaceObject {
 	//forward wird geschwindigkeit des textes verdoppelt
 	//rewind bedeutet rückwärts schreiben ==> wird evt. tricky
 
-	Resources resources;
-	Context context;
+	private Resources resources;
+	private Context context;
 
-	Drawable play;
-	Drawable pause;
-	Drawable forward;
-	Drawable backward;
-	Drawable circle;
-	Bitmap playBitmap;
-	Bitmap pauseBitmap;
-	Bitmap forwardBitmap;
-	Bitmap backwardBitmap;
-	Bitmap menuBitmap;
+	private NinePatchDrawable menuBar;
+	private NinePatchDrawable menuButton;
 
-	Rect bounds;
-	Rect menuBounds;
+	private Rect menuButtonBounds;
+	private Rect menuBarBounds;
+
 	public static boolean active;
 	private boolean open;
-	Tutorial tut;
 
-	public ControlPanel(Context context) {
+	public ControlPanel(Context context, TutorialOverlay tutorialOverlay) {
 		active = true;
-		tut = Tutorial.getInstance(null);
+
 		this.resources = ((Activity) context).getResources();
 		this.context = context;
-		play = resources.getDrawable(R.drawable.play_tutorial);
-		pause = resources.getDrawable(R.drawable.pause_tutorial);
-		forward = resources.getDrawable(R.drawable.forward_tutorial);
-		backward = resources.getDrawable(R.drawable.tutorial_menu_open_inactive);
-		circle = resources.getDrawable(R.drawable.circle_panel);
 
-		bounds = new Rect();
-		menuBounds = new Rect();
+		tutorialOverlay.addSurfaceObject(this);
 
-		playBitmap = ((BitmapDrawable) play).getBitmap();
-		pauseBitmap = ((BitmapDrawable) pause).getBitmap();
-		forwardBitmap = ((BitmapDrawable) forward).getBitmap();
-		backwardBitmap = ((BitmapDrawable) backward).getBitmap();
-		menuBitmap = ((BitmapDrawable) circle).getBitmap();
+		menuBar = (NinePatchDrawable) resources.getDrawable(R.drawable.tutmenubar);
+		menuButton = (NinePatchDrawable) resources.getDrawable(R.drawable.circle);
+
+		menuBarBounds = new Rect();
+		menuBarBounds.bottom = getScreenHeight() - 5;
+		menuBarBounds.top = getScreenHeight() - 55;
+		menuBarBounds.right = getScreenWidth();
+		menuBarBounds.left = 0;
+
+		menuBar.setBounds(menuBarBounds);
+
+		menuButtonBounds = new Rect();
+		menuButtonBounds.bottom = getScreenHeight() - 5;
+		menuButtonBounds.left = 0;
+		menuButtonBounds.top = getScreenHeight() - 55;
+		menuButtonBounds.right = 55;
+
+		menuButton.setBounds(menuButtonBounds);
+
 		open = false;
 	}
 
 	@Override
 	public void draw(Canvas canvas) {
-		Paint paint = new Paint();
+		new Paint();
 		if (open) {
-			setMenuBounds();
-			canvas.drawBitmap(backwardBitmap, menuBounds.left, getScreenHeight() - backwardBitmap.getHeight(), paint);
+			//canvas.drawBitmap(backwardBitmap, menuBounds.left, getScreenHeight() - backwardBitmap.getHeight(), paint);
+			menuBar.draw(canvas);
 		} else {
-			setMenuBounds();
-			canvas.drawBitmap(menuBitmap, menuBounds.left, menuBounds.top, paint);
+			//canvas.drawBitmap(menuBitmap, menuBounds.left, menuBounds.top, paint);
+			menuButton.draw(canvas);
 		}
 	}
 
@@ -111,12 +109,12 @@ public class ControlPanel implements SurfaceObject {
 		open = false;
 	}
 
-	private void setMenuBounds() {
-		menuBounds.left = 0;
-		menuBounds.right = menuBitmap.getWidth();
-		menuBounds.bottom = getScreenHeight();
-		menuBounds.top = getScreenHeight() - menuBitmap.getHeight();
-	}
+	//	private void setMenuBounds() {
+	//		menuBounds.left = 0;
+	//		menuBounds.right = menuBitmap.getWidth();
+	//		menuBounds.bottom = getScreenHeight();
+	//		menuBounds.top = getScreenHeight() - menuBitmap.getHeight();
+	//	}
 
 	//	private void setBounds(int shift) {
 	//		int height = getScreenHeight();
@@ -136,23 +134,23 @@ public class ControlPanel implements SurfaceObject {
 		return screenHeight;
 	}
 
-	//	private int getScreenWidth() {
-	//		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
-	//		int screenWidth = display.getWidth();
-	//		return screenWidth;
-	//	}
-
-	public Rect getPanelBounds() {
-		//coordinaten von gesamten panel mit 4 button
-		Rect panelBounds = new Rect();
-		panelBounds.bottom = bounds.bottom;
-		panelBounds.top = bounds.top;
-		panelBounds.right = bounds.right;
-		//3*20 = 60 ==> abstand zwischen buttons
-		panelBounds.left = bounds.right - 4 * (bounds.right - bounds.left) - 60;
-		return panelBounds;
-
+	private int getScreenWidth() {
+		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+		int screenWidth = display.getWidth();
+		return screenWidth;
 	}
+
+	//	public Rect getPanelBounds() {
+	//		//coordinaten von gesamten panel mit 4 button
+	//		Rect panelBounds = new Rect();
+	//		panelBounds.bottom = bounds.bottom;
+	//		panelBounds.top = bounds.top;
+	//		panelBounds.right = bounds.right;
+	//		//3*20 = 60 ==> abstand zwischen buttons
+	//		panelBounds.left = bounds.right - 4 * (bounds.right - bounds.left) - 60;
+	//		return panelBounds;
+	//
+	//	}
 
 	public void pressPlay() {
 		//check if tutorial is active, if so there is no need to press play

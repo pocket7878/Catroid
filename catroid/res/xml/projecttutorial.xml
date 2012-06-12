@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ProjectTutorial>
-	
 	<dog>foo</dog>
 	<appear>350,400</appear>
 	<say>Oooohhh wo sind wir denn hier gelandet? Sieht ja interessant aus.</say>

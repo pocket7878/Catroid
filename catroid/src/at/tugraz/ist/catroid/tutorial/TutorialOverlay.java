@@ -80,8 +80,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		getHolder().setFormat(PixelFormat.TRANSPARENT);
 		getHolder().addCallback(this);
 		surfaceObjects = new ArrayList<SurfaceObject>();
-		panel = new ControlPanel(context);
-		surfaceObjects.add(panel);
+		panel = new ControlPanel(context, this);
 		co = new CloudController();
 	}
 
@@ -151,11 +150,13 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	public boolean dispatchTouchEvent(MotionEvent ev) {
 		Activity activity = (Activity) context;
 		boolean retval = false;
+
 		if (panel.isOpen()) {
 			panel.close();
 		}
+
 		float displayHeight = activity.getWindowManager().getDefaultDisplay().getHeight();
-		//		clickDispatcher.dispatchEvent(ev);
+
 		ClickableArea clickableArea = Cloud.getInstance(null).getClickableArea();
 
 		if (ev.getY() > displayHeight - 100) {
@@ -179,6 +180,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		double diffx = ev.getX();
 		double diffy = y1 - y2;
 		double distance = Math.sqrt(diffx * diffx + diffy * diffy);
+
 		if (distance < 70 && panel != null) {
 			if (!panel.isOpen()) {
 				panel.open();
