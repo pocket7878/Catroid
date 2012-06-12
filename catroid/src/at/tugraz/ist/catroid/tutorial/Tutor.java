@@ -46,6 +46,8 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private int targetX;
 	private int targetY;
 	private boolean flip = false;
+	private int flipFlag = 2;
+	private boolean reset = true;
 
 	public Tutor(int drawable, TutorialOverlay tutorialOverlay) {
 		super(Tutorial.getInstance(null).getActualContext(), tutorialOverlay);
@@ -155,61 +157,82 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		Bitmap todraw = Bitmap.createBitmap(bitmap, 0, 0, sizeX, sizeY);
 		if (currentStep > 9) {
 			currentStep = 0;
+			reset = true;
 		}
 
 		switch (state) {
-			case 0: //APPEARING
+			case 0:
+			case 4: //APPEARING
 				if (currentStep == 9) {
 					state = 1;
 					Tutorial.getInstance(null).setNotification("appear done!");
+					break;
 				}
-				Log.i("HERB", "TUTOR: " + this.tutorType + " - appearing!");
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 				break;
-			case 1: //IDLE
+
+			case 1:
+			case 5: //IDLE
 				if (currentStep == 9) {
 					currentStep = 0;
 				}
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-				Log.i("HERB", "TUTOR: " + this.tutorType + " - idle!");
 				break;
-			case 2: //SAYING
+
+			case 2:
+			case 6: //SAYING
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 				break;
-			case 3: //DISAPPEARING
+
+			case 3:
+			case 7: //DISAPPEARING
 				if (currentStep == 9) {
 					currentStep = 0;
 					state = 100;
 					Tutorial.getInstance(null).setNotification("disappear done!");
 					break;
 				}
-				Log.i("HERB", "TUTOR-disappeared!");
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 				break;
 
-			/**
-			 * Todo: Impement flipping procedure
-			 */
 			case 8: //FLIP
-				if (currentStep == 9) {
-					currentStep = 0;
+				if (flipFlag > 0) {
+					if (flip && reset) {
+						if (flipFlag == 2) {
+							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 306, sizeX, sizeY);
+						} else {
+							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 408, sizeX, sizeY);
+						}
+					} else if (reset) {
+						if (flipFlag == 2) {
+							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 714, sizeX, sizeY);
+						} else {
+							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 0, sizeX, sizeY);
+						}
+					}
+					Log.i("HERB", "START of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
+							+ flipFlag + " flip: " + flip);
+					if (currentStep == 9 && reset) {
+						flipFlag--;
+						reset = false;
+					}
+				} else {
 					if (flip) {
-						state = 4;
+						state = 5;
 					} else {
 						state = 1;
 					}
-				}
-				if (currentStep < 5) {
-					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, (state) * sizeY, sizeX, sizeY);
-				} else if (currentStep > 4 && currentStep < 10) {
+					flipFlag = 2;
 					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+					Tutorial.getInstance(null).setNotification("flip done!");
 				}
+				Log.i("HERB", "END of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
+						+ flipFlag);
 				break;
 			default:
 				return;
 		}
 		canvas.drawBitmap(todraw, targetX, targetY, paint);
-
 	}
 
 	@Override

@@ -26,10 +26,7 @@
 					<sleepTime>1000</sleepTime>
 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
 
-<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-					<tutorType>CAT</tutorType>
-					<message>Hallo,  Hund!!</message>
-				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
+
 
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>
 				</at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>	
@@ -38,6 +35,10 @@
                     <tutorType>CAT</tutorType>
                     <message>Hallo! Darf ich mich vorstellen....</message>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+				    <tutorType>CAT</tutorType>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
                 
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
                     <tutorType>CAT</tutorType>

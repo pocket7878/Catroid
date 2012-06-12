@@ -27,6 +27,6 @@ public class TaskFlip implements Task {
 		if (tutor != null) {
 			tutor.flip();
 		}
-		return false;
+		return true;
 	}
 }
