@@ -23,6 +23,9 @@ public class KeyCode {
 	private boolean isModifier;
 	private int keyCode;
 
+	public KeyCode() {
+	}
+
 	public KeyCode(boolean isModifier, int keyCode) {
 		this.isModifier = isModifier;
 		this.keyCode = keyCode;
