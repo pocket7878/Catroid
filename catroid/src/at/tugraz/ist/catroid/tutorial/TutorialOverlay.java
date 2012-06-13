@@ -180,8 +180,11 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 				panel.open();
 			}
 		} else if (ev.getY() < displayHeight && ev.getY() > (displayHeight - 55) && ev.getX() < 310 && ev.getX() > 270
-				&& panel != null) {
+				&& panel != null && panel.isOpen()) {
 			Tutorial.getInstance(null).stopButtonTutorial();
+		} else if (ev.getY() < displayHeight && ev.getY() > (displayHeight - 55) && ev.getX() < 230 && ev.getX() > 190
+				&& panel != null && panel.isOpen()) {
+			Tutorial.getInstance(null).pauseTutorial();
 		}
 	}
 
@@ -192,7 +195,6 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		if (x > area.x && x < area.x + area.width && y > area.y && y < area.y + area.height) {
 			return true;
 		}
-
 		return false;
 	}
 

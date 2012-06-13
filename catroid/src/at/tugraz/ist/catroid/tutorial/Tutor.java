@@ -48,6 +48,8 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private boolean flip = false;
 	private int flipFlag = 2;
 	private boolean reset = true;
+	private boolean walkFast = false;
+	private int distanceToWalk;
 
 	public Tutor(int drawable, TutorialOverlay tutorialOverlay) {
 		super(Tutorial.getInstance(null).getActualContext(), tutorialOverlay);
@@ -86,6 +88,17 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	}
 
 	@Override
+	public void walk(int distance, boolean fastWalk) {
+		if (!flip) {
+			state = 9;
+		} else {
+			state = 10;
+		}
+		walkFast = fastWalk;
+		distanceToWalk = distance;
+	}
+
+	@Override
 	public void idle() {
 		if (!flip) {
 			state = 1;
@@ -110,7 +123,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	public void jumpTo(int x, int y) {
 		targetX = x;
 		targetY = y;
-
 	}
 
 	@Override
@@ -229,6 +241,27 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 				Log.i("HERB", "END of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
 						+ flipFlag);
 				break;
+
+			case 9:
+			case 10:
+				if (distanceToWalk == 0) {
+					if (flip) {
+						state = 5;
+					} else {
+						state = 1;
+					}
+					Tutorial.getInstance(null).setNotification("walk done!");
+				} else {
+					if (flip) {
+						targetX++;
+					} else {
+						targetX--;
+					}
+					distanceToWalk--;
+				}
+				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, (state - 1) * sizeY, sizeX, sizeY);
+				break;
+
 			default:
 				return;
 		}
@@ -247,4 +280,5 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	public void register(TutorialOverlay overlay) {
 		overlay.addSurfaceObject(this);
 	}
+
 }

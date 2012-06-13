@@ -7,11 +7,11 @@ import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 public interface Task {
 
 	public static enum Type {
-		JUMP, APPEAR, DISAPPEAR, SAY, FLIP, POINT, NOTIFICATION, SLEEP
+		JUMP, APPEAR, DISAPPEAR, SAY, FLIP, POINT, NOTIFICATION, SLEEP, WALK
 	}
 
 	public enum Tutor {
-		CAT, DOG
+		CATRO, MIAUS
 	}
 
 	public enum Notification {

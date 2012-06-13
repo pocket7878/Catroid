@@ -38,7 +38,7 @@ public class Bubble implements SurfaceObject {
 	private Rect bounds;
 	private String[] textArray = { "", "", "", "", "", "", "", "", "" };
 	private int currentLine = 0;
-	private int minWidth = 100;
+	private int minWidth = 80;
 	private int x = 0;
 	private int y = 0;
 	private int textSize = 16;
@@ -56,7 +56,6 @@ public class Bubble implements SurfaceObject {
 		bounds = new Rect();
 		bounds.top = y;
 		bounds.left = x;
-		//		bounds.bottom = ;
 		bounds.right = bounds.left + minWidth;
 		speechBubble.setBounds(bounds);
 	}
@@ -84,7 +83,7 @@ public class Bubble implements SurfaceObject {
 		frames++;
 		if (currentPosition < text.length() && currentLine < 8) {
 			if (frames % 6 == 0) {
-				if (currentPosition > 20 * (currentLine + 1) && text.charAt(currentPosition) == ' ') {
+				if (currentPosition > 15 * (currentLine + 1) && text.charAt(currentPosition) == ' ') {
 					currentLine++;
 				}
 
@@ -92,7 +91,7 @@ public class Bubble implements SurfaceObject {
 				currentPosition++;
 			}
 		}
-		if (frames == 15 * text.length()) {
+		if (frames == 10 * text.length()) {
 			tutor.idle();
 			tutorialOverlay.removeSurfaceObject(this);
 			Tutorial.getInstance(null).setNotification("Bubble finished!");

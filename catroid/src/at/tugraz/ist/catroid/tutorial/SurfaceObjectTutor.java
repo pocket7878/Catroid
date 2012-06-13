@@ -73,4 +73,6 @@ public abstract class SurfaceObjectTutor implements SurfaceObject {
 
 	public abstract void sayFinished();
 
+	public abstract void walk(int distance, boolean fastWalk);
+
 }
