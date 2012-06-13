@@ -460,10 +460,10 @@ public class BrickAdapter extends BaseAdapter implements DragAndDropListener {
 			}
 			ArrayList<Brick> brickListTo = sprite.getScript(getScriptId(to)).getBrickList();
 			for (int i = to - startBrickIdFromToScript; i < brickListTo.size(); i++) {
-				Brick currBrick = brickListTo.get(i - 1);
+				Brick currBrick = brickListTo.get(i);
 				if (currBrick instanceof HIDComboEndBrick) {
 					sprite.getScript(getScriptId(to)).removeBrick(draggedBrick);
-					sprite.getScript(getScriptId(to)).addBrick(i - 1, draggedBrick);
+					sprite.getScript(getScriptId(to)).addBrick(i, draggedBrick);
 				} else if (currBrick instanceof HIDComboBrick) {
 					break;
 				}

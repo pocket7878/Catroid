@@ -32,7 +32,6 @@ import android.test.suitebuilder.annotation.Smoke;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.widget.Adapter;
 import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.content.Project;
@@ -44,18 +43,19 @@ import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.HIDComboBrick;
 import at.tugraz.ist.catroid.content.bricks.HIDComboEndBrick;
 import at.tugraz.ist.catroid.content.bricks.HIDKeyBoardButtonBrick;
-import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
-import at.tugraz.ist.catroid.content.bricks.ShowBrick;
-import at.tugraz.ist.catroid.content.bricks.WaitBrick;
+import at.tugraz.ist.catroid.content.bricks.SetBrightnessBrick;
 import at.tugraz.ist.catroid.ui.ScriptActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
 
 import com.jayway.android.robotium.solo.Solo;
 
 public class HIDKeyBoardComboBrickTest extends ActivityInstrumentationTestCase2<ScriptTabActivity> {
 	private Solo solo;
-	private ArrayList<Brick> brickListToCheck;
-	private ArrayList<Brick> secondBrickListForMoving;
+	private ArrayList<Brick> startbrickListToCheck;
+	private ArrayList<Brick> firstbrickListToCheck;
+	Script startScript;
+	Script firstScript;
 	private Sprite firstSprite;
 
 	public HIDKeyBoardComboBrickTest() {
@@ -83,7 +83,6 @@ public class HIDKeyBoardComboBrickTest extends ActivityInstrumentationTestCase2<
 	private ArrayList<Integer> getListItemYPositions() {
 		ArrayList<Integer> yPositionList = new ArrayList<Integer>();
 		ListView listView = solo.getCurrentListViews().get(0);
-
 		for (int i = 0; i < listView.getChildCount(); ++i) {
 			View currentViewInList = listView.getChildAt(i);
 
@@ -109,7 +108,7 @@ public class HIDKeyBoardComboBrickTest extends ActivityInstrumentationTestCase2<
 			}
 		});
 
-		solo.sleep(ViewConfiguration.getLongPressTimeout() + 200);
+		solo.sleep(ViewConfiguration.getLongPressTimeout() + 20);
 
 		handler.post(new Runnable() {
 			public void run() {
@@ -120,13 +119,12 @@ public class HIDKeyBoardComboBrickTest extends ActivityInstrumentationTestCase2<
 					MotionEvent moveEvent = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(),
 							MotionEvent.ACTION_MOVE, x, y, 0);
 					getActivity().dispatchTouchEvent(moveEvent);
-
 					solo.sleep(20);
 				}
 			}
 		});
 
-		solo.sleep(steps * 20 + 200);
+		solo.sleep(steps * 20 + 20);
 
 		handler.post(new Runnable() {
 
@@ -137,80 +135,80 @@ public class HIDKeyBoardComboBrickTest extends ActivityInstrumentationTestCase2<
 			}
 		});
 
-		solo.sleep(1000);
-
 	}
 
 	@Smoke
 	public void testMoveKeyBoardBrickToCombo() {
 
 		ArrayList<Integer> yPositionList = getListItemYPositions();
-		assertTrue("Test project brick list smaller than expected", yPositionList.size() >= 6);
-
-		int numberOfBricks = ProjectManager.getInstance().getCurrentScript().getBrickList().size();
-		longClickAndDrag(10, yPositionList.get(6), 10, yPositionList.get(2), 20);
-
-		assertTrue("Number of Bricks inside Script hasn't changed", (numberOfBricks + 1) == ProjectManager
-				.getInstance().getCurrentScript().getBrickList().size());
-
-		Adapter adapter = ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter();
-
-		assertEquals("Incorrect Brick after dragging over Script",
-				(Brick) adapter.getItem(2) instanceof HIDKeyBoardButtonBrick, true);
+		assertTrue("Test project brick list smaller than expected. Maybe Display to small for all bricks?",
+				yPositionList.size() == 6);
+		longClickAndDrag(10, yPositionList.get(1), 10, (yPositionList.get(2)) + 5, 20);
 		yPositionList = getListItemYPositions();
-		longClickAndDrag(10, yPositionList.get(7), 10, yPositionList.get(2), 20);
+		BrickAdapter adapter = ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter();
+		assertTrue("KeyBrick is not in the Combo", adapter.getItem(2) instanceof HIDKeyBoardButtonBrick);
 
-		assertEquals("Number of Bricks inside ComboBrick has changed. Wait Brick in Combo should not be possible.",
-				(Brick) adapter.getItem(2) instanceof HIDKeyBoardButtonBrick, true);
-
+		yPositionList = getListItemYPositions();
+		longClickAndDrag(10, yPositionList.get(5), 10, yPositionList.get(3) - 5, 20);
 		adapter = ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter();
-
-		assertEquals("Incorrect Brick should be at the end of the Combo",
-				(Brick) adapter.getItem(4) instanceof WaitBrick, true);
+		assertTrue("BrightnessBrick is in the Combo", !(adapter.getItem(3) instanceof SetBrightnessBrick));
+		//
+		//		int numberOfBricks = ProjectManager.getInstance().getCurrentScript().getBrickList().size();
+		//		longClickAndDrag(10, yPositionList.get(6), 10, yPositionList.get(2), 20);
+		//
+		//		assertTrue("Number of Bricks inside Script hasn't changed", (numberOfBricks + 1) == ProjectManager
+		//				.getInstance().getCurrentScript().getBrickList().size());
+		//
+		//		Adapter adapter = ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter();
+		//
+		//		assertEquals("Incorrect Brick after dragging over Script",
+		//				(Brick) adapter.getItem(2) instanceof HIDKeyBoardButtonBrick, true);
+		//		yPositionList = getListItemYPositions();
+		//		longClickAndDrag(10, yPositionList.get(7), 10, yPositionList.get(2), 20);
+		//
+		//		assertEquals("Number of Bricks inside ComboBrick has changed. Wait Brick in Combo should not be possible.",
+		//				(Brick) adapter.getItem(2) instanceof HIDKeyBoardButtonBrick, true);
+		//
+		//		adapter = ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter();
+		//
+		//		assertEquals("Incorrect Brick should be at the end of the Combo",
+		//				(Brick) adapter.getItem(4) instanceof WaitBrick, true);
 
 	}
 
 	private void createProject(String projectName) {
-		double size = 0.8;
 
 		Project project = new Project(null, projectName);
 		firstSprite = new Sprite("cat");
 
-		Script startScript1 = new StartScript(firstSprite);
-		Script whenScript1 = new WhenScript(firstSprite);
-		Script whenScript2 = new WhenScript(firstSprite);
+		startScript = new StartScript(firstSprite);
+		firstScript = new WhenScript(firstSprite);
 
-		HIDComboBrick tmpCombo = new HIDComboBrick(firstSprite, 0);
-		HIDComboEndBrick tmpEnd = new HIDComboEndBrick(firstSprite, tmpCombo);
-		tmpCombo.setLoopEndBrick(tmpEnd);
-		brickListToCheck = new ArrayList<Brick>();
-		brickListToCheck.add(tmpCombo);
-		brickListToCheck.add(tmpEnd);
-		brickListToCheck.add(new SetCostumeBrick(firstSprite));
-		brickListToCheck.add(new SetCostumeBrick(firstSprite));
+		startbrickListToCheck = new ArrayList<Brick>();
+		startbrickListToCheck.add(new HIDKeyBoardButtonBrick(firstSprite));
+		HIDComboBrick startCombo = new HIDComboBrick(firstSprite);
+		HIDComboEndBrick startEnd = new HIDComboEndBrick(firstSprite, startCombo);
+		startCombo.setLoopEndBrick(startEnd);
+		startbrickListToCheck.add(startCombo);
+		startbrickListToCheck.add(startEnd);
 
-		secondBrickListForMoving = new ArrayList<Brick>();
-		secondBrickListForMoving.add(new HIDKeyBoardButtonBrick(firstSprite));
-		secondBrickListForMoving.add(new WaitBrick(firstSprite, 100));
-		secondBrickListForMoving.add(new SetCostumeBrick(firstSprite));
-		secondBrickListForMoving.add(new SetCostumeBrick(firstSprite));
+		firstbrickListToCheck = new ArrayList<Brick>();
+		SetBrightnessBrick brightBrick = new SetBrightnessBrick(firstSprite, 100);
+		firstbrickListToCheck.add(brightBrick);
 
 		// adding Bricks: ----------------
-		for (Brick brick : brickListToCheck) {
-			startScript1.addBrick(brick);
+		for (Brick brick : startbrickListToCheck) {
+			startScript.addBrick(brick);
 		}
 
-		for (Brick brick : secondBrickListForMoving) {
-			whenScript1.addBrick(brick);
+		for (Brick brick : firstbrickListToCheck) {
+			firstScript.addBrick(brick);
 		}
 
-		whenScript2.addBrick(new WaitBrick(firstSprite, 300));
-		whenScript2.addBrick(new ShowBrick(firstSprite));
 		// -------------------------------
 
-		firstSprite.addScript(startScript1);
-		firstSprite.addScript(whenScript1);
-		firstSprite.addScript(whenScript2);
+		firstSprite.addScript(startScript);
+		firstSprite.addScript(firstScript);
 
 		project.addSprite(firstSprite);
 
