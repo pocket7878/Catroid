@@ -63,12 +63,15 @@ public class HIDComboBrick extends LoopBeginBrick {
 			} catch (Exception e) {
 				e.printStackTrace();
 				Log.e("HIDCombo Brick", "Wrong element in Combo Brick! Only KeyBrick allowed!");
+				script.setExecutingBrickIndex(script.getBrickList().indexOf(loopEndBrick));
 				return;
 			}
 		}
 
-		((HIDBrick) script.getBrick(begin)).getHidConnection().send(keyCodes);
-		script.setExecutingBrickIndex(script.getBrickList().indexOf(loopEndBrick));
+		if (keyCodes.size() != 0) {
+			((HIDBrick) script.getBrick(begin)).getHidConnection().send(keyCodes);
+			script.setExecutingBrickIndex(script.getBrickList().indexOf(loopEndBrick));
+		}
 	}
 
 	@Override
