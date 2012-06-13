@@ -18,6 +18,8 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
+import java.util.Date;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
@@ -30,19 +32,10 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 
 /**
- * @author Pinki
+ * @author Pinki, Herb
  * 
  */
 public class ControlPanel implements SurfaceObject {
-
-	//ein paar gedanken zum control panel
-	//play / pause panel je nach status abwechseln
-	//wird es ausgeführt nur pause button anzeigen
-	//sind wir im pause modus playbutton stattdessen anzeigen
-	//pause bedeutet bleibt an der jeweiligen zeile stehen und wartet auf play
-	//forward wird geschwindigkeit des textes verdoppelt
-	//rewind bedeutet rückwärts schreiben ==> wird evt. tricky
-
 	private Resources resources;
 	private Context context;
 
@@ -54,6 +47,7 @@ public class ControlPanel implements SurfaceObject {
 
 	public static boolean active;
 	private boolean open;
+	private long timeOfLastChange = 0;
 
 	public ControlPanel(Context context, TutorialOverlay tutorialOverlay) {
 		active = true;
@@ -89,10 +83,8 @@ public class ControlPanel implements SurfaceObject {
 	public void draw(Canvas canvas) {
 		new Paint();
 		if (open) {
-			//canvas.drawBitmap(backwardBitmap, menuBounds.left, getScreenHeight() - backwardBitmap.getHeight(), paint);
 			menuBar.draw(canvas);
 		} else {
-			//canvas.drawBitmap(menuBitmap, menuBounds.left, menuBounds.top, paint);
 			menuButton.draw(canvas);
 		}
 	}
@@ -102,31 +94,20 @@ public class ControlPanel implements SurfaceObject {
 	}
 
 	public void open() {
-		open = true;
+		long actTime = new Date().getTime();
+		if ((actTime - 500) > timeOfLastChange) {
+			open = true;
+			timeOfLastChange = actTime;
+		}
 	}
 
 	public void close() {
-		open = false;
+		long actTime = new Date().getTime();
+		if ((actTime - 500) > timeOfLastChange) {
+			open = false;
+			timeOfLastChange = actTime;
+		}
 	}
-
-	//	private void setMenuBounds() {
-	//		menuBounds.left = 0;
-	//		menuBounds.right = menuBitmap.getWidth();
-	//		menuBounds.bottom = getScreenHeight();
-	//		menuBounds.top = getScreenHeight() - menuBitmap.getHeight();
-	//	}
-
-	//	private void setBounds(int shift) {
-	//		int height = getScreenHeight();
-	//		int width = getScreenWidth();
-	//		//abstand zwischen buttons = 20
-	//
-	//		bounds.left = ((width - 260) / 2) + shift;
-	//		bounds.right = bounds.left + 50;
-	//		bounds.top = height - 40;
-	//		bounds.bottom = height;// - 10;
-	//
-	//	}
 
 	private int getScreenHeight() {
 		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
@@ -139,18 +120,6 @@ public class ControlPanel implements SurfaceObject {
 		int screenWidth = display.getWidth();
 		return screenWidth;
 	}
-
-	//	public Rect getPanelBounds() {
-	//		//coordinaten von gesamten panel mit 4 button
-	//		Rect panelBounds = new Rect();
-	//		panelBounds.bottom = bounds.bottom;
-	//		panelBounds.top = bounds.top;
-	//		panelBounds.right = bounds.right;
-	//		//3*20 = 60 ==> abstand zwischen buttons
-	//		panelBounds.left = bounds.right - 4 * (bounds.right - bounds.left) - 60;
-	//		return panelBounds;
-	//
-	//	}
 
 	public void pressPlay() {
 		//check if tutorial is active, if so there is no need to press play

@@ -151,10 +151,6 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		Activity activity = (Activity) context;
 		boolean retval = false;
 
-		if (panel.isOpen()) {
-			panel.close();
-		}
-
 		float displayHeight = activity.getWindowManager().getDefaultDisplay().getHeight();
 
 		ClickableArea clickableArea = Cloud.getInstance(null).getClickableArea();
@@ -162,9 +158,11 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		if (ev.getY() > displayHeight - 100) {
 			dispatchPanel(ev, displayHeight);
 		}
+
 		if (clickableArea == null || clickableArea.x == 0 && clickableArea.y == 0) {
 			return false;
 		}
+
 		if (isEVinArea(clickableArea, ev)) {
 			retval = Tutorial.getInstance(null).dispatchTouchEvent(ev);
 			co.disapear();
@@ -175,19 +173,14 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	public void dispatchPanel(MotionEvent ev, float displayHeight) {
 		//TODO: Dispatch ALL the Panel!
 
-		double y1 = displayHeight;
-		double y2 = ev.getY();
-		double diffx = ev.getX();
-		double diffy = y1 - y2;
-		double distance = Math.sqrt(diffx * diffx + diffy * diffy);
-
-		if (distance < 70 && panel != null) {
-			if (!panel.isOpen()) {
-				panel.open();
-			} else {
+		if (ev.getY() < displayHeight && ev.getY() > (displayHeight - 55) && ev.getX() < 55 && panel != null) {
+			if (panel.isOpen()) {
 				panel.close();
+			} else {
+				panel.open();
 			}
-		} else if (ev.getY() > displayHeight - 50) {
+		} else if (ev.getY() < displayHeight && ev.getY() > (displayHeight - 55) && ev.getX() < 310 && ev.getX() > 270
+				&& panel != null) {
 			Tutorial.getInstance(null).stopButtonTutorial();
 		}
 	}
