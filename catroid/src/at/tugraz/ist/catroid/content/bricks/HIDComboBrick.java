@@ -25,30 +25,21 @@ package at.tugraz.ist.catroid.content.bricks;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnCancelListener;
-import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
-import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.hid.KeyCode;
-import at.tugraz.ist.catroid.utils.Utils;
 
-public class HIDComboBrick extends LoopBeginBrick implements OnClickListener {
+public class HIDComboBrick extends LoopBeginBrick {
 	private static final long serialVersionUID = 1L;
-	private int timesToRepeat;
 
-	public HIDComboBrick(Sprite sprite, int timesToRepeat) {
+	public HIDComboBrick(Sprite sprite) {
 		this.sprite = sprite;
-		this.timesToRepeat = timesToRepeat;
+
 	}
 
 	public int getRequiredResources() {
@@ -82,17 +73,13 @@ public class HIDComboBrick extends LoopBeginBrick implements OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new HIDComboBrick(getSprite(), timesToRepeat);
+		return new HIDComboBrick(getSprite());
 	}
 
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		View view = View.inflate(context, R.layout.brick_combo_start, null);
 
-		EditText edit = (EditText) view.findViewById(R.id.brick_repeat_edit_text);
-		edit.setText(timesToRepeat + "");
-
-		edit.setOnClickListener(this);
 		return view;
 	}
 
@@ -100,37 +87,4 @@ public class HIDComboBrick extends LoopBeginBrick implements OnClickListener {
 		return View.inflate(context, R.layout.brick_combo_start, null);
 	}
 
-	public void onClick(View view) {
-		final Context context = view.getContext();
-
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		final EditText input = new EditText(context);
-		input.setText(String.valueOf(timesToRepeat));
-		input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
-				| InputType.TYPE_NUMBER_FLAG_SIGNED);
-		input.setSelectAllOnFocus(true);
-		dialog.setView(input);
-		dialog.setOnCancelListener((OnCancelListener) context);
-		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				try {
-					timesToRepeat = Integer.parseInt(input.getText().toString());
-				} catch (NumberFormatException exception) {
-					Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
-				}
-				dialog.cancel();
-			}
-		});
-		dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.cancel();
-			}
-		});
-
-		AlertDialog finishedDialog = dialog.create();
-		finishedDialog.setOnShowListener(Utils.getBrickDialogOnClickListener(context, input));
-
-		finishedDialog.show();
-
-	}
 }

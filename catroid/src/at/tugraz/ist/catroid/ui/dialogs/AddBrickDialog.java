@@ -175,7 +175,7 @@ public class AddBrickDialog extends Dialog {
 
 		List<Brick> hidBrickList = new ArrayList<Brick>();
 		hidBrickList.add(new HIDKeyBoardButtonBrick(sprite));
-		hidBrickList.add(new HIDComboBrick(sprite, 1));
+		hidBrickList.add(new HIDComboBrick(sprite));
 		brickMap.put(context.getString(R.string.category_hid), hidBrickList);
 
 		return brickMap;
