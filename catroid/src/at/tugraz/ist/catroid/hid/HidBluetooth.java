@@ -40,47 +40,46 @@ public class HidBluetooth implements IHid {
 		return instance;
 	}
 
+	public int[] generateHidCode(Collection<KeyCode> keys) {
+
+		int[] hidCode = new int[] { 161, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+		int i = 4;
+		for (KeyCode key : keys) {
+
+			if (key.isModifier()) {
+				hidCode[2] |= key.getKeyCode();
+			} else {
+				if (i < 10) {
+					hidCode[i] = key.getKeyCode();
+					i++;
+				}
+
+			}
+		}
+
+		return hidCode;
+	}
+
 	public void send(KeyCode key) {
 
 	}
 
 	public void send(Collection<KeyCode> keys) {
-		/*
-		 * int key = 0;
-		 * int modifier = 0;
-		 * boolean invalidCombo = false;
-		 * 
-		 * for (int index : spinnerIndices) {
-		 * 
-		 * Integer keyCode = new Integer(0);
-		 * boolean mod = interpretKey(keyCode, index, keyXmlId);
-		 * if (mod) {
-		 * modifier = modifier | keyCode.intValue();
-		 * } else {
-		 * if (invalidCombo) {
-		 * 
-		 * }
-		 * key = keyCode.intValue();
-		 * invalidCombo = true;
-		 * }
-		 * }
-		 */
-		//buildHIDCode(..)
-		//sending the code
-
+		int[] hidCode = generateHidCode(keys);
 	}
 
 	public KeyCode interpretKey(Context context, int spinnerIndex, int keyXmlId) {
 
 		String[] hidRes = context.getResources().getStringArray(keyXmlId);
 
-		KeyCode blub = new KeyCode(false, 1);
+		String keyString = hidRes[spinnerIndex];
 
-		return blub;
-	}
+		String[] oneKey = keyString.split("\\|");
 
-	public int generateHidCode() {
-		return 0;
+		KeyCode key = new KeyCode(((oneKey.length > 1) ? true : false), Integer.parseInt(oneKey[0]));
+
+		return key;
 	}
 
 }
