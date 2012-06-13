@@ -23,7 +23,6 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -32,6 +31,8 @@ import android.widget.BaseAdapter;
 import android.widget.Spinner;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.hid.HidBluetooth;
+import at.tugraz.ist.catroid.hid.IHid;
 import at.tugraz.ist.catroid.hid.KeyCode;
 
 public class HIDKeyBoardButtonBrick implements HIDBrick, OnItemSelectedListener {
@@ -39,14 +40,18 @@ public class HIDKeyBoardButtonBrick implements HIDBrick, OnItemSelectedListener 
 
 	private Sprite sprite;
 	private KeyCode keyCode;
+	private IHid hidBT = HidBluetooth.getInstance();
 
 	protected Object readResolve() {
 		return this;
 	}
 
+	public IHid getHidConnection() {
+		return hidBT;
+	}
+
 	public HIDKeyBoardButtonBrick(Sprite sprite) {
 		this.sprite = sprite;
-		this.keyCode = null; // TODO Call key Mapping
 	}
 
 	public int getRequiredResources() {
@@ -54,8 +59,7 @@ public class HIDKeyBoardButtonBrick implements HIDBrick, OnItemSelectedListener 
 	}
 
 	public void execute() {
-		Log.i("HID KeyBoard Key Brick", "KeyCode: " + getKeyCode());
-
+		hidBT.send(keyCode);
 	}
 
 	public Sprite getSprite() {
@@ -63,6 +67,7 @@ public class HIDKeyBoardButtonBrick implements HIDBrick, OnItemSelectedListener 
 	}
 
 	public View getPrototypeView(Context context) {
+		hidBT.interpretKey(context, 0, R.array.key_code_array);
 		return View.inflate(context, R.layout.brick_hid_keyboard_button_press, null);
 	}
 
@@ -72,6 +77,7 @@ public class HIDKeyBoardButtonBrick implements HIDBrick, OnItemSelectedListener 
 	}
 
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
+		hidBT.interpretKey(context, 0, R.array.key_code_array);
 		View brickView = View.inflate(context, R.layout.brick_hid_keyboard_button_press, null);
 
 		ArrayAdapter<CharSequence> keyAdapter = ArrayAdapter.createFromResource(context,
@@ -89,7 +95,7 @@ public class HIDKeyBoardButtonBrick implements HIDBrick, OnItemSelectedListener 
 	}
 
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		keyCode = null; // TODO Call KeyCode Mapper
+		keyCode = hidBT.interpretKey(parent.getContext(), position, R.array.key_code_array); // TODO Call KeyCode Mapper
 	}
 
 	public void onNothingSelected(AdapterView<?> arg0) {

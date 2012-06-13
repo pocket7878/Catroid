@@ -20,10 +20,14 @@ package at.tugraz.ist.catroid.hid;
 
 import java.util.Collection;
 
+import android.content.Context;
+
 public interface IHid {
 
 	public void send(KeyCode key);
 
 	public void send(Collection<KeyCode> keys);
+
+	public KeyCode interpretKey(Context context, int spinnerIndex, int keyXmlId);
 
 }

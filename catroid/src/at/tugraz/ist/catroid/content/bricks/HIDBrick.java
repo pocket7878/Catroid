@@ -18,10 +18,13 @@
  */
 package at.tugraz.ist.catroid.content.bricks;
 
+import at.tugraz.ist.catroid.hid.IHid;
 import at.tugraz.ist.catroid.hid.KeyCode;
 
 public interface HIDBrick extends Brick {
 
 	public KeyCode getKeyCode();
+
+	public IHid getHidConnection();
 
 }
