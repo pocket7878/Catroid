@@ -48,9 +48,9 @@ public class SetVelocityBrickTest extends AndroidTestCase {
 	}
 
 	public void testExecution() {
-		assertFalse(((PhysicWorldMock) physicWorld).isExecuted());
+		assertFalse(((PhysicWorldMock) physicWorld).wasExecuted());
 		setVelocityBrick.execute();
-		assertTrue(((PhysicWorldMock) physicWorld).isExecuted());
+		assertTrue(((PhysicWorldMock) physicWorld).wasExecuted());
 	}
 
 	public void testNullSprite() {
@@ -72,7 +72,7 @@ public class SetVelocityBrickTest extends AndroidTestCase {
 			executed = false;
 		}
 
-		public boolean isExecuted() {
+		public boolean wasExecuted() {
 			return executed;
 		}
 

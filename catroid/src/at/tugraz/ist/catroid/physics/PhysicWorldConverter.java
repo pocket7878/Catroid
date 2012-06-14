@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 class PhysicWorldConverter {
 
 	// Ratio of pixels to meters
-	private static float RATIO = 40;
+	static float RATIO = 40;
 
 	public static Vector2 VectorFromCatroidToBox2D(Vector2 catroidVec) {
 		return new Vector2(catroidVec.x / RATIO, catroidVec.y / RATIO);
@@ -22,7 +22,7 @@ class PhysicWorldConverter {
 	}
 
 	public static Vector2 Vector2FromCatroidToBox2D(Vector2 x) {
-		return new Vector2(x.x / RATIO, x.y / RATIO);
+		return new Vector2(x.x * RATIO, x.y * RATIO);
 	}
 
 	public static Vector2 Vector2FromBox2DToCatroid(Vector2 x) {
