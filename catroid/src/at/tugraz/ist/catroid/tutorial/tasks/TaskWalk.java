@@ -29,7 +29,25 @@ import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 
 public class TaskWalk implements Task {
 	private Tutor tutorType;
-	private int distance;
+	private int walkToX;
+	private int walkToY;
+
+	public int getWalkToX() {
+		return walkToX;
+	}
+
+	public void setWalkToX(int walkToX) {
+		this.walkToX = walkToX;
+	}
+
+	public int getWalkToY() {
+		return walkToY;
+	}
+
+	public void setWalkToY(int walkToY) {
+		this.walkToY = walkToY;
+	}
+
 	private boolean fastWalk = false;
 
 	@Override
@@ -39,14 +57,6 @@ public class TaskWalk implements Task {
 
 	public void setTutorType(Tutor tutorType) {
 		this.tutorType = tutorType;
-	}
-
-	public int getDistance() {
-		return distance;
-	}
-
-	public void setDistance(int distance) {
-		this.distance = distance;
 	}
 
 	public boolean isFastWalk() {
@@ -66,7 +76,7 @@ public class TaskWalk implements Task {
 	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		SurfaceObjectTutor tutor = tutors.get(tutorType);
 		if (tutor != null) {
-			tutor.walk(this.distance, this.fastWalk);
+			tutor.walk(this.walkToX, this.walkToY, this.fastWalk);
 		}
 		return true;
 	}

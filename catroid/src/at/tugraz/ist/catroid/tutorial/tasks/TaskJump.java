@@ -5,9 +5,9 @@ import java.util.HashMap;
 import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 
 public class TaskJump implements Task {
-	private int x;
-	private int y;
 	private Tutor tutorType;
+	private int newX;
+	private int newY;
 
 	@Override
 	public Tutor getTutorType() {
@@ -18,20 +18,20 @@ public class TaskJump implements Task {
 		this.tutorType = tutorType;
 	}
 
-	public int getX() {
-		return x;
+	public int getNewX() {
+		return newX;
 	}
 
-	public void setX(int x) {
-		this.x = x;
+	public void setNewX(int newX) {
+		this.newX = newX;
 	}
 
-	public int getY() {
-		return y;
+	public int getNewY() {
+		return newY;
 	}
 
-	public void setY(int y) {
-		this.y = y;
+	public void setNewY(int newY) {
+		this.newY = newY;
 	}
 
 	@Override
@@ -43,8 +43,9 @@ public class TaskJump implements Task {
 	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		SurfaceObjectTutor tutor = tutors.get(tutorType);
 		if (tutor != null) {
-			tutor.jumpTo(x, y);
+			tutor.jumpTo(this.newX, this.newY);
 		}
 		return true;
 	}
+
 }

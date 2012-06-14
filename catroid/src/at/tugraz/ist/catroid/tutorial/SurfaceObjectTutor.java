@@ -55,13 +55,13 @@ public abstract class SurfaceObjectTutor implements SurfaceObject {
 	@Override
 	public abstract void update(long gameTime);
 
-	public abstract void flip();
+	public abstract void flip(boolean flipFast);
 
 	public abstract void idle();
 
 	public abstract void say(String text);
 
-	public abstract void jumpTo(int x, int y);
+	public abstract void jumpTo(int newX, int newY);
 
 	public abstract void appear(int x, int y);
 
@@ -73,6 +73,6 @@ public abstract class SurfaceObjectTutor implements SurfaceObject {
 
 	public abstract void sayFinished();
 
-	public abstract void walk(int distance, boolean fastWalk);
+	public abstract void walk(int walkToX, int walkToY, boolean fastWalk);
 
 }

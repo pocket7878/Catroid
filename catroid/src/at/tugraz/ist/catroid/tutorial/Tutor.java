@@ -49,7 +49,10 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private int flipFlag = 2;
 	private boolean reset = true;
 	private boolean walkFast = false;
-	private int distanceToWalk;
+	private int walkToX;
+	private int walkToY;
+	private boolean directionX;
+	private boolean directionY;
 
 	public Tutor(int drawable, TutorialOverlay tutorialOverlay) {
 		super(Tutorial.getInstance(null).getActualContext(), tutorialOverlay);
@@ -78,24 +81,41 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	}
 
 	@Override
-	public void flip() {
+	public void flip(boolean flipFast) {
 		if (flip) {
 			flip = false;
 		} else {
 			flip = true;
 		}
 		state = 8;
+
+		if (flipFast) {
+			flipFlag = 0;
+		}
 	}
 
 	@Override
-	public void walk(int distance, boolean fastWalk) {
+	public void walk(int distanceX, int distanceY, boolean fastWalk) {
 		if (!flip) {
 			state = 9;
 		} else {
 			state = 10;
 		}
 		walkFast = fastWalk;
-		distanceToWalk = distance;
+		walkToX = distanceX;
+		walkToY = distanceY;
+
+		if (walkToX > targetX) {
+			directionX = true;
+		} else {
+			directionX = false;
+		}
+
+		if (walkToY > targetY) {
+			directionY = true;
+		} else {
+			directionY = false;
+		}
 	}
 
 	@Override
@@ -105,6 +125,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		} else {
 			state = 5;
 		}
+		Log.i("herb", "Set idle...");
 	}
 
 	@Override
@@ -117,12 +138,16 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		} else {
 			state = 6;
 		}
+		Log.i("herb", "Set saying...");
 	}
 
 	@Override
 	public void jumpTo(int x, int y) {
+		Log.i("herb", "Jumping...");
 		targetX = x;
 		targetY = y;
+		state = 33;
+		Log.i("herb", "Done Jumping...");
 	}
 
 	@Override
@@ -173,6 +198,16 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		}
 
 		switch (state) {
+			case 33:
+				if (flip) {
+					state = 5;
+				} else {
+					state = 1;
+				}
+				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+				Tutorial.getInstance(null).setNotification("Jump done!");
+				break;
+
 			case 0:
 			case 4: //APPEARING
 				if (currentStep == 9) {
@@ -199,7 +234,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 			case 3:
 			case 7: //DISAPPEARING
 				if (currentStep == 9) {
-					currentStep = 0;
 					state = 100;
 					Tutorial.getInstance(null).setNotification("disappear done!");
 					break;
@@ -244,7 +278,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 			case 9:
 			case 10:
-				if (distanceToWalk == 0) {
+				if (walkToX == 0 && walkToY == 0) {
 					if (flip) {
 						state = 5;
 					} else {
@@ -252,12 +286,28 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 					}
 					Tutorial.getInstance(null).setNotification("walk done!");
 				} else {
-					if (flip) {
-						targetX++;
-					} else {
-						targetX--;
+					if (walkFast || (currentStep % 2) == 0) {
+
+						if (directionX) {
+							targetX++;
+						} else {
+							targetX--;
+						}
+
+						if (directionY) {
+							targetY++;
+						} else {
+							targetY--;
+						}
+
+						if (walkToX > 0) {
+							walkToX--;
+						}
+
+						if (walkToY > 0) {
+							walkToY--;
+						}
 					}
-					distanceToWalk--;
 				}
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, (state - 1) * sizeY, sizeX, sizeY);
 				break;
@@ -274,7 +324,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		if (currentFrame % 7 == 0) {
 			currentStep++;
 		}
-
 	}
 
 	public void register(TutorialOverlay overlay) {
