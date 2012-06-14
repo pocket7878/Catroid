@@ -49,7 +49,7 @@ public class SetVelocityBrickTest extends ActivityInstrumentationTestCase2<Scrip
 	}
 
 	@Smoke
-	public void testSetGravityByBrick() {
+	public void testSetVelocityByBrick() {
 		int childrenCount = getActivity().getAdapter().getChildCountFromLastGroup();
 		int groupCount = getActivity().getAdapter().getGroupCount();
 
@@ -76,14 +76,14 @@ public class SetVelocityBrickTest extends ActivityInstrumentationTestCase2<Scrip
 		assertEquals("Value in Brick is not updated", velocity.y, actualVelocity.y);
 	}
 
-	//	public void testResizeInputField() {
-	//		for (int editTextIndex = 0; editTextIndex < 2; editTextIndex++) {
-	//			UiTestUtils.testDoubleEditText(solo, editTextIndex, 1234.0, 50, false);
-	//			UiTestUtils.testDoubleEditText(solo, editTextIndex, 1.0, 50, true);
-	//			UiTestUtils.testDoubleEditText(solo, editTextIndex, 123.0, 50, true);
-	//			UiTestUtils.testDoubleEditText(solo, editTextIndex, -1, 50, true);
-	//		}
-	//	}
+	public void testResizeInputField() {
+		for (int editTextIndex = 0; editTextIndex < 2; editTextIndex++) {
+			//UiTestUtils.testDoubleEditText(solo, editTextIndex, 1234.0, 50, false);
+			//			UiTestUtils.testDoubleEditText(solo, editTextIndex, 1.0, 50, true);
+			//			UiTestUtils.testDoubleEditText(solo, editTextIndex, 123.0, 50, true);
+			//			UiTestUtils.testDoubleEditText(solo, editTextIndex, -1, 50, true);
+		}
+	}
 
 	private void createProject() {
 		project = new Project(null, "testProject");

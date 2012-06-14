@@ -69,9 +69,9 @@ public class SetMassBrick implements Brick, OnClickListener {
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		view = View.inflate(context, R.layout.brick_set_mass, null);
 
-		EditText editX = (EditText) view.findViewById(R.id.brick_set_mass_edit_text);
-		editX.setText(String.valueOf(mass));
-		editX.setOnClickListener(this);
+		EditText editMass = (EditText) view.findViewById(R.id.brick_set_mass_edit_text);
+		editMass.setText(String.valueOf(mass));
+		editMass.setOnClickListener(this);
 
 		return view;
 	}
