@@ -29,10 +29,10 @@
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>
 				</at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>	
 
-				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
                     <tutorType>CATRO</tutorType>
                     <message>Hallo! Darf ich mich vorstellen....</message>
-                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
                 
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
                     <tutorType>CATRO</tutorType>
@@ -53,9 +53,19 @@
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskWalk>
                     <tutorType>CATRO</tutorType>
                     <walkToX>200</walkToX>
-                    <walkToY>200</walkToY>
+                    <walkToY>500</walkToY>
                     <fastWalk>true</fastWalk>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskWalk>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+                    <tutorType>CATRO</tutorType>
+                    <flipFast>false</flipFast>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>NA NA NA NA BATMAN!</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 
 			</lessonContent>
 			<lessonID>0</lessonID>

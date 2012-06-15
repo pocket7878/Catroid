@@ -27,6 +27,8 @@ import android.graphics.Paint;
 import android.util.Log;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
+import com.badlogic.gdx.math.MathUtils;
+
 /**
  * @author faxxe
  * 
@@ -53,6 +55,10 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private int walkToY;
 	private boolean directionX;
 	private boolean directionY;
+	private int distanceX;
+	private int distanceY;
+	private int factorX;
+	private int factorY;
 
 	public Tutor(int drawable, TutorialOverlay tutorialOverlay) {
 		super(Tutorial.getInstance(null).getActualContext(), tutorialOverlay);
@@ -95,26 +101,42 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	}
 
 	@Override
-	public void walk(int distanceX, int distanceY, boolean fastWalk) {
-		if (!flip) {
-			state = 9;
-		} else {
-			state = 10;
-		}
+	public void walk(int walkX, int walkY, boolean fastWalk) {
 		walkFast = fastWalk;
-		walkToX = distanceX;
-		walkToY = distanceY;
+		walkToX = walkX;
+		walkToY = walkY;
 
 		if (walkToX > targetX) {
 			directionX = true;
+			distanceX = walkToX - targetX;
 		} else {
 			directionX = false;
+			distanceX = targetX - walkToX;
 		}
 
 		if (walkToY > targetY) {
 			directionY = true;
+			distanceY = walkToY - targetY;
 		} else {
 			directionY = false;
+			distanceY = targetY - walkToY;
+		}
+
+		if (distanceX > distanceY) {
+			factorY = MathUtils.round(distanceX / distanceY);
+			factorX = 1;
+		} else if (distanceX < distanceY) {
+			factorX = MathUtils.round(distanceY / distanceX);
+			factorY = 1;
+		} else {
+			factorX = 1;
+			factorY = 1;
+		}
+
+		if (!flip) {
+			state = 9;
+		} else {
+			state = 10;
 		}
 	}
 
@@ -125,12 +147,12 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		} else {
 			state = 5;
 		}
-		Log.i("herb", "Set idle...");
+		Log.i("drab", "Set idle...");
 	}
 
 	@Override
 	public void say(String text) {
-		Log.i("herb", "NewTutor: " + text);
+		Log.i("drab", "NewTutor: " + text);
 		new Bubble(text, tutorialOverlay, this, targetX - 20, targetY - 90);
 
 		if (!flip) {
@@ -138,23 +160,23 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		} else {
 			state = 6;
 		}
-		Log.i("herb", "Set saying...");
+		Log.i("drab", "Set saying...");
 	}
 
 	@Override
 	public void jumpTo(int x, int y) {
-		Log.i("herb", "Jumping...");
+		Log.i("drab", "Jumping...");
 		targetX = x;
 		targetY = y;
 		state = 33;
-		Log.i("herb", "Done Jumping...");
+		Log.i("drab", "Done Jumping...");
 	}
 
 	@Override
 	public void appear(int x, int y) {
 		targetX = x;
 		targetY = y;
-		Log.i("herb", " appear!");
+		Log.i("drab", " appear!");
 
 		if (!flip) {
 			state = 0;
@@ -165,7 +187,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void disappear() {
-		Log.i("herb", "disappearing...");
+		Log.i("drab", "disappearing...");
 
 		if (!flip) {
 			state = 3;
@@ -186,7 +208,11 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void sayFinished() {
-		state = 3;
+		if (flip) {
+			state = 7;
+		} else {
+			state = 3;
+		}
 	}
 
 	@Override
@@ -198,16 +224,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		}
 
 		switch (state) {
-			case 33:
-				if (flip) {
-					state = 5;
-				} else {
-					state = 1;
-				}
-				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-				Tutorial.getInstance(null).setNotification("Jump done!");
-				break;
-
 			case 0:
 			case 4: //APPEARING
 				if (currentStep == 9) {
@@ -256,7 +272,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 0, sizeX, sizeY);
 						}
 					}
-					Log.i("HERB", "START of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
+					Log.i("drab", "START of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
 							+ flipFlag + " flip: " + flip);
 					if (currentStep == 9 && reset) {
 						flipFlag--;
@@ -272,13 +288,15 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 					Tutorial.getInstance(null).setNotification("flip done!");
 				}
-				Log.i("HERB", "END of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
+				Log.i("drab", "END of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
 						+ flipFlag);
 				break;
 
 			case 9:
-			case 10:
-				if (walkToX == 0 && walkToY == 0) {
+			case 10: //WALK
+				Log.i("drab", "(" + currentStep + " % " + factorX);
+				Log.i("drab", "(" + currentStep + " % " + factorY);
+				if (walkToX == targetX && walkToY == targetY) {
 					if (flip) {
 						state = 5;
 					} else {
@@ -287,29 +305,36 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 					Tutorial.getInstance(null).setNotification("walk done!");
 				} else {
 					if (walkFast || (currentStep % 2) == 0) {
-
-						if (directionX) {
+						if (directionX && targetX != walkToX && distanceX % factorX == 0) {
 							targetX++;
-						} else {
+							Log.i("drab", "walking in X-Direction");
+						} else if (!directionX && targetX != walkToX && distanceX % factorX == 0) {
 							targetX--;
+							Log.i("drab", "walking in X-Direction");
 						}
 
-						if (directionY) {
+						if (directionY && targetY != walkToY && distanceY % factorY == 0) {
 							targetY++;
-						} else {
+							Log.i("drab", "walking in Y-Direction");
+						} else if (!directionY && targetY != walkToY && distanceY % factorY == 0) {
 							targetY--;
+							Log.i("drab", "walking in Y-Direction");
 						}
-
-						if (walkToX > 0) {
-							walkToX--;
-						}
-
-						if (walkToY > 0) {
-							walkToY--;
-						}
+						distanceX--;
+						distanceY--;
 					}
 				}
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, (state - 1) * sizeY, sizeX, sizeY);
+				break;
+
+			case 33: //JUMP
+				if (flip) {
+					state = 5;
+				} else {
+					state = 1;
+				}
+				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+				Tutorial.getInstance(null).setNotification("Jump done!");
 				break;
 
 			default:
