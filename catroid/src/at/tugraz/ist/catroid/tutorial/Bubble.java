@@ -40,7 +40,7 @@ public class Bubble implements SurfaceObject {
 	private TutorialOverlay tutorialOverlay;
 	private SurfaceObjectTutor tutor;
 	private Rect bounds;
-	private String[] textArray = { "", "", "", "" };
+	private String[] textArray = new String[] { "", "", "", "" };
 	private int currentLine = 0;
 	private int minWidth = 70;
 	private int x = 0;
@@ -86,8 +86,6 @@ public class Bubble implements SurfaceObject {
 					canvas.drawText(textArray[i], x + textSize, y + 20 + i * textSize, paint);
 				}
 			}
-		} else {
-
 		}
 	}
 
