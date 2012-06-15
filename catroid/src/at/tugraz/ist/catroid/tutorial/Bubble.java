@@ -18,10 +18,13 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
+import java.util.Date;
+
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.NinePatchDrawable;
+import android.util.Log;
 import at.tugraz.ist.catroid.R;
 
 /**
@@ -31,17 +34,21 @@ import at.tugraz.ist.catroid.R;
 public class Bubble implements SurfaceObject {
 	private String text = " So, donn woll !";
 	private int currentPosition = 0;
+	private int linePosition = 0;
 	private int frames = 0;
 	private NinePatchDrawable speechBubble;
 	private TutorialOverlay tutorialOverlay;
 	private SurfaceObjectTutor tutor;
 	private Rect bounds;
-	private String[] textArray = { "", "", "", "", "", "", "", "", "" };
+	private String[] textArray = { "", "", "", "" };
 	private int currentLine = 0;
-	private int minWidth = 80;
+	private int minWidth = 70;
 	private int x = 0;
 	private int y = 0;
 	private int textSize = 16;
+	private boolean reset = false;
+	private long endTimeBubble = 0;
+	private boolean setEndTime = false;
 
 	public Bubble(String text, TutorialOverlay tutorialOverlay, SurfaceObjectTutor tutor, int x, int y) {
 		this.tutor = tutor;
@@ -65,37 +72,72 @@ public class Bubble implements SurfaceObject {
 		Paint paint = new Paint();
 		paint.setFakeBoldText(true);
 		paint.setTextSize(textSize);
-		if (currentLine < 4) {
+		if (currentLine < 5) {
 			if (bounds.right < bounds.left + 10 * textArray[currentLine].length()) {
 				bounds.right = bounds.left + 10 * textArray[currentLine].length();
 			}
-			bounds.bottom = 70 + bounds.top + 14 * currentLine + 1;
+
+			bounds.bottom = 70 + bounds.top + 14 * currentLine;
 			speechBubble.setBounds(bounds);
 			speechBubble.draw(canvas);
-			for (int i = 0; i < 8; i++) {
-				canvas.drawText(textArray[i], x + textSize, y + 20 + i * textSize, paint);
+
+			for (int i = 0; i < textArray.length; i++) {
+				if (textArray[i] != "") {
+					canvas.drawText(textArray[i], x + textSize, y + 20 + i * textSize, paint);
+				}
 			}
+		} else {
+
 		}
 	}
 
 	@Override
 	public void update(long gameTime) {
 		frames++;
-		if (currentPosition < text.length() && currentLine < 8) {
+		if (currentPosition < text.length() && currentLine < textArray.length) {
 			if (frames % 6 == 0) {
-				if (currentPosition > 15 * (currentLine + 1) && text.charAt(currentPosition) == ' ') {
-					currentLine++;
+				if (linePosition > 15 && text.charAt(currentPosition) == ' ') {
+					if (currentLine < 3) {
+						currentLine++;
+						currentPosition++;
+					} else {
+						currentLine = 0;
+						currentPosition++;
+						reset = true;
+					}
+					linePosition = 0;
 				}
 
-				textArray[currentLine] = textArray[currentLine] + text.charAt(currentPosition);
+				if (reset) {
+					resetTextArray();
+					textArray[currentLine] = "" + text.charAt(currentPosition);
+					reset = false;
+				} else {
+					textArray[currentLine] = textArray[currentLine] + text.charAt(currentPosition);
+				}
+				Log.i("drab", "TEXT: " + textArray[currentLine]);
 				currentPosition++;
+				linePosition++;
 			}
 		}
-		if (frames == 10 * text.length()) {
+
+		if (currentPosition == text.length() && !setEndTime) {
+			endTimeBubble = new Date().getTime();
+			setEndTime = true;
+		}
+
+		long actTime = new Date().getTime();
+
+		if ((endTimeBubble + 2000) < actTime && endTimeBubble != 0) {
 			tutor.idle();
 			tutorialOverlay.removeSurfaceObject(this);
 			Tutorial.getInstance(null).setNotification("Bubble finished!");
 		}
+	}
 
+	private void resetTextArray() {
+		for (int i = 0; i < textArray.length; i++) {
+			textArray[i] = "";
+		}
 	}
 }

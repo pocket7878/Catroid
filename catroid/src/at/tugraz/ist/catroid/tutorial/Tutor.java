@@ -307,18 +307,14 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 					if (walkFast || (currentStep % 2) == 0) {
 						if (directionX && targetX != walkToX && distanceX % factorX == 0) {
 							targetX++;
-							Log.i("drab", "walking in X-Direction");
 						} else if (!directionX && targetX != walkToX && distanceX % factorX == 0) {
 							targetX--;
-							Log.i("drab", "walking in X-Direction");
 						}
 
 						if (directionY && targetY != walkToY && distanceY % factorY == 0) {
 							targetY++;
-							Log.i("drab", "walking in Y-Direction");
 						} else if (!directionY && targetY != walkToY && distanceY % factorY == 0) {
 							targetY--;
-							Log.i("drab", "walking in Y-Direction");
 						}
 						distanceX--;
 						distanceY--;

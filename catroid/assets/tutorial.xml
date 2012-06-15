@@ -2,71 +2,23 @@
 <at.tugraz.ist.catroid.tutorial.LessonCollection>
 	<lessonArray>
 		<at.tugraz.ist.catroid.tutorial.Lesson>
-			<lessonName>Daumenkino</lessonName>
+			<lessonName>Demonstration</lessonName>
 			<lessonContent>
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
 					<sleepTime>1000</sleepTime>
 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
  				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-					<tutorType>MIAUS</tutorType>
+					<tutorType>CATRO</tutorType>
 					<x>80</x>
 					<y>300</y>
 				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear> 
 				
-				<at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-					<sleepTime>1000</sleepTime>
-				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-				
-				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-					<tutorType>CATRO</tutorType>
-					<x>280</x>
-					<y>300</y>
-				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-				<at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-					<sleepTime>1000</sleepTime>
-				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-				
-				<at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>
-				</at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>	
+ 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+ 				    <tutorType>CATRO</tutorType>
+ 				    <message>Hallo ich bin Miaus aka Tutor und ich rede extrem viel ... um zu testen ob die Bubble dies verkraftet!</message>
+ 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 
-<!-- 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-                    <tutorType>CATRO</tutorType>
-                    <message>Hallo! Darf ich mich vorstellen....</message>
-                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
-                
-                <at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
-                    <tutorType>CATRO</tutorType>
-                    <flipFast>true</flipFast>
-                </at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
-                
-                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-                    <tutorType>CATRO</tutorType>
-                    <message>NA NA NA NA BATMAN!</message>
-                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-                
-                <at.tugraz.ist.catroid.tutorial.tasks.TaskJump>
-                    <tutorType>CATRO</tutorType>
-                    <newX>100</newX>
-                    <newY>100</newY>
-                </at.tugraz.ist.catroid.tutorial.tasks.TaskJump>
-                
-                <at.tugraz.ist.catroid.tutorial.tasks.TaskWalk>
-                    <tutorType>CATRO</tutorType>
-                    <walkToX>200</walkToX>
-                    <walkToY>500</walkToY>
-                    <fastWalk>true</fastWalk>
-                </at.tugraz.ist.catroid.tutorial.tasks.TaskWalk>
-                
-                <at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
-                    <tutorType>CATRO</tutorType>
-                    <flipFast>false</flipFast>
-                </at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
-                
-                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-                    <tutorType>CATRO</tutorType>
-                    <message>NA NA NA NA BATMAN!</message>
-                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-
+				
 			</lessonContent>
 			<lessonID>0</lessonID>
 			<currentStep>0</currentStep>
