@@ -19,7 +19,7 @@
                     <tutorType>CATRO</tutorType>
                     <message>Hallo! Ich bin CATRO- dein Tutor. Ich werde dir in aller Kürze erklären wie du uns Tutoren steuern kannst.</message>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-                <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+<!--                 <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
                     <tutorType>CATRO</tutorType>
                     <sleepTime>1000</sleepTime>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
@@ -27,7 +27,7 @@
  				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
                     <tutorType>CATRO</tutorType>
                     <message>Alle Aktionen kannst du in der tutorial.xml Datei erstellen. Nun lassen wir uns mal den lieben MIAUS kommen... Mit dem Task APPEAR geht das ganz einfach. Schauen wir einmal: TASKAPPEAR</message>
-                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay> -->
                 
  				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
  				    <tutorType>MIAUS</tutorType>
@@ -52,8 +52,8 @@
  				
  				<at.tugraz.ist.catroid.tutorial.tasks.TaskWalk>
  				    <tutorType>MIAUS</tutorType>
- 				    <walkToX>50</walkToX>
- 				    <walkToY>50</walkToY>
+ 				    <walkToX>350</walkToX>
+ 				    <walkToY>300</walkToY>
  				    <fastWalk>true</fastWalk>
  				</at.tugraz.ist.catroid.tutorial.tasks.TaskWalk>
  				

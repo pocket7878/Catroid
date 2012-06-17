@@ -124,10 +124,10 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 			distanceY = targetY - walkToY;
 		}
 
-		if (distanceX > distanceY) {
+		if (distanceX > distanceY && distanceY > 0) {
 			factorY = Math.round((distanceX / distanceY) + 0.5f);
 			factorX = 1;
-		} else if (distanceX < distanceY) {
+		} else if (distanceX < distanceY && distanceX > 0) {
 			factorX = Math.round((distanceY / distanceX) + 0.5f);
 			factorY = 1;
 		} else {

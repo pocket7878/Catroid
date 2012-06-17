@@ -101,19 +101,17 @@ public class Bubble implements SurfaceObject {
 		paint.setFakeBoldText(true);
 		paint.setTextSize(textSize);
 
-		if (currentLine < 5) {
-			if (bounds.right < bounds.left + 10 * textArray[currentLine].length()) {
-				bounds.right = bounds.left + 10 * textArray[currentLine].length();
-			}
+		if (bounds.right < bounds.left + 10 * textArray[currentLine].length()) {
+			bounds.right = bounds.left + 10 * textArray[currentLine].length();
+		}
 
-			bounds.bottom = 70 + bounds.top + 14 * currentLine;
-			speechBubble.setBounds(bounds);
-			speechBubble.draw(canvas);
+		bounds.bottom = 70 + bounds.top + 14 * currentLine;
+		speechBubble.setBounds(bounds);
+		speechBubble.draw(canvas);
 
-			for (int i = 0; i < textArray.length; i++) {
-				if (textArray[i] != "") {
-					canvas.drawText(textArray[i], x + textSize, y + textMarginY + i * textSize, paint);
-				}
+		for (int i = 0; i < textArray.length; i++) {
+			if (textArray[i] != "") {
+				canvas.drawText(textArray[i], x + textSize, y + textMarginY + i * textSize, paint);
 			}
 		}
 	}
@@ -162,7 +160,6 @@ public class Bubble implements SurfaceObject {
 	}
 
 	private void resetTextArray(long time) {
-
 		while (true) {
 			long actTime = new Date().getTime();
 			if (actTime > time) {
