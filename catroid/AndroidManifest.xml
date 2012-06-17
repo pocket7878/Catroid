@@ -40,12 +40,27 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <uses-feature android:name="android.software.live_wallpaper" 
+	    android:required="true">
+	</uses-feature>
+	
     <application
         android:name=".web.CatroidApplication"
         android:debuggable="true"
         android:icon="@drawable/ic_launcher_catroid_fat"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Light.NoTitleBar" >
+        
+        <service android:name="MyWallpaperService" android:enabled="true"
+			android:permission="android.permission.BIND_WALLPAPER" 
+			android:label="Wallpaper Example ">
+			<intent-filter>
+				<action android:name="android.service.wallpaper.WallpaperService"></action>
+			</intent-filter>
+			<meta-data android:name="android.service.wallpaper"
+				></meta-data>
+		</service>
+		
         <activity
             android:name=".ui.MainMenuActivity"
             android:configChanges="keyboardHidden|orientation" >
@@ -100,6 +115,12 @@
                 <data android:mimeType="audio/*" />
             </intent-filter>
         </activity>
+        
+        <activity android:label="@string/app_name" android:name=".MyPreferencesActivity"
+			android:theme="@android:style/Theme.Light.WallpaperSettings"
+			android:exported="true">
+		</activity>
+		
     </application>
 
 </manifest>
