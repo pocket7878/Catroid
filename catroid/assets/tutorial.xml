@@ -3,11 +3,7 @@
 	<lessonArray>
 		<at.tugraz.ist.catroid.tutorial.Lesson>
 			<lessonName>Demonstration</lessonName>
-			<lessonContent>
-				<at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-					<sleepTime>1000</sleepTime>
-				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-				
+			<lessonContent>				
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
 				    <tutorType>CATRO</tutorType>
 				    <flipFast>true</flipFast>
@@ -38,6 +34,11 @@
  				    <x>200</x>
  				    <y>300</y>
  				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+ 				
+ 			    <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+ 			        <tutorType>MIAUS</tutorType>
+                    <sleepTime>1000</sleepTime>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
 
  				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
                     <tutorType>MIAUS</tutorType>

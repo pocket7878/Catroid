@@ -18,6 +18,8 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
+import java.util.Date;
+
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -46,12 +48,13 @@ public class Bubble implements SurfaceObject {
 	private boolean reset = false;
 	private int textMarginY = 0;
 
-	private int updateTime = 50;
+	private int updateTime = 110;
 	private long lastUpdateTime = 0;
 
 	private long endTimeBubble = 0;
 	private boolean setEndTime = false;
 	private int waitTime = 2000;
+	private boolean waitForReset = false;
 
 	public Bubble(String text, TutorialOverlay tutorialOverlay, SurfaceObjectTutor tutor, int x, int y) {
 		this.tutor = tutor;
@@ -97,6 +100,7 @@ public class Bubble implements SurfaceObject {
 		Paint paint = new Paint();
 		paint.setFakeBoldText(true);
 		paint.setTextSize(textSize);
+
 		if (currentLine < 5) {
 			if (bounds.right < bounds.left + 10 * textArray[currentLine].length()) {
 				bounds.right = bounds.left + 10 * textArray[currentLine].length();
@@ -117,7 +121,8 @@ public class Bubble implements SurfaceObject {
 	@Override
 	public void update(long gameTime) {
 		if (currentPosition < text.length() && currentLine < textArray.length) {
-			if ((lastUpdateTime + updateTime) < gameTime) {
+			if ((lastUpdateTime + updateTime) < gameTime && !waitForReset) {
+
 				if (linePosition > 15 && text.charAt(currentPosition) == ' ') {
 					if (currentLine < 3) {
 						currentLine++;
@@ -126,12 +131,13 @@ public class Bubble implements SurfaceObject {
 						currentLine = 0;
 						currentPosition++;
 						reset = true;
+						waitForReset = true;
 					}
 					linePosition = 0;
 				}
 
 				if (reset) {
-					resetTextArray();
+					resetTextArray(new Date().getTime() + waitTime);
 					textArray[currentLine] = "" + text.charAt(currentPosition);
 					reset = false;
 				} else {
@@ -155,9 +161,17 @@ public class Bubble implements SurfaceObject {
 		}
 	}
 
-	private void resetTextArray() {
-		for (int i = 0; i < textArray.length; i++) {
-			textArray[i] = "";
+	private void resetTextArray(long time) {
+
+		while (true) {
+			long actTime = new Date().getTime();
+			if (actTime > time) {
+				for (int i = 0; i < textArray.length; i++) {
+					textArray[i] = "";
+				}
+				waitForReset = false;
+				return;
+			}
 		}
 	}
 }

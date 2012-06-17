@@ -27,8 +27,6 @@ import android.graphics.Paint;
 import android.util.Log;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
-import com.badlogic.gdx.math.MathUtils;
-
 /**
  * @author faxxe
  * 
@@ -127,10 +125,10 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		}
 
 		if (distanceX > distanceY) {
-			factorY = MathUtils.round(distanceX / distanceY);
+			factorY = Math.round((distanceX / distanceY) + 0.5f);
 			factorX = 1;
 		} else if (distanceX < distanceY) {
-			factorX = MathUtils.round(distanceY / distanceX);
+			factorX = Math.round((distanceY / distanceX) + 0.5f);
 			factorY = 1;
 		} else {
 			factorX = 1;
@@ -263,6 +261,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 			case 8:
 			case 9: //WALK
+				Log.i("drab", "factorX: " + factorX + " factorY: " + factorY);
 				if (walkToX == targetX && walkToY == targetY) {
 					if (flip) {
 						state = 5;
@@ -318,6 +317,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 						state = 1;
 					}
 					flipFlag = 2;
+					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 					Tutorial.getInstance(null).setNotification("flip done!");
 				}
 				Log.i("drab", "END of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
