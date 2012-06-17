@@ -24,7 +24,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.NinePatchDrawable;
-import android.util.Log;
 import at.tugraz.ist.catroid.R;
 
 /**
@@ -113,7 +112,7 @@ public class Bubble implements SurfaceObject {
 				} else {
 					textArray[currentLine] = textArray[currentLine] + text.charAt(currentPosition);
 				}
-				Log.i("drab", "TEXT: " + textArray[currentLine]);
+
 				currentPosition++;
 				linePosition++;
 			}

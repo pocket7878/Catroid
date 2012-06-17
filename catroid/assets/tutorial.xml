@@ -7,6 +7,12 @@
 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
 					<sleepTime>1000</sleepTime>
 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+				
+				<at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+				    <tutorType>CATRO</tutorType>
+				    <flipFast>true</flipFast>
+				</at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+				
  				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
 					<tutorType>CATRO</tutorType>
 					<x>80</x>
@@ -14,10 +20,29 @@
 				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear> 
 				
  				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
- 				    <tutorType>CATRO</tutorType>
- 				    <message>Hallo ich bin Miaus aka Tutor und ich rede extrem viel ... um zu testen ob die Bubble dies verkraftet!</message>
- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>Hallo! Ich bin CATRO- dein Tutor. Ich werde dir in aller Kürze erklären wie du uns Tutoren steuern kannst.</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                    <tutorType>CATRO</tutorType>
+                    <sleepTime>1000</sleepTime>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                
+ 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>Alle Aktionen kannst du in der tutorial.xml Datei erstellen. Nun lassen wir uns mal den lieben MIAUS kommen... Mit dem Task APPEAR geht das ganz einfach. Schauen wir einmal: TASKAPPEAR</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                
+ 				<at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+ 				    <tutorType>MIAUS</tutorType>
+ 				    <x>200</x>
+ 				    <y>300</y>
+ 				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
 
+ 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+ 				    <tutorType>MIAUS</tutorType>
+ 				    <message>NARF!</message>
+ 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 				
 			</lessonContent>
 			<lessonID>0</lessonID>
