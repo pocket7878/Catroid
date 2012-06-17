@@ -138,9 +138,9 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		}
 
 		if (!flip) {
-			state = 9;
+			state = 8;
 		} else {
-			state = 10;
+			state = 9;
 		}
 	}
 
@@ -157,7 +157,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	@Override
 	public void say(String text) {
 		Log.i("drab", "NewTutor: " + text);
-		new Bubble(text, tutorialOverlay, this, targetX - 20, targetY - 90);
+		new Bubble(text, tutorialOverlay, this, targetX, targetY);
 
 		if (!flip) {
 			state = 2;
@@ -261,8 +261,8 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 				break;
 
-			case 9:
-			case 10: //WALK
+			case 8:
+			case 9: //WALK
 				if (walkToX == targetX && walkToY == targetY) {
 					if (flip) {
 						state = 5;
@@ -287,7 +287,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 						distanceY--;
 					}
 				}
-				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, (state - 1) * sizeY, sizeX, sizeY);
+				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 				break;
 
 			case 60: //FLIP
@@ -330,7 +330,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 				} else {
 					state = 1;
 				}
-				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 				Tutorial.getInstance(null).setNotification("Jump done!");
 				break;
 

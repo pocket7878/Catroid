@@ -31,6 +31,7 @@ public class TaskWalk implements Task {
 	private Tutor tutorType;
 	private int walkToX;
 	private int walkToY;
+	private boolean fastWalk = false;
 
 	public int getWalkToX() {
 		return walkToX;
@@ -47,8 +48,6 @@ public class TaskWalk implements Task {
 	public void setWalkToY(int walkToY) {
 		this.walkToY = walkToY;
 	}
-
-	private boolean fastWalk = false;
 
 	@Override
 	public Tutor getTutorType() {

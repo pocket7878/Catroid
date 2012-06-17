@@ -23,6 +23,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.NinePatchDrawable;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.tutorial.tasks.Task.Tutor;
 
 /**
  * @author faxxe
@@ -43,8 +44,9 @@ public class Bubble implements SurfaceObject {
 	private int y = 0;
 	private int textSize = 16;
 	private boolean reset = false;
+	private int textMarginY = 0;
 
-	private int updateTime = 150;
+	private int updateTime = 50;
 	private long lastUpdateTime = 0;
 
 	private long endTimeBubble = 0;
@@ -58,14 +60,36 @@ public class Bubble implements SurfaceObject {
 		this.y = y;
 		tutorialOverlay.addSurfaceObject(this);
 		this.tutorialOverlay = tutorialOverlay;
-		speechBubble = (NinePatchDrawable) Tutorial.getInstance(null).getActualContext().getResources()
-				.getDrawable(R.drawable.bubble);
 
 		bounds = new Rect();
-		bounds.top = y;
-		bounds.left = x;
+		if (this.y > 200) {
+			if (this.tutor.tutorType == Tutor.CATRO) {
+				speechBubble = (NinePatchDrawable) Tutorial.getInstance(null).getActualContext().getResources()
+						.getDrawable(R.drawable.bubble_catro);
+			} else {
+				speechBubble = (NinePatchDrawable) Tutorial.getInstance(null).getActualContext().getResources()
+						.getDrawable(R.drawable.bubble_miaus);
+			}
+			this.y -= 90;
+			this.x -= 20;
+			textMarginY = 20;
+		} else {
+			if (this.tutor.tutorType == Tutor.CATRO) {
+				speechBubble = (NinePatchDrawable) Tutorial.getInstance(null).getActualContext().getResources()
+						.getDrawable(R.drawable.bubble_catro_low);
+			} else {
+				speechBubble = (NinePatchDrawable) Tutorial.getInstance(null).getActualContext().getResources()
+						.getDrawable(R.drawable.bubble_miaus_low);
+			}
+			this.y += 110;
+			this.x -= 20;
+			textMarginY = 45;
+		}
+		bounds.top = this.y;
+		bounds.left = this.x;
 		bounds.right = bounds.left + minWidth;
 		speechBubble.setBounds(bounds);
+
 	}
 
 	@Override
@@ -84,7 +108,7 @@ public class Bubble implements SurfaceObject {
 
 			for (int i = 0; i < textArray.length; i++) {
 				if (textArray[i] != "") {
-					canvas.drawText(textArray[i], x + textSize, y + 20 + i * textSize, paint);
+					canvas.drawText(textArray[i], x + textSize, y + textMarginY + i * textSize, paint);
 				}
 			}
 		}

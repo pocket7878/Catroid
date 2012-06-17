@@ -40,9 +40,26 @@
  				</at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
 
  				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>MIAUS</tutorType>
+                    <message>NARF!</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                
+ 				<at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
  				    <tutorType>MIAUS</tutorType>
- 				    <message>NARF!</message>
- 				</at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+ 				    <flipFast>false</flipFast>
+ 				</at.tugraz.ist.catroid.tutorial.tasks.TaskFlip>
+ 				
+ 				<at.tugraz.ist.catroid.tutorial.tasks.TaskWalk>
+ 				    <tutorType>MIAUS</tutorType>
+ 				    <walkToX>50</walkToX>
+ 				    <walkToY>50</walkToY>
+ 				    <fastWalk>true</fastWalk>
+ 				</at.tugraz.ist.catroid.tutorial.tasks.TaskWalk>
+ 				
+ 				<at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>MIAUS</tutorType>
+                    <message>Hallo, ich bin MIAUS... ich bin hier um alles zu tun was CATRO mir so sagt!</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 				
 			</lessonContent>
 			<lessonID>0</lessonID>
