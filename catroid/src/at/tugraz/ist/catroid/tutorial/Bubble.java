@@ -18,8 +18,6 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
-import java.util.Date;
-
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -31,23 +29,27 @@ import at.tugraz.ist.catroid.R;
  * 
  */
 public class Bubble implements SurfaceObject {
-	private String text = " So, donn woll !";
+	private String text = new String();
 	private int currentPosition = 0;
 	private int linePosition = 0;
-	private int frames = 0;
 	private NinePatchDrawable speechBubble;
 	private TutorialOverlay tutorialOverlay;
 	private SurfaceObjectTutor tutor;
 	private Rect bounds;
 	private String[] textArray = new String[] { "", "", "", "" };
 	private int currentLine = 0;
-	private int minWidth = 70;
+	private int minWidth = 80;
 	private int x = 0;
 	private int y = 0;
 	private int textSize = 16;
 	private boolean reset = false;
+
+	private int updateTime = 150;
+	private long lastUpdateTime = 0;
+
 	private long endTimeBubble = 0;
 	private boolean setEndTime = false;
+	private int waitTime = 2000;
 
 	public Bubble(String text, TutorialOverlay tutorialOverlay, SurfaceObjectTutor tutor, int x, int y) {
 		this.tutor = tutor;
@@ -90,9 +92,8 @@ public class Bubble implements SurfaceObject {
 
 	@Override
 	public void update(long gameTime) {
-		frames++;
 		if (currentPosition < text.length() && currentLine < textArray.length) {
-			if (frames % 6 == 0) {
+			if ((lastUpdateTime + updateTime) < gameTime) {
 				if (linePosition > 15 && text.charAt(currentPosition) == ' ') {
 					if (currentLine < 3) {
 						currentLine++;
@@ -112,20 +113,18 @@ public class Bubble implements SurfaceObject {
 				} else {
 					textArray[currentLine] = textArray[currentLine] + text.charAt(currentPosition);
 				}
-
+				lastUpdateTime = gameTime;
 				currentPosition++;
 				linePosition++;
 			}
 		}
 
 		if (currentPosition == text.length() && !setEndTime) {
-			endTimeBubble = new Date().getTime();
+			endTimeBubble = gameTime;
 			setEndTime = true;
 		}
 
-		long actTime = new Date().getTime();
-
-		if ((endTimeBubble + 2000) < actTime && endTimeBubble != 0) {
+		if ((endTimeBubble + waitTime) < gameTime && endTimeBubble != 0) {
 			tutor.idle();
 			tutorialOverlay.removeSurfaceObject(this);
 			Tutorial.getInstance(null).setNotification("Bubble finished!");

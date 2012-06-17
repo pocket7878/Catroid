@@ -40,16 +40,17 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private Resources ressources;
 	private Bitmap bitmap;
 	private int state = -1;
-	private int currentFrame = 0;
 	private int currentStep = 0;
 	private Paint paint;
 	private int sizeX = 110;
 	private int sizeY = 102;
 	private int targetX;
 	private int targetY;
+
 	private boolean flip = false;
 	private int flipFlag = 2;
 	private boolean reset = true;
+
 	private boolean walkFast = false;
 	private int walkToX;
 	private int walkToY;
@@ -59,6 +60,9 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private int distanceY;
 	private int factorX;
 	private int factorY;
+
+	private long lastUpdateTime = 0;
+	private int updateTime = 150;
 
 	public Tutor(int drawable, TutorialOverlay tutorialOverlay) {
 		super(Tutorial.getInstance(null).getActualContext(), tutorialOverlay);
@@ -93,7 +97,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		} else {
 			flip = true;
 		}
-		state = 8;
+		state = 60;
 
 		if (flipFast) {
 			flipFlag = 0;
@@ -168,7 +172,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		Log.i("drab", "Jumping...");
 		targetX = x;
 		targetY = y;
-		state = 33;
+		state = 61;
 		Log.i("drab", "Done Jumping...");
 	}
 
@@ -257,45 +261,8 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 				break;
 
-			case 8: //FLIP
-				if (flipFlag > 0) {
-					if (flip && reset) {
-						if (flipFlag == 2) {
-							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 306, sizeX, sizeY);
-						} else {
-							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 408, sizeX, sizeY);
-						}
-					} else if (reset) {
-						if (flipFlag == 2) {
-							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 714, sizeX, sizeY);
-						} else {
-							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 0, sizeX, sizeY);
-						}
-					}
-					Log.i("drab", "START of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
-							+ flipFlag + " flip: " + flip);
-					if (currentStep == 9 && reset) {
-						flipFlag--;
-						reset = false;
-					}
-				} else {
-					if (flip) {
-						state = 5;
-					} else {
-						state = 1;
-					}
-					flipFlag = 2;
-					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-					Tutorial.getInstance(null).setNotification("flip done!");
-				}
-				Log.i("drab", "END of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
-						+ flipFlag);
-				break;
-
 			case 9:
 			case 10: //WALK
-				Log.i("drab", "(" + currentStep + " % " + factorX);
-				Log.i("drab", "(" + currentStep + " % " + factorY);
 				if (walkToX == targetX && walkToY == targetY) {
 					if (flip) {
 						state = 5;
@@ -323,7 +290,41 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, (state - 1) * sizeY, sizeX, sizeY);
 				break;
 
-			case 33: //JUMP
+			case 60: //FLIP
+				if (flipFlag > 0) {
+					if (flip && reset) {
+						if (flipFlag == 2) {
+							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 306, sizeX, sizeY);
+						} else {
+							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 408, sizeX, sizeY);
+						}
+					} else if (reset) {
+						if (flipFlag == 2) {
+							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 714, sizeX, sizeY);
+						} else {
+							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 0, sizeX, sizeY);
+						}
+					}
+					Log.i("drab", "START of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
+							+ flipFlag + " flip: " + flip);
+					if (currentStep == 9 && reset) {
+						flipFlag--;
+						reset = false;
+					}
+				} else {
+					if (flip) {
+						state = 5;
+					} else {
+						state = 1;
+					}
+					flipFlag = 2;
+					Tutorial.getInstance(null).setNotification("flip done!");
+				}
+				Log.i("drab", "END of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
+						+ flipFlag);
+				break;
+
+			case 61: //JUMP
 				if (flip) {
 					state = 5;
 				} else {
@@ -341,8 +342,8 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void update(long gameTime) {
-		currentFrame++;
-		if (currentFrame % 7 == 0) {
+		if ((lastUpdateTime + updateTime) < gameTime) {
+			lastUpdateTime = gameTime;
 			currentStep++;
 		}
 	}
