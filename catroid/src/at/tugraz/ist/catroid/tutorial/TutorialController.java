@@ -153,10 +153,10 @@ public class TutorialController {
 	}
 
 	public void initalizeLessons() {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-		//TODO: Seems like this two lines are a hot mess...
+		//TODO: Seems like this comment toogled lines are a hot mess...
 		// Intended to look for default Tutorial-Lesson...but not quite working right
 		/*
+		 * SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 		 * int possibleLesson = preferences.getInt(PREF_KEY_POSSIBLE_LESSON, 0);
 		 * lessonCollection.setLastPossibleLessonNumber(possibleLesson);
 		 */

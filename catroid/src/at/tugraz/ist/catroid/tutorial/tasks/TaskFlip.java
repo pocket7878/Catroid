@@ -6,7 +6,7 @@ import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 
 public class TaskFlip implements Task {
 	private Tutor tutorType;
-	private boolean flipFast = true;
+	private boolean flipFast;
 
 	@Override
 	public Tutor getTutorType() {

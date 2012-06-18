@@ -95,11 +95,11 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		} else {
 			flip = true;
 		}
-		state = 60;
 
 		if (flipFast) {
 			flipFlag = 0;
 		}
+		state = 60;
 	}
 
 	@Override
@@ -261,13 +261,13 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 			case 8:
 			case 9: //WALK
-				Log.i("drab", "factorX: " + factorX + " factorY: " + factorY);
 				if (walkToX == targetX && walkToY == targetY) {
 					if (flip) {
 						state = 5;
 					} else {
 						state = 1;
 					}
+					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 					Tutorial.getInstance(null).setNotification("walk done!");
 				} else {
 					if (walkFast || (currentStep % 2) == 0) {
@@ -285,8 +285,9 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 						distanceX--;
 						distanceY--;
 					}
+					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 				}
-				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+
 				break;
 
 			case 60: //FLIP

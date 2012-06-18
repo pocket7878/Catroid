@@ -31,7 +31,7 @@ public class TaskWalk implements Task {
 	private Tutor tutorType;
 	private int walkToX;
 	private int walkToY;
-	private boolean fastWalk = false;
+	private boolean walkFast;
 
 	public int getWalkToX() {
 		return walkToX;
@@ -58,12 +58,12 @@ public class TaskWalk implements Task {
 		this.tutorType = tutorType;
 	}
 
-	public boolean isFastWalk() {
-		return fastWalk;
+	public boolean isWalkFast() {
+		return walkFast;
 	}
 
-	public void setFastWalk(boolean fastWalk) {
-		this.fastWalk = fastWalk;
+	public void setWalkFast(boolean walkFast) {
+		this.walkFast = walkFast;
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class TaskWalk implements Task {
 	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		SurfaceObjectTutor tutor = tutors.get(tutorType);
 		if (tutor != null) {
-			tutor.walk(this.walkToX, this.walkToY, this.fastWalk);
+			tutor.walk(this.walkToX, this.walkToY, this.walkFast);
 		}
 		return true;
 	}
