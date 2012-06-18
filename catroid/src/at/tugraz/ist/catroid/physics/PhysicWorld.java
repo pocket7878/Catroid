@@ -38,33 +38,35 @@ public class PhysicWorld implements Serializable {
 
 	private transient World world;
 	private transient Map<Sprite, Body> bodys;
-	private PhysicShapeBuilder physicShapeBuilder;
+	private transient PhysicShapeBuilder physicShapeBuilder;
 
 	public PhysicWorld() {
 		world = new World(PhysicWorldSetting.defaultgravity, PhysicWorldSetting.ignoreSleepingObjects);
 		bodys = new HashMap<Sprite, Body>();
 		physicShapeBuilder = new PhysicShapeBuilder(world);
-		physicShapeBuilder.CreateBox(6);
+		physicShapeBuilder.createSurroundingBox();
 	}
 
 	public void step(float deltaTime) {
-		world.step(deltaTime, PhysicWorldSetting.velocityIterations, PhysicWorldSetting.positionIterations);
+		world.step(PhysicWorldSetting.timeStep, PhysicWorldSetting.velocityIterations,
+				PhysicWorldSetting.positionIterations);
 		refreshSprites();
 	}
 
 	private void refreshSprites() {
 		for (Sprite sprite : bodys.keySet()) {
-
 			Body body = bodys.get(sprite);
-			Vector2 catrobatCoords = PhysicWorldConverter.CoordsFromBox2DToCatroid(body.getPosition().x,
-					body.getPosition().y);
-			float angle = body.getAngle();
+			Vector2 catrobatCoords = PhysicWorldConverter.Vector2FromBox2DToCatroid(body.getPosition());
+			//float angle = body.getAngle();
+
 			sprite.costume.aquireXYWidthHeightLock(); // Sinn ?
 			sprite.costume.setXYPosition(catrobatCoords.x, catrobatCoords.y);
-			sprite.costume.rotation = angle;
+			//sprite.costume.rotation = angle;
 			sprite.costume.releaseXYWidthHeightLock();
-			System.out.println("x:" + sprite.costume.x + "  y:" + sprite.costume.y);
 
+			System.out.println("#### DEBUG  x:" + sprite.costume.x + "  y:" + sprite.costume.y);
+			physicShapeBuilder.printStaticBodys();
+			System.out.println("#### DEBUG - ENDE  ");
 		}
 	}
 
@@ -77,7 +79,7 @@ public class PhysicWorld implements Serializable {
 	 * @param gravity
 	 */
 	public void setGravity(Sprite sprite, Vector2 gravity) {
-		world.setGravity(PhysicWorldConverter.VectorFromCatroidToBox2D(gravity));
+		world.setGravity(PhysicWorldConverter.Vector2FromCatroidToBox2D(gravity));
 	}
 
 	/**
