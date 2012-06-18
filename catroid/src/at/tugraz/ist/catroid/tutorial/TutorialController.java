@@ -58,7 +58,7 @@ public class TutorialController {
 	private TutorialThread tutorialThread;
 	private boolean activityChanged = false;
 
-	private static final String PREF_KEY_POSSIBLE_LESSON = "possibleLesson";
+	private static final String PREF_KEY_POSSIBLE_LESSON = "Demonstration";
 
 	public void cleanAll() {
 		Cloud.getInstance(context).clear();
@@ -154,11 +154,14 @@ public class TutorialController {
 
 	public void initalizeLessons() {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-		int possibleLesson = preferences.getInt(PREF_KEY_POSSIBLE_LESSON, 0);
-		lessonCollection.setLastPossibleLessonNumber(possibleLesson);
+		//TODO: Seems like this two lines are a hot mess...
+		// Intended to look for default Tutorial-Lesson...but not quite working right
+		/*
+		 * int possibleLesson = preferences.getInt(PREF_KEY_POSSIBLE_LESSON, 0);
+		 * lessonCollection.setLastPossibleLessonNumber(possibleLesson);
+		 */
 		lessonCollection.switchToLesson(0);
 		lessonCollection.setTutorialOverlay(tutorialOverlay);
-
 	}
 
 	public void showLessonDialog() {
@@ -201,7 +204,10 @@ public class TutorialController {
 		//TODO: Cancle Tutorial if Dialog is cancled!
 		ArrayList<String> lessons = lessonCollection.getLessons();
 		final CharSequence[] items = new CharSequence[lessonCollection.getLastPossibleLessonNumber() + 1];
-		for (int i = 0; i < lessonCollection.getLastPossibleLessonNumber() + 1; i++) {
+
+		Log.i("drab", "lastPossNumber: " + lessonCollection.getLastPossibleLessonNumber());
+		for (int i = 0; i < lessonCollection.getLastPossibleLessonNumber()/* +1 */; i++) {
+			Log.i("drab", "Lesson i: " + i);
 			items[i] = lessons.get(i);
 		}
 
@@ -213,7 +219,6 @@ public class TutorialController {
 				lessonCollection.switchToLesson(item);
 				resumeTutorial();
 			}
-
 		});
 		AlertDialog alert = builder.create();
 		return alert;

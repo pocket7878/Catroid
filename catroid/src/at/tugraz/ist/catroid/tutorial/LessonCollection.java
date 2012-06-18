@@ -10,11 +10,10 @@ public class LessonCollection {
 	private ArrayList<Lesson> lessonArray;
 	private int currentLesson;
 	private int currentPossibleLesson;
-	private TutorialOverlay tutorialOverlay;
+
 	private HashMap<Task.Tutor, SurfaceObjectTutor> tutors;
 
 	public void setTutorialOverlay(TutorialOverlay tutorialOverlay) {
-		this.tutorialOverlay = tutorialOverlay;
 	}
 
 	public void resetCurrentLesson() {
@@ -54,13 +53,13 @@ public class LessonCollection {
 
 	boolean nextLesson() {
 		if ((currentLesson + 1) >= lessonArray.size()) {
-			return (false);
+			return false;
 		} else {
 			currentLesson++;
 			if (currentPossibleLesson < currentLesson) {
 				currentPossibleLesson = currentLesson;
 			}
-			return (true);
+			return true;
 		}
 	}
 
