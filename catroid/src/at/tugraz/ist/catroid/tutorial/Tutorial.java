@@ -18,8 +18,10 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.util.Log;
 import android.view.MotionEvent;
 import at.tugraz.ist.catroid.ProjectManager;
@@ -75,6 +77,8 @@ public class Tutorial {
 
 	public void startTutorial() {
 		ProjectManager.getInstance().initializeThumbTutorialProject(context);
+		Activity currentActivity = (Activity) context;
+		currentActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setTutorialActive();
 		tutorialController.initalizeLessonCollection();
 		tutorialController.initalizeLessons();
@@ -91,7 +95,7 @@ public class Tutorial {
 		tutorialController.stopButtonTutorial();
 		clear();
 		System.gc();
-		Log.i("faxxe", "stopButtonTutorial: calling finalisation");
+		Log.i("drab", "stopButtonTutorial: calling finalisation");
 		System.runFinalization();
 
 	}
@@ -111,10 +115,12 @@ public class Tutorial {
 		setTutorialNotActive();
 		tutorialController.stopThread();
 		tutorialController.setSharedPreferences();
+		Activity currentActivity = (Activity) context;
+		currentActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 	}
 
 	public void pauseTutorial() {
-		Log.i("faxxe", "pause Tutorial");
+		Log.i("drab", "pause Tutorial");
 		if (!tutorialActive) {
 			return;
 		}
@@ -129,7 +135,7 @@ public class Tutorial {
 	}
 
 	public void setNotification(String notification) {
-		Log.i("faxxe", "TutorialS: " + notification);
+		Log.i("drab", "TutorialS: " + notification);
 		tutorialController.notifyThread();
 	}
 
@@ -165,7 +171,7 @@ public class Tutorial {
 	//			Activity currentActivity = (Activity) context;
 	//			currentActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	//		} catch (NullPointerException e) {
-	//			Log.i("faxxe", "Cannot set Portrait-Mode");
+	//			Log.i("drab", "Cannot set Portrait-Mode");
 	//			e.printStackTrace();
 	//		}
 	//	}
@@ -175,7 +181,7 @@ public class Tutorial {
 	//			Activity currentActivity = (Activity) context;
 	//			currentActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 	//		} catch (NullPointerException e) {
-	//			Log.i("faxxe", "Cannot set Sensor-Mode");
+	//			Log.i("drab", "Cannot set Sensor-Mode");
 	//			e.printStackTrace();
 	//		}
 	//	}
@@ -186,7 +192,7 @@ public class Tutorial {
 	//			View focus = currentActivity.getCurrentFocus();
 	//			focus.setKeepScreenOn(true);
 	//		} catch (NullPointerException e) {
-	//			Log.i("faxxe", "Cannot set KeepScreenOn");
+	//			Log.i("drab", "Cannot set KeepScreenOn");
 	//			e.printStackTrace();
 	//		}
 	//	}
@@ -196,9 +202,9 @@ public class Tutorial {
 	//			Activity currentActivity = (Activity) context;
 	//			View focus = currentActivity.getCurrentFocus();
 	//			focus.setKeepScreenOn(false);
-	//			Log.i("faxxe", "KeepScreenOff - checked!");
+	//			Log.i("drab", "KeepScreenOff - checked!");
 	//		} catch (Exception e) {
-	//			Log.i("faxxe", "Cannot set KeepScreenOff");
+	//			Log.i("drab", "Cannot set KeepScreenOff");
 	//			e.printStackTrace();
 	//		}
 	//	}

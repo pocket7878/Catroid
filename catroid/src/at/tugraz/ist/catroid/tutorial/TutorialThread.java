@@ -79,6 +79,7 @@ public class TutorialThread extends Thread implements Runnable {
 
 	private void runTutorial() {
 		do {
+
 			boolean notification = lessonCollection.executeTask();
 			if (notification == true) {
 				synchronized (this) {

@@ -95,7 +95,9 @@ public class TutorialController {
 	}
 
 	public void stopThread() {
-		tutorialThread.stopThread();
+		if (tutorialThread.isAlive()) {
+			tutorialThread.stopThread();
+		}
 	}
 
 	public void removeOverlayFromWindow() {
@@ -130,12 +132,10 @@ public class TutorialController {
 			tutorialOverlay.addCloud(cloud);
 		}
 		if (tutor == null) {
-			//			tutor = new TutorCat(context, tutorialOverlay);
 			tutor = new Tutor(R.drawable.tutor_catro_animation, tutorialOverlay, 100, 100, Task.Tutor.CATRO);
 			tutors.put(tutor.tutorType, tutor);
 		}
 		if (tutor_2 == null) {
-			//			tutor_2 = new TutorDog(context, tutorialOverlay);
 			tutor_2 = new Tutor(R.drawable.tutor_miaus_animation, tutorialOverlay, 400, 400, Task.Tutor.MIAUS);
 			tutors.put(tutor_2.tutorType, tutor_2);
 		}
@@ -197,7 +197,6 @@ public class TutorialController {
 		setupTutorialOverlay();
 		initializeTutors();
 		startThread();
-		//		setDisplayPreferences();
 	}
 
 	private AlertDialog generateLessonDialog() {

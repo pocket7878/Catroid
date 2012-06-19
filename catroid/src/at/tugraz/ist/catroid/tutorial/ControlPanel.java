@@ -57,22 +57,22 @@ public class ControlPanel implements SurfaceObject {
 
 		tutorialOverlay.addSurfaceObject(this);
 
-		menuBar = (NinePatchDrawable) resources.getDrawable(R.drawable.tutmenubar);
-		menuButton = (NinePatchDrawable) resources.getDrawable(R.drawable.circle);
+		menuBar = (NinePatchDrawable) resources.getDrawable(R.drawable.tutorial_menu_bar);
+		menuButton = (NinePatchDrawable) resources.getDrawable(R.drawable.tutorial_menu_button);
 
 		menuBarBounds = new Rect();
-		menuBarBounds.bottom = getScreenHeight() - 5;
-		menuBarBounds.top = getScreenHeight() - 55;
+		menuBarBounds.bottom = getScreenHeight();
+		menuBarBounds.top = getScreenHeight() - menuBar.getIntrinsicHeight();
 		menuBarBounds.right = getScreenWidth();
-		menuBarBounds.left = 0;
+		menuBarBounds.left = 2;
 
 		menuBar.setBounds(menuBarBounds);
 
 		menuButtonBounds = new Rect();
-		menuButtonBounds.bottom = getScreenHeight() - 5;
-		menuButtonBounds.left = 0;
-		menuButtonBounds.top = getScreenHeight() - 55;
-		menuButtonBounds.right = 55;
+		menuButtonBounds.bottom = getScreenHeight();
+		menuButtonBounds.top = getScreenHeight() - menuButton.getIntrinsicHeight();
+		menuButtonBounds.right = 64;
+		menuButtonBounds.left = 2;
 
 		menuButton.setBounds(menuButtonBounds);
 
