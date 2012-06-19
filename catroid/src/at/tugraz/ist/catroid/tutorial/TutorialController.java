@@ -49,8 +49,6 @@ public class TutorialController {
 	private HashMap<Task.Tutor, SurfaceObjectTutor> tutors;
 	private Cloud cloud;
 	private TutorialOverlay tutorialOverlay;
-	private SurfaceObjectTutor tutor;
-	private SurfaceObjectTutor tutor_2;
 	private LessonCollection lessonCollection;
 	private XmlHandler xmlHandler;
 	private WindowManager windowManager;
@@ -64,10 +62,6 @@ public class TutorialController {
 		Cloud.getInstance(context).clear();
 		cloud = null;
 		tutorialOverlay = null;
-		tutor.idle();
-		tutor_2.idle();
-		tutor = null;
-		tutor_2 = null;
 		lessonCollection = null;
 		xmlHandler = null;
 		windowManager = null;
@@ -131,14 +125,14 @@ public class TutorialController {
 			cloud = Cloud.getInstance(context);
 			tutorialOverlay.addCloud(cloud);
 		}
-		if (tutor == null) {
-			tutor = new Tutor(R.drawable.tutor_catro_animation, tutorialOverlay, 100, 100, Task.Tutor.CATRO);
-			tutors.put(tutor.tutorType, tutor);
-		}
-		if (tutor_2 == null) {
-			tutor_2 = new Tutor(R.drawable.tutor_miaus_animation, tutorialOverlay, 400, 400, Task.Tutor.MIAUS);
-			tutors.put(tutor_2.tutorType, tutor_2);
-		}
+
+		SurfaceObjectTutor tutor = new Tutor(R.drawable.tutor_catro_animation, tutorialOverlay, 100, 100,
+				Task.Tutor.CATRO);
+		tutors.put(tutor.tutorType, tutor);
+
+		tutor = new Tutor(R.drawable.tutor_miaus_animation, tutorialOverlay, 400, 400, Task.Tutor.MIAUS);
+		tutors.put(tutor.tutorType, tutor);
+
 		lessonCollection.setTutors(tutors);
 	}
 
@@ -248,12 +242,12 @@ public class TutorialController {
 		this.dialog = dialog;
 	}
 
-	public void rewindStep() {
-		lessonCollection.rewindStep();
-	}
-
 	public Dialog getDialog() {
 		return this.dialog;
+	}
+
+	public void rewindStep() {
+		lessonCollection.rewindStep();
 	}
 
 	public void stopButtonTutorial() {
@@ -262,9 +256,13 @@ public class TutorialController {
 		cleanAll();
 	}
 
-	public void idleTutors() {
-		tutor.idle(); //TODO: improve! make dynamic :)
-		tutor_2.idle();
+	public void holdTutorsAndRemoveOverlay() {
+		//TODO: improve! make dynamic :)
+		Tutor tutor = (Tutor) tutors.get(Task.Tutor.CATRO);
+		tutor.setHoldTutor(true);
+
+		tutor = (Tutor) tutors.get(Task.Tutor.MIAUS);
+		tutor.setHoldTutor(true);
 		tutorialOverlay.removeCloud();
 	}
 

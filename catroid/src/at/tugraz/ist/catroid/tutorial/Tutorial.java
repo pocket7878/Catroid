@@ -44,7 +44,6 @@ public class Tutorial {
 	public void clear() {
 		tutorial = null;
 		context = null;
-
 		tutorialController = null;
 	}
 
@@ -125,7 +124,7 @@ public class Tutorial {
 		}
 		tutorialController.setTutorialPaused(true);
 		tutorialActive = true;
-		tutorialController.idleTutors();
+		tutorialController.holdTutorsAndRemoveOverlay();
 		tutorialController.removeOverlayFromWindow();
 	}
 

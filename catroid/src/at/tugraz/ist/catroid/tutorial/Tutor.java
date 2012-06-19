@@ -62,6 +62,8 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private long lastUpdateTime = 0;
 	private int updateTime = 150;
 
+	private boolean holdTutor = false;
+
 	public Tutor(int drawable, TutorialOverlay tutorialOverlay) {
 		super(Tutorial.getInstance(null).getActualContext(), tutorialOverlay);
 		context = Tutorial.getInstance(null).getActualContext();
@@ -206,124 +208,130 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 			reset = true;
 		}
 
-		switch (state) {
-			case 0:
-			case 4: //APPEARING
-				if (currentStep == 9) {
-					state = 1;
-					Tutorial.getInstance(null).setNotification("appear done!");
+		if (!holdTutor) {
+			switch (state) {
+				case 0:
+				case 4: //APPEARING
+					if (currentStep == 9) {
+						state = 1;
+						Tutorial.getInstance(null).setNotification("appear done!");
+						break;
+					}
+					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 					break;
-				}
-				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-				break;
 
-			case 1:
-			case 5: //IDLE
-				if (currentStep == 9) {
-					currentStep = 0;
-				}
-				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-				break;
-
-			case 2:
-			case 6: //SAYING
-				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-				break;
-
-			case 3:
-			case 7: //DISAPPEARING
-				if (currentStep == 9) {
-					state = 100;
-					Tutorial.getInstance(null).setNotification("disappear done!");
+				case 1:
+				case 5: //IDLE
+					if (currentStep == 9) {
+						currentStep = 0;
+					}
+					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 					break;
-				}
-				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-				break;
 
-			case 8:
-			case 9: //WALK
-				if (walkToX == targetX && walkToY == targetY) {
+				case 2:
+				case 6: //SAYING
+					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+					break;
+
+				case 3:
+				case 7: //DISAPPEARING
+					if (currentStep == 9) {
+						state = 100;
+						Tutorial.getInstance(null).setNotification("disappear done!");
+						break;
+					}
+					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+					break;
+
+				case 8:
+				case 9: //WALK
+					if (walkToX == targetX && walkToY == targetY) {
+						if (flip) {
+							state = 5;
+						} else {
+							state = 1;
+						}
+						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+						Tutorial.getInstance(null).setNotification("walk done!");
+					} else {
+						if (walkFast || (currentStep % 2) == 0) {
+							if (directionX && targetX != walkToX && distanceX % factorX == 0) {
+								targetX++;
+							} else if (!directionX && targetX != walkToX && distanceX % factorX == 0) {
+								targetX--;
+							}
+
+							if (directionY && targetY != walkToY && distanceY % factorY == 0) {
+								targetY++;
+							} else if (!directionY && targetY != walkToY && distanceY % factorY == 0) {
+								targetY--;
+							}
+							distanceX--;
+							distanceY--;
+						}
+						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+					}
+
+					break;
+
+				case 60: //FLIP
+					if (flipFlag > 0) {
+						if (flip && reset) {
+							if (flipFlag == 2) {
+								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 306, sizeX, sizeY);
+							} else {
+								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 408, sizeX, sizeY);
+							}
+						} else if (reset) {
+							if (flipFlag == 2) {
+								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 714, sizeX, sizeY);
+							} else {
+								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 0, sizeX, sizeY);
+							}
+						}
+						Log.i("drab", "START of FLIP | currentStep: " + currentStep + " state: " + state
+								+ " flipFlag: " + flipFlag + " flip: " + flip);
+						if (currentStep == 9 && reset) {
+							flipFlag--;
+							reset = false;
+						}
+					} else {
+						if (flip) {
+							state = 5;
+						} else {
+							state = 1;
+						}
+						flipFlag = 2;
+						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+						Tutorial.getInstance(null).setNotification("flip done!");
+					}
+					Log.i("drab", "END of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
+							+ flipFlag);
+					break;
+
+				case 61: //JUMP
 					if (flip) {
 						state = 5;
 					} else {
 						state = 1;
 					}
-					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-					Tutorial.getInstance(null).setNotification("walk done!");
-				} else {
-					if (walkFast || (currentStep % 2) == 0) {
-						if (directionX && targetX != walkToX && distanceX % factorX == 0) {
-							targetX++;
-						} else if (!directionX && targetX != walkToX && distanceX % factorX == 0) {
-							targetX--;
-						}
+					Tutorial.getInstance(null).setNotification("Jump done!");
+					break;
 
-						if (directionY && targetY != walkToY && distanceY % factorY == 0) {
-							targetY++;
-						} else if (!directionY && targetY != walkToY && distanceY % factorY == 0) {
-							targetY--;
-						}
-						distanceX--;
-						distanceY--;
-					}
-					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-				}
-
-				break;
-
-			case 60: //FLIP
-				if (flipFlag > 0) {
-					if (flip && reset) {
-						if (flipFlag == 2) {
-							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 306, sizeX, sizeY);
-						} else {
-							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 408, sizeX, sizeY);
-						}
-					} else if (reset) {
-						if (flipFlag == 2) {
-							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 714, sizeX, sizeY);
-						} else {
-							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 0, sizeX, sizeY);
-						}
-					}
-					Log.i("drab", "START of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
-							+ flipFlag + " flip: " + flip);
-					if (currentStep == 9 && reset) {
-						flipFlag--;
-						reset = false;
-					}
-				} else {
-					if (flip) {
-						state = 5;
-					} else {
-						state = 1;
-					}
-					flipFlag = 2;
-					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-					Tutorial.getInstance(null).setNotification("flip done!");
-				}
-				Log.i("drab", "END of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
-						+ flipFlag);
-				break;
-
-			case 61: //JUMP
-				if (flip) {
-					state = 5;
-				} else {
-					state = 1;
-				}
-				Tutorial.getInstance(null).setNotification("Jump done!");
-				break;
-
-			default:
-				return;
+				default:
+					return;
+			}
 		}
 		canvas.drawBitmap(todraw, targetX, targetY, paint);
 	}
 
+	public void setHoldTutor(boolean holdTutor) {
+		this.holdTutor = holdTutor;
+	}
+
 	@Override
 	public void update(long gameTime) {
-		if ((lastUpdateTime + updateTime) < gameTime) {
+		if ((lastUpdateTime + updateTime) < gameTime && !holdTutor) {
 			lastUpdateTime = gameTime;
 			currentStep++;
 		}

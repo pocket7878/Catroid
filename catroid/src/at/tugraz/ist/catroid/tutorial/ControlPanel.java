@@ -29,6 +29,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.NinePatchDrawable;
 import android.util.Log;
 import android.view.Display;
+import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 
 /**
@@ -146,33 +147,31 @@ public class ControlPanel implements SurfaceObject {
 		return false;
 	}
 
-	//	public void pressPlay() {
-	//		//		//check if tutorial is active, if so there is no need to press play
-	//		//		//otherwise resume the tutorial where it was stopped
-	//		//		active = true;
-	//		//		//		tut.setNotification("BubblePlay");
-	//		//		Toast toast = Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT);
-	//		//		toast.show();
-	//
-	//	}
-	//
-	//	public void pressPause() throws InterruptedException {
-	//		//		active = false;
-	//		//		//Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
-	//		//		//toast.show();
-	//		//		//		tut.waitForNotification("BubblePlay");
-	//
-	//	}
-	//
-	//	public void pressForward() {
-	//		//		Toast toast = Toast.makeText(context, "FORWARD", Toast.LENGTH_SHORT);
-	//		//		toast.show();
-	//	}
-	//
-	//	public void pressBackward() {
-	//		//		Toast toast = Toast.makeText(context, "BACKWARD", Toast.LENGTH_SHORT);
-	//		//		toast.show();
-	//	}
+	public void pressPlay() {
+		//		active = true;
+		//		//		tut.setNotification("BubblePlay");
+		//		Toast toast = Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT);
+		//		toast.show();
+
+	}
+
+	public void pressPause() throws InterruptedException {
+		//		active = false;
+		//		//Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
+		//		//toast.show();
+		//		//		tut.waitForNotification("BubblePlay");
+
+	}
+
+	public void pressForward() {
+		Toast toast = Toast.makeText(context, "Weiter", Toast.LENGTH_SHORT);
+		toast.show();
+	}
+
+	public void pressBackward() {
+		Toast toast = Toast.makeText(context, "Zurück", Toast.LENGTH_SHORT);
+		toast.show();
+	}
 
 	public NinePatchDrawable getMenuBar() {
 		return menuBar;

@@ -188,6 +188,15 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 					panel.open();
 				}
 				Log.i("drab", "DISPATCH Button open/close");
+			} else if (isOnBackwardButton(ev)) {
+				panel.pressBackward();
+				Tutorial.getInstance(null).rewindStep();
+				Log.i("drab", "DISPATCH Button rewind");
+			} else if (isOnForwardButton(ev)) {
+				panel.pressForward();
+				//TODO: implement foward step
+				//Tutorial.getInstance(null).rewindStep();
+				Log.i("drab", "DISPATCH Button rewind");
 			}
 
 		} else {
@@ -214,8 +223,23 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	}
 
 	private boolean isOnButton(MotionEvent ev) {
-		// TODO Auto-generated method stub
 		if (ev.getX() < panel.getMenuButton().getIntrinsicWidth()) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isOnBackwardButton(MotionEvent ev) {
+		double[] backwardPosition = panel.getBackwardPosition();
+		if (ev.getX() > backwardPosition[0] && ev.getX() < backwardPosition[1]) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isOnForwardButton(MotionEvent ev) {
+		double[] forwardPosition = panel.getForwardPosition();
+		if (ev.getX() > forwardPosition[0] && ev.getX() < forwardPosition[1]) {
 			return true;
 		}
 		return false;
