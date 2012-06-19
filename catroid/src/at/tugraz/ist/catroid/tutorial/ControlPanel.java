@@ -27,8 +27,8 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.NinePatchDrawable;
+import android.util.Log;
 import android.view.Display;
-import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 
 /**
@@ -47,7 +47,15 @@ public class ControlPanel implements SurfaceObject {
 
 	public static boolean active;
 	private boolean open;
+	private long waitTimeToDispatch = 500;
 	private long timeOfLastChange = 0;
+
+	private double scaleDifference = 0;
+
+	private double[] stopPosition = { 241, 273 };
+	private double[] pausePosition = { 79, 111 };
+	private double[] backwardPosition = { 129, 167 };
+	private double[] forwardPosition = { 185, 223 };
 
 	public ControlPanel(Context context, TutorialOverlay tutorialOverlay) {
 		active = true;
@@ -76,6 +84,20 @@ public class ControlPanel implements SurfaceObject {
 
 		menuButton.setBounds(menuButtonBounds);
 
+		scaleDifference = ((double) menuBar.getIntrinsicWidth() - 300.0f) / 4.0f;
+
+		pausePosition[0] = pausePosition[0] + scaleDifference * 1.0f;
+		pausePosition[1] = pausePosition[1] + scaleDifference * 1.0f;
+
+		backwardPosition[0] = backwardPosition[0] + scaleDifference * 2.0f;
+		backwardPosition[1] = backwardPosition[1] + scaleDifference * 2.0f;
+
+		forwardPosition[0] = forwardPosition[0] + scaleDifference * 3.0f;
+		forwardPosition[1] = forwardPosition[1] + scaleDifference * 3.0f;
+
+		stopPosition[0] = stopPosition[0] + scaleDifference * 4.0f;
+		stopPosition[1] = stopPosition[1] + scaleDifference * 4.0f;
+
 		open = false;
 	}
 
@@ -94,19 +116,11 @@ public class ControlPanel implements SurfaceObject {
 	}
 
 	public void open() {
-		long actTime = new Date().getTime();
-		if ((actTime - 500) > timeOfLastChange) {
-			open = true;
-			timeOfLastChange = actTime;
-		}
+		open = true;
 	}
 
 	public void close() {
-		long actTime = new Date().getTime();
-		if ((actTime - 500) > timeOfLastChange) {
-			open = false;
-			timeOfLastChange = actTime;
-		}
+		open = false;
 	}
 
 	private int getScreenHeight() {
@@ -121,39 +135,69 @@ public class ControlPanel implements SurfaceObject {
 		return screenWidth;
 	}
 
-	public void pressPlay() {
-		//check if tutorial is active, if so there is no need to press play
-		//otherwise resume the tutorial where it was stopped
-		active = true;
-		//		tut.setNotification("BubblePlay");
-		Toast toast = Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT);
-		toast.show();
-
+	public boolean isReadyToDispatch() {
+		long actTime = new Date().getTime();
+		Log.i("drab", "(actTime - waitTimeToDispatch) > timeOfLastChange = " + (actTime - waitTimeToDispatch) + " and "
+				+ timeOfLastChange);
+		if ((actTime - waitTimeToDispatch) > timeOfLastChange) {
+			timeOfLastChange = actTime;
+			return true;
+		}
+		return false;
 	}
 
-	public void pressPause() throws InterruptedException {
-		active = false;
-		//Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
-		//toast.show();
-		//		tut.waitForNotification("BubblePlay");
+	//	public void pressPlay() {
+	//		//		//check if tutorial is active, if so there is no need to press play
+	//		//		//otherwise resume the tutorial where it was stopped
+	//		//		active = true;
+	//		//		//		tut.setNotification("BubblePlay");
+	//		//		Toast toast = Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT);
+	//		//		toast.show();
+	//
+	//	}
+	//
+	//	public void pressPause() throws InterruptedException {
+	//		//		active = false;
+	//		//		//Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
+	//		//		//toast.show();
+	//		//		//		tut.waitForNotification("BubblePlay");
+	//
+	//	}
+	//
+	//	public void pressForward() {
+	//		//		Toast toast = Toast.makeText(context, "FORWARD", Toast.LENGTH_SHORT);
+	//		//		toast.show();
+	//	}
+	//
+	//	public void pressBackward() {
+	//		//		Toast toast = Toast.makeText(context, "BACKWARD", Toast.LENGTH_SHORT);
+	//		//		toast.show();
+	//	}
 
+	public NinePatchDrawable getMenuBar() {
+		return menuBar;
 	}
 
-	public void pressForward() {
-		Toast toast = Toast.makeText(context, "FORWARD", Toast.LENGTH_SHORT);
-		toast.show();
+	public NinePatchDrawable getMenuButton() {
+		return menuButton;
 	}
 
-	public void pressBackward() {
-		Toast toast = Toast.makeText(context, "BACKWARD", Toast.LENGTH_SHORT);
-		toast.show();
+	public double[] getPausePosition() {
+		return pausePosition;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.tutorial.SurfaceObject#update(long)
-	 */
+	public double[] getStopPosition() {
+		return stopPosition;
+	}
+
+	public double[] getBackwardPosition() {
+		return backwardPosition;
+	}
+
+	public double[] getForwardPosition() {
+		return forwardPosition;
+	}
+
 	@Override
 	public void update(long gameTime) {
 		// TODO Auto-generated method stub

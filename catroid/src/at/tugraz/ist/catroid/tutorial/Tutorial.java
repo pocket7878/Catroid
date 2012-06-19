@@ -97,7 +97,6 @@ public class Tutorial {
 		System.gc();
 		Log.i("drab", "stopButtonTutorial: calling finalisation");
 		System.runFinalization();
-
 	}
 
 	public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -154,59 +153,4 @@ public class Tutorial {
 	public Dialog getDialog() {
 		return tutorialController.getDialog();
 	}
-
-	//
-	//	private void setDisplayPreferences() {
-	//		if (tutorialActive) {
-	//			//			tutorial.setOrientationPortaitMode();
-	//			//			tutorial.setKeepScreenOn();
-	//		} else {
-	//			//			tutorial.setOrientationSensorMode();
-	//			//			tutorial.setKeepScreenOff();
-	//		}
-	//	}
-	//
-	//	private void setOrientationPortaitMode() {
-	//		try {
-	//			Activity currentActivity = (Activity) context;
-	//			currentActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	//		} catch (NullPointerException e) {
-	//			Log.i("drab", "Cannot set Portrait-Mode");
-	//			e.printStackTrace();
-	//		}
-	//	}
-	//
-	//	private void setOrientationSensorMode() {
-	//		try {
-	//			Activity currentActivity = (Activity) context;
-	//			currentActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
-	//		} catch (NullPointerException e) {
-	//			Log.i("drab", "Cannot set Sensor-Mode");
-	//			e.printStackTrace();
-	//		}
-	//	}
-	//
-	//	private void setKeepScreenOn() {
-	//		try {
-	//			Activity currentActivity = (Activity) context;
-	//			View focus = currentActivity.getCurrentFocus();
-	//			focus.setKeepScreenOn(true);
-	//		} catch (NullPointerException e) {
-	//			Log.i("drab", "Cannot set KeepScreenOn");
-	//			e.printStackTrace();
-	//		}
-	//	}
-	//
-	//	private void setKeepScreenOff() {
-	//		try {
-	//			Activity currentActivity = (Activity) context;
-	//			View focus = currentActivity.getCurrentFocus();
-	//			focus.setKeepScreenOn(false);
-	//			Log.i("drab", "KeepScreenOff - checked!");
-	//		} catch (Exception e) {
-	//			Log.i("drab", "Cannot set KeepScreenOff");
-	//			e.printStackTrace();
-	//		}
-	//	}
-
 }

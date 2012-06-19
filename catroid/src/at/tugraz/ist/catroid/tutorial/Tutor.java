@@ -199,25 +199,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	}
 
 	@Override
-	public void point() {
-
-	}
-
-	@Override
-	public void setNewPositionAfterPort() {
-
-	}
-
-	@Override
-	public void sayFinished() {
-		if (flip) {
-			state = 7;
-		} else {
-			state = 3;
-		}
-	}
-
-	@Override
 	public void draw(Canvas canvas) {
 		Bitmap todraw = Bitmap.createBitmap(bitmap, 0, 0, sizeX, sizeY);
 		if (currentStep > 9) {

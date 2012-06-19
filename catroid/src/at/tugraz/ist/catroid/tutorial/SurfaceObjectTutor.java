@@ -67,12 +67,6 @@ public abstract class SurfaceObjectTutor implements SurfaceObject {
 
 	public abstract void disappear();
 
-	public abstract void point();
-
-	public abstract void setNewPositionAfterPort();
-
-	public abstract void sayFinished();
-
 	public abstract void walk(int walkToX, int walkToY, boolean fastWalk);
 
 }

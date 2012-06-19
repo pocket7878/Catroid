@@ -257,9 +257,6 @@ public class TutorialController {
 	}
 
 	public void stopButtonTutorial() {
-
-		//		tutorialController.setKeepScreenOff();
-		//		tutorialController.setOrientationSensorMode();
 		this.dialog = null;
 		lessonCollection.resetCurrentLesson();
 		cleanAll();

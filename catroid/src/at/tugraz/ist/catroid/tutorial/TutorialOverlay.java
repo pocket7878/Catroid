@@ -30,6 +30,7 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -155,7 +156,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 
 		ClickableArea clickableArea = Cloud.getInstance(null).getClickableArea();
 
-		if (ev.getY() > displayHeight - 100) {
+		if (ev.getY() > displayHeight - panel.getMenuButton().getIntrinsicHeight() && panel != null) {
 			dispatchPanel(ev, displayHeight);
 		}
 
@@ -173,19 +174,51 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	public void dispatchPanel(MotionEvent ev, float displayHeight) {
 		//TODO: Dispatch ALL the Panel!
 
-		if (ev.getY() < displayHeight && ev.getY() > (displayHeight - 55) && ev.getX() < 55 && panel != null) {
-			if (panel.isOpen()) {
-				panel.close();
-			} else {
-				panel.open();
+		if (panel.isReadyToDispatch()) {
+			if (isOnStopButton(ev)) {
+				Tutorial.getInstance(null).stopButtonTutorial();
+				Log.i("drab", "DISPATCH Stop");
+			} else if (isOnPauseButton(ev)) {
+				//Tutorial.getInstance(null).pauseTutorial();
+				Log.i("drab", "DISPATCH Pause");
+			} else if (isOnButton(ev)) {
+				if (panel.isOpen()) {
+					panel.close();
+				} else {
+					panel.open();
+				}
+				Log.i("drab", "DISPATCH Button open/close");
 			}
-		} else if (ev.getY() < displayHeight && ev.getY() > (displayHeight - 55) && ev.getX() < 310 && ev.getX() > 270
-				&& panel != null && panel.isOpen()) {
-			Tutorial.getInstance(null).stopButtonTutorial();
-		} else if (ev.getY() < displayHeight && ev.getY() > (displayHeight - 55) && ev.getX() < 230 && ev.getX() > 190
-				&& panel != null && panel.isOpen()) {
-			Tutorial.getInstance(null).pauseTutorial();
+
+		} else {
+			Log.i("drab", "Not ready to DISPATCH!");
 		}
+	}
+
+	private boolean isOnPauseButton(MotionEvent ev) {
+		// TODO Auto-generated method stub
+		double[] pausePosition = panel.getPausePosition();
+		if (ev.getX() > pausePosition[0] && ev.getX() < pausePosition[1]) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isOnStopButton(MotionEvent ev) {
+		// TODO Auto-generated method stub
+		double[] stopPosition = panel.getStopPosition();
+		if (ev.getX() > stopPosition[0] && ev.getX() < stopPosition[1]) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isOnButton(MotionEvent ev) {
+		// TODO Auto-generated method stub
+		if (ev.getX() < panel.getMenuButton().getIntrinsicWidth()) {
+			return true;
+		}
+		return false;
 	}
 
 	public boolean isEVinArea(ClickableArea area, MotionEvent ev) {
