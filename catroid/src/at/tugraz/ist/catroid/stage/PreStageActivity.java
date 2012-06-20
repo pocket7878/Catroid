@@ -60,8 +60,8 @@ public class PreStageActivity extends Activity {
 	public static final String REQUEST_SERVICE = "connect_service";
 
 	public static StageListener stageListener;
-	private static LegoNXT legoNXT;
-	BTConnectable connectable;
+	//private static LegoNXT legoNXT;
+	private static BTConnectable connectable;
 	private ProgressDialog connectingProgressDialog;
 	public static TextToSpeech textToSpeech;
 	private int requiredResourceCounter;
@@ -99,7 +99,7 @@ public class PreStageActivity extends Activity {
 				Toast.makeText(PreStageActivity.this, R.string.notification_blueth_err, Toast.LENGTH_LONG).show();
 				resourceFailed();
 			} else if (bluetoothState == BluetoothManager.BLUETOOTH_ALREADY_ON) {
-				if ((required_resources & Brick.BLUETOOTH_LEGO_NXT) > 0 && legoNXT == null) {
+				if ((required_resources & Brick.BLUETOOTH_LEGO_NXT) > 0 && connectable == null) {
 					startBTComm(true);
 				} else if ((required_resources & Brick.BLUETOOTH_HID) > 0 && connectable == null) {
 					startBTComm(false, Brick.BLUETOOTH_HID);
@@ -136,17 +136,17 @@ public class PreStageActivity extends Activity {
 			textToSpeech.stop();
 			textToSpeech.shutdown();
 		}
-		if (legoNXT != null) {
-			legoNXT.pauseCommunicator();
+		if (connectable != null) {
+			connectable.pauseCommunicator();
 		}
 	}
 
 	//all resources that should not have to be reinitialized every stage start
 	public static void shutdownPersistentResources() {
 
-		if (legoNXT != null) {
-			legoNXT.destroyCommunicator();
-			legoNXT = null;
+		if (connectable != null) {
+			connectable.destroyCommunicator();
+			connectable = null;
 		}
 	}
 
@@ -228,8 +228,7 @@ public class PreStageActivity extends Activity {
 						if (data.getExtras().getInt(REQUEST_SERVICE) == Brick.BLUETOOTH_HID) {
 							connectable = HidBluetooth.getUpdatedInstance(this, recieveHandler);
 						} else {
-							legoNXT = new LegoNXT(this, recieveHandler);
-							connectable = legoNXT;
+							connectable = new LegoNXT(this, recieveHandler);
 						}
 						String address = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
 						autoConnect = data.getExtras().getBoolean(DeviceListActivity.AUTO_CONNECT);
@@ -323,8 +322,8 @@ public class PreStageActivity extends Activity {
 				case LegoNXTBtCommunicator.STATE_CONNECTERROR:
 					Toast.makeText(PreStageActivity.this, R.string.bt_connection_failed, Toast.LENGTH_SHORT);
 					connectingProgressDialog.dismiss();
-					legoNXT.destroyCommunicator();
-					legoNXT = null;
+					connectable.destroyCommunicator();
+					connectable = null;
 					if (autoConnect) {
 						startBTComm(false);
 					} else {
@@ -339,5 +338,4 @@ public class PreStageActivity extends Activity {
 			}
 		}
 	};
-
 }

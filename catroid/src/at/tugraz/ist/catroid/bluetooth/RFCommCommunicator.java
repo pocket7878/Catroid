@@ -19,8 +19,11 @@
 package at.tugraz.ist.catroid.bluetooth;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.UUID;
 
 import android.bluetooth.BluetoothAdapter;
@@ -38,14 +41,20 @@ public class RFCommCommunicator extends Thread implements BtCommunicator {
 	public static final int STATE_CONNECTED = 1001;
 	public static final int STATE_CONNECTERROR = 1002;
 	public static final int STATE_CONNECTERROR_PAIRING = 1022;
+	public static final int STATE_RECEIVEERROR = 1004;
 
 	private BluetoothAdapter btAdapter;
 	private BluetoothSocket rfcCommSocket = null;
 	private OutputStream rfcCommOutputStream = null;
+	private InputStream rfcCommInputStream = null;
+
+	private Queue<byte[]> messageQueue = new LinkedList<byte[]>();
 
 	private String macAddress;
 	private UUID serviceUUID;
 	private BTConnectable myOwner;
+
+	protected byte[] returnMessage;
 
 	protected Handler uiHandler;
 	protected Resources resources;
@@ -85,6 +94,19 @@ public class RFCommCommunicator extends Thread implements BtCommunicator {
 		try {
 			createConnection(macAddress, serviceUUID);
 		} catch (IOException e) {
+		}
+
+		while (connected) {
+			try {
+				messageQueue.add(receiveMessage());
+
+			} catch (IOException e) {
+				// don't inform the user when connection is already closed
+				if (connected) {
+					sendState(STATE_RECEIVEERROR);
+				}
+				return;
+			}
 		}
 	}
 
@@ -136,6 +158,7 @@ public class RFCommCommunicator extends Thread implements BtCommunicator {
 				}
 			}
 			rfcCommSocket = rfcCommBTSocketTemporary;
+			rfcCommInputStream = rfcCommSocket.getInputStream();
 			rfcCommOutputStream = rfcCommSocket.getOutputStream();
 			connected = true;
 		} catch (IOException e) {
@@ -157,6 +180,8 @@ public class RFCommCommunicator extends Thread implements BtCommunicator {
 
 	public void destroyConnection() throws IOException {
 		try {
+			byte[] exit = { -1 };
+			send(exit);
 			if (rfcCommSocket != null) {
 				connected = false;
 				rfcCommSocket.close();
@@ -164,6 +189,7 @@ public class RFCommCommunicator extends Thread implements BtCommunicator {
 			}
 
 			rfcCommOutputStream = null;
+			rfcCommInputStream = null;
 
 		} catch (IOException e) {
 			if (uiHandler == null) {
@@ -224,4 +250,22 @@ public class RFCommCommunicator extends Thread implements BtCommunicator {
 		}
 	};
 
+	public byte[] getNextMessage() {
+		return messageQueue.poll();
+	}
+
+	public byte[] receiveMessage() throws IOException {
+		if (rfcCommInputStream == null) {
+			throw new IOException();
+		}
+
+		long length = rfcCommInputStream.available();
+		byte[] bytes = new byte[(int) length];
+		rfcCommInputStream.read(bytes);
+
+		//		if (length >= 5) {
+		//			Log.i("bt", "" + (int) bytes[4]);
+		//		}
+		return bytes;
+	}
 }

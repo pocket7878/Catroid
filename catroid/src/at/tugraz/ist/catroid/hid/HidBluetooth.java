@@ -135,10 +135,28 @@ public class HidBluetooth implements IHid, BTConnectable {
 		communicator.setMACAddress(macAddress);
 		communicator.setServiceUUID(SPP_UUID);
 		communicator.start();
+	}
 
+	public void destroyCommunicator() {
+
+		if (communicator != null) {
+			//sendBTCMotorMessage(LegoNXTBtCommunicator.NO_DELAY, LegoNXTBtCommunicator.DISCONNECT, 0, 0);
+			try {
+				communicator.destroyConnection();
+			} catch (IOException e) { // TODO Auto-generated method stub
+
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			communicator = null;
+		}
 	}
 
 	public boolean isPairing() {
 		return false;
+	}
+
+	public void pauseCommunicator() {
+
 	}
 }

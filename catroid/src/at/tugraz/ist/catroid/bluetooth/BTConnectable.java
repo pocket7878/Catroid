@@ -51,4 +51,8 @@ public interface BTConnectable {
 	public boolean isPairing();
 
 	public void startBTCommunicator(String mac_address);
+
+	public void destroyCommunicator();
+
+	public void pauseCommunicator();
 }
