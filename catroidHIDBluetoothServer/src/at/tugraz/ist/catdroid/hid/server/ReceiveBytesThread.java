@@ -52,7 +52,8 @@ class ReceiveBytesThread implements Runnable {
             }
             
             input_stream.close();
-            output_stream.close();
+            if (testMode)
+            	output_stream.close();
 
         } catch (Exception e) {
             e.printStackTrace();
