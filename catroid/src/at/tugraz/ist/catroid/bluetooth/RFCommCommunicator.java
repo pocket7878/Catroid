@@ -181,7 +181,9 @@ public class RFCommCommunicator extends Thread implements BtCommunicator {
 	public void destroyConnection() throws IOException {
 		try {
 			byte[] exit = { -1 };
-			send(exit);
+			
+			if (rfcCommSocket != null && rfcCommOutputStream != null)
+				send(exit);
 			if (rfcCommSocket != null) {
 				connected = false;
 				rfcCommSocket.close();
