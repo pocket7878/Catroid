@@ -33,6 +33,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import at.tugraz.ist.catroid.R;
 
 public class RFCommCommunicator extends Thread implements BtCommunicator {
@@ -48,7 +49,7 @@ public class RFCommCommunicator extends Thread implements BtCommunicator {
 	private OutputStream rfcCommOutputStream = null;
 	private InputStream rfcCommInputStream = null;
 
-	private Queue<byte[]> messageQueue = new LinkedList<byte[]>();
+	private static Queue<byte[]> messageQueue = new LinkedList<byte[]>();
 
 	private String macAddress;
 	private UUID serviceUUID;
@@ -98,7 +99,7 @@ public class RFCommCommunicator extends Thread implements BtCommunicator {
 
 		while (connected) {
 			try {
-				messageQueue.add(receiveMessage());
+				receiveMessage();
 
 			} catch (IOException e) {
 				// don't inform the user when connection is already closed
@@ -181,9 +182,10 @@ public class RFCommCommunicator extends Thread implements BtCommunicator {
 	public void destroyConnection() throws IOException {
 		try {
 			byte[] exit = { -1 };
-			
-			if (rfcCommSocket != null && rfcCommOutputStream != null)
+
+			if (rfcCommSocket != null && rfcCommOutputStream != null) {
 				send(exit);
+			}
 			if (rfcCommSocket != null) {
 				connected = false;
 				rfcCommSocket.close();
@@ -252,7 +254,7 @@ public class RFCommCommunicator extends Thread implements BtCommunicator {
 		}
 	};
 
-	public byte[] getNextMessage() {
+	public static byte[] getNextMessage() {
 		return messageQueue.poll();
 	}
 
@@ -265,9 +267,14 @@ public class RFCommCommunicator extends Thread implements BtCommunicator {
 		byte[] bytes = new byte[(int) length];
 		rfcCommInputStream.read(bytes);
 
-		//		if (length >= 5) {
-		//			Log.i("bt", "" + (int) bytes[4]);
-		//		}
+		Log.i("--------bt", "" + bytes.length);
+
+		if (length >= 5) {
+			Log.i("bt", "" + (int) bytes[4]);
+			messageQueue.add(bytes);
+			byte[] a = messageQueue.peek();
+			System.out.println("bytes length: " + a.length);
+		}
 		return bytes;
 	}
 }

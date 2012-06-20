@@ -4,6 +4,7 @@
  */
 package at.tugraz.ist.catdroid.hid.server;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -25,16 +26,21 @@ class ReceiveBytesThread implements Runnable {
 
     public ReceiveBytesThread(StreamConnection connection, boolean testMode) {
         stream_connection = connection;
+        this.testMode = testMode;
     }
 
     public void run() {
+        
+	    InputStream input_stream = null;
+	    OutputStream output_stream = null;
+	    
         try {
-            InputStream input_stream = stream_connection.openInputStream();
-            
-            OutputStream output_stream = null;
+        	input_stream = stream_connection.openInputStream();
+        	
             if (testMode)
             	output_stream = stream_connection.openDataOutputStream();
-            System.out.println("waiting for input");
+            
+            System.out.println("waiting for input...");
 
             while (true) {
                 
@@ -45,18 +51,20 @@ class ReceiveBytesThread implements Runnable {
 		            output_stream.write(buffer);
 		            output_stream.flush();
                 }
-                
-                if (lookupCMD(buffer) == EXIT_CODE) {
-                    break;
+                else {
+	                if (lookupCMD(buffer) == EXIT_CODE) {
+	                    break;
+	                }
                 }
             }
-            
-            input_stream.close();
-            if (testMode)
-            	output_stream.close();
 
-        } catch (Exception e) {
-            e.printStackTrace();
+	        if (input_stream != null)
+	        	input_stream.close();
+            if (output_stream != null)
+            	output_stream.close();
+            
+        } catch (IOException e) {
+            //e.printStackTrace();
         }
     }
 
