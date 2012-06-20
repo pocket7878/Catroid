@@ -46,7 +46,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -83,7 +82,6 @@ public class DroneWifiConnectionActivity extends Activity {
 	private ImageView ivCheckConfigStatus;
 
 	private Button startButton;
-	private CheckBox checkBoxFirmwareUpdate;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -122,7 +120,6 @@ public class DroneWifiConnectionActivity extends Activity {
 				}
 			}
 		});
-		checkBoxFirmwareUpdate = (CheckBox) findViewById(R.id.checkBoxUpdateFirmware);
 
 	}
 
@@ -173,29 +170,6 @@ public class DroneWifiConnectionActivity extends Activity {
 					}
 				});
 				dialog = builder.create();
-				break;
-			case DroneConsts.DIALOG_FIRMWAREUPDATE:
-				dialog = new DroneFirmwareUpdateDialog(this, wifiManager);
-				dialog.setOnDismissListener(new OnDismissListener() {
-					public void onDismiss(DialogInterface dialog) {
-						switch (((DroneFirmwareUpdateDialog) dialog).status()) {
-							case DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL:
-								changeStatus(DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL);
-								break;
-
-							case DroneConsts.RESULT_FIRMWARE_UPDATE_ERROR:
-								changeStatus(DroneConsts.RESULT_FIRMWARE_UPDATE_ERROR);
-								break;
-							case DroneConsts.RESULT_FIRMWARE_UPDATE_OK:
-								changeStatus(DroneConsts.RESULT_FIRMWARE_UPDATE_OK);
-
-								break;
-							default:
-								break;
-
-						}
-					}
-				});
 				break;
 		}
 
@@ -378,13 +352,6 @@ public class DroneWifiConnectionActivity extends Activity {
 		finish();
 	}
 
-	private void statusUPDATINGFIRMWARE(Message msg) {
-		runConnectThread = false;
-		connectThread = null;
-		showDialog(DroneConsts.DIALOG_FIRMWAREUPDATE);
-		status = msg.what;
-	}
-
 	private Handler handler = new Handler() {
 
 		@Override
@@ -428,22 +395,10 @@ public class DroneWifiConnectionActivity extends Activity {
 					showDialog(DroneConsts.SELECT_DRONE_DIALOG);
 					break;
 
-				case DroneConsts.UPDATING_FIRMWARE:
-					statusUPDATINGFIRMWARE(msg);
-					break;
-
-				case DroneConsts.RESULT_FIRMWARE_UPDATE_OK:
-					// TODO Reset
-					firmwareUpdateOK();
-					break;
-
 				// errors
-				case DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL:
-				case DroneConsts.RESULT_FIRMWARE_UPDATE_ERROR:
 				case DroneConsts.ERROR_SCANNING:
 				case DroneConsts.ERROR_FINDING_DRONE:
 				case DroneConsts.ERROR_CONNECTING_DRONE:
-				case DroneConsts.ERROR_FIRMWARE:
 				case DroneConsts.ERROR_NAVDATA:
 				case DroneConsts.ERROR_CONFIG:
 					handleError(msg.what);
@@ -459,21 +414,6 @@ public class DroneWifiConnectionActivity extends Activity {
 			}
 		}
 	};
-
-	private void firmwareUpdateOK() {
-		// TODO Deactivate WIFI
-		tvWifiConnectionError.setText("Firmware Update OK!");
-		pbConnectionStatus.setVisibility(ProgressBar.GONE);
-		ivCheckFirmwareStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.no_icon));
-		ivCheckFirmwareStatus.setVisibility(ImageView.VISIBLE);
-		startButton.setClickable(true);
-		startButton.setEnabled(true);
-		startButton.setText(R.string.drone_bt_wifi_start);
-		runConnectThread = false;
-		connectThread = null;
-		checkBoxFirmwareUpdate.setChecked(false);
-		checkBoxFirmwareUpdate.setEnabled(false);
-	}
 
 	private void errorERRORSCANNING() {
 		tvWifiConnectionError.setText(getApplicationContext().getResources().getString(R.string.drone_scan_err));
@@ -500,39 +440,11 @@ public class DroneWifiConnectionActivity extends Activity {
 		errorCount = 0; // TODO, necessary?
 	}
 
-	private void errorERRORFIRMWARE() {
-		tvWifiConnectionError.setText(getApplicationContext().getResources().getString(R.string.drone_firmware_err));
-		ivCheckFirmwareStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.no_icon));
-		ivCheckFirmwareStatus.setVisibility(ImageView.VISIBLE);
-		pbConnectionStatus.setVisibility(ProgressBar.GONE);
-	}
-
 	private void errorERRORNAVDATA() {
 		tvWifiConnectionError.setText(getApplicationContext().getResources().getString(R.string.drone_navdata_err));
 		ivGetNavdataStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.no_icon));
 		ivGetNavdataStatus.setVisibility(ImageView.VISIBLE);
 		pbConnectionStatus.setVisibility(ProgressBar.GONE);
-	}
-
-	private void errorFIRMWAREUPDATECANCEL() {
-
-		tvWifiConnectionError.setText("Firmware Update Cancelled!");
-		// ivCheckConfigStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(
-		// R.drawable.no_icon));
-		// ivCheckConfigStatus.setVisibility(ImageView.GONE);
-		pbConnectionStatus.setVisibility(ProgressBar.GONE);
-		ivCheckFirmwareStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.no_icon));
-		ivCheckFirmwareStatus.setVisibility(ImageView.VISIBLE);
-	}
-
-	private void errorFIRMWAREUPDATEERROR() {
-		tvWifiConnectionError.setText("Firmware Update Error!");
-		// ivCheckConfigStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(
-		// R.drawable.no_icon));
-		// ivCheckConfigStatus.setVisibility(ImageView.GONE);
-		pbConnectionStatus.setVisibility(ProgressBar.GONE);
-		ivCheckFirmwareStatus.setImageDrawable(getApplicationContext().getResources().getDrawable(R.drawable.no_icon));
-		ivCheckFirmwareStatus.setVisibility(ImageView.VISIBLE);
 	}
 
 	private void errorERRORCONFIG() {
@@ -543,7 +455,6 @@ public class DroneWifiConnectionActivity extends Activity {
 	}
 
 	private void handleError(int error) {
-
 		runConnectThread = false;
 		connectThread = null;
 
@@ -570,10 +481,6 @@ public class DroneWifiConnectionActivity extends Activity {
 				errorERRORCONNECTINGDRONE();
 				break;
 
-			case DroneConsts.ERROR_FIRMWARE:
-				errorERRORFIRMWARE();
-				break;
-
 			case DroneConsts.ERROR_NAVDATA:
 				errorERRORNAVDATA();
 				break;
@@ -581,14 +488,6 @@ public class DroneWifiConnectionActivity extends Activity {
 			case DroneConsts.ERROR_CONFIG:
 				errorERRORCONFIG();
 				break;
-			case DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL:
-				errorFIRMWAREUPDATECANCEL();
-				break;
-
-			case DroneConsts.RESULT_FIRMWARE_UPDATE_ERROR:
-				errorFIRMWAREUPDATEERROR();
-				break;
-
 		}
 
 		startButton.setClickable(true);
@@ -646,12 +545,6 @@ public class DroneWifiConnectionActivity extends Activity {
 						 * TODO check firmware version first
 						 * Check Firmware Version, BEFORE connectiong NAVDATA, CMD Sockets
 						 */
-						// if (DroneHandler.getInstance().getDrone().connect()) {
-						// changeStatus(CHECKING_FIRMWARE);
-						// } else {
-						// changeStatus(ERROR_CONNECTING_DRONE);
-						// return;
-						// }
 						changeStatus(DroneConsts.CHECKING_FIRMWARE);
 					} else if (errorCount++ > 3) {
 						changeStatus(DroneConsts.ERROR_CONNECTING_DRONE);
@@ -837,11 +730,10 @@ public class DroneWifiConnectionActivity extends Activity {
 	private synchronized boolean checkFirmware() {
 		Log.d(DroneConsts.DroneLogTag, "checkFirmware()");
 
-		if (checkBoxFirmwareUpdate.isChecked()
-				|| (DroneHandler.getInstance().getDrone().getFirmwareVersion().equals("1.7.4")) == false) {
+		if ((DroneHandler.getInstance().getDrone().getFirmwareVersion().equals("1.7.4")) == false) {
 			Log.d(DroneConsts.DroneLogTag, "checkFirmware() -> Update Firmware");
 
-			return false; // FIRMWARE hast to be updated
+			return true; // FIRMWARE hast to be updated
 
 		} else {
 			Log.d(DroneConsts.DroneLogTag, "checkFirmware() -> DONT'T Update Firmware");
@@ -888,11 +780,10 @@ public class DroneWifiConnectionActivity extends Activity {
 						case DroneConsts.CHECKING_FIRMWARE:
 							status = DroneConsts.WAITING_FOR_FWCHECK;
 							if (checkFirmware()) {
-								// TODO Change Status to CONNECT2Drone
 								changeStatus(DroneConsts.CONNECTING_TO_DRONE);
-
 							} else {
-								changeStatus(DroneConsts.UPDATING_FIRMWARE);
+								//TODO What should happen when firmware is to old?
+								changeStatus(DroneConsts.CONNECTING_TO_DRONE);
 							}
 							break;
 
@@ -904,11 +795,6 @@ public class DroneWifiConnectionActivity extends Activity {
 								changeStatus(DroneConsts.ERROR_CONNECTING_DRONE);
 								return; // TODO necessary?
 							}
-							break;
-
-						case DroneConsts.UPDATING_FIRMWARE:
-							Thread.sleep(100L);
-							Log.e(DroneConsts.DroneLogTag, "Sleeping while Updating Firmware");
 							break;
 
 						case DroneConsts.WAITING_FOR_NAVDATA:
@@ -958,34 +844,14 @@ public class DroneWifiConnectionActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(DroneConsts.DroneLogTag, "AroneWifiConnectionActivity::onActivityResult()");
-		if (requestCode == DroneConsts.FIRMWARE_UPDATE_REQEUST) {
-			switch (resultCode) {
-				case DroneConsts.RESULT_FIRMWARE_UPDATE_OK:
-					tvWifiConnectionError.setText("Firmware update OK!");
-					changeStatus(DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL);
-					break;
+		switch (resultCode) {
 
-				case DroneConsts.RESULT_FIRMWARE_UPDATE_ERROR:
-					tvWifiConnectionError.setText("Error during Firmware Update, please try again!");
-					break;
-
-				case DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL:
-					Log.d(DroneConsts.DroneLogTag,
-							"DroneWifiConnectionActivity::onActivityResult() RESULT_FIRMWARE_UPDATE_CANCEL");
-					tvWifiConnectionError
-							.setText("Firmware Update cancelled.\n Press \"Start\" to try again or\n Press \"Back\".");
-					// TODO Necessary
-					// changeStatus(START);
-					changeStatus(DroneConsts.RESULT_FIRMWARE_UPDATE_CANCEL);
-					break;
-
-				default:
-					// nothing
-					break;
-
-			}
+			default:
+				// nothing
+				break;
 
 		}
+
 	}
 
 }
