@@ -42,9 +42,14 @@ public class HidTest extends AndroidTestCase {
 		Collection<KeyCode> keyList = new ArrayList<KeyCode>();
 		keyList.add(valueKey);
 		keyList.add(modifierKey);
-		int[] returnArr = hid.generateHidCode(keyList);
-		assertEquals("Test index 0 value", 161, returnArr[0]);
-		assertEquals("Test modifier value", 230, returnArr[2]);
+		byte[] returnArr = hid.generateHidCode(keyList);
+
+		for (byte blub : returnArr) {
+			System.out.println(blub);
+		}
+
+		assertEquals("Test index 0 value", -95, returnArr[0]);
+		assertEquals("Test modifier value", 64, returnArr[2]);
 		assertEquals("Test key value", 4, returnArr[4]);
 
 		KeyCode valueKey1 = new KeyCode(false, 8);
@@ -57,8 +62,8 @@ public class HidTest extends AndroidTestCase {
 		keyList.add(modifierKey2);
 
 		returnArr = hid.generateHidCode(keyList);
-		assertEquals("Test index 0 value", 161, returnArr[0]);
-		assertEquals("Test modifier value", 230 | 224, returnArr[2]);
+		assertEquals("Test index 0 value", -95, returnArr[0]);
+		assertEquals("Test modifier value", 0x40 | 0x01, returnArr[2]);
 		assertEquals("Test key value", 8, returnArr[4]);
 
 		keyList = new ArrayList<KeyCode>();
@@ -73,7 +78,7 @@ public class HidTest extends AndroidTestCase {
 		keyList.add(new KeyCode(false, 9));
 
 		returnArr = hid.generateHidCode(keyList);
-		assertEquals("Test index 0 value", 161, returnArr[0]);
+		assertEquals("Test index 0 value", -95, returnArr[0]);
 		assertEquals("Test index 1 value", 1, returnArr[1]);
 		assertEquals("Test index 4 value", 5, returnArr[4]);
 		assertEquals("Test index 5 value", 8, returnArr[5]);
@@ -81,6 +86,31 @@ public class HidTest extends AndroidTestCase {
 		assertEquals("Test index 7 value", 27, returnArr[7]);
 		assertEquals("Test index 8 value", 30, returnArr[8]);
 		assertEquals("Test index 9 value", 39, returnArr[9]);
+
+		keyList = new ArrayList<KeyCode>();
+		keyList.add(new KeyCode(true, 224));
+		keyList.add(new KeyCode(true, 226));
+		keyList.add(new KeyCode(false, 76));
+
+		returnArr = hid.generateHidCode(keyList);
+		assertEquals("Test index 0 value", -95, returnArr[0]);
+		assertEquals("Test index 1 value", 1, returnArr[1]);
+		assertEquals("Test modifier value", 0x04 | 0x01, returnArr[2]);
+		assertEquals("Test index 4 value", 76, returnArr[4]);
+		assertEquals("Test index 5 value", 0, returnArr[5]);
+		assertEquals("Test index 6 value", 0, returnArr[6]);
+		assertEquals("Test index 7 value", 0, returnArr[7]);
+		assertEquals("Test index 8 value", 0, returnArr[8]);
+		assertEquals("Test index 9 value", 0, returnArr[9]);
+
+		keyList = new ArrayList<KeyCode>();
+		keyList.add(new KeyCode(false, 69));
+
+		returnArr = hid.generateHidCode(keyList);
+		assertEquals("Test index 0 value", -95, returnArr[0]);
+		assertEquals("Test index 1 value", 1, returnArr[1]);
+		assertEquals("Test modifier value", 0, returnArr[2]);
+		assertEquals("Test index 4 value", 69, returnArr[4]);
 
 	}
 }

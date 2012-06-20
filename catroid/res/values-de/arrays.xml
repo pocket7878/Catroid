@@ -19,7 +19,7 @@
  *  GNU Affero General Public License for more details.
  *   
  *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <resources>
 
@@ -105,6 +105,19 @@
         <item>SHIFT_RIGHT</item>
         <item>ALT_LEFT</item>
         <item>ALT_RIGHT</item>
+        <item>F1</item>
+        <item>F2</item>
+        <item>F3</item>
+        <item>F4</item>
+        <item>F5</item>
+        <item>F6</item>
+        <item>F7</item>
+        <item>F8</item>
+        <item>F9</item>
+        <item>F10</item>
+        <item>F11</item>
+        <item>F12</item>
+        <item>ENTF</item>
     </string-array>
     <string-array name="key_array"></string-array>
     <string-array name="key_code_array">
@@ -149,6 +162,20 @@
         <item>229|mod</item>
         <item>226|mod</item>
         <item>230|mod</item>
+        <item>58</item>
+        <item>59</item>
+        <item>60</item>
+        <item>61</item>
+        <item>62</item>
+        <item>63</item>
+        <item>64</item>
+        <item>65</item>
+        <item>66</item>
+        <item>67</item>
+        <item>68</item>
+        <item>69</item>
+        <item>76</item>
     </string-array>
 
 </resources>
+
