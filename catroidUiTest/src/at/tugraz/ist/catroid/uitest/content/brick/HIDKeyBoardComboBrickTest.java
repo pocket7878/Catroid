@@ -144,6 +144,7 @@ public class HIDKeyBoardComboBrickTest extends ActivityInstrumentationTestCase2<
 		assertTrue("Test project brick list smaller than expected. Maybe Display to small for all bricks?",
 				yPositionList.size() == 6);
 		longClickAndDrag(10, yPositionList.get(1), 10, (yPositionList.get(2)) + 5, 20);
+		solo.sleep(2000);
 		yPositionList = getListItemYPositions();
 		BrickAdapter adapter = ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter();
 		assertTrue("KeyBrick is not in the Combo", adapter.getItem(2) instanceof HIDKeyBoardButtonBrick);
