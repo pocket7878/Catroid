@@ -64,6 +64,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.stage.PreStageActivity;
 
 public class DeviceListActivity extends Activity {
 	public static final String PAIRING = "pairing";
@@ -75,6 +76,7 @@ public class DeviceListActivity extends Activity {
 	private ArrayAdapter<String> pairedDevicesArrayAdapter;
 	private ArrayAdapter<String> newDevicesArrayAdapter;
 	private boolean autoConnect = true;
+	private int requestService = 0;
 	private static ArrayList<String> autoConnectIDs = new ArrayList<String>();
 
 	@Override
@@ -85,6 +87,7 @@ public class DeviceListActivity extends Activity {
 			autoConnectIDs.add(BtCommunicator.OUI_LEGO);
 		}
 		autoConnect = this.getIntent().getExtras().getBoolean(AUTO_CONNECT);
+		requestService = this.getIntent().getExtras().getInt(PreStageActivity.REQUEST_SERVICE);
 		//Log.i("bto", autoConnect + "");
 		if (autoConnect) {
 			this.setVisible(false);
@@ -125,14 +128,14 @@ public class DeviceListActivity extends Activity {
 
 		Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
 
-		BluetoothDevice legoNXT = null;
+		BluetoothDevice btDevice = null;
 		int possibleConnections = 0;
 		if (pairedDevices.size() > 0) {
 			findViewById(R.id.title_paired_devices).setVisibility(View.VISIBLE);
 			for (BluetoothDevice device : pairedDevices) {
 				for (String item : autoConnectIDs) {
 					if (device.getAddress().startsWith(item)) {
-						legoNXT = device;
+						btDevice = device;
 						possibleConnections++;
 						//legoDevicesFound = true;
 						//legoDevicesArrayAdapter.add(device.getName() + "-" + device.getAddress());
@@ -157,10 +160,11 @@ public class DeviceListActivity extends Activity {
 			btAdapter.cancelDiscovery();
 			Intent intent = new Intent();
 			Bundle data = new Bundle();
-			data.putString(DEVICE_NAME_AND_ADDRESS, legoNXT.getName() + "-" + legoNXT.getAddress());
-			data.putString(EXTRA_DEVICE_ADDRESS, legoNXT.getAddress());
+			data.putString(DEVICE_NAME_AND_ADDRESS, btDevice.getName() + "-" + btDevice.getAddress());
+			data.putString(EXTRA_DEVICE_ADDRESS, btDevice.getAddress());
 			data.putBoolean(PAIRING, false);
 			data.putBoolean(AUTO_CONNECT, true);
+			data.putInt(PreStageActivity.REQUEST_SERVICE, requestService);
 			intent.putExtras(data);
 			setResult(RESULT_OK, intent);
 			finish();
@@ -212,6 +216,7 @@ public class DeviceListActivity extends Activity {
 			data.putString(EXTRA_DEVICE_ADDRESS, address);
 			data.putBoolean(PAIRING, av.getId() == R.id.new_devices);
 			data.putBoolean(AUTO_CONNECT, false);
+			data.putInt(PreStageActivity.REQUEST_SERVICE, requestService);
 			intent.putExtras(data);
 			setResult(RESULT_OK, intent);
 			finish();

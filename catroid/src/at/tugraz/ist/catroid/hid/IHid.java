@@ -30,4 +30,5 @@ public interface IHid {
 
 	public KeyCode interpretKey(Context context, int spinnerIndex, int keyXmlId);
 
+	//public void connectDevice(String macAddress);
 }

@@ -321,5 +321,6 @@
     <string name="category_hid">HID</string>
     <string name="brick_key_combo">Key Combo</string>
     <string name="brick_key_combo_end">Key Combo End</string>
+    <string name="no_paired_rfccomm_device">No paired device found</string>
 
 </resources>

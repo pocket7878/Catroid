@@ -43,10 +43,12 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.LegoNXT.LegoNXT;
 import at.tugraz.ist.catroid.LegoNXT.LegoNXTBtCommunicator;
+import at.tugraz.ist.catroid.bluetooth.BTConnectable;
 import at.tugraz.ist.catroid.bluetooth.BluetoothManager;
 import at.tugraz.ist.catroid.bluetooth.DeviceListActivity;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.hid.HidBluetooth;
 
 public class PreStageActivity extends Activity {
 
@@ -55,8 +57,11 @@ public class PreStageActivity extends Activity {
 	public static final int REQUEST_RESOURCES_INIT = 0101;
 	public static final int MY_DATA_CHECK_CODE = 0;
 
+	public static final String REQUEST_SERVICE = "connect_service";
+
 	public static StageListener stageListener;
 	private static LegoNXT legoNXT;
+	BTConnectable connectable;
 	private ProgressDialog connectingProgressDialog;
 	public static TextToSpeech textToSpeech;
 	private int requiredResourceCounter;
@@ -94,8 +99,10 @@ public class PreStageActivity extends Activity {
 				Toast.makeText(PreStageActivity.this, R.string.notification_blueth_err, Toast.LENGTH_LONG).show();
 				resourceFailed();
 			} else if (bluetoothState == BluetoothManager.BLUETOOTH_ALREADY_ON) {
-				if (legoNXT == null) {
+				if ((required_resources & Brick.BLUETOOTH_LEGO_NXT) > 0 && legoNXT == null) {
 					startBTComm(true);
+				} else if ((required_resources & Brick.BLUETOOTH_HID) > 0 && connectable == null) {
+					startBTComm(false, Brick.BLUETOOTH_HID);
 				} else {
 					resourceInitialized();
 				}
@@ -173,6 +180,15 @@ public class PreStageActivity extends Activity {
 		this.startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
 	}
 
+	private void startBTComm(boolean autoConnect, int connectService) {
+		connectingProgressDialog = ProgressDialog.show(this, "",
+				getResources().getString(R.string.connecting_please_wait), true);
+		Intent serverIntent = new Intent(this, DeviceListActivity.class);
+		serverIntent.putExtra(DeviceListActivity.AUTO_CONNECT, autoConnect);
+		serverIntent.putExtra(REQUEST_SERVICE, connectService);
+		this.startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+	}
+
 	private int getRequiredRessources() {
 
 		ArrayList<Sprite> spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject()
@@ -208,10 +224,17 @@ public class PreStageActivity extends Activity {
 			case REQUEST_CONNECT_DEVICE:
 				switch (resultCode) {
 					case Activity.RESULT_OK:
-						legoNXT = new LegoNXT(this, recieveHandler);
+						System.out.println("----- " + data.getExtras().getInt(REQUEST_SERVICE));
+						if (data.getExtras().getInt(REQUEST_SERVICE) == Brick.BLUETOOTH_HID) {
+							connectable = HidBluetooth.getUpdatedInstance(this, recieveHandler);
+						} else {
+							legoNXT = new LegoNXT(this, recieveHandler);
+							connectable = legoNXT;
+						}
 						String address = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
 						autoConnect = data.getExtras().getBoolean(DeviceListActivity.AUTO_CONNECT);
-						legoNXT.startBTCommunicator(address);
+						//legoNXT.startBTCommunicator(address);
+						connectable.startBTCommunicator(address);
 						break;
 
 					case Activity.RESULT_CANCELED:

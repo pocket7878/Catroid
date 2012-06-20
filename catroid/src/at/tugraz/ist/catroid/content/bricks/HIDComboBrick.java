@@ -69,7 +69,7 @@ public class HIDComboBrick extends LoopBeginBrick {
 		}
 
 		if (keyCodes.size() != 0) {
-			((HIDBrick) script.getBrick(begin)).getHidConnection().send(keyCodes);
+			((HIDBrick) script.getBrick(end - 1)).getHidConnection().send(keyCodes);
 			script.setExecutingBrickIndex(script.getBrickList().indexOf(loopEndBrick));
 		}
 	}

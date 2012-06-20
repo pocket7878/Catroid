@@ -18,19 +18,40 @@
  */
 package at.tugraz.ist.catroid.hid;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.os.Handler;
+import android.util.Log;
+import at.tugraz.ist.catroid.bluetooth.BTConnectable;
+import at.tugraz.ist.catroid.bluetooth.RFCommCommunicator;
 
-/**
- * @author dominik
- * 
- */
-public class HidBluetooth implements IHid {
+public class HidBluetooth implements IHid, BTConnectable {
 
 	private static HidBluetooth instance;
+	private static Activity activity;
+	private static Handler recieverHandler;
+
+	private RFCommCommunicator communicator;
+	private static final UUID SPP_UUID = UUID.fromString("04c6093b-0000-1000-8000-00805f9b34fb");
 
 	private HidBluetooth() {
+	}
+
+	public synchronized static HidBluetooth getUpdatedInstance(Activity activity, Handler recieverHandler) {
+		if (instance == null) {
+			instance = new HidBluetooth();
+		}
+
+		HidBluetooth.activity = activity;
+		HidBluetooth.recieverHandler = recieverHandler;
+
+		return instance;
 	}
 
 	public synchronized static HidBluetooth getInstance() {
@@ -40,7 +61,7 @@ public class HidBluetooth implements IHid {
 		return instance;
 	}
 
-	public int[] generateHidCode(Collection<KeyCode> keys) {
+	public byte[] generateHidCode(Collection<KeyCode> keys) {
 
 		int[] hidCode = new int[] { 161, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -54,19 +75,45 @@ public class HidBluetooth implements IHid {
 					hidCode[i] = key.getKeyCode();
 					i++;
 				}
-
 			}
 		}
 
-		return hidCode;
+		byte[] conv = new byte[10];
+
+		for (int j = 0; j < 10; j++) {
+			conv[j] = (byte) (hidCode[j]);
+		}
+		return conv;
 	}
 
 	public void send(KeyCode key) {
 
+		//byte[] data = String.valueOf(key.getKeyCode()).getBytes();
+
+		if (communicator == null) {
+			Log.e("HidBluetooth", "Communicator no available!!");
+			return;
+		}
+		Collection<KeyCode> c = new ArrayList<KeyCode>();
+		c.add(key);
+		try {
+			communicator.send(generateHidCode(c));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void send(Collection<KeyCode> keys) {
-		int[] hidCode = generateHidCode(keys);
+		if (communicator == null) {
+			Log.e("HidBluetooth", "Communicator no available!!");
+			return;
+		}
+
+		try {
+			communicator.send(generateHidCode(keys));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public KeyCode interpretKey(Context context, int spinnerIndex, int keyXmlId) {
@@ -82,4 +129,16 @@ public class HidBluetooth implements IHid {
 		return key;
 	}
 
+	public void startBTCommunicator(String macAddress) {
+		communicator = new RFCommCommunicator(this, recieverHandler, BluetoothAdapter.getDefaultAdapter(),
+				activity.getResources());
+		communicator.setMACAddress(macAddress);
+		communicator.setServiceUUID(SPP_UUID);
+		communicator.start();
+
+	}
+
+	public boolean isPairing() {
+		return false;
+	}
 }

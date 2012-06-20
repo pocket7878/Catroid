@@ -22,9 +22,13 @@
  */
 package at.tugraz.ist.catroid.bluetooth;
 
+import java.io.IOException;
+import java.util.UUID;
+
 import android.os.Handler;
 
 // TODO Not needed for LegoNXT anymore, functionality now in LegoNXTBtCommunicator! Maybe refactor similary for arduino or move to arduino package...
+// TODO used now for HID bluetooth
 public abstract interface BtCommunicator {
 
 	// this is the only OUI registered by LEGO, see http://standards.ieee.org/regauth/oui/index.shtml
@@ -32,7 +36,15 @@ public abstract interface BtCommunicator {
 
 	public void setMACAddress(String mMACaddress);
 
+	public void setServiceUUID(UUID serviceUUID);
+
 	public abstract boolean isConnected();
 
 	public Handler getHandler();
+
+	public void createConnection(String macAddress, UUID serviceUUID) throws IOException;
+
+	public void destroyConnection() throws IOException;
+
+	public void send(byte[] data) throws IOException;
 }

@@ -40,14 +40,20 @@ public class HIDKeyBoardButtonBrick implements HIDBrick, OnItemSelectedListener 
 
 	private Sprite sprite;
 	private KeyCode keyCode;
-	private IHid hidBT = HidBluetooth.getInstance();
+	private int currentIndex = 0;
+
+	//	public HIDKeyBoardButtonBrick() {
+	//	}
+
+	public HIDKeyBoardButtonBrick(Context context) {
+	}
 
 	protected Object readResolve() {
 		return this;
 	}
 
 	public IHid getHidConnection() {
-		return hidBT;
+		return HidBluetooth.getInstance();
 	}
 
 	public HIDKeyBoardButtonBrick(Sprite sprite) {
@@ -59,7 +65,7 @@ public class HIDKeyBoardButtonBrick implements HIDBrick, OnItemSelectedListener 
 	}
 
 	public void execute() {
-		hidBT.send(keyCode);
+		HidBluetooth.getInstance().send(keyCode);
 	}
 
 	public Sprite getSprite() {
@@ -67,7 +73,7 @@ public class HIDKeyBoardButtonBrick implements HIDBrick, OnItemSelectedListener 
 	}
 
 	public View getPrototypeView(Context context) {
-		hidBT.interpretKey(context, 0, R.array.key_code_array);
+		HidBluetooth.getInstance().interpretKey(context, 0, R.array.key_code_array);
 		return View.inflate(context, R.layout.brick_hid_keyboard_button_press, null);
 	}
 
@@ -77,7 +83,7 @@ public class HIDKeyBoardButtonBrick implements HIDBrick, OnItemSelectedListener 
 	}
 
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
-		hidBT.interpretKey(context, 0, R.array.key_code_array);
+		HidBluetooth.getInstance().interpretKey(context, 0, R.array.key_code_array);
 		View brickView = View.inflate(context, R.layout.brick_hid_keyboard_button_press, null);
 
 		ArrayAdapter<CharSequence> keyAdapter = ArrayAdapter.createFromResource(context,
@@ -89,13 +95,14 @@ public class HIDKeyBoardButtonBrick implements HIDBrick, OnItemSelectedListener 
 		keySpinner.setClickable(true);
 		keySpinner.setEnabled(true);
 		keySpinner.setAdapter(keyAdapter);
-		keySpinner.setSelection(0);
+		keySpinner.setSelection(currentIndex);
 
 		return brickView;
 	}
 
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		keyCode = hidBT.interpretKey(parent.getContext(), position, R.array.key_code_array); // TODO Call KeyCode Mapper
+		currentIndex = position;
+		keyCode = HidBluetooth.getInstance().interpretKey(parent.getContext(), position, R.array.key_code_array); // TODO Call KeyCode Mapper
 	}
 
 	public void onNothingSelected(AdapterView<?> arg0) {
