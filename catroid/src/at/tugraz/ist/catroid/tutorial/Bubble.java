@@ -53,7 +53,7 @@ public class Bubble implements SurfaceObject {
 
 	private long endTimeBubble = 0;
 	private boolean setEndTime = false;
-	private int waitTime = 2000;
+	private int waitTime = 1000;
 	private boolean waitForReset = false;
 
 	public Bubble(String text, TutorialOverlay tutorialOverlay, SurfaceObjectTutor tutor, int x, int y) {

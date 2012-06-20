@@ -157,7 +157,11 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		ClickableArea clickableArea = Cloud.getInstance(null).getClickableArea();
 
 		if (ev.getY() > displayHeight - panel.getMenuButton().getIntrinsicHeight() && panel != null) {
-			dispatchPanel(ev, displayHeight);
+			try {
+				dispatchPanel(ev, displayHeight);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 
 		if (clickableArea == null || clickableArea.x == 0 && clickableArea.y == 0) {
@@ -171,15 +175,18 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		return retval;
 	}
 
-	public void dispatchPanel(MotionEvent ev, float displayHeight) {
-		//TODO: Dispatch ALL the Panel!
-
+	public void dispatchPanel(MotionEvent ev, float displayHeight) throws InterruptedException {
 		if (panel.isReadyToDispatch()) {
 			if (isOnStopButton(ev)) {
 				Tutorial.getInstance(null).stopButtonTutorial();
 				Log.i("drab", "DISPATCH Stop");
 			} else if (isOnPauseButton(ev)) {
 				//Tutorial.getInstance(null).pauseTutorial();
+				if (panel.isPaused()) {
+					panel.pressPlay();
+				} else {
+					panel.pressPause();
+				}
 				Log.i("drab", "DISPATCH Pause");
 			} else if (isOnButton(ev)) {
 				if (panel.isOpen()) {

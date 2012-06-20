@@ -40,14 +40,16 @@ public class ControlPanel implements SurfaceObject {
 	private Resources resources;
 	private Context context;
 
-	private NinePatchDrawable menuBar;
+	private NinePatchDrawable menuBarPlaying;
+	private NinePatchDrawable menuBarPaused;
 	private NinePatchDrawable menuButton;
 
 	private Rect menuButtonBounds;
 	private Rect menuBarBounds;
 
-	public static boolean active;
-	private boolean open;
+	private boolean open = false;
+	private boolean paused = false;
+
 	private long waitTimeToDispatch = 250;
 	private long timeOfLastChange = 0;
 
@@ -58,55 +60,61 @@ public class ControlPanel implements SurfaceObject {
 	private double[] backwardPosition = { 129, 167 };
 	private double[] forwardPosition = { 185, 223 };
 
-	public ControlPanel(Context context, TutorialOverlay tutorialOverlay) {
-		active = true;
+	private int marginLeft = 2;
 
+	public ControlPanel(Context context, TutorialOverlay tutorialOverlay) {
 		this.resources = ((Activity) context).getResources();
 		this.context = context;
 
 		tutorialOverlay.addSurfaceObject(this);
 
-		menuBar = (NinePatchDrawable) resources.getDrawable(R.drawable.tutorial_menu_bar);
+		menuBarPlaying = (NinePatchDrawable) resources.getDrawable(R.drawable.tutorial_menu_bar_playing);
+		menuBarPaused = (NinePatchDrawable) resources.getDrawable(R.drawable.tutorial_menu_bar_paused);
 		menuButton = (NinePatchDrawable) resources.getDrawable(R.drawable.tutorial_menu_button);
 
 		menuBarBounds = new Rect();
 		menuBarBounds.bottom = getScreenHeight();
-		menuBarBounds.top = getScreenHeight() - menuBar.getIntrinsicHeight();
+		menuBarBounds.top = getScreenHeight() - menuBarPlaying.getIntrinsicHeight();
 		menuBarBounds.right = getScreenWidth();
-		menuBarBounds.left = 2;
+		menuBarBounds.left = marginLeft;
 
-		menuBar.setBounds(menuBarBounds);
+		menuBarPlaying.setBounds(menuBarBounds);
+		menuBarPaused.setBounds(menuBarBounds);
 
 		menuButtonBounds = new Rect();
 		menuButtonBounds.bottom = getScreenHeight();
 		menuButtonBounds.top = getScreenHeight() - menuButton.getIntrinsicHeight();
 		menuButtonBounds.right = 64;
-		menuButtonBounds.left = 2;
+		menuButtonBounds.left = marginLeft;
 
 		menuButton.setBounds(menuButtonBounds);
 
-		scaleDifference = ((double) menuBar.getIntrinsicWidth() - 300.0f) / 4.0f;
+		scaleDifference = ((double) menuBarPlaying.getIntrinsicWidth() - 300.0f) / 4.0f;
 
-		pausePosition[0] = pausePosition[0] + scaleDifference * 1.0f;
-		pausePosition[1] = pausePosition[1] + scaleDifference * 1.0f;
+		pausePosition[0] = pausePosition[0] + scaleDifference * 1.0f + marginLeft;
+		pausePosition[1] = pausePosition[1] + scaleDifference * 1.0f + marginLeft;
 
-		backwardPosition[0] = backwardPosition[0] + scaleDifference * 2.0f;
-		backwardPosition[1] = backwardPosition[1] + scaleDifference * 2.0f;
+		backwardPosition[0] = backwardPosition[0] + scaleDifference * 2.0f + marginLeft;
+		backwardPosition[1] = backwardPosition[1] + scaleDifference * 2.0f + marginLeft;
 
-		forwardPosition[0] = forwardPosition[0] + scaleDifference * 3.0f;
-		forwardPosition[1] = forwardPosition[1] + scaleDifference * 3.0f;
+		forwardPosition[0] = forwardPosition[0] + scaleDifference * 3.0f + marginLeft;
+		forwardPosition[1] = forwardPosition[1] + scaleDifference * 3.0f + marginLeft;
 
-		stopPosition[0] = stopPosition[0] + scaleDifference * 4.0f;
-		stopPosition[1] = stopPosition[1] + scaleDifference * 4.0f;
-
-		open = false;
+		stopPosition[0] = stopPosition[0] + scaleDifference * 4.0f + marginLeft;
+		stopPosition[1] = stopPosition[1] + scaleDifference * 4.0f + marginLeft;
 	}
 
 	@Override
 	public void draw(Canvas canvas) {
 		new Paint();
 		if (open) {
-			menuBar.draw(canvas);
+			if (paused) {
+				menuBarPaused.draw(canvas);
+				Log.i("drab", "NOW ----PAUSE");
+			} else {
+				menuBarPlaying.draw(canvas);
+				Log.i("drab", "NOW ----PLAY");
+			}
 		} else {
 			menuButton.draw(canvas);
 		}
@@ -148,23 +156,25 @@ public class ControlPanel implements SurfaceObject {
 	}
 
 	public void pressPlay() {
-		//		active = true;
+		paused = false;
+		Log.i("drab", "NOW ----PRESS-PAUSE");
 		//		//		tut.setNotification("BubblePlay");
-		//		Toast toast = Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT);
-		//		toast.show();
+		Toast toast = Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT);
+		toast.show();
 
 	}
 
 	public void pressPause() throws InterruptedException {
-		//		active = false;
-		//		//Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
-		//		//toast.show();
-		//		//		tut.waitForNotification("BubblePlay");
+		paused = true;
+		Log.i("drab", "NOW ----PRESS-PAUSE");
+		Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
+		toast.show();
+		//xtut.waitForNotification("BubblePlay");
 
 	}
 
 	public void pressForward() {
-		Toast toast = Toast.makeText(context, "Weiter", Toast.LENGTH_SHORT);
+		Toast toast = Toast.makeText(context, "Vorwärts", Toast.LENGTH_SHORT);
 		toast.show();
 	}
 
@@ -173,8 +183,12 @@ public class ControlPanel implements SurfaceObject {
 		toast.show();
 	}
 
+	public boolean isPaused() {
+		return this.paused;
+	}
+
 	public NinePatchDrawable getMenuBar() {
-		return menuBar;
+		return menuBarPlaying;
 	}
 
 	public NinePatchDrawable getMenuButton() {

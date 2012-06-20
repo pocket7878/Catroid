@@ -38,24 +38,29 @@ public class Lesson {
 	}
 
 	boolean forwardStep() {
-		if ((currentStep) + 1 >= lessonContent.size()) {
-			// TODO: da ghoert naechste Lesson
-			// TODO: da stimmt was nicht, das +1 sollte nicht noetig sein
-
-			return (false);
-		} else {
-			currentStep++;
-			return (true);
+		synchronized (this) {
+			Log.i("lesson", "Forwarding 1 Step");
+			if ((currentStep) + 1 >= lessonContent.size()) {
+				// TODO: da ghoert naechste Lesson
+				// TODO: da stimmt was nicht, das +1 sollte nicht noetig sein
+				return (false);
+			} else {
+				currentStep++;
+				return (true);
+			}
 		}
 	}
 
 	boolean rewindStep() {
-		if (currentStep <= 0) {
-			// TODO: da ghoert vorherige Lesson
-			return (false);
-		} else {
-			currentStep--;
-			return (true);
+		synchronized (this) {
+			Log.i("lesson", "Backwarding 1 Step");
+			if (currentStep <= 0) {
+				// TODO: da ghoert vorherige Lesson
+				return false;
+			} else {
+				currentStep--;
+				return true;
+			}
 		}
 	}
 

@@ -81,13 +81,14 @@ public class TutorialThread extends Thread implements Runnable {
 		do {
 
 			boolean notification = lessonCollection.executeTask();
+
 			if (notification == true) {
 				synchronized (this) {
 					try {
-						Log.i("faxxe", " waiting for notification");
+						Log.i("drab", " waiting for notification");
 						wait();
 					} catch (InterruptedException e) {
-						Log.i("faxxe", "TutorialThread: wait() failed!");
+						Log.i("drab", "TutorialThread: wait() failed!");
 						e.printStackTrace();
 					}
 				}
