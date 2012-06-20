@@ -61,6 +61,34 @@ public class HidBluetooth implements IHid, BTConnectable {
 		return instance;
 	}
 
+	public int getModifierCode(int keyValue) {
+
+		int modifier;
+
+		switch (keyValue) {
+			case 224: // emulate STRG
+				modifier = 0x01;
+				break;
+			case 225: // emulate SHIFT_LEFT
+				modifier = 0x02;
+				break;
+			case 229: // emulate SHIFT_RIGHT
+				modifier = 0x20;
+				break;
+			case 226: // emulate ALT_LEFT
+				modifier = 0x04;
+				break;
+			case 230: // emulate ALT_RIGHT
+				modifier = 0x40;
+				break;
+			default:
+				modifier = 0x00;
+				break;
+		}
+
+		return modifier;
+	}
+
 	public byte[] generateHidCode(Collection<KeyCode> keys) {
 
 		int[] hidCode = new int[] { 161, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -69,7 +97,7 @@ public class HidBluetooth implements IHid, BTConnectable {
 		for (KeyCode key : keys) {
 
 			if (key.isModifier()) {
-				hidCode[2] |= key.getKeyCode();
+				hidCode[2] |= getModifierCode(key.getKeyCode());
 			} else {
 				if (i < 10) {
 					hidCode[i] = key.getKeyCode();
@@ -135,10 +163,28 @@ public class HidBluetooth implements IHid, BTConnectable {
 		communicator.setMACAddress(macAddress);
 		communicator.setServiceUUID(SPP_UUID);
 		communicator.start();
+	}
 
+	public void destroyCommunicator() {
+
+		if (communicator != null) {
+			//sendBTCMotorMessage(LegoNXTBtCommunicator.NO_DELAY, LegoNXTBtCommunicator.DISCONNECT, 0, 0);
+			try {
+				communicator.destroyConnection();
+			} catch (IOException e) { // TODO Auto-generated method stub
+
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			communicator = null;
+		}
 	}
 
 	public boolean isPairing() {
 		return false;
+	}
+
+	public void pauseCommunicator() {
+
 	}
 }
