@@ -118,6 +118,12 @@
         <item>F11</item>
         <item>F12</item>
         <item>ENTF</item>
+        <item>Leertaste</item>
+        <item>Enter</item>
+        <item>Links</item>
+        <item>Rechts</item>
+        <item>Oben</item>
+        <item>Unten</item>
     </string-array>
     <string-array name="key_array"></string-array>
     <string-array name="key_code_array">
@@ -175,6 +181,12 @@
         <item>68</item>
         <item>69</item>
         <item>76</item>
+        <item>44</item>
+        <item>40</item>
+        <item>80</item>
+        <item>79</item>
+        <item>82</item>
+        <item>81</item>
     </string-array>
 
 </resources>
