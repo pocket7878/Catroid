@@ -48,7 +48,7 @@ public class ControlPanel implements SurfaceObject {
 
 	public static boolean active;
 	private boolean open;
-	private long waitTimeToDispatch = 500;
+	private long waitTimeToDispatch = 250;
 	private long timeOfLastChange = 0;
 
 	private double scaleDifference = 0;

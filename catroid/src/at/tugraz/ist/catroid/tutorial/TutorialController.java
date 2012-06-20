@@ -71,7 +71,6 @@ public class TutorialController {
 		tutors.clear();
 		tutors = null;
 		Tutorial.getInstance(null).clear();
-
 	}
 
 	public TutorialController() {
@@ -85,7 +84,9 @@ public class TutorialController {
 	}
 
 	public void notifyThread() {
-		tutorialThread.notifyThread();
+		if (tutorialThread.isAlive()) {
+			tutorialThread.notifyThread();
+		}
 	}
 
 	public void stopThread() {

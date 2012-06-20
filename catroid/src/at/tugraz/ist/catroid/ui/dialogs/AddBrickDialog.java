@@ -297,9 +297,11 @@ public class AddBrickDialog extends Dialog {
 				}
 				scriptTabActivity.dismissDialog(ScriptTabActivity.DIALOG_ADD_BRICK);
 				scriptTabActivity.dismissDialog(ScriptTabActivity.DIALOG_BRICK_CATEGORY);
-				//Tutorial tutorial = Tutorial.getInstance(null);
-				Tutorial.getInstance(null).setNotification("DIALOG");
-				Tutorial.getInstance(null).setDialog(null);
+
+				if (Tutorial.getInstance(null).isActive()) {
+					Tutorial.getInstance(null).setNotification("DIALOG");
+					Tutorial.getInstance(null).setDialog(null);
+				}
 			}
 		});
 	}

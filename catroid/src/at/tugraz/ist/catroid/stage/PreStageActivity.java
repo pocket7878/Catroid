@@ -66,7 +66,9 @@ public class PreStageActivity extends Activity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Tutorial.getInstance(null).stopButtonTutorial();
+		if (Tutorial.getInstance(null).isActive()) {
+			Tutorial.getInstance(null).stopButtonTutorial();
+		}
 		super.onCreate(savedInstanceState);
 
 		int required_resources = getRequiredRessources();
