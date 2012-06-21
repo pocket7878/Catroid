@@ -7,15 +7,15 @@ class PhysicWorldConverter {
 	// Ratio of pixels to meters
 	static float RATIO = 40;
 
-	public static float LengthFromCatroidToBox2D(float x) {
+	public static float lengthCatToBox2D(float x) {
 		return x / RATIO;
 	}
 
-	public static Vector2 Vector2FromCatroidToBox2D(Vector2 x) {
+	public static Vector2 vectCatToBox2D(Vector2 x) {
 		return new Vector2(x.x / RATIO, x.y / RATIO);
 	}
 
-	public static Vector2 Vector2FromBox2DToCatroid(Vector2 x) {
+	public static Vector2 vectBox2DToCat(Vector2 x) {
 		return new Vector2(x.x * RATIO, x.y * RATIO);
 	}
 

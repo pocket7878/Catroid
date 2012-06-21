@@ -27,7 +27,7 @@ public class PhysicShapeBuilderTest extends AndroidTestCase {
 	@Override
 	public void setUp() {
 		world = new World(PhysicWorldSetting.defaultgravity, PhysicWorldSetting.ignoreSleepingObjects);
-		phyWB = new PhysicShapeBuilder(world);
+		phyWB = new PhysicShapeBuilder();
 	}
 
 	@Override

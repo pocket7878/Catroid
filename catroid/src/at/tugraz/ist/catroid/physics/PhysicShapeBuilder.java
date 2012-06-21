@@ -28,63 +28,68 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.GdxNativesLoader;
 
 /**
  * @author Philipp
  * 
  */
 public class PhysicShapeBuilder {
-
+	static {
+		GdxNativesLoader.load();
+	}
 	private World world;
-	ArrayList<Body> staticBodyList;
 
-	public PhysicShapeBuilder(World w) {
-		world = w;
-		staticBodyList = new ArrayList<Body>();
+	/**
+	 * @return the world
+	 */
+	public World getWorld() {
+		return world;
 	}
 
-	public void createSurroundingBox() {
-		int frameWidthPixels = PhysicWorldSetting.surroundingBoxFrameWidth;
-		//createStaticBody(frameWidthPixels * 2, Values.SCREEN_HEIGHT, new Vector2(-Values.SCREEN_WIDTH / 2
-		//	+ frameWidthPixels, 0), 0);
-		//createStaticBody(frameWidthPixels * 2, Values.SCREEN_HEIGHT, new Vector2(Values.SCREEN_WIDTH / 2
-		//- frameWidthPixels, 0), 0);
-		createStaticBody(Values.SCREEN_WIDTH, frameWidthPixels * 2, new Vector2(0, -Values.SCREEN_HEIGHT / 2
-				+ frameWidthPixels), 0);
-		//createStaticBody(Values.SCREEN_WIDTH, frameWidthPixels * 2, new Vector2(0, Values.SCREEN_HEIGHT / 2
-		//	- frameWidthPixels), 0);
+	ArrayList<Body> staticBodyList;
+
+	public PhysicShapeBuilder() {
+		world = new World(PhysicWorldSetting.defaultgravity, PhysicWorldSetting.ignoreSleepingObjects);
+		staticBodyList = new ArrayList<Body>();
 	}
 
 	public Body createBody(Sprite sprite) {
 
 		// What kind of body is it ???
+		float w;
+		float h;
+		float r;
+		Body body = null;
+
 		CostumeData costumeData = sprite.costume.getCostumeData();
 		int[] resulution = costumeData.getResolution();
-
-		float r = (resulution[0] > resulution[1]) ? resulution[0] / 2f : resulution[1] / 2f;
 		Vector2 pos = new Vector2(sprite.costume.getXPosition(), sprite.costume.getYPosition());
-		float b2r = PhysicWorldConverter.LengthFromCatroidToBox2D(r);
-		Vector2 b2pos = PhysicWorldConverter.Vector2FromCatroidToBox2D(pos);
+		Vector2 b2pos = PhysicWorldConverter.vectCatToBox2D(pos);
 
-		return createDynamicCircle(b2r, b2pos, sprite.costume.rotation);
-	}
+		if (resulution[0] == resulution[1]) {
+			r = PhysicWorldConverter.lengthCatToBox2D(resulution[0] / 2.0f);
+			body = createCircle(BodyType.DynamicBody, r, b2pos, 0, 2.0f);
 
-	private Body createDynamicCircle(float radius, Vector2 pos, float angle_rad) {
-		Body body = createCircle(BodyType.DynamicBody, radius, pos, angle_rad, 2.0f);
-		//Body body = createCircle(BodyType.DynamicBody, radius, 2.0f);
-		//body.setTransform(pos, angle_rad);
+		} else {
+			w = PhysicWorldConverter.lengthCatToBox2D(resulution[0]);
+			h = PhysicWorldConverter.lengthCatToBox2D(resulution[1]);
+			body = createBox(BodyType.DynamicBody, w, h, sprite.costume.rotation, b2pos);
+		}
+
 		return body;
 	}
 
 	public Body createCircle(BodyType type, float radius, Vector2 pos, float angle, float density) {
 		BodyDef bodydef = new BodyDef();
 		bodydef.type = type;
+		bodydef.angle = angle;
+		bodydef.fixedRotation = false;
 
 		FixtureDef fd = new FixtureDef();
 		fd.friction = 0.3f;
@@ -102,33 +107,46 @@ public class PhysicShapeBuilder {
 		return circle;
 	}
 
-	private Body createCircle(BodyType type, float radius, float density) {
+	public Body createBox(BodyType type, float width, float height, float rotation, Vector2 pos) {
 		BodyDef def = new BodyDef();
 		def.type = type;
-		Body circle = world.createBody(def);
-		CircleShape poly = new CircleShape();
-		poly.setRadius(radius);
+		def.fixedRotation = false;
+		def.position.x = pos.x;
+		def.position.y = pos.y;
+		def.angle = rotation;
+
 		FixtureDef fd = new FixtureDef();
-		fd.friction = 0.3f;
-		fd.restitution = 0.75f;
-		fd.shape = poly;
-		fd.density = density;
-		circle.createFixture(fd);
+		fd.shape = new PolygonShape();
+		fd.density = 1.0f;
+		fd.friction = 1.0f;
+		((PolygonShape) fd.shape).setAsBox(width / 2.0f, height / 2.0f);
 
-		return circle;
+		Body box = world.createBody(def);
+		box.createFixture(fd);
+		return box;
 	}
-
-	// #############################################################################
 
 	public void createStaticBody(int with, int height, Vector2 pos, float angle_rad) {
 
-		float w = PhysicWorldConverter.LengthFromCatroidToBox2D(with);
-		float h = PhysicWorldConverter.LengthFromCatroidToBox2D(height);
-		Vector2 pos_ = PhysicWorldConverter.Vector2FromCatroidToBox2D(pos);
+		float w = PhysicWorldConverter.lengthCatToBox2D(with);
+		float h = PhysicWorldConverter.lengthCatToBox2D(height);
+		Vector2 pos_ = PhysicWorldConverter.vectCatToBox2D(pos);
 		System.out.println(" # # DEBUG  in :" + pos + " out :" + pos_);
 		Body body = createstaticBox(w, h, 0f, pos_);
 		//body.setTransform(trans, angle_rad);
 		staticBodyList.add(body);
+	}
+
+	public void createSurroundingBox() {
+		int frameWidthPixels = PhysicWorldSetting.surroundingBoxFrameWidth;
+		createStaticBody(frameWidthPixels * 2, Values.SCREEN_HEIGHT, new Vector2(-Values.SCREEN_WIDTH / 2 - 2
+				* frameWidthPixels, 0), 0);
+		createStaticBody(frameWidthPixels * 2, Values.SCREEN_HEIGHT, new Vector2(Values.SCREEN_WIDTH / 2 + 2
+				* frameWidthPixels, 0), 0);
+		createStaticBody(Values.SCREEN_WIDTH, frameWidthPixels * 2, new Vector2(0, -Values.SCREEN_HEIGHT / 2 - 2
+				* frameWidthPixels), 0);
+		createStaticBody(Values.SCREEN_WIDTH, frameWidthPixels * 2, new Vector2(0, Values.SCREEN_HEIGHT / 2 + 2
+				* frameWidthPixels), 0);
 	}
 
 	public Body createstaticBox(float width, float height, float density, Vector2 pos) {
