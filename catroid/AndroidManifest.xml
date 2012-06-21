@@ -106,6 +106,8 @@
 
 		<activity android:name=".ui.DroneInstallPluginActivity" android:launchMode="standard" android:screenOrientation="portrait"></activity>
 		
+		<service android:name=".plugin.Drone.DroneService"></service>
+		
 	</application>
 	
 </manifest>

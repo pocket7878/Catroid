@@ -29,10 +29,14 @@ import java.util.Locale;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
@@ -49,9 +53,17 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.plugin.PluginManager;
 import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
+import at.tugraz.ist.catroid.plugin.Drone.DroneService;
+import at.tugraz.ist.catroid.plugin.Drone.DroneService.LocalBinder;
+import at.tugraz.ist.catroid.plugin.Drone.IDrone;
 import at.tugraz.ist.catroid.plugin.Drone.other.DroneWifiConnectionActivity;
 
 public class PreStageActivity extends Activity {
+
+	//Drone Service Members
+	DroneService mService;
+	IDrone droneInstance;
+	boolean mBound = false;
 
 	private static final int REQUEST_ENABLE_BT = 2000;
 	private static final int REQUEST_CONNECT_DEVICE = 1000;
@@ -90,7 +102,7 @@ public class PreStageActivity extends Activity {
 			Intent checkIntent = new Intent();
 			checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
 			startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
-					}
+		}
 		if ((required_resources & Brick.BLUETOOTH_LEGO_NXT) > 0) {
 			BluetoothManager bluetoothManager = new BluetoothManager(this);
 
@@ -113,6 +125,8 @@ public class PreStageActivity extends Activity {
 			DronePartOfProject = true;
 			Log.d("Catroid", "Test Null Point");
 			if (PluginManager.getInstance().isDroneAddonInstalled()) {
+				//Init the drone service
+				initDroneService();
 				// check if we are already connected to an Drone
 				if (!DroneHandler.getInstance().wasAlreadyConnected()) {
 					Intent intent = new Intent(this, DroneWifiConnectionActivity.class);
@@ -136,6 +150,43 @@ public class PreStageActivity extends Activity {
 
 	}
 
+	private void initDroneService() {
+
+		Intent intent = new Intent(this, DroneService.class);
+		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+		startService(intent);
+
+		if (mBound) {
+			// Call a method from the LocalService.
+			// However, if this call were something that might hang, then this request should
+			// occur in a separate thread to avoid slowing down the activity performance.
+
+		}
+
+	}
+
+	/** Defines callbacks for service binding, passed to bindService() */
+	private ServiceConnection mConnection = new ServiceConnection() {
+
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			Log.d("Catroid", "onServiceConnected");
+			LocalBinder binder = (LocalBinder) service;
+			mService = binder.getService();
+			mBound = true;
+
+			//call Service
+			int num = mService.getRandomNumber();
+			Toast.makeText(getApplicationContext(), "number: " + num, Toast.LENGTH_SHORT).show();
+
+		}
+
+		public void onServiceDisconnected(ComponentName name) {
+			// TODO Auto-generated method stub
+			Log.d("Catroid", "onServiceDisconnected");
+			mBound = false;
+		}
+	};
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -147,6 +198,11 @@ public class PreStageActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		// Unbind from the service
+		if (mBound) {
+			unbindService(mConnection);
+			mBound = false;
+		}
 
 	}
 
@@ -253,7 +309,7 @@ public class PreStageActivity extends Activity {
 						break;
 				}
 				break;
-				
+
 			case MY_DATA_CHECK_CODE:
 				if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
 					// success, create the TTS instance
