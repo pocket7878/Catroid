@@ -72,8 +72,4 @@ public interface IDrone {
 
 	public abstract String getFirmwareVersion();
 
-	public abstract boolean uploadFirmwareFile();
-
-	public abstract boolean restartDrone();
-
 }

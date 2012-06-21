@@ -40,7 +40,6 @@ public class DroneLibraryWrapper implements IDrone {
 		Class<?> droneClass = Class.forName(DroneLibraryWrapper.droneClass, true, droneContext.getClassLoader());
 
 		droneInstance = droneClass.getMethod("getInstance", (Class[]) null).invoke(null, (Object[]) null);
-
 	}
 
 	public boolean connect() {
@@ -268,23 +267,4 @@ public class DroneLibraryWrapper implements IDrone {
 		return null;
 	}
 
-	public boolean uploadFirmwareFile() {
-		try {
-			return (Boolean) this.droneInstance.getClass().getMethod("uploadFirmwareFile", (Class[]) null)
-					.invoke(this.droneInstance, (Object[]) null);
-		} catch (Exception e) {
-			printException(e);
-		}
-		return false;
-	}
-
-	public boolean restartDrone() {
-		try {
-			return (Boolean) this.droneInstance.getClass().getMethod("restartDrone", (Class[]) null)
-					.invoke(this.droneInstance, (Object[]) null);
-		} catch (Exception e) {
-			printException(e);
-		}
-		return false;
-	}
 }

@@ -237,11 +237,11 @@ public class DroneWifiConnectionActivity extends Activity {
 		} else { // ping possible
 
 			// TODO Now Check firmware
-			// if (!DroneHandler.getInstance().getDrone().connect()) {
-			//
-			// changeStatus(ERROR_CONNECTING_DRONE);
-			// return;
-			// }
+			if (!DroneHandler.getInstance().getDrone().connect()) {
+
+				changeStatus(DroneConsts.ERROR_CONNECTING_DRONE);
+				return;
+			}
 
 			tvWifiStatus.setText(getApplicationContext().getResources().getString(R.string.drone_wifi_status_enabled));
 			ivWifiStatus.setVisibility(ImageView.VISIBLE);
@@ -729,15 +729,20 @@ public class DroneWifiConnectionActivity extends Activity {
 
 	private synchronized boolean checkFirmware() {
 		Log.d(DroneConsts.DroneLogTag, "checkFirmware()");
+		// Move to Drone Consts
+		String supportedDrone1firmwareVersion = "1.7.4";
+		String supportedDrone2firmwareVersion = "2.1.18";
+		String droneFirmwareVersion = "";
+		droneFirmwareVersion = DroneHandler.getInstance().getDrone().getFirmwareVersion();
 
-		if ((DroneHandler.getInstance().getDrone().getFirmwareVersion().equals("1.7.4")) == false) {
-			Log.d(DroneConsts.DroneLogTag, "checkFirmware() -> Update Firmware");
-
-			return true; // FIRMWARE hast to be updated
+		if (droneFirmwareVersion.equals(supportedDrone1firmwareVersion)
+				|| droneFirmwareVersion.equals(supportedDrone2firmwareVersion)) {
+			Log.d(DroneConsts.DroneLogTag, "checkFirmware() -> Firmware is Fine");
+			return true;
 
 		} else {
-			Log.d(DroneConsts.DroneLogTag, "checkFirmware() -> DONT'T Update Firmware");
-			return true; // firmware is ok
+			Log.d(DroneConsts.DroneLogTag, "checkFirmware() -> Firmware to old");
+			return false; // FIRMWARE is to old
 		}
 	}
 
