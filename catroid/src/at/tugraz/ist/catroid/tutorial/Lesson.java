@@ -56,9 +56,11 @@ public class Lesson {
 			Log.i("lesson", "Backwarding 1 Step");
 			if (currentStep <= 0) {
 				// TODO: da ghoert vorherige Lesson
+				Log.i("drab", "Lesson not rewinded");
 				return false;
 			} else {
 				currentStep--;
+				Log.i("drab", "Lesson rewinded to: " + currentStep);
 				return true;
 			}
 		}

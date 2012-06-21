@@ -33,6 +33,10 @@ import at.tugraz.ist.catroid.tutorial.tasks.Task;
  */
 public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
+	public enum ACTIONS {
+		REWIND, FORWARD
+	}
+
 	private Context context;
 	private TutorialOverlay tutorialOverlay;
 	private Resources ressources;
@@ -42,10 +46,18 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private Paint paint;
 	private int sizeX = 110;
 	private int sizeY = 102;
+	private Bubble tutorBubble;
+
+	/*
+	 * State + State Variables
+	 */
 	private int targetX;
 	private int targetY;
-
 	private boolean flip = false;
+
+	private TutorState currentState;
+	private TutorStateHistory tutorStateHistory;
+
 	private int flipFlag = 2;
 	private boolean reset = true;
 
@@ -63,19 +75,21 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private int updateTime = 150;
 
 	private boolean interruptOfSequence = false;
+	private ACTIONS actionOfInterrupt;
 
 	private boolean holdTutor = false;
 
-	public Tutor(int drawable, TutorialOverlay tutorialOverlay) {
-		super(Tutorial.getInstance(null).getActualContext(), tutorialOverlay);
-		context = Tutorial.getInstance(null).getActualContext();
-		ressources = context.getResources();
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inScaled = false;
-		bitmap = BitmapFactory.decodeResource(ressources, drawable, options);
-		paint = new Paint();
-		this.tutorialOverlay = tutorialOverlay;
-	}
+	//	public Tutor(int drawable, TutorialOverlay tutorialOverlay) {
+	//		super(Tutorial.getInstance(null).getActualContext(), tutorialOverlay);
+	//
+	//		context = Tutorial.getInstance(null).getActualContext();
+	//		ressources = context.getResources();
+	//		BitmapFactory.Options options = new BitmapFactory.Options();
+	//		options.inScaled = false;
+	//		bitmap = BitmapFactory.decodeResource(ressources, drawable, options);
+	//		paint = new Paint();
+	//		this.tutorialOverlay = tutorialOverlay;
+	//	}
 
 	public Tutor(int drawable, TutorialOverlay tutorialOverlay, int x, int y, Task.Tutor tutorType) {
 		super(Tutorial.getInstance(null).getActualContext(), tutorialOverlay);
@@ -86,14 +100,22 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		bitmap = BitmapFactory.decodeResource(ressources, drawable, options);
 		paint = new Paint();
 		this.tutorialOverlay = tutorialOverlay;
+
+		tutorStateHistory = new TutorStateHistory(this.tutorType);
+
 		this.targetX = x;
 		this.targetY = y;
 		super.tutorType = tutorType;
+		currentState = new TutorState(targetX, targetY, flip, state);
+		tutorStateHistory.addStateToHistory(currentState);
 
 	}
 
 	@Override
 	public void flip(boolean flipFast) {
+		currentState = new TutorState(targetX, targetY, flip, state);
+		tutorStateHistory.addStateToHistory(currentState);
+
 		if (flip) {
 			flip = false;
 		} else {
@@ -108,6 +130,9 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void walk(int walkX, int walkY, boolean fastWalk) {
+		currentState = new TutorState(targetX, targetY, flip, state);
+		tutorStateHistory.addStateToHistory(currentState);
+
 		walkFast = fastWalk;
 		walkToX = walkX;
 		walkToY = walkY;
@@ -159,13 +184,16 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	@Override
 	public void say(String text) {
 		Log.i("drab", "NewTutor: " + text);
-		new Bubble(text, tutorialOverlay, this, targetX, targetY);
+		tutorBubble = new Bubble(text, tutorialOverlay, this, targetX, targetY);
 
 		if (!flip) {
 			state = 2;
 		} else {
 			state = 6;
 		}
+
+		currentState = new TutorState(targetX, targetY, flip, state);
+		tutorStateHistory.addStateToHistory(currentState);
 		Log.i("drab", "Set saying...");
 	}
 
@@ -175,6 +203,9 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		targetX = x;
 		targetY = y;
 		state = 61;
+
+		currentState = new TutorState(targetX, targetY, flip, state);
+		tutorStateHistory.addStateToHistory(currentState);
 		Log.i("drab", "Done Jumping...");
 	}
 
@@ -189,6 +220,9 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		} else {
 			state = 4;
 		}
+
+		currentState = new TutorState(targetX, targetY, flip, state);
+		tutorStateHistory.addStateToHistory(currentState);
 	}
 
 	@Override
@@ -200,6 +234,9 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		} else {
 			state = 7;
 		}
+
+		currentState = new TutorState(targetX, targetY, flip, state);
+		tutorStateHistory.addStateToHistory(currentState);
 	}
 
 	@Override
@@ -326,6 +363,8 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 				}
 			}
 			canvas.drawBitmap(todraw, targetX, targetY, paint);
+		} else {
+
 		}
 	}
 
@@ -335,7 +374,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void update(long gameTime) {
-		if ((lastUpdateTime + updateTime) < gameTime && !holdTutor) {
+		if ((lastUpdateTime + updateTime) < gameTime && !holdTutor && !interruptOfSequence) {
 			lastUpdateTime = gameTime;
 			currentStep++;
 		}
@@ -352,8 +391,38 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		return interruptOfSequence;
 	}
 
-	public void setInterruptOfSequence(boolean interruptOfSequence) {
-		this.interruptOfSequence = interruptOfSequence;
-	}
+	@Override
+	public void setInterruptOfSequence(ACTIONS action) {
+		this.interruptOfSequence = true;
 
+		if (tutorBubble != null) {
+			Tutorial.getInstance(null).setNotification("Bubble finished!");
+			tutorBubble.interruptAndClear();
+			tutorBubble = null;
+			Log.i("interrupt", "Bubble deleted for " + this.tutorType);
+		}
+
+		TutorState newState;
+		Log.i("interrupt", "Interrupt set for Tutor " + this.tutorType);
+
+		if (action == ACTIONS.REWIND) {
+			newState = tutorStateHistory.setBackAndReturnState();
+		} else {
+			newState = tutorStateHistory.setBackAndReturnState();
+		}
+		Log.i("interrupt",
+				"NEW-STATE retrieved for " + this.tutorType + ": X=" + newState.getX() + " Y=" + newState.getY()
+						+ " state=" + newState.getState());
+
+		targetX = newState.getX();
+		targetX = newState.getX();
+		flip = newState.isFlip();
+		state = newState.getState();
+		currentStep = 0;
+
+		Log.i("interrupt", "New state is SET and Steps reseted for " + this.tutorType);
+
+		this.interruptOfSequence = false;
+		Log.i("interrupt", "Interrupt over for " + this.tutorType);
+	}
 }

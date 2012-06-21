@@ -20,6 +20,7 @@ package at.tugraz.ist.catroid.tutorial;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -35,6 +36,7 @@ import android.view.MotionEvent;
 import android.view.WindowManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Values;
+import at.tugraz.ist.catroid.tutorial.Tutor.ACTIONS;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
 /**
@@ -248,7 +250,13 @@ public class TutorialController {
 	}
 
 	public void rewindStep() {
-		lessonCollection.rewindStep();
+		if (lessonCollection.rewindStep()) {
+			for (Entry<at.tugraz.ist.catroid.tutorial.tasks.Task.Tutor, SurfaceObjectTutor> tempTutor : tutors
+					.entrySet()) {
+				Log.i("interrupt", "Now trying to interrupt Tutor: " + tempTutor.getValue().tutorType);
+				tempTutor.getValue().setInterruptOfSequence(ACTIONS.REWIND);
+			}
+		}
 	}
 
 	public void stopButtonTutorial() {

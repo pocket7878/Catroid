@@ -110,10 +110,8 @@ public class ControlPanel implements SurfaceObject {
 		if (open) {
 			if (paused) {
 				menuBarPaused.draw(canvas);
-				Log.i("drab", "NOW ----PAUSE");
 			} else {
 				menuBarPlaying.draw(canvas);
-				Log.i("drab", "NOW ----PLAY");
 			}
 		} else {
 			menuButton.draw(canvas);

@@ -20,6 +20,7 @@ package at.tugraz.ist.catroid.tutorial;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import at.tugraz.ist.catroid.tutorial.Tutor.ACTIONS;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
 /**
@@ -68,5 +69,7 @@ public abstract class SurfaceObjectTutor implements SurfaceObject {
 	public abstract void disappear();
 
 	public abstract void walk(int walkToX, int walkToY, boolean fastWalk);
+
+	public abstract void setInterruptOfSequence(ACTIONS action);
 
 }

@@ -30,6 +30,7 @@ public class TutorialThread extends Thread implements Runnable {
 	private LessonCollection lessonCollection;
 	public boolean tutorialThreadRunning = true;
 	private volatile ArrayList<String> notifies = new ArrayList<String>();
+	private boolean interrupted = false;
 
 	public TutorialThread() {
 		Thread thisThread = new Thread(this);
@@ -80,16 +81,18 @@ public class TutorialThread extends Thread implements Runnable {
 	private void runTutorial() {
 		do {
 
-			boolean notification = lessonCollection.executeTask();
+			if (!interrupted) {
+				boolean notification = lessonCollection.executeTask();
 
-			if (notification == true) {
-				synchronized (this) {
-					try {
-						Log.i("drab", " waiting for notification");
-						wait();
-					} catch (InterruptedException e) {
-						Log.i("drab", "TutorialThread: wait() failed!");
-						e.printStackTrace();
+				if (notification == true) {
+					synchronized (this) {
+						try {
+							Log.i("drab", " waiting for notification");
+							wait();
+						} catch (InterruptedException e) {
+							Log.i("drab", "TutorialThread: wait() failed!");
+							e.printStackTrace();
+						}
 					}
 				}
 			}

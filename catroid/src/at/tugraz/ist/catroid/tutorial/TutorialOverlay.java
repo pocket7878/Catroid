@@ -47,6 +47,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	private Cloud cloud;
 	private CloudController co;
 	private ControlPanel panel;
+	private boolean interrupt = false;
 
 	@Override
 	protected void finalize() throws Throwable {
@@ -87,20 +88,22 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		Paint paint = new Paint();
-		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-		canvas.drawPaint(paint);
-		postInvalidate();
-		if (cloud == null) {
-			cloud = Cloud.getInstance(getContext());
-		}
-		cloud.draw(canvas);
-		if (surfaceObjects != null) {
-			synchronized (surfaceObjects) {
-				for (SurfaceObject tmp : surfaceObjects) {
-					if (tmp != null) {
-						tmp.update(System.currentTimeMillis());
-						tmp.draw(canvas);
+		if (!interrupt) {
+			Paint paint = new Paint();
+			paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+			canvas.drawPaint(paint);
+			postInvalidate();
+			if (cloud == null) {
+				cloud = Cloud.getInstance(getContext());
+			}
+			cloud.draw(canvas);
+			if (surfaceObjects != null) {
+				synchronized (surfaceObjects) {
+					for (SurfaceObject tmp : surfaceObjects) {
+						if (tmp != null) {
+							tmp.update(System.currentTimeMillis());
+							tmp.draw(canvas);
+						}
 					}
 				}
 			}
@@ -196,9 +199,12 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 				}
 				Log.i("drab", "DISPATCH Button open/close");
 			} else if (isOnBackwardButton(ev)) {
-				panel.pressBackward();
-				Tutorial.getInstance(null).rewindStep();
+				interrupt = true;
 				Log.i("drab", "DISPATCH Button rewind");
+				panel.pressBackward();
+
+				Tutorial.getInstance(null).rewindStep();
+				interrupt = false;
 			} else if (isOnForwardButton(ev)) {
 				panel.pressForward();
 				//TODO: implement foward step
