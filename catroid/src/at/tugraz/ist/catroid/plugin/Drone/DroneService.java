@@ -44,6 +44,7 @@ public class DroneService extends Service {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
+		Toast.makeText(getApplicationContext(), "OnServiceCreate", 1000);
 		try {
 			drone = new DroneLibraryWrapper(getApplicationContext());
 		} catch (Exception e) {
@@ -75,7 +76,6 @@ public class DroneService extends Service {
 	/** method for clients */
 	public int getRandomNumber() {
 
-		Toast.makeText(getApplicationContext(), "someToast", 1000);
 		return mGenerator.nextInt(100);
 	}
 
