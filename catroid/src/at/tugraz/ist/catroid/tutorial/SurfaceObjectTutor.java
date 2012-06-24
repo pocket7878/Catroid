@@ -72,4 +72,6 @@ public abstract class SurfaceObjectTutor implements SurfaceObject {
 
 	public abstract void setInterruptOfSequence(ACTIONS action);
 
+	public abstract void sleep();
+
 }

@@ -196,6 +196,21 @@ public class TutorialController {
 		startThread();
 	}
 
+	public void pauseTutorial() {
+		try {
+			synchronized (tutorialThread) {
+				tutorialThread.wait();
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void playTutorial() {
+		tutorialThread.notify();
+	}
+
 	private AlertDialog generateLessonDialog() {
 		//TODO: Cancle Tutorial if Dialog is cancled!
 		ArrayList<String> lessons = lessonCollection.getLessons();
@@ -250,13 +265,22 @@ public class TutorialController {
 	}
 
 	public void rewindStep() {
-		if (lessonCollection.rewindStep()) {
-			for (Entry<at.tugraz.ist.catroid.tutorial.tasks.Task.Tutor, SurfaceObjectTutor> tempTutor : tutors
-					.entrySet()) {
-				Log.i("interrupt", "Now trying to interrupt Tutor: " + tempTutor.getValue().tutorType);
-				tempTutor.getValue().setInterruptOfSequence(ACTIONS.REWIND);
-			}
+		tutorialThread.setInterruptRoutine(ACTIONS.REWIND);
+		tutorialThread.setInterrupt(true);
+		synchronized (tutorialThread) {
+			tutorialThread.notify();
 		}
+		/* reset Tutors */
+		for (Entry<at.tugraz.ist.catroid.tutorial.tasks.Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
+			Log.i("interrupt", "Now trying to interrupt Tutor: " + tempTutor.getValue().tutorType);
+			tempTutor.getValue().setInterruptOfSequence(ACTIONS.REWIND);
+		}
+
+		tutorialThread.setInterrupt(false);
+		synchronized (tutorialThread) {
+			tutorialThread.notify();
+		}
+
 	}
 
 	public void stopButtonTutorial() {

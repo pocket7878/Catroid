@@ -98,6 +98,14 @@ public class Tutorial {
 		System.runFinalization();
 	}
 
+	public void playButtonTutorial() {
+		tutorialController.playTutorial();
+	}
+
+	public void pauseButtonTutorial() {
+		tutorialController.pauseTutorial();
+	}
+
 	public boolean dispatchTouchEvent(MotionEvent ev) {
 		return tutorialController.dispatchTouchEvent(ev);
 	}

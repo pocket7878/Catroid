@@ -74,9 +74,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private long lastUpdateTime = 0;
 	private int updateTime = 150;
 
-	private boolean interruptOfSequence = false;
-	private ACTIONS actionOfInterrupt;
-
 	private boolean holdTutor = false;
 
 	//	public Tutor(int drawable, TutorialOverlay tutorialOverlay) {
@@ -101,11 +98,11 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		paint = new Paint();
 		this.tutorialOverlay = tutorialOverlay;
 
-		tutorStateHistory = new TutorStateHistory(this.tutorType);
-
 		this.targetX = x;
 		this.targetY = y;
 		super.tutorType = tutorType;
+
+		tutorStateHistory = new TutorStateHistory(tutorType);
 		currentState = new TutorState(targetX, targetY, flip, state);
 		tutorStateHistory.addStateToHistory(currentState);
 
@@ -115,6 +112,8 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	public void flip(boolean flipFast) {
 		currentState = new TutorState(targetX, targetY, flip, state);
 		tutorStateHistory.addStateToHistory(currentState);
+
+		Log.i("drab", Thread.currentThread().getName() + ": State set for Flipping");
 
 		if (flip) {
 			flip = false;
@@ -132,6 +131,8 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	public void walk(int walkX, int walkY, boolean fastWalk) {
 		currentState = new TutorState(targetX, targetY, flip, state);
 		tutorStateHistory.addStateToHistory(currentState);
+
+		Log.i("drab", Thread.currentThread().getName() + ": State set for Walking");
 
 		walkFast = fastWalk;
 		walkToX = walkX;
@@ -178,12 +179,27 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		} else {
 			state = 5;
 		}
-		Log.i("drab", "Set idle...");
+	}
+
+	@Override
+	public void sleep() {
+		currentState = new TutorState(targetX, targetY, flip, state);
+		tutorStateHistory.addStateToHistory(currentState);
+
+		Log.i("drab", Thread.currentThread().getName() + ": State set for sleep");
+		if (!flip) {
+			state = 1;
+		} else {
+			state = 5;
+		}
 	}
 
 	@Override
 	public void say(String text) {
-		Log.i("drab", "NewTutor: " + text);
+		currentState = new TutorState(targetX, targetY, flip, state);
+		tutorStateHistory.addStateToHistory(currentState);
+
+		Log.i("drab", Thread.currentThread().getName() + ": State set for Saying");
 		tutorBubble = new Bubble(text, tutorialOverlay, this, targetX, targetY);
 
 		if (!flip) {
@@ -191,181 +207,173 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		} else {
 			state = 6;
 		}
-
-		currentState = new TutorState(targetX, targetY, flip, state);
-		tutorStateHistory.addStateToHistory(currentState);
-		Log.i("drab", "Set saying...");
 	}
 
 	@Override
 	public void jumpTo(int x, int y) {
-		Log.i("drab", "Jumping...");
+		currentState = new TutorState(targetX, targetY, flip, state);
+		tutorStateHistory.addStateToHistory(currentState);
+
+		Log.i("drab", Thread.currentThread().getName() + ": State set for Jumping");
 		targetX = x;
 		targetY = y;
 		state = 61;
-
-		currentState = new TutorState(targetX, targetY, flip, state);
-		tutorStateHistory.addStateToHistory(currentState);
-		Log.i("drab", "Done Jumping...");
 	}
 
 	@Override
 	public void appear(int x, int y) {
+		currentState = new TutorState(targetX, targetY, flip, state);
+		tutorStateHistory.addStateToHistory(currentState);
 		targetX = x;
 		targetY = y;
-		Log.i("drab", " appear!");
+		Log.i("drab", Thread.currentThread().getName() + ": State set for appear");
 
 		if (!flip) {
 			state = 0;
 		} else {
 			state = 4;
 		}
-
-		currentState = new TutorState(targetX, targetY, flip, state);
-		tutorStateHistory.addStateToHistory(currentState);
 	}
 
 	@Override
 	public void disappear() {
-		Log.i("drab", "disappearing...");
+		currentState = new TutorState(targetX, targetY, flip, state);
+		tutorStateHistory.addStateToHistory(currentState);
+
+		Log.i("drab", Thread.currentThread().getName() + ": State set for disappearing");
 
 		if (!flip) {
 			state = 3;
 		} else {
 			state = 7;
 		}
-
-		currentState = new TutorState(targetX, targetY, flip, state);
-		tutorStateHistory.addStateToHistory(currentState);
 	}
 
 	@Override
 	public void draw(Canvas canvas) {
-		if (!interruptOfSequence) {
-			Bitmap todraw = Bitmap.createBitmap(bitmap, 0, 0, sizeX, sizeY);
-			if (currentStep > 9) {
-				currentStep = 0;
-				reset = true;
-			}
+		Bitmap todraw = Bitmap.createBitmap(bitmap, 0, 0, sizeX, sizeY);
+		if (currentStep > 9) {
+			currentStep = 0;
+			reset = true;
+		}
 
-			if (!holdTutor) {
-				switch (state) {
-					case 0:
-					case 4: //APPEARING
-						if (currentStep == 9) {
-							state = 1;
-							Tutorial.getInstance(null).setNotification("appear done!");
-							break;
-						}
-						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+		//Log.i("drab", Thread.currentThread().getName() + ": TutorDraw()");
+
+		if (!holdTutor) {
+			switch (state) {
+				case 0:
+				case 4: //APPEARING
+					if (currentStep == 9) {
+						state = 1;
+						Tutorial.getInstance(null).setNotification("appear done!");
 						break;
+					}
+					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+					break;
 
-					case 1:
-					case 5: //IDLE
-						if (currentStep == 9) {
-							currentStep = 0;
-						}
-						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+				case 1:
+				case 5: //IDLE
+					if (currentStep == 9) {
+						currentStep = 0;
+					}
+					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+					break;
+
+				case 2:
+				case 6: //SAYING
+					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+					break;
+
+				case 3:
+				case 7: //DISAPPEARING
+					if (currentStep == 9) {
+						state = 100;
+						Tutorial.getInstance(null).setNotification("disappear done!");
 						break;
+					}
+					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+					break;
 
-					case 2:
-					case 6: //SAYING
-						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-						break;
-
-					case 3:
-					case 7: //DISAPPEARING
-						if (currentStep == 9) {
-							state = 100;
-							Tutorial.getInstance(null).setNotification("disappear done!");
-							break;
-						}
-						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-						break;
-
-					case 8:
-					case 9: //WALK
-						if (walkToX == targetX && walkToY == targetY) {
-							if (flip) {
-								state = 5;
-							} else {
-								state = 1;
-							}
-							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-							Tutorial.getInstance(null).setNotification("walk done!");
-						} else {
-							if (walkFast || (currentStep % 2) == 0) {
-								if (directionX && targetX != walkToX && distanceX % factorX == 0) {
-									targetX++;
-								} else if (!directionX && targetX != walkToX && distanceX % factorX == 0) {
-									targetX--;
-								}
-
-								if (directionY && targetY != walkToY && distanceY % factorY == 0) {
-									targetY++;
-								} else if (!directionY && targetY != walkToY && distanceY % factorY == 0) {
-									targetY--;
-								}
-								distanceX--;
-								distanceY--;
-							}
-							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-						}
-
-						break;
-
-					case 60: //FLIP
-						if (flipFlag > 0) {
-							if (flip && reset) {
-								if (flipFlag == 2) {
-									todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 306, sizeX, sizeY);
-								} else {
-									todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 408, sizeX, sizeY);
-								}
-							} else if (reset) {
-								if (flipFlag == 2) {
-									todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 714, sizeX, sizeY);
-								} else {
-									todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 0, sizeX, sizeY);
-								}
-							}
-							Log.i("drab", "START of FLIP | currentStep: " + currentStep + " state: " + state
-									+ " flipFlag: " + flipFlag + " flip: " + flip);
-							if (currentStep == 9 && reset) {
-								flipFlag--;
-								reset = false;
-							}
-						} else {
-							if (flip) {
-								state = 5;
-							} else {
-								state = 1;
-							}
-							flipFlag = 2;
-							todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-							Tutorial.getInstance(null).setNotification("flip done!");
-						}
-						Log.i("drab", "END of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
-								+ flipFlag);
-						break;
-
-					case 61: //JUMP
+				case 8:
+				case 9: //WALK
+					if (walkToX == targetX && walkToY == targetY) {
 						if (flip) {
 							state = 5;
 						} else {
 							state = 1;
 						}
-						Tutorial.getInstance(null).setNotification("Jump done!");
-						break;
+						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+						Tutorial.getInstance(null).setNotification("walk done!");
+					} else {
+						if (walkFast || (currentStep % 2) == 0) {
+							if (directionX && targetX != walkToX && distanceX % factorX == 0) {
+								targetX++;
+							} else if (!directionX && targetX != walkToX && distanceX % factorX == 0) {
+								targetX--;
+							}
 
-					default:
-						return;
-				}
+							if (directionY && targetY != walkToY && distanceY % factorY == 0) {
+								targetY++;
+							} else if (!directionY && targetY != walkToY && distanceY % factorY == 0) {
+								targetY--;
+							}
+							distanceX--;
+							distanceY--;
+						}
+						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+					}
+
+					break;
+
+				case 60: //FLIP
+					if (flipFlag > 0) {
+						if (flip && reset) {
+							if (flipFlag == 2) {
+								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 306, sizeX, sizeY);
+							} else {
+								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 408, sizeX, sizeY);
+							}
+						} else if (reset) {
+							if (flipFlag == 2) {
+								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 714, sizeX, sizeY);
+							} else {
+								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 0, sizeX, sizeY);
+							}
+						}
+						//						Log.i("drab", "START of FLIP | currentStep: " + currentStep + " state: " + state
+						//								+ " flipFlag: " + flipFlag + " flip: " + flip);
+						if (currentStep == 9 && reset) {
+							flipFlag--;
+							reset = false;
+						}
+					} else {
+						if (flip) {
+							state = 5;
+						} else {
+							state = 1;
+						}
+						flipFlag = 2;
+						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+						Tutorial.getInstance(null).setNotification("flip done!");
+					}
+					//					Log.i("drab", "END of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
+					//							+ flipFlag);
+					break;
+
+				case 61: //JUMP
+					if (flip) {
+						state = 5;
+					} else {
+						state = 1;
+					}
+					Tutorial.getInstance(null).setNotification("Jump done!");
+					break;
+
+				default:
+					return;
 			}
-			canvas.drawBitmap(todraw, targetX, targetY, paint);
-		} else {
-
 		}
+		canvas.drawBitmap(todraw, targetX, targetY, paint);
 	}
 
 	public void setHoldTutor(boolean holdTutor) {
@@ -374,7 +382,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void update(long gameTime) {
-		if ((lastUpdateTime + updateTime) < gameTime && !holdTutor && !interruptOfSequence) {
+		if ((lastUpdateTime + updateTime) < gameTime && !holdTutor) {
 			lastUpdateTime = gameTime;
 			currentStep++;
 		}
@@ -384,35 +392,25 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		overlay.addSurfaceObject(this);
 	}
 
-	/*
-	 * Meant for Backward and Forward stepping of lesson
-	 */
-	public boolean getInterruptOfSequence() {
-		return interruptOfSequence;
-	}
-
 	@Override
 	public void setInterruptOfSequence(ACTIONS action) {
-		this.interruptOfSequence = true;
 
 		if (tutorBubble != null) {
 			Tutorial.getInstance(null).setNotification("Bubble finished!");
 			tutorBubble.interruptAndClear();
 			tutorBubble = null;
-			Log.i("interrupt", "Bubble deleted for " + this.tutorType);
+			Log.i("drab", Thread.currentThread().getName() + ": Bubble deleted for " + this.tutorType);
 		}
 
 		TutorState newState;
-		Log.i("interrupt", "Interrupt set for Tutor " + this.tutorType);
 
 		if (action == ACTIONS.REWIND) {
 			newState = tutorStateHistory.setBackAndReturnState();
 		} else {
 			newState = tutorStateHistory.setBackAndReturnState();
 		}
-		Log.i("interrupt",
-				"NEW-STATE retrieved for " + this.tutorType + ": X=" + newState.getX() + " Y=" + newState.getY()
-						+ " state=" + newState.getState());
+		Log.i("drab", Thread.currentThread().getName() + ": NEW-STATE retrieved for " + this.tutorType + ": X="
+				+ newState.getX() + " Y=" + newState.getY() + " state=" + newState.getState());
 
 		targetX = newState.getX();
 		targetX = newState.getX();
@@ -420,9 +418,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		state = newState.getState();
 		currentStep = 0;
 
-		Log.i("interrupt", "New state is SET and Steps reseted for " + this.tutorType);
-
-		this.interruptOfSequence = false;
-		Log.i("interrupt", "Interrupt over for " + this.tutorType);
+		Log.i("drab", Thread.currentThread().getName() + ": New state is SET and Steps reseted for " + this.tutorType);
 	}
 }

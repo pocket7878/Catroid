@@ -17,7 +17,7 @@ public class LessonCollection {
 	}
 
 	public void resetCurrentLesson() {
-		lessonArray.get(currentLesson).currentStep = 0;
+		(lessonArray.get(currentLesson)).setCurrentStep(0);
 	}
 
 	public void cleanAfterXML() {
@@ -48,7 +48,7 @@ public class LessonCollection {
 
 	boolean executeTask() {
 		//		return (lessonArray.get(currentLesson).executeTask(tutorialOverlay));
-		return (lessonArray.get(currentLesson).executeTask(tutors));
+		return (lessonArray.get(currentLesson)).executeTask(tutors);
 	}
 
 	boolean nextLesson() {
@@ -109,10 +109,18 @@ public class LessonCollection {
 		tutors = null;
 	}
 
+	public int currentStepOfLesson() {
+		return (lessonArray.get(currentLesson)).getCurrentStep();
+	}
+
+	public int getSizeOfCurrentLesson() {
+		return (lessonArray.get(currentLesson)).getSizeOfLesson();
+	}
+
 	@Override
 	protected void finalize() throws Throwable {
 		// TODO Auto-generated method stub
-		Log.i("faxxe", "LessonCollection: finalize called!");
+		Log.i("drab", "LessonCollection: finalize called!");
 		super.finalize();
 	}
 

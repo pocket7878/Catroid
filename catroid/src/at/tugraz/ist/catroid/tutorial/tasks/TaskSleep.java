@@ -33,6 +33,8 @@ public class TaskSleep implements Task {
 	@Override
 	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		try {
+			SurfaceObjectTutor tutor = tutors.get(tutorType);
+			tutor.sleep();
 			Thread.sleep(sleepTime);
 		} catch (Exception e) {
 

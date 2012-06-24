@@ -88,22 +88,22 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		if (!interrupt) {
-			Paint paint = new Paint();
-			paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-			canvas.drawPaint(paint);
-			postInvalidate();
-			if (cloud == null) {
-				cloud = Cloud.getInstance(getContext());
-			}
-			cloud.draw(canvas);
-			if (surfaceObjects != null) {
-				synchronized (surfaceObjects) {
-					for (SurfaceObject tmp : surfaceObjects) {
-						if (tmp != null) {
-							tmp.update(System.currentTimeMillis());
-							tmp.draw(canvas);
-						}
+		Paint paint = new Paint();
+		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+		canvas.drawPaint(paint);
+		postInvalidate();
+		if (cloud == null) {
+			cloud = Cloud.getInstance(getContext());
+		}
+		cloud.draw(canvas);
+		if (surfaceObjects != null && !interrupt) {
+			synchronized (surfaceObjects) {
+				for (SurfaceObject tmp : surfaceObjects) {
+					if (tmp != null) {
+
+						tmp.update(System.currentTimeMillis());
+						tmp.draw(canvas);
+
 					}
 				}
 			}
@@ -179,41 +179,50 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	}
 
 	public void dispatchPanel(MotionEvent ev, float displayHeight) throws InterruptedException {
-		if (panel.isReadyToDispatch()) {
-			if (isOnStopButton(ev)) {
+		if (isOnStopButton(ev)) {
+			if (panel.isReadyToDispatch()) {
 				Tutorial.getInstance(null).stopButtonTutorial();
 				Log.i("drab", "DISPATCH Stop");
-			} else if (isOnPauseButton(ev)) {
+			}
+		} else if (isOnPauseButton(ev)) {
+			if (panel.isReadyToDispatch()) {
 				//Tutorial.getInstance(null).pauseTutorial();
 				if (panel.isPaused()) {
 					panel.pressPlay();
+					Tutorial.getInstance(null).playButtonTutorial();
+					interrupt = false;
+
 				} else {
+					interrupt = true;
 					panel.pressPause();
+					Tutorial.getInstance(null).pauseButtonTutorial();
 				}
 				Log.i("drab", "DISPATCH Pause");
-			} else if (isOnButton(ev)) {
+			}
+		} else if (isOnButton(ev)) {
+			if (panel.isReadyToDispatch()) {
 				if (panel.isOpen()) {
 					panel.close();
 				} else {
 					panel.open();
 				}
 				Log.i("drab", "DISPATCH Button open/close");
-			} else if (isOnBackwardButton(ev)) {
+			}
+		} else if (isOnBackwardButton(ev)) {
+			if (panel.isReadyToDispatch()) {
 				interrupt = true;
-				Log.i("drab", "DISPATCH Button rewind");
-				panel.pressBackward();
-
 				Tutorial.getInstance(null).rewindStep();
+				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button rewind");
+				panel.pressBackward();
 				interrupt = false;
-			} else if (isOnForwardButton(ev)) {
+			}
+		} else if (isOnForwardButton(ev)) {
+			if (panel.isReadyToDispatch()) {
 				panel.pressForward();
 				//TODO: implement foward step
 				//Tutorial.getInstance(null).rewindStep();
 				Log.i("drab", "DISPATCH Button rewind");
 			}
-
-		} else {
-			Log.i("drab", "Not ready to DISPATCH!");
 		}
 	}
 

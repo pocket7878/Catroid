@@ -21,6 +21,7 @@ package at.tugraz.ist.catroid.tutorial;
 import java.util.ArrayList;
 
 import android.util.Log;
+import at.tugraz.ist.catroid.tutorial.Tutor.ACTIONS;
 
 /**
  * @author faxxe
@@ -31,11 +32,12 @@ public class TutorialThread extends Thread implements Runnable {
 	public boolean tutorialThreadRunning = true;
 	private volatile ArrayList<String> notifies = new ArrayList<String>();
 	private boolean interrupted = false;
+	private ACTIONS interruptRoutine;
 
 	public TutorialThread() {
 		Thread thisThread = new Thread(this);
 		thisThread.setName("NewTutorialThread");
-		Log.i("faxxe", "New TutorialThread started... ");
+		Log.i("drab", "New TutorialThread started... ");
 	}
 
 	@Override
@@ -69,7 +71,7 @@ public class TutorialThread extends Thread implements Runnable {
 	}
 
 	private void doNotify() {
-		Log.i("faxxe", "TutorialThread: notifying!");
+		Log.i("drab", Thread.currentThread().getName() + ": notified");
 		synchronized (this) {
 			this.notify();
 		}
@@ -79,8 +81,8 @@ public class TutorialThread extends Thread implements Runnable {
 	}
 
 	private void runTutorial() {
-		do {
-
+		while (tutorialThreadRunning
+				&& lessonCollection.currentStepOfLesson() < lessonCollection.getSizeOfCurrentLesson()) {
 			if (!interrupted) {
 				boolean notification = lessonCollection.executeTask();
 
@@ -95,8 +97,25 @@ public class TutorialThread extends Thread implements Runnable {
 						}
 					}
 				}
+				if (!interrupted) {
+					lessonCollection.forwardStep();
+				}
+			} else {
+				while (interrupted) {
+					synchronized (this) {
+						try {
+							this.wait();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				if (interruptRoutine == ACTIONS.REWIND) {
+					lessonCollection.rewindStep();
+				}
 			}
-		} while (lessonCollection.forwardStep() && tutorialThreadRunning);
+		}
 
 		if (!lessonCollection.forwardStep()) {
 			lessonCollection.resetCurrentLesson();
@@ -121,4 +140,11 @@ public class TutorialThread extends Thread implements Runnable {
 		notifies.add(notification);
 	}
 
+	public void setInterrupt(boolean flag) {
+		interrupted = flag;
+	}
+
+	public void setInterruptRoutine(ACTIONS action) {
+		interruptRoutine = action;
+	}
 }

@@ -36,7 +36,6 @@ public class TaskSay implements Task {
 		if (tutor != null) {
 			tutor.say(message);
 		}
-		//		NewBubble bubble = new NewBubble("");
 
 		return true;
 	}

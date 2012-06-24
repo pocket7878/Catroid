@@ -9,25 +9,24 @@ import at.tugraz.ist.catroid.tutorial.tasks.Task;
 public class Lesson {
 	public int lessonID;
 	public String lessonName;
-	int currentStep;
+	private int currentStep;
 	private ArrayList<Task> lessonContent = new ArrayList<Task>();
 
-	Lesson() {
+	public Lesson() {
+		this.currentStep = 0;
+		Log.i("drab", Thread.currentThread().getName() + ": Lesson currentStep: " + this.currentStep);
 	}
 
 	public void clean() {
 		lessonContent.clear();
-
 	}
 
-	//	public void insertTask(Task task){
-	//		lessonContent.add(currentStep, task);
-	//	}
 	public int getCurrentStep() {
-		return currentStep;
+		return this.currentStep;
 	}
 
 	public void setCurrentStep(int currentStep) {
+		Log.i("drab", Thread.currentThread().getName() + ": currentStep was set to " + currentStep);
 		this.currentStep = currentStep;
 	}
 
@@ -39,28 +38,31 @@ public class Lesson {
 
 	boolean forwardStep() {
 		synchronized (this) {
-			Log.i("lesson", "Forwarding 1 Step");
-			if ((currentStep) + 1 >= lessonContent.size()) {
+			if ((this.currentStep) + 1 >= lessonContent.size()) {
 				// TODO: da ghoert naechste Lesson
 				// TODO: da stimmt was nicht, das +1 sollte nicht noetig sein
-				return (false);
+				return false;
 			} else {
+				Log.i("drab", Thread.currentThread().getName() + ":Forwarding from " + this.currentStep + " to "
+						+ (this.currentStep + 1));
 				currentStep++;
-				return (true);
+				Log.i("drab", Thread.currentThread().getName() + ":Lesson was forwarded to " + this.currentStep);
+				return true;
 			}
 		}
 	}
 
 	boolean rewindStep() {
 		synchronized (this) {
-			Log.i("lesson", "Backwarding 1 Step");
 			if (currentStep <= 0) {
 				// TODO: da ghoert vorherige Lesson
-				Log.i("drab", "Lesson not rewinded");
+				Log.i("drab", Thread.currentThread().getName() + ":Lesson not rewinded");
 				return false;
 			} else {
+				Log.i("drab", Thread.currentThread().getName() + ":Backwarding from " + currentStep + " to "
+						+ (currentStep - 1));
 				currentStep--;
-				Log.i("drab", "Lesson rewinded to: " + currentStep);
+				Log.i("drab", Thread.currentThread().getName() + ":Lesson rewinded to: " + currentStep);
 				return true;
 			}
 		}
@@ -68,14 +70,12 @@ public class Lesson {
 
 	//	String executeTask(NewTutorialOverlay tutorialOverlay) {
 	boolean executeTask(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
-		Log.i("faxxe", "executing: " + lessonContent.get(currentStep).toString());
+		Log.i("drab", Thread.currentThread().getName() + ": @ Step " + currentStep + " executing: "
+				+ lessonContent.get(currentStep).toString());
 		return (lessonContent.get(currentStep).execute(tutors));
-		//		if (notification != null) {
-		//			try {
-		//				waitForNotification(notification);
-		//			} catch (Exception e) {
-		//			}
-		//		}
 	}
 
+	public int getSizeOfLesson() {
+		return this.lessonContent.size();
+	}
 }
