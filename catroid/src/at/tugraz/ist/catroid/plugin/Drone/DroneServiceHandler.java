@@ -22,10 +22,12 @@
  */
 package at.tugraz.ist.catroid.plugin.Drone;
 
+import at.tugraz.ist.droned.client.CatroidDrone;
+
 public class DroneServiceHandler {
 
 	private static DroneServiceHandler droneServiceHandler;
-	private IDrone droneInstance;
+	private CatroidDrone catroidDroneInstance; // TODO Change to IDrone
 	private DroneService droneServiceInstance;
 
 	public static DroneServiceHandler getInstance() {
@@ -41,10 +43,11 @@ public class DroneServiceHandler {
 	public void setDroneServiceInstance(DroneService droneService) {
 		droneServiceInstance = null;
 		droneServiceInstance = droneService;
+		catroidDroneInstance = droneServiceInstance.getCatroidDrone();
 	}
 
-	public IDrone getDrone() {
-		return droneInstance;
+	public CatroidDrone getDrone() {
+		return catroidDroneInstance;
 	}
 
 }

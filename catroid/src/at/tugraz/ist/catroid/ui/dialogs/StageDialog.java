@@ -24,10 +24,12 @@ package at.tugraz.ist.catroid.ui.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.plugin.Drone.DroneConsts;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.stage.StageListener;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -66,6 +68,7 @@ public class StageDialog extends Dialog {
 		resumeCurrentProjectButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				dismiss();
+				// TODO What to do with Drone?
 				stageActivity.pauseOrContinue();
 			}
 		});
@@ -73,6 +76,8 @@ public class StageDialog extends Dialog {
 		Button restartCurrentProjectButton = (Button) findViewById(R.id.restart_current_project_button);
 		restartCurrentProjectButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				Log.d(DroneConsts.DroneLogTag, "Project Restart");
+				// TODO What to do with Drone?
 				restartProject();
 			}
 		});
@@ -109,6 +114,7 @@ public class StageDialog extends Dialog {
 
 	private void exitStage() {
 		this.dismiss();
+		// TODO Handle drone behavior in prestage activity 
 		stageActivity.manageLoadAndFinish();
 	}
 

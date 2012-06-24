@@ -28,7 +28,6 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -53,19 +52,17 @@ import at.tugraz.ist.catroid.bluetooth.DeviceListActivity;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.plugin.PluginManager;
+import at.tugraz.ist.catroid.plugin.Drone.DroneConsts;
 import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 import at.tugraz.ist.catroid.plugin.Drone.DroneService;
-import at.tugraz.ist.catroid.plugin.Drone.DroneService.LocalBinder;
+import at.tugraz.ist.catroid.plugin.Drone.DroneService.LocalDroneServiceBinder;
 import at.tugraz.ist.catroid.plugin.Drone.DroneServiceHandler;
-import at.tugraz.ist.catroid.plugin.Drone.IDrone;
-import at.tugraz.ist.catroid.plugin.Drone.other.DroneWifiConnectionActivity;
 import at.tugraz.ist.catroid.ui.SettingsActivity;
 
 public class PreStageActivity extends Activity {
 
 	//Drone Service Members
 	DroneService droneService;
-	IDrone droneInstance;
 	boolean isDroneServiceBound = false;
 
 	private static final int REQUEST_ENABLE_BT = 2000;
@@ -134,27 +131,44 @@ public class PreStageActivity extends Activity {
 				// drone bricks are enabled
 
 				//Init the drone service
+				if (!isDroneServiceStarted()) {
+					startDroneService();
+
+					while (isDroneServiceBound) {
+						Log.d(DroneConsts.DroneLogTag, "Drone Service not Bound, sleeping");
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					Log.d(DroneConsts.DroneLogTag, "Drone Service bound, initializing");
+					droneService.getCatroidDrone().init();
+					startStage();
+				}
+
 				// initDroneService();
 				// check if we are already connected to an Drone
-				if (!DroneHandler.getInstance().wasAlreadyConnected()) {
-					Intent intent = new Intent(this, DroneWifiConnectionActivity.class);
-					startActivityForResult(intent, DRONEWIFICONNECTIONACTIVITY);
-				} else {
-					if (!DroneHandler.getInstance().getDrone().connect()) {
-						Intent intent = new Intent(this, DroneWifiConnectionActivity.class);
-						startActivityForResult(intent, DRONEWIFICONNECTIONACTIVITY);
-					} else {
-						startStage();
-					}
-				}
+				//				if (!DroneHandler.getInstance().wasAlreadyConnected()) {
+				//					Intent intent = new Intent(this, DroneWifiConnectionActivity.class);
+				//					startActivityForResult(intent, DRONEWIFICONNECTIONACTIVITY);
+				//				} else {
+				//					if (!DroneHandler.getInstance().getDrone().connect()) {
+				//						Intent intent = new Intent(this, DroneWifiConnectionActivity.class);
+				//						startActivityForResult(intent, DRONEWIFICONNECTIONACTIVITY);
+				//					} else {
+				//						startStage();
+				//					}
+				//				}
 			} else {
 				// Bricks are in the project
 				// drone bricks are disabled
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				builder.setTitle("Go to settings?");
 				builder.setMessage("Do you want to go to the settings and enable the drone bricks?")
-						.setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener)
-						.show();
+						.setPositiveButton("Yes", dialogGoToSettingsClickListener)
+						.setNegativeButton("No", dialogGoToSettingsClickListener).show();
 				//Toast.makeText(PreStageActivity.this, R.string.drone_plugin_not_enabled, Toast.LENGTH_LONG).show();
 				//finish();
 			}
@@ -165,11 +179,24 @@ public class PreStageActivity extends Activity {
 
 	}
 
-	private void initDroneService() {
+	private boolean isDroneServiceStarted() {
+		if (startService(getDroneServiceIntent()) != null) {
+			Log.d(DroneConsts.DroneLogTag, "Drone Service is Running");
+			return true;
+		} else {
+			Log.d(DroneConsts.DroneLogTag, "Drone Service is not running");
+			return false;
+		}
+	}
 
-		Intent intent = new Intent(this, DroneService.class);
-		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+	private Intent getDroneServiceIntent() {
+		return new Intent(this, DroneService.class);
+	}
+
+	private void startDroneService() {
+		Intent intent = getDroneServiceIntent();
 		startService(intent);
+		bindService(intent, droneServiceConnection, Context.BIND_AUTO_CREATE);
 
 		if (isDroneServiceBound) {
 			// Call a method from the LocalService.
@@ -177,28 +204,23 @@ public class PreStageActivity extends Activity {
 			// occur in a separate thread to avoid slowing down the activity performance.
 
 		}
-
 	}
 
 	/** Defines callbacks for service binding, passed to bindService() */
-	private ServiceConnection mConnection = new ServiceConnection() {
+	private ServiceConnection droneServiceConnection = new ServiceConnection() {
 
 		public void onServiceConnected(ComponentName name, IBinder service) {
-			Log.d("Catroid", "onServiceConnected");
-			LocalBinder binder = (LocalBinder) service;
-			DroneServiceHandler.getInstance().setDroneServiceInstance(binder.getService());
-			//droneService = binder.getService();
+			Log.d(DroneConsts.DroneLogTag, "onServiceConnected:: Drone is Connected");
+			LocalDroneServiceBinder droneServiceBinder = (LocalDroneServiceBinder) service;
+			DroneServiceHandler.getInstance().setDroneServiceInstance(droneServiceBinder.getDroneService());
 			isDroneServiceBound = true;
 
-			//call Service
-			int num = droneService.getRandomNumber();
-			Toast.makeText(getApplicationContext(), "number: " + num, Toast.LENGTH_SHORT).show();
-
+			//Toast.makeText(getApplicationContext(), "number: " + num, Toast.LENGTH_SHORT).show();
 		}
 
 		public void onServiceDisconnected(ComponentName name) {
 			// TODO Auto-generated method stub
-			Log.d("Catroid", "onServiceDisconnected");
+			Log.d("Catroid", "onServiceDisconnected:: Drone Service disconnected");
 			isDroneServiceBound = false;
 		}
 	};
@@ -216,7 +238,7 @@ public class PreStageActivity extends Activity {
 		super.onDestroy();
 		// Unbind from the service
 		if (isDroneServiceBound) {
-			unbindService(mConnection);
+			unbindService(droneServiceConnection);
 			isDroneServiceBound = false;
 		}
 
@@ -232,6 +254,7 @@ public class PreStageActivity extends Activity {
 			legoNXT.pauseCommunicator();
 		}
 		if (DronePartOfProject) {
+			// TODO change to DroneService
 			DroneHandler.getInstance().getDrone().emergencyLand();
 			DroneHandler.getInstance().getDrone().disconnect();
 		}
@@ -439,7 +462,7 @@ public class PreStageActivity extends Activity {
 		}
 	};
 
-	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+	DialogInterface.OnClickListener dialogGoToSettingsClickListener = new DialogInterface.OnClickListener() {
 		public void onClick(DialogInterface dialog, int which) {
 			switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
@@ -456,24 +479,23 @@ public class PreStageActivity extends Activity {
 	};
 
 	private void startSettingsActivity() {
-		// TODO replace request code with proper constant
 		startActivityForResult(new Intent(this, SettingsActivity.class), 1111);
 	}
 
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		Dialog dialog = null;
-
-		// TODO Add enable Brick Dialog
-		switch (id) {
-			case DRONE_BRICKS_ENABLED_DIALOG:
-				//dialog = new EnableDroneBricksDialog(this);
-				break;
-			default:
-				dialog = null;
-				break;
-		}
-
-		return dialog;
-	}
+	//	@Override
+	//	protected Dialog onCreateDialog(int id) {
+	//		Dialog dialog = null;
+	//
+	//		// TODO Add enable Brick Dialog
+	//		switch (id) {
+	//			case DRONE_BRICKS_ENABLED_DIALOG:
+	//				//dialog = new EnableDroneBricksDialog(this);
+	//				break;
+	//			default:
+	//				dialog = null;
+	//				break;
+	//		}
+	//
+	//		return dialog;
+	//	}
 }

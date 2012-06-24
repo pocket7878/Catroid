@@ -25,15 +25,16 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.widget.Toast;
+import at.tugraz.ist.droned.client.CatroidDrone;
 
 public class DroneService extends Service {
 
 	// Binder given to clients
-	private final IBinder mBinder = new LocalBinder();
+	private final IBinder mBinder = new LocalDroneServiceBinder();
 	// Random number generator
 	private final Random mGenerator = new Random();
 
-	private IDrone drone;
+	private CatroidDrone catroidDrone;
 
 	/*
 	 * (non-Javadoc)
@@ -44,27 +45,33 @@ public class DroneService extends Service {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
-		Toast.makeText(getApplicationContext(), "OnServiceCreate", 1000);
-		try {
-			drone = new DroneLibraryWrapper(getApplicationContext());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Toast.makeText(getApplicationContext(), "OnServiceCreate - DroneService created", 1000);
+		//		try {
+		//			drone = new DroneLibraryWrapper(getApplicationContext());
+		//		} catch (Exception e) {
+		//			// TODO Auto-generated catch block
+		//			e.printStackTrace();
+		//		}
+		catroidDrone = new CatroidDrone();
+
+	}
+
+	public CatroidDrone getCatroidDrone() {
+		return this.catroidDrone;
 	}
 
 	/**
 	 * Class used for the client Binder. Because we know this service always
 	 * runs in the same process as its clients, we don't need to deal with IPC.
 	 */
-	public class LocalBinder extends Binder {
-		public DroneService getService() {
+	public class LocalDroneServiceBinder extends Binder {
+		public DroneService getDroneService() {
 			// Return this instance of LocalService so clients can call public methods
 			return DroneService.this;
 		}
 
-		public IDrone getDrone() {
-			return drone;
+		public CatroidDrone getCatroidDrone() {
+			return catroidDrone;
 		}
 	}
 

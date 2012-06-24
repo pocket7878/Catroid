@@ -24,10 +24,12 @@ package at.tugraz.ist.catroid.stage;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Values;
+import at.tugraz.ist.catroid.plugin.Drone.DroneConsts;
 import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -53,6 +55,7 @@ public class StageActivity extends AndroidApplication {
 
 	@Override
 	public void onBackPressed() {
+		// What to do with drone?
 		pauseOrContinue();
 		stageDialog.show();
 	}
@@ -92,6 +95,8 @@ public class StageActivity extends AndroidApplication {
 
 	public void pauseOrContinue() {
 		if (stagePlaying) {
+			// TODO What to do with Drone?
+			Log.d(DroneConsts.DroneLogTag, "pauseOrContinue");
 			stageListener.menuPause();
 			stagePlaying = false;
 		} else {

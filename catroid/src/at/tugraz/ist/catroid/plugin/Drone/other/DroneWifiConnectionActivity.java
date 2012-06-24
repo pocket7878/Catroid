@@ -854,7 +854,6 @@ public class DroneWifiConnectionActivity extends Activity {
 			default:
 				// nothing
 				break;
-
 		}
 
 	}
