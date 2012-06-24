@@ -23,20 +23,13 @@
 package at.tugraz.ist.catroid.ui;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.plugin.PluginManager;
 import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 import at.tugraz.ist.catroid.plugin.Drone.other.DroneDownloadInstallDialog;
 
@@ -50,58 +43,41 @@ public class SettingsActivity extends PreferenceActivity {
 		addPreferencesFromResource(R.xml.preferences);
 
 		PreferenceManager.getDefaultSharedPreferences(this);
-		Preference dronePlugin = findPreference("setting_drone_plugin");
 		Preference droneBricks = findPreference("setting_drone_bricks");
 		Preference droneDslTimeout = findPreference("setting_drone_dsl_timeout");
 
-		if (PluginManager.getInstance().isDroneAddonInstalled()) {
-			dronePlugin.setSummary(R.string.drone_plugin_installed);
-			dronePlugin.setSelectable(false);
-			droneBricks.setEnabled(true);
-			droneDslTimeout.setEnabled(true);
+		droneBricks.setEnabled(true);
+		droneDslTimeout.setEnabled(true);
 
-			droneDslTimeout.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-				public boolean onPreferenceChange(Preference preference, Object newValue) {
-					try {
-						int seconds = Integer.parseInt((String) newValue);
-						DroneHandler.getInstance().getDrone().setDslTimeout(seconds);
-						return true;
-					} catch (NumberFormatException e) {
-						Toast.makeText(getApplicationContext(), R.string.drone_settings_dsl_only_numbers,
-								Toast.LENGTH_LONG).show();
-						DroneHandler.getInstance().getDrone().setDslTimeout(5);
-					}
-					return false;
+		droneDslTimeout.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				try {
+					int seconds = Integer.parseInt((String) newValue);
+					DroneHandler.getInstance().getDrone().setDslTimeout(seconds);
+					return true;
+				} catch (NumberFormatException e) {
+					Toast.makeText(getApplicationContext(), R.string.drone_settings_dsl_only_numbers, Toast.LENGTH_LONG)
+							.show();
+					DroneHandler.getInstance().getDrone().setDslTimeout(5);
 				}
-			});
+				return false;
+			}
+		});
 
-		} else {
-			dronePlugin.setSummary(R.string.drone_plugin_not_installed);
-			dronePlugin.setSelectable(true);
-			droneBricks.setEnabled(false);
-			droneDslTimeout.setEnabled(false);
-
-			dronePlugin.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-				public boolean onPreferenceClick(Preference preference) {
-					boolean connected = false;
-					ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-					NetworkInfo ni = cm.getActiveNetworkInfo();
-					if (ni != null && ni.isAvailable() && ni.isConnected()) {
-						connected = true;
-					}
-
-					if (!connected) {
-						Toast.makeText(getApplicationContext(), R.string.drone_not_connected_to_internet,
-								Toast.LENGTH_LONG).show();
-						startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
-					} else {
-						showDialog(DIALOG_DOWNLOAD_INSTALL_DRONE);
-					}
-
-					return false;
-				}
-			});
-		}
+		//		droneBricks.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+		//			public boolean onPreferenceChange(Preference preference, Object newValue) {
+		//				boolean newvalue = (Boolean) newValue;
+		//				if (newvalue) {
+		//					Log.d(DroneConsts.DroneLogTag, "Settingsactivity: Drone Plugin Enabled");
+		//
+		//					return true;
+		//				} else {
+		//					Log.d(DroneConsts.DroneLogTag, "Settingsactivity: Drone Plugin Disabled");
+		//					return false;
+		//				}
+		//
+		//			}
+		//		});
 
 	}
 

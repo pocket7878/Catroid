@@ -55,15 +55,16 @@ import at.tugraz.ist.catroid.plugin.PluginManager;
 import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 import at.tugraz.ist.catroid.plugin.Drone.DroneService;
 import at.tugraz.ist.catroid.plugin.Drone.DroneService.LocalBinder;
+import at.tugraz.ist.catroid.plugin.Drone.DroneServiceHandler;
 import at.tugraz.ist.catroid.plugin.Drone.IDrone;
 import at.tugraz.ist.catroid.plugin.Drone.other.DroneWifiConnectionActivity;
 
 public class PreStageActivity extends Activity {
 
 	//Drone Service Members
-	DroneService mService;
+	DroneService droneService;
 	IDrone droneInstance;
-	boolean mBound = false;
+	boolean isDroneServiceBound = false;
 
 	private static final int REQUEST_ENABLE_BT = 2000;
 	private static final int REQUEST_CONNECT_DEVICE = 1000;
@@ -124,9 +125,9 @@ public class PreStageActivity extends Activity {
 
 			DronePartOfProject = true;
 			Log.d("Catroid", "Test Null Point");
-			if (PluginManager.getInstance().isDroneAddonInstalled()) {
+			if (PluginManager.getInstance().areDroneBricksEnabled()) {
 				//Init the drone service
-				initDroneService();
+				// initDroneService();
 				// check if we are already connected to an Drone
 				if (!DroneHandler.getInstance().wasAlreadyConnected()) {
 					Intent intent = new Intent(this, DroneWifiConnectionActivity.class);
@@ -140,7 +141,7 @@ public class PreStageActivity extends Activity {
 					}
 				}
 			} else {
-				Toast.makeText(PreStageActivity.this, R.string.drone_not_installed_addon, Toast.LENGTH_LONG).show();
+				Toast.makeText(PreStageActivity.this, R.string.drone_plugin_not_enabled, Toast.LENGTH_LONG).show();
 				finish();
 			}
 		}
@@ -156,7 +157,7 @@ public class PreStageActivity extends Activity {
 		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 		startService(intent);
 
-		if (mBound) {
+		if (isDroneServiceBound) {
 			// Call a method from the LocalService.
 			// However, if this call were something that might hang, then this request should
 			// occur in a separate thread to avoid slowing down the activity performance.
@@ -171,11 +172,12 @@ public class PreStageActivity extends Activity {
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			Log.d("Catroid", "onServiceConnected");
 			LocalBinder binder = (LocalBinder) service;
-			mService = binder.getService();
-			mBound = true;
+			DroneServiceHandler.getInstance().setDroneServiceInstance(binder.getService());
+			//droneService = binder.getService();
+			isDroneServiceBound = true;
 
 			//call Service
-			int num = mService.getRandomNumber();
+			int num = droneService.getRandomNumber();
 			Toast.makeText(getApplicationContext(), "number: " + num, Toast.LENGTH_SHORT).show();
 
 		}
@@ -183,7 +185,7 @@ public class PreStageActivity extends Activity {
 		public void onServiceDisconnected(ComponentName name) {
 			// TODO Auto-generated method stub
 			Log.d("Catroid", "onServiceDisconnected");
-			mBound = false;
+			isDroneServiceBound = false;
 		}
 	};
 
@@ -199,9 +201,9 @@ public class PreStageActivity extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		// Unbind from the service
-		if (mBound) {
+		if (isDroneServiceBound) {
 			unbindService(mConnection);
-			mBound = false;
+			isDroneServiceBound = false;
 		}
 
 	}

@@ -27,14 +27,12 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import at.tugraz.ist.catroid.plugin.Drone.DroneConsts;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 
 public class PluginManager {
 
 	private static PluginManager pluginManager;
 	private Context context;
-	private boolean droneAddonInstalled;
-	private boolean droneTermsOfUseAccepted;
+	private SharedPreferences prefs;
 
 	public static PluginManager getInstance() {
 		return pluginManager;
@@ -48,34 +46,23 @@ public class PluginManager {
 	private PluginManager(Context context) {
 		this.context = context;
 
-		if (checkDroneAddonInstalled()) {
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-			droneTermsOfUseAccepted = prefs.getBoolean(DroneConsts.PREF_DRONE_TOF, false);
-		}
-	}
-
-	private boolean checkDroneAddonInstalled() {
-		droneAddonInstalled = DroneHandler.getInstance().createDroneFrameworkWrapper(this.context);
-		return droneAddonInstalled;
-	}
-
-	public boolean reCheckDroneAddonInstalled() {
-		return checkDroneAddonInstalled();
-	}
-
-	public boolean isDroneAddonInstalled() {
-		return droneAddonInstalled;
+		prefs = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
 	public boolean areDroneTermsOfUseAccepted() {
-		return droneTermsOfUseAccepted;
+		return prefs.getBoolean(DroneConsts.PREF_DRONE_TOF, false);
 	}
 
 	public void setDroneTermsOfUseAccepted() {
-		droneTermsOfUseAccepted = true;
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		Editor edit = prefs.edit();
-		edit.putBoolean(DroneConsts.PREF_DRONE_TOF, droneTermsOfUseAccepted);
+		edit.putBoolean(DroneConsts.PREF_DRONE_TOF, true);
 		edit.commit();
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean areDroneBricksEnabled() {
+		return prefs.getBoolean("setting_drone_bricks", false);
 	}
 }

@@ -1,4 +1,6 @@
-/**
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
  *  Catroid: An on-device graphical programming language for Android devices
  *  Copyright (C) 2010-2011 The Catroid Team
  *  (<http://code.google.com/p/catroid/wiki/Credits>)
@@ -19,32 +21,21 @@
  *   
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-package at.tugraz.ist.catroid.plugin.Drone;
+ -->
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="horizontal"
+  android:layout_height="wrap_content"
+  android:layout_width="fill_parent"
+  android:background="@drawable/brick_drone"
+>
+
+	<TextView
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/drone_brick_flip_drone"
+	    android:textColor="@color/white"
+	    android:textSize="18dip"
+	    android:textStyle="bold" />
 
-public class DroneServiceHandler {
-
-	private static DroneServiceHandler droneServiceHandler;
-	private IDrone droneInstance;
-	private DroneService droneServiceInstance;
-
-	public static DroneServiceHandler getInstance() {
-		if (droneServiceHandler == null) {
-			droneServiceHandler = new DroneServiceHandler();
-		}
-		return droneServiceHandler;
-	}
-
-	private DroneServiceHandler() {
-	}
-
-	public void setDroneServiceInstance(DroneService droneService) {
-		droneServiceInstance = null;
-		droneServiceInstance = droneService;
-	}
-
-	public IDrone getDrone() {
-		return droneInstance;
-	}
-
-}
+</LinearLayout>

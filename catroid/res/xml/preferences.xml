@@ -33,10 +33,6 @@
     </PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/pref_category_drone">
-		<Preference
-		    android:key="setting_drone_plugin"
-		    android:title="@string/pref_plugin_drone"
-		/>
 		<CheckBoxPreference
 			android:key="setting_drone_bricks"
 			android:title="@string/pref_enable_drone_bricks"

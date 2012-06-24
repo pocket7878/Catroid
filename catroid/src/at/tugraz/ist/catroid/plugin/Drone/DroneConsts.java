@@ -60,8 +60,11 @@ public final class DroneConsts {
 	// log Tag
 	public static final String DroneLogTag = "Drone";
 
+	// Shared Prefs enabled
 	// Terms of Use
 	public static final String PREF_DRONE_TOF = "DroneTermsOfUseAccepted";
+	// Drone Bricks enabled
+	public static final String PREF_DRONE_BRICKS = "DroneBricksEnabled";
 
 	private DroneConsts() {
 		/**

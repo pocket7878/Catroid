@@ -397,6 +397,7 @@
     <string name="drone_move_rotation_left">rotation\nleft</string>
     <string name="drone_move_rotation_right">rotation\nright</string>
     <string name="drone_not_installed_addon">The plugin for running Drone projects is not installed. Go to Seetings and install it.</string>
+    <string name="drone_plugin_not_enabled">The plugin for running Drone projects is not enabled. Go to Seetings and enable it.</string>    
     <string name="drone_terms_of_use_title">Terms of Use</string>
     <string name="drone_terms_of_use">Drone is a registered trademark of Parrot SA.. Catroid and Drone Catroid Plugin is open source software licensed under the GNU AGPL v3 and not associated, affiliated, endorsed, or approved by Parrot SA.. The software is strictly experimental and untested, it is provided "as is", without fitness for a particular purpose. In no event shall the authors or copyright holders of the software, Catroid or software created with Catroid be liable for any claim, damages, injuries or other liability, arising from, out of or in connection with the software or the use or other dealings in the software.</string>
     <string name="drone_tof_not_show_again">Never show again.</string>
@@ -421,6 +422,7 @@
     <string name="drone_firmware_forceupdate">Force Firmwareupate to 1.7.4!</string>
 
 	<!-- DON'T Toch this!!!! END (else merging is horrible ;) ) -->
+    <string name="drone_brick_flip_drone">Flip Drone</string>
 
 	
 </resources>
