@@ -168,16 +168,17 @@ public class HidBluetooth implements IHid, BTConnectable {
 	public void destroyCommunicator() {
 
 		if (communicator != null) {
-			//sendBTCMotorMessage(LegoNXTBtCommunicator.NO_DELAY, LegoNXTBtCommunicator.DISCONNECT, 0, 0);
 			try {
 				communicator.destroyConnection();
-			} catch (IOException e) { // TODO Auto-generated method stub
-
-				// TODO Auto-generated catch block
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			communicator = null;
 		}
+	}
+
+	public RFCommCommunicator getCommunicator() {
+		return communicator;
 	}
 
 	public boolean isPairing() {

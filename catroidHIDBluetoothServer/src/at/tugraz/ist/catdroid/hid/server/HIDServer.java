@@ -10,12 +10,14 @@ import javax.microedition.io.StreamConnectionNotifier;
 
 public class HIDServer {
 	
-private static boolean TEST_MODE = false;
+private static boolean testMode = false;
 private static String SERVER_NAME = "WirelesHumanInterfaceServer";
     
     public static void main(String[] args) {
-    	if (args.length >= 2 && args[1].equalsIgnoreCase("--mode=test"))
-    		TEST_MODE = true;
+    	if (args.length >= 1 && args[0].equalsIgnoreCase("--mode=test")) {
+    		testMode = true;
+    		System.out.println("Run in Test Mode");
+    	}
     	
         initServerConnection();
     }
@@ -40,19 +42,24 @@ private static String SERVER_NAME = "WirelesHumanInterfaceServer";
       e.printStackTrace();
       return;
     }
-    
-    while (true) {
+    Thread receiveThread;
+    //while (true) {
       try {
         System.out.println("waiting for connection...");
         connection = notifier.acceptAndOpen();
 
-        Thread receiveThread = new Thread(new ReceiveBytesThread(connection, TEST_MODE));
+        receiveThread = new Thread(new ReceiveBytesThread(connection, testMode));
         receiveThread.start();
 
       } catch (Exception e) {
         e.printStackTrace();
         return;
       }
-    }
+    //}
+    try {
+		receiveThread.join();
+	} catch (InterruptedException e) {
+		e.printStackTrace();
+	}
   }
 }
