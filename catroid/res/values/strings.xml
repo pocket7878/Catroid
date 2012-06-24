@@ -319,8 +319,8 @@
     <string name="number_to_big">Value is too big!</string>
     <string name="hid_press_keyboard_button">Press keyboard key</string>
     <string name="category_hid">HID</string>
-    <string name="brick_key_combo">Key Combo</string>
-    <string name="brick_key_combo_end">Key Combo End</string>
+    <string name="brick_key_combo">Key Combination</string>
+    <string name="brick_key_combo_end">Key Combination End</string>
     <string name="no_paired_rfccomm_device">No paired device found</string>
 
 </resources>
