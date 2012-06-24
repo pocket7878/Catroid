@@ -28,6 +28,7 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -58,6 +59,7 @@ import at.tugraz.ist.catroid.plugin.Drone.DroneService.LocalBinder;
 import at.tugraz.ist.catroid.plugin.Drone.DroneServiceHandler;
 import at.tugraz.ist.catroid.plugin.Drone.IDrone;
 import at.tugraz.ist.catroid.plugin.Drone.other.DroneWifiConnectionActivity;
+import at.tugraz.ist.catroid.ui.SettingsActivity;
 
 public class PreStageActivity extends Activity {
 
@@ -71,6 +73,8 @@ public class PreStageActivity extends Activity {
 	public static final int REQUEST_RESOURCES_INIT = 0101;
 	private static final int DRONEWIFICONNECTIONACTIVITY = 9000;
 	public static final int MY_DATA_CHECK_CODE = 0;
+
+	public static final int DRONE_BRICKS_ENABLED_DIALOG = 101010;
 
 	public static StageListener stageListener;
 	private static LegoNXT legoNXT;
@@ -122,10 +126,13 @@ public class PreStageActivity extends Activity {
 			}
 		}
 		if ((required_resources & Brick.WIFI_DRONE) > 0) {
-
+			// Drone bricks are in the project
 			DronePartOfProject = true;
-			Log.d("Catroid", "Test Null Point");
+
 			if (PluginManager.getInstance().areDroneBricksEnabled()) {
+				// Bricks are in the project
+				// drone bricks are enabled
+
 				//Init the drone service
 				// initDroneService();
 				// check if we are already connected to an Drone
@@ -141,8 +148,15 @@ public class PreStageActivity extends Activity {
 					}
 				}
 			} else {
-				Toast.makeText(PreStageActivity.this, R.string.drone_plugin_not_enabled, Toast.LENGTH_LONG).show();
-				finish();
+				// Bricks are in the project
+				// drone bricks are disabled
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle("Go to settings?");
+				builder.setMessage("Do you want to go to the settings and enable the drone bricks?")
+						.setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener)
+						.show();
+				//Toast.makeText(PreStageActivity.this, R.string.drone_plugin_not_enabled, Toast.LENGTH_LONG).show();
+				//finish();
 			}
 		}
 		if (noResources == true) {
@@ -425,4 +439,41 @@ public class PreStageActivity extends Activity {
 		}
 	};
 
+	DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int which) {
+			switch (which) {
+				case DialogInterface.BUTTON_POSITIVE:
+					//Yes button clicked
+					startSettingsActivity();
+					break;
+
+				case DialogInterface.BUTTON_NEGATIVE:
+					//No button clicked
+					finish();
+					break;
+			}
+		}
+	};
+
+	private void startSettingsActivity() {
+		// TODO replace request code with proper constant
+		startActivityForResult(new Intent(this, SettingsActivity.class), 1111);
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		Dialog dialog = null;
+
+		// TODO Add enable Brick Dialog
+		switch (id) {
+			case DRONE_BRICKS_ENABLED_DIALOG:
+				//dialog = new EnableDroneBricksDialog(this);
+				break;
+			default:
+				dialog = null;
+				break;
+		}
+
+		return dialog;
+	}
 }

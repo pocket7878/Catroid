@@ -58,27 +58,12 @@ public class SettingsActivity extends PreferenceActivity {
 				} catch (NumberFormatException e) {
 					Toast.makeText(getApplicationContext(), R.string.drone_settings_dsl_only_numbers, Toast.LENGTH_LONG)
 							.show();
+					// TODO 
 					DroneHandler.getInstance().getDrone().setDslTimeout(5);
 				}
 				return false;
 			}
 		});
-
-		//		droneBricks.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-		//			public boolean onPreferenceChange(Preference preference, Object newValue) {
-		//				boolean newvalue = (Boolean) newValue;
-		//				if (newvalue) {
-		//					Log.d(DroneConsts.DroneLogTag, "Settingsactivity: Drone Plugin Enabled");
-		//
-		//					return true;
-		//				} else {
-		//					Log.d(DroneConsts.DroneLogTag, "Settingsactivity: Drone Plugin Disabled");
-		//					return false;
-		//				}
-		//
-		//			}
-		//		});
-
 	}
 
 	@Override
