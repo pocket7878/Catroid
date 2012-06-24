@@ -28,7 +28,6 @@ import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -45,7 +44,6 @@ public class DroneFlipBrick implements Brick {
 
 	public void execute() {
 		// TODO Performe flip
-		DroneHandler.getInstance().getDrone().takeoff();
 	}
 
 	public Sprite getSprite() {
@@ -54,13 +52,13 @@ public class DroneFlipBrick implements Brick {
 
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
-			view = View.inflate(context, R.layout.toolbox_brick_drone_stop_video_recorder, null);
+			view = View.inflate(context, R.layout.toolbox_brick_drone_flip_drone, null);
 		}
 		return view;
 	}
 
 	public View getPrototypeView(Context context) {
-		return View.inflate(context, R.layout.toolbox_brick_drone_stop_video_recorder, null);
+		return View.inflate(context, R.layout.toolbox_brick_drone_flip_drone, null);
 	}
 
 	@Override
