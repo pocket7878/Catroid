@@ -419,4 +419,9 @@
 	
 	<string name="number_to_small">Слишком маленькое значение!</string>
 	<string name="number_to_big">Слишком большое значение!</string>
+
+    <string name="press_keyboard_button">Пресс клавиатуры кнопки</string>
+    <string name="category_hid">HID</string>
+    <string name="brick_key_combo">Клавиатура комбинации</string>
+    <string name="brick_key_combo_end">Клавиатура конце комбинации</string>
 </resources>

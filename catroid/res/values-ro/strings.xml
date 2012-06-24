@@ -414,4 +414,9 @@
 	
 	<string name="number_to_small">Valoarea este prea mică!</string>
 	<string name="number_to_big">Valoarea este prea mare!</string>
+
+    <string name="press_keyboard_button">Apăsaţi butonul de tastatură</string>
+    <string name="category_hid">HID</string>
+    <string name="brick_key_combo">tastatura combinaţie</string>
+    <string name="brick_key_combo_end">Tastatura combinaţie sfârşitul</string>
 </resources>
