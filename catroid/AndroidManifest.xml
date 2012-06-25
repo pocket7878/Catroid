@@ -40,12 +40,17 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <uses-feature android:name="android.software.live_wallpaper" 
+	    android:required="true">
+	</uses-feature>
+	
     <application
         android:name=".web.CatroidApplication"
         android:debuggable="true"
         android:icon="@drawable/ic_launcher_catroid_fat"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Light.NoTitleBar" >
+        		
         <activity
             android:name=".ui.MainMenuActivity"
             android:configChanges="keyboardHidden|orientation" >
@@ -100,6 +105,8 @@
                 <data android:mimeType="audio/*" />
             </intent-filter>
         </activity>
+        
+		
     </application>
 
 </manifest>
