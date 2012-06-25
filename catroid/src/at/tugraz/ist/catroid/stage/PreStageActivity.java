@@ -58,6 +58,7 @@ import at.tugraz.ist.catroid.plugin.Drone.DroneService;
 import at.tugraz.ist.catroid.plugin.Drone.DroneService.LocalDroneServiceBinder;
 import at.tugraz.ist.catroid.plugin.Drone.DroneServiceHandler;
 import at.tugraz.ist.catroid.ui.SettingsActivity;
+import at.tugraz.ist.droned.client.CatroidDrone;
 
 public class PreStageActivity extends Activity {
 
@@ -215,7 +216,27 @@ public class PreStageActivity extends Activity {
 			isDroneServiceBound = true;
 			DroneServiceHandler.getInstance().getDrone().init();
 
+			// wait until the drone is ready 5 seconds
+			int sleepCntr = 0;
+			while (DroneServiceHandler.getInstance().getDrone().getSate() != CatroidDrone.State.READY) {
+				sleepCntr++;
+				if (sleepCntr > 50) {
+					finish();
+					Toast.makeText(getApplicationContext(), "Problem connecting to drone", Toast.LENGTH_SHORT).show();
+				}
+				Log.d(DroneConsts.DroneLogTag, "Waiting for drone to be ready");
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+			Log.d(DroneConsts.DroneLogTag, "Drone is ready!");
+
 			startStage();
+
 			//Toast.makeText(getApplicationContext(), "number: " + num, Toast.LENGTH_SHORT).show();
 		}
 
@@ -257,8 +278,8 @@ public class PreStageActivity extends Activity {
 		}
 		if (DronePartOfProject) {
 			// TODO change to DroneService
-			DroneHandler.getInstance().getDrone().emergencyLand();
-			DroneHandler.getInstance().getDrone().disconnect();
+			//DroneHandler.getInstance().getDrone().emergencyLand();
+			//DroneHandler.getInstance().getDrone().disconnect();
 		}
 	}
 

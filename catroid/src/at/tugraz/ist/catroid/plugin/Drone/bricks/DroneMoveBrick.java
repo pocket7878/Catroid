@@ -40,7 +40,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
+import at.tugraz.ist.catroid.plugin.Drone.DroneServiceHandler;
 import at.tugraz.ist.catroid.plugin.Drone.other.DroneMoveBrickChooseMovementDialog;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -66,9 +66,10 @@ public class DroneMoveBrick implements Brick, OnSeekBarChangeListener, OnDismiss
 		this.velocity = velocity;
 	}
 
+	@Override
 	public void execute() {
-		double throttle = 0, roll = 0, pitch = 0, yaw = 0;
-		double constant = (double) velocity / 100;
+		float throttle = 0, roll = 0, pitch = 0, yaw = 0;
+		float constant = (float) velocity / 100;
 
 		if (options != null) {
 			if (options[0] == true) {
@@ -96,13 +97,18 @@ public class DroneMoveBrick implements Brick, OnSeekBarChangeListener, OnDismiss
 				yaw += constant;
 			}
 		}
-		DroneHandler.getInstance().getDrone().move(throttle, roll, pitch, yaw);
+
+		//DroneHandler.getInstance().getDrone().move(throttle, roll, pitch, yaw);
+
+		DroneServiceHandler.getInstance().getDrone().move(roll, pitch, throttle, yaw, 200);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(final Context context, int brickId, final BaseAdapter adapter) {
 		if (view == null) {
 			view = View.inflate(context, R.layout.toolbox_brick_drone_move, null);
@@ -176,6 +182,7 @@ public class DroneMoveBrick implements Brick, OnSeekBarChangeListener, OnDismiss
 		dialog = new DroneMoveBrickChooseMovementDialog(context, options);
 		dialog.setOnDismissListener(this);
 		button.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				dialog.show();
 			}
@@ -198,6 +205,7 @@ public class DroneMoveBrick implements Brick, OnSeekBarChangeListener, OnDismiss
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.toolbox_brick_drone_move, null);
 	}
@@ -207,6 +215,7 @@ public class DroneMoveBrick implements Brick, OnSeekBarChangeListener, OnDismiss
 		return new DroneMoveBrick(getSprite(), velocity);
 	}
 
+	@Override
 	public void onProgressChanged(SeekBar bar, int progress, boolean arg2) {
 		velocity = progress * 10;
 		String vel = Integer.toString(velocity);
@@ -219,20 +228,24 @@ public class DroneMoveBrick implements Brick, OnSeekBarChangeListener, OnDismiss
 		tvSpeed.setText("Speed: " + vel + "%");
 	}
 
+	@Override
 	public void onStartTrackingTouch(SeekBar bar) {
 		// do nothing
 	}
 
+	@Override
 	public void onStopTrackingTouch(SeekBar bar) {
 		adapter.notifyDataSetChanged();
 	}
 
+	@Override
 	public void onDismiss(DialogInterface dialog) {
 		options = ((DroneMoveBrickChooseMovementDialog) this.dialog).getSelectedOptions();
 		adapter.notifyDataSetChanged();
 		dialog.cancel();
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return WIFI_DRONE;
 	}
