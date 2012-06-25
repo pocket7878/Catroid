@@ -28,7 +28,7 @@ import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
+import at.tugraz.ist.catroid.plugin.Drone.DroneServiceHandler;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -43,14 +43,17 @@ public class DroneTakeOffBrick implements Brick {
 		this.sprite = sprite;
 	}
 
+	@Override
 	public void execute() {
-		DroneHandler.getInstance().getDrone().takeoff();
+		DroneServiceHandler.getInstance().getDrone().takeOff();
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
 			view = View.inflate(context, R.layout.toolbox_brick_drone_takeoff, null);
@@ -58,6 +61,7 @@ public class DroneTakeOffBrick implements Brick {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.toolbox_brick_drone_takeoff, null);
 	}
@@ -67,6 +71,7 @@ public class DroneTakeOffBrick implements Brick {
 		return new DroneTakeOffBrick(getSprite());
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return WIFI_DRONE;
 	}

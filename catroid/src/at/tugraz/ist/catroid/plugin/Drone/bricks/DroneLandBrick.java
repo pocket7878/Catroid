@@ -30,7 +30,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.plugin.Drone.DroneConsts;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
+import at.tugraz.ist.catroid.plugin.Drone.DroneServiceHandler;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -46,18 +46,21 @@ public class DroneLandBrick implements Brick {
 		this.sprite = sprite;
 	}
 
+	@Override
 	public void execute() {
 		try {
-			DroneHandler.getInstance().getDrone().land();
+			DroneServiceHandler.getInstance().getDrone().land();
 		} catch (Exception e) {
 			Log.e(DroneConsts.DroneLogTag, "Exception DroneLandBrick -> execute()", e);
 		}
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
 			view = View.inflate(context, R.layout.toolbox_brick_drone_land, null);
@@ -65,6 +68,7 @@ public class DroneLandBrick implements Brick {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.toolbox_brick_drone_land, null);
 	}
@@ -74,6 +78,7 @@ public class DroneLandBrick implements Brick {
 		return new DroneLandBrick(getSprite());
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return WIFI_DRONE;
 	}

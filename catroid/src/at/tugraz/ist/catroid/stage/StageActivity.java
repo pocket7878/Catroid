@@ -85,6 +85,17 @@ public class StageActivity extends AndroidApplication {
 		finish();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.badlogic.gdx.backends.android.AndroidApplication#onPause()
+	 */
+	@Override
+	protected void onPause() {
+		// TODO What Happens with Drone
+		super.onPause();
+	}
+
 	public void toggleAxes() {
 		if (stageListener.axesOn) {
 			stageListener.axesOn = false;
