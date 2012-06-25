@@ -44,7 +44,7 @@ import android.widget.ListView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
+import at.tugraz.ist.catroid.plugin.Drone.DroneServiceHandler;
 import at.tugraz.ist.catroid.plugin.Drone.other.DroneBrickListAdapter;
 import at.tugraz.ist.catroid.plugin.Drone.other.DroneSelectTimeDialogInteger;
 
@@ -77,14 +77,17 @@ public class DroneLedAnimationBrick implements Brick, OnItemClickListener, OnDis
 		this.durationSeconds = durationSeconds;
 	}
 
+	@Override
 	public void execute() {
-		DroneHandler.getInstance().getDrone().playLedAnimation(animation, frequency, durationSeconds);
+		DroneServiceHandler.getInstance().getDrone().playLedAnimation(animation, frequency, durationSeconds);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(final Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
 			view = View.inflate(context, R.layout.toolbox_brick_drone_led_animation, null);
@@ -114,6 +117,7 @@ public class DroneLedAnimationBrick implements Brick, OnItemClickListener, OnDis
 
 		final DroneBrickListAdapter ledAnimationBrickAdapter = new DroneBrickListAdapter(context, animationList);
 		animationButton.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				animationDialog = new Dialog(context);
 				animationDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -132,6 +136,7 @@ public class DroneLedAnimationBrick implements Brick, OnItemClickListener, OnDis
 		final DroneBrickListAdapter ledAnimationFrequencyBrickAdapter = new DroneBrickListAdapter(context,
 				animationFrequencyList);
 		animationFrequencyButton.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				animationFrequencyDialog = new Dialog(context);
 				animationFrequencyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -157,6 +162,7 @@ public class DroneLedAnimationBrick implements Brick, OnItemClickListener, OnDis
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.toolbox_brick_drone_led_animation, null);
 	}
@@ -166,6 +172,7 @@ public class DroneLedAnimationBrick implements Brick, OnItemClickListener, OnDis
 		return new DroneLedAnimationBrick(getSprite(), animation, frequency, durationSeconds);
 	}
 
+	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		if (parent.getCount() == animationList.size()) {
 			animationTitle = animationList.get(position);
@@ -179,12 +186,14 @@ public class DroneLedAnimationBrick implements Brick, OnItemClickListener, OnDis
 		adapter.notifyDataSetChanged();
 	}
 
+	@Override
 	public void onDismiss(DialogInterface dialog) {
 		durationSeconds = (int) Math.round(((DroneSelectTimeDialogInteger) dialog).getValue());
 		adapter.notifyDataSetChanged();
 		dialog.cancel();
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return WIFI_DRONE;
 	}

@@ -127,25 +127,23 @@ public class PreStageActivity extends Activity {
 			DronePartOfProject = true;
 
 			if (PluginManager.getInstance().areDroneBricksEnabled()) {
+				Log.d(DroneConsts.DroneLogTag, "Prestageactivity, drone bricks enabled");
 				// Bricks are in the project
 				// drone bricks are enabled
 
 				//Init the drone service
-				if (!isDroneServiceStarted()) {
+				if (!isDroneServiceBound) {
 					startDroneService();
-
-					while (isDroneServiceBound) {
-						Log.d(DroneConsts.DroneLogTag, "Drone Service not Bound, sleeping");
-						try {
-							Thread.sleep(100);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-					Log.d(DroneConsts.DroneLogTag, "Drone Service bound, initializing");
-					droneService.getCatroidDrone().init();
-					startStage();
+					//					while (!isDroneServiceBound) {
+					//						Log.d(DroneConsts.DroneLogTag, "Drone Service not Bound, sleeping");
+					//						try {
+					//							Thread.sleep(100);
+					//						} catch (InterruptedException e) {
+					//							// TODO Auto-generated catch block
+					//							e.printStackTrace();
+					//						}
+					//					}
+					//					Log.d(DroneConsts.DroneLogTag, "Drone Service bound, initializing");
 				}
 
 				// initDroneService();
@@ -209,15 +207,19 @@ public class PreStageActivity extends Activity {
 	/** Defines callbacks for service binding, passed to bindService() */
 	private ServiceConnection droneServiceConnection = new ServiceConnection() {
 
+		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			Log.d(DroneConsts.DroneLogTag, "onServiceConnected:: Drone is Connected");
 			LocalDroneServiceBinder droneServiceBinder = (LocalDroneServiceBinder) service;
 			DroneServiceHandler.getInstance().setDroneServiceInstance(droneServiceBinder.getDroneService());
 			isDroneServiceBound = true;
+			DroneServiceHandler.getInstance().getDrone().init();
 
+			startStage();
 			//Toast.makeText(getApplicationContext(), "number: " + num, Toast.LENGTH_SHORT).show();
 		}
 
+		@Override
 		public void onServiceDisconnected(ComponentName name) {
 			// TODO Auto-generated method stub
 			Log.d("Catroid", "onServiceDisconnected:: Drone Service disconnected");
@@ -353,6 +355,7 @@ public class PreStageActivity extends Activity {
 				if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
 					// success, create the TTS instance
 					textToSpeech = new TextToSpeech(this.getApplicationContext(), new OnInitListener() {
+						@Override
 						public void onInit(int status) {
 							resourceInitialized();
 							if (status == TextToSpeech.ERROR) {
@@ -376,6 +379,7 @@ public class PreStageActivity extends Activity {
 					AlertDialog.Builder builder = new AlertDialog.Builder(this);
 					builder.setMessage(getString(R.string.text_to_speech_engine_not_installed)).setCancelable(false)
 							.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+								@Override
 								public void onClick(DialogInterface dialog, int id) {
 									Intent installIntent = new Intent();
 									installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
@@ -383,6 +387,7 @@ public class PreStageActivity extends Activity {
 									resourceFailed();
 								}
 							}).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+								@Override
 								public void onClick(DialogInterface dialog, int id) {
 									dialog.cancel();
 									resourceFailed();
@@ -463,6 +468,7 @@ public class PreStageActivity extends Activity {
 	};
 
 	DialogInterface.OnClickListener dialogGoToSettingsClickListener = new DialogInterface.OnClickListener() {
+		@Override
 		public void onClick(DialogInterface dialog, int which) {
 			switch (which) {
 				case DialogInterface.BUTTON_POSITIVE:
