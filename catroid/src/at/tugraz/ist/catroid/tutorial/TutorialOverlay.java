@@ -92,15 +92,17 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 		canvas.drawPaint(paint);
 		postInvalidate();
+
 		if (cloud == null) {
 			cloud = Cloud.getInstance(getContext());
 		}
+
 		cloud.draw(canvas);
+
 		if (surfaceObjects != null && !interrupt) {
 			synchronized (surfaceObjects) {
 				for (SurfaceObject tmp : surfaceObjects) {
 					if (tmp != null) {
-
 						tmp.update(System.currentTimeMillis());
 						tmp.draw(canvas);
 
@@ -182,7 +184,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		if (isOnStopButton(ev)) {
 			if (panel.isReadyToDispatch()) {
 				Tutorial.getInstance(null).stopButtonTutorial();
-				Log.i("drab", "DISPATCH Stop");
+				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Stop");
 			}
 		} else if (isOnPauseButton(ev)) {
 			if (panel.isReadyToDispatch()) {
@@ -197,7 +199,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 					panel.pressPause();
 					Tutorial.getInstance(null).pauseButtonTutorial();
 				}
-				Log.i("drab", "DISPATCH Pause");
+				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Pause");
 			}
 		} else if (isOnButton(ev)) {
 			if (panel.isReadyToDispatch()) {
@@ -206,13 +208,13 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 				} else {
 					panel.open();
 				}
-				Log.i("drab", "DISPATCH Button open/close");
+				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button open/close");
 			}
 		} else if (isOnBackwardButton(ev)) {
 			if (panel.isReadyToDispatch()) {
+				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button rewind");
 				interrupt = true;
 				Tutorial.getInstance(null).rewindStep();
-				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button rewind");
 				panel.pressBackward();
 				interrupt = false;
 			}
@@ -221,7 +223,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 				panel.pressForward();
 				//TODO: implement foward step
 				//Tutorial.getInstance(null).rewindStep();
-				Log.i("drab", "DISPATCH Button rewind");
+				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button rewind");
 			}
 		}
 	}

@@ -172,7 +172,7 @@ public class TutorialController {
 
 	public void startThread() {
 		if (tutorialThread == null) {
-			tutorialThread = new TutorialThread();
+			tutorialThread = new TutorialThread(this.tutors);
 			tutorialThread.setName("TutorialThread");
 			tutorialThread.setLessonCollection(lessonCollection);
 			tutorialThread.startThread();
@@ -216,9 +216,11 @@ public class TutorialController {
 		ArrayList<String> lessons = lessonCollection.getLessons();
 		final CharSequence[] items = new CharSequence[lessonCollection.getLastPossibleLessonNumber() + 1];
 
-		Log.i("drab", "lastPossNumber: " + lessonCollection.getLastPossibleLessonNumber());
+		Log.i("drab",
+				Thread.currentThread().getName() + ": lastPossNumber: "
+						+ lessonCollection.getLastPossibleLessonNumber());
 		for (int i = 0; i < lessonCollection.getLastPossibleLessonNumber()/* +1 */; i++) {
-			Log.i("drab", "Lesson i: " + i);
+			Log.i("drab", Thread.currentThread().getName() + ": Lesson i: " + i);
 			items[i] = lessons.get(i);
 		}
 
@@ -267,20 +269,25 @@ public class TutorialController {
 	public void rewindStep() {
 		tutorialThread.setInterruptRoutine(ACTIONS.REWIND);
 		tutorialThread.setInterrupt(true);
-		synchronized (tutorialThread) {
-			tutorialThread.notify();
-		}
+		tutorialThread.notifyThread();
+
 		/* reset Tutors */
-		for (Entry<at.tugraz.ist.catroid.tutorial.tasks.Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
-			Log.i("interrupt", "Now trying to interrupt Tutor: " + tempTutor.getValue().tutorType);
-			tempTutor.getValue().setInterruptOfSequence(ACTIONS.REWIND);
-		}
+		while (true) {
+			if (tutorialThread.getAck()) {
+				for (Entry<Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
+					Log.i("drab",
+							Thread.currentThread().getName() + ": Now trying to interrupt Tutor: "
+									+ tempTutor.getValue().tutorType);
+					tempTutor.getValue().setInterruptOfSequence(ACTIONS.REWIND);
+				}
 
+				break;
+			}
+		}
 		tutorialThread.setInterrupt(false);
-		synchronized (tutorialThread) {
-			tutorialThread.notify();
+		tutorialThread.notifyThread();
+		while (tutorialThread.getAck()) {
 		}
-
 	}
 
 	public void stopButtonTutorial() {
@@ -306,7 +313,7 @@ public class TutorialController {
 			tutorialOverlay = new TutorialOverlay(context);
 			windowManager.addView(tutorialOverlay, dragViewParameters);
 		} else {
-			Log.i("faxxe", "Tutorial: Adding Overlay again!");
+			Log.i("drab", Thread.currentThread().getName() + ": Tutorial: Adding Overlay again!");
 			dragViewParameters = createLayoutParameters();
 			windowManager = ((Activity) context).getWindowManager();
 			windowManager.addView(tutorialOverlay, dragViewParameters);

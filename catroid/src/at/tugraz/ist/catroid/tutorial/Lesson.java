@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import android.util.Log;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
+import at.tugraz.ist.catroid.tutorial.tasks.Task.Tutor;
 
 public class Lesson {
 	public int lessonID;
@@ -59,7 +60,7 @@ public class Lesson {
 				Log.i("drab", Thread.currentThread().getName() + ":Lesson not rewinded");
 				return false;
 			} else {
-				Log.i("drab", Thread.currentThread().getName() + ":Backwarding from " + currentStep + " to "
+				Log.i("new", Thread.currentThread().getName() + ":Backwarding from " + currentStep + " to "
 						+ (currentStep - 1));
 				currentStep--;
 				Log.i("drab", Thread.currentThread().getName() + ":Lesson rewinded to: " + currentStep);
@@ -77,5 +78,10 @@ public class Lesson {
 
 	public int getSizeOfLesson() {
 		return this.lessonContent.size();
+	}
+
+	public Tutor getCurrentTutorNameFromTask() {
+		// TODO Auto-generated method stub
+		return lessonContent.get(currentStep).getTutorType();
 	}
 }

@@ -144,8 +144,8 @@ public class ControlPanel implements SurfaceObject {
 
 	public boolean isReadyToDispatch() {
 		long actTime = new Date().getTime();
-		Log.i("drab", "(actTime - waitTimeToDispatch) > timeOfLastChange = " + (actTime - waitTimeToDispatch) + " and "
-				+ timeOfLastChange);
+		Log.i("drab", Thread.currentThread().getName() + ": (actTime - waitTimeToDispatch) > timeOfLastChange = "
+				+ (actTime - waitTimeToDispatch) + " and " + timeOfLastChange);
 		if ((actTime - waitTimeToDispatch) > timeOfLastChange) {
 			timeOfLastChange = actTime;
 			return true;
@@ -155,7 +155,7 @@ public class ControlPanel implements SurfaceObject {
 
 	public void pressPlay() {
 		paused = false;
-		Log.i("drab", "NOW ----PRESS-PAUSE");
+		Log.i("drab", Thread.currentThread().getName() + ": NOW ----PRESS-PAUSE");
 		//		//		tut.setNotification("BubblePlay");
 		Toast toast = Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT);
 		toast.show();
@@ -164,7 +164,7 @@ public class ControlPanel implements SurfaceObject {
 
 	public void pressPause() throws InterruptedException {
 		paused = true;
-		Log.i("drab", "NOW ----PRESS-PAUSE");
+		Log.i("drab", Thread.currentThread().getName() + ": NOW ----PRESS-PAUSE");
 		Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
 		toast.show();
 		//xtut.waitForNotification("BubblePlay");

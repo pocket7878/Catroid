@@ -92,7 +92,6 @@ public class Bubble implements SurfaceObject {
 		bounds.left = this.x;
 		bounds.right = bounds.left + minWidth;
 		speechBubble.setBounds(bounds);
-
 	}
 
 	@Override

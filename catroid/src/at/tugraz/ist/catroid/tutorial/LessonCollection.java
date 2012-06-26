@@ -101,7 +101,7 @@ public class LessonCollection {
 	}
 
 	public void clean() {
-		Log.i("faxxe", "LessonCollection: clean called!");
+		Log.i("drab", Thread.currentThread().getName() + ": LessonCollection: clean called!");
 		for (Lesson lesson : lessonArray) {
 			lesson.clean();
 		}
@@ -120,8 +120,12 @@ public class LessonCollection {
 	@Override
 	protected void finalize() throws Throwable {
 		// TODO Auto-generated method stub
-		Log.i("drab", "LessonCollection: finalize called!");
+		Log.i("drab", Thread.currentThread().getName() + ": LessonCollection: finalize called!");
 		super.finalize();
+	}
+
+	public Task.Tutor getNameFromCurrentTaskInLesson() {
+		return (lessonArray.get(currentLesson)).getCurrentTutorNameFromTask();
 	}
 
 }

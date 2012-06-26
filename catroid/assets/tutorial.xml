@@ -5,7 +5,7 @@
             <lessonName>Demonstration</lessonName>
             <lessonContent>
                                
-                <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                 <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
                     <tutorType>CATRO</tutorType>
                     <x>250</x>
                     <y>400</y>

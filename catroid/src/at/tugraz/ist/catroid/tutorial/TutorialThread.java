@@ -19,9 +19,11 @@
 package at.tugraz.ist.catroid.tutorial;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.util.Log;
 import at.tugraz.ist.catroid.tutorial.Tutor.ACTIONS;
+import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
 /**
  * @author faxxe
@@ -33,11 +35,16 @@ public class TutorialThread extends Thread implements Runnable {
 	private volatile ArrayList<String> notifies = new ArrayList<String>();
 	private boolean interrupted = false;
 	private ACTIONS interruptRoutine;
+	private boolean iAck = false;
+	private ArrayList<Task.Tutor> lastModifiedTutorList = new ArrayList<Task.Tutor>();
+	private int lastModifiedTutorIndex = 0;
+	private HashMap<Task.Tutor, SurfaceObjectTutor> tutors = new HashMap<Task.Tutor, SurfaceObjectTutor>();
 
-	public TutorialThread() {
+	public TutorialThread(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		Thread thisThread = new Thread(this);
 		thisThread.setName("NewTutorialThread");
-		Log.i("drab", "New TutorialThread started... ");
+		this.tutors = tutors;
+		Log.i("drab", Thread.currentThread().getName() + ": New TutorialThread started... ");
 	}
 
 	@Override
@@ -86,34 +93,60 @@ public class TutorialThread extends Thread implements Runnable {
 			if (!interrupted) {
 				boolean notification = lessonCollection.executeTask();
 
+				synchronized (lastModifiedTutorList) {
+
+					//					Log.i("new",
+					//							"Adding on " + lastModifiedTutorIndex + " Tutor "
+					//									+ lessonCollection.getNameFromCurrentTaskInLesson());
+					lastModifiedTutorList
+							.add(lastModifiedTutorIndex, lessonCollection.getNameFromCurrentTaskInLesson());
+
+					//					Log.i("new", "\n");
+					//					Log.i("new", "#######LastModifiedList#######");
+					//					for (int i = 0; i <= lastModifiedTutorIndex; i++) {
+					//						Log.i("new", i + ")  " + lastModifiedTutorList.get(i));
+					//					}
+					//					Log.i("new", "##############################");
+					//					Log.i("new", "\n");
+					lastModifiedTutorIndex++;
+				}
+
 				if (notification == true) {
 					synchronized (this) {
 						try {
-							Log.i("drab", " waiting for notification");
+							Log.i("drab", Thread.currentThread().getName() + ": waiting for notification");
 							wait();
 						} catch (InterruptedException e) {
-							Log.i("drab", "TutorialThread: wait() failed!");
+							Log.i("drab", Thread.currentThread().getName() + ": TutorialThread: wait() failed!");
 							e.printStackTrace();
 						}
 					}
 				}
-				if (!interrupted) {
-					lessonCollection.forwardStep();
+			}
+			if (!interrupted) {
+				lessonCollection.forwardStep();
+			}
+
+			if (interrupted) {
+				if (interruptRoutine == ACTIONS.REWIND) {
+					setLastTutorModified();
 				}
-			} else {
 				while (interrupted) {
 					synchronized (this) {
 						try {
-							this.wait();
+							iAck = true;
+							wait();
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
 				}
+
 				if (interruptRoutine == ACTIONS.REWIND) {
 					lessonCollection.rewindStep();
 				}
+				iAck = false;
 			}
 		}
 
@@ -146,5 +179,44 @@ public class TutorialThread extends Thread implements Runnable {
 
 	public void setInterruptRoutine(ACTIONS action) {
 		interruptRoutine = action;
+	}
+
+	public void setLastTutorModified() {
+		synchronized (lastModifiedTutorList) {
+			boolean flag1 = decrementLastTutorModifiedIndex();
+			Task.Tutor tutor1 = lastModifiedTutorList.get(lastModifiedTutorIndex);
+			boolean flag2 = decrementLastTutorModifiedIndex();
+			Task.Tutor tutor2 = lastModifiedTutorList.get(lastModifiedTutorIndex);
+
+			if (tutor1 == tutor2) {
+				//				if (flag1 && flag2) {
+				//					this.tutors.get(tutor1).setBackTutor(1);
+				//					Log.i("new", "Setting back 2 steps of " + tutor1 + " tutor");
+				//				} else {
+				this.tutors.get(tutor1).setBackTutor(1);
+				Log.i("new", "Setting back 1 step of " + tutor1 + " tutor");
+				//				}
+			} else {
+				this.tutors.get(tutor1).setBackTutor(1);
+				this.tutors.get(tutor2).setBackTutor(1);
+				Log.i("new", "Setting back 1 step of both tutors");
+			}
+		}
+	}
+
+	public boolean decrementLastTutorModifiedIndex() {
+		synchronized (lastModifiedTutorList) {
+			if (lastModifiedTutorIndex > 0) {
+				lastModifiedTutorIndex--;
+				//Log.i("new", "lastModiefiedIndex is decremented to: " + lastModifiedTutorIndex);
+				return true;
+			}
+			//Log.i("new", "lastModiefiedIndex not decremented: " + lastModifiedTutorIndex);
+			return false;
+		}
+	}
+
+	public boolean getAck() {
+		return iAck;
 	}
 }

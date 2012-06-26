@@ -41,12 +41,14 @@ public class TutorStateHistory {
 	public void addStateToHistory(TutorState state) {
 		stateCounter++;
 		stateMap.put(stateCounter, state);
-		Log.i("drab", "New STATE for " + tutor + " added!");
+		Log.i("drab", Thread.currentThread().getName() + ": New STATE for " + tutor + " added!");
 	}
 
-	public TutorState setBackAndReturnState() {
+	public TutorState setBackAndReturnState(int setCount) {
+		Log.i("new", "SET:" + setCount);
+
 		if (stateCounter > 0) {
-			stateCounter = stateCounter - 1;
+			stateCounter = stateCounter - setCount;
 		}
 		return stateMap.get(stateCounter);
 	}
