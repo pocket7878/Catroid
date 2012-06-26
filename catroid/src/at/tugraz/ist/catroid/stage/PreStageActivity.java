@@ -220,24 +220,30 @@ public class PreStageActivity extends Activity {
 			int sleepCntr = 0;
 			while (DroneServiceHandler.getInstance().getDrone().getSate() != CatroidDrone.State.READY) {
 				sleepCntr++;
-				if (sleepCntr > 50) {
+				if (sleepCntr > 12) {
+
+					Toast.makeText(getApplicationContext(), "Problem connecting to drone", Toast.LENGTH_LONG).show();
+
 					finish();
-					Toast.makeText(getApplicationContext(), "Problem connecting to drone", Toast.LENGTH_SHORT).show();
+
+					return;
 				}
 				Log.d(DroneConsts.DroneLogTag, "Waiting for drone to be ready");
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				sleep(700);
 
 			}
 			Log.d(DroneConsts.DroneLogTag, "Drone is ready!");
 
 			startStage();
+		}
 
-			//Toast.makeText(getApplicationContext(), "number: " + num, Toast.LENGTH_SHORT).show();
+		private void sleep(int millis) {
+			try {
+				Thread.sleep(millis);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		@Override
