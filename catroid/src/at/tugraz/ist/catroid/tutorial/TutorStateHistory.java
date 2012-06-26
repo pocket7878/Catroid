@@ -30,6 +30,7 @@ import at.tugraz.ist.catroid.tutorial.tasks.Task;
 public class TutorStateHistory {
 	private int stateCounter = -1;
 	private Task.Tutor tutor;
+	private boolean backFlag = false;
 
 	private HashMap<Integer, TutorState> stateMap;
 
@@ -41,15 +42,25 @@ public class TutorStateHistory {
 	public void addStateToHistory(TutorState state) {
 		stateCounter++;
 		stateMap.put(stateCounter, state);
-		Log.i("drab", Thread.currentThread().getName() + ": New STATE for " + tutor + " added!");
+		Log.i("new", "New STATE for " + tutor + " added @ " + stateCounter);
 	}
 
 	public TutorState setBackAndReturnState(int setCount) {
-		Log.i("new", "SET:" + setCount);
+		Log.i("new", "Actual State of " + tutor + ": " + stateCounter + " - setBackSteps: " + setCount);
+
+		if (stateCounter - setCount >= 0) {
+			stateCounter = stateCounter - setCount;
+		} else {
+			stateCounter = 0;
+		}
+
+		Log.i("new", "Tutor - " + tutor + " new State will be from: " + stateCounter);
+		TutorState returnState = stateMap.get(stateCounter);
 
 		if (stateCounter > 0) {
-			stateCounter = stateCounter - setCount;
+			stateCounter--;
 		}
-		return stateMap.get(stateCounter);
+
+		return returnState;
 	}
 }

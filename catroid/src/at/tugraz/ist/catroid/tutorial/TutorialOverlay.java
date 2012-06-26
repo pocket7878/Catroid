@@ -20,6 +20,7 @@ package at.tugraz.ist.catroid.tutorial;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -48,6 +49,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	private CloudController co;
 	private ControlPanel panel;
 	private boolean interrupt = false;
+	private long timeToWaitAfterRewind = 0;
 
 	@Override
 	protected void finalize() throws Throwable {
@@ -99,7 +101,8 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 
 		cloud.draw(canvas);
 
-		if (surfaceObjects != null && !interrupt) {
+		long actTime = new Date().getTime();
+		if (surfaceObjects != null && !interrupt && actTime > timeToWaitAfterRewind) {
 			synchronized (surfaceObjects) {
 				for (SurfaceObject tmp : surfaceObjects) {
 					if (tmp != null) {

@@ -402,6 +402,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	@Override
 	public void setInterruptOfSequence(ACTIONS action) {
 		if (setBackTutor > 0) {
+			Log.i("new", "TUTOR - " + tutorType + ": stepsback " + setBackTutor);
 			if (this.tutorBubble != null) {
 				tutorBubble.interruptAndClear();
 				tutorBubble = null;
@@ -425,7 +426,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 			state = newState.getState();
 			currentStep = 0;
 
-			Log.i("drab", Thread.currentThread().getName() + ": New state is SET and Steps reseted for "
+			Log.i("new", Thread.currentThread().getName() + ": New state is SET and Steps reseted for "
 					+ this.tutorType);
 			setBackTutor = 0;
 		}
@@ -433,6 +434,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void setBackTutor(int set) {
-		this.setBackTutor = set;
+		this.setBackTutor += set;
 	}
 }

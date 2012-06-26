@@ -280,14 +280,12 @@ public class TutorialController {
 									+ tempTutor.getValue().tutorType);
 					tempTutor.getValue().setInterruptOfSequence(ACTIONS.REWIND);
 				}
-
 				break;
 			}
 		}
 		tutorialThread.setInterrupt(false);
 		tutorialThread.notifyThread();
-		while (tutorialThread.getAck()) {
-		}
+
 	}
 
 	public void stopButtonTutorial() {

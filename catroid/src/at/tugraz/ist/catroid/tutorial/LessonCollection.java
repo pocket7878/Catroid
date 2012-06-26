@@ -88,8 +88,9 @@ public class LessonCollection {
 		return lessonNames;
 	}
 
-	boolean rewindStep() {
+	int rewindStep() {
 		return (lessonArray.get(currentLesson).rewindStep());
+
 	}
 
 	boolean forwardStep() {

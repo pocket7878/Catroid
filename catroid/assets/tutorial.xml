@@ -5,7 +5,7 @@
             <lessonName>Demonstration</lessonName>
             <lessonContent>
                                
-                 <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                 <!--  <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
                     <tutorType>CATRO</tutorType>
                     <x>250</x>
                     <y>400</y>
@@ -42,7 +42,7 @@
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
                     <tutorType>CATRO</tutorType>
                     <message>Du kannst Beispielsweise einen Tutor erscheinen lassen: TaskAppear macht dies möglich.</message>
-                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>-->
                 
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
                     <tutorType>CATRO</tutorType>

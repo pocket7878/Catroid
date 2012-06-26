@@ -53,26 +53,33 @@ public class Lesson {
 		}
 	}
 
-	boolean rewindStep() {
+	int rewindStep() {
 		synchronized (this) {
 			if (currentStep <= 0) {
 				// TODO: da ghoert vorherige Lesson
 				Log.i("drab", Thread.currentThread().getName() + ":Lesson not rewinded");
-				return false;
+				return 0;
 			} else {
-				Log.i("new", Thread.currentThread().getName() + ":Backwarding from " + currentStep + " to "
-						+ (currentStep - 1));
 				currentStep--;
-				Log.i("drab", Thread.currentThread().getName() + ":Lesson rewinded to: " + currentStep);
-				return true;
+				int rewindBackSteps = 1;
+
+				while (lessonContent.get(currentStep).getType() == Task.Type.FLIP
+						|| lessonContent.get(currentStep).getType() == Task.Type.JUMP
+						|| lessonContent.get(currentStep).getType() == Task.Type.SLEEP) {
+					currentStep--;
+					rewindBackSteps++;
+				}
+				Log.i("new", Thread.currentThread().getName() + ": Lesson rewinded to: " + currentStep);
+				return rewindBackSteps;
 			}
 		}
 	}
 
 	//	String executeTask(NewTutorialOverlay tutorialOverlay) {
 	boolean executeTask(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
-		Log.i("drab", Thread.currentThread().getName() + ": @ Step " + currentStep + " executing: "
-				+ lessonContent.get(currentStep).toString());
+		Log.i("new",
+				Thread.currentThread().getName() + ": @ Step " + currentStep + " executing: "
+						+ lessonContent.get(currentStep).toString());
 		return (lessonContent.get(currentStep).execute(tutors));
 	}
 
