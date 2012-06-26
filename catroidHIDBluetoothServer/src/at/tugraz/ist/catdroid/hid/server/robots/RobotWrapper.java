@@ -33,7 +33,7 @@ public class RobotWrapper {
 			robot.keyPress(codes.get(i));
 		}
 
-		for (int i = 0; i < codes.size(); i++) {
+		for (int i = codes.size() - 1; i >= 0 ; i--) {
 			robot.keyRelease(codes.get(i));
 		}
 	}

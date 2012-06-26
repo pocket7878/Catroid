@@ -40,7 +40,7 @@ class ReceiveBytesThread implements Runnable {
             if (testMode)
             	output_stream = stream_connection.openDataOutputStream();
             
-            System.out.println("waiting for input...");
+            //System.out.println("waiting for input...");
 
             while (true) {
                 
