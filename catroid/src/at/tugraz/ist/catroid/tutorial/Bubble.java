@@ -165,7 +165,6 @@ public class Bubble implements SurfaceObject {
 				for (int i = 0; i < textArray.length; i++) {
 					textArray[i] = "";
 				}
-
 				waitForReset = false;
 				return;
 			}

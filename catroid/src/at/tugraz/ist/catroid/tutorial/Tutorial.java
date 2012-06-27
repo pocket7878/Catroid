@@ -126,7 +126,7 @@ public class Tutorial {
 	}
 
 	public void pauseTutorial() {
-		Log.i("drab", "pause Tutorial");
+		Log.i("new", "pause Tutorial");
 		if (!tutorialActive) {
 			return;
 		}

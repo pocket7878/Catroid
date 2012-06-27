@@ -39,16 +39,15 @@ public class Lesson {
 
 	boolean forwardStep() {
 		synchronized (this) {
-			if ((this.currentStep) >= lessonContent.size()) {
-				// TODO: da ghoert naechste Lesson
-				// TODO: da stimmt was nicht, das +1 sollte nicht noetig sein
-				return false;
-			} else {
-				Log.i("drab", Thread.currentThread().getName() + ":Forwarding from " + this.currentStep + " to "
+			Log.i("new", "THE SIZE of the Lesson is: " + lessonContent.size());
+			if ((this.currentStep + 1) < lessonContent.size()) {
+				Log.i("new", Thread.currentThread().getName() + ":Forwarding from " + this.currentStep + " to "
 						+ (this.currentStep + 1));
 				currentStep++;
 				Log.i("drab", Thread.currentThread().getName() + ":Lesson was forwarded to " + this.currentStep);
 				return true;
+			} else {
+				return false;
 			}
 		}
 	}

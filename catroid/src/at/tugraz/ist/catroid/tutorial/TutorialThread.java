@@ -142,22 +142,21 @@ public class TutorialThread extends Thread implements Runnable {
 				iAck = false;
 			} else {
 				boolean nextStep = lessonCollection.forwardStep();
+				Log.i("new", "Found new LessonStep continue EXECUTING!");
 				if (!nextStep) {
 					Log.i("new", "Tutorial stopped in TUT-Thread");
 					lessonCollection.resetCurrentLesson();
+					boolean nextLesson = lessonCollection.nextLesson();
 
-					if (tutorialThreadRunning) {
+					if (tutorialThreadRunning && !nextLesson) {
 						Log.i("new", "STOP Tutorial");
-						lessonCollection.nextLesson();
-						Tutorial.getInstance(null).stopTutorial();
+						Tutorial.getInstance(null).stopButtonTutorial();
+						break;
 					}
-					break;
 				}
 			}
 		}
-
 		return;
-
 	}
 
 	public void stopTutorial() {

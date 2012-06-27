@@ -155,30 +155,20 @@ public class ControlPanel implements SurfaceObject {
 
 	public void pressPlay() {
 		paused = false;
-		Log.i("drab", Thread.currentThread().getName() + ": NOW ----PRESS-PAUSE");
-		//		//		tut.setNotification("BubblePlay");
-		Toast toast = Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT);
-		toast.show();
-
+		Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT).show();
 	}
 
 	public void pressPause() throws InterruptedException {
 		paused = true;
-		Log.i("drab", Thread.currentThread().getName() + ": NOW ----PRESS-PAUSE");
-		Toast toast = Toast.makeText(context, "PAUSE", Toast.LENGTH_SHORT);
-		toast.show();
-		//xtut.waitForNotification("BubblePlay");
-
+		Toast.makeText(context, "Pause", Toast.LENGTH_SHORT).show();
 	}
 
 	public void pressForward() {
-		Toast toast = Toast.makeText(context, "Vorwärts", Toast.LENGTH_SHORT);
-		toast.show();
+		Toast.makeText(context, "Schritt vorwärts", Toast.LENGTH_SHORT).show();
 	}
 
 	public void pressBackward() {
-		Toast toast = Toast.makeText(context, "Zurück", Toast.LENGTH_SHORT);
-		toast.show();
+		Toast.makeText(context, "Schritt zurück", Toast.LENGTH_SHORT).show();
 	}
 
 	public boolean isPaused() {
@@ -212,7 +202,5 @@ public class ControlPanel implements SurfaceObject {
 	@Override
 	public void update(long gameTime) {
 		// TODO Auto-generated method stub
-
 	}
-
 }

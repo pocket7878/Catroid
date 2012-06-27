@@ -187,7 +187,7 @@
                 
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
                     <tutorType>MIAUS</tutorType>
-                    <sleepTime>8000</sleepTime>
+                    <sleepTime>2000</sleepTime>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
                
             </lessonContent>
