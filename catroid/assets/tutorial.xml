@@ -5,7 +5,7 @@
             <lessonName>Demonstration</lessonName>
             <lessonContent>
                                
-                 <!--  <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
                     <tutorType>CATRO</tutorType>
                     <x>250</x>
                     <y>400</y>
@@ -42,7 +42,7 @@
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
                     <tutorType>CATRO</tutorType>
                     <message>Du kannst Beispielsweise einen Tutor erscheinen lassen: TaskAppear macht dies möglich.</message>
-                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>-->
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
                 
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
                     <tutorType>CATRO</tutorType>
@@ -148,6 +148,50 @@
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
             </lessonContent>
             <lessonID>0</lessonID>
+            <currentStep>0</currentStep>
+        </at.tugraz.ist.catroid.tutorial.Lesson>
+        
+        <at.tugraz.ist.catroid.tutorial.Lesson>
+            <lessonName>DebuggLesson</lessonName>
+            <lessonContent>
+    
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                    <tutorType>CATRO</tutorType>
+                    <x>250</x>
+                    <y>400</y>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                    <tutorType>CATRO</tutorType>
+                    <sleepTime>2000</sleepTime>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskDisappear>
+                    <tutorType>CATRO</tutorType>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskDisappear>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                    <tutorType>MIAUS</tutorType>
+                    <x>250</x>
+                    <y>400</y>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                    <tutorType>MIAUS</tutorType>
+                    <sleepTime>2000</sleepTime>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskDisappear>
+                    <tutorType>MIAUS</tutorType>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskDisappear>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                    <tutorType>MIAUS</tutorType>
+                    <sleepTime>8000</sleepTime>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+               
+            </lessonContent>
+            <lessonID>1</lessonID>
             <currentStep>0</currentStep>
         </at.tugraz.ist.catroid.tutorial.Lesson>
     </lessonArray>

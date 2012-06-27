@@ -94,7 +94,7 @@ public class Tutorial {
 		tutorialController.stopButtonTutorial();
 		clear();
 		System.gc();
-		Log.i("drab", "stopButtonTutorial: calling finalisation");
+		Log.i("new", "Tutorial.java: stopButtonTutorial: calling finalisation");
 		System.runFinalization();
 	}
 

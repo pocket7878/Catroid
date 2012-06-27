@@ -28,9 +28,9 @@ import at.tugraz.ist.catroid.tutorial.tasks.Task;
  * 
  */
 public class TutorStateHistory {
-	private int stateCounter = -1;
+	private int stateCounter = 0;
 	private Task.Tutor tutor;
-	private boolean backFlag = false;
+	private boolean stateCountCarry = false;
 
 	private HashMap<Integer, TutorState> stateMap;
 
@@ -40,27 +40,34 @@ public class TutorStateHistory {
 	}
 
 	public void addStateToHistory(TutorState state) {
-		stateCounter++;
 		stateMap.put(stateCounter, state);
-		Log.i("new", "New STATE for " + tutor + " added @ " + stateCounter);
+		Log.i("new", "ADDED STATE INTO HISTORY for " + tutor + " @ StateCounter: " + stateCounter);
+		stateCounter++;
+		stateCountCarry = true;
 	}
 
 	public TutorState setBackAndReturnState(int setCount) {
+		if (stateCountCarry) {
+			stateCountCarry = false;
+			stateCounter--;
+		}
 		Log.i("new", "Actual State of " + tutor + ": " + stateCounter + " - setBackSteps: " + setCount);
 
-		if (stateCounter - setCount >= 0) {
+		if (stateCounter - setCount > 0) {
 			stateCounter = stateCounter - setCount;
 		} else {
 			stateCounter = 0;
 		}
 
-		Log.i("new", "Tutor - " + tutor + " new State will be from: " + stateCounter);
+		Log.i("new", "New State for Tutor - " + tutor + " will be from StateHistory: " + stateCounter);
 		TutorState returnState = stateMap.get(stateCounter);
-
-		if (stateCounter > 0) {
-			stateCounter--;
+		if (stateCounter == 0) {
+			stateCounter++;
 		}
-
 		return returnState;
+	}
+
+	public void setStateCounterExtraStep() {
+		stateCounter++;
 	}
 }

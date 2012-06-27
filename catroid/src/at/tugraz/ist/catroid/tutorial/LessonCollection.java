@@ -17,6 +17,7 @@ public class LessonCollection {
 	}
 
 	public void resetCurrentLesson() {
+		Log.i("new", "LESSON OVER and will be set to 0");
 		(lessonArray.get(currentLesson)).setCurrentStep(0);
 	}
 

@@ -39,7 +39,6 @@ public class TutorialThread extends Thread implements Runnable {
 	private ArrayList<Task.Tutor> lastModifiedTutorList = new ArrayList<Task.Tutor>();
 	private int lastModifiedTutorIndex = 0;
 	private HashMap<Task.Tutor, SurfaceObjectTutor> tutors = new HashMap<Task.Tutor, SurfaceObjectTutor>();
-	private long timeToWaitAfterInterrupt = 0;
 
 	public TutorialThread(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		Thread thisThread = new Thread(this);
@@ -89,18 +88,11 @@ public class TutorialThread extends Thread implements Runnable {
 	}
 
 	private void runTutorial() {
-
-		while (tutorialThreadRunning
-				&& lessonCollection.currentStepOfLesson() < lessonCollection.getSizeOfCurrentLesson()) {
-
+		while (tutorialThreadRunning) {
+			Log.i("new", "_________________________NEW THREAD ITERATION________________________________");
 			if (!interrupted) {
 				boolean notification = lessonCollection.executeTask();
-				Log.i("new", "______________________________________________________________________________");
 				synchronized (lastModifiedTutorList) {
-
-					//					Log.i("new",
-					//							"Adding on " + lastModifiedTutorIndex + " Tutor "
-					//									+ lessonCollection.getNameFromCurrentTaskInLesson());
 					lastModifiedTutorList
 							.add(lastModifiedTutorIndex, lessonCollection.getNameFromCurrentTaskInLesson());
 
@@ -111,6 +103,7 @@ public class TutorialThread extends Thread implements Runnable {
 					}
 					Log.i("new", "##############################");
 					Log.i("new", "\n");
+
 					lastModifiedTutorIndex++;
 				}
 
@@ -125,9 +118,6 @@ public class TutorialThread extends Thread implements Runnable {
 						}
 					}
 				}
-			}
-			if (!interrupted) {
-				lessonCollection.forwardStep();
 			}
 
 			if (interrupted) {
@@ -150,17 +140,22 @@ public class TutorialThread extends Thread implements Runnable {
 					}
 				}
 				iAck = false;
+			} else {
+				boolean nextStep = lessonCollection.forwardStep();
+				if (!nextStep) {
+					Log.i("new", "Tutorial stopped in TUT-Thread");
+					lessonCollection.resetCurrentLesson();
+
+					if (tutorialThreadRunning) {
+						Log.i("new", "STOP Tutorial");
+						lessonCollection.nextLesson();
+						Tutorial.getInstance(null).stopTutorial();
+					}
+					break;
+				}
 			}
 		}
 
-		if (!lessonCollection.forwardStep()) {
-			lessonCollection.resetCurrentLesson();
-		}
-
-		if (tutorialThreadRunning) {
-			lessonCollection.nextLesson();
-			Tutorial.getInstance(null).stopTutorial();
-		}
 		return;
 
 	}
@@ -194,6 +189,8 @@ public class TutorialThread extends Thread implements Runnable {
 			Task.Tutor tutor1 = null;
 			Task.Tutor tutor2 = null;
 			decrementLastTutorModifiedIndex();
+			boolean notifyTutorForExtraStep = false;
+			SurfaceObjectTutor lastTutor = null;
 
 			for (int i = 0; i < stepsBack; i++) {
 				tutor1 = lastModifiedTutorList.get(lastModifiedTutorIndex);
@@ -202,12 +199,19 @@ public class TutorialThread extends Thread implements Runnable {
 
 				if (tutor1 == tutor2) {
 					this.tutors.get(tutor1).setBackTutor(1);
+					lastTutor = this.tutors.get(tutor1);
 					Log.i("new", "Setting back 1 step of " + tutor1 + " tutor");
 				} else {
+					notifyTutorForExtraStep = true;
 					this.tutors.get(tutor1).setBackTutor(1);
 					this.tutors.get(tutor2).setBackTutor(1);
+					lastTutor = this.tutors.get(tutor2);
 					Log.i("new", "Setting back 1 step of both tutors");
 				}
+			}
+
+			if (notifyTutorForExtraStep) {
+				lastTutor.setExtraStepInHistory();
 			}
 		}
 	}

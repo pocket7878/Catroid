@@ -27,7 +27,7 @@ public class Lesson {
 	}
 
 	public void setCurrentStep(int currentStep) {
-		Log.i("drab", Thread.currentThread().getName() + ": currentStep was set to " + currentStep);
+		Log.i("new", Thread.currentThread().getName() + ": currentStep was set to " + currentStep);
 		this.currentStep = currentStep;
 	}
 
@@ -39,7 +39,7 @@ public class Lesson {
 
 	boolean forwardStep() {
 		synchronized (this) {
-			if ((this.currentStep) + 1 >= lessonContent.size()) {
+			if ((this.currentStep) >= lessonContent.size()) {
 				// TODO: da ghoert naechste Lesson
 				// TODO: da stimmt was nicht, das +1 sollte nicht noetig sein
 				return false;
@@ -69,7 +69,7 @@ public class Lesson {
 					currentStep--;
 					rewindBackSteps++;
 				}
-				Log.i("new", Thread.currentThread().getName() + ": Lesson rewinded to: " + currentStep);
+				Log.i("new", "Lesson rewinded to: " + currentStep);
 				return rewindBackSteps;
 			}
 		}

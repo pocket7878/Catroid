@@ -76,4 +76,6 @@ public abstract class SurfaceObjectTutor implements SurfaceObject {
 
 	public abstract void setBackTutor(int set);
 
+	public abstract void setExtraStepInHistory();
+
 }

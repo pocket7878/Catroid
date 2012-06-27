@@ -184,49 +184,41 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	}
 
 	public void dispatchPanel(MotionEvent ev, float displayHeight) throws InterruptedException {
-		if (isOnStopButton(ev)) {
-			if (panel.isReadyToDispatch()) {
+		if (panel.isOpen() && panel.isReadyToDispatch()) {
+			if (isOnStopButton(ev)) {
 				Tutorial.getInstance(null).stopButtonTutorial();
 				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Stop");
-			}
-		} else if (isOnPauseButton(ev)) {
-			if (panel.isReadyToDispatch()) {
+			} else if (isOnPauseButton(ev)) {
 				//Tutorial.getInstance(null).pauseTutorial();
 				if (panel.isPaused()) {
 					panel.pressPlay();
 					Tutorial.getInstance(null).playButtonTutorial();
 					interrupt = false;
-
 				} else {
 					interrupt = true;
 					panel.pressPause();
 					Tutorial.getInstance(null).pauseButtonTutorial();
 				}
 				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Pause");
-			}
-		} else if (isOnButton(ev)) {
-			if (panel.isReadyToDispatch()) {
-				if (panel.isOpen()) {
-					panel.close();
-				} else {
-					panel.open();
-				}
-				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button open/close");
-			}
-		} else if (isOnBackwardButton(ev)) {
-			if (panel.isReadyToDispatch()) {
+			} else if (isOnBackwardButton(ev)) {
 				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button rewind");
 				interrupt = true;
 				Tutorial.getInstance(null).rewindStep();
 				panel.pressBackward();
 				interrupt = false;
-			}
-		} else if (isOnForwardButton(ev)) {
-			if (panel.isReadyToDispatch()) {
+			} else if (isOnForwardButton(ev)) {
 				panel.pressForward();
 				//TODO: implement foward step
 				//Tutorial.getInstance(null).rewindStep();
 				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button rewind");
+			} else if (isOnButton(ev)) {
+				panel.close();
+				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button open/close");
+			}
+		} else if (!panel.isOpen() && panel.isReadyToDispatch()) {
+			if (isOnButton(ev)) {
+				panel.open();
+				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button open/close");
 			}
 		}
 	}

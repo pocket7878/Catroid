@@ -184,13 +184,15 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void sleep() {
-
+		//		targetX = -150;
+		//		targetY = -150;
+		//state = 100;
 		Log.i("drab", Thread.currentThread().getName() + ": State set for sleep");
-		if (!flip) {
-			state = 1;
-		} else {
-			state = 5;
-		}
+		//		if (!flip) {
+		//			state = 1;
+		//		} else {
+		//			state = 5;
+		//		}
 		currentState = new TutorState(targetX, targetY, flip, state);
 		tutorStateHistory.addStateToHistory(currentState);
 	}
@@ -402,7 +404,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	@Override
 	public void setInterruptOfSequence(ACTIONS action) {
 		if (setBackTutor > 0) {
-			Log.i("new", "TUTOR - " + tutorType + ": stepsback " + setBackTutor);
+			Log.i("new", "In TUTOR-" + tutorType + " - Steps tto set back: " + setBackTutor);
 			if (this.tutorBubble != null) {
 				tutorBubble.interruptAndClear();
 				tutorBubble = null;
@@ -426,8 +428,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 			state = newState.getState();
 			currentStep = 0;
 
-			Log.i("new", Thread.currentThread().getName() + ": New state is SET and Steps reseted for "
-					+ this.tutorType);
+			Log.i("new", "In TUTOR-" + tutorType + " -New state is recovered from LESSON and is SET " + this.tutorType);
 			setBackTutor = 0;
 		}
 	}
@@ -435,5 +436,10 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	@Override
 	public void setBackTutor(int set) {
 		this.setBackTutor += set;
+	}
+
+	@Override
+	public void setExtraStepInHistory() {
+		tutorStateHistory.setStateCounterExtraStep();
 	}
 }

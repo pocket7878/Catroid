@@ -157,7 +157,7 @@ public class TutorialController {
 		 * int possibleLesson = preferences.getInt(PREF_KEY_POSSIBLE_LESSON, 0);
 		 * lessonCollection.setLastPossibleLessonNumber(possibleLesson);
 		 */
-		lessonCollection.switchToLesson(0);
+		lessonCollection.switchToLesson(1);
 		lessonCollection.setTutorialOverlay(tutorialOverlay);
 	}
 
