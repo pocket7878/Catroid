@@ -56,6 +56,8 @@ public class Bubble implements SurfaceObject {
 	private int waitTime = 1000;
 	private boolean waitForReset = false;
 
+	private int maxWidth = minWidth;
+
 	public Bubble(String text, TutorialOverlay tutorialOverlay, SurfaceObjectTutor tutor, int x, int y) {
 		this.tutor = tutor;
 		this.text = text;
@@ -65,6 +67,7 @@ public class Bubble implements SurfaceObject {
 		this.tutorialOverlay = tutorialOverlay;
 
 		bounds = new Rect();
+
 		if (this.y > 200) {
 			if (this.tutor.tutorType == Tutor.CATRO) {
 				speechBubble = (NinePatchDrawable) Tutorial.getInstance(null).getActualContext().getResources()
@@ -100,8 +103,12 @@ public class Bubble implements SurfaceObject {
 		paint.setFakeBoldText(true);
 		paint.setTextSize(textSize);
 
-		if (bounds.right < bounds.left + 10 * textArray[currentLine].length()) {
-			bounds.right = bounds.left + 10 * textArray[currentLine].length();
+		if (maxWidth < bounds.left + 9 * textArray[currentLine].length()) {
+			maxWidth += (bounds.left + 9 * textArray[currentLine].length() - maxWidth) + 5;
+		}
+
+		if (bounds.right < maxWidth) {
+			bounds.right = maxWidth;
 		}
 
 		bounds.bottom = 70 + bounds.top + 14 * currentLine;
@@ -110,7 +117,7 @@ public class Bubble implements SurfaceObject {
 
 		for (int i = 0; i < textArray.length; i++) {
 			if (textArray[i] != "") {
-				canvas.drawText(textArray[i], x + textSize, y + textMarginY + i * textSize, paint);
+				canvas.drawText(textArray[i], x + textSize, y + textMarginY + (i * textSize), paint);
 			}
 		}
 	}
@@ -165,7 +172,12 @@ public class Bubble implements SurfaceObject {
 				for (int i = 0; i < textArray.length; i++) {
 					textArray[i] = "";
 				}
+				bounds.top = this.y;
+				bounds.left = this.x;
+				bounds.right = bounds.left + minWidth;
+				speechBubble.setBounds(bounds);
 				waitForReset = false;
+				maxWidth = minWidth;
 				return;
 			}
 		}
