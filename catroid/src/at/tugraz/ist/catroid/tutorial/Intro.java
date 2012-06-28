@@ -37,11 +37,6 @@ public class Intro implements SurfaceObject {
 		bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.intro);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.tutorial.SurfaceObject#draw(android.graphics.Canvas)
-	 */
 	@Override
 	public void draw(Canvas canvas) {
 		// TODO Auto-generated method stub
@@ -49,11 +44,6 @@ public class Intro implements SurfaceObject {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.tutorial.SurfaceObject#update(long)
-	 */
 	@Override
 	public void update(long gameTime) {
 		// TODO Auto-generated method stub

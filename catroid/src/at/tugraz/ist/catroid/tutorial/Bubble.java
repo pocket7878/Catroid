@@ -42,6 +42,7 @@ public class Bubble implements SurfaceObject {
 	private String[] textArray = new String[] { "", "", "", "" };
 	private int currentLine = 0;
 	private int minWidth = 80;
+	private int maxTextWidth = minWidth;
 	private int x = 0;
 	private int y = 0;
 	private int textSize = 16;
@@ -55,8 +56,6 @@ public class Bubble implements SurfaceObject {
 	private boolean setEndTime = false;
 	private int waitTime = 1000;
 	private boolean waitForReset = false;
-
-	private int maxWidth = minWidth;
 
 	public Bubble(String text, TutorialOverlay tutorialOverlay, SurfaceObjectTutor tutor, int x, int y) {
 		this.tutor = tutor;
@@ -103,12 +102,12 @@ public class Bubble implements SurfaceObject {
 		paint.setFakeBoldText(true);
 		paint.setTextSize(textSize);
 
-		if (maxWidth < bounds.left + 9 * textArray[currentLine].length()) {
-			maxWidth += (bounds.left + 9 * textArray[currentLine].length() - maxWidth) + 5;
+		if (maxTextWidth < bounds.left + 10 * textArray[currentLine].length()) {
+			maxTextWidth += (bounds.left + 10 * textArray[currentLine].length() - maxTextWidth);
 		}
 
-		if (bounds.right < maxWidth) {
-			bounds.right = maxWidth;
+		if (bounds.right < maxTextWidth) {
+			bounds.right = maxTextWidth;
 		}
 
 		bounds.bottom = 70 + bounds.top + 14 * currentLine;
@@ -141,7 +140,7 @@ public class Bubble implements SurfaceObject {
 				}
 
 				if (reset) {
-					resetTextArray(new Date().getTime() + waitTime);
+					resetBubble(new Date().getTime() + waitTime);
 					textArray[currentLine] = "" + text.charAt(currentPosition);
 					reset = false;
 				} else {
@@ -165,7 +164,7 @@ public class Bubble implements SurfaceObject {
 		}
 	}
 
-	private void resetTextArray(long time) {
+	private void resetBubble(long time) {
 		while (true) {
 			long actTime = new Date().getTime();
 			if (actTime > time) {
@@ -177,13 +176,13 @@ public class Bubble implements SurfaceObject {
 				bounds.right = bounds.left + minWidth;
 				speechBubble.setBounds(bounds);
 				waitForReset = false;
-				maxWidth = minWidth;
+				maxTextWidth = minWidth;
 				return;
 			}
 		}
 	}
 
-	public void interruptAndClear() {
+	public void clearBubbleRemoveSurfaceObject() {
 		tutorialOverlay.removeSurfaceObject(this);
 	}
 }

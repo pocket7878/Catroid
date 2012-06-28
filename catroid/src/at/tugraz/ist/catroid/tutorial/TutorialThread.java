@@ -68,7 +68,6 @@ public class TutorialThread extends Thread implements Runnable {
 				this.join(1);
 				retry = false;
 			} catch (InterruptedException e) {
-				// we will try it again and again...
 			}
 		}
 	}
@@ -134,7 +133,6 @@ public class TutorialThread extends Thread implements Runnable {
 							iAck = true;
 							wait();
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
@@ -150,7 +148,7 @@ public class TutorialThread extends Thread implements Runnable {
 
 					if (tutorialThreadRunning && !nextLesson) {
 						Log.i("new", "STOP Tutorial");
-						Tutorial.getInstance(null).stopButtonTutorial();
+						stopTutorial();
 						break;
 					}
 				}
@@ -160,7 +158,7 @@ public class TutorialThread extends Thread implements Runnable {
 	}
 
 	public void stopTutorial() {
-		//TODO: stop tutorial here :)
+		Tutorial.getInstance(null).stopButtonTutorial();
 	}
 
 	public void setLessonCollection(LessonCollection lessonCollection) {
@@ -197,20 +195,18 @@ public class TutorialThread extends Thread implements Runnable {
 				tutor2 = lastModifiedTutorList.get(lastModifiedTutorIndex);
 
 				if (tutor1 == tutor2) {
-					this.tutors.get(tutor1).setBackTutor(1);
+					this.tutors.get(tutor1).setBackStepForTutor();
 					lastTutor = this.tutors.get(tutor1);
-					Log.i("new", "Setting back 1 step of " + tutor1 + " tutor");
 				} else {
 					notifyTutorForExtraStep = true;
-					this.tutors.get(tutor1).setBackTutor(1);
-					this.tutors.get(tutor2).setBackTutor(1);
+					this.tutors.get(tutor1).setBackStepForTutor();
+					this.tutors.get(tutor2).setBackStepForTutor();
 					lastTutor = this.tutors.get(tutor2);
-					Log.i("new", "Setting back 1 step of both tutors");
 				}
 			}
 
 			if (notifyTutorForExtraStep) {
-				lastTutor.setExtraStepInHistory();
+				lastTutor.setExtraStepInStateHistory();
 			}
 		}
 	}

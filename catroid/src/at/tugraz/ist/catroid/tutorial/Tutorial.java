@@ -39,6 +39,7 @@ public class Tutorial {
 	TutorialController tutorialController = new TutorialController();
 
 	private Tutorial() {
+
 	}
 
 	public void clear() {

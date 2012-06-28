@@ -34,11 +34,6 @@ public abstract class SurfaceObjectTutor implements SurfaceObject {
 	public Task.Tutor tutorType;
 	private TutorialOverlay tutorialOverlay;
 
-	//	public SurfaceObjectTutor(NewTutorialOverlay tutorialOverlay) {
-	//		this.tutorialOverlay = tutorialOverlay;
-	//		tutorialOverlay.addSurfaceObject(this);
-	//	}
-
 	public SurfaceObjectTutor(Context context, TutorialOverlay tutorialOverlay) {
 		this.tutorialOverlay = tutorialOverlay;
 		tutorialOverlay.addSurfaceObject(this);
@@ -74,8 +69,8 @@ public abstract class SurfaceObjectTutor implements SurfaceObject {
 
 	public abstract void sleep();
 
-	public abstract void setBackTutor(int set);
+	public abstract void setBackStepForTutor();
 
-	public abstract void setExtraStepInHistory();
+	public abstract void setExtraStepInStateHistory();
 
 }

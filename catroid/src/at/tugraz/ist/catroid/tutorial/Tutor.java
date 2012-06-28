@@ -48,17 +48,13 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private int sizeY = 102;
 	private Bubble tutorBubble = null;
 
-	/*
-	 * State + State Variables
-	 */
 	private int targetX;
 	private int targetY;
 	private boolean flip = false;
-
 	private TutorState currentState;
 	private TutorStateHistory tutorStateHistory;
-
 	private int flipFlag = 2;
+
 	private boolean reset = true;
 
 	private boolean walkFast = false;
@@ -75,19 +71,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private int updateTime = 150;
 
 	private boolean holdTutor = false;
-	private int setBackTutor = 0;
-
-	public Tutor(int drawable, TutorialOverlay tutorialOverlay) {
-		super(Tutorial.getInstance(null).getActualContext(), tutorialOverlay);
-
-		context = Tutorial.getInstance(null).getActualContext();
-		ressources = context.getResources();
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inScaled = false;
-		bitmap = BitmapFactory.decodeResource(ressources, drawable, options);
-		paint = new Paint();
-		this.tutorialOverlay = tutorialOverlay;
-	}
+	private int setBackStepsTutor = 0;
 
 	public Tutor(int drawable, TutorialOverlay tutorialOverlay, int x, int y, Task.Tutor tutorType) {
 		super(Tutorial.getInstance(null).getActualContext(), tutorialOverlay);
@@ -106,13 +90,10 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		tutorStateHistory = new TutorStateHistory(tutorType);
 		currentState = new TutorState(targetX, targetY, flip, state);
 		tutorStateHistory.addStateToHistory(currentState);
-
 	}
 
 	@Override
 	public void flip(boolean flipFast) {
-		Log.i("drab", Thread.currentThread().getName() + ": State set for Flipping");
-
 		if (flip) {
 			flip = false;
 		} else {
@@ -130,9 +111,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void walk(int walkX, int walkY, boolean fastWalk) {
-
-		Log.i("drab", Thread.currentThread().getName() + ": State set for Walking");
-
 		walkFast = fastWalk;
 		walkToX = walkX;
 		walkToY = walkY;
@@ -184,23 +162,12 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void sleep() {
-		//		targetX = -150;
-		//		targetY = -150;
-		//state = 100;
-		Log.i("drab", Thread.currentThread().getName() + ": State set for sleep");
-		//		if (!flip) {
-		//			state = 1;
-		//		} else {
-		//			state = 5;
-		//		}
 		currentState = new TutorState(targetX, targetY, flip, state);
 		tutorStateHistory.addStateToHistory(currentState);
 	}
 
 	@Override
 	public void say(String text) {
-
-		//Log.i("drab", Thread.currentThread().getName() + ": State set for Saying");
 		this.tutorBubble = new Bubble(text, tutorialOverlay, this, targetX, targetY);
 		Log.i("drab", Thread.currentThread().getName() + ": New bubble created : " + this.tutorBubble);
 
@@ -215,8 +182,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void jumpTo(int x, int y) {
-
-		Log.i("drab", Thread.currentThread().getName() + ": State set for Jumping");
 		targetX = x;
 		targetY = y;
 		state = 61;
@@ -226,10 +191,8 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void appear(int x, int y) {
-
 		this.targetX = x;
 		this.targetY = y;
-		Log.i("drab", Thread.currentThread().getName() + ": State set for appear");
 
 		if (!flip) {
 			state = 0;
@@ -242,9 +205,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void disappear() {
-
-		Log.i("drab", Thread.currentThread().getName() + ": State set for disappearing");
-
 		if (!flip) {
 			state = 3;
 		} else {
@@ -261,8 +221,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 			currentStep = 0;
 			reset = true;
 		}
-
-		//Log.i("drab", Thread.currentThread().getName() + ": TutorDraw()");
 
 		if (!holdTutor) {
 			switch (state) {
@@ -349,8 +307,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 0, sizeX, sizeY);
 							}
 						}
-						//						Log.i("drab", "START of FLIP | currentStep: " + currentStep + " state: " + state
-						//								+ " flipFlag: " + flipFlag + " flip: " + flip);
+
 						if (currentStep == 9 && reset) {
 							flipFlag--;
 							reset = false;
@@ -365,8 +322,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 						Tutorial.getInstance(null).setNotification("flip done!");
 					}
-					//					Log.i("drab", "END of FLIP | currentStep: " + currentStep + " state: " + state + " flipFlag: "
-					//							+ flipFlag);
 					break;
 
 				case 61: //JUMP
@@ -403,10 +358,10 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void setInterruptOfSequence(ACTIONS action) {
-		if (setBackTutor > 0) {
-			Log.i("new", "In TUTOR-" + tutorType + " - Steps tto set back: " + setBackTutor);
+		if (setBackStepsTutor > 0) {
+			Log.i("new", "In TUTOR-" + tutorType + " - Steps tto set back: " + setBackStepsTutor);
 			if (this.tutorBubble != null) {
-				tutorBubble.interruptAndClear();
+				tutorBubble.clearBubbleRemoveSurfaceObject();
 				tutorBubble = null;
 				Tutorial.getInstance(null).setNotification("Bubble finished!");
 				Log.i("drab", Thread.currentThread().getName() + ": Bubble deleted for " + this.tutorType);
@@ -417,9 +372,9 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 			TutorState newState;
 
 			if (action == ACTIONS.REWIND) {
-				newState = tutorStateHistory.setBackAndReturnState(setBackTutor);
+				newState = tutorStateHistory.setBackAndReturnState(setBackStepsTutor);
 			} else {
-				newState = tutorStateHistory.setBackAndReturnState(setBackTutor);
+				newState = tutorStateHistory.setBackAndReturnState(setBackStepsTutor);
 			}
 
 			targetX = newState.getX();
@@ -429,17 +384,17 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 			currentStep = 0;
 
 			Log.i("new", "In TUTOR-" + tutorType + " -New state is recovered from LESSON and is SET " + this.tutorType);
-			setBackTutor = 0;
+			setBackStepsTutor = 0;
 		}
 	}
 
 	@Override
-	public void setBackTutor(int set) {
-		this.setBackTutor += set;
+	public void setBackStepForTutor() {
+		this.setBackStepsTutor += 1;
 	}
 
 	@Override
-	public void setExtraStepInHistory() {
+	public void setExtraStepInStateHistory() {
 		tutorStateHistory.setStateCounterExtraStep();
 	}
 }

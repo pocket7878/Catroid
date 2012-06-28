@@ -74,7 +74,6 @@ public class Cloud implements SurfaceObject {
 
 	@Override
 	public void draw(Canvas canvas) {
-		//	Log.i("faxxe", "Cloud: draw!" + alpha);
 		int height = ((Activity) context).getWindowManager().getDefaultDisplay().getHeight();
 		int width = ((Activity) context).getWindowManager().getDefaultDisplay().getWidth();
 		paint.setColor(Color.GRAY);
@@ -98,7 +97,7 @@ public class Cloud implements SurfaceObject {
 	}
 
 	public void updateXY() {
-		//fix the following 6 lines for all directions!
+		//TODO:fix the following 6 lines for all directions!
 		float deltax = sollX;
 		float deltay = sollY;
 		double dist = Math.sqrt(sollX * sollX + sollY * sollY);
