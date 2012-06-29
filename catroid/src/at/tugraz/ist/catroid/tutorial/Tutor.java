@@ -383,7 +383,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 			state = newState.getState();
 			currentStep = 0;
 
-			Log.i("new", "In TUTOR-" + tutorType + " -New state is recovered from LESSON and is SET " + this.tutorType);
+			Log.i("new", "In TUTOR-" + tutorType + " -New state: " + state + " for - " + this.tutorType);
 			setBackStepsTutor = 0;
 		}
 	}
@@ -396,5 +396,15 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	@Override
 	public void setExtraStepInStateHistory() {
 		tutorStateHistory.setStateCounterExtraStep();
+	}
+
+	@Override
+	public void resetTutor() {
+		tutorStateHistory.clearStateHistory();
+		state = -1;
+		flip = false;
+		currentStep = 0;
+		targetX = 0;
+		targetY = 0;
 	}
 }

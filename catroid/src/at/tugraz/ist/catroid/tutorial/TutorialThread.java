@@ -104,6 +104,7 @@ public class TutorialThread extends Thread implements Runnable {
 					Log.i("new", "\n");
 
 					lastModifiedTutorIndex++;
+
 				}
 
 				if (notification == true) {
@@ -144,6 +145,11 @@ public class TutorialThread extends Thread implements Runnable {
 				if (!nextStep) {
 					Log.i("new", "Tutorial stopped in TUT-Thread");
 					lessonCollection.resetCurrentLesson();
+					tutors.get(Task.Tutor.CATRO).resetTutor();
+					tutors.get(Task.Tutor.MIAUS).resetTutor();
+					lastModifiedTutorIndex = 0;
+					lastModifiedTutorList.clear();
+
 					boolean nextLesson = lessonCollection.nextLesson();
 
 					if (tutorialThreadRunning && !nextLesson) {
@@ -183,11 +189,12 @@ public class TutorialThread extends Thread implements Runnable {
 		}
 
 		synchronized (lastModifiedTutorList) {
-			Task.Tutor tutor1 = null;
-			Task.Tutor tutor2 = null;
-			decrementLastTutorModifiedIndex();
 			boolean notifyTutorForExtraStep = false;
 			SurfaceObjectTutor lastTutor = null;
+			Task.Tutor tutor1 = null;
+			Task.Tutor tutor2 = null;
+
+			decrementLastTutorModifiedIndex();
 
 			for (int i = 0; i < stepsBack; i++) {
 				tutor1 = lastModifiedTutorList.get(lastModifiedTutorIndex);
@@ -195,13 +202,19 @@ public class TutorialThread extends Thread implements Runnable {
 				tutor2 = lastModifiedTutorList.get(lastModifiedTutorIndex);
 
 				if (tutor1 == tutor2) {
-					this.tutors.get(tutor1).setBackStepForTutor();
-					lastTutor = this.tutors.get(tutor1);
+					if (tutor1 != null) {
+						this.tutors.get(tutor1).setBackStepForTutor();
+						lastTutor = this.tutors.get(tutor1);
+					}
 				} else {
-					notifyTutorForExtraStep = true;
-					this.tutors.get(tutor1).setBackStepForTutor();
-					this.tutors.get(tutor2).setBackStepForTutor();
-					lastTutor = this.tutors.get(tutor2);
+					if (tutor1 != null) {
+						this.tutors.get(tutor1).setBackStepForTutor();
+					}
+					if (tutor2 != null) {
+						notifyTutorForExtraStep = true;
+						this.tutors.get(tutor2).setBackStepForTutor();
+						lastTutor = this.tutors.get(tutor2);
+					}
 				}
 			}
 

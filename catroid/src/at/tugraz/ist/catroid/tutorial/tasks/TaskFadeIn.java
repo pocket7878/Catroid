@@ -30,36 +30,21 @@ import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
  */
 public class TaskFadeIn implements Task {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.tutorial.tasks.Task#execute(at.tugraz.ist.catroid.tutorial.TutorialOverlay)
-	 */
 	@Override
 	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		// TODO Auto-generated method stub
-		Log.i("faxxe", "TaskFadeIn: Cloud is fading in!");
+		Log.i("new", "TaskFadeIn: Cloud is fading in!");
 		CloudController co = new CloudController();
 		co.fadeIn();
 		return false;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.tutorial.tasks.Task#getType()
-	 */
 	@Override
 	public Type getType() {
 		// TODO Auto-generated method stub
-		return null;
+		return Type.FADEIN;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.tutorial.tasks.Task#getTutorType()
-	 */
 	@Override
 	public Tutor getTutorType() {
 		// TODO Auto-generated method stub

@@ -4,6 +4,245 @@
         <at.tugraz.ist.catroid.tutorial.Lesson>
             <lessonName>Demonstration</lessonName>
             <lessonContent>
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                    <sleepTime>1000</sleepTime>
+                    <tutorType>MIAUS</tutorType>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                    <tutorType>MIAUS</tutorType>
+                    <x>80</x>
+                    <y>300</y>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                    <sleepTime>1000</sleepTime>
+                    <tutorType>MIAUS</tutorType>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                    <tutorType>CATRO</tutorType>
+                    <x>280</x>
+                    <y>300</y>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                    <sleepTime>2000</sleepTime>
+                    <tutorType>MIAUS</tutorType>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>Hallo! Darf ich mich vorstellen....</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                
+                 <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>Mein Name ist CATRO. Und wer bist du?</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>MIAUS</tutorType>
+                    <message>Hi CATRO. Ich bin MIAUS...narf.</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>MIAUS</tutorType>
+                    <message>...was machst du den so hier?</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>Ich bin hier um dir was über CATROID zu erklären.</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>MIAUS</tutorType>
+                    <message>CATROID? Was ist den das? Eine Roboter Katze?</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>Haha, nein. Ein wirklich cooles APP mit dem man lernt zu programmieren</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskDisappear>
+                    <tutorType>MIAUS</tutorType>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskDisappear>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>Drücke nun einmal auf AKTUELLES PROJEKT</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                    <sleepTime>500</sleepTime>
+                    <tutorType>CATRO</tutorType>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>  
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+                    <notificationType>CURRENT_PROJECT_BUTTON</notificationType>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                    <tutorType>CATRO</tutorType>
+                    <x>200</x>
+                    <y>300</y>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>New Sprite please!</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>New Sprite please!</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+                    <notificationType>PROJECT_ADD_SPRITE</notificationType>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>Nun drueck zweites item in Liste</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+                    <notificationType>PROJECT_LIST_ITEM</notificationType>
+                    <notificationString>1</notificationString>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                    <tutorType>CATRO</tutorType>
+                    <x>200</x>
+                    <y>300</y>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>Jetzt tue emol e Brickele hinzufueche!</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+                    <notificationType>SCRIPTS_ADD_BRICK</notificationType>
+                    <notificationString>2</notificationString>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                    <tutorType>CATRO</tutorType>
+                    <x>200</x>
+                    <y>300</y>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>Aussehen!</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+                    <notificationType>BRICK_CATEGORY_DIALOG</notificationType>
+                    <notificationString>100</notificationString>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>Setze Kostüm!</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+                    <notificationType>BRICK_ADD_DIALOG</notificationType>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>Kostuembrick!!</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                    <sleepTime>500</sleepTime>
+                    <tutorType>CATRO</tutorType>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>MIAUS</tutorType>
+                    <message>Supi supi supi. Du bist so unglaublich spitze.</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                    <tutorType>CATRO</tutorType>
+                    <x>200</x>
+                    <y>300</y>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>Tua mol Costumes clickele!</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+                    <tutorType>CATRO</tutorType>
+                    <notificationType>TAB_COSTUMES</notificationType>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+                    <sleepTime>500</sleepTime>
+                    <tutorType>CATRO</tutorType>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                    <tutorType>CATRO</tutorType>
+                    <x>200</x>
+                    <y>300</y>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>Jetzt tua mol de Sounds clickele!</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+                    <tutorType>CATRO</tutorType>
+                    <notificationType>TAB_SOUNDS</notificationType>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+                    <tutorType>CATRO</tutorType>
+                    <x>200</x>
+                    <y>300</y>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                    <tutorType>CATRO</tutorType>
+                    <message>Jetzt tua mol den Sound dazuafÃ¼gen!</message>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+                    <tutorType>CATRO</tutorType>
+                    <notificationType>SOUNDS_ADD_SOUND</notificationType>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
+                
+                     </lessonContent>
+            <lessonID>0</lessonID>
+            <currentStep>0</currentStep>
+        </at.tugraz.ist.catroid.tutorial.Lesson>
+ <!-- 
+        
+        <at.tugraz.ist.catroid.tutorial.Lesson>
+            <lessonName>Demonstration</lessonName>
+            <lessonContent>
                                
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
                     <tutorType>CATRO</tutorType>
@@ -15,6 +254,9 @@
                     <tutorType>CATRO</tutorType>
                     <message>Hallo. Mein Name ist CATRO und ich werde dir erklären, wie du uns Tutoren steuern kannst um super Tutorials für die Kids zu gestalten.</message>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
+                
+                <at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>
+                </at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>
                 
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskWalk>
                     <tutorType>CATRO</tutorType>
@@ -147,7 +389,7 @@
                     <sleepTime>2000</sleepTime>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
             </lessonContent>
-            <lessonID>0</lessonID>
+            <lessonID>1</lessonID>
             <currentStep>0</currentStep>
         </at.tugraz.ist.catroid.tutorial.Lesson>
         
@@ -191,9 +433,9 @@
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
                
             </lessonContent>
-            <lessonID>1</lessonID>
+            <lessonID>2</lessonID>
             <currentStep>0</currentStep>
-        </at.tugraz.ist.catroid.tutorial.Lesson>
+        </at.tugraz.ist.catroid.tutorial.Lesson> -->
     </lessonArray>
     <currentLesson>0</currentLesson>
 </at.tugraz.ist.catroid.tutorial.LessonCollection>

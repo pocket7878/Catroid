@@ -7,7 +7,7 @@ import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 public interface Task {
 
 	public static enum Type {
-		JUMP, APPEAR, DISAPPEAR, SAY, FLIP, POINT, NOTIFICATION, SLEEP, WALK
+		JUMP, APPEAR, DISAPPEAR, SAY, FLIP, POINT, NOTIFICATION, SLEEP, WALK, FADEIN, FADEOUT
 	}
 
 	public enum Tutor {

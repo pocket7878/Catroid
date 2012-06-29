@@ -32,9 +32,7 @@ public class Lesson {
 	}
 
 	public void cleanAfterXML() {
-		//		if (lessonContent.size() > 0) {
-		//			lessonContent.remove(0);
-		//		}
+
 	}
 
 	boolean forwardStep() {
@@ -62,9 +60,13 @@ public class Lesson {
 				currentStep--;
 				int rewindBackSteps = 1;
 
-				while (lessonContent.get(currentStep).getType() == Task.Type.FLIP
+				while ((lessonContent.get(currentStep).getType() == Task.Type.FLIP
 						|| lessonContent.get(currentStep).getType() == Task.Type.JUMP
-						|| lessonContent.get(currentStep).getType() == Task.Type.SLEEP) {
+						|| lessonContent.get(currentStep).getType() == Task.Type.FADEIN || lessonContent.get(
+						currentStep).getType() == Task.Type.FADEOUT)
+						&& currentStep != 0) {
+					Log.i("new", "REWINDED to " + (lessonContent.get(currentStep).getType())
+							+ " need to rewind one more");
 					currentStep--;
 					rewindBackSteps++;
 				}
@@ -74,7 +76,6 @@ public class Lesson {
 		}
 	}
 
-	//	String executeTask(NewTutorialOverlay tutorialOverlay) {
 	boolean executeTask(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		Log.i("new",
 				Thread.currentThread().getName() + ": @ Step " + currentStep + " executing: "
@@ -87,7 +88,6 @@ public class Lesson {
 	}
 
 	public Tutor getCurrentTutorNameFromTask() {
-		// TODO Auto-generated method stub
 		return lessonContent.get(currentStep).getTutorType();
 	}
 }

@@ -29,33 +29,18 @@ import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
  */
 public class TaskFadeOut implements Task {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.tutorial.tasks.Task#getType()
-	 */
 	@Override
 	public Type getType() {
 		// TODO Auto-generated method stub
-		return null;
+		return Type.FADEOUT;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.tutorial.tasks.Task#getTutorType()
-	 */
 	@Override
 	public Tutor getTutorType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.tutorial.tasks.Task#execute(java.util.HashMap)
-	 */
 	@Override
 	public boolean execute(HashMap<Tutor, SurfaceObjectTutor> tutors) {
 		CloudController co = new CloudController();

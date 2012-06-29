@@ -38,11 +38,12 @@ public class Bubble implements SurfaceObject {
 	private NinePatchDrawable speechBubble;
 	private TutorialOverlay tutorialOverlay;
 	private SurfaceObjectTutor tutor;
-	private Rect bounds;
+	private Rect bubbleBounds;
+
 	private String[] textArray = new String[] { "", "", "", "" };
 	private int currentLine = 0;
 	private int minWidth = 80;
-	private int maxTextWidth = minWidth;
+
 	private int x = 0;
 	private int y = 0;
 	private int textSize = 16;
@@ -65,7 +66,7 @@ public class Bubble implements SurfaceObject {
 		tutorialOverlay.addSurfaceObject(this);
 		this.tutorialOverlay = tutorialOverlay;
 
-		bounds = new Rect();
+		bubbleBounds = new Rect();
 
 		if (this.y > 200) {
 			if (this.tutor.tutorType == Tutor.CATRO) {
@@ -90,10 +91,10 @@ public class Bubble implements SurfaceObject {
 			this.x -= 20;
 			textMarginY = 45;
 		}
-		bounds.top = this.y;
-		bounds.left = this.x;
-		bounds.right = bounds.left + minWidth;
-		speechBubble.setBounds(bounds);
+		bubbleBounds.top = this.y;
+		bubbleBounds.left = this.x;
+		bubbleBounds.right = bubbleBounds.left + minWidth;
+		speechBubble.setBounds(bubbleBounds);
 	}
 
 	@Override
@@ -102,16 +103,15 @@ public class Bubble implements SurfaceObject {
 		paint.setFakeBoldText(true);
 		paint.setTextSize(textSize);
 
-		if (maxTextWidth < bounds.left + 10 * textArray[currentLine].length()) {
-			maxTextWidth += (bounds.left + 10 * textArray[currentLine].length() - maxTextWidth);
+		int width = (int) paint.measureText(textArray[currentLine]);
+
+		if (bubbleBounds.right < bubbleBounds.left + width + 40) {
+			bubbleBounds.right = bubbleBounds.left + width + 40;
 		}
 
-		if (bounds.right < maxTextWidth) {
-			bounds.right = maxTextWidth;
-		}
+		bubbleBounds.bottom = 70 + bubbleBounds.top + 14 * currentLine;
 
-		bounds.bottom = 70 + bounds.top + 14 * currentLine;
-		speechBubble.setBounds(bounds);
+		speechBubble.setBounds(bubbleBounds);
 		speechBubble.draw(canvas);
 
 		for (int i = 0; i < textArray.length; i++) {
@@ -171,12 +171,11 @@ public class Bubble implements SurfaceObject {
 				for (int i = 0; i < textArray.length; i++) {
 					textArray[i] = "";
 				}
-				bounds.top = this.y;
-				bounds.left = this.x;
-				bounds.right = bounds.left + minWidth;
-				speechBubble.setBounds(bounds);
+				bubbleBounds.top = this.y;
+				bubbleBounds.left = this.x;
+				bubbleBounds.right = bubbleBounds.left + minWidth;
+				speechBubble.setBounds(bubbleBounds);
 				waitForReset = false;
-				maxTextWidth = minWidth;
 				return;
 			}
 		}
