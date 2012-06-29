@@ -28,7 +28,6 @@ import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -43,14 +42,17 @@ public class DroneStopVideoRecorderBrick implements Brick {
 		this.sprite = sprite;
 	}
 
+	@Override
 	public void execute() {
-		DroneHandler.getInstance().getDrone().stopVideoRecorder();
+		//DroneHandler.getInstance().getDrone().stopVideoRecorder();
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
 			view = View.inflate(context, R.layout.toolbox_brick_drone_stop_video_recorder, null);
@@ -58,6 +60,7 @@ public class DroneStopVideoRecorderBrick implements Brick {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.toolbox_brick_drone_stop_video_recorder, null);
 	}
@@ -67,6 +70,7 @@ public class DroneStopVideoRecorderBrick implements Brick {
 		return new DroneStopVideoRecorderBrick(getSprite());
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return WIFI_DRONE;
 	}

@@ -83,10 +83,23 @@ public class PreStageActivity extends Activity {
 
 	private boolean autoConnect = false;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	private ConnectThread connThread;
 
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onPostCreate(savedInstanceState);
+		restartConnectThread();
+
+	}
+
+	private void restartConnectThread() {
+		connThread = null;
+		connThread = new ConnectThread();
+		connThread.start();
+	}
+
+	private void checkProjects() {
 		int required_resources = getRequiredRessources();
 		int mask = 0x1;
 		int value = required_resources;
@@ -169,12 +182,19 @@ public class PreStageActivity extends Activity {
 						.setPositiveButton("Yes", dialogGoToSettingsClickListener)
 						.setNegativeButton("No", dialogGoToSettingsClickListener).show();
 				//Toast.makeText(PreStageActivity.this, R.string.drone_plugin_not_enabled, Toast.LENGTH_LONG).show();
-				//finish();
+				//finishMethod() ;
 			}
 		}
 		if (noResources == true) {
 			startStage();
 		}
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setContentView(R.layout.activity_prestage);
 
 	}
 
@@ -224,7 +244,7 @@ public class PreStageActivity extends Activity {
 
 					Toast.makeText(getApplicationContext(), "Problem connecting to drone", Toast.LENGTH_LONG).show();
 
-					finish();
+					finishMethod();
 
 					return;
 				}
@@ -235,6 +255,14 @@ public class PreStageActivity extends Activity {
 			Log.d(DroneConsts.DroneLogTag, "Drone is ready!");
 
 			startStage();
+
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			// TODO Auto-generated method stub
+			Log.d("Catroid", "onServiceDisconnected:: Drone Service disconnected");
+			isDroneServiceBound = false;
 		}
 
 		private void sleep(int millis) {
@@ -246,20 +274,20 @@ public class PreStageActivity extends Activity {
 			}
 		}
 
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-			// TODO Auto-generated method stub
-			Log.d("Catroid", "onServiceDisconnected:: Drone Service disconnected");
-			isDroneServiceBound = false;
-		}
 	};
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (requiredResourceCounter == 0) {
-			finish();
-		}
+		Log.d(DroneConsts.DroneLogTag, "Prestage onResume() ... should not happen");
+		setVisible(true);
+		restartConnectThread();
+		//checkProjects();
+
+		//getResources();
+		//		if (requiredResourceCounter == 0) {
+		//			finishMethod();
+		//		}
 	}
 
 	@Override
@@ -289,6 +317,11 @@ public class PreStageActivity extends Activity {
 		}
 	}
 
+	private void finishMethod() {
+		Log.d(DroneConsts.DroneLogTag, "finish is called");
+		finish();
+	}
+
 	//all resources that should not have to be reinitialized every stage start
 	public static void shutdownPersistentResources() {
 
@@ -301,7 +334,7 @@ public class PreStageActivity extends Activity {
 	private void resourceFailed() {
 		Intent intent = this.getIntent();
 		this.setResult(RESULT_CANCELED, intent);
-		finish();
+		finishMethod();
 	}
 
 	private synchronized void resourceInitialized() {
@@ -317,7 +350,7 @@ public class PreStageActivity extends Activity {
 	public void startStage() {
 		Intent intent = this.getIntent();
 		this.setResult(RESULT_OK, intent);
-		finish();
+		finishMethod();
 	}
 
 	private void startBTComm(boolean autoConnect) {
@@ -354,7 +387,7 @@ public class PreStageActivity extends Activity {
 					case Activity.RESULT_CANCELED:
 						Toast.makeText(PreStageActivity.this, R.string.notification_blueth_err, Toast.LENGTH_LONG)
 								.show();
-						//finish();
+						//finishMethod() ;
 						resourceFailed();
 						break;
 				}
@@ -372,7 +405,7 @@ public class PreStageActivity extends Activity {
 					case Activity.RESULT_CANCELED:
 						connectingProgressDialog.dismiss();
 						Toast.makeText(PreStageActivity.this, R.string.bt_connection_failed, Toast.LENGTH_LONG).show();
-						//finish();
+						//finishMethod() ;
 						resourceFailed();
 						break;
 				}
@@ -424,6 +457,7 @@ public class PreStageActivity extends Activity {
 					alert.show();
 
 				}
+
 				break;
 
 			case DRONEWIFICONNECTIONACTIVITY:
@@ -440,7 +474,7 @@ public class PreStageActivity extends Activity {
 					case Activity.RESULT_CANCELED:
 						Toast.makeText(PreStageActivity.this, R.string.drone_connect_drone_cancel, Toast.LENGTH_LONG)
 								.show();
-						finish();
+						finishMethod();
 						break;
 				}
 				break;
@@ -505,7 +539,7 @@ public class PreStageActivity extends Activity {
 
 				case DialogInterface.BUTTON_NEGATIVE:
 					//No button clicked
-					finish();
+					finishMethod();
 					break;
 			}
 		}
@@ -515,6 +549,19 @@ public class PreStageActivity extends Activity {
 		startActivityForResult(new Intent(this, SettingsActivity.class), 1111);
 	}
 
+	private class ConnectThread extends Thread {
+		@Override
+		public void run() {
+			try {
+				sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			checkProjects();
+		}
+
+	}
 	//	@Override
 	//	protected Dialog onCreateDialog(int id) {
 	//		Dialog dialog = null;

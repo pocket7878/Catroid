@@ -45,7 +45,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.plugin.Drone.DroneConsts;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
+import at.tugraz.ist.catroid.plugin.Drone.DroneServiceHandler;
 import at.tugraz.ist.catroid.plugin.Drone.other.DroneBrickListAdapter;
 import at.tugraz.ist.catroid.plugin.Drone.other.DroneSelectTimeDialogInteger;
 
@@ -73,9 +73,10 @@ public class DroneMoveAnimationBrick implements Brick, OnItemClickListener, OnDi
 		this.durationSeconds = durationSeconds;
 	}
 
+	@Override
 	public void execute() {
 
-		DroneHandler.getInstance().getDrone().playMoveAnimation(animation, durationSeconds);
+		DroneServiceHandler.getInstance().getDrone().playMoveAnimation(animation, durationSeconds);
 
 		// wait for finishing executing animation
 		try {
@@ -85,10 +86,12 @@ public class DroneMoveAnimationBrick implements Brick, OnItemClickListener, OnDi
 		}
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(final Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
 			view = View.inflate(context, R.layout.toolbox_brick_drone_move_animation, null);
@@ -110,6 +113,7 @@ public class DroneMoveAnimationBrick implements Brick, OnItemClickListener, OnDi
 		final DroneBrickListAdapter moveAnimationBrickAdapter = new DroneBrickListAdapter(context, animationList);
 
 		animationButton.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				animationDialog = new Dialog(context);
 				animationDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -136,6 +140,7 @@ public class DroneMoveAnimationBrick implements Brick, OnItemClickListener, OnDi
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.toolbox_brick_drone_move_animation, null);
 	}
@@ -145,6 +150,7 @@ public class DroneMoveAnimationBrick implements Brick, OnItemClickListener, OnDi
 		return new DroneMoveAnimationBrick(getSprite(), animation, durationSeconds);
 	}
 
+	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		title = animationList.get(position);
 		animation = position;
@@ -152,12 +158,14 @@ public class DroneMoveAnimationBrick implements Brick, OnItemClickListener, OnDi
 		animationDialog.dismiss();
 	}
 
+	@Override
 	public void onDismiss(DialogInterface dialog) {
 		durationSeconds = (int) Math.round(((DroneSelectTimeDialogInteger) dialog).getValue());
 		adapter.notifyDataSetChanged();
 		dialog.cancel();
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return WIFI_DRONE;
 	}

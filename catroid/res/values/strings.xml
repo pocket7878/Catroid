@@ -423,6 +423,7 @@
 
 	<!-- DON'T Toch this!!!! END (else merging is horrible ;) ) -->
     <string name="drone_brick_flip_drone">Flip Drone</string>
+    <string name="prestage_activity_loading_stage">Loading stage ...</string>
 
 	
 </resources>

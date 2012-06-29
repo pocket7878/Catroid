@@ -28,7 +28,6 @@ import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 import at.tugraz.ist.catroid.plugin.Drone.other.DroneVideoCostume;
 import at.tugraz.ist.catroid.stage.StageActivity;
 
@@ -47,8 +46,9 @@ public class DroneStartVideoBrick implements Brick {
 
 	private static final long serialVersionUID = 1L;
 
+	@Override
 	public void execute() {
-		DroneHandler.getInstance().getDrone().startVideo();
+		//DroneHandler.getInstance().getDrone().startVideo();
 		try {
 			StageActivity.stageListener.removeActor(sprite.costume);
 			sprite.costume.disposeTextures();
@@ -60,10 +60,12 @@ public class DroneStartVideoBrick implements Brick {
 		}
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
 			view = View.inflate(context, R.layout.toolbox_brick_drone_start_video, null);
@@ -71,6 +73,7 @@ public class DroneStartVideoBrick implements Brick {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.toolbox_brick_drone_start_video, null);
 	}
@@ -80,6 +83,7 @@ public class DroneStartVideoBrick implements Brick {
 		return new DroneStartVideoBrick(getSprite());
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return WIFI_DRONE;
 	}

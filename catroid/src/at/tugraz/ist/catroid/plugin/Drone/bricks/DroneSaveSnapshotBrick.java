@@ -33,7 +33,6 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -48,6 +47,7 @@ public class DroneSaveSnapshotBrick implements Brick {
 		this.sprite = sprite;
 	}
 
+	@Override
 	public void execute() {
 		String path = null;
 		try {
@@ -57,13 +57,15 @@ public class DroneSaveSnapshotBrick implements Brick {
 			// TODO: handle exception
 		}
 
-		DroneHandler.getInstance().getDrone().saveVideoSnapshot(path);
+		//DroneHandler.getInstance().getDrone().saveVideoSnapshot(path);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
 			view = View.inflate(context, R.layout.toolbox_brick_drone_save_snapshot, null);
@@ -71,6 +73,7 @@ public class DroneSaveSnapshotBrick implements Brick {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.toolbox_brick_drone_save_snapshot, null);
 	}
@@ -80,6 +83,7 @@ public class DroneSaveSnapshotBrick implements Brick {
 		return new DroneSaveSnapshotBrick(getSprite());
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return WIFI_DRONE;
 	}

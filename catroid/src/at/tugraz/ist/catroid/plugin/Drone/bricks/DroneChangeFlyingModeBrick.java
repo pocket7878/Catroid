@@ -39,7 +39,6 @@ import android.widget.ListView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 import at.tugraz.ist.catroid.plugin.Drone.other.DroneBrickListAdapter;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -64,14 +63,17 @@ public class DroneChangeFlyingModeBrick implements Brick, OnItemClickListener {
 		this.flyingMode = flyingMode;
 	}
 
+	@Override
 	public void execute() {
-		DroneHandler.getInstance().getDrone().changeFlyingMode(flyingMode);
+		//DroneHandler.getInstance().getDrone().changeFlyingMode(flyingMode);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(final Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
 			view = View.inflate(context, R.layout.toolbox_brick_drone_change_flyingmode, null);
@@ -92,6 +94,7 @@ public class DroneChangeFlyingModeBrick implements Brick, OnItemClickListener {
 
 		final DroneBrickListAdapter flyingModeBrickAdapter = new DroneBrickListAdapter(context, flyingModeList);
 		flyingStateButton.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				flyingModeDialog = new Dialog(context);
 				flyingModeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -110,6 +113,7 @@ public class DroneChangeFlyingModeBrick implements Brick, OnItemClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.toolbox_brick_drone_change_flyingmode, null);
 	}
@@ -119,6 +123,7 @@ public class DroneChangeFlyingModeBrick implements Brick, OnItemClickListener {
 		return new DroneChangeFlyingModeBrick(getSprite(), flyingMode);
 	}
 
+	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		title = flyingModeList.get(position);
 		flyingMode = position;
@@ -126,6 +131,7 @@ public class DroneChangeFlyingModeBrick implements Brick, OnItemClickListener {
 		adapter.notifyDataSetChanged();
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return WIFI_DRONE;
 	}

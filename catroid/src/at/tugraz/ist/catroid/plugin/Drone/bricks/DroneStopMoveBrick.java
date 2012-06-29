@@ -44,14 +44,17 @@ public class DroneStopMoveBrick implements Brick {
 		this.sprite = sprite;
 	}
 
+	@Override
 	public void execute() {
 		DroneHandler.getInstance().getDrone().move(0, 0, 0, 0);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
 			view = View.inflate(context, R.layout.toolbox_brick_drone_stop_move, null);
@@ -59,6 +62,7 @@ public class DroneStopMoveBrick implements Brick {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.toolbox_brick_drone_stop_move, null);
 	}
@@ -68,6 +72,7 @@ public class DroneStopMoveBrick implements Brick {
 		return new DroneStopMoveBrick(getSprite());
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return WIFI_DRONE;
 	}

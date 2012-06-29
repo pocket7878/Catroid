@@ -98,8 +98,6 @@ public class DroneMoveBrick implements Brick, OnSeekBarChangeListener, OnDismiss
 			}
 		}
 
-		//DroneHandler.getInstance().getDrone().move(throttle, roll, pitch, yaw);
-
 		DroneServiceHandler.getInstance().getDrone().move(roll, pitch, throttle, yaw, 200);
 	}
 
