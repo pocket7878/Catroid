@@ -53,4 +53,8 @@ public class CloudController {
 		cloud.fadeOut();
 	}
 
+	public void clear() {
+		cloud.clear();
+	}
+
 }

@@ -36,8 +36,13 @@ public class TutorialThread extends Thread implements Runnable {
 	private boolean interrupted = false;
 	private ACTIONS interruptRoutine;
 	private boolean iAck = false;
+
 	private ArrayList<Task.Tutor> lastModifiedTutorList = new ArrayList<Task.Tutor>();
 	private int lastModifiedTutorIndex = 0;
+
+	private HashMap<Integer, Task> notifyTasks = new HashMap<Integer, Task>();
+	private int lastNotifyTasksIndex = 0;
+
 	private HashMap<Task.Tutor, SurfaceObjectTutor> tutors = new HashMap<Task.Tutor, SurfaceObjectTutor>();
 
 	public TutorialThread(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
@@ -89,11 +94,14 @@ public class TutorialThread extends Thread implements Runnable {
 	private void runTutorial() {
 		while (tutorialThreadRunning) {
 			Log.i("new", "_________________________NEW THREAD ITERATION________________________________");
+			Task.Type currentTaskType = lessonCollection.getTypeFromCurrentTaskInLesson();
+
 			if (!interrupted) {
 				boolean notification = lessonCollection.executeTask();
+
 				synchronized (lastModifiedTutorList) {
-					lastModifiedTutorList
-							.add(lastModifiedTutorIndex, lessonCollection.getNameFromCurrentTaskInLesson());
+					lastModifiedTutorList.add(lastModifiedTutorIndex,
+							lessonCollection.getTutorNameFromCurrentTaskInLesson());
 
 					Log.i("new", "\n");
 					Log.i("new", "#######LastModifiedList#######");
@@ -105,6 +113,12 @@ public class TutorialThread extends Thread implements Runnable {
 
 					lastModifiedTutorIndex++;
 
+				}
+
+				if (currentTaskType == Task.Type.FADEIN) {
+					Task currentTask = lessonCollection.getCurrentTaskObject();
+					notifyTasks.put(lastNotifyTasksIndex, currentTask);
+					lastNotifyTasksIndex++;
 				}
 
 				if (notification == true) {
@@ -123,6 +137,12 @@ public class TutorialThread extends Thread implements Runnable {
 			if (interrupted) {
 				Log.i("new", "NOW REWINDING in TUT-THREAD");
 				if (interruptRoutine == ACTIONS.REWIND) {
+					if (currentTaskType == Task.Type.FADEIN) {
+						lastNotifyTasksIndex--;
+						CloudController co = new CloudController();
+						co.clear();
+						lastNotifyTasksIndex--;
+					}
 					int stepsBack = lessonCollection.rewindStep();
 					Log.i("new", "STEPS Back: " + stepsBack);
 					setLastTutorModified(stepsBack);

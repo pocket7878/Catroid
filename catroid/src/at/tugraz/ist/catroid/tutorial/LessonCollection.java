@@ -126,8 +126,16 @@ public class LessonCollection {
 		super.finalize();
 	}
 
-	public Task.Tutor getNameFromCurrentTaskInLesson() {
+	public Task.Tutor getTutorNameFromCurrentTaskInLesson() {
 		return (lessonArray.get(currentLesson)).getCurrentTutorNameFromTask();
+	}
+
+	public Task.Type getTypeFromCurrentTaskInLesson() {
+		return (lessonArray.get(currentLesson)).getCurrentTypeFromTask();
+	}
+
+	public Task getCurrentTaskObject() {
+		return (lessonArray.get(currentLesson)).getCurrentTaskObject();
 	}
 
 }

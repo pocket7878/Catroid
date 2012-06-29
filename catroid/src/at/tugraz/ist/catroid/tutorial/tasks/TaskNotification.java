@@ -42,10 +42,9 @@ public class TaskNotification implements Task {
 
 	@Override
 	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
-		//		ClickDispatcher clickDispatcher = tutorialOverlay.getClickDispatcher();
-		//		clickDispatcher.setCurrentNotification(notificationType, null);
 		ClickDispatcher clickDispatcher = new ClickDispatcher();
 		clickDispatcher.processNotification(this);
+
 		// TODO: Maybe Problem: User presses ProjectListItem between setting Notification at
 		// begin of execute and the specific setCurrentNotification with the notificationString
 		if (notificationType == Notification.PROJECT_ADD_SPRITE) {
@@ -75,4 +74,11 @@ public class TaskNotification implements Task {
 		// notification, which will be deleted during pause/resume of the Tutorial
 		return true;
 	}
+
+	//	public void revertTask() {
+	//		if (notificationType == Notification.CURRENT_PROJECT_BUTTON) {
+	//			CloudController co = new CloudController();
+	//			co.fadeOut();
+	//		}
+	//	}
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import android.util.Log;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
 import at.tugraz.ist.catroid.tutorial.tasks.Task.Tutor;
+import at.tugraz.ist.catroid.tutorial.tasks.Task.Type;
 
 public class Lesson {
 	public int lessonID;
@@ -89,5 +90,13 @@ public class Lesson {
 
 	public Tutor getCurrentTutorNameFromTask() {
 		return lessonContent.get(currentStep).getTutorType();
+	}
+
+	public Type getCurrentTypeFromTask() {
+		return lessonContent.get(currentStep).getType();
+	}
+
+	public Task getCurrentTaskObject() {
+		return lessonContent.get(currentStep);
 	}
 }
