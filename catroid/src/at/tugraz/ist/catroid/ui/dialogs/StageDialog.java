@@ -30,9 +30,11 @@ import android.view.View;
 import android.widget.Button;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.plugin.Drone.DroneConsts;
+import at.tugraz.ist.catroid.plugin.Drone.DroneServiceHandler;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.stage.StageListener;
 import at.tugraz.ist.catroid.utils.Utils;
+import at.tugraz.ist.droned.client.CatroidDrone;
 
 /**
  * @author
@@ -59,6 +61,7 @@ public class StageDialog extends Dialog {
 
 		Button closeDialogButton = (Button) findViewById(R.id.exit_stage_button);
 		closeDialogButton.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				exitStage();
 			}
@@ -66,6 +69,7 @@ public class StageDialog extends Dialog {
 
 		Button resumeCurrentProjectButton = (Button) findViewById(R.id.resume_current_project_button);
 		resumeCurrentProjectButton.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				dismiss();
 				// TODO What to do with Drone?
@@ -75,6 +79,7 @@ public class StageDialog extends Dialog {
 
 		Button restartCurrentProjectButton = (Button) findViewById(R.id.restart_current_project_button);
 		restartCurrentProjectButton.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				Log.d(DroneConsts.DroneLogTag, "Project Restart");
 				// TODO What to do with Drone?
@@ -84,6 +89,7 @@ public class StageDialog extends Dialog {
 
 		Button axesToggleButton = (Button) findViewById(R.id.axes_toggle_button);
 		axesToggleButton.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				toggleAxes();
 			}
@@ -92,6 +98,7 @@ public class StageDialog extends Dialog {
 		Button maximizeButton = (Button) findViewById(R.id.maximize_button);
 		if (stageActivity.getResizePossible()) {
 			maximizeButton.setOnClickListener(new View.OnClickListener() {
+				@Override
 				public void onClick(View v) {
 					stageListener.changeScreenSize();
 				}
@@ -102,6 +109,7 @@ public class StageDialog extends Dialog {
 
 		Button snapshotButton = (Button) findViewById(R.id.screenshot_button);
 		snapshotButton.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				if (stageListener.makeScreenshot()) {
 					Utils.displayToast(stageActivity, stageActivity.getString(R.string.notification_screenshot_ok));
@@ -120,6 +128,11 @@ public class StageDialog extends Dialog {
 
 	@Override
 	public void onBackPressed() {
+		if (DroneServiceHandler.getInstance().getDrone().getSate() != CatroidDrone.State.READY) {
+			// TODO check for flying drone
+		} else {
+
+		}
 		exitStage();
 	}
 

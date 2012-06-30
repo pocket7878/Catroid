@@ -29,6 +29,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -40,6 +41,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.plugin.Drone.DroneConsts;
 import at.tugraz.ist.catroid.plugin.Drone.DroneServiceHandler;
 import at.tugraz.ist.catroid.plugin.Drone.other.DroneMoveBrickChooseMovementDialog;
 
@@ -103,6 +105,15 @@ public class DroneMoveBrick implements Brick, OnSeekBarChangeListener, OnDismiss
 		}
 
 		DroneServiceHandler.getInstance().getDrone().move(roll, pitch, throttle, yaw, duration);
+		// TODO Wait until drone has finished the  movement
+		try {
+			Log.d(DroneConsts.DroneLogTag, "Drone Move Sleeping");
+			Thread.sleep(duration);
+			Log.d(DroneConsts.DroneLogTag, "Drone Move woke up");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

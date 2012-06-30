@@ -158,6 +158,37 @@ public class PreStageActivity extends Activity {
 					//						}
 					//					}
 					//					Log.d(DroneConsts.DroneLogTag, "Drone Service bound, initializing");
+				} else {
+					// Check if Drone is ready
+
+					Log.d(DroneConsts.DroneLogTag, "Check if Drone is ready - service already running");
+
+					if (DroneServiceHandler.getInstance().getDrone().getSate() != CatroidDrone.State.READY) {
+						DroneServiceHandler.getInstance().getDrone().resetEmergency();
+						int sleepCntr = 0;
+						while (DroneServiceHandler.getInstance().getDrone().getSate() != CatroidDrone.State.READY) {
+							sleepCntr++;
+							if (sleepCntr > 30) {
+
+								Toast.makeText(getApplicationContext(), "Problem connecting to drone",
+										Toast.LENGTH_LONG).show();
+
+								finishMethod();
+
+								return;
+							}
+							Log.d(DroneConsts.DroneLogTag, "Waiting for drone to be ready, Resetting Emergency");
+							try {
+								Thread.sleep(700);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
+						}
+						Log.d(DroneConsts.DroneLogTag, "Drone is ready!");
+
+					}
 				}
 
 				// initDroneService();
@@ -236,7 +267,7 @@ public class PreStageActivity extends Activity {
 			isDroneServiceBound = true;
 			DroneServiceHandler.getInstance().getDrone().init();
 
-			// wait until the drone is ready 5 seconds
+			// wait until the drone is ready for 5 seconds
 			int sleepCntr = 0;
 			while (DroneServiceHandler.getInstance().getDrone().getSate() != CatroidDrone.State.READY) {
 				sleepCntr++;
@@ -253,7 +284,7 @@ public class PreStageActivity extends Activity {
 
 			}
 			Log.d(DroneConsts.DroneLogTag, "Drone is ready!");
-
+			DroneServiceHandler.getInstance().getDrone().resetEmergency();
 			startStage();
 
 		}
