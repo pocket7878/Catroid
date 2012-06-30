@@ -45,69 +45,58 @@
 		android:textStyle="bold"
 	>
 	</TextView>
-	<Button
-		android:id="@+id/btMoveChoose"
-		android:layout_height="wrap_content"
-		android:layout_width="280px"
-		android:layout_alignParentRight="true"
-		android:layout_centerVertical="true"
-		android:maxWidth="150dip"
-		android:clickable="false"
-    android:focusable="false"
-    android:focusableInTouchMode="false">
-  </Button>
- </RelativeLayout>
 
- <RelativeLayout
-    android:layout_height="wrap_content"
-    android:layout_width="fill_parent"
-    android:layout_centerVertical="true"
-  >
-   <LinearLayout
-     android:id="@+id/linearLayout1"
-     android:layout_height="wrap_content"
-     android:layout_width="wrap_content"
-     android:layout_centerVertical="true"
-     android:layout_alignParentLeft="true"
-     android:layout_alignParentRight="true">
-     
-     <TextView
-       android:id="@+id/ValueTextView"
-       android:text="@string/drone_to"
-       android:layout_height="wrap_content"
-       android:layout_width="130px"
-       android:layout_alignParentLeft="true"
-       android:layout_centerVertical="true"
-       android:textColor="@color/white"
-       android:textSize="18dip"
-       android:textStyle="bold"
-      >
-      </TextView>
-     
-     <ImageView
+	<Button
+	    android:id="@+id/btMoveChoose"
+	    android:layout_width="70dp"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_toRightOf="@+id/ValueTextView"
+	    android:clickable="false"
+	    android:focusable="false"
+	    android:focusableInTouchMode="false"/>
+
+	<TextView
+	    android:id="@+id/ValueTextView1"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBaseline="@+id/btMoveChoose"
+	    android:layout_alignBottom="@+id/btMoveChoose"
+	    android:layout_centerVertical="true"
+	    android:layout_toRightOf="@+id/btMoveChoose"
+	    android:text="@string/drone_to"
+	    android:textColor="@color/white"
+	    android:textSize="18dip"
+	    android:textStyle="bold" />
+
+	<ImageView
 	    android:id="@+id/ivMoveDirection"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
+	    android:layout_centerHorizontal="true"
+	    android:layout_toRightOf="@+id/ValueTextView1"
 	    android:src="@drawable/drone_move_forward"
-	    android:visibility="gone">
-      </ImageView>
-      <ImageView
-        android:id="@+id/ivMoveAltitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/drone_move_downward"
-        android:visibility="gone">
-      </ImageView>
-      <ImageView
-        android:id="@+id/ivMoveRotation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/drone_move_rotation_left"
-        android:visibility="gone">
-      </ImageView>
-     
-   </LinearLayout>
-  </RelativeLayout>
+	    android:visibility="visible" />
+
+	<ImageView
+	    android:id="@+id/ivMoveAltitude"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerHorizontal="true"
+	    android:layout_toRightOf="@+id/ivMoveDirection"
+	    android:src="@drawable/drone_move_downward"
+	    android:visibility="visible" />
+
+	<ImageView
+	    android:id="@+id/ivMoveRotation"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_centerHorizontal="true"
+	    android:layout_toRightOf="@+id/ivMoveAltitude"
+	    android:src="@drawable/drone_move_rotation_left"
+	    android:visibility="visible" />
+
+ </RelativeLayout>
 
   <RelativeLayout
     android:layout_height="wrap_content"

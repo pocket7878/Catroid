@@ -178,12 +178,12 @@ public class DroneMoveBrick implements Brick, OnSeekBarChangeListener, OnDismiss
 			ivRotation.setVisibility(ImageView.GONE);
 		}
 
-		Button button = (Button) view.findViewById(R.id.btMoveChoose);
-		button.setText(context.getString(R.string.drone_choose_movement_title));
+		Button btnMoveChoose = (Button) view.findViewById(R.id.btMoveChoose);
+		btnMoveChoose.setText(context.getString(R.string.drone_choose_movement_title));
 
 		dialog = new DroneMoveBrickChooseMovementDialog(context, options);
 		dialog.setOnDismissListener(this);
-		button.setOnClickListener(new OnClickListener() {
+		btnMoveChoose.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				dialog.show();
@@ -225,12 +225,12 @@ public class DroneMoveBrick implements Brick, OnSeekBarChangeListener, OnDismiss
 
 			private void progressChangedHelper(int progress) {
 				duration = progress;
-				tvMoveDuration.setText("t=" + duration + "ms");
+				tvMoveDuration.setText("time=" + duration + "ms");
 			}
 		});
 		sbMoveDuration.setEnabled(true);
 		tvMoveDuration = (TextView) view.findViewById(R.id.tvDroneMoveDuration);
-		tvMoveDuration.setText("t=" + Integer.toString(duration) + "ms");
+		tvMoveDuration.setText("time=" + Integer.toString(duration) + "ms");
 		return view;
 	}
 

@@ -341,7 +341,7 @@
     <string name="drone_for">für</string>
     <string name="drone_choose_animation_frequency_title">Geschwindigkeit wählen</string>
     <string name="drone_brick_move">Fliege</string>
-    <string name="drone_choose_movement_title">Bewegung wählen</string>
+    <string name="drone_choose_movement_title">wähle</string>
     <string name="drone_move_to">Fliege nach ...</string>
     <string name="drone_seconds">Sekunden</string>
     <string name="drone_to">nach</string>
