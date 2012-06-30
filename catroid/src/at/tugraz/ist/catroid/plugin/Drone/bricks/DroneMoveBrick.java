@@ -52,18 +52,22 @@ public class DroneMoveBrick implements Brick, OnSeekBarChangeListener, OnDismiss
 	private transient ArrayList<String> movementList;
 	private boolean[] options;
 	private int velocity;
+	private int duration;
 	private transient Dialog dialog;
-	private transient SeekBar speedBar;
-	private transient TextView tvSpeed;
+	private transient SeekBar sbMoveSpeed;
+	private transient SeekBar sbMoveDuration;
+	private transient TextView tvMoveSpeed;
+	private transient TextView tvMoveDuration;
 
 	private transient BaseAdapter adapter;
 
 	@XStreamOmitField
 	private transient View view;
 
-	public DroneMoveBrick(Sprite sprite, int velocity) {
+	public DroneMoveBrick(Sprite sprite, int velocity, int duration) {
 		this.sprite = sprite;
 		this.velocity = velocity;
+		this.duration = duration;
 	}
 
 	@Override
@@ -98,7 +102,7 @@ public class DroneMoveBrick implements Brick, OnSeekBarChangeListener, OnDismiss
 			}
 		}
 
-		DroneServiceHandler.getInstance().getDrone().move(roll, pitch, throttle, yaw, 200);
+		DroneServiceHandler.getInstance().getDrone().move(roll, pitch, throttle, yaw, duration);
 	}
 
 	@Override
@@ -186,20 +190,47 @@ public class DroneMoveBrick implements Brick, OnSeekBarChangeListener, OnDismiss
 			}
 		});
 
-		tvSpeed = (TextView) view.findViewById(R.id.drone_TvSpeed);
+		tvMoveSpeed = (TextView) view.findViewById(R.id.drone_TvSpeed);
 		String vel = Integer.toString(velocity);
 		if (vel.length() == 1) {
 			vel = "  " + vel;
 		} else if (vel.length() == 2) {
 			vel = " " + vel;
 		}
-		tvSpeed.setText("Speed: " + vel + "%");
 
-		speedBar = (SeekBar) view.findViewById(R.id.seekBarSpeed);
-		speedBar.setOnSeekBarChangeListener(this);
-		speedBar.setEnabled(true);
-		speedBar.setProgress(velocity / 10);
+		tvMoveSpeed.setText("Speed: " + vel + "%");
 
+		sbMoveSpeed = (SeekBar) view.findViewById(R.id.seekBarSpeed);
+		sbMoveSpeed.setOnSeekBarChangeListener(this);
+		sbMoveSpeed.setEnabled(true);
+		sbMoveSpeed.setProgress(velocity / 10);
+
+		sbMoveDuration = (SeekBar) view.findViewById(R.id.sbDroneMoveDuration);
+		sbMoveDuration.setProgress(duration);
+		sbMoveDuration.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				/** Do Nothing */
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+				/** Do Nothing */
+			}
+
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				progressChangedHelper(progress);
+			}
+
+			private void progressChangedHelper(int progress) {
+				duration = progress;
+				tvMoveDuration.setText("t=" + duration + "ms");
+			}
+		});
+		sbMoveDuration.setEnabled(true);
+		tvMoveDuration = (TextView) view.findViewById(R.id.tvDroneMoveDuration);
+		tvMoveDuration.setText("t=" + Integer.toString(duration) + "ms");
 		return view;
 	}
 
@@ -210,11 +241,12 @@ public class DroneMoveBrick implements Brick, OnSeekBarChangeListener, OnDismiss
 
 	@Override
 	public Brick clone() {
-		return new DroneMoveBrick(getSprite(), velocity);
+		return new DroneMoveBrick(getSprite(), velocity, duration);
 	}
 
 	@Override
 	public void onProgressChanged(SeekBar bar, int progress, boolean arg2) {
+		//
 		velocity = progress * 10;
 		String vel = Integer.toString(velocity);
 		if (vel.length() == 1) {
@@ -223,7 +255,7 @@ public class DroneMoveBrick implements Brick, OnSeekBarChangeListener, OnDismiss
 			vel = " " + vel;
 		}
 
-		tvSpeed.setText("Speed: " + vel + "%");
+		tvMoveSpeed.setText("Speed: " + vel + "%");
 	}
 
 	@Override

@@ -131,15 +131,53 @@
        android:textStyle="bold"
      >
      </TextView>
+
      <SeekBar
-      android:max="10"
-      android:id="@+id/seekBarSpeed"
-      android:layout_height="wrap_content"
-      android:layout_width="200px"
-      android:clickable="false"
-      android:focusable="false"
-      android:focusableInTouchMode="false">
+         android:id="@+id/seekBarSpeed"
+         android:layout_width="200px"
+         android:layout_height="wrap_content"
+         android:clickable="false"
+         android:focusable="false"
+         android:focusableInTouchMode="false"
+         android:max="10"
+         android:progress="5" >
+
     </SeekBar>
    </LinearLayout>
+
  </RelativeLayout>
+
+  <RelativeLayout
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content" >
+
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentRight="false"
+          android:layout_centerVertical="true" >
+
+          <TextView
+              android:id="@+id/tvDroneMoveDuration"
+              android:layout_width="180px"
+              android:layout_height="wrap_content"
+              android:paddingRight="10dip"
+              android:textColor="@color/white"
+              android:textSize="18dip"
+              android:textStyle="bold" />
+
+          <SeekBar
+              android:id="@+id/sbDroneMoveDuration"
+              android:layout_width="200px"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:clickable="false"
+              android:focusable="false"
+              android:focusableInTouchMode="false"
+              android:max="3000"
+              android:progress="1000" />
+
+      </LinearLayout>
+  </RelativeLayout>
+
 </LinearLayout>

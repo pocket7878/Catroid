@@ -192,7 +192,7 @@ public class AddBrickDialog extends Dialog {
 
 			droneBrickList.add(new DroneTakeOffBrick(sprite));
 			droneBrickList.add(new DroneLandBrick(sprite));
-			droneBrickList.add(new DroneMoveBrick(sprite, 50));
+			droneBrickList.add(new DroneMoveBrick(sprite, 50, 1000));
 			droneBrickList.add(new DroneStopMoveBrick(sprite));
 			droneBrickList.add(new DroneMoveAnimationBrick(sprite, 0, 3));
 			droneBrickList.add(new DroneLedAnimationBrick(sprite, 0, 2.5f, 3));
@@ -221,6 +221,7 @@ public class AddBrickDialog extends Dialog {
 
 		ImageButton closeButton = (ImageButton) findViewById(R.id.btn_close_dialog);
 		closeButton.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				abort();
 				dismiss();
@@ -251,6 +252,7 @@ public class AddBrickDialog extends Dialog {
 
 		listView.setOnItemClickListener(new ListView.OnItemClickListener() {
 
+			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Brick addedBrick = adapter.getItem(position);
 				ProjectManager projectManager = ProjectManager.getInstance();
