@@ -62,9 +62,11 @@ public class TutorStateHistory {
 
 		Log.i("new", "New State for Tutor - " + tutor + " will be from StateHistory: " + stateCounter);
 		TutorState returnState = stateMap.get(stateCounter);
-		if (stateCounter == 0) {
-			stateCounter++;
-		}
+
+		//TODO: Have an Eye on this
+		//		if (stateCounter == 0) {
+		stateCounter++;
+		//		}
 		return returnState;
 	}
 
