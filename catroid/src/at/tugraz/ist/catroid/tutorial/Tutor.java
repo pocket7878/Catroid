@@ -335,8 +335,9 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 				default:
 					return;
 			}
+		} else {
+			todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 		}
-		todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 		canvas.drawBitmap(todraw, targetX, targetY, paint);
 	}
 

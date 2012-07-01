@@ -47,7 +47,12 @@ public class TaskNotification implements Task {
 
 		// TODO: Maybe Problem: User presses ProjectListItem between setting Notification at
 		// begin of execute and the specific setCurrentNotification with the notificationString
+
 		if (notificationType == Notification.PROJECT_ADD_SPRITE) {
+			return true;
+		}
+
+		if (notificationType == Notification.CURRENT_PROJECT_BUTTON) {
 			return true;
 		}
 
@@ -61,9 +66,11 @@ public class TaskNotification implements Task {
 		//		if (notificationType == notificationType.BRICK_CATEGORY_DIALOG) {
 		//			return ("DIALOG");
 		//		}
+
 		if (notificationType == Notification.BRICK_ADD_DIALOG) {
 			return true;
 		}
+
 		//		if (notificationType == notificationType.BRICK_DIALOG_DONE) {
 		//			return ("BRICK_DIALOG_DONE");
 		//		}
