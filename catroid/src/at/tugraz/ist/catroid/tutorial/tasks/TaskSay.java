@@ -39,4 +39,10 @@ public class TaskSay implements Task {
 
 		return true;
 	}
+
+	@Override
+	public void setEndPositionForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
+		// TODO Auto-generated method stub
+
+	}
 }

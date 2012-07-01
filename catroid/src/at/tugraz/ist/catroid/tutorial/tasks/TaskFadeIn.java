@@ -51,4 +51,10 @@ public class TaskFadeIn implements Task {
 		return null;
 	}
 
+	@Override
+	public void setEndPositionForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

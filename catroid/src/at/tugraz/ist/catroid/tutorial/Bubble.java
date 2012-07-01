@@ -58,6 +58,8 @@ public class Bubble implements SurfaceObject {
 	private int waitTime = 1000;
 	private boolean waitForReset = false;
 
+	private boolean holdBubble = false;
+
 	public Bubble(String text, TutorialOverlay tutorialOverlay, SurfaceObjectTutor tutor, int x, int y) {
 		this.tutor = tutor;
 		this.text = text;
@@ -114,53 +116,63 @@ public class Bubble implements SurfaceObject {
 		speechBubble.setBounds(bubbleBounds);
 		speechBubble.draw(canvas);
 
-		for (int i = 0; i < textArray.length; i++) {
-			if (textArray[i] != "") {
-				canvas.drawText(textArray[i], x + textSize, y + textMarginY + (i * textSize), paint);
+		if (!holdBubble) {
+			for (int i = 0; i < textArray.length; i++) {
+				if (textArray[i] != "") {
+					canvas.drawText(textArray[i], x + textSize, y + textMarginY + (i * textSize), paint);
+				}
+			}
+		} else {
+			for (int i = 0; i < textArray.length; i++) {
+				if (textArray[i] != "") {
+					canvas.drawText(textArray[i], x + textSize, y + textMarginY + (i * textSize), paint);
+				}
 			}
 		}
 	}
 
 	@Override
 	public void update(long gameTime) {
-		if (currentPosition < text.length() && currentLine < textArray.length) {
-			if ((lastUpdateTime + updateTime) < gameTime && !waitForReset) {
+		if (!holdBubble) {
+			if (currentPosition < text.length() && currentLine < textArray.length) {
+				if ((lastUpdateTime + updateTime) < gameTime && !waitForReset) {
 
-				if (linePosition > 15 && text.charAt(currentPosition) == ' ') {
-					if (currentLine < 3) {
-						currentLine++;
-						currentPosition++;
-					} else {
-						currentLine = 0;
-						currentPosition++;
-						reset = true;
-						waitForReset = true;
+					if (linePosition > 15 && text.charAt(currentPosition) == ' ') {
+						if (currentLine < 3) {
+							currentLine++;
+							currentPosition++;
+						} else {
+							currentLine = 0;
+							currentPosition++;
+							reset = true;
+							waitForReset = true;
+						}
+						linePosition = 0;
 					}
-					linePosition = 0;
-				}
 
-				if (reset) {
-					resetBubble(new Date().getTime() + waitTime);
-					textArray[currentLine] = "" + text.charAt(currentPosition);
-					reset = false;
-				} else {
-					textArray[currentLine] = textArray[currentLine] + text.charAt(currentPosition);
+					if (reset) {
+						resetBubble(new Date().getTime() + waitTime);
+						textArray[currentLine] = "" + text.charAt(currentPosition);
+						reset = false;
+					} else {
+						textArray[currentLine] = textArray[currentLine] + text.charAt(currentPosition);
+					}
+					lastUpdateTime = gameTime;
+					currentPosition++;
+					linePosition++;
 				}
-				lastUpdateTime = gameTime;
-				currentPosition++;
-				linePosition++;
 			}
-		}
 
-		if (currentPosition == text.length() && !setEndTime) {
-			endTimeBubble = gameTime;
-			setEndTime = true;
-		}
+			if (currentPosition == text.length() && !setEndTime) {
+				endTimeBubble = gameTime;
+				setEndTime = true;
+			}
 
-		if ((endTimeBubble + waitTime) < gameTime && endTimeBubble != 0) {
-			tutor.idle();
-			tutorialOverlay.removeSurfaceObject(this);
-			Tutorial.getInstance(null).setNotification("Bubble finished!");
+			if ((endTimeBubble + waitTime) < gameTime && endTimeBubble != 0) {
+				tutor.idle();
+				tutorialOverlay.removeSurfaceObject(this);
+				Tutorial.getInstance(null).setNotification("Bubble finished!");
+			}
 		}
 	}
 
@@ -183,5 +195,9 @@ public class Bubble implements SurfaceObject {
 
 	public void clearBubbleRemoveSurfaceObject() {
 		tutorialOverlay.removeSurfaceObject(this);
+	}
+
+	public void setHoldBubble(boolean value) {
+		holdBubble = value;
 	}
 }

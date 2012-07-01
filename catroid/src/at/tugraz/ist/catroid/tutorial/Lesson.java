@@ -62,14 +62,15 @@ public class Lesson {
 				int rewindBackSteps = 1;
 
 				while ((lessonContent.get(currentStep).getType() == Task.Type.FLIP
-						|| lessonContent.get(currentStep).getType() == Task.Type.JUMP
-						|| lessonContent.get(currentStep).getType() == Task.Type.FADEIN || lessonContent.get(
-						currentStep).getType() == Task.Type.FADEOUT)
-						&& currentStep != 0) {
+						|| lessonContent.get(currentStep).getType() == Task.Type.JUMP || lessonContent.get(currentStep)
+						.getType() == Task.Type.NOTIFICATION) && currentStep != 0) {
 					Log.i("new", "REWINDED to " + (lessonContent.get(currentStep).getType())
 							+ " need to rewind one more");
 					currentStep--;
-					rewindBackSteps++;
+
+					if (lessonContent.get(currentStep).getType() != Task.Type.NOTIFICATION) {
+						rewindBackSteps++;
+					}
 				}
 				Log.i("new", "Lesson rewinded to: " + currentStep);
 				return rewindBackSteps;

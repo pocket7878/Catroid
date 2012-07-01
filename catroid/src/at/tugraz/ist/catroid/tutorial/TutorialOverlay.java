@@ -189,28 +189,28 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 				Tutorial.getInstance(null).stopButtonTutorial();
 				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Stop");
 			} else if (isOnPauseButton(ev)) {
-				//Tutorial.getInstance(null).pauseTutorial();
 				if (panel.isPaused()) {
-					panel.pressPlay();
+					interrupt = true;
 					Tutorial.getInstance(null).playButtonTutorial();
+					panel.pressPlay();
 					interrupt = false;
 				} else {
 					interrupt = true;
-					panel.pressPause();
 					Tutorial.getInstance(null).pauseButtonTutorial();
+					panel.pressPause();
+					interrupt = false;
 				}
 				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Pause");
-			} else if (isOnBackwardButton(ev)) {
+			} else if (isOnBackwardButton(ev) && !panel.isPaused()) {
 				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button rewind");
 				interrupt = true;
-				Tutorial.getInstance(null).rewindStep();
+				Tutorial.getInstance(null).stepBackward();
 				panel.pressBackward();
 				interrupt = false;
-			} else if (isOnForwardButton(ev)) {
+			} else if (isOnForwardButton(ev) && !panel.isPaused()) {
 				panel.pressForward();
-				//TODO: implement foward step
-				//Tutorial.getInstance(null).rewindStep();
-				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button rewind");
+				Tutorial.getInstance(null).stepForward();
+				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button forward");
 			} else if (isOnButton(ev)) {
 				panel.close();
 				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button open/close");

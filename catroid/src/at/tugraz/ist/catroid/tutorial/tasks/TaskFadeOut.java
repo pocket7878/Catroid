@@ -48,4 +48,10 @@ public class TaskFadeOut implements Task {
 		return false;
 	}
 
+	@Override
+	public void setEndPositionForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

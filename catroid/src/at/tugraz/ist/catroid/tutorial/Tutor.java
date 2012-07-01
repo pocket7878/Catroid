@@ -34,7 +34,7 @@ import at.tugraz.ist.catroid.tutorial.tasks.Task;
 public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	public enum ACTIONS {
-		REWIND, FORWARD
+		REWIND, FORWARD, PAUSE, PLAY
 	}
 
 	private Context context;
@@ -289,7 +289,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 						}
 						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 					}
-
 					break;
 
 				case 60: //FLIP
@@ -337,6 +336,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 					return;
 			}
 		}
+		todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 		canvas.drawBitmap(todraw, targetX, targetY, paint);
 	}
 
@@ -358,25 +358,12 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void setInterruptOfSequence(ACTIONS action) {
-		if (setBackStepsTutor > 0) {
+
+		if (setBackStepsTutor > 0 && action == ACTIONS.REWIND) {
+			removeTutorBubble();
 			Log.i("new", "In TUTOR-" + tutorType + " - Steps tto set back: " + setBackStepsTutor);
-			if (this.tutorBubble != null) {
-				tutorBubble.clearBubbleRemoveSurfaceObject();
-				tutorBubble = null;
-				Tutorial.getInstance(null).setNotification("Bubble finished!");
-				Log.i("drab", Thread.currentThread().getName() + ": Bubble deleted for " + this.tutorType);
-			} else {
-				Log.i("drab", Thread.currentThread().getName() + ": NO Bubble found for " + this.tutorType);
-			}
-
 			TutorState newState;
-
-			if (action == ACTIONS.REWIND) {
-				newState = tutorStateHistory.setBackAndReturnState(setBackStepsTutor);
-			} else {
-				newState = tutorStateHistory.setBackAndReturnState(setBackStepsTutor);
-			}
-
+			newState = tutorStateHistory.setBackAndReturnState(setBackStepsTutor);
 			targetX = newState.getX();
 			targetY = newState.getY();
 			flip = newState.isFlip();
@@ -386,6 +373,25 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 			Log.i("new", "In TUTOR-" + tutorType + " -New state: " + state + " for - " + this.tutorType);
 			setBackStepsTutor = 0;
 		}
+
+		if (action == ACTIONS.FORWARD) {
+			removeTutorBubble();
+		}
+
+		if (action == ACTIONS.PAUSE) {
+			if (tutorBubble != null) {
+				tutorBubble.setHoldBubble(true);
+			}
+			holdTutor = true;
+		}
+
+		if (action == ACTIONS.PLAY) {
+			if (tutorBubble != null) {
+				tutorBubble.setHoldBubble(false);
+			}
+			holdTutor = false;
+		}
+
 	}
 
 	@Override
@@ -406,5 +412,20 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		currentStep = 0;
 		targetX = 0;
 		targetY = 0;
+	}
+
+	@Override
+	public void setTutorToStateAndPosition(int x, int y, boolean flip) {
+		targetX = x;
+		targetY = y;
+	}
+
+	private void removeTutorBubble() {
+		if (this.tutorBubble != null) {
+			tutorBubble.clearBubbleRemoveSurfaceObject();
+			tutorBubble = null;
+			Tutorial.getInstance(null).setNotification("Bubble finished!");
+			Log.i("drab", Thread.currentThread().getName() + ": Bubble deleted for " + this.tutorType);
+		}
 	}
 }

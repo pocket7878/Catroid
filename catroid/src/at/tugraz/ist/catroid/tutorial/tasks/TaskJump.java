@@ -48,4 +48,10 @@ public class TaskJump implements Task {
 		return true;
 	}
 
+	@Override
+	public void setEndPositionForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

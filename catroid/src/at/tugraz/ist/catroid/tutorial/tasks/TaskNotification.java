@@ -75,10 +75,9 @@ public class TaskNotification implements Task {
 		return true;
 	}
 
-	//	public void revertTask() {
-	//		if (notificationType == Notification.CURRENT_PROJECT_BUTTON) {
-	//			CloudController co = new CloudController();
-	//			co.fadeOut();
-	//		}
-	//	}
+	@Override
+	public void setEndPositionForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
+		// TODO Auto-generated method stub
+
+	}
 }

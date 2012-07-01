@@ -75,4 +75,6 @@ public abstract class SurfaceObjectTutor implements SurfaceObject {
 
 	public abstract void resetTutor();
 
+	public abstract void setTutorToStateAndPosition(int x, int y, boolean flip);
+
 }

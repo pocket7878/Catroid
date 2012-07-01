@@ -196,18 +196,19 @@ public class TutorialController {
 	}
 
 	public void pauseTutorial() {
-		try {
-			synchronized (tutorialThread) {
-				tutorialThread.wait();
-			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		for (Entry<Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
+			Log.i("drab", Thread.currentThread().getName() + ": Now trying to interrupt Tutor: "
+					+ tempTutor.getValue().tutorType);
+			tempTutor.getValue().setInterruptOfSequence(ACTIONS.PAUSE);
 		}
 	}
 
 	public void playTutorial() {
-		tutorialThread.notify();
+		for (Entry<Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
+			Log.i("drab", Thread.currentThread().getName() + ": Now trying to interrupt Tutor: "
+					+ tempTutor.getValue().tutorType);
+			tempTutor.getValue().setInterruptOfSequence(ACTIONS.PLAY);
+		}
 	}
 
 	private AlertDialog generateLessonDialog() {
@@ -218,7 +219,7 @@ public class TutorialController {
 		Log.i("drab",
 				Thread.currentThread().getName() + ": lastPossNumber: "
 						+ lessonCollection.getLastPossibleLessonNumber());
-		for (int i = 0; i < lessonCollection.getLastPossibleLessonNumber()/* +1 */; i++) {
+		for (int i = 0; i < lessonCollection.getLastPossibleLessonNumber(); i++) {
 			Log.i("drab", Thread.currentThread().getName() + ": Lesson i: " + i);
 			items[i] = lessons.get(i);
 		}
@@ -265,7 +266,7 @@ public class TutorialController {
 		return this.dialog;
 	}
 
-	public void rewindStep() {
+	public void stepBackward() {
 		tutorialThread.setInterruptRoutine(ACTIONS.REWIND);
 		tutorialThread.setInterrupt(true);
 		tutorialThread.notifyThread();
@@ -284,7 +285,27 @@ public class TutorialController {
 		}
 		tutorialThread.setInterrupt(false);
 		tutorialThread.notifyThread();
+	}
 
+	public void stepForward() {
+		tutorialThread.setInterruptRoutine(ACTIONS.FORWARD);
+		tutorialThread.setInterrupt(true);
+		tutorialThread.notifyThread();
+
+		while (true) {
+			if (tutorialThread.getAck()) {
+				for (Entry<Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
+					Log.i("drab",
+							Thread.currentThread().getName() + ": Now trying to interrupt Tutor: "
+									+ tempTutor.getValue().tutorType);
+					tempTutor.getValue().setInterruptOfSequence(ACTIONS.FORWARD);
+				}
+				break;
+			}
+		}
+
+		tutorialThread.setInterrupt(false);
+		tutorialThread.notifyThread();
 	}
 
 	public void stopButtonTutorial() {

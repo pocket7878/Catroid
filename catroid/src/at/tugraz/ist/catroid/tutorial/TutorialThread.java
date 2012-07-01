@@ -135,17 +135,31 @@ public class TutorialThread extends Thread implements Runnable {
 			}
 
 			if (interrupted) {
-				Log.i("new", "NOW REWINDING in TUT-THREAD");
 				if (interruptRoutine == ACTIONS.REWIND) {
-					if (currentTaskType == Task.Type.FADEIN) {
+					Log.i("new", "NOW REWINDING in TUT-THREAD");
+					if (currentTaskType == Task.Type.NOTIFICATION) {
 						lastNotifyTasksIndex--;
 						CloudController co = new CloudController();
-						co.clear();
+						co.disapear();
 						lastNotifyTasksIndex--;
 					}
 					int stepsBack = lessonCollection.rewindStep();
 					Log.i("new", "STEPS Back: " + stepsBack);
 					setLastTutorModified(stepsBack);
+				} else if (interruptRoutine == ACTIONS.FORWARD) {
+					Log.i("forward", "FORWARDING @ TASK: " + lessonCollection.getTypeFromCurrentTaskInLesson());
+					Task currentTask = lessonCollection.getCurrentTaskObject();
+					if (lessonCollection.getTypeFromCurrentTaskInLesson() == Task.Type.FLIP
+							|| lessonCollection.getTypeFromCurrentTaskInLesson() == Task.Type.WALK) {
+						Log.i("forward", "TASK WALK identified!");
+						currentTask.setEndPositionForTutor(tutors);
+					}
+					boolean nextStep = lessonCollection.forwardStep();
+
+					Log.i("new", "Found new LessonStep continue EXECUTING in FORWARDING!");
+					if (!nextStep && resetAndCheckIfEndTutorial()) {
+						break;
+					}
 				}
 
 				while (interrupted) {
@@ -161,22 +175,9 @@ public class TutorialThread extends Thread implements Runnable {
 				iAck = false;
 			} else {
 				boolean nextStep = lessonCollection.forwardStep();
-				Log.i("new", "Found new LessonStep continue EXECUTING!");
-				if (!nextStep) {
-					Log.i("new", "Tutorial stopped in TUT-Thread");
-					lessonCollection.resetCurrentLesson();
-					tutors.get(Task.Tutor.CATRO).resetTutor();
-					tutors.get(Task.Tutor.MIAUS).resetTutor();
-					lastModifiedTutorIndex = 0;
-					lastModifiedTutorList.clear();
-
-					boolean nextLesson = lessonCollection.nextLesson();
-
-					if (tutorialThreadRunning && !nextLesson) {
-						Log.i("new", "STOP Tutorial");
-						stopTutorial();
-						break;
-					}
+				Log.i("new", "Found new LessonStep continue EXECUTING in normal!");
+				if (!nextStep && resetAndCheckIfEndTutorial()) {
+					break;
 				}
 			}
 		}
@@ -258,5 +259,23 @@ public class TutorialThread extends Thread implements Runnable {
 
 	public boolean getAck() {
 		return iAck;
+	}
+
+	public boolean resetAndCheckIfEndTutorial() {
+		Log.i("new", "Tutorial stopped in TUT-Thread");
+		lessonCollection.resetCurrentLesson();
+		tutors.get(Task.Tutor.CATRO).resetTutor();
+		tutors.get(Task.Tutor.MIAUS).resetTutor();
+		lastModifiedTutorIndex = 0;
+		lastModifiedTutorList.clear();
+
+		boolean nextLesson = lessonCollection.nextLesson();
+
+		if (tutorialThreadRunning && !nextLesson) {
+			Log.i("new", "STOP Tutorial");
+			stopTutorial();
+			return true;
+		}
+		return false;
 	}
 }

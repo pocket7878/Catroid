@@ -38,4 +38,9 @@ public class TaskFlip implements Task {
 		}
 		return true;
 	}
+
+	@Override
+	public void setEndPositionForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
+
+	}
 }

@@ -41,4 +41,9 @@ public class TaskSleep implements Task {
 		}
 		return false;
 	}
+
+	@Override
+	public void setEndPositionForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
+
+	}
 }

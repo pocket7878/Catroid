@@ -4,7 +4,7 @@
         <at.tugraz.ist.catroid.tutorial.Lesson>
             <lessonName>Demonstration</lessonName>
             <lessonContent>
-                <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
+            <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
                     <sleepTime>1000</sleepTime>
                     <tutorType>MIAUS</tutorType>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
@@ -104,9 +104,6 @@
                     <sleepTime>500</sleepTime>
                     <tutorType>CATRO</tutorType>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
-                
-                <at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>
-                </at.tugraz.ist.catroid.tutorial.tasks.TaskFadeIn>  
                 
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
                     <notificationType>CURRENT_PROJECT_BUTTON</notificationType>

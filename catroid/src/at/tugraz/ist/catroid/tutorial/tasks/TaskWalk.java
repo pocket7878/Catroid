@@ -19,6 +19,7 @@
 package at.tugraz.ist.catroid.tutorial.tasks;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 
@@ -78,5 +79,14 @@ public class TaskWalk implements Task {
 			tutor.walk(this.walkToX, this.walkToY, this.walkFast);
 		}
 		return true;
+	}
+
+	@Override
+	public void setEndPositionForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
+		for (Entry<Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
+			if (tutorType == tempTutor.getValue().tutorType) {
+				tempTutor.getValue().setTutorToStateAndPosition(walkToX, walkToY, false);
+			}
+		}
 	}
 }

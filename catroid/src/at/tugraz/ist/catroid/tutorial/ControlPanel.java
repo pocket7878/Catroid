@@ -164,10 +164,16 @@ public class ControlPanel implements SurfaceObject {
 	}
 
 	public void pressForward() {
+		if (paused) {
+			paused = false;
+		}
 		Toast.makeText(context, "Schritt vorwärts", Toast.LENGTH_SHORT).show();
 	}
 
 	public void pressBackward() {
+		if (paused) {
+			paused = false;
+		}
 		Toast.makeText(context, "Schritt zurück", Toast.LENGTH_SHORT).show();
 	}
 

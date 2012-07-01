@@ -150,8 +150,12 @@ public class Tutorial {
 		return tutorialActive;
 	}
 
-	public void rewindStep() {
-		tutorialController.rewindStep();
+	public void stepBackward() {
+		tutorialController.stepBackward();
+	}
+
+	public void stepForward() {
+		tutorialController.stepForward();
 	}
 
 	public void setDialog(Dialog dialog) {
