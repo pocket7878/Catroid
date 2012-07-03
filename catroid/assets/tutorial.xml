@@ -73,7 +73,7 @@
                 
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskWalk>
                     <tutorType>MIAUS</tutorType>
-                    <walkToX>310</walkToX>
+                    <walkToX>300</walkToX>
                     <walkToY>200</walkToY>
                     <walkFast>true</walkFast>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskWalk>

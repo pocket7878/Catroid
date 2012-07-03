@@ -16,45 +16,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.tugraz.ist.catroid.tutorial.tasks;
-
-import java.util.HashMap;
-
-import android.util.Log;
-import at.tugraz.ist.catroid.tutorial.CloudController;
-import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
+package at.tugraz.ist.catroid.ui;
 
 /**
- * @author faxxe
- * 
+ * @author drab
+ *
  */
-public class TaskFadeIn implements Task {
-
-	@Override
-	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
-		// TODO Auto-generated method stub
-		Log.i("new", "TaskFadeIn: Cloud is fading in!");
-		CloudController co = new CloudController();
-		co.fadeIn();
-		return false;
-	}
-
-	@Override
-	public Type getType() {
-		// TODO Auto-generated method stub
-		return Type.FADEIN;
-	}
-
-	@Override
-	public Tutor getTutorType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setEndPositionForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
-		// TODO Auto-generated method stub
-
-	}
+public class OldProjectActivity {
 
 }

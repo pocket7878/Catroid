@@ -31,6 +31,7 @@ import android.util.Log;
 import android.view.Display;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.tutorial.Tutor.ACTIONS;
 
 /**
  * @author Pinki, Herb
@@ -59,6 +60,9 @@ public class ControlPanel implements SurfaceObject {
 	private double[] pausePosition = { 79, 111 };
 	private double[] backwardPosition = { 129, 167 };
 	private double[] forwardPosition = { 185, 223 };
+
+	private ACTIONS lastPressAction = null;
+	private long lastPressTime = 0;
 
 	private int marginLeft = 2;
 
@@ -155,26 +159,40 @@ public class ControlPanel implements SurfaceObject {
 
 	public void pressPlay() {
 		paused = false;
-		Toast.makeText(context, "PLAY", Toast.LENGTH_SHORT).show();
+		long actTime = new Date().getTime();
+		if (lastPressAction != ACTIONS.PLAY || actTime > (lastPressTime + 2000)) {
+			lastPressAction = ACTIONS.PLAY;
+			Toast.makeText(context, "Play", Toast.LENGTH_SHORT).show();
+			lastPressTime = actTime;
+		}
 	}
 
 	public void pressPause() throws InterruptedException {
 		paused = true;
-		Toast.makeText(context, "Pause", Toast.LENGTH_SHORT).show();
+		long actTime = new Date().getTime();
+		if (lastPressAction != ACTIONS.PAUSE || actTime > (lastPressTime + 2000)) {
+			lastPressAction = ACTIONS.PAUSE;
+			Toast.makeText(context, "Pause", Toast.LENGTH_SHORT).show();
+			lastPressTime = actTime;
+		}
 	}
 
 	public void pressForward() {
-		if (paused) {
-			paused = false;
+		long actTime = new Date().getTime();
+		if (lastPressAction != ACTIONS.FORWARD || actTime > (lastPressTime + 2000)) {
+			lastPressAction = ACTIONS.FORWARD;
+			Toast.makeText(context, "Schritt vor", Toast.LENGTH_SHORT).show();
+			lastPressTime = actTime;
 		}
-		Toast.makeText(context, "Schritt vorwärts", Toast.LENGTH_SHORT).show();
 	}
 
 	public void pressBackward() {
-		if (paused) {
-			paused = false;
+		long actTime = new Date().getTime();
+		if (lastPressAction != ACTIONS.REWIND || actTime > (lastPressTime + 2000)) {
+			lastPressAction = ACTIONS.REWIND;
+			Toast.makeText(context, "Schritt zurück", Toast.LENGTH_SHORT).show();
+			lastPressTime = actTime;
 		}
-		Toast.makeText(context, "Schritt zurück", Toast.LENGTH_SHORT).show();
 	}
 
 	public boolean isPaused() {

@@ -208,9 +208,11 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 				panel.pressBackward();
 				interrupt = false;
 			} else if (isOnForwardButton(ev) && !panel.isPaused()) {
-				panel.pressForward();
-				Tutorial.getInstance(null).stepForward();
 				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button forward");
+				interrupt = true;
+				Tutorial.getInstance(null).stepForward();
+				panel.pressForward();
+				interrupt = false;
 			} else if (isOnButton(ev)) {
 				panel.close();
 				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button open/close");

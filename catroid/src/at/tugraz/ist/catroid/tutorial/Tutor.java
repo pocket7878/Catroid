@@ -54,6 +54,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	private TutorState currentState;
 	private TutorStateHistory tutorStateHistory;
 	private int flipFlag = 2;
+	private int stateDouble = -1;
 
 	private boolean reset = true;
 
@@ -102,6 +103,8 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 		if (flipFast) {
 			flipFlag = 0;
+		} else {
+			flipFlag = 2;
 		}
 		state = 60;
 
@@ -199,6 +202,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		} else {
 			state = 4;
 		}
+		Log.i("new", "APPEAR set with state= " + state);
 		currentState = new TutorState(targetX, targetY, flip, state);
 		tutorStateHistory.addStateToHistory(currentState);
 	}
@@ -295,15 +299,19 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 					if (flipFlag > 0) {
 						if (flip && reset) {
 							if (flipFlag == 2) {
-								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 306, sizeX, sizeY);
+								stateDouble = 306;
+								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, stateDouble, sizeX, sizeY);
 							} else {
-								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 408, sizeX, sizeY);
+								stateDouble = 408;
+								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, stateDouble, sizeX, sizeY);
 							}
 						} else if (reset) {
 							if (flipFlag == 2) {
-								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 714, sizeX, sizeY);
+								stateDouble = 714;
+								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, stateDouble, sizeX, sizeY);
 							} else {
-								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 0, sizeX, sizeY);
+								stateDouble = 0;
+								todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, stateDouble, sizeX, sizeY);
 							}
 						}
 
@@ -312,11 +320,13 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 							reset = false;
 						}
 					} else {
+						stateDouble = -1;
 						if (flip) {
 							state = 5;
 						} else {
 							state = 1;
 						}
+
 						flipFlag = 2;
 						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 						Tutorial.getInstance(null).setNotification("flip done!");
@@ -336,7 +346,23 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 					return;
 			}
 		}
-		todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+
+		if (holdTutor) {
+			if (stateDouble < 0) {
+				if (state > -1 && state < 60) {
+					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+				} else {
+					if (flip) {
+						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 4 * sizeY, sizeX, sizeY);
+					} else {
+						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 0 * sizeY, sizeX, sizeY);
+					}
+				}
+			} else {
+				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, stateDouble, sizeX, sizeY);
+
+			}
+		}
 		canvas.drawBitmap(todraw, targetX, targetY, paint);
 	}
 
@@ -358,7 +384,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void setInterruptOfSequence(ACTIONS action) {
-
 		if (setBackStepsTutor > 0 && action == ACTIONS.REWIND) {
 			removeTutorBubble();
 			Log.i("new", "In TUTOR-" + tutorType + " - Steps tto set back: " + setBackStepsTutor);
@@ -369,6 +394,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 			flip = newState.isFlip();
 			state = newState.getState();
 			currentStep = 0;
+			stateDouble = -1;
 
 			Log.i("new", "In TUTOR-" + tutorType + " -New state: " + state + " for - " + this.tutorType);
 			setBackStepsTutor = 0;
@@ -376,6 +402,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 		if (action == ACTIONS.FORWARD) {
 			removeTutorBubble();
+			stateDouble = -1;
 		}
 
 		if (action == ACTIONS.PAUSE) {
@@ -391,7 +418,6 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 			}
 			holdTutor = false;
 		}
-
 	}
 
 	@Override
@@ -416,8 +442,22 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void setTutorToStateAndPosition(int x, int y, boolean flip) {
-		targetX = x;
-		targetY = y;
+		if (x > 0) {
+			targetX = x;
+		}
+
+		if (y > 0) {
+			targetY = y;
+		}
+		currentStep = 0;
+
+		if (flip) {
+			state = 1;
+		} else {
+			state = 5;
+		}
+
+		Log.i("new", "setTutorToStateAndPosition -> x=" + targetX + " y=" + targetY + " state=" + state);
 	}
 
 	private void removeTutorBubble() {

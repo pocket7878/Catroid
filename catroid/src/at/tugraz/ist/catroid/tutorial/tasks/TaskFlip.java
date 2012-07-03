@@ -1,6 +1,7 @@
 package at.tugraz.ist.catroid.tutorial.tasks;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 
@@ -41,6 +42,10 @@ public class TaskFlip implements Task {
 
 	@Override
 	public void setEndPositionForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
-
+		for (Entry<Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
+			if (tutorType == tempTutor.getValue().tutorType) {
+				tempTutor.getValue().setTutorToStateAndPosition(-1, -1, false);
+			}
+		}
 	}
 }
