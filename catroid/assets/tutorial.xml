@@ -120,11 +120,6 @@
                     <message>New Sprite please!</message>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 
-                <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-                    <tutorType>CATRO</tutorType>
-                    <message>New Sprite please!</message>
-                </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
                     <notificationType>PROJECT_ADD_SPRITE</notificationType>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
@@ -145,7 +140,6 @@
                     <x>200</x>
                     <y>300</y>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-
 
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
                     <tutorType>CATRO</tutorType>

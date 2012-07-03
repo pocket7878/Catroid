@@ -112,7 +112,6 @@ public class TutorialThread extends Thread implements Runnable {
 					Log.i("new", "\n");
 
 					lastModifiedTutorIndex++;
-
 				}
 
 				if (currentTaskType == Task.Type.FADEIN) {

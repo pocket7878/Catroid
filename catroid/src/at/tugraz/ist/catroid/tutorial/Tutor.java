@@ -345,6 +345,8 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 				default:
 					return;
 			}
+		} else {
+			todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 		}
 
 		if (holdTutor) {
@@ -363,6 +365,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 			}
 		}
+
 		canvas.drawBitmap(todraw, targetX, targetY, paint);
 	}
 
