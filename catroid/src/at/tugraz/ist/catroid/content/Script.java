@@ -95,6 +95,10 @@ public abstract class Script implements Serializable {
 
 	public void removeBrick(Brick brick) {
 		brickList.remove(brick);
+
+		if (ProjectManager.getInstance().getCurrentProject().isDefault()) {
+			ProjectManager.getInstance().getCurrentProject().setDefault(false);
+		}
 	}
 
 	public ArrayList<Brick> getBrickList() {

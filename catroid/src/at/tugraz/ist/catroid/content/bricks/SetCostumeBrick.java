@@ -87,6 +87,7 @@ public class SetCostumeBrick implements Brick {
 				} else {
 					costumeData = (CostumeData) parent.getItemAtPosition(position);
 				}
+
 			}
 
 			public void onNothingSelected(AdapterView<?> arg0) {

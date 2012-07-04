@@ -139,17 +139,23 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		solo.clickOnButton(getActivity().getString(R.string.current_project_button));
 		solo.clickOnText("Catroid");
 
+		assertTrue("The project is not default but it should be", ProjectManager.getInstance().getCurrentProject()
+				.isDefault());
+
 		solo.sleep(500);
 		addCostumeToDefaultProject();
 
-		resetDefaultFlag();
-		switchCostumeInDefualtProject();
+		//		resetDefaultFlag();
+		//switchCostumeInDefualtProject();
 
 		resetDefaultFlag();
 		addSoundToDefaultProject();
 
 		resetDefaultFlag();
 		addBrickToDefaultProject();
+
+		//		resetDefaultFlag();
+		//		removeBrickInDefaultProject();
 
 		solo.clickOnText(getActivity().getString(R.string.home));
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
@@ -191,7 +197,13 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 
 	public void switchCostumeInDefualtProject() {
 		solo.clickOnText(getActivity().getString(R.string.default_project_sprites_catroid_normalcat));
+		solo.clickOnText(getActivity().getString(R.string.default_project_sprites_catroid_normalcat));
+		solo.sleep(1000);
+		assertTrue("The default flag is false after selecting the same costume", defaultProject.isDefault());
+
+		solo.clickOnText(getActivity().getString(R.string.default_project_sprites_catroid_normalcat));
 		solo.clickOnText(getActivity().getString(R.string.default_project_sprites_catroid_banzaicat));
+
 		solo.sleep(1000);
 		assertFalse("The default flag is still set after switching the costumes", defaultProject.isDefault());
 	}

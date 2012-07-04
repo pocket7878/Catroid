@@ -40,11 +40,6 @@ public class CostumeData {
 
 	public CostumeData() {
 		super();
-
-		if (ProjectManager.getInstance().getCurrentProject().isDefault()) {
-			ProjectManager.getInstance().getCurrentProject().setDefault(false);
-		}
-
 	}
 
 	public String getAbsolutePath() {
@@ -71,7 +66,7 @@ public class CostumeData {
 		this.name = name;
 	}
 
-	public void setCostumeFilename(String fileName) {
+	public public void setCostumeFilename(String fileName) {
 		this.fileName = fileName;
 	}
 
