@@ -124,19 +124,27 @@ public class TutorialController {
 		if (tutors == null) {
 			tutors = new HashMap<Task.Tutor, SurfaceObjectTutor>();
 		}
+
 		if (cloud == null) {
 			cloud = Cloud.getInstance(context);
 			tutorialOverlay.addCloud(cloud);
 		}
 
-		SurfaceObjectTutor tutor = new Tutor(R.drawable.tutor_catro_animation, tutorialOverlay, 100, 100,
-				Task.Tutor.CATRO);
-		tutors.put(tutor.tutorType, tutor);
+		if (tutors.size() < 2) {
+			SurfaceObjectTutor tutor = new Tutor(R.drawable.tutor_catro_animation, tutorialOverlay, 100, 100,
+					Task.Tutor.CATRO);
+			tutors.put(tutor.tutorType, tutor);
 
-		tutor = new Tutor(R.drawable.tutor_miaus_animation, tutorialOverlay, 400, 400, Task.Tutor.MIAUS);
-		tutors.put(tutor.tutorType, tutor);
+			tutor = new Tutor(R.drawable.tutor_miaus_animation, tutorialOverlay, 400, 400, Task.Tutor.MIAUS);
+			tutors.put(tutor.tutorType, tutor);
 
-		lessonCollection.setTutors(tutors);
+			lessonCollection.setTutors(tutors);
+		} else {
+			Tutor catro = (Tutor) tutors.get(Task.Tutor.CATRO);
+			Tutor miaus = (Tutor) tutors.get(Task.Tutor.MIAUS);
+			catro.setHoldTutor(false);
+			miaus.setHoldTutor(false);
+		}
 	}
 
 	public void initalizeLessonCollection() {
@@ -321,6 +329,7 @@ public class TutorialController {
 
 		tutor = (Tutor) tutors.get(Task.Tutor.MIAUS);
 		tutor.setHoldTutor(true);
+
 		tutorialOverlay.removeCloud();
 	}
 

@@ -111,12 +111,6 @@ public class Tutorial {
 		return tutorialController.dispatchTouchEvent(ev);
 	}
 
-	public void resumeTutorial() {
-		if (tutorialActive) {
-			tutorialController.resumeTutorial();
-		}
-	}
-
 	public void stopTutorial() {
 		pauseTutorial();
 		setTutorialNotActive();
@@ -135,6 +129,12 @@ public class Tutorial {
 		tutorialActive = true;
 		tutorialController.holdTutorsAndRemoveOverlay();
 		tutorialController.removeOverlayFromWindow();
+	}
+
+	public void resumeTutorial() {
+		if (tutorialActive) {
+			tutorialController.resumeTutorial();
+		}
 	}
 
 	public Context getActualContext() {

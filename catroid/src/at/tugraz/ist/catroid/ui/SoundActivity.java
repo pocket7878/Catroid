@@ -243,6 +243,7 @@ public class SoundActivity extends ListActivity {
 		startSound(soundInfo);
 
 		mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
+			@Override
 			public void onCompletion(MediaPlayer mp) {
 				soundInfo.isPlaying = false;
 				soundInfo.isPaused = false;

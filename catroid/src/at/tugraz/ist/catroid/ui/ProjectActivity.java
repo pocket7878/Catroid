@@ -70,17 +70,6 @@ public class ProjectActivity extends ListActivity {
 		super.onBackPressed();
 	}
 
-	//	@Override
-	//	public void onPause() {
-	//		super.onPause();
-	//		Tutorial.getInstance(this).pauseTutorial();
-	//		// tutorial.pauseTutorial();
-	//		ProjectManager projectManager = ProjectManager.getInstance();
-	//		if (projectManager.getCurrentProject() != null) {
-	//			projectManager.saveProject();
-	//		}
-	//	}
-
 	private void initListeners() {
 		spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject().getSpriteList();
 		spriteAdapter = new SpriteAdapter(this, R.layout.activity_project_spritelist_item, R.id.sprite_title,
