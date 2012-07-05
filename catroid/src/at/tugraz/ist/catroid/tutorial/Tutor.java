@@ -220,13 +220,15 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void draw(Canvas canvas) {
-		Bitmap todraw = Bitmap.createBitmap(bitmap, 0, 0, sizeX, sizeY);
-		if (currentStep > 9) {
-			currentStep = 0;
-			reset = true;
+		Bitmap todraw = Bitmap.createBitmap(bitmap, 0, 10, sizeX, sizeY);
+		if (tutorType == Task.Tutor.MIAUS && holdTutor) {
+			Log.i("MIAUS", "should be 10: " + 10);
 		}
-
 		if (!holdTutor) {
+			if (currentStep > 9) {
+				currentStep = 0;
+				reset = true;
+			}
 			switch (state) {
 				case 0:
 				case 4: //APPEARING
@@ -345,27 +347,20 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 				default:
 					return;
 			}
-		} else {
-			todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
 		}
-
-		if (holdTutor) {
-			if (stateDouble < 0) {
-				if (state > -1 && state < 60) {
-					todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
-				} else {
-					if (flip) {
-						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 4 * sizeY, sizeX, sizeY);
-					} else {
-						todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, 0 * sizeY, sizeX, sizeY);
-					}
-				}
-			} else {
+		if (holdTutor && state != -1) {
+			if (stateDouble > -1 && state != -1) {
 				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, stateDouble, sizeX, sizeY);
-
+				if (tutorType == Task.Tutor.MIAUS) {
+					Log.i("MIAUS", "stateDouble: " + stateDouble);
+				}
+			} else if (state > -1 && state < 60) {
+				todraw = Bitmap.createBitmap(bitmap, currentStep * sizeX, state * sizeY, sizeX, sizeY);
+				if (tutorType == Task.Tutor.MIAUS) {
+					Log.i("MIAUS", "state * sizeY: " + state * sizeY);
+				}
 			}
 		}
-
 		canvas.drawBitmap(todraw, targetX, targetY, paint);
 	}
 

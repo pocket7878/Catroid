@@ -64,9 +64,9 @@ public class TutorStateHistory {
 		TutorState returnState = stateMap.get(stateCounter);
 
 		//TODO: Have an Eye on this
-		//		if (stateCounter == 0) {
-		stateCounter++;
-		//		}
+		if (stateCounter == 0) {
+			stateCounter++;
+		}
 		return returnState;
 	}
 

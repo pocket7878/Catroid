@@ -108,7 +108,6 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 					if (tmp != null) {
 						tmp.update(System.currentTimeMillis());
 						tmp.draw(canvas);
-
 					}
 				}
 			}
