@@ -41,6 +41,7 @@ public class ProjectManager {
 	private Project project;
 	private Script currentScript;
 	private Sprite currentSprite;
+	private int standardProjectCostumeCount;
 	private static ProjectManager instance;
 
 	public FileChecksumContainer fileChecksumContainer;
@@ -241,5 +242,17 @@ public class ProjectManager {
 		currentScript = project.getSpriteList().get(this.getCurrentSpritePosition()).getScript(position);
 
 		return true;
+	}
+
+	public int getStandardProjectSetCostumeBrickCount() {
+		return standardProjectCostumeCount;
+	}
+
+	public void setStandardProjectCostumeCount(int standardProjectSetCostumeBrickCount) {
+		this.standardProjectCostumeCount = standardProjectSetCostumeBrickCount;
+	}
+
+	public void decrementStandardProjectCostumeCount() {
+		this.standardProjectCostumeCount--;
 	}
 }

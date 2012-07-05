@@ -130,6 +130,8 @@ public class StandardProjectHandler {
 		whenScript.addBrick(setCostumeBrick1);
 		backgroundStartScript.addBrick(backgroundBrick);
 
+		ProjectManager.getInstance().setStandardProjectCostumeCount(3);
+
 		defaultProject.addSprite(sprite);
 		sprite.addScript(startScript);
 		sprite.addScript(whenScript);

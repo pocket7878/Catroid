@@ -30,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -75,10 +76,12 @@ public class SetCostumeBrick implements Brick {
 
 		view = View.inflate(context, R.layout.brick_set_costume, null);
 
-		Spinner costumebrickSpinner = (Spinner) view.findViewById(R.id.setcostume_spinner);
+		final Spinner costumebrickSpinner = (Spinner) view.findViewById(R.id.setcostume_spinner);
 		costumebrickSpinner.setAdapter(createCostumeAdapter(context));
 		costumebrickSpinner.setClickable(true);
 		costumebrickSpinner.setFocusable(true);
+
+		final long originalSelectedCostumeId = costumebrickSpinner.getSelectedItemId();
 
 		costumebrickSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -86,6 +89,15 @@ public class SetCostumeBrick implements Brick {
 					costumeData = null;
 				} else {
 					costumeData = (CostumeData) parent.getItemAtPosition(position);
+				}
+
+				if (ProjectManager.getInstance().getCurrentProject().isDefault()) {
+					if (ProjectManager.getInstance().getStandardProjectSetCostumeBrickCount() == 0) {
+						ProjectManager.getInstance().getCurrentProject().setDefault(false);
+
+					} else {
+						ProjectManager.getInstance().decrementStandardProjectCostumeCount();
+					}
 				}
 
 			}
