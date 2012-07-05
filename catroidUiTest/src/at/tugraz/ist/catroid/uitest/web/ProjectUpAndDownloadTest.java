@@ -41,6 +41,7 @@ import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.common.StandardProjectHandler;
 import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
@@ -115,95 +116,91 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		downloadProject();
 	}
 
-	public void testUploadDefaultProject() throws Throwable {
-		setServerURLToTestUrl();
-		UiTestUtils.createValidUser(getActivity());
+	public void tryUploadingDefaultProjectBeforeChanges() {
 
-		defaultProject = StandardProjectHandler.createAndSaveStandardProject(
-				getActivity().getString(R.string.default_project_name), getInstrumentation().getTargetContext());
+		try {
+			setServerURLToTestUrl();
+			UiTestUtils.createValidUser(getActivity());
 
+			defaultProject = StandardProjectHandler.createAndSaveStandardProject(
+					getActivity().getString(R.string.default_project_name), getInstrumentation().getTargetContext());
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
-		solo.sleep(500);
-		uploadDefaultProject();
-		assertTrue("Upload of the project with default name suceeded",
-				solo.searchText(getActivity().getString(R.string.error_default_project_name)));
-		solo.clickOnButton(getActivity().getString(R.string.close));
 
-		renameDefaultProject();
-		uploadDefaultProject();
+		solo.scrollUp();
+		solo.clearEditText(0);
+		solo.enterText(0, testProject);
+		solo.clickOnButton(getActivity().getString(R.string.upload_button));
+
+		solo.waitForDialogToClose(10000);
 		assertTrue("Upload of the default project suceeded",
 				solo.searchText(getActivity().getString(R.string.error_default_project)));
 
 		solo.clickOnButton(getActivity().getString(R.string.close));
 		solo.clickOnButton(getActivity().getString(R.string.cancel_button));
-
 		solo.clickOnButton(getActivity().getString(R.string.current_project_button));
 		solo.clickOnText("Catroid");
-
-		assertTrue("The project is not default but it should be", ProjectManager.getInstance().getCurrentProject()
-				.isDefault());
-
 		solo.sleep(500);
-		switchCostumeInDefualtProject();
 
-		resetDefaultFlag();
-		addCostumeToDefaultProject();
+	}
 
-		resetDefaultFlag();
-		addSoundToDefaultProject();
-
-		resetDefaultFlag();
-		addBrickToDefaultProject();
-
-		//		resetDefaultFlag();
-		//		removeBrickInDefaultProject();
-
+	public void tryUploadingDefaultProjectAfterChanges() {
 		solo.clickOnText(getActivity().getString(R.string.home));
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
 		solo.sleep(500);
-		renameDefaultProject();
-		uploadDefaultProject();
-		assertTrue("Upload of the default project after changing it not succeeded",
-				solo.searchText(getActivity().getString(R.string.success_project_upload)));
-
-	}
-
-	public void uploadDefaultProject() {
-		solo.clickOnButton(getActivity().getString(R.string.upload_button));
-		solo.waitForDialogToClose(10000);
-	}
-
-	public void renameDefaultProject() {
 		solo.scrollUp();
 		solo.clearEditText(0);
 		solo.enterText(0, testProject);
+		solo.clickOnButton(getActivity().getString(R.string.upload_button));
+		solo.waitForDialogToClose(10000);
+		assertTrue("Upload of the default project after changing it not succeeded",
+				solo.searchText(getActivity().getString(R.string.success_project_upload)));
 	}
 
-	public void resetDefaultFlag() {
-		defaultProject.setDefault(true);
-		assertTrue("The default flag was not set", defaultProject.isDefault());
+	public void testUploadingProjectWithDefaultName() {
+
+		try {
+			setServerURLToTestUrl();
+			UiTestUtils.createValidUser(getActivity());
+
+			defaultProject = StandardProjectHandler.createAndSaveStandardProject(
+					getActivity().getString(R.string.default_project_name), getInstrumentation().getTargetContext());
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+
+		solo.clickOnText(getActivity().getString(R.string.upload_project));
+		solo.sleep(500);
+		solo.clickOnButton(getActivity().getString(R.string.upload_button));
+		solo.waitForDialogToClose(10000);
+
+		assertTrue("Upload of the project with default name suceeded",
+				solo.searchText(getActivity().getString(R.string.error_default_project_name)));
+		solo.clickOnButton(getActivity().getString(R.string.close));
+
+		solo.scrollUp();
+		solo.clearEditText(0);
+		solo.enterText(0, testProject);
+		solo.clickOnButton(getActivity().getString(R.string.upload_button));
+		solo.waitForDialogToClose(10000);
+		assertTrue("Upload of the default project suceeded",
+				solo.searchText(getActivity().getString(R.string.error_default_project)));
 
 	}
 
-	public void addBrickToDefaultProject() {
-		UiTestUtils.addNewBrick(solo, R.string.brick_play_sound);
-		solo.sleep(1000);
-		assertFalse("The default flag is still set after adding a brick to the project", defaultProject.isDefault());
-
-	}
-
-	public void removeBrickInDefaultProject() {
-
-	}
-
-	public void switchCostumeInDefualtProject() {
+	public void testUploadDefaultProjectAfterSwitchingCostumes() {
+		tryUploadingDefaultProjectBeforeChanges();
 		solo.clickOnText(getActivity().getString(R.string.default_project_sprites_catroid_normalcat));
 		solo.clickOnText(getActivity().getString(R.string.default_project_sprites_catroid_banzaicat));
 		solo.sleep(1000);
 		assertFalse("The default flag is still set after switching the costumes", defaultProject.isDefault());
+		tryUploadingDefaultProjectAfterChanges();
 	}
 
-	public void addCostumeToDefaultProject() {
+	public void testUploadDefaultProjectAfterAddingCostume() {
+		tryUploadingDefaultProjectBeforeChanges();
 		ArrayList<CostumeData> costumeDataList = projectManager.getCurrentSprite().getCostumeDataList();
 		File imageFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "catroid_sunglasses.png",
 				RESOURCE_IMAGE, getActivity(), UiTestUtils.FileTypes.IMAGE);
@@ -215,9 +212,13 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 
 		solo.sleep(1000);
 		assertFalse("The default flag is stil set after adding a costume", defaultProject.isDefault());
+		tryUploadingDefaultProjectAfterChanges();
+
 	}
 
-	public void addSoundToDefaultProject() {
+	public void testUploadDefaultProjectAfterAddingSound() {
+
+		tryUploadingDefaultProjectBeforeChanges();
 		ArrayList<SoundInfo> soundInfoList = projectManager.getCurrentSprite().getSoundList();
 		File soundFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "longsound.mp3",
 				RESOURCE_SOUND, getInstrumentation().getContext(), UiTestUtils.FileTypes.SOUND);
@@ -229,6 +230,31 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 
 		solo.sleep(1000);
 		assertFalse("The default flag is stil set after adding a sound", defaultProject.isDefault());
+
+		tryUploadingDefaultProjectAfterChanges();
+
+	}
+
+	public void testUploadDefaultProjectAfterAddingBrick() {
+		tryUploadingDefaultProjectBeforeChanges();
+
+		UiTestUtils.addNewBrick(solo, R.string.brick_play_sound);
+		solo.sleep(1000);
+		assertFalse("The default flag is still set after adding a brick to the project", defaultProject.isDefault());
+
+		tryUploadingDefaultProjectAfterChanges();
+
+	}
+
+	public void testUploadDefaultProjectAfterRemovingBrick() {
+		tryUploadingDefaultProjectBeforeChanges();
+
+		Brick brick = ProjectManager.getInstance().getCurrentScript().getBrickList().get(0);
+		ProjectManager.getInstance().getCurrentScript().removeBrick(brick);
+		assertFalse("The default flag is still set after removing a brick", defaultProject.isDefault());
+
+		tryUploadingDefaultProjectAfterChanges();
+
 	}
 
 	private void createTestProject(String projectToCreate) {
