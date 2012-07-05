@@ -45,7 +45,7 @@
         android:textColor="@android:color/primary_text_dark"
         android:textSize="1px"
     />
-    <ListView android:id="@+id/paired_devices"
+    <at.tugraz.ist.catroid.utils.BounceListView android:id="@+id/paired_devices"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:stackFromBottom="true"
@@ -69,7 +69,7 @@
         android:textColor="@android:color/primary_text_dark"
         android:textSize="1px"
     />
-    <ListView android:id="@+id/new_devices"
+    <at.tugraz.ist.catroid.utils.BounceListView android:id="@+id/new_devices"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:stackFromBottom="true"

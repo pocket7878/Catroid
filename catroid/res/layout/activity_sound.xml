@@ -29,10 +29,11 @@
 	android:background="@color/website_blue">
 
 	<!-- Sound list -->
-	<ListView
+	<at.tugraz.ist.catroid.utils.BounceListView
 		android:id="@android:id/list"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_weight="1.0"
-		android:cacheColorHint="#00000000"/>
+		android:cacheColorHint="#00000000"
+	/>
 </LinearLayout>

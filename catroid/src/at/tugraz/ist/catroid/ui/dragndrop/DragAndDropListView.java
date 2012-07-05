@@ -36,18 +36,18 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.View.OnLongClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.ListView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Values;
+import at.tugraz.ist.catroid.utils.BounceListView;
 import at.tugraz.ist.catroid.utils.Utils;
 
-public class DragAndDropListView extends ListView implements OnLongClickListener {
+public class DragAndDropListView extends BounceListView implements OnLongClickListener {
 
 	private static final int SCROLL_SPEED = 25;
 	private static final int DRAG_BACKGROUND_COLOR = Color.TRANSPARENT;
@@ -225,8 +225,8 @@ public class DragAndDropListView extends ListView implements OnLongClickListener
 
 		view.setDrawingCacheEnabled(true);
 
-		view.measure(MeasureSpec.makeMeasureSpec(Values.SCREEN_WIDTH, MeasureSpec.EXACTLY), MeasureSpec
-				.makeMeasureSpec(Utils.getPhysicalPixels(400, getContext()), MeasureSpec.AT_MOST));
+		view.measure(MeasureSpec.makeMeasureSpec(Values.SCREEN_WIDTH, MeasureSpec.EXACTLY),
+				MeasureSpec.makeMeasureSpec(Utils.getPhysicalPixels(400, getContext()), MeasureSpec.AT_MOST));
 		view.layout(0, 0, Values.SCREEN_WIDTH, view.getMeasuredHeight());
 
 		view.buildDrawingCache(true);

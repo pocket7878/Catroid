@@ -32,7 +32,7 @@
 	<!-- Top bar -->
 	<include layout="@layout/brick_dialog_top"/>
 	
-	<ListView
+	<at.tugraz.ist.catroid.utils.BounceListView
 		android:id="@+id/categoriesListView"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
