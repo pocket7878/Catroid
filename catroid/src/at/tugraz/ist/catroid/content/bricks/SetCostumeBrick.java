@@ -81,8 +81,6 @@ public class SetCostumeBrick implements Brick {
 		costumebrickSpinner.setClickable(true);
 		costumebrickSpinner.setFocusable(true);
 
-		final long originalSelectedCostumeId = costumebrickSpinner.getSelectedItemId();
-
 		costumebrickSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				if (position == 0) {

@@ -41,7 +41,8 @@ public class CostumeData {
 	public CostumeData() {
 		super();
 
-		if (ProjectManager.getInstance().getCurrentProject().isDefault()) {
+		if (ProjectManager.getInstance().getCurrentProject() != null
+				&& ProjectManager.getInstance().getCurrentProject().isDefault()) {
 			ProjectManager.getInstance().getCurrentProject().setDefault(false);
 		}
 	}

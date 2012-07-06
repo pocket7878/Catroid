@@ -36,7 +36,8 @@ public class SoundInfo implements Comparable<SoundInfo> {
 		isPlaying = false;
 		isPaused = false;
 
-		if (ProjectManager.getInstance().getCurrentProject().isDefault()) {
+		if (ProjectManager.getInstance().getCurrentProject() != null
+				&& ProjectManager.getInstance().getCurrentProject().isDefault()) {
 			ProjectManager.getInstance().getCurrentProject().setDefault(false);
 		}
 

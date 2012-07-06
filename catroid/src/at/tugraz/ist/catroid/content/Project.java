@@ -33,20 +33,12 @@ import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.utils.Utils;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 public class Project implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<Sprite> spriteList = new ArrayList<Sprite>();
 	private String projectName;
-	private boolean isDefault = false;
-
-	public boolean isDefault() {
-		return isDefault;
-	}
-
-	public void setDefault(boolean isDefault) {
-		this.isDefault = isDefault;
-	}
 
 	// Only used for Catroid website
 	@SuppressWarnings("unused")
@@ -64,6 +56,9 @@ public class Project implements Serializable {
 	public int virtualScreenHeight = 0;
 
 	public String description;
+
+	@XStreamOmitField
+	private boolean isDefault = false;
 
 	public Project(Context context, String name) {
 		this.projectName = name;
@@ -124,5 +119,13 @@ public class Project implements Serializable {
 			catroidVersionName = Utils.getVersionName(context);
 			catroidVersionCode = Utils.getVersionCode(context);
 		}
+	}
+
+	public boolean isDefault() {
+		return isDefault;
+	}
+
+	public void setDefault(boolean isDefault) {
+		this.isDefault = isDefault;
 	}
 }

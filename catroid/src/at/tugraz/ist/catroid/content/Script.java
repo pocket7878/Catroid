@@ -77,7 +77,8 @@ public abstract class Script implements Serializable {
 	public void addBrick(Brick brick) {
 		if (brick != null) {
 			brickList.add(brick);
-			if (ProjectManager.getInstance().getCurrentProject().isDefault()) {
+			if (ProjectManager.getInstance().getCurrentProject() != null
+					&& ProjectManager.getInstance().getCurrentProject().isDefault()) {
 				ProjectManager.getInstance().getCurrentProject().setDefault(false);
 			}
 
@@ -87,7 +88,8 @@ public abstract class Script implements Serializable {
 	public void addBrick(int position, Brick brick) {
 		if (brick != null) {
 			brickList.add(position, brick);
-			if (ProjectManager.getInstance().getCurrentProject().isDefault()) {
+			if (ProjectManager.getInstance().getCurrentProject() != null
+					&& ProjectManager.getInstance().getCurrentProject().isDefault()) {
 				ProjectManager.getInstance().getCurrentProject().setDefault(false);
 			}
 		}
@@ -96,7 +98,8 @@ public abstract class Script implements Serializable {
 	public void removeBrick(Brick brick) {
 		brickList.remove(brick);
 
-		if (ProjectManager.getInstance().getCurrentProject().isDefault()) {
+		if (ProjectManager.getInstance().getCurrentProject() != null
+				&& ProjectManager.getInstance().getCurrentProject().isDefault()) {
 			ProjectManager.getInstance().getCurrentProject().setDefault(false);
 		}
 	}
