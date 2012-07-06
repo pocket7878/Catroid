@@ -292,8 +292,10 @@ public class StorageHandler {
 	}
 
 	private File copyFile(File destinationFile, File sourceFile, File directory) throws IOException {
-		FileChannel inputChannel = new FileInputStream(sourceFile).getChannel();
-		FileChannel outputChannel = new FileOutputStream(destinationFile).getChannel();
+		FileInputStream inputStream = new FileInputStream(sourceFile);
+		FileChannel inputChannel = inputStream.getChannel();
+		FileOutputStream outputStream = new FileOutputStream(destinationFile);
+		FileChannel outputChannel = outputStream.getChannel();
 
 		String checksumSource = Utils.md5Checksum(sourceFile);
 		FileChecksumContainer fileChecksumContainer = ProjectManager.getInstance().fileChecksumContainer;
@@ -309,8 +311,14 @@ public class StorageHandler {
 			if (inputChannel != null) {
 				inputChannel.close();
 			}
+			if (inputStream != null) {
+				inputStream.close();
+			}
 			if (outputChannel != null) {
 				outputChannel.close();
+			}
+			if (outputStream != null) {
+				outputStream.close();
 			}
 		}
 	}
