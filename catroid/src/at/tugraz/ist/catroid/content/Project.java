@@ -33,20 +33,12 @@ import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.utils.Utils;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 public class Project implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<Sprite> spriteList = new ArrayList<Sprite>();
 	private String projectName;
-	private boolean manualScreenshot = false;
-
-	public boolean isManualScreenshot() {
-		return manualScreenshot;
-	}
-
-	public void setManualScreenshot(boolean manualScreenshot) {
-		this.manualScreenshot = manualScreenshot;
-	}
 
 	// Only used for Catroid website
 	@SuppressWarnings("unused")
@@ -64,6 +56,17 @@ public class Project implements Serializable {
 	public int virtualScreenHeight = 0;
 
 	public String description;
+
+	@XStreamOmitField
+	private boolean manualScreenshot = false;
+
+	public boolean isManualScreenshot() {
+		return manualScreenshot;
+	}
+
+	public void setManualScreenshot(boolean manualScreenshot) {
+		this.manualScreenshot = manualScreenshot;
+	}
 
 	public Project(Context context, String name) {
 		this.projectName = name;
