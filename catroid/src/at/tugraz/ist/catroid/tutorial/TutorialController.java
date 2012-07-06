@@ -169,7 +169,7 @@ public class TutorialController {
 	}
 
 	public void showLessonDialog() {
-		if (lessonCollection.getLastPossibleLessonNumber() != 0) {
+		if (lessonCollection.getSizeOfCurrentLesson() != 0) {
 			AlertDialog alert = generateLessonDialog();
 			alert.show();
 		} else {
@@ -222,13 +222,13 @@ public class TutorialController {
 	private AlertDialog generateLessonDialog() {
 		//TODO: Cancle Tutorial if Dialog is cancled!
 		ArrayList<String> lessons = lessonCollection.getLessons();
-		final CharSequence[] items = new CharSequence[lessonCollection.getLastPossibleLessonNumber() + 1];
+		final CharSequence[] items = new CharSequence[lessonCollection.getSizeOfLessonCollection()];
 
-		Log.i("drab",
-				Thread.currentThread().getName() + ": lastPossNumber: "
-						+ lessonCollection.getLastPossibleLessonNumber());
-		for (int i = 0; i < lessonCollection.getLastPossibleLessonNumber(); i++) {
-			Log.i("drab", Thread.currentThread().getName() + ": Lesson i: " + i);
+		Log.i("dialog",
+				Thread.currentThread().getName() + ": lastPossNumber: " + lessonCollection.getSizeOfLessonCollection());
+		for (int i = 0; i < lessonCollection.getSizeOfLessonCollection(); i++) {
+			Log.i("dialog", "Lesson i: " + i + " and the intems length:" + items.length);
+
 			items[i] = lessons.get(i);
 		}
 

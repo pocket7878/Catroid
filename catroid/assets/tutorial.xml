@@ -2,7 +2,7 @@
 <at.tugraz.ist.catroid.tutorial.LessonCollection>
     <lessonArray>
         <at.tugraz.ist.catroid.tutorial.Lesson>
-            <lessonName>Für Storyboards</lessonName>
+            <lessonName>1) How to do Storyboards</lessonName>
             <lessonContent>
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
                     <tutorType>CATRO</tutorType>
@@ -172,7 +172,7 @@
         
                
         <at.tugraz.ist.catroid.tutorial.Lesson>
-            <lessonName>Demonstration</lessonName>
+            <lessonName>2) First Lesson</lessonName>
             <lessonContent>
             <at.tugraz.ist.catroid.tutorial.tasks.TaskSleep>
                     <sleepTime>1000</sleepTime>
@@ -279,12 +279,6 @@
                     <notificationType>CURRENT_PROJECT_BUTTON</notificationType>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
 
-                <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-                    <tutorType>CATRO</tutorType>
-                    <x>200</x>
-                    <y>300</y>
-                </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
                     <tutorType>CATRO</tutorType>
                     <message>New Sprite please!</message>
@@ -299,17 +293,10 @@
                     <message>Nun drueck zweites item in Liste</message>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 
-
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
                     <notificationType>PROJECT_LIST_ITEM</notificationType>
                     <notificationString>1</notificationString>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-
-                <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
-                    <tutorType>CATRO</tutorType>
-                    <x>200</x>
-                    <y>300</y>
-                </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
 
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
                     <tutorType>CATRO</tutorType>
@@ -320,7 +307,6 @@
                     <notificationType>SCRIPTS_ADD_BRICK</notificationType>
                     <notificationString>2</notificationString>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
-
 
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
                     <tutorType>CATRO</tutorType>
@@ -361,7 +347,6 @@
                     <tutorType>MIAUS</tutorType>
                     <message>Supi supi supi. Du bist so unglaublich spitze.</message>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
-
 
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
                     <tutorType>CATRO</tutorType>
@@ -408,7 +393,7 @@
 
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
                     <tutorType>CATRO</tutorType>
-                    <message>Jetzt tua mol den Sound dazuafÃ¼gen!</message>
+                    <message>Jetzt tua mol den Sound dazuafügen!</message>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
 
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
@@ -416,7 +401,7 @@
                     <notificationType>SOUNDS_ADD_SOUND</notificationType>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskNotification>
                 
-                     </lessonContent>
+            </lessonContent>
             <lessonID>1</lessonID>
             <currentStep>0</currentStep>
         </at.tugraz.ist.catroid.tutorial.Lesson>

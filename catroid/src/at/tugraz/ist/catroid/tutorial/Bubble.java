@@ -34,7 +34,6 @@ import at.tugraz.ist.catroid.tutorial.tasks.Task.Tutor;
 public class Bubble implements SurfaceObject {
 	private String text = new String();
 	private int currentPosition = 0;
-	private int linePosition = 0;
 	private NinePatchDrawable speechBubble;
 	private TutorialOverlay tutorialOverlay;
 	private SurfaceObjectTutor tutor;
@@ -43,6 +42,7 @@ public class Bubble implements SurfaceObject {
 	private String[] textArray = new String[] { "", "", "", "" };
 	private int currentLine = 0;
 	private int minWidth = 80;
+	private int maxWidth = 160;
 
 	private int x = 0;
 	private int y = 0;
@@ -137,7 +137,13 @@ public class Bubble implements SurfaceObject {
 			if (currentPosition < text.length() && currentLine < textArray.length) {
 				if ((lastUpdateTime + updateTime) < gameTime && !waitForReset) {
 
-					if (linePosition > 15 && text.charAt(currentPosition) == ' ') {
+					Paint paint = new Paint();
+					paint.setFakeBoldText(true);
+					paint.setTextSize(textSize);
+					int width = (int) paint.measureText(textArray[currentLine]);
+
+					if ((width > maxWidth && text.charAt(currentPosition) == ' ')
+							|| (x + textSize + width + 25) > tutorialOverlay.getScreenWidth()) {
 						if (currentLine < 3) {
 							currentLine++;
 							currentPosition++;
@@ -147,7 +153,6 @@ public class Bubble implements SurfaceObject {
 							reset = true;
 							waitForReset = true;
 						}
-						linePosition = 0;
 					}
 
 					if (reset) {
@@ -159,7 +164,6 @@ public class Bubble implements SurfaceObject {
 					}
 					lastUpdateTime = gameTime;
 					currentPosition++;
-					linePosition++;
 				}
 			}
 

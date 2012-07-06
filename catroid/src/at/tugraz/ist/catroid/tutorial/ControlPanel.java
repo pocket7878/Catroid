@@ -143,13 +143,13 @@ public class ControlPanel implements SurfaceObject {
 		open = false;
 	}
 
-	private int getScreenHeight() {
+	public int getScreenHeight() {
 		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
 		int screenHeight = display.getHeight();
 		return screenHeight;
 	}
 
-	private int getScreenWidth() {
+	public int getScreenWidth() {
 		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
 		int screenWidth = display.getWidth();
 		return screenWidth;

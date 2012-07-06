@@ -279,4 +279,12 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		return (fl > 0) ? fl : fl * -1;
 	}
 
+	public int getScreenHeight() {
+		return panel.getScreenHeight();
+	}
+
+	public int getScreenWidth() {
+		return panel.getScreenWidth();
+	}
+
 }

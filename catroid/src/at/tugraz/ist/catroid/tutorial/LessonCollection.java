@@ -119,6 +119,10 @@ public class LessonCollection {
 		return (lessonArray.get(currentLesson)).getSizeOfLesson();
 	}
 
+	public int getSizeOfLessonCollection() {
+		return lessonArray.size();
+	}
+
 	@Override
 	protected void finalize() throws Throwable {
 		// TODO Auto-generated method stub
