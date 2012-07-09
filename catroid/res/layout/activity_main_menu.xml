@@ -91,6 +91,14 @@
             android:drawableTop="@drawable/about_selector"
             android:onClick="handleAboutCatroidButton"
             android:text="@string/about" />
+        
+        <Button 
+            android:id = "@+id/local_upload_project"
+            style="@style/DashboardButton"
+            android:drawableTop="@drawable/about_selector"
+            android:onClick="HandleUpload"
+            android:text="@string/local_upload_project"
+            />
     </at.tugraz.ist.catroid.ui.widget.DashboardLayout>
 
 </LinearLayout>
