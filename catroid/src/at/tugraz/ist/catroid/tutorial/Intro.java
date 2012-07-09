@@ -46,8 +46,6 @@ public class Intro implements SurfaceObject {
 
 	@Override
 	public void update(long gameTime) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

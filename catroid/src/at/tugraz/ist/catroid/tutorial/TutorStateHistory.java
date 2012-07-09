@@ -20,6 +20,7 @@ package at.tugraz.ist.catroid.tutorial;
 
 import java.util.HashMap;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
@@ -27,6 +28,7 @@ import at.tugraz.ist.catroid.tutorial.tasks.Task;
  * @author drab
  * 
  */
+@SuppressLint("UseSparseArrays")
 public class TutorStateHistory {
 	private int stateCounter = 0;
 	private Task.Tutor tutor;
@@ -63,7 +65,6 @@ public class TutorStateHistory {
 		Log.i("new", "New State for Tutor - " + tutor + " will be from StateHistory: " + stateCounter);
 		TutorState returnState = stateMap.get(stateCounter);
 
-		//TODO: Have an Eye on this
 		if (stateCounter == 0) {
 			stateCounter++;
 		}

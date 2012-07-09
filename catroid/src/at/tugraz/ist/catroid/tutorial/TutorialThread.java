@@ -41,7 +41,7 @@ public class TutorialThread extends Thread implements Runnable {
 	private ArrayList<Task.Tutor> lastModifiedTutorList = new ArrayList<Task.Tutor>();
 	private int lastModifiedTutorIndex = 0;
 
-	private HashMap<Integer, Task> notifyTasks = new HashMap<Integer, Task>();
+	//private HashMap<Integer, Task> notifyTasks = new HashMap<Integer, Task>();
 	private int lastNotifyTasksIndex = 0;
 
 	private HashMap<Task.Tutor, SurfaceObjectTutor> tutors = new HashMap<Task.Tutor, SurfaceObjectTutor>();
@@ -115,12 +115,6 @@ public class TutorialThread extends Thread implements Runnable {
 					lastModifiedTutorIndex++;
 				}
 
-				if (currentTaskType == Task.Type.FADEIN) {
-					Task currentTask = lessonCollection.getCurrentTaskObject();
-					notifyTasks.put(lastNotifyTasksIndex, currentTask);
-					lastNotifyTasksIndex++;
-				}
-
 				if (notification == true) {
 					synchronized (this) {
 						try {
@@ -143,9 +137,16 @@ public class TutorialThread extends Thread implements Runnable {
 						co.disapear();
 						lastNotifyTasksIndex--;
 					}
+
 					int stepsBack = lessonCollection.rewindStep();
+
+					if (stepsBack == 0) {
+						resetAndGoToPreviousLesson();
+					} else {
+						setLastTutorModified(stepsBack);
+					}
 					Log.i("new", "STEPS Back: " + stepsBack);
-					setLastTutorModified(stepsBack);
+
 				} else if (interruptRoutine == ACTIONS.FORWARD) {
 					Log.i("forward", "FORWARDING @ TASK: " + lessonCollection.getTypeFromCurrentTaskInLesson());
 					Task currentTask = lessonCollection.getCurrentTaskObject();
@@ -275,8 +276,23 @@ public class TutorialThread extends Thread implements Runnable {
 			Log.i("new", "STOP Tutorial");
 			stopTutorial();
 			return true;
-		} else {
-			//lessonCollection.initializeIntroForLesson(context);
+		}
+
+		return false;
+	}
+
+	public boolean resetAndGoToPreviousLesson() {
+		Log.i("new", "Tutorial stopped in TUT-Thread");
+		lessonCollection.resetCurrentLesson();
+		tutors.get(Task.Tutor.CATRO).resetTutor();
+		tutors.get(Task.Tutor.MIAUS).resetTutor();
+		lastModifiedTutorIndex = 0;
+		lastModifiedTutorList.clear();
+
+		boolean previousLesson = lessonCollection.previousLesson();
+
+		if (tutorialThreadRunning && previousLesson) {
+			return true;
 		}
 		return false;
 	}

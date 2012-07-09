@@ -131,7 +131,6 @@ public class LessonCollection {
 
 	@Override
 	protected void finalize() throws Throwable {
-		// TODO Auto-generated method stub
 		Log.i("drab", Thread.currentThread().getName() + ": LessonCollection: finalize called!");
 		super.finalize();
 	}

@@ -154,6 +154,7 @@ public class LegoNXT implements BTConnectable {
 		return btcHandler;
 	}
 
+	@Override
 	public boolean isPairing() {
 		// TODO Auto-generated method stub
 		return pairing;
