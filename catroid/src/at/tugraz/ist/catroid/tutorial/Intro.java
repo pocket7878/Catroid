@@ -21,10 +21,8 @@ package at.tugraz.ist.catroid.tutorial;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import at.tugraz.ist.catroid.R;
 
 /**
  * @author faxxe
@@ -37,7 +35,7 @@ public class Intro implements SurfaceObject {
 	TutorialOverlay tutorialOverlay;
 
 	public Intro(TutorialOverlay tutorialOverlay, Context context) {
-		bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.lesson_intro);
+		//	bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.lesson_intro);
 		this.tutorialOverlay = tutorialOverlay;
 	}
 
