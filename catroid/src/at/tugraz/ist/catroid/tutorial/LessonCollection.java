@@ -3,6 +3,7 @@ package at.tugraz.ist.catroid.tutorial;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.content.Context;
 import android.util.Log;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
 
@@ -10,10 +11,20 @@ public class LessonCollection {
 	private ArrayList<Lesson> lessonArray;
 	private int currentLesson;
 	private int currentPossibleLesson;
+	private TutorialOverlay tutorialOverlay;
 
 	private HashMap<Task.Tutor, SurfaceObjectTutor> tutors;
 
 	public void setTutorialOverlay(TutorialOverlay tutorialOverlay) {
+		this.tutorialOverlay = tutorialOverlay;
+	}
+
+	int getLastPossibleLessonNumber() {
+		return currentPossibleLesson;
+	}
+
+	void setLastPossibleLessonNumber(int value) {
+		currentPossibleLesson = value;
 	}
 
 	public void resetCurrentLesson() {
@@ -39,16 +50,20 @@ public class LessonCollection {
 	}
 
 	boolean switchToLesson(int lessonID) {
-		if (lessonID > lessonArray.size()) {
-			return (false);
+		if (lessonID >= lessonArray.size()) {
+			return false;
 		} else {
 			currentLesson = lessonID;
-			return (true);
+			Log.i("dialog", "Switched to Cl: " + currentLesson);
+			return true;
 		}
 	}
 
+	void initializeIntroForLesson(Context context) {
+		new Intro(tutorialOverlay, context);
+	}
+
 	boolean executeTask() {
-		//		return (lessonArray.get(currentLesson).executeTask(tutorialOverlay));
 		return (lessonArray.get(currentLesson)).executeTask(tutors);
 	}
 
@@ -73,14 +88,6 @@ public class LessonCollection {
 		}
 	}
 
-	int getLastPossibleLessonNumber() {
-		return currentPossibleLesson;
-	}
-
-	void setLastPossibleLessonNumber(int value) {
-		currentPossibleLesson = value;
-	}
-
 	ArrayList<String> getLessons() {
 		ArrayList<String> lessonNames = new ArrayList<String>();
 		for (Lesson tmp : lessonArray) {
@@ -91,7 +98,6 @@ public class LessonCollection {
 
 	int rewindStep() {
 		return (lessonArray.get(currentLesson).rewindStep());
-
 	}
 
 	boolean forwardStep() {

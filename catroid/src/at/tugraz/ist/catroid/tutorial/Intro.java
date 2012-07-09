@@ -18,6 +18,7 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,19 +30,20 @@ import at.tugraz.ist.catroid.R;
  * @author faxxe
  * 
  */
+@SuppressLint("ParserError")
 public class Intro implements SurfaceObject {
 	Bitmap bitmap;
 	Paint paint = new Paint();
+	TutorialOverlay tutorialOverlay;
 
-	public Intro(Context context) {
-		bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.intro);
+	public Intro(TutorialOverlay tutorialOverlay, Context context) {
+		bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.lesson_intro);
+		this.tutorialOverlay = tutorialOverlay;
 	}
 
 	@Override
 	public void draw(Canvas canvas) {
-		// TODO Auto-generated method stub
 		canvas.drawBitmap(bitmap, 0, 0, paint);
-
 	}
 
 	@Override

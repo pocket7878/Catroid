@@ -171,7 +171,12 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void say(String text) {
+		if (tutorBubble != null) {
+			tutorBubble.clearBubbleRemoveSurfaceObject();
+			tutorBubble = null;
+		}
 		this.tutorBubble = new Bubble(text, tutorialOverlay, this, targetX, targetY);
+
 		Log.i("drab", Thread.currentThread().getName() + ": New bubble created : " + this.tutorBubble);
 
 		if (!flip) {

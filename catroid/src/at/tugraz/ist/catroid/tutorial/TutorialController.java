@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -58,7 +59,7 @@ public class TutorialController {
 	private TutorialThread tutorialThread;
 	private boolean activityChanged = false;
 
-	private static final String PREF_KEY_POSSIBLE_LESSON = "Demonstration";
+	private static final String PREF_TUTORIAL_LESSON = "INITIAL_TUTORIAL_LESSON";
 
 	public void cleanAll() {
 		Cloud.getInstance(context).clear();
@@ -130,7 +131,7 @@ public class TutorialController {
 			tutorialOverlay.addCloud(cloud);
 		}
 
-		if (tutors.size() < 2) {
+		if (tutors.size() == 0) {
 			SurfaceObjectTutor tutor = new Tutor(R.drawable.tutor_catro_animation, tutorialOverlay, 100, 100,
 					Task.Tutor.CATRO);
 			tutors.put(tutor.tutorType, tutor);
@@ -160,16 +161,18 @@ public class TutorialController {
 	public void initalizeLessons() {
 		//TODO: Seems like this comment toogled lines are a hot mess...
 		// Intended to look for default Tutorial-Lesson...but not quite working right
-		//		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-		//		int possibleLesson = preferences.getInt(PREF_KEY_POSSIBLE_LESSON, 0);
-		//		lessonCollection.setLastPossibleLessonNumber(possibleLesson);
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+		int possibleLesson = preferences.getInt(PREF_TUTORIAL_LESSON, 0);
+		lessonCollection.setLastPossibleLessonNumber(possibleLesson);
 
-		lessonCollection.switchToLesson(0);
+		Log.i("dialog", "The lesson out of the Preferences is: " + possibleLesson);
+
 		lessonCollection.setTutorialOverlay(tutorialOverlay);
+		lessonCollection.switchToLesson(possibleLesson);
 	}
 
 	public void showLessonDialog() {
-		if (lessonCollection.getSizeOfCurrentLesson() != 0) {
+		if (lessonCollection.getSizeOfLessonCollection() != 0) {
 			AlertDialog alert = generateLessonDialog();
 			alert.show();
 		} else {
@@ -177,9 +180,10 @@ public class TutorialController {
 		}
 	}
 
+	@SuppressLint("ParserError")
 	public void startThread() {
 		if (tutorialThread == null) {
-			tutorialThread = new TutorialThread(this.tutors);
+			tutorialThread = new TutorialThread(this.tutors, this.context);
 			tutorialThread.setName("TutorialThread");
 			tutorialThread.setLessonCollection(lessonCollection);
 			tutorialThread.startThread();
@@ -200,6 +204,7 @@ public class TutorialController {
 		tutorialPaused = false;
 		setupTutorialOverlay();
 		initializeTutors();
+		//lessonCollection.initializeIntroForLesson(context);
 		startThread();
 	}
 
@@ -222,18 +227,16 @@ public class TutorialController {
 	private AlertDialog generateLessonDialog() {
 		//TODO: Cancle Tutorial if Dialog is cancled!
 		ArrayList<String> lessons = lessonCollection.getLessons();
-		final CharSequence[] items = new CharSequence[lessonCollection.getSizeOfLessonCollection()];
+		final CharSequence[] items = new CharSequence[lessonCollection.getLastPossibleLessonNumber() + 1];
 
-		Log.i("dialog",
-				Thread.currentThread().getName() + ": lastPossNumber: " + lessonCollection.getSizeOfLessonCollection());
-		for (int i = 0; i < lessonCollection.getSizeOfLessonCollection(); i++) {
-			Log.i("dialog", "Lesson i: " + i + " and the intems length:" + items.length);
-
+		for (int i = 0; i <= lessonCollection.getLastPossibleLessonNumber(); i++) {
+			Log.i("dialog", "LASTPOS: " + lessonCollection.getLastPossibleLessonNumber() + " - Lesson i: " + i
+					+ " and the intems length:" + items.length);
 			items[i] = lessons.get(i);
 		}
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle("choose lesson:");
+		builder.setTitle("Wähle eine Lektion:");
 		builder.setItems(items, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int item) {
@@ -241,6 +244,7 @@ public class TutorialController {
 				resumeTutorial();
 			}
 		});
+
 		AlertDialog alert = builder.create();
 		return alert;
 	}
@@ -259,7 +263,7 @@ public class TutorialController {
 	public void setSharedPreferences() {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor sharedPreferencesEditor = preferences.edit();
-		sharedPreferencesEditor.putInt(PREF_KEY_POSSIBLE_LESSON, lessonCollection.getLastPossibleLessonNumber());
+		sharedPreferencesEditor.putInt(PREF_TUTORIAL_LESSON, lessonCollection.getLastPossibleLessonNumber());
 		sharedPreferencesEditor.commit();
 		// TODO: Dont know, maybe reset it to default, but if not: copying the project
 		// so it dont get lost if tutorial is used again, so that the kids dont lose their work
@@ -345,7 +349,7 @@ public class TutorialController {
 			windowManager = ((Activity) context).getWindowManager();
 			windowManager.addView(tutorialOverlay, dragViewParameters);
 		}
-
+		lessonCollection.initializeIntroForLesson(context);
 	}
 
 	public boolean dispatchTouchEvent(MotionEvent ev) {

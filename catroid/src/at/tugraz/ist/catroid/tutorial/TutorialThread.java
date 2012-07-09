@@ -21,6 +21,7 @@ package at.tugraz.ist.catroid.tutorial;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.content.Context;
 import android.util.Log;
 import at.tugraz.ist.catroid.tutorial.Tutor.ACTIONS;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
@@ -45,7 +46,7 @@ public class TutorialThread extends Thread implements Runnable {
 
 	private HashMap<Task.Tutor, SurfaceObjectTutor> tutors = new HashMap<Task.Tutor, SurfaceObjectTutor>();
 
-	public TutorialThread(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
+	public TutorialThread(HashMap<Task.Tutor, SurfaceObjectTutor> tutors, Context context) {
 		Thread thisThread = new Thread(this);
 		thisThread.setName("NewTutorialThread");
 		this.tutors = tutors;
@@ -274,6 +275,8 @@ public class TutorialThread extends Thread implements Runnable {
 			Log.i("new", "STOP Tutorial");
 			stopTutorial();
 			return true;
+		} else {
+			//lessonCollection.initializeIntroForLesson(context);
 		}
 		return false;
 	}

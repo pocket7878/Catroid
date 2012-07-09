@@ -6,8 +6,8 @@
             <lessonContent>
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
                     <tutorType>CATRO</tutorType>
-                    <x>250</x>
-                    <y>400</y>
+                    <x>100</x>
+                    <y>200</y>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskAppear>
                 
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskSay>
@@ -17,8 +17,8 @@
                 
                 <at.tugraz.ist.catroid.tutorial.tasks.TaskWalk>
                     <tutorType>CATRO</tutorType>
-                    <walkToX>100</walkToX>
-                    <walkToY>400</walkToY>
+                    <walkToX>120</walkToX>
+                    <walkToY>220</walkToY>
                     <walkFast>true</walkFast>
                 </at.tugraz.ist.catroid.tutorial.tasks.TaskWalk>
                 
