@@ -40,10 +40,6 @@ public class XmlHandler {
 			lessonCollection = (LessonCollection) xstream.fromXML(inputStream);
 		} catch (Exception e) {
 		}
-
-		// Do no irgendwen vom Kernteam fragen, wieso XStream in allen Arrays den ersten 
-		// Eintrag dupliziert.
-
 		lessonCollection.cleanAfterXML();
 	}
 

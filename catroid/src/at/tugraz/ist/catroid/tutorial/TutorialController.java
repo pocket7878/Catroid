@@ -159,8 +159,6 @@ public class TutorialController {
 	}
 
 	public void initalizeLessons() {
-		//TODO: Seems like this comment toogled lines are a hot mess...
-		// Intended to look for default Tutorial-Lesson...but not quite working right
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 		int possibleLesson = preferences.getInt(PREF_TUTORIAL_LESSON, 0);
 		lessonCollection.setLastPossibleLessonNumber(possibleLesson);
@@ -327,12 +325,9 @@ public class TutorialController {
 	}
 
 	public void holdTutorsAndRemoveOverlay() {
-		//TODO: improve! make dynamic :)
-		Tutor tutor = (Tutor) tutors.get(Task.Tutor.CATRO);
-		tutor.setHoldTutor(true);
-
-		tutor = (Tutor) tutors.get(Task.Tutor.MIAUS);
-		tutor.setHoldTutor(true);
+		for (Entry<Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
+			((Tutor) tempTutor.getValue()).setHoldTutor(true);
+		}
 
 		tutorialOverlay.removeCloud();
 	}

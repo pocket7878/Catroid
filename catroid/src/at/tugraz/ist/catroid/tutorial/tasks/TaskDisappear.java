@@ -32,7 +32,5 @@ public class TaskDisappear implements Task {
 
 	@Override
 	public void setEndPositionForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
-		// TODO Auto-generated method stub
-
 	}
 }

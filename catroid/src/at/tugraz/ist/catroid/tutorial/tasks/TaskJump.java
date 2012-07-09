@@ -50,8 +50,6 @@ public class TaskJump implements Task {
 
 	@Override
 	public void setEndPositionForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

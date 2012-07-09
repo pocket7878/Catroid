@@ -225,7 +225,6 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	}
 
 	private boolean isOnPauseButton(MotionEvent ev) {
-		// TODO Auto-generated method stub
 		double[] pausePosition = panel.getPausePosition();
 		if (ev.getX() > pausePosition[0] && ev.getX() < pausePosition[1]) {
 			return true;
@@ -234,7 +233,6 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	}
 
 	private boolean isOnStopButton(MotionEvent ev) {
-		// TODO Auto-generated method stub
 		double[] stopPosition = panel.getStopPosition();
 		if (ev.getX() > stopPosition[0] && ev.getX() < stopPosition[1]) {
 			return true;

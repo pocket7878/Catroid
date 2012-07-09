@@ -234,6 +234,5 @@ public class ControlPanel implements SurfaceObject {
 
 	@Override
 	public void update(long gameTime) {
-		// TODO Auto-generated method stub
 	}
 }
