@@ -40,6 +40,9 @@ public final class Constants {
 	//Web:
 	public static final String TOKEN = "token";
 
+	//localhost 
+	public static final String PROJECT_TOKEN = "project_token";
+
 	// Paintroid
 	public static final String EXTRA_PICTURE_PATH_PAINTROID = "at.tugraz.ist.extra.PAINTROID_PICTURE_PATH";
 	public static final String EXTRA_PICTURE_NAME_PAINTROID = "at.tugraz.ist.extra.PAINTROID_PICTURE_NAME";
