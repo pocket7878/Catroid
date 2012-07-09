@@ -111,13 +111,6 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 					createAddBrickClickListener());
 			//set new icon for actionbar plus button:
 			scriptTabActivity.activityHelper.changeButtonIcon(R.id.btn_action_add_button, R.drawable.ic_plus_black);
-
-			int scriptCount = adapter.getScriptCount();
-			for (int i = 0; i < scriptCount; i++) {
-				ProjectManager.getInstance().getCurrentSprite().getScript(i).logScriptList();
-
-			}
-
 		}
 	}
 
@@ -125,9 +118,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 		return new View.OnClickListener() {
 			public void onClick(View v) {
 				getParent().showDialog(DIALOG_ADD_BRICK);
-
 			}
-
 		};
 	}
 
@@ -149,13 +140,6 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 			listView.setInsertedBrick(pos);
 		}
 		adapter.notifyDataSetChanged();
-
-		int scriptCount = adapter.getScriptCount();
-		for (int i = 0; i < scriptCount; i++) {
-			ProjectManager.getInstance().getCurrentSprite().getScript(i).logScriptList();
-
-		}
-
 	}
 
 	public void onCancel(DialogInterface arg0) {

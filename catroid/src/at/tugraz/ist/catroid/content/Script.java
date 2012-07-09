@@ -24,9 +24,7 @@ package at.tugraz.ist.catroid.content;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 
-import android.util.Log;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 
 public abstract class Script implements Serializable {
@@ -79,19 +77,16 @@ public abstract class Script implements Serializable {
 		if (brick != null) {
 			brickList.add(brick);
 		}
-
 	}
 
 	public void addBrick(int position, Brick brick) {
 		if (brick != null) {
 			brickList.add(position, brick);
 		}
-
 	}
 
 	public void removeBrick(Brick brick) {
 		brickList.remove(brick);
-
 	}
 
 	public ArrayList<Brick> getBrickList() {
@@ -166,15 +161,5 @@ public abstract class Script implements Serializable {
 
 	public Brick getBrick(int index) {
 		return brickList.get(index);
-	}
-
-	public void logScriptList() {
-		Iterator<Brick> itr = brickList.iterator();
-		Brick next;
-		Log.d("Current script ", this.getClass().getName());
-		while (itr.hasNext()) {
-			next = itr.next();
-			Log.d("Brick: ", next.getClass().getName());
-		}
 	}
 }
