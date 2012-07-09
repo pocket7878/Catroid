@@ -42,6 +42,7 @@ import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
+import at.tugraz.ist.catroid.transfers.CheckConnection;
 import at.tugraz.ist.catroid.transfers.CheckTokenTask;
 import at.tugraz.ist.catroid.transfers.ProjectDownloadTask;
 import at.tugraz.ist.catroid.ui.dialogs.AboutDialog;
@@ -49,6 +50,7 @@ import at.tugraz.ist.catroid.ui.dialogs.LoadProjectDialog;
 import at.tugraz.ist.catroid.ui.dialogs.LoginRegisterDialog;
 import at.tugraz.ist.catroid.ui.dialogs.NewProjectDialog;
 import at.tugraz.ist.catroid.ui.dialogs.UploadProjectDialog;
+import at.tugraz.ist.catroid.ui.dialogs.UploadToLocalDialog;
 import at.tugraz.ist.catroid.utils.ActivityHelper;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -63,6 +65,7 @@ public class MainMenuActivity extends Activity {
 	public static final int DIALOG_UPLOAD_PROJECT = 2;
 	private static final int DIALOG_ABOUT = 3;
 	private static final int DIALOG_LOGIN_REGISTER = 4;
+	public static final int DIALOG_UPLOAD = 5;
 	private boolean ignoreResume = false;
 
 	public void updateProjectName() {
@@ -151,6 +154,8 @@ public class MainMenuActivity extends Activity {
 			case DIALOG_LOGIN_REGISTER:
 				dialog = new LoginRegisterDialog(this);
 				break;
+			case DIALOG_UPLOAD:
+				dialog = new UploadToLocalDialog(this);
 			default:
 				dialog = null;
 				break;
@@ -169,8 +174,8 @@ public class MainMenuActivity extends Activity {
 				EditText projectDescriptionField = (EditText) dialog.findViewById(R.id.project_description_upload);
 				EditText projectUploadName = (EditText) dialog.findViewById(R.id.project_upload_name);
 				TextView sizeOfProject = (TextView) dialog.findViewById(R.id.dialog_upload_size_of_project);
-				sizeOfProject.setText(UtilFile
-						.getSizeAsString(new File(Constants.DEFAULT_ROOT + "/" + currentProjectName)));
+				sizeOfProject.setText(UtilFile.getSizeAsString(new File(Constants.DEFAULT_ROOT + "/"
+						+ currentProjectName)));
 
 				projectRename.setVisibility(View.GONE);
 				projectUploadName.setText(ProjectManager.getInstance().getCurrentProject().getName());
@@ -183,6 +188,23 @@ public class MainMenuActivity extends Activity {
 				EditText passwordEditText = (EditText) dialog.findViewById(R.id.password);
 				usernameEditText.setText("");
 				passwordEditText.setText("");
+				break;
+
+			case DIALOG_UPLOAD:
+				Project crrntProject = ProjectManager.getInstance().getCurrentProject();
+				String crrntProjectName = crrntProject.getName();
+				TextView prjctRename = (TextView) dialog.findViewById(R.id.tv_project_rename);
+				EditText prjctDscrptionField = (EditText) dialog.findViewById(R.id.project_description_upload);
+				EditText prjctUploadName = (EditText) dialog.findViewById(R.id.project_upload_name);
+				TextView szOfProject = (TextView) dialog.findViewById(R.id.dialog_upload_size_of_project);
+				szOfProject
+						.setText(UtilFile.getSizeAsString(new File(Constants.DEFAULT_ROOT + "/" + crrntProjectName)));
+
+				prjctRename.setVisibility(View.GONE);
+				prjctUploadName.setText(ProjectManager.getInstance().getCurrentProject().getName());
+				prjctDscrptionField.setText("");
+				prjctUploadName.requestFocus();
+				prjctUploadName.selectAll();
 				break;
 		}
 	}
@@ -259,6 +281,27 @@ public class MainMenuActivity extends Activity {
 			new CheckTokenTask(this, token).execute();
 		}
 	}
+
+	/***
+	 * 
+	 * uploading Local server
+	 * 
+	 */
+	public void HandleUpload(View v) {
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		String local_token = preferences.getString(Constants.TOKEN, null);
+
+		if (local_token == null || local_token.length() == 0 || local_token.equals("0")) {
+			showDialog(DIALOG_LOGIN_REGISTER);
+		} else {
+			new CheckConnection(this, local_token).execute();
+		}
+	}
+
+	/***
+	 * 
+	 * 
+	 */
 
 	public void handleWebResourcesButton(View v) {
 		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getText(R.string.catroid_website).toString()));
