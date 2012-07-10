@@ -28,7 +28,7 @@ public class LessonCollection {
 	}
 
 	public void resetCurrentLesson() {
-		Log.i("new", "LESSON OVER and will be set to 0");
+		Log.i("tutorial", "LESSON OVER and will be set to 0");
 		(lessonArray.get(currentLesson)).setCurrentStep(0);
 	}
 
@@ -54,7 +54,7 @@ public class LessonCollection {
 			return false;
 		} else {
 			currentLesson = lessonID;
-			Log.i("dialog", "Switched to Cl: " + currentLesson);
+			Log.i("tutorial", "Switched to Cl: " + currentLesson);
 			return true;
 		}
 	}
@@ -109,7 +109,7 @@ public class LessonCollection {
 	}
 
 	public void clean() {
-		Log.i("drab", Thread.currentThread().getName() + ": LessonCollection: clean called!");
+		Log.i("tutorial", Thread.currentThread().getName() + ": LessonCollection: clean called!");
 		for (Lesson lesson : lessonArray) {
 			lesson.clean();
 		}
@@ -131,7 +131,7 @@ public class LessonCollection {
 
 	@Override
 	protected void finalize() throws Throwable {
-		Log.i("drab", Thread.currentThread().getName() + ": LessonCollection: finalize called!");
+		Log.i("tutorial", Thread.currentThread().getName() + ": LessonCollection: finalize called!");
 		super.finalize();
 	}
 

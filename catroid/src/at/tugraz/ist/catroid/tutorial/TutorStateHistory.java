@@ -43,7 +43,7 @@ public class TutorStateHistory {
 
 	public void addStateToHistory(TutorState state) {
 		stateMap.put(stateCounter, state);
-		Log.i("new", "ADDED STATE: " + state.getState() + " INTO HISTORY for " + tutor + " @ StateCounter: "
+		Log.i("tutorial", "ADDED STATE: " + state.getState() + " INTO HISTORY for " + tutor + " @ StateCounter: "
 				+ stateCounter);
 		stateCounter++;
 		stateCountCarry = true;
@@ -54,7 +54,7 @@ public class TutorStateHistory {
 			stateCountCarry = false;
 			stateCounter--;
 		}
-		Log.i("new", "Actual State of " + tutor + ": " + stateCounter + " - setBackSteps: " + setCount);
+		Log.i("tutorial", "Actual State of " + tutor + ": " + stateCounter + " - setBackSteps: " + setCount);
 
 		if (stateCounter - setCount > 0) {
 			stateCounter = stateCounter - setCount;
@@ -62,7 +62,7 @@ public class TutorStateHistory {
 			stateCounter = 0;
 		}
 
-		Log.i("new", "New State for Tutor - " + tutor + " will be from StateHistory: " + stateCounter);
+		Log.i("tutorial", "New State for Tutor - " + tutor + " will be from StateHistory: " + stateCounter);
 		TutorState returnState = stateMap.get(stateCounter);
 
 		if (stateCounter == 0) {

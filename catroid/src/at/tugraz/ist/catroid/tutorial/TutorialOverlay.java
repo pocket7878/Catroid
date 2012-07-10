@@ -20,7 +20,6 @@ package at.tugraz.ist.catroid.tutorial;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -50,6 +49,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	private ControlPanel panel;
 	private boolean interrupt = false;
 	private long timeToWaitAfterRewind = 0;
+	private Paint paint = new Paint();
 
 	@Override
 	protected void finalize() throws Throwable {
@@ -86,12 +86,12 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		surfaceObjects = new ArrayList<SurfaceObject>();
 		panel = new ControlPanel(context, this);
 		co = new CloudController();
+		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 	}
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		Paint paint = new Paint();
-		paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+
 		canvas.drawPaint(paint);
 		postInvalidate();
 
@@ -101,7 +101,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 
 		cloud.draw(canvas);
 
-		long actTime = new Date().getTime();
+		long actTime = System.currentTimeMillis();
 		if (surfaceObjects != null && !interrupt && actTime > timeToWaitAfterRewind) {
 			synchronized (surfaceObjects) {
 				for (SurfaceObject tmp : surfaceObjects) {
@@ -186,7 +186,7 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 		if (panel.isOpen() && panel.isReadyToDispatch()) {
 			if (isOnStopButton(ev)) {
 				Tutorial.getInstance(null).stopButtonTutorial();
-				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Stop");
+				Log.i("tutorial", Thread.currentThread().getName() + ": DISPATCH Stop");
 			} else if (isOnPauseButton(ev)) {
 				if (panel.isPaused()) {
 					interrupt = true;
@@ -199,27 +199,27 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 					panel.pressPause();
 					interrupt = false;
 				}
-				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Pause");
+				Log.i("tutorial", Thread.currentThread().getName() + ": DISPATCH Pause");
 			} else if (isOnBackwardButton(ev) && !panel.isPaused()) {
-				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button rewind");
+				Log.i("tutorial", Thread.currentThread().getName() + ": DISPATCH Button rewind");
 				interrupt = true;
 				Tutorial.getInstance(null).stepBackward();
 				panel.pressBackward();
 				interrupt = false;
 			} else if (isOnForwardButton(ev) && !panel.isPaused()) {
-				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button forward");
+				Log.i("tutorial", Thread.currentThread().getName() + ": DISPATCH Button forward");
 				interrupt = true;
 				Tutorial.getInstance(null).stepForward();
 				panel.pressForward();
 				interrupt = false;
 			} else if (isOnButton(ev)) {
 				panel.close();
-				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button open/close");
+				Log.i("tutorial", Thread.currentThread().getName() + ": DISPATCH Button open/close");
 			}
 		} else if (!panel.isOpen() && panel.isReadyToDispatch()) {
 			if (isOnButton(ev)) {
 				panel.open();
-				Log.i("drab", Thread.currentThread().getName() + ": DISPATCH Button open/close");
+				Log.i("tutorial", Thread.currentThread().getName() + ": DISPATCH Button open/close");
 			}
 		}
 	}
@@ -276,13 +276,4 @@ public class TutorialOverlay extends SurfaceView implements SurfaceHolder.Callba
 	public float abs(float fl) {
 		return (fl > 0) ? fl : fl * -1;
 	}
-
-	public int getScreenHeight() {
-		return panel.getScreenHeight();
-	}
-
-	public int getScreenWidth() {
-		return panel.getScreenWidth();
-	}
-
 }

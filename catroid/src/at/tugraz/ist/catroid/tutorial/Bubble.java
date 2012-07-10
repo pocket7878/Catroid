@@ -18,8 +18,6 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
-import java.util.Date;
-
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -47,12 +45,16 @@ public class Bubble implements SurfaceObject {
 	private int x = 0;
 	private int y = 0;
 	private int textSize = 16;
-	private boolean reset = false;
+	private boolean isBold = false;
+	private boolean isAntiAliasing = false;
+
 	private int textMarginY = 0;
+	private int bottomMargin = 0;
 
 	private int updateTime = 110;
 	private long lastUpdateTime = 0;
 
+	private boolean reset = false;
 	private long endTimeBubble = 0;
 	private boolean setEndTime = false;
 	private int waitTime = 1000;
@@ -61,6 +63,9 @@ public class Bubble implements SurfaceObject {
 	private boolean holdBubble = false;
 
 	public Bubble(String text, TutorialOverlay tutorialOverlay, SurfaceObjectTutor tutor, int x, int y) {
+
+		setTextSizeAndMarginForDisplayDensity(Tutorial.getInstance(null).getDensity());
+
 		this.tutor = tutor;
 		this.text = text;
 		this.x = x;
@@ -99,11 +104,33 @@ public class Bubble implements SurfaceObject {
 		speechBubble.setBounds(bubbleBounds);
 	}
 
+	private void setTextSizeAndMarginForDisplayDensity(float density) {
+		if (density < 1.0f) { //ldpi
+			textSize = 10;
+			isBold = false;
+			isAntiAliasing = true;
+			bottomMargin = 20;
+		} else if (density == 1.0f) { //mdpi
+			textSize = 13;
+			isBold = false;
+			bottomMargin = 40;
+		} else if (density == 1.5f) { //hdpi
+			textSize = 16;
+			isBold = false;
+			bottomMargin = 70;
+		} else { //xdpi
+			textSize = 19;
+			isBold = false;
+			bottomMargin = 90;
+		}
+	}
+
 	@Override
 	public void draw(Canvas canvas) {
 		Paint paint = new Paint();
-		paint.setFakeBoldText(true);
+		paint.setFakeBoldText(isBold);
 		paint.setTextSize(textSize);
+		paint.setAntiAlias(isAntiAliasing);
 
 		int width = (int) paint.measureText(textArray[currentLine]);
 
@@ -111,7 +138,7 @@ public class Bubble implements SurfaceObject {
 			bubbleBounds.right = bubbleBounds.left + width + 40;
 		}
 
-		bubbleBounds.bottom = 70 + bubbleBounds.top + 14 * currentLine;
+		bubbleBounds.bottom = bottomMargin + bubbleBounds.top + textSize * currentLine;
 
 		speechBubble.setBounds(bubbleBounds);
 		speechBubble.draw(canvas);
@@ -140,23 +167,28 @@ public class Bubble implements SurfaceObject {
 					Paint paint = new Paint();
 					paint.setFakeBoldText(true);
 					paint.setTextSize(textSize);
+					paint.setAntiAlias(isAntiAliasing);
 					int width = (int) paint.measureText(textArray[currentLine]);
 
 					if ((width > maxWidth && text.charAt(currentPosition) == ' ')
-							|| (x + textSize + width + 25) > tutorialOverlay.getScreenWidth()) {
+							|| (x + textSize + width + 25) > Tutorial.getInstance(null).getScreenWidth()) {
+
+						if ((x + textSize + width + 25) <= Tutorial.getInstance(null).getScreenWidth()
+								&& text.charAt(currentPosition) != ' ') {
+							currentPosition++;
+						}
 						if (currentLine < 3) {
 							currentLine++;
-							currentPosition++;
+
 						} else {
 							currentLine = 0;
-							currentPosition++;
 							reset = true;
 							waitForReset = true;
 						}
 					}
 
 					if (reset) {
-						resetBubble(new Date().getTime() + waitTime);
+						resetBubble(System.currentTimeMillis() + waitTime);
 						textArray[currentLine] = "" + text.charAt(currentPosition);
 						reset = false;
 					} else {
@@ -182,7 +214,7 @@ public class Bubble implements SurfaceObject {
 
 	private void resetBubble(long time) {
 		while (true) {
-			long actTime = new Date().getTime();
+			long actTime = System.currentTimeMillis();
 			if (actTime > time) {
 				for (int i = 0; i < textArray.length; i++) {
 					textArray[i] = "";

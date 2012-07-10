@@ -23,6 +23,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import at.tugraz.ist.catroid.ProjectManager;
 
@@ -95,7 +96,7 @@ public class Tutorial {
 		tutorialController.stopButtonTutorial();
 		clear();
 		System.gc();
-		Log.i("new", "Tutorial.java: stopButtonTutorial: calling finalisation");
+		Log.i("tutorial", "Tutorial.java: stopButtonTutorial: calling finalisation");
 		System.runFinalization();
 	}
 
@@ -121,7 +122,7 @@ public class Tutorial {
 	}
 
 	public void pauseTutorial() {
-		Log.i("new", "pause Tutorial");
+		Log.i("tutorial", "pause Tutorial");
 		if (!tutorialActive) {
 			return;
 		}
@@ -164,5 +165,21 @@ public class Tutorial {
 
 	public Dialog getDialog() {
 		return tutorialController.getDialog();
+	}
+
+	public float getDensity() {
+		return context.getResources().getDisplayMetrics().density;
+	}
+
+	public int getScreenHeight() {
+		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+		int screenHeight = display.getHeight();
+		return screenHeight;
+	}
+
+	public int getScreenWidth() {
+		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+		int screenWidth = display.getWidth();
+		return screenWidth;
 	}
 }

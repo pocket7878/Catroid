@@ -18,8 +18,6 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
-import java.util.Date;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
@@ -29,7 +27,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.util.Log;
-import android.view.Display;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.tutorial.Tutor.ACTIONS;
@@ -84,23 +81,23 @@ public class ControlPanel implements SurfaceObject {
 		menuButton = (NinePatchDrawable) resources.getDrawable(R.drawable.tutorial_menu_button);
 
 		menuBarBounds = new Rect();
-		menuBarBounds.bottom = getScreenHeight();
-		menuBarBounds.top = (getScreenHeight() - menuBarPlaying.getIntrinsicHeight());
-		menuBarBounds.right = getScreenWidth();
+		menuBarBounds.bottom = Tutorial.getInstance(null).getScreenHeight();
+		menuBarBounds.top = (Tutorial.getInstance(null).getScreenHeight() - menuBarPlaying.getIntrinsicHeight());
+		menuBarBounds.right = Tutorial.getInstance(null).getScreenWidth();
 		menuBarBounds.left = marginLeft;
 
 		menuBarPlaying.setBounds(menuBarBounds);
 		menuBarPaused.setBounds(menuBarBounds);
 
 		menuButtonBounds = new Rect();
-		menuButtonBounds.bottom = getScreenHeight();
-		menuButtonBounds.top = (getScreenHeight() - menuButton.getIntrinsicHeight());
+		menuButtonBounds.bottom = Tutorial.getInstance(null).getScreenHeight();
+		menuButtonBounds.top = (Tutorial.getInstance(null).getScreenHeight() - menuButton.getIntrinsicHeight());
 		menuButtonBounds.right = 64;
 		menuButtonBounds.left = marginLeft;
 
 		menuButton.setBounds(menuButtonBounds);
 
-		scaleDifference = ((float) getScreenWidth() - originalDisplayWidthForPNGs) / 4.0f;
+		scaleDifference = ((float) Tutorial.getInstance(null).getScreenWidth() - originalDisplayWidthForPNGs) / 4.0f;
 
 		pausePosition[0] = pausePosition[0] + scaleDifference + marginLeft;
 		pausePosition[1] = pausePosition[1] + scaleDifference + marginLeft;
@@ -143,21 +140,9 @@ public class ControlPanel implements SurfaceObject {
 		open = false;
 	}
 
-	public int getScreenHeight() {
-		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
-		int screenHeight = display.getHeight();
-		return screenHeight;
-	}
-
-	public int getScreenWidth() {
-		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
-		int screenWidth = display.getWidth();
-		return screenWidth;
-	}
-
 	public boolean isReadyToDispatch() {
-		long actTime = new Date().getTime();
-		Log.i("drab", Thread.currentThread().getName() + ": (actTime - waitTimeToDispatch) > timeOfLastChange = "
+		long actTime = System.currentTimeMillis();
+		Log.i("tutorial", Thread.currentThread().getName() + ": (actTime - waitTimeToDispatch) > timeOfLastChange = "
 				+ (actTime - waitTimeToDispatch) + " and " + timeOfLastChange);
 		if ((actTime - waitTimeToDispatch) > timeOfLastChange) {
 			timeOfLastChange = actTime;
@@ -168,7 +153,7 @@ public class ControlPanel implements SurfaceObject {
 
 	public void pressPlay() {
 		paused = false;
-		long actTime = new Date().getTime();
+		long actTime = System.currentTimeMillis();
 		if (lastPressAction != ACTIONS.PLAY || actTime > (lastPressTime + pauseTimeForToastMessage)) {
 			lastPressAction = ACTIONS.PLAY;
 			Toast.makeText(context, "Play", Toast.LENGTH_SHORT).show();
@@ -178,7 +163,7 @@ public class ControlPanel implements SurfaceObject {
 
 	public void pressPause() throws InterruptedException {
 		paused = true;
-		long actTime = new Date().getTime();
+		long actTime = System.currentTimeMillis();
 		if (lastPressAction != ACTIONS.PAUSE || actTime > (lastPressTime + pauseTimeForToastMessage)) {
 			lastPressAction = ACTIONS.PAUSE;
 			Toast.makeText(context, "Pause", Toast.LENGTH_SHORT).show();
@@ -187,7 +172,7 @@ public class ControlPanel implements SurfaceObject {
 	}
 
 	public void pressForward() {
-		long actTime = new Date().getTime();
+		long actTime = System.currentTimeMillis();
 		if (lastPressAction != ACTIONS.FORWARD || actTime > (lastPressTime + pauseTimeForToastMessage)) {
 			lastPressAction = ACTIONS.FORWARD;
 			Toast.makeText(context, "Schritt vor", Toast.LENGTH_SHORT).show();
@@ -196,7 +181,7 @@ public class ControlPanel implements SurfaceObject {
 	}
 
 	public void pressBackward() {
-		long actTime = new Date().getTime();
+		long actTime = System.currentTimeMillis();
 		if (lastPressAction != ACTIONS.REWIND || actTime > (lastPressTime + pauseTimeForToastMessage)) {
 			lastPressAction = ACTIONS.REWIND;
 			Toast.makeText(context, "Schritt zurück", Toast.LENGTH_SHORT).show();
