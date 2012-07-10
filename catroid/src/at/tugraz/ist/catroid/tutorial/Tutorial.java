@@ -80,6 +80,8 @@ public class Tutorial {
 		ProjectManager.getInstance().initializeThumbTutorialProject(context);
 		Activity currentActivity = (Activity) context;
 		currentActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		ScreenParameters.getInstance().setScreenParameters();
+
 		setTutorialActive();
 		tutorialController.initalizeLessonCollection();
 		tutorialController.initalizeLessons();
