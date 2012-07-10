@@ -99,8 +99,8 @@ public class ScreenParameters {
 			case MDPI:
 				bubbleTextSize = 13;
 				bubbleTextBold = true;
-				bubbleTextAliasing = false;
-				bubbleBottomMarginToText = 40;
+				bubbleTextAliasing = true;
+				bubbleBottomMarginToText = 60;
 				upperBubbleTopMarginToText = 20;
 				lowerBubbleTopMarginToText = 45;
 				bubbleFlipDownMargin = 200;
@@ -133,20 +133,20 @@ public class ScreenParameters {
 				break;
 
 			case XDPI:
-				bubbleTextSize = 19;
+				bubbleTextSize = 24;
 				bubbleTextBold = true;
-				bubbleTextAliasing = false;
+				bubbleTextAliasing = true;
 				bubbleBottomMarginToText = 90;
-				upperBubbleTopMarginToText = 20;
+				upperBubbleTopMarginToText = 30;
 				lowerBubbleTopMarginToText = 45;
 				bubbleFlipDownMargin = 200;
 				xMarginBubbleUpToTutor = 20;
-				yMarginBubbleUpToTutor = 90;
+				yMarginBubbleUpToTutor = 130;
 				xMarginBubbleDownToTutor = 20;
 				yMarginBubbleDownToTutor = 110;
 				bubbleResizeWidthMargin = 40;
-				bubbleMaxWidth = 160;
-				bubbleMinWidth = 80;
+				bubbleMaxWidth = 200;
+				bubbleMinWidth = 120;
 
 				break;
 

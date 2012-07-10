@@ -52,7 +52,7 @@ public class Bubble implements SurfaceObject {
 	private boolean reset = false;
 	private long endTimeBubble = 0;
 	private boolean setEndTime = false;
-	private int waitTime = 1000;
+	private int waitTime = 2000;
 	private boolean waitForReset = false;
 	private boolean holdBubble = false;
 	private int updateTime = 110;
@@ -162,7 +162,6 @@ public class Bubble implements SurfaceObject {
 							currentLine++;
 
 						} else {
-							currentLine = 0;
 							reset = true;
 							waitForReset = true;
 						}
@@ -195,18 +194,12 @@ public class Bubble implements SurfaceObject {
 
 	private void resetBubble(long time) {
 		while (true) {
-			long actTime = System.currentTimeMillis();
-			if (actTime > time) {
-				for (int i = 0; i < textArray.length; i++) {
-					textArray[i] = "";
-				}
-				bubbleBounds.top = this.y;
-				bubbleBounds.left = this.x;
-				bubbleBounds.right = bubbleBounds.left + minWidth;
-				speechBubble.setBounds(bubbleBounds);
-				waitForReset = false;
-				return;
+			for (int i = 1; i < textArray.length; i++) {
+				textArray[i - 1] = textArray[i];
 			}
+			textArray[3] = "";
+			waitForReset = false;
+			return;
 		}
 	}
 
