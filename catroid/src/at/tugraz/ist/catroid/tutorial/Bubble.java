@@ -36,35 +36,35 @@ public class Bubble implements SurfaceObject {
 	private TutorialOverlay tutorialOverlay;
 	private SurfaceObjectTutor tutor;
 	private Rect bubbleBounds;
-
-	private String[] textArray = new String[] { "", "", "", "" };
 	private int currentLine = 0;
-	private int minWidth = 80;
-	private int maxWidth = 160;
-
+	private String[] textArray = new String[] { "", "", "", "" };
 	private int x = 0;
 	private int y = 0;
-	private int textSize = 16;
-	private boolean isBold = false;
-	private boolean isAntiAliasing = false;
 
-	private int textMarginY = 0;
-	private int bottomMargin = 0;
-
-	private int updateTime = 110;
-	private long lastUpdateTime = 0;
+	private int minWidth;
+	private int maxWidth;
+	private int textSize;
+	private boolean isBold;
+	private boolean isAntiAliasing;
+	private int textMarginY;
+	private int bottomMargin;
 
 	private boolean reset = false;
 	private long endTimeBubble = 0;
 	private boolean setEndTime = false;
 	private int waitTime = 1000;
 	private boolean waitForReset = false;
-
 	private boolean holdBubble = false;
+	private int updateTime = 110;
+	private long lastUpdateTime = 0;
 
 	public Bubble(String text, TutorialOverlay tutorialOverlay, SurfaceObjectTutor tutor, int x, int y) {
-
-		setTextSizeAndMarginForDisplayDensity(Tutorial.getInstance(null).getDensity());
+		minWidth = ScreenParameters.getInstance().getBubbleMinWidth();
+		maxWidth = ScreenParameters.getInstance().getBubbleMaxWidth();
+		textSize = ScreenParameters.getInstance().getBubbleTextSize();
+		isBold = ScreenParameters.getInstance().isBubbleTextBold();
+		isAntiAliasing = ScreenParameters.getInstance().isBubbleTextAliasing();
+		bottomMargin = ScreenParameters.getInstance().getBubbleBottomMargin();
 
 		this.tutor = tutor;
 		this.text = text;
@@ -75,7 +75,7 @@ public class Bubble implements SurfaceObject {
 
 		bubbleBounds = new Rect();
 
-		if (this.y > 200) {
+		if (this.y > ScreenParameters.getInstance().getBubbleFlipDownMargin()) {
 			if (this.tutor.tutorType == Tutor.CATRO) {
 				speechBubble = (NinePatchDrawable) Tutorial.getInstance(null).getActualContext().getResources()
 						.getDrawable(R.drawable.bubble_catro);
@@ -83,9 +83,9 @@ public class Bubble implements SurfaceObject {
 				speechBubble = (NinePatchDrawable) Tutorial.getInstance(null).getActualContext().getResources()
 						.getDrawable(R.drawable.bubble_miaus);
 			}
-			this.y -= 90;
-			this.x -= 20;
-			textMarginY = 20;
+			this.y -= ScreenParameters.getInstance().getyMarginBubbleUpToTutor();
+			this.x -= ScreenParameters.getInstance().getxMarginBubbleUpToTutor();
+			textMarginY = ScreenParameters.getInstance().getBubbleUpTopMargin();
 		} else {
 			if (this.tutor.tutorType == Tutor.CATRO) {
 				speechBubble = (NinePatchDrawable) Tutorial.getInstance(null).getActualContext().getResources()
@@ -94,35 +94,15 @@ public class Bubble implements SurfaceObject {
 				speechBubble = (NinePatchDrawable) Tutorial.getInstance(null).getActualContext().getResources()
 						.getDrawable(R.drawable.bubble_miaus_low);
 			}
-			this.y += 110;
-			this.x -= 20;
-			textMarginY = 45;
+			this.y += ScreenParameters.getInstance().getyMarginBubbleDownToTutor();
+			this.x -= ScreenParameters.getInstance().getxMarginBubbleDownToTutor();
+			textMarginY = ScreenParameters.getInstance().getBubbleDownTopMargin();
+
 		}
 		bubbleBounds.top = this.y;
 		bubbleBounds.left = this.x;
 		bubbleBounds.right = bubbleBounds.left + minWidth;
 		speechBubble.setBounds(bubbleBounds);
-	}
-
-	private void setTextSizeAndMarginForDisplayDensity(float density) {
-		if (density < 1.0f) { //ldpi
-			textSize = 10;
-			isBold = false;
-			isAntiAliasing = true;
-			bottomMargin = 20;
-		} else if (density == 1.0f) { //mdpi
-			textSize = 13;
-			isBold = false;
-			bottomMargin = 40;
-		} else if (density == 1.5f) { //hdpi
-			textSize = 16;
-			isBold = false;
-			bottomMargin = 70;
-		} else { //xdpi
-			textSize = 19;
-			isBold = false;
-			bottomMargin = 90;
-		}
 	}
 
 	@Override
@@ -134,8 +114,10 @@ public class Bubble implements SurfaceObject {
 
 		int width = (int) paint.measureText(textArray[currentLine]);
 
-		if (bubbleBounds.right < bubbleBounds.left + width + 40) {
-			bubbleBounds.right = bubbleBounds.left + width + 40;
+		if (bubbleBounds.right < (bubbleBounds.left + width + ScreenParameters.getInstance()
+				.getBubbleResizeWidthMargin())) {
+			bubbleBounds.right = bubbleBounds.left + width
+					+ ScreenParameters.getInstance().getBubbleResizeWidthMargin();
 		}
 
 		bubbleBounds.bottom = bottomMargin + bubbleBounds.top + textSize * currentLine;
@@ -163,17 +145,16 @@ public class Bubble implements SurfaceObject {
 		if (!holdBubble) {
 			if (currentPosition < text.length() && currentLine < textArray.length) {
 				if ((lastUpdateTime + updateTime) < gameTime && !waitForReset) {
-
 					Paint paint = new Paint();
-					paint.setFakeBoldText(true);
+					paint.setFakeBoldText(isBold);
 					paint.setTextSize(textSize);
 					paint.setAntiAlias(isAntiAliasing);
 					int width = (int) paint.measureText(textArray[currentLine]);
 
 					if ((width > maxWidth && text.charAt(currentPosition) == ' ')
-							|| (x + textSize + width + 25) > Tutorial.getInstance(null).getScreenWidth()) {
+							|| (x + textSize + width > Tutorial.getInstance(null).getScreenWidth())) {
 
-						if ((x + textSize + width + 25) <= Tutorial.getInstance(null).getScreenWidth()
+						if ((x + textSize + width <= Tutorial.getInstance(null).getScreenWidth())
 								&& text.charAt(currentPosition) != ' ') {
 							currentPosition++;
 						}
