@@ -18,8 +18,6 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
-import java.util.Date;
-
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -173,9 +171,9 @@ public class Bubble implements SurfaceObject {
 					int width = (int) paint.measureText(textArray[currentLine]);
 
 					if ((width > maxWidth && text.charAt(currentPosition) == ' ')
-							|| (x + textSize + width + 25) > tutorialOverlay.getScreenWidth()) {
+							|| (x + textSize + width + 25) > Tutorial.getInstance(null).getScreenWidth()) {
 
-						if ((x + textSize + width + 25) <= tutorialOverlay.getScreenWidth()
+						if ((x + textSize + width + 25) <= Tutorial.getInstance(null).getScreenWidth()
 								&& text.charAt(currentPosition) != ' ') {
 							currentPosition++;
 						}
@@ -190,7 +188,7 @@ public class Bubble implements SurfaceObject {
 					}
 
 					if (reset) {
-						resetBubble(new Date().getTime() + waitTime);
+						resetBubble(System.currentTimeMillis() + waitTime);
 						textArray[currentLine] = "" + text.charAt(currentPosition);
 						reset = false;
 					} else {
@@ -216,7 +214,7 @@ public class Bubble implements SurfaceObject {
 
 	private void resetBubble(long time) {
 		while (true) {
-			long actTime = new Date().getTime();
+			long actTime = System.currentTimeMillis();
 			if (actTime > time) {
 				for (int i = 0; i < textArray.length; i++) {
 					textArray[i] = "";

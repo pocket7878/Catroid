@@ -177,7 +177,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		}
 		this.tutorBubble = new Bubble(text, tutorialOverlay, this, targetX, targetY);
 
-		Log.i("drab", Thread.currentThread().getName() + ": New bubble created : " + this.tutorBubble);
+		Log.i("tutorial", Thread.currentThread().getName() + ": New bubble created : " + this.tutorBubble);
 
 		if (!flip) {
 			state = 2;
@@ -207,7 +207,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		} else {
 			state = 4;
 		}
-		Log.i("new", "APPEAR set with state= " + state);
+		Log.i("tutorial", "APPEAR set with state= " + state);
 		currentState = new TutorState(targetX, targetY, flip, state);
 		tutorStateHistory.addStateToHistory(currentState);
 	}
@@ -389,7 +389,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	public void setInterruptOfSequence(ACTIONS action) {
 		if (setBackStepsTutor > 0 && action == ACTIONS.REWIND) {
 			removeTutorBubble();
-			Log.i("new", "In TUTOR-" + tutorType + " - Steps tto set back: " + setBackStepsTutor);
+			Log.i("tutorial", "In TUTOR-" + tutorType + " - Steps tto set back: " + setBackStepsTutor);
 			TutorState newState;
 			newState = tutorStateHistory.setBackAndReturnState(setBackStepsTutor);
 			targetX = newState.getX();
@@ -399,7 +399,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 			currentStep = 0;
 			stateDouble = -1;
 
-			Log.i("new", "In TUTOR-" + tutorType + " -New state: " + state + " for - " + this.tutorType);
+			Log.i("tutorial", "In TUTOR-" + tutorType + " -New state: " + state + " for - " + this.tutorType);
 			setBackStepsTutor = 0;
 		}
 
@@ -460,7 +460,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 			state = 5;
 		}
 
-		Log.i("new", "setTutorToStateAndPosition -> x=" + targetX + " y=" + targetY + " state=" + state);
+		Log.i("tutorial", "setTutorToStateAndPosition -> x=" + targetX + " y=" + targetY + " state=" + state);
 	}
 
 	private void removeTutorBubble() {
@@ -468,7 +468,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 			tutorBubble.clearBubbleRemoveSurfaceObject();
 			tutorBubble = null;
 			Tutorial.getInstance(null).setNotification("Bubble finished!");
-			Log.i("drab", Thread.currentThread().getName() + ": Bubble deleted for " + this.tutorType);
+			Log.i("tutorial", Thread.currentThread().getName() + ": Bubble deleted for " + this.tutorType);
 		}
 	}
 }

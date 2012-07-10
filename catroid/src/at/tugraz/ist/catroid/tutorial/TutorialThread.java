@@ -48,9 +48,9 @@ public class TutorialThread extends Thread implements Runnable {
 
 	public TutorialThread(HashMap<Task.Tutor, SurfaceObjectTutor> tutors, Context context) {
 		Thread thisThread = new Thread(this);
-		thisThread.setName("NewTutorialThread");
+		thisThread.setName("TutorialThread");
 		this.tutors = tutors;
-		Log.i("drab", Thread.currentThread().getName() + ": New TutorialThread started... ");
+		Log.i("tutorial", Thread.currentThread().getName() + ": New TutorialThread started... ");
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class TutorialThread extends Thread implements Runnable {
 	}
 
 	private void doNotify() {
-		Log.i("drab", Thread.currentThread().getName() + ": notified");
+		Log.i("tutorial", Thread.currentThread().getName() + ": notified");
 		synchronized (this) {
 			this.notify();
 		}
@@ -94,7 +94,7 @@ public class TutorialThread extends Thread implements Runnable {
 
 	private void runTutorial() {
 		while (tutorialThreadRunning) {
-			Log.i("new", "_________________________NEW THREAD ITERATION________________________________");
+			Log.i("tutorial", "_________________________NEW THREAD ITERATION________________________________");
 			Task.Type currentTaskType = lessonCollection.getTypeFromCurrentTaskInLesson();
 
 			if (!interrupted) {
@@ -104,13 +104,13 @@ public class TutorialThread extends Thread implements Runnable {
 					lastModifiedTutorList.add(lastModifiedTutorIndex,
 							lessonCollection.getTutorNameFromCurrentTaskInLesson());
 
-					Log.i("new", "\n");
-					Log.i("new", "#######LastModifiedList#######");
+					Log.i("tutorial", "\n");
+					Log.i("tutorial", "#######LastModifiedList#######");
 					for (int i = 0; i <= lastModifiedTutorIndex; i++) {
-						Log.i("new", i + ")  " + lastModifiedTutorList.get(i));
+						Log.i("tutorial", i + ")  " + lastModifiedTutorList.get(i));
 					}
-					Log.i("new", "##############################");
-					Log.i("new", "\n");
+					Log.i("tutorial", "##############################");
+					Log.i("tutorial", "\n");
 
 					lastModifiedTutorIndex++;
 				}
@@ -118,10 +118,9 @@ public class TutorialThread extends Thread implements Runnable {
 				if (notification == true) {
 					synchronized (this) {
 						try {
-							Log.i("drab", Thread.currentThread().getName() + ": waiting for notification");
+							Log.i("tutorial", Thread.currentThread().getName() + ": waiting for notification");
 							wait();
 						} catch (InterruptedException e) {
-							Log.i("drab", Thread.currentThread().getName() + ": TutorialThread: wait() failed!");
 							e.printStackTrace();
 						}
 					}
@@ -130,7 +129,7 @@ public class TutorialThread extends Thread implements Runnable {
 
 			if (interrupted) {
 				if (interruptRoutine == ACTIONS.REWIND) {
-					Log.i("new", "NOW REWINDING in TUT-THREAD");
+					Log.i("tutorial", "NOW REWINDING in TUT-THREAD");
 					if (currentTaskType == Task.Type.NOTIFICATION) {
 						lastNotifyTasksIndex--;
 						CloudController co = new CloudController();
@@ -145,7 +144,7 @@ public class TutorialThread extends Thread implements Runnable {
 					} else {
 						setLastTutorModified(stepsBack);
 					}
-					Log.i("new", "STEPS Back: " + stepsBack);
+					Log.i("tutorial", "STEPS Back: " + stepsBack);
 
 				} else if (interruptRoutine == ACTIONS.FORWARD) {
 					Log.i("forward", "FORWARDING @ TASK: " + lessonCollection.getTypeFromCurrentTaskInLesson());
@@ -157,7 +156,7 @@ public class TutorialThread extends Thread implements Runnable {
 					}
 					boolean nextStep = lessonCollection.forwardStep();
 
-					Log.i("new", "Found new LessonStep continue EXECUTING in FORWARDING!");
+					Log.i("tutorial", "Found new LessonStep continue EXECUTING in FORWARDING!");
 					if (!nextStep && resetAndCheckIfEndTutorial()) {
 						break;
 					}
@@ -176,7 +175,7 @@ public class TutorialThread extends Thread implements Runnable {
 				iAck = false;
 			} else {
 				boolean nextStep = lessonCollection.forwardStep();
-				Log.i("new", "Found new LessonStep continue EXECUTING in normal!");
+				Log.i("tutorial", "Found new LessonStep continue EXECUTING in normal!");
 				if (!nextStep && resetAndCheckIfEndTutorial()) {
 					break;
 				}
@@ -250,10 +249,10 @@ public class TutorialThread extends Thread implements Runnable {
 		synchronized (lastModifiedTutorList) {
 			if (lastModifiedTutorIndex > 0) {
 				lastModifiedTutorIndex--;
-				Log.i("new", "lastModiefiedIndex is decremented to: " + lastModifiedTutorIndex);
+				Log.i("tutorial", "lastModiefiedIndex is decremented to: " + lastModifiedTutorIndex);
 				return true;
 			}
-			Log.i("new", "lastModiefiedIndex not decremented: " + lastModifiedTutorIndex);
+			Log.i("tutorial", "lastModiefiedIndex not decremented: " + lastModifiedTutorIndex);
 			return false;
 		}
 	}
@@ -263,7 +262,7 @@ public class TutorialThread extends Thread implements Runnable {
 	}
 
 	public boolean resetAndCheckIfEndTutorial() {
-		Log.i("new", "Tutorial stopped in TUT-Thread");
+		Log.i("tutorial", "Tutorial stopped in TUT-Thread");
 		lessonCollection.resetCurrentLesson();
 		tutors.get(Task.Tutor.CATRO).resetTutor();
 		tutors.get(Task.Tutor.MIAUS).resetTutor();
@@ -273,7 +272,7 @@ public class TutorialThread extends Thread implements Runnable {
 		boolean nextLesson = lessonCollection.nextLesson();
 
 		if (tutorialThreadRunning && !nextLesson) {
-			Log.i("new", "STOP Tutorial");
+			Log.i("tutorial", "STOP Tutorial");
 			stopTutorial();
 			return true;
 		}
@@ -282,7 +281,7 @@ public class TutorialThread extends Thread implements Runnable {
 	}
 
 	public boolean resetAndGoToPreviousLesson() {
-		Log.i("new", "Tutorial stopped in TUT-Thread");
+		Log.i("tutorial", "Tutorial stopped in TUT-Thread");
 		lessonCollection.resetCurrentLesson();
 		tutors.get(Task.Tutor.CATRO).resetTutor();
 		tutors.get(Task.Tutor.MIAUS).resetTutor();
@@ -292,6 +291,7 @@ public class TutorialThread extends Thread implements Runnable {
 		boolean previousLesson = lessonCollection.previousLesson();
 
 		if (tutorialThreadRunning && previousLesson) {
+			Log.i("tutorial", "Lesson changed to Previous lesson");
 			return true;
 		}
 		return false;

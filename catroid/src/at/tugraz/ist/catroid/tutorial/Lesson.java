@@ -16,7 +16,7 @@ public class Lesson {
 
 	public Lesson() {
 		this.currentStep = 0;
-		Log.i("drab", Thread.currentThread().getName() + ": Lesson currentStep: " + this.currentStep);
+		Log.i("tutorial", Thread.currentThread().getName() + ": Lesson currentStep: " + this.currentStep);
 	}
 
 	public void clean() {
@@ -28,7 +28,7 @@ public class Lesson {
 	}
 
 	public void setCurrentStep(int currentStep) {
-		Log.i("new", Thread.currentThread().getName() + ": currentStep was set to " + currentStep);
+		Log.i("tutorial", Thread.currentThread().getName() + ": currentStep was set to " + currentStep);
 		this.currentStep = currentStep;
 	}
 
@@ -38,12 +38,12 @@ public class Lesson {
 
 	boolean forwardStep() {
 		synchronized (this) {
-			Log.i("new", "THE SIZE of the Lesson is: " + lessonContent.size());
+			Log.i("tutorial", "THE SIZE of the Lesson is: " + lessonContent.size());
 			if ((this.currentStep + 1) < lessonContent.size()) {
-				Log.i("new", Thread.currentThread().getName() + ":Forwarding from " + this.currentStep + " to "
+				Log.i("tutorial", Thread.currentThread().getName() + ":Forwarding from " + this.currentStep + " to "
 						+ (this.currentStep + 1));
 				currentStep++;
-				Log.i("drab", Thread.currentThread().getName() + ":Lesson was forwarded to " + this.currentStep);
+				Log.i("tutorial", Thread.currentThread().getName() + ":Lesson was forwarded to " + this.currentStep);
 				return true;
 			} else {
 				return false;
@@ -54,8 +54,7 @@ public class Lesson {
 	int rewindStep() {
 		synchronized (this) {
 			if (currentStep <= 0) {
-				// TODO: da ghoert vorherige Lesson
-				Log.i("drab", Thread.currentThread().getName() + ":Lesson not rewinded");
+				Log.i("tutorial", Thread.currentThread().getName() + ":Lesson not rewinded");
 				return 0;
 			} else {
 				currentStep--;
@@ -64,7 +63,7 @@ public class Lesson {
 				while ((lessonContent.get(currentStep).getType() == Task.Type.FLIP
 						|| lessonContent.get(currentStep).getType() == Task.Type.JUMP || lessonContent.get(currentStep)
 						.getType() == Task.Type.NOTIFICATION) && currentStep != 0) {
-					Log.i("new", "REWINDED to " + (lessonContent.get(currentStep).getType())
+					Log.i("tutorial", "REWINDED to " + (lessonContent.get(currentStep).getType())
 							+ " need to rewind one more");
 					currentStep--;
 
@@ -72,16 +71,15 @@ public class Lesson {
 						rewindBackSteps++;
 					}
 				}
-				Log.i("new", "Lesson rewinded to: " + currentStep);
+				Log.i("tutorial", "Lesson rewinded to: " + currentStep);
 				return rewindBackSteps;
 			}
 		}
 	}
 
 	boolean executeTask(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
-		Log.i("new",
-				Thread.currentThread().getName() + ": @ Step " + currentStep + " executing: "
-						+ lessonContent.get(currentStep).toString());
+		Log.i("tutorial", Thread.currentThread().getName() + ": @ Step " + currentStep + " executing: "
+				+ lessonContent.get(currentStep).toString());
 		return (lessonContent.get(currentStep).execute(tutors));
 	}
 

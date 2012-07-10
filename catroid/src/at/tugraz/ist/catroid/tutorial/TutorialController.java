@@ -163,7 +163,7 @@ public class TutorialController {
 		int possibleLesson = preferences.getInt(PREF_TUTORIAL_LESSON, 0);
 		lessonCollection.setLastPossibleLessonNumber(possibleLesson);
 
-		Log.i("dialog", "The lesson out of the Preferences is: " + possibleLesson);
+		Log.i("tutorial", "The lesson out of the Preferences is: " + possibleLesson);
 
 		lessonCollection.setTutorialOverlay(tutorialOverlay);
 		lessonCollection.switchToLesson(possibleLesson);
@@ -208,16 +208,18 @@ public class TutorialController {
 
 	public void pauseTutorial() {
 		for (Entry<Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
-			Log.i("drab", Thread.currentThread().getName() + ": Now trying to interrupt Tutor: "
-					+ tempTutor.getValue().tutorType);
+			Log.i("tutorial",
+					Thread.currentThread().getName() + ": Now trying to interrupt Tutor: "
+							+ tempTutor.getValue().tutorType);
 			tempTutor.getValue().setInterruptOfSequence(ACTIONS.PAUSE);
 		}
 	}
 
 	public void playTutorial() {
 		for (Entry<Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
-			Log.i("drab", Thread.currentThread().getName() + ": Now trying to interrupt Tutor: "
-					+ tempTutor.getValue().tutorType);
+			Log.i("tutorial",
+					Thread.currentThread().getName() + ": Now trying to interrupt Tutor: "
+							+ tempTutor.getValue().tutorType);
 			tempTutor.getValue().setInterruptOfSequence(ACTIONS.PLAY);
 		}
 	}
@@ -228,7 +230,7 @@ public class TutorialController {
 		final CharSequence[] items = new CharSequence[lessonCollection.getLastPossibleLessonNumber() + 1];
 
 		for (int i = 0; i <= lessonCollection.getLastPossibleLessonNumber(); i++) {
-			Log.i("dialog", "LASTPOS: " + lessonCollection.getLastPossibleLessonNumber() + " - Lesson i: " + i
+			Log.i("tutorial", "LASTPOS: " + lessonCollection.getLastPossibleLessonNumber() + " - Lesson i: " + i
 					+ " and the intems length:" + items.length);
 			items[i] = lessons.get(i);
 		}
@@ -285,9 +287,8 @@ public class TutorialController {
 		while (true) {
 			if (tutorialThread.getAck()) {
 				for (Entry<Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
-					Log.i("drab",
-							Thread.currentThread().getName() + ": Now trying to interrupt Tutor: "
-									+ tempTutor.getValue().tutorType);
+					Log.i("tutorial", Thread.currentThread().getName() + ": Now trying to interrupt Tutor: "
+							+ tempTutor.getValue().tutorType);
 					tempTutor.getValue().setInterruptOfSequence(ACTIONS.REWIND);
 				}
 				break;
@@ -305,9 +306,8 @@ public class TutorialController {
 		while (true) {
 			if (tutorialThread.getAck()) {
 				for (Entry<Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
-					Log.i("drab",
-							Thread.currentThread().getName() + ": Now trying to interrupt Tutor: "
-									+ tempTutor.getValue().tutorType);
+					Log.i("tutorial", Thread.currentThread().getName() + ": Now trying to interrupt Tutor: "
+							+ tempTutor.getValue().tutorType);
 					tempTutor.getValue().setInterruptOfSequence(ACTIONS.FORWARD);
 				}
 				break;
@@ -339,7 +339,7 @@ public class TutorialController {
 			tutorialOverlay = new TutorialOverlay(context);
 			windowManager.addView(tutorialOverlay, dragViewParameters);
 		} else {
-			Log.i("drab", Thread.currentThread().getName() + ": Tutorial: Adding Overlay again!");
+			Log.i("tutorial", Thread.currentThread().getName() + ": Tutorial: Adding Overlay again!");
 			dragViewParameters = createLayoutParameters();
 			windowManager = ((Activity) context).getWindowManager();
 			windowManager.addView(tutorialOverlay, dragViewParameters);
