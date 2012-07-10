@@ -32,7 +32,7 @@
 	<!-- Top bar -->
 	<include layout="@layout/brick_dialog_top"/>
 		
-	<ListView
+	<at.tugraz.ist.catroid.utils.BounceListView
 		android:id="@+id/addBrickDialogListView"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -42,5 +42,5 @@
 		android:clickable="true"
 		android:dividerHeight="10dip"
 		android:divider="#00000000"
-	></ListView>
+	/>
 </LinearLayout>
