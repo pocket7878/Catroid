@@ -18,6 +18,8 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
+import android.util.Log;
+
 /**
  * @author drab
  * 
@@ -80,19 +82,14 @@ public class ScreenParameters {
 				bubbleTextSize = 10;
 				bubbleTextBold = false;
 				bubbleTextAliasing = true;
-
 				bubbleBottomMarginToText = 50;
-
 				upperBubbleTopMarginToText = 25;
 				lowerBubbleTopMarginToText = 25;
-
 				bubbleFlipDownMargin = 200;
-
 				xMarginBubbleUpToTutor = 20;
 				yMarginBubbleUpToTutor = 90;
 				xMarginBubbleDownToTutor = 20;
 				yMarginBubbleDownToTutor = 110;
-
 				bubbleResizeWidthMargin = 40;
 				bubbleMaxWidth = 160;
 				bubbleMinWidth = 80;
@@ -156,6 +153,24 @@ public class ScreenParameters {
 			default:
 				break;
 		}
+	}
+
+	public int setCoordinatesToDensity(int value, boolean width) {
+		if (value > 100) {
+			value = 100;
+		}
+
+		if (width) {
+			Log.i("density", "Old x is: " + value);
+			value = (int) ((value / 100.0f) * Tutorial.getInstance(null).getScreenWidth());
+			Log.i("density", "New x is: " + value);
+		} else {
+			Log.i("density", "Old y is: " + value);
+			value = (int) ((value / 100.0f) * Tutorial.getInstance(null).getScreenHeight());
+			Log.i("density", "Old y is: " + value);
+		}
+
+		return value;
 	}
 
 	public int getBubbleMinWidth() {

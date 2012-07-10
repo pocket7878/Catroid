@@ -2,6 +2,7 @@ package at.tugraz.ist.catroid.tutorial.tasks;
 
 import java.util.HashMap;
 
+import at.tugraz.ist.catroid.tutorial.ScreenParameters;
 import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 
 public class TaskJump implements Task {
@@ -43,7 +44,9 @@ public class TaskJump implements Task {
 	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		SurfaceObjectTutor tutor = tutors.get(tutorType);
 		if (tutor != null) {
-			tutor.jumpTo(this.newX, this.newY);
+			newX = ScreenParameters.getInstance().setCoordinatesToDensity(newX, true);
+			newY = ScreenParameters.getInstance().setCoordinatesToDensity(newY, false);
+			tutor.jumpTo(newX, newY);
 		}
 		return true;
 	}

@@ -21,6 +21,7 @@ package at.tugraz.ist.catroid.tutorial.tasks;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import at.tugraz.ist.catroid.tutorial.ScreenParameters;
 import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 
 /**
@@ -76,6 +77,8 @@ public class TaskWalk implements Task {
 	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		SurfaceObjectTutor tutor = tutors.get(tutorType);
 		if (tutor != null) {
+			walkToX = ScreenParameters.getInstance().setCoordinatesToDensity(walkToX, true);
+			walkToY = ScreenParameters.getInstance().setCoordinatesToDensity(walkToY, false);
 			tutor.walk(this.walkToX, this.walkToY, this.walkFast);
 		}
 		return true;
@@ -85,6 +88,8 @@ public class TaskWalk implements Task {
 	public void setEndPositionForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
 		for (Entry<Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
 			if (tutorType == tempTutor.getValue().tutorType) {
+				walkToX = ScreenParameters.getInstance().setCoordinatesToDensity(walkToX, true);
+				walkToY = ScreenParameters.getInstance().setCoordinatesToDensity(walkToY, false);
 				tempTutor.getValue().setTutorToStateAndPosition(walkToX, walkToY, false);
 			}
 		}
