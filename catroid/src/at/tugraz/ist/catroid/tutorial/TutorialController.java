@@ -143,8 +143,8 @@ public class TutorialController {
 		} else {
 			Tutor catro = (Tutor) tutors.get(Task.Tutor.CATRO);
 			Tutor miaus = (Tutor) tutors.get(Task.Tutor.MIAUS);
-			catro.setHoldTutor(false);
-			miaus.setHoldTutor(false);
+			catro.setHoldTutorAndBubble(false);
+			miaus.setHoldTutorAndBubble(false);
 		}
 	}
 
@@ -326,7 +326,7 @@ public class TutorialController {
 
 	public void holdTutorsAndRemoveOverlay() {
 		for (Entry<Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
-			((Tutor) tempTutor.getValue()).setHoldTutor(true);
+			((Tutor) tempTutor.getValue()).setHoldTutorAndBubble(true);
 		}
 
 		tutorialOverlay.removeCloud();

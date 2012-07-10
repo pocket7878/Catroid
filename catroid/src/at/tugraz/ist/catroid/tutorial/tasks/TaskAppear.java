@@ -2,8 +2,6 @@ package at.tugraz.ist.catroid.tutorial.tasks;
 
 import java.util.HashMap;
 
-import android.util.Log;
-import at.tugraz.ist.catroid.tutorial.ScreenParameters;
 import at.tugraz.ist.catroid.tutorial.SurfaceObjectTutor;
 
 public class TaskAppear implements Task {
@@ -45,9 +43,6 @@ public class TaskAppear implements Task {
 	public boolean execute(HashMap<Task.Tutor, SurfaceObjectTutor> tutors) {
 		SurfaceObjectTutor tutor = tutors.get(tutorType);
 		if (tutor != null) {
-			Log.i("faxxe", "Lesson: tutor exists!");
-			x = ScreenParameters.getInstance().setCoordinatesToDensity(x, true);
-			y = ScreenParameters.getInstance().setCoordinatesToDensity(y, false);
 			tutor.appear(x, y);
 		}
 		return true;

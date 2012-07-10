@@ -161,13 +161,13 @@ public class ScreenParameters {
 		}
 
 		if (width) {
-			Log.i("density", "Old x is: " + value);
+			Log.i("state", "DEN: Old x is: " + value);
 			value = (int) ((value / 100.0f) * Tutorial.getInstance(null).getScreenWidth());
-			Log.i("density", "New x is: " + value);
+			Log.i("state", "DEN: New x is: " + value);
 		} else {
-			Log.i("density", "Old y is: " + value);
+			Log.i("state", "DEN: Old y is: " + value);
 			value = (int) ((value / 100.0f) * Tutorial.getInstance(null).getScreenHeight());
-			Log.i("density", "Old y is: " + value);
+			Log.i("state", "DEN: Old y is: " + value);
 		}
 
 		return value;

@@ -84,8 +84,8 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		paint = new Paint();
 		this.tutorialOverlay = tutorialOverlay;
 
-		this.targetX = x;
-		this.targetY = y;
+		this.targetX = ScreenParameters.getInstance().setCoordinatesToDensity(x, true);
+		this.targetY = ScreenParameters.getInstance().setCoordinatesToDensity(y, false);
 		super.tutorType = tutorType;
 
 		tutorStateHistory = new TutorStateHistory(tutorType);
@@ -115,8 +115,11 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	@Override
 	public void walk(int walkX, int walkY, boolean fastWalk) {
 		walkFast = fastWalk;
-		walkToX = walkX;
-		walkToY = walkY;
+
+		walkToX = ScreenParameters.getInstance().setCoordinatesToDensity(walkX, true);
+		walkToY = ScreenParameters.getInstance().setCoordinatesToDensity(walkY, false);
+
+		Log.i("state", "walkX= " + walkX + " walkY= " + walkY);
 
 		if (walkToX > targetX) {
 			directionX = true;
@@ -190,8 +193,8 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void jumpTo(int x, int y) {
-		targetX = x;
-		targetY = y;
+		targetX = ScreenParameters.getInstance().setCoordinatesToDensity(x, true);
+		targetY = ScreenParameters.getInstance().setCoordinatesToDensity(y, false);
 		state = 61;
 		currentState = new TutorState(targetX, targetY, flip, state);
 		tutorStateHistory.addStateToHistory(currentState);
@@ -199,8 +202,8 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void appear(int x, int y) {
-		this.targetX = x;
-		this.targetY = y;
+		this.targetX = ScreenParameters.getInstance().setCoordinatesToDensity(x, true);
+		this.targetY = ScreenParameters.getInstance().setCoordinatesToDensity(y, false);
 
 		if (!flip) {
 			state = 0;
@@ -369,8 +372,11 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		canvas.drawBitmap(todraw, targetX, targetY, paint);
 	}
 
-	public void setHoldTutor(boolean holdTutor) {
+	public void setHoldTutorAndBubble(boolean holdTutor) {
 		this.holdTutor = holdTutor;
+		if (tutorBubble != null) {
+			tutorBubble.setHoldBubble(holdTutor);
+		}
 	}
 
 	@Override
@@ -445,12 +451,12 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 
 	@Override
 	public void setTutorToStateAndPosition(int x, int y, boolean flip) {
-		if (x > 0) {
-			targetX = x;
+		if (x >= 0) {
+			targetX = ScreenParameters.getInstance().setCoordinatesToDensity(x, true);
 		}
 
-		if (y > 0) {
-			targetY = y;
+		if (y >= 0) {
+			targetY = ScreenParameters.getInstance().setCoordinatesToDensity(y, false);
 		}
 		currentStep = 0;
 

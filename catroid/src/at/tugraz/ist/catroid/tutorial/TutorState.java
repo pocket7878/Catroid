@@ -18,6 +18,8 @@
  */
 package at.tugraz.ist.catroid.tutorial;
 
+import android.util.Log;
+
 /**
  * @author drab
  * 
@@ -33,6 +35,7 @@ public class TutorState {
 		this.y = y;
 		this.flip = flip;
 		this.state = state;
+		Log.i("state", "x= " + x + " y= " + y);
 	}
 
 	public int getX() {
