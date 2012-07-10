@@ -165,4 +165,8 @@ public class Tutorial {
 	public Dialog getDialog() {
 		return tutorialController.getDialog();
 	}
+
+	public float getDensity() {
+		return context.getResources().getDisplayMetrics().density;
+	}
 }
