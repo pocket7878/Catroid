@@ -172,7 +172,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 		tutorStateHistory.addStateToHistory(currentState);
 	}
 
-	//TODO check, if tutors talk parallel
+	//TODO: check, if tutors talk parallel
 	@Override
 	public void say(String text) {
 		if (tutorBubble != null) {
