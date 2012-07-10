@@ -64,7 +64,7 @@ public class Bubble implements SurfaceObject {
 		textSize = ScreenParameters.getInstance().getBubbleTextSize();
 		isBold = ScreenParameters.getInstance().isBubbleTextBold();
 		isAntiAliasing = ScreenParameters.getInstance().isBubbleTextAliasing();
-		bottomMargin = ScreenParameters.getInstance().getBubbleBottomMargin();
+		bottomMargin = ScreenParameters.getInstance().getBubbleBottomMarginToText();
 
 		this.tutor = tutor;
 		this.text = text;
@@ -85,7 +85,7 @@ public class Bubble implements SurfaceObject {
 			}
 			this.y -= ScreenParameters.getInstance().getyMarginBubbleUpToTutor();
 			this.x -= ScreenParameters.getInstance().getxMarginBubbleUpToTutor();
-			textMarginY = ScreenParameters.getInstance().getBubbleUpTopMargin();
+			textMarginY = ScreenParameters.getInstance().getUpperBubbleTopMarginToText();
 		} else {
 			if (this.tutor.tutorType == Tutor.CATRO) {
 				speechBubble = (NinePatchDrawable) Tutorial.getInstance(null).getActualContext().getResources()
@@ -96,7 +96,7 @@ public class Bubble implements SurfaceObject {
 			}
 			this.y += ScreenParameters.getInstance().getyMarginBubbleDownToTutor();
 			this.x -= ScreenParameters.getInstance().getxMarginBubbleDownToTutor();
-			textMarginY = ScreenParameters.getInstance().getBubbleDownTopMargin();
+			textMarginY = ScreenParameters.getInstance().getLowerBubbleTopMarginToText();
 
 		}
 		bubbleBounds.top = this.y;

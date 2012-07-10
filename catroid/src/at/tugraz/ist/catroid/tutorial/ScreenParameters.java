@@ -28,9 +28,9 @@ public class ScreenParameters {
 	private int bubbleTextSize = 0;
 	private boolean bubbleTextBold = false;
 	private boolean bubbleTextAliasing = false;
-	private int bubbleBottomMargin = 0;
-	private int bubbleUpTopMargin = 0;
-	private int bubbleDownTopMargin = 0;
+	private int bubbleBottomMarginToText = 0;
+	private int upperBubbleTopMarginToText = 0;
+	private int lowerBubbleTopMarginToText = 0;
 	private int bubbleFlipDownMargin = 0;
 	private int xMarginBubbleDownToTutor = 0;
 	private int yMarginBubbleDownToTutor = 0;
@@ -80,14 +80,19 @@ public class ScreenParameters {
 				bubbleTextSize = 10;
 				bubbleTextBold = false;
 				bubbleTextAliasing = true;
-				bubbleBottomMargin = 20;
-				bubbleUpTopMargin = 20;
-				bubbleDownTopMargin = 45;
+
+				bubbleBottomMarginToText = 50;
+
+				upperBubbleTopMarginToText = 25;
+				lowerBubbleTopMarginToText = 25;
+
 				bubbleFlipDownMargin = 200;
+
 				xMarginBubbleUpToTutor = 20;
 				yMarginBubbleUpToTutor = 90;
 				xMarginBubbleDownToTutor = 20;
 				yMarginBubbleDownToTutor = 110;
+
 				bubbleResizeWidthMargin = 40;
 				bubbleMaxWidth = 160;
 				bubbleMinWidth = 80;
@@ -98,9 +103,9 @@ public class ScreenParameters {
 				bubbleTextSize = 13;
 				bubbleTextBold = true;
 				bubbleTextAliasing = false;
-				bubbleBottomMargin = 40;
-				bubbleUpTopMargin = 20;
-				bubbleDownTopMargin = 45;
+				bubbleBottomMarginToText = 40;
+				upperBubbleTopMarginToText = 20;
+				lowerBubbleTopMarginToText = 45;
 				bubbleFlipDownMargin = 200;
 				xMarginBubbleUpToTutor = 20;
 				yMarginBubbleUpToTutor = 90;
@@ -116,9 +121,9 @@ public class ScreenParameters {
 				bubbleTextSize = 16;
 				bubbleTextBold = true;
 				bubbleTextAliasing = false;
-				bubbleBottomMargin = 70;
-				bubbleUpTopMargin = 20;
-				bubbleDownTopMargin = 45;
+				bubbleBottomMarginToText = 70;
+				upperBubbleTopMarginToText = 20;
+				lowerBubbleTopMarginToText = 45;
 				bubbleFlipDownMargin = 200;
 				xMarginBubbleUpToTutor = 20;
 				yMarginBubbleUpToTutor = 90;
@@ -134,9 +139,9 @@ public class ScreenParameters {
 				bubbleTextSize = 19;
 				bubbleTextBold = true;
 				bubbleTextAliasing = false;
-				bubbleBottomMargin = 90;
-				bubbleUpTopMargin = 20;
-				bubbleDownTopMargin = 45;
+				bubbleBottomMarginToText = 90;
+				upperBubbleTopMarginToText = 20;
+				lowerBubbleTopMarginToText = 45;
 				bubbleFlipDownMargin = 200;
 				xMarginBubbleUpToTutor = 20;
 				yMarginBubbleUpToTutor = 90;
@@ -177,16 +182,16 @@ public class ScreenParameters {
 		return bubbleTextAliasing;
 	}
 
-	public int getBubbleBottomMargin() {
-		return bubbleBottomMargin;
+	public int getBubbleBottomMarginToText() {
+		return bubbleBottomMarginToText;
 	}
 
-	public int getBubbleUpTopMargin() {
-		return bubbleUpTopMargin;
+	public int getUpperBubbleTopMarginToText() {
+		return upperBubbleTopMarginToText;
 	}
 
-	public int getBubbleDownTopMargin() {
-		return bubbleDownTopMargin;
+	public int getLowerBubbleTopMarginToText() {
+		return lowerBubbleTopMarginToText;
 	}
 
 	public int getBubbleFlipDownMargin() {
