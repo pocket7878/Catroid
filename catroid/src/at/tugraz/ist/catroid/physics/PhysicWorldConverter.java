@@ -19,4 +19,12 @@ class PhysicWorldConverter {
 		return new Vector2(x.x * RATIO, x.y * RATIO);
 	}
 
+	public static float angleBox2DToCat(float angle) {
+		return (float) ((angle % (2 * Math.PI)) / Math.PI * 180f);
+	}
+
+	public static float angleCatToBox2D(float angle) {
+		return ((angle / 180.0f) * (float) Math.PI);
+	}
+
 }

@@ -19,23 +19,20 @@
 package at.tugraz.ist.catroid.physics;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
 import at.tugraz.ist.catroid.content.Sprite;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.MassData;
 
 public class PhysicWorld implements Serializable {
 	private static final long serialVersionUID = -9103964560286141267L;
 
-	private transient Map<Sprite, Body> bodys;
+	ArrayList<Sprite> spriteList;
 	private transient PhysicShapeBuilder physicShapeBuilder;
 
 	public PhysicWorld() {
-		bodys = new HashMap<Sprite, Body>();
+		spriteList = new ArrayList<Sprite>();
 		physicShapeBuilder = new PhysicShapeBuilder();
 		physicShapeBuilder.createSurroundingBox();
 	}
@@ -47,16 +44,18 @@ public class PhysicWorld implements Serializable {
 	}
 
 	private void refreshSprites() {
-		for (Sprite sprite : bodys.keySet()) {
-			Body body = bodys.get(sprite);
-			Vector2 catrobatCoords = PhysicWorldConverter.vectBox2DToCat(body.getPosition());
-			float angle = body.getAngle();
+		for (Sprite sprite : spriteList) {
+			Vector2 catrobatCoords = physicShapeBuilder.getPosition(sprite);
+			float angle = physicShapeBuilder.getAngle(sprite);
+			angle = PhysicWorldConverter.angleBox2DToCat(angle);
 
-			sprite.costume.aquireXYWidthHeightLock(); // Sinn ?
+			System.out.println("#### DEBUG : angle : " + angle);
+
+			sprite.costume.aquireXYWidthHeightLock(); //   ?
 			sprite.costume.setXYPosition(catrobatCoords.x, catrobatCoords.y);
 			sprite.costume.rotation = angle;
 			sprite.costume.releaseXYWidthHeightLock();
-
+			physicShapeBuilder.turn(sprite);
 			//System.out.println("#### DEBUG  x:" + sprite.costume.x + "  y:" + sprite.costume.y);
 			//physicShapeBuilder.printStaticBodys();
 			//System.out.println("#### DEBUG - ENDE  ");
@@ -64,28 +63,25 @@ public class PhysicWorld implements Serializable {
 	}
 
 	public void setGravity(Sprite sprite, Vector2 gravity) {
-		physicShapeBuilder.getWorld().setGravity(PhysicWorldConverter.vectCatToBox2D(gravity));
+		physicShapeBuilder.setGravity(sprite, gravity);
 	}
 
 	public void setVelocity(Sprite sprite, Vector2 velocity) {
-		Body body = getBody(sprite);
-		body.applyLinearImpulse(PhysicWorldConverter.vectCatToBox2D(velocity), body.getPosition());
+		boolean added = physicShapeBuilder.setVelocity(sprite, velocity);
+		if (added) {
+			spriteList.add(sprite);
+		}
 	}
 
 	public void setMass(Sprite sprite, float mass) {
-		Body body = getBody(sprite);
-		MassData mdata = new MassData();
-		mdata.mass = mass;
-		body.setMassData(mdata);
+		boolean added = physicShapeBuilder.setMassData(sprite, mass);
+		if (added) {
+			spriteList.add(sprite);
+		}
 	}
 
-	private Body getBody(Sprite sprite) {
-		Body body = bodys.get(sprite);
-		if (null == body) {
-			body = physicShapeBuilder.createBody(sprite);
-			bodys.put(sprite, body);
-		}
-		return body;
+	public void setPhysicShapeBuilderTestMock(PhysicShapeBuilder physShBTestMock) {
+		physicShapeBuilder = physShBTestMock;
 	}
 
 }

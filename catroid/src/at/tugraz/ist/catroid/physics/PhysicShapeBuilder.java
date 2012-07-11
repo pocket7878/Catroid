@@ -19,6 +19,8 @@
 package at.tugraz.ist.catroid.physics;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.Values;
@@ -30,36 +32,33 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 
-/**
- * @author Philipp
- * 
- */
 public class PhysicShapeBuilder {
 	static {
 		GdxNativesLoader.load();
 	}
+
 	private World world;
 
-	/**
-	 * @return the world
-	 */
 	public World getWorld() {
 		return world;
 	}
 
+	private transient Map<Sprite, Body> bodys;
 	ArrayList<Body> staticBodyList;
 
 	public PhysicShapeBuilder() {
 		world = new World(PhysicWorldSetting.defaultgravity, PhysicWorldSetting.ignoreSleepingObjects);
 		staticBodyList = new ArrayList<Body>();
+		bodys = new HashMap<Sprite, Body>();
 	}
 
-	public Body createBody(Sprite sprite) {
+	private Body createBody(Sprite sprite) {
 
 		// What kind of body is it ???
 		float w;
@@ -71,17 +70,19 @@ public class PhysicShapeBuilder {
 		int[] resulution = costumeData.getResolution();
 		Vector2 pos = new Vector2(sprite.costume.getXPosition(), sprite.costume.getYPosition());
 		Vector2 b2pos = PhysicWorldConverter.vectCatToBox2D(pos);
+		float rotation = PhysicWorldConverter.angleCatToBox2D(sprite.costume.rotation);
 
 		if (resulution[0] == resulution[1]) {
 			r = PhysicWorldConverter.lengthCatToBox2D(resulution[0] / 2.0f);
-			body = createCircle(BodyType.DynamicBody, r, b2pos, 0, 2.0f);
+			body = createCircle(BodyType.DynamicBody, r, b2pos, rotation, 2.0f);
 
 		} else {
 			w = PhysicWorldConverter.lengthCatToBox2D(resulution[0]);
 			h = PhysicWorldConverter.lengthCatToBox2D(resulution[1]);
-			body = createBox(BodyType.DynamicBody, w, h, sprite.costume.rotation, b2pos);
+			body = createBox(BodyType.DynamicBody, w, h, rotation, b2pos);
 		}
 
+		bodys.put(sprite, body);
 		return body;
 	}
 
@@ -113,16 +114,19 @@ public class PhysicShapeBuilder {
 		def.fixedRotation = false;
 		def.position.x = pos.x;
 		def.position.y = pos.y;
-		def.angle = rotation;
+		//def.angle = 0;
+		Body box = world.createBody(def);
 
 		FixtureDef fd = new FixtureDef();
 		fd.shape = new PolygonShape();
-		fd.density = 1.0f;
-		fd.friction = 1.0f;
 		((PolygonShape) fd.shape).setAsBox(width / 2.0f, height / 2.0f);
-
-		Body box = world.createBody(def);
+		fd.density = 1.0f;
+		fd.friction = 0.5f;
+		fd.restitution = 0.5f;
 		box.createFixture(fd);
+		// DEBUG
+		//box.setAngularVelocity(1f);
+
 		return box;
 	}
 
@@ -135,6 +139,12 @@ public class PhysicShapeBuilder {
 		Body body = createstaticBox(w, h, 0f, pos_);
 		//body.setTransform(trans, angle_rad);
 		staticBodyList.add(body);
+	}
+
+	public void turn(Sprite sprite) {
+
+		Body body = getBody(sprite);
+		body.applyAngularImpulse(10.5f);
 	}
 
 	public void createSurroundingBox() {
@@ -163,6 +173,57 @@ public class PhysicShapeBuilder {
 		Body box = world.createBody(def);
 		box.createFixture(fd);
 		return box;
+	}
+
+	public float getAngle(Sprite sprite) {
+		Body body = getBody(sprite);
+		boolean fr = body.isFixedRotation(); // debug
+
+		return body.getAngle();
+	}
+
+	public Vector2 getPosition(Sprite sprite) {
+		Body body = getBody(sprite);
+		return PhysicWorldConverter.vectBox2DToCat(body.getPosition());
+	}
+
+	public boolean setMassData(Sprite sprite, float mass) {
+		boolean added = false;
+		Body body = bodys.get(sprite);
+
+		if (null == body) {
+			body = createBody(sprite);
+			added = true;
+		}
+		MassData mdata = new MassData();
+		mdata.mass = mass;
+		body.setMassData(mdata);
+		return added;
+	}
+
+	public void setGravity(Sprite sprite, Vector2 gravity) {
+		world.setGravity(PhysicWorldConverter.vectCatToBox2D(gravity));
+	}
+
+	public boolean setVelocity(Sprite sprite, Vector2 velocity) {
+
+		boolean added = false;
+		Body body = bodys.get(sprite);
+
+		if (null == body) {
+			body = createBody(sprite);
+			added = true;
+		}
+		body.applyLinearImpulse(velocity, body.getPosition());
+		return added;
+	}
+
+	private Body getBody(Sprite sprite) {
+		Body body = bodys.get(sprite);
+		if (null == body) {
+			body = createBody(sprite);
+		}
+		return body;
 	}
 
 	public void printStaticBodys() {
