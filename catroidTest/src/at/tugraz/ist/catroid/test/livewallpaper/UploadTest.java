@@ -50,17 +50,12 @@ public class UploadTest extends AndroidTestCase {
 		assertTrue("The default Project does not exist.", new File(pathToDefaultProject).exists());
 		new ProjectUploadTask(null, testProjectName, projectDescription, pathToDefaultProject, "0").execute();
 		Thread.sleep(3000);
-
 		//
 		//		UploadProject.getInstance().uploadProject(testProjectName, projectDescription,
 		//				UploadProject.PROJECT_CHECKSUM_TAG, UploadProject.USER_EMAIL, UploadProject.USER_LANGUAGE,
 		//				Constants.PROJECT_TOKEN);
 
 		assertTrue("Uploaded file does not exist", new File(pathToDefaultProject).exists());
-
-
-		assertTrue("Uploaded file does not exist", uploadServerFile.exists());
-
 
 		UtilFile.deleteDirectory(new File(pathToDefaultProject));
 	}

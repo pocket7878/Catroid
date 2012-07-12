@@ -12,7 +12,15 @@ public class LiveWallpaper extends WallpaperService {
 	@Override
 	public Engine onCreateEngine() {
 		// TODO Auto-generated method stub
-		return null;
+		return new CatWallEngine();
 	}
+
+	private class CatWallEngine extends Engine {
+
+	}
+
+	/**
+	 * @return
+	 */
 
 }
