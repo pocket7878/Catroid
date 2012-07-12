@@ -121,14 +121,18 @@ public class ScreenParameters {
 				bubbleBottomMarginToText = 70;
 				upperBubbleTopMarginToText = 20;
 				lowerBubbleTopMarginToText = 45;
-				bubbleFlipDownMargin = 200;
+
+				bubbleFlipDownMargin = 150;
+
 				xMarginBubbleUpToTutor = 20;
 				yMarginBubbleUpToTutor = 90;
 				xMarginBubbleDownToTutor = 20;
 				yMarginBubbleDownToTutor = 110;
-				bubbleResizeWidthMargin = 40;
-				bubbleMaxWidth = 160;
-				bubbleMinWidth = 80;
+
+				bubbleResizeWidthMargin = 25;
+
+				bubbleMaxWidth = 200;
+				bubbleMinWidth = 150;
 
 				break;
 

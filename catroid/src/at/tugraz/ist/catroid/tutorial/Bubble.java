@@ -22,6 +22,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.NinePatchDrawable;
+import android.util.Log;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.tutorial.tasks.Task.Tutor;
 
@@ -57,6 +58,7 @@ public class Bubble implements SurfaceObject {
 	private boolean holdBubble = false;
 	private int updateTime = 110;
 	private long lastUpdateTime = 0;
+	private int lastNewlinePosition = 0;
 
 	public Bubble(String text, TutorialOverlay tutorialOverlay, SurfaceObjectTutor tutor, int x, int y) {
 		minWidth = ScreenParameters.getInstance().getBubbleMinWidth();
@@ -152,19 +154,24 @@ public class Bubble implements SurfaceObject {
 					int width = (int) paint.measureText(textArray[currentLine]);
 
 					if ((width > maxWidth && text.charAt(currentPosition) == ' ')
-							|| (x + textSize + width > Tutorial.getInstance(null).getScreenWidth())) {
+							|| (bubbleBounds.left + textSize + width
+									+ ScreenParameters.getInstance().getBubbleResizeWidthMargin() > Tutorial
+									.getInstance(null).getScreenWidth())) {
 
-						if ((x + textSize + width <= Tutorial.getInstance(null).getScreenWidth())
-								&& text.charAt(currentPosition) != ' ') {
+						if (text.charAt(currentPosition) == ' ') {
 							currentPosition++;
+						} else {
+							resetCurrentPositionToLastBlank();
 						}
+						lastNewlinePosition = currentPosition;
+
 						if (currentLine < 3) {
 							currentLine++;
-
 						} else {
 							reset = true;
 							waitForReset = true;
 						}
+
 					}
 
 					if (reset) {
@@ -175,6 +182,7 @@ public class Bubble implements SurfaceObject {
 						textArray[currentLine] = textArray[currentLine] + text.charAt(currentPosition);
 					}
 					lastUpdateTime = gameTime;
+
 					currentPosition++;
 				}
 			}
@@ -190,6 +198,22 @@ public class Bubble implements SurfaceObject {
 				Tutorial.getInstance(null).setNotification("Bubble finished!");
 			}
 		}
+	}
+
+	private void resetCurrentPositionToLastBlank() {
+		textArray[currentLine] = "";
+
+		while (text.charAt(currentPosition) != ' ' && currentPosition > 0) {
+			currentPosition--;
+		}
+		Log.i("bubble", "LastNewline at: " + lastNewlinePosition + " currentPosition: " + currentPosition);
+		for (int i = lastNewlinePosition; i < currentPosition; i++) {
+
+			textArray[currentLine] = textArray[currentLine] + text.charAt(i);
+			Log.i("bubble", "LastNewline at: " + lastNewlinePosition + " currentPosition: " + currentPosition);
+
+		}
+		currentPosition++;
 	}
 
 	private void resetBubble(long time) {

@@ -82,7 +82,7 @@ public class TaskWalk implements Task {
 	}
 
 	@Override
-	public void setEndPositionForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
+	public void setEndPositionOfTaskForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
 		for (Entry<Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
 			if (tutorType == tempTutor.getValue().tutorType) {
 				tempTutor.getValue().setTutorToStateAndPosition(this.walkToX, this.walkToY, false);

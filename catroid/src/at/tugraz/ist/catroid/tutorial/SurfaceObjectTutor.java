@@ -65,7 +65,7 @@ public abstract class SurfaceObjectTutor implements SurfaceObject {
 
 	public abstract void walk(int walkToX, int walkToY, boolean fastWalk);
 
-	public abstract void setInterruptOfSequence(ACTIONS action);
+	public abstract void setInterruptActionOfTutor(ACTIONS action);
 
 	public abstract void sleep();
 

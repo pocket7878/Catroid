@@ -23,8 +23,10 @@ import java.util.HashMap;
 
 import android.content.Context;
 import android.util.Log;
+import android.util.SparseArray;
 import at.tugraz.ist.catroid.tutorial.Tutor.ACTIONS;
 import at.tugraz.ist.catroid.tutorial.tasks.Task;
+import at.tugraz.ist.catroid.tutorial.tasks.Task.Type;
 
 /**
  * @author faxxe
@@ -41,7 +43,7 @@ public class TutorialThread extends Thread implements Runnable {
 	private ArrayList<Task.Tutor> lastModifiedTutorList = new ArrayList<Task.Tutor>();
 	private int lastModifiedTutorIndex = 0;
 
-	//private HashMap<Integer, Task> notifyTasks = new HashMap<Integer, Task>();
+	private SparseArray<Task.Type> notificationTasksList = new SparseArray<Task.Type>();
 	private int lastNotifyTasksIndex = 0;
 
 	private HashMap<Task.Tutor, SurfaceObjectTutor> tutors = new HashMap<Task.Tutor, SurfaceObjectTutor>();
@@ -94,7 +96,6 @@ public class TutorialThread extends Thread implements Runnable {
 
 	private void runTutorial() {
 		while (tutorialThreadRunning) {
-			Log.i("tutorial", "_________________________NEW THREAD ITERATION________________________________");
 			Task.Type currentTaskType = lessonCollection.getTypeFromCurrentTaskInLesson();
 
 			if (!interrupted) {
@@ -103,16 +104,13 @@ public class TutorialThread extends Thread implements Runnable {
 				synchronized (lastModifiedTutorList) {
 					lastModifiedTutorList.add(lastModifiedTutorIndex,
 							lessonCollection.getTutorNameFromCurrentTaskInLesson());
-
-					Log.i("tutorial", "\n");
-					Log.i("tutorial", "#######LastModifiedList#######");
-					for (int i = 0; i <= lastModifiedTutorIndex; i++) {
-						Log.i("tutorial", i + ")  " + lastModifiedTutorList.get(i));
-					}
-					Log.i("tutorial", "##############################");
-					Log.i("tutorial", "\n");
-
 					lastModifiedTutorIndex++;
+				}
+
+				if (currentTaskType == Task.Type.NOTIFICATION) {
+					Type notificationType = lessonCollection.getCurrentTaskObject().getType();
+					notificationTasksList.put(lastNotifyTasksIndex, notificationType);
+					lastNotifyTasksIndex++;
 				}
 
 				if (notification == true) {
@@ -129,7 +127,9 @@ public class TutorialThread extends Thread implements Runnable {
 
 			if (interrupted) {
 				if (interruptRoutine == ACTIONS.REWIND) {
-					Log.i("tutorial", "NOW REWINDING in TUT-THREAD");
+					//TODO: needs to be implemented for every Notification 
+					//Like: TaskNotification.handleRewindNotification()
+					//For every NotificationType
 					if (currentTaskType == Task.Type.NOTIFICATION) {
 						lastNotifyTasksIndex--;
 						CloudController co = new CloudController();
@@ -147,17 +147,18 @@ public class TutorialThread extends Thread implements Runnable {
 					Log.i("tutorial", "STEPS Back: " + stepsBack);
 
 				} else if (interruptRoutine == ACTIONS.FORWARD) {
-					Log.i("forward", "FORWARDING @ TASK: " + lessonCollection.getTypeFromCurrentTaskInLesson());
+
 					Task currentTask = lessonCollection.getCurrentTaskObject();
 					if (lessonCollection.getTypeFromCurrentTaskInLesson() == Task.Type.FLIP
 							|| lessonCollection.getTypeFromCurrentTaskInLesson() == Task.Type.WALK) {
-						Log.i("forward", "TASK WALK identified!");
-						currentTask.setEndPositionForTutor(tutors);
-					}
-					boolean nextStep = lessonCollection.forwardStep();
 
-					Log.i("tutorial", "Found new LessonStep continue EXECUTING in FORWARDING!");
-					if (!nextStep && resetAndCheckIfEndTutorial()) {
+						currentTask.setEndPositionOfTaskForTutor(tutors);
+
+					}
+
+					boolean nextStepOfLesson = lessonCollection.forwardStep();
+
+					if (!nextStepOfLesson && resetAndCheckIfEndTutorial()) {
 						break;
 					}
 				}
@@ -174,34 +175,14 @@ public class TutorialThread extends Thread implements Runnable {
 				}
 				iAck = false;
 			} else {
-				boolean nextStep = lessonCollection.forwardStep();
-				Log.i("tutorial", "Found new LessonStep continue EXECUTING in normal!");
-				if (!nextStep && resetAndCheckIfEndTutorial()) {
+				boolean nextStepOfLesson = lessonCollection.forwardStep();
+
+				if (!nextStepOfLesson && resetAndCheckIfEndTutorial()) {
 					break;
 				}
 			}
 		}
 		return;
-	}
-
-	public void stopTutorial() {
-		Tutorial.getInstance(null).stopButtonTutorial();
-	}
-
-	public void setLessonCollection(LessonCollection lessonCollection) {
-		this.lessonCollection = lessonCollection;
-	}
-
-	public void setNotification(String notification) {
-		notifies.add(notification);
-	}
-
-	public void setInterrupt(boolean flag) {
-		interrupted = flag;
-	}
-
-	public void setInterruptRoutine(ACTIONS action) {
-		interruptRoutine = action;
 	}
 
 	public void setLastTutorModified(int stepsBack) {
@@ -273,7 +254,7 @@ public class TutorialThread extends Thread implements Runnable {
 
 		if (tutorialThreadRunning && !nextLesson) {
 			Log.i("tutorial", "STOP Tutorial");
-			stopTutorial();
+			Tutorial.getInstance(null).stopButtonTutorial();
 			return true;
 		}
 
@@ -295,5 +276,21 @@ public class TutorialThread extends Thread implements Runnable {
 			return true;
 		}
 		return false;
+	}
+
+	public void setLessonCollection(LessonCollection lessonCollection) {
+		this.lessonCollection = lessonCollection;
+	}
+
+	public void setNotification(String notification) {
+		notifies.add(notification);
+	}
+
+	public void setInterrupt(boolean flag) {
+		interrupted = flag;
+	}
+
+	public void setInterruptRoutine(ACTIONS action) {
+		interruptRoutine = action;
 	}
 }

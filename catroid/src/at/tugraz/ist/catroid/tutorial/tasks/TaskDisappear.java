@@ -31,6 +31,6 @@ public class TaskDisappear implements Task {
 	}
 
 	@Override
-	public void setEndPositionForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
+	public void setEndPositionOfTaskForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors) {
 	}
 }

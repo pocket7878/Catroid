@@ -55,8 +55,9 @@ public class NewSpriteDialog extends TextDialog {
 			return;
 		}
 
-		Tutorial tutorial = Tutorial.getInstance(null);
-		tutorial.setNotification("DialogDone");
+		if (Tutorial.getInstance(null).isActive()) {
+			Tutorial.getInstance(null).setNotification("DialogDone");
+		}
 
 		Sprite sprite = new Sprite(spriteName);
 		projectManager.addSprite(sprite);

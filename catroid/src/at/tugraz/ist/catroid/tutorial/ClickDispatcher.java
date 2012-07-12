@@ -41,6 +41,7 @@ public class ClickDispatcher {
 			case CURRENT_PROJECT_BUTTON:
 				dispatchButton(R.id.current_project_button);
 				break;
+
 			case PROJECT_LIST_ITEM:
 				if (task.getNotificationString() != null) {
 					dispatchProjectListItem(Integer.parseInt(task.getNotificationString()));
@@ -48,20 +49,25 @@ public class ClickDispatcher {
 					dispatchProjectListItem(0);
 				}
 				break;
+
 			case TAB_SCRIPTS:
 				dispatchScripts("Scripts");
 				break;
+
 			case TAB_COSTUMES:
 				dispatchScripts("Costumes");
 				break;
+
 			case TAB_SOUNDS:
 				dispatchScripts("Sounds");
 				break;
+
 			case SOUNDS_ADD_SOUND:
 			case SCRIPTS_ADD_BRICK:
 			case PROJECT_ADD_SPRITE:
 				dispatchButton(R.id.btn_action_add_button);
 				break;
+
 			case BRICK_ADD_DIALOG:
 				Log.i("faxxe", "BRICK_ADD_DIALOG");
 				if (task.getNotificationString() != null) {
@@ -70,6 +76,7 @@ public class ClickDispatcher {
 					dispatchAddBrick(0);
 				}
 				break;
+
 			case BRICK_CATEGORY_DIALOG:
 				if (task.getNotificationString() != null) {
 					dispatchBrickCategories(Integer.parseInt(task.getNotificationString()));
@@ -77,6 +84,7 @@ public class ClickDispatcher {
 					dispatchBrickCategories(0);
 				}
 				break;
+
 			case PROJECT_STAGE_BUTTON:
 				dispatchButton(R.id.btn_action_play);
 				break;

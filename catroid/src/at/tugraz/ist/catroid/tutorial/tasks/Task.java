@@ -38,6 +38,6 @@ public interface Task {
 
 	public Tutor getTutorType();
 
-	public void setEndPositionForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors);
+	public void setEndPositionOfTaskForTutor(HashMap<Tutor, SurfaceObjectTutor> tutors);
 
 }

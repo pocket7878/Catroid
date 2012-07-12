@@ -393,7 +393,7 @@ public class Tutor extends SurfaceObjectTutor implements SurfaceObject {
 	}
 
 	@Override
-	public void setInterruptOfSequence(ACTIONS action) {
+	public void setInterruptActionOfTutor(ACTIONS action) {
 		if (setBackStepsTutor > 0 && action == ACTIONS.REWIND) {
 			removeTutorBubble();
 			Log.i("tutorial", "In TUTOR-" + tutorType + " - Steps tto set back: " + setBackStepsTutor);

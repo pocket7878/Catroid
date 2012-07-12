@@ -211,7 +211,7 @@ public class TutorialController {
 			Log.i("tutorial",
 					Thread.currentThread().getName() + ": Now trying to interrupt Tutor: "
 							+ tempTutor.getValue().tutorType);
-			tempTutor.getValue().setInterruptOfSequence(ACTIONS.PAUSE);
+			tempTutor.getValue().setInterruptActionOfTutor(ACTIONS.PAUSE);
 		}
 	}
 
@@ -220,7 +220,7 @@ public class TutorialController {
 			Log.i("tutorial",
 					Thread.currentThread().getName() + ": Now trying to interrupt Tutor: "
 							+ tempTutor.getValue().tutorType);
-			tempTutor.getValue().setInterruptOfSequence(ACTIONS.PLAY);
+			tempTutor.getValue().setInterruptActionOfTutor(ACTIONS.PLAY);
 		}
 	}
 
@@ -289,7 +289,7 @@ public class TutorialController {
 				for (Entry<Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
 					Log.i("tutorial", Thread.currentThread().getName() + ": Now trying to interrupt Tutor: "
 							+ tempTutor.getValue().tutorType);
-					tempTutor.getValue().setInterruptOfSequence(ACTIONS.REWIND);
+					tempTutor.getValue().setInterruptActionOfTutor(ACTIONS.REWIND);
 				}
 				break;
 			}
@@ -308,7 +308,7 @@ public class TutorialController {
 				for (Entry<Task.Tutor, SurfaceObjectTutor> tempTutor : tutors.entrySet()) {
 					Log.i("tutorial", Thread.currentThread().getName() + ": Now trying to interrupt Tutor: "
 							+ tempTutor.getValue().tutorType);
-					tempTutor.getValue().setInterruptOfSequence(ACTIONS.FORWARD);
+					tempTutor.getValue().setInterruptActionOfTutor(ACTIONS.FORWARD);
 				}
 				break;
 			}
