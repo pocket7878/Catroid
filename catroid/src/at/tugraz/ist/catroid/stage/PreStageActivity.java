@@ -63,7 +63,6 @@ public class PreStageActivity extends Activity {
 
 	//Drone Service Members
 	DroneService droneService;
-	boolean isDroneServiceBound = false;
 
 	private static final int REQUEST_ENABLE_BT = 2000;
 	private static final int REQUEST_CONNECT_DEVICE = 1000;
@@ -150,7 +149,7 @@ public class PreStageActivity extends Activity {
 				// drone bricks are enabled
 
 				//Init the drone service
-				if (!isDroneServiceBound) {
+				if (isDroneServiceRunning()) {
 					startDroneService();
 					//					while (!isDroneServiceBound) {
 					//						Log.d(DroneConsts.DroneLogTag, "Drone Service not Bound, sleeping");
@@ -233,7 +232,7 @@ public class PreStageActivity extends Activity {
 
 	}
 
-	private boolean isDroneServiceStarted() {
+	private boolean isDroneServiceRunning() {
 		if (startService(getDroneServiceIntent()) != null) {
 			Log.d(DroneConsts.DroneLogTag, "Drone Service is Running");
 			return true;
@@ -252,12 +251,6 @@ public class PreStageActivity extends Activity {
 		startService(intent);
 		bindService(intent, droneServiceConnection, Context.BIND_AUTO_CREATE);
 
-		if (isDroneServiceBound) {
-			// Call a method from the LocalService.
-			// However, if this call were something that might hang, then this request should
-			// occur in a separate thread to avoid slowing down the activity performance.
-
-		}
 	}
 
 	/** Defines callbacks for service binding, passed to bindService() */
@@ -268,7 +261,6 @@ public class PreStageActivity extends Activity {
 			Log.d(DroneConsts.DroneLogTag, "onServiceConnected:: Drone is Connected");
 			LocalDroneServiceBinder droneServiceBinder = (LocalDroneServiceBinder) service;
 			DroneServiceHandler.getInstance().setDroneServiceInstance(droneServiceBinder.getDroneService());
-			isDroneServiceBound = true;
 			DroneServiceHandler.getInstance().getDrone().init();
 
 			// wait until the drone is ready for 5 seconds
@@ -297,7 +289,6 @@ public class PreStageActivity extends Activity {
 		public void onServiceDisconnected(ComponentName name) {
 			// TODO Auto-generated method stub
 			Log.d("Catroid", "onServiceDisconnected:: Drone Service disconnected");
-			isDroneServiceBound = false;
 		}
 
 		private void sleep(int millis) {
@@ -329,11 +320,9 @@ public class PreStageActivity extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		// Unbind from the service
-		if (isDroneServiceBound) {
+		if (isDroneServiceRunning()) {
 			unbindService(droneServiceConnection);
-			isDroneServiceBound = false;
 		}
-
 	}
 
 	//all resources that should be reinitialized with every stage start
