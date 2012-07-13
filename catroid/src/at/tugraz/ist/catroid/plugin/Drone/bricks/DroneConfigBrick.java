@@ -27,7 +27,6 @@ import java.util.Arrays;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -40,8 +39,6 @@ import android.widget.ListView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.plugin.Drone.DroneConsts;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 import at.tugraz.ist.catroid.plugin.Drone.other.DroneBrickListAdapter;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -75,6 +72,7 @@ public class DroneConfigBrick implements Brick, OnItemClickListener {
 		this.configValue = configValue;
 	}
 
+	@Override
 	public void execute() {
 
 		String cmd = "";
@@ -150,23 +148,25 @@ public class DroneConfigBrick implements Brick, OnItemClickListener {
 				break;
 		}
 
-		try {
-			int counter = 0;
-			while (!DroneHandler.getInstance().getDrone().setConfiguration("AT*CONFIG=#SEQ#," + cmd, true)) {
-				if (counter++ > 2) {
-					break;
-				}
-			}
-		} catch (Exception e) {
-			Log.e(DroneConsts.DroneLogTag, "Exception DroneConfigBrick -> execute()", e);
-		}
+		//		try {
+		//			int counter = 0;
+		//			while (!DroneHandler.getInstance().getDrone().setConfiguration("AT*CONFIG=#SEQ#," + cmd, true)) {
+		//				if (counter++ > 2) {
+		//					break;
+		//				}
+		//			}
+		//		} catch (Exception e) {
+		//			Log.e(DroneConsts.DroneLogTag, "Exception DroneConfigBrick -> execute()", e);
+		//		}
 
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(final Context context, int brickId, BaseAdapter adapter) {
 
 		if (view == null) {
@@ -185,6 +185,7 @@ public class DroneConfigBrick implements Brick, OnItemClickListener {
 
 		configKeyBrickAdapter = new DroneBrickListAdapter(context, configList);
 		configKeyButton.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				configKeyDialog = new Dialog(context);
 				configKeyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -202,6 +203,7 @@ public class DroneConfigBrick implements Brick, OnItemClickListener {
 
 		configValueBrickAdapter = new DroneBrickListAdapter(context, configValueList);
 		configValueButton.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				configValueDialog = new Dialog(context);
 				configValueDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -251,6 +253,7 @@ public class DroneConfigBrick implements Brick, OnItemClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.toolbox_brick_drone_config, null);
 	}
@@ -260,6 +263,7 @@ public class DroneConfigBrick implements Brick, OnItemClickListener {
 		return new DroneConfigBrick(getSprite(), configKey, configValue);
 	}
 
+	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		if (parent.getAdapter().getItem(0) == configList.get(0)) {
 			adapter.notifyDataSetChanged();
@@ -298,6 +302,7 @@ public class DroneConfigBrick implements Brick, OnItemClickListener {
 		adapter.notifyDataSetChanged();
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return WIFI_DRONE;
 	}

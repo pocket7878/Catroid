@@ -53,7 +53,6 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.plugin.PluginManager;
 import at.tugraz.ist.catroid.plugin.Drone.DroneConsts;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 import at.tugraz.ist.catroid.plugin.Drone.DroneService;
 import at.tugraz.ist.catroid.plugin.Drone.DroneService.LocalDroneServiceBinder;
 import at.tugraz.ist.catroid.plugin.Drone.DroneServiceHandler;
@@ -91,6 +90,11 @@ public class PreStageActivity extends Activity {
 		super.onPostCreate(savedInstanceState);
 		restartConnectThread();
 
+	}
+
+	@Override
+	public void onBackPressed() {
+		// do nothing
 	}
 
 	private void restartConnectThread() {
@@ -496,9 +500,9 @@ public class PreStageActivity extends Activity {
 					case Activity.RESULT_OK:
 						Toast.makeText(PreStageActivity.this, R.string.drone_connect_drone_success, Toast.LENGTH_LONG)
 								.show();
-						DroneHandler.getInstance().setWasAlreadyConnected();
+						//DroneHandler.getInstance().setWasAlreadyConnected();
 						// let drone blink 2 seconds green on success
-						DroneHandler.getInstance().getDrone().playLedAnimation(1, 5.0f, 2);
+						DroneServiceHandler.getInstance().getDrone().playLedAnimation(1, 5.0f, 2);
 						startStage();
 						break;
 
@@ -551,7 +555,6 @@ public class PreStageActivity extends Activity {
 					}
 					break;
 				default:
-
 					//Toast.makeText(StageActivity.this, myMessage.getData().getString("toastText"), Toast.LENGTH_SHORT);
 					break;
 

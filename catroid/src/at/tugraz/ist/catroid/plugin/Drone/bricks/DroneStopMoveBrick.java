@@ -28,7 +28,7 @@ import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
+import at.tugraz.ist.catroid.plugin.Drone.DroneServiceHandler;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -46,7 +46,7 @@ public class DroneStopMoveBrick implements Brick {
 
 	@Override
 	public void execute() {
-		DroneHandler.getInstance().getDrone().move(0, 0, 0, 0);
+		DroneServiceHandler.getInstance().getDrone().move(0, 0, 0, 0);
 	}
 
 	@Override

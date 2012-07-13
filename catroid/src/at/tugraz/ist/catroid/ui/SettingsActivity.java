@@ -30,7 +30,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 import at.tugraz.ist.catroid.plugin.Drone.other.DroneDownloadInstallDialog;
 
 public class SettingsActivity extends PreferenceActivity {
@@ -50,16 +49,18 @@ public class SettingsActivity extends PreferenceActivity {
 		droneDslTimeout.setEnabled(true);
 
 		droneDslTimeout.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				try {
 					int seconds = Integer.parseInt((String) newValue);
-					DroneHandler.getInstance().getDrone().setDslTimeout(seconds);
+					// TODO set Security Time Out
+					// DroneHandler.getInstance().getDrone().setDslTimeout(seconds);
 					return true;
 				} catch (NumberFormatException e) {
 					Toast.makeText(getApplicationContext(), R.string.drone_settings_dsl_only_numbers, Toast.LENGTH_LONG)
 							.show();
-					// TODO 
-					DroneHandler.getInstance().getDrone().setDslTimeout(5);
+					// TODO Necessary
+					//DroneHandler.getInstance().getDrone().setDslTimeout(5);
 				}
 				return false;
 			}

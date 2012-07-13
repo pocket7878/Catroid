@@ -22,108 +22,95 @@
  */
 package at.tugraz.ist.catroid.uitest.drone;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-
-import org.easymock.EasyMock;
-
 import android.test.ActivityInstrumentationTestCase2;
-import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.io.StorageHandler;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
-import at.tugraz.ist.catroid.plugin.Drone.IDrone;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 
-import com.jayway.android.robotium.solo.Solo;
-
 public class TakeOfBrickTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
-	private Solo solo;
-	private static String projectName = "BrickTest";
-	IDrone droneMock;
-
+	//	private Solo solo;
+	//	private static String projectName = "BrickTest";
+	//	IDrone droneMock;
+	//
 	public TakeOfBrickTest() {
 		super("at.tugraz.ist.catroid", MainMenuActivity.class);
 	}
-
-	@Override
-	public void setUp() throws Exception {
-		solo = new Solo(getInstrumentation(), getActivity());
-	}
-
-	private void deleteTestProject() {
-		if (StorageHandler.getInstance().projectExists(projectName)) {
-			Project delete = StorageHandler.getInstance().loadProject(projectName);
-			StorageHandler.getInstance().deleteProject(delete);
-			delete = null;
-		}
-	}
-
-	@Override
-	public void tearDown() throws Exception {
-		try {
-			solo.finalize();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-
-		getActivity().finish();
-		deleteTestProject();
-		super.tearDown();
-	}
-
-	public void testLiftoffAndLand() {
-
-		solo.clickOnText("New Project");
-
-		solo.enterText(0, projectName);
-
-		solo.sendKey(Solo.ENTER);
-
-		solo.clickOnText("Catroid");
-
-		solo.sleep(1000);
-
-		solo.clickOnText("Add");
-
-		solo.clickOnText("Drone");
-
-		solo.clickOnText("take off");
-
-		solo.clickOnText("Add");
-		solo.clickOnText("Drone");
-		solo.clickOnText("land");
-
-		DroneHandler.getInstance().setWasAlreadyConnected();
-		droneMock = createMock(IDrone.class);
-
-		DroneHandler.getInstance().setIDrone(droneMock);
-
-		expect(droneMock.getFlyingMode()).andReturn(0);
-		expect(droneMock.connect()).andReturn(true);
-
-		/** expected calls */
-		droneMock.takeoff();
-		droneMock.land();
-		droneMock.emergencyLand();
-		EasyMock.expectLastCall().anyTimes();
-		droneMock.disconnect();
-		EasyMock.expectLastCall().anyTimes();
-
-		replay(droneMock);
-
-		solo.clickOnText("Start");
-		solo.sleep(4000);
-
-		solo.goBack();
-		solo.sleep(1000);
-		solo.goBack();
-
-		verify(droneMock);
-
-		solo.sleep(1000);
-		//just for file tests: assertions are covered by verifytest(...)
-		assertTrue("should not fail", true);
-	}
+	//
+	//	@Override
+	//	public void setUp() throws Exception {
+	//		solo = new Solo(getInstrumentation(), getActivity());
+	//	}
+	//
+	//	private void deleteTestProject() {
+	//		if (StorageHandler.getInstance().projectExists(projectName)) {
+	//			Project delete = StorageHandler.getInstance().loadProject(projectName);
+	//			StorageHandler.getInstance().deleteProject(delete);
+	//			delete = null;
+	//		}
+	//	}
+	//
+	//	@Override
+	//	public void tearDown() throws Exception {
+	//		try {
+	//			solo.finalize();
+	//		} catch (Throwable e) {
+	//			e.printStackTrace();
+	//		}
+	//
+	//		getActivity().finish();
+	//		deleteTestProject();
+	//		super.tearDown();
+	//	}
+	//
+	//	public void testLiftoffAndLand() {
+	//
+	//		solo.clickOnText("New Project");
+	//
+	//		solo.enterText(0, projectName);
+	//
+	//		solo.sendKey(Solo.ENTER);
+	//
+	//		solo.clickOnText("Catroid");
+	//
+	//		solo.sleep(1000);
+	//
+	//		solo.clickOnText("Add");
+	//
+	//		solo.clickOnText("Drone");
+	//
+	//		solo.clickOnText("take off");
+	//
+	//		solo.clickOnText("Add");
+	//		solo.clickOnText("Drone");
+	//		solo.clickOnText("land");
+	//
+	//		DroneHandler.getInstance().setWasAlreadyConnected();
+	//		droneMock = createMock(IDrone.class);
+	//
+	//		DroneHandler.getInstance().setIDrone(droneMock);
+	//
+	//		expect(droneMock.getFlyingMode()).andReturn(0);
+	//		expect(droneMock.connect()).andReturn(true);
+	//
+	//		/** expected calls */
+	//		droneMock.takeoff();
+	//		droneMock.land();
+	//		droneMock.emergencyLand();
+	//		EasyMock.expectLastCall().anyTimes();
+	//		droneMock.disconnect();
+	//		EasyMock.expectLastCall().anyTimes();
+	//
+	//		replay(droneMock);
+	//
+	//		solo.clickOnText("Start");
+	//		solo.sleep(4000);
+	//
+	//		solo.goBack();
+	//		solo.sleep(1000);
+	//		solo.goBack();
+	//
+	//		verify(droneMock);
+	//
+	//		solo.sleep(1000);
+	//		//just for file tests: assertions are covered by verifytest(...)
+	//		assertTrue("should not fail", true);
+	//	}
 }

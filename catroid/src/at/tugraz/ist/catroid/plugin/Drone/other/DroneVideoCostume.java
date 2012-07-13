@@ -24,7 +24,6 @@ package at.tugraz.ist.catroid.plugin.Drone.other;
 
 import at.tugraz.ist.catroid.content.Costume;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.plugin.Drone.DroneHandler;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -53,10 +52,11 @@ public class DroneVideoCostume extends Costume {
 		if (firstStart) {
 			initializeTexture();
 		} else {
-			DroneHandler.getInstance().getDrone()
-					.renderVideoFrame(this.getRegion().getTexture().getTextureObjectHandle());
+			//DroneHandler.getInstance().getDrone()
+			//		.renderVideoFrame(this.getRegion().getTexture().getTextureObjectHandle());
 
-			int newCameraOrientation = DroneHandler.getInstance().getDrone().getCameraOrientation();
+			//int newCameraOrientation = DroneHandler.getInstance().getDrone().getCameraOrientation();
+			int newCameraOrientation = 0;
 			if (oldCameraOrientation != newCameraOrientation) {
 				oldCameraOrientation = newCameraOrientation;
 				if (newCameraOrientation == 1) {
