@@ -23,13 +23,15 @@ import java.util.ArrayList;
 
 import at.tugraz.ist.catroid.content.Sprite;
 
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
 public class PhysicWorld implements Serializable {
 	private static final long serialVersionUID = -9103964560286141267L;
 
-	ArrayList<Sprite> spriteList;
+	private ArrayList<Sprite> spriteList;
 	private transient PhysicShapeBuilder physicShapeBuilder;
+	private transient PhysicRenderer renderer;
 
 	public PhysicWorld() {
 		spriteList = new ArrayList<Sprite>();
@@ -62,6 +64,13 @@ public class PhysicWorld implements Serializable {
 		}
 	}
 
+	public void render(Matrix4 perspectiveMatrix) {
+		if (renderer == null) {
+			renderer = new PhysicRenderer();
+		}
+		renderer.render(perspectiveMatrix, physicShapeBuilder.getBodies());
+	}
+
 	public void setGravity(Sprite sprite, Vector2 gravity) {
 		physicShapeBuilder.setGravity(sprite, gravity);
 	}
@@ -83,5 +92,43 @@ public class PhysicWorld implements Serializable {
 	public void setPhysicShapeBuilderTestMock(PhysicShapeBuilder physShBTestMock) {
 		physicShapeBuilder = physShBTestMock;
 	}
-
+	/*
+	 * private ShapeRenderer renderer;
+	 * 
+	 * public void drawCollisionBorders(Matrix4 projectionMatrix) {
+	 * if (renderer == null) {
+	 * renderer = new ShapeRenderer();
+	 * }
+	 * renderer.setProjectionMatrix(projectionMatrix);
+	 * 
+	 * for (Sprite sprite : spriteList) {
+	 * Body body = physicShapeBuilder.getBody(sprite);
+	 * for (Fixture fixture : body.getFixtureList()) {
+	 * Shape shape = fixture.getShape();
+	 * 
+	 * renderer.begin(ShapeType.Line);
+	 * int i = 0;
+	 * for (; i < (((PolygonShape) shape).getVertexCount() - 1); i++) {
+	 * Vector2 start = new Vector2();
+	 * ((PolygonShape) shape).getVertex(i, start);
+	 * start = PhysicWorldConverter.vectBox2DToCat(body.getWorldPoint(start));
+	 * Vector2 end = new Vector2();
+	 * ((PolygonShape) shape).getVertex(i + 1, end);
+	 * end = PhysicWorldConverter.vectBox2DToCat(body.getWorldPoint(end));
+	 * 
+	 * renderer.line(start.x, start.y, end.x, end.y);
+	 * }
+	 * Vector2 start = new Vector2();
+	 * ((PolygonShape) shape).getVertex(i, start);
+	 * start = PhysicWorldConverter.vectBox2DToCat(body.getWorldPoint(start));
+	 * Vector2 end = new Vector2();
+	 * ((PolygonShape) shape).getVertex(0, end);
+	 * end = PhysicWorldConverter.vectBox2DToCat(body.getWorldPoint(end));
+	 * renderer.line(start.x, start.y, end.x, end.y);
+	 * 
+	 * renderer.end();
+	 * }
+	 * }
+	 * }
+	 */
 }

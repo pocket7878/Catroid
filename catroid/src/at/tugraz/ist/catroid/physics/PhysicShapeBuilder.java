@@ -19,6 +19,7 @@
 package at.tugraz.ist.catroid.physics;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -224,6 +225,10 @@ public class PhysicShapeBuilder {
 			body = createBody(sprite);
 		}
 		return body;
+	}
+
+	public Collection<Body> getBodies() {
+		return bodys.values();
 	}
 
 	public void printStaticBodys() {

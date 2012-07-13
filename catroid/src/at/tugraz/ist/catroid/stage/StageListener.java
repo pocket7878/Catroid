@@ -37,6 +37,7 @@ import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.SoundManager;
+import at.tugraz.ist.catroid.physics.PhysicSettings;
 import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -327,6 +328,10 @@ public class StageListener implements ApplicationListener {
 
 		if (axesOn && !finished) {
 			drawAxes();
+		}
+
+		if (PhysicSettings.RENDER_COLLISION_FRAMES && !finished) {
+			project.getPhysicWorld().render(camera.combined);
 		}
 
 		if (DEBUG) {
