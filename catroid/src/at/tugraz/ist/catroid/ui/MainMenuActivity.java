@@ -34,6 +34,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.ProjectManager;
@@ -99,6 +100,7 @@ public class MainMenuActivity extends Activity {
 
 		this.getIntent().setData(null);
 		new ProjectDownloadTask(this, projectDownloadUrl, projectName).execute();
+
 	}
 
 	@Override
@@ -122,6 +124,26 @@ public class MainMenuActivity extends Activity {
 					}
 				}, false);
 		this.titleText = (TextView) findViewById(R.id.tv_title);
+
+		/***
+		 * Download Part
+		 * 
+		 */
+		final Button button = (Button) findViewById(R.id.download);
+		if (button != null) {
+			button.setOnClickListener(new View.OnClickListener() {
+
+				public void onClick(View paramView) {
+					Log.v("DEBUG", "download button was clicked");
+					Intent i = new Intent(MainMenuActivity.this,
+							at.tugraz.ist.catroid.livewallpaper.LiveWallpaper.class);
+					startService(i);
+				}
+			});
+		}
+		/**
+			 * 
+			 */
 
 	}
 
