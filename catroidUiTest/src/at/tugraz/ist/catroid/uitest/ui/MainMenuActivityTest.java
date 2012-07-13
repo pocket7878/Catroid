@@ -26,10 +26,11 @@ import java.io.File;
 import java.util.ArrayList;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -81,11 +82,18 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 	}
 
 	public void testCreateNewProject() {
-		File directory = new File(Consts.DEFAULT_ROOT + "/" + testProject);
+		File directory = new File(Constants.DEFAULT_ROOT + "/" + testProject);
 		UtilFile.deleteDirectory(directory);
 		assertFalse("testProject was not deleted!", directory.exists());
 
 		solo.clickOnButton(getActivity().getString(R.string.new_project));
+		solo.sleep(200);
+		EditText addNewProjectEditText = solo.getEditText(0);
+		//check if hint is set
+		assertEquals("Not the proper hint set", getActivity().getString(R.string.new_project_dialog_hint),
+				addNewProjectEditText.getHint());
+		assertEquals("There should no text be set", "", addNewProjectEditText.getText().toString());
+		solo.sleep(100);
 		solo.setActivityOrientation(Solo.PORTRAIT);
 		solo.sleep(300);
 		solo.clearEditText(0);
@@ -100,7 +108,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		solo.clickOnText(buttonOKText);
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
 
-		File file = new File(Consts.DEFAULT_ROOT + "/" + testProject + "/" + Consts.PROJECTCODE_NAME);
+		File file = new File(Constants.DEFAULT_ROOT + "/" + testProject + "/" + Constants.PROJECTCODE_NAME);
 		assertTrue(testProject + " was not created!", file.exists());
 	}
 
@@ -126,7 +134,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 
 		solo.clickOnButton(0);
 
-		File directory = new File(Consts.DEFAULT_ROOT + "/" + testProject);
+		File directory = new File(Constants.DEFAULT_ROOT + "/" + testProject);
 		directory.mkdirs();
 		solo.sleep(50);
 
@@ -190,7 +198,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		solo.clickOnText(buttonOKText);
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
 
-		File file = new File(Utils.buildPath(directoryPath, Consts.PROJECTCODE_NAME));
+		File file = new File(Utils.buildPath(directoryPath, Constants.PROJECTCODE_NAME));
 		assertTrue("Project with blacklisted characters was not created!", file.exists());
 
 	}
@@ -213,13 +221,13 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		solo.clickOnText(buttonOKText);
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
 
-		File file = new File(Utils.buildPath(directoryPath, Consts.PROJECTCODE_NAME));
+		File file = new File(Utils.buildPath(directoryPath, Constants.PROJECTCODE_NAME));
 		assertTrue("Project file with whitelisted characters was not created!", file.exists());
 
 	}
 
 	public void testLoadProject() {
-		File directory = new File(Consts.DEFAULT_ROOT + "/" + testProject2);
+		File directory = new File(Constants.DEFAULT_ROOT + "/" + testProject2);
 		UtilFile.deleteDirectory(directory);
 		assertFalse(testProject2 + " was not deleted!", directory.exists());
 
@@ -240,16 +248,18 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 	}
 
 	public void testResume() {
-		File directory = new File(Consts.DEFAULT_ROOT + "/" + testProject3);
+		File directory = new File(Constants.DEFAULT_ROOT + "/" + testProject3);
 		UtilFile.deleteDirectory(directory);
 		assertFalse(testProject3 + " was not deleted!", directory.exists());
 
 		createTestProject(testProject3);
 
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
+		solo.sleep(300);
 		solo.clickOnText(testProject3);
+		solo.sleep(300);
 		solo.goBack();
-
+		solo.sleep(200);
 		solo.clickOnButton(getActivity().getString(R.string.current_project_button));
 
 		ListView spritesList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
@@ -297,7 +307,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 	//	}
 
 	//	public void testDefaultProject() throws IOException {
-	//		File directory = new File(Consts.DEFAULT_ROOT + "/" + getActivity().getString(R.string.default_project_name));
+	//		File directory = new File(Constants.DEFAULT_ROOT + "/" + getActivity().getString(R.string.default_project_name));
 	//		UtilFile.deleteDirectory(directory);
 	//
 	//		StorageHandler handler = StorageHandler.getInstance();
@@ -309,7 +319,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 	//		assertNotNull("Bitmap is null", bitmap);
 	//		assertTrue("Sprite not visible", project.getCurrentProject().getSpriteList().get(1).isVisible());
 	//
-	//		directory = new File(Consts.DEFAULT_ROOT + "/" + getActivity().getString(R.string.default_project_name));
+	//		directory = new File(Constants.DEFAULT_ROOT + "/" + getActivity().getString(R.string.default_project_name));
 	//		UtilFile.deleteDirectory(directory);
 	//	}
 

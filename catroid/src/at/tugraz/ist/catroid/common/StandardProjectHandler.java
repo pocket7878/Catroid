@@ -59,7 +59,7 @@ public class StandardProjectHandler {
 	public static Project createAndSaveStandardProject(String projectName, Context context) throws IOException {
 		String normalCatName = context.getString(R.string.default_project_sprites_catroid_normalcat);
 		String banzaiCatName = context.getString(R.string.default_project_sprites_catroid_banzaicat);
-		String chesireCatName = context.getString(R.string.default_project_sprites_catroid_chesirecat);
+		String cheshireCatName = context.getString(R.string.default_project_sprites_catroid_cheshirecat);
 		String backgroundName = context.getString(R.string.default_project_backgroundname);
 
 		Project defaultProject = new Project(context, projectName);
@@ -77,7 +77,8 @@ public class StandardProjectHandler {
 
 		File normalCat = copyAndScaleImageToProject(projectName, context, normalCatName, R.drawable.catroid);
 		File banzaiCat = copyAndScaleImageToProject(projectName, context, banzaiCatName, R.drawable.catroid_banzai);
-		File cheshireCat = copyAndScaleImageToProject(projectName, context, chesireCatName, R.drawable.catroid_cheshire);
+		File cheshireCat = copyAndScaleImageToProject(projectName, context, cheshireCatName,
+				R.drawable.catroid_cheshire);
 
 		CostumeData normalCatCostumeData = new CostumeData();
 		normalCatCostumeData.setCostumeName(normalCatName);
@@ -88,7 +89,7 @@ public class StandardProjectHandler {
 		banzaiCatCostumeData.setCostumeFilename(banzaiCat.getName());
 
 		CostumeData cheshireCatCostumeData = new CostumeData();
-		cheshireCatCostumeData.setCostumeName(chesireCatName);
+		cheshireCatCostumeData.setCostumeName(cheshireCatName);
 		cheshireCatCostumeData.setCostumeFilename(cheshireCat.getName());
 
 		CostumeData backgroundCostumeData = new CostumeData();
@@ -141,7 +142,7 @@ public class StandardProjectHandler {
 
 	private static File createBackgroundImage(String projectName, String backgroundName, String backgroundColor)
 			throws FileNotFoundException {
-		String directoryName = Utils.buildPath(Utils.buildProjectPath(projectName), Consts.IMAGE_DIRECTORY);
+		String directoryName = Utils.buildPath(Utils.buildProjectPath(projectName), Constants.IMAGE_DIRECTORY);
 		File backgroundTemp = new File(Utils.buildPath(directoryName, backgroundName));
 		Bitmap backgroundBitmap = ImageEditing.createSingleColorBitmap(Values.SCREEN_WIDTH, Values.SCREEN_HEIGHT,
 				Color.parseColor(backgroundColor));
@@ -154,7 +155,7 @@ public class StandardProjectHandler {
 
 	private static File copyAndScaleImageToProject(String projectName, Context context, String imageName, int imageId)
 			throws IOException {
-		String directoryName = Utils.buildPath(Utils.buildProjectPath(projectName), Consts.IMAGE_DIRECTORY);
+		String directoryName = Utils.buildPath(Utils.buildProjectPath(projectName), Constants.IMAGE_DIRECTORY);
 		File tempImageFile = savePictureFromResourceInProject(projectName, imageName, imageId, context);
 
 		int[] dimensions = ImageEditing.getImageDimensions(tempImageFile.getAbsolutePath());
@@ -178,14 +179,14 @@ public class StandardProjectHandler {
 	private static File savePictureFromResourceInProject(String project, String outputName, int fileId, Context context)
 			throws IOException {
 
-		final String imagePath = Utils.buildPath(Utils.buildProjectPath(project), Consts.IMAGE_DIRECTORY, outputName);
+		final String imagePath = Utils.buildPath(Utils.buildProjectPath(project), Constants.IMAGE_DIRECTORY, outputName);
 		File testImage = new File(imagePath);
 		if (!testImage.exists()) {
 			testImage.createNewFile();
 		}
 		InputStream in = context.getResources().openRawResource(fileId);
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(testImage), Consts.BUFFER_8K);
-		byte[] buffer = new byte[Consts.BUFFER_8K];
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(testImage), Constants.BUFFER_8K);
+		byte[] buffer = new byte[Constants.BUFFER_8K];
 		int length = 0;
 		while ((length = in.read(buffer)) > 0) {
 			out.write(buffer, 0, length);
