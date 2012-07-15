@@ -81,7 +81,7 @@ public class UploadProject {
 			String serverUrl = BASE_URL;
 
 			Log.v(TAG, "url to upload: " + serverUrl);
-			resultString = connection.doHttpPostFileUpload(serverUrl, postValues, FILE_UPLOAD_TAG, null);
+			resultString = connection.doHttpPostFileUpload(serverUrl, postValues, FILE_UPLOAD_TAG, zipFileString);
 			Log.v(TAG, "result string:" + resultString);
 
 			JSONObject jsonObject = null;

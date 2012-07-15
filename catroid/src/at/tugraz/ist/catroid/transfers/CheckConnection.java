@@ -29,7 +29,7 @@ import android.os.AsyncTask;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.livewallpaper.UploadProject;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
-import at.tugraz.ist.catroid.ui.dialogs.LoginRegisterDialog;
+import at.tugraz.ist.catroid.ui.dialogs.DialogLoginRegister;
 import at.tugraz.ist.catroid.utils.Utils;
 import at.tugraz.ist.catroid.web.WebconnectionException;
 
@@ -88,11 +88,11 @@ public class CheckConnection extends AsyncTask<Void, Void, Boolean> {
 		}
 		if (!success) {
 			// token is not valid -> maybe password has changed
-			new LoginRegisterDialog(activity).show();
+			new DialogLoginRegister(activity).show();
 			return;
 		}
 
-		activity.showDialog(MainMenuActivity.DIALOG_UPLOAD_PROJECT);
+		activity.showDialog(MainMenuActivity.DIALOG_UPLOAD);
 	}
 
 	private void showDialog(int messageId) {

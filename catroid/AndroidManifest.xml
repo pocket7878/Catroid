@@ -50,6 +50,16 @@
         android:icon="@drawable/ic_launcher_catroid_fat"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Light.NoTitleBar" >
+        
+         <service android:name="LiveWallpaper" android:enabled="true"
+			android:permission="android.permission.BIND_WALLPAPER" 
+			android:label="Wallpaper Example ">
+			<intent-filter>
+				<action android:name="android.service.wallpaper.WallpaperService"></action>
+			</intent-filter>
+			<meta-data android:name="android.service.wallpaper"
+				android:resource="@xml/mywallpaper"></meta-data>
+		</service>
 
         <activity
             android:name=".ui.MainMenuActivity"
@@ -94,6 +104,7 @@
         <activity
             android:name=".bluetooth.DeviceListActivity"
             android:theme="@android:style/Theme.Dialog" />
+      
         <activity
             android:name=".soundrecorder.SoundRecorderActivity"
             android:label="@string/soundrecorder_name" >
@@ -103,11 +114,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="audio/*" />
-            </intent-filter>
-        </activity>
-        
-
 		
+            </intent-filter>
+        </activity>		
     </application>
-
 </manifest>

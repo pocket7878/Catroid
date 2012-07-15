@@ -32,7 +32,9 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.ProjectManager;
@@ -46,6 +48,7 @@ import at.tugraz.ist.catroid.transfers.CheckConnection;
 import at.tugraz.ist.catroid.transfers.CheckTokenTask;
 import at.tugraz.ist.catroid.transfers.ProjectDownloadTask;
 import at.tugraz.ist.catroid.ui.dialogs.AboutDialog;
+import at.tugraz.ist.catroid.ui.dialogs.DialogLoginRegister;
 import at.tugraz.ist.catroid.ui.dialogs.LoadProjectDialog;
 import at.tugraz.ist.catroid.ui.dialogs.LoginRegisterDialog;
 import at.tugraz.ist.catroid.ui.dialogs.NewProjectDialog;
@@ -66,6 +69,7 @@ public class MainMenuActivity extends Activity {
 	private static final int DIALOG_ABOUT = 3;
 	private static final int DIALOG_LOGIN_REGISTER = 4;
 	public static final int DIALOG_UPLOAD = 5;
+	public static final int DIALOG_LOGIN = 6;
 	private boolean ignoreResume = false;
 
 	public void updateProjectName() {
@@ -96,6 +100,7 @@ public class MainMenuActivity extends Activity {
 
 		this.getIntent().setData(null);
 		new ProjectDownloadTask(this, projectDownloadUrl, projectName).execute();
+
 	}
 
 	@Override
@@ -119,6 +124,26 @@ public class MainMenuActivity extends Activity {
 					}
 				}, false);
 		this.titleText = (TextView) findViewById(R.id.tv_title);
+
+		/***
+		 * Download Part
+		 * 
+		 */
+		final Button button = (Button) findViewById(R.id.download);
+		if (button != null) {
+			button.setOnClickListener(new View.OnClickListener() {
+
+				public void onClick(View paramView) {
+					Log.v("DEBUG", "download button was clicked");
+					Intent i = new Intent(MainMenuActivity.this,
+							at.tugraz.ist.catroid.livewallpaper.LiveWallpaper.class);
+					startService(i);
+				}
+			});
+		}
+		/**
+			 * 
+			 */
 
 	}
 
@@ -156,6 +181,10 @@ public class MainMenuActivity extends Activity {
 				break;
 			case DIALOG_UPLOAD:
 				dialog = new UploadToLocalDialog(this);
+				break;
+			case DIALOG_LOGIN:
+				dialog = new DialogLoginRegister(this);
+				break;
 			default:
 				dialog = null;
 				break;
@@ -205,6 +234,15 @@ public class MainMenuActivity extends Activity {
 				prjctDscrptionField.setText("");
 				prjctUploadName.requestFocus();
 				prjctUploadName.selectAll();
+				break;
+
+			case DIALOG_LOGIN:
+				EditText username = (EditText) dialog.findViewById(R.id.username);
+				Log.v("DEBUG", "username : " + username);
+				EditText password = (EditText) dialog.findViewById(R.id.password);
+				Log.v("DEBUG", "password : " + password);
+				username.setText("username");
+				password.setText("");
 				break;
 		}
 	}
@@ -292,7 +330,7 @@ public class MainMenuActivity extends Activity {
 		String local_token = preferences.getString(Constants.TOKEN, null);
 
 		if (local_token == null || local_token.length() == 0 || local_token.equals("0")) {
-			showDialog(DIALOG_LOGIN_REGISTER);
+			showDialog(DIALOG_LOGIN);
 		} else {
 			new CheckConnection(this, local_token).execute();
 		}

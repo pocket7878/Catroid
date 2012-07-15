@@ -95,9 +95,16 @@
         <Button 
             android:id = "@+id/local_upload_project"
             style="@style/DashboardButton"
-            android:drawableTop="@drawable/about_selector"
+            android:drawableTop="@drawable/upload_selector"
             android:onClick="HandleUpload"
             android:text="@string/local_upload_project"
+            />
+        
+        <Button 
+            android:id = "@+id/download"
+            style="@style/DashboardButton"
+            android:drawableTop="@drawable/about_selector"
+            android:text="download"
             />
     </at.tugraz.ist.catroid.ui.widget.DashboardLayout>
 
