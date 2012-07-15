@@ -87,8 +87,9 @@ public class PhysicBodyBuilder {
 
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
-		fixtureDef.density = 1;
+		fixtureDef.density = 0.5f;
 		fixtureDef.friction = 0.3f;
+		fixtureDef.restitution = 0.75f;
 
 		Body body = world.createBody(bodyDef);
 		body.createFixture(fixtureDef);
