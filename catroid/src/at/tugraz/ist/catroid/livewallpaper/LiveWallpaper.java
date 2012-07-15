@@ -8,14 +8,8 @@ import android.view.SurfaceHolder;
 
 public class LiveWallpaper extends WallpaperService {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.service.wallpaper.WallpaperService#onCreateEngine()
-	 */
 	@Override
 	public Engine onCreateEngine() {
-		// TODO Auto-generated method stub
 		return new CatWallEngine();
 	}
 
@@ -23,7 +17,6 @@ public class LiveWallpaper extends WallpaperService {
 		private final Handler handler = new Handler();
 		private final Runnable run = new Runnable() {
 			public void run() {
-				// TODO Auto-generated method stub
 				draw();
 			}
 		};
@@ -49,7 +42,6 @@ public class LiveWallpaper extends WallpaperService {
 			handler.removeCallbacks(run);
 		}
 
-		//		@Override
 		@Override
 		public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 			this.width = width;
@@ -58,7 +50,6 @@ public class LiveWallpaper extends WallpaperService {
 		}
 
 		private void draw() {
-			// TODO Auto-generated method stub
 			SurfaceHolder holder = getSurfaceHolder();
 			Canvas c = null;
 			try {
@@ -72,14 +63,10 @@ public class LiveWallpaper extends WallpaperService {
 				}
 			}
 			handler.removeCallbacks(run);
-			//			handler.postDelayed(run, 1000/targetFramerate -(System.currentTimeMillis() - mLastTime));
+			//handler.postDelayed(run, 1000/targetFramerate -(System.currentTimeMillis() - mLastTime));
 
 		}
 
 	}
-
-	/**
-	 * @return
-	 */
 
 }

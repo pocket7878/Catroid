@@ -42,6 +42,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.livewallpaper.LiveWallpaper;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.transfers.CheckConnection;
@@ -135,8 +136,7 @@ public class MainMenuActivity extends Activity {
 
 				public void onClick(View paramView) {
 					Log.v("DEBUG", "download button was clicked");
-					Intent i = new Intent(MainMenuActivity.this,
-							at.tugraz.ist.catroid.livewallpaper.LiveWallpaper.class);
+					Intent i = new Intent(MainMenuActivity.this, LiveWallpaper.class);
 					startService(i);
 				}
 			});

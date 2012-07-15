@@ -27,14 +27,22 @@ public class UploadProject {
 	private static final int SERVER_RESPONSE_TOKEN_OK = 200;
 	private static final int SERVER_RESPONSE_REGISTER_OK = 201;
 
-	public static final String BASE_URL = "http://192.168.1.100/";
+	public static final String BASE_URL = "http://192.168.1.69/";
 
-	private static final String FILE_UPLOAD_URL = BASE_URL;
-	private static final String CHECK_TOKEN_URL = BASE_URL;
+	//	private static final String FILE_UPLOAD_URL = BASE_URL;
+	//	private static final String CHECK_TOKEN_URL = BASE_URL;
 
-	public static final String BASE_URL_TEST = "http://192.168.1.100/";
-	public static final String TEST_FILE_UPLOAD_URL = BASE_URL_TEST + "uploads/";
-	private static final String TEST_CHECK_TOKEN_URL = BASE_URL_TEST + "uploads/";
+	private static final String FILE_UPLOAD_URL = BASE_URL + "api/upload/upload.json";
+	private static final String CHECK_TOKEN_URL = BASE_URL + "api/checkToken/check.json";
+	public static final String REGISTRATION_URL = BASE_URL + "api/checkTokenOrRegister/check.json";
+
+	public static final String BASE_URL_TEST = "http://192.168.1.69/";
+	//	public static final String TEST_FILE_UPLOAD_URL = BASE_URL_TEST + "uploads/";
+	//	private static final String TEST_CHECK_TOKEN_URL = BASE_URL_TEST + "uploads/";
+
+	public static final String TEST_FILE_UPLOAD_URL = BASE_URL_TEST + "api/upload/upload.json";
+	private static final String TEST_CHECK_TOKEN_URL = BASE_URL_TEST + "api/checkToken/check.json";
+	private static final String TEST_REGISTRATION_URL = BASE_URL_TEST + "api/checkTokenOrRegister/check.json";
 
 	//	public static final String TEST_FILE_UPLOAD_URL = BASE_URL_TEST + "api/upload/upload.json";
 
@@ -73,7 +81,7 @@ public class UploadProject {
 			HashMap<String, String> postValues = new HashMap<String, String>();
 			postValues.put(PROJECT_NAME_TAG, projectName);
 			postValues.put(PROJECT_DESCRIPTION_TAG, projectDescription);
-			postValues.put(USER_EMAIL, "simgesezgin88@gmail.com");
+			postValues.put(USER_EMAIL, "mobearette@gmail.com");
 			postValues.put(PROJECT_CHECKSUM_TAG, md5Checksum.toLowerCase());
 			postValues.put(Constants.PROJECT_TOKEN, token);
 
