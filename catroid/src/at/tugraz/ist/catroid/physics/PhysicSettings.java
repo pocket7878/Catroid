@@ -18,11 +18,28 @@
  */
 package at.tugraz.ist.catroid.physics;
 
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * @author robert
  * 
  */
 public class PhysicSettings {
-	public final static boolean RENDER_COLLISION_FRAMES = true;
 
+	public static class Render {
+		public final static boolean RENDER_COLLISION_FRAMES = true;
+	}
+
+	public static class World {
+		public final static float TIMESTEP = 1.0f / 30.0f;
+		public final static int VELOCITY_ITERATIONS = 10;
+		public final static int POSITION_ITERATIONS = 10;
+
+		public final static int DEAULT_MASS = 1;
+		public final static Vector2 DEFAULT_GRAVITY = new Vector2(0, -10);
+		public final static boolean IGNORE_SLEEPING_OBJECTS = false;
+
+		public final static boolean SURROUNDING_BOX = true;
+		public final static int SURROUNDING_BOX_FRAME_SIZE = 1;
+	}
 }

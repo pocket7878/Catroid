@@ -330,7 +330,7 @@ public class StageListener implements ApplicationListener {
 			drawAxes();
 		}
 
-		if (PhysicSettings.RENDER_COLLISION_FRAMES && !finished) {
+		if (PhysicSettings.Render.RENDER_COLLISION_FRAMES && !finished) {
 			project.getPhysicWorld().render(camera.combined);
 		}
 

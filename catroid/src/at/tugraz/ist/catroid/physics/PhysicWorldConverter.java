@@ -11,6 +11,10 @@ class PhysicWorldConverter {
 		return x / RATIO;
 	}
 
+	public static float lengthBox2DToCat(float x) {
+		return x * RATIO;
+	}
+
 	public static Vector2 vectCatToBox2D(Vector2 x) {
 		return new Vector2(x.x / RATIO, x.y / RATIO);
 	}

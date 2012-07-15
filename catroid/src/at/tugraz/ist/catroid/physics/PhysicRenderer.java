@@ -86,8 +86,10 @@ public class PhysicRenderer {
 	}
 
 	private void draw(CircleShape circle) {
-		System.out.println("Rendering circle");
 		Vector2 center = PhysicWorldConverter.vectBox2DToCat(circle.getPosition());
-		renderer.circle(center.x, center.y, circle.getRadius());
+		float radius = PhysicWorldConverter.lengthBox2DToCat(circle.getRadius());
+		renderer.begin(ShapeType.Circle);
+		renderer.circle(center.x, center.y, radius);
+		renderer.end();
 	}
 }
