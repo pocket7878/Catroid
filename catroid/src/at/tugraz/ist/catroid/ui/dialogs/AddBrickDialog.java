@@ -43,6 +43,8 @@ import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.WhenScript;
+import at.tugraz.ist.catroid.content.bricks.AccelerometerVariableBrick;
+import at.tugraz.ist.catroid.content.bricks.AccelerometerVariableBrick.Dimension;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.BroadcastBrick;
 import at.tugraz.ist.catroid.content.bricks.BroadcastReceiverBrick;
@@ -67,6 +69,8 @@ import at.tugraz.ist.catroid.content.bricks.NXTMotorTurnAngleBrick;
 import at.tugraz.ist.catroid.content.bricks.NXTPlayToneBrick;
 import at.tugraz.ist.catroid.content.bricks.NextCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.NoteBrick;
+import at.tugraz.ist.catroid.content.bricks.OrientationVariableBrick;
+import at.tugraz.ist.catroid.content.bricks.OrientationVariableBrick.Angle;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaySoundBrick;
 import at.tugraz.ist.catroid.content.bricks.PointInDirectionBrick;
@@ -163,6 +167,11 @@ public class AddBrickDialog extends Dialog {
 		controlBrickList.add(new ForeverBrick(sprite));
 		controlBrickList.add(new RepeatBrick(sprite, 3));
 		brickMap.put(context.getString(R.string.category_control), controlBrickList);
+
+		List<Brick> sensingBrickList = new ArrayList<Brick>();
+		sensingBrickList.add(new AccelerometerVariableBrick(sprite, Dimension.X_DIMENSION));
+		sensingBrickList.add(new OrientationVariableBrick(sprite, Angle.Azimuth));
+		brickMap.put(context.getString(R.string.category_sensing), sensingBrickList);
 
 		List<Brick> legoNXTBrickList = new ArrayList<Brick>();
 		legoNXTBrickList.add(new NXTMotorTurnAngleBrick(sprite, NXTMotorTurnAngleBrick.Motor.MOTOR_A, 180));

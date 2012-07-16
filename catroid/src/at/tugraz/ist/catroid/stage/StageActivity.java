@@ -48,7 +48,6 @@ public class StageActivity extends AndroidApplication {
 		stageDialog = new StageDialog(this, stageListener, R.style.stage_dialog);
 		this.calculateScreenSizes();
 		initialize(stageListener, true);
-
 	}
 
 	@Override
@@ -134,5 +133,4 @@ public class StageActivity extends AndroidApplication {
 	public boolean getResizePossible() {
 		return resizePossible;
 	}
-
 }

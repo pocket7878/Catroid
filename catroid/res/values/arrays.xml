@@ -37,6 +37,20 @@
     <item>(180) down</item>
   </string-array>
   
+  <!-- Accelerometer DimensionXYZ spinner -->
+  <string-array name="accelerometer_value_strings">
+    <item>XAccel</item>
+    <item>YAccel</item>
+    <item>ZAccel</item>
+  </string-array>
+  
+   <!-- Orientation Sensor Angle spinner -->
+  <string-array name="orientation_Angle_value_strings">
+    <item>Azimuth</item>
+    <item>Pitch</item>
+    <item>Roll</item>
+  </string-array>
+  
   <!-- Mindroid motors spinner -->
     <string-array name="nxt_motor_chooser">
 	    <item>A</item>

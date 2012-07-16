@@ -183,6 +183,7 @@
     <string name="category_sound">Sound</string>
     <string name="category_control">Control</string>
     <string name="category_lego_nxt">Lego NXT</string>
+    <string name="category_sensing">Sensing</string>
 
     <!-- Motion bricks -->
     <string name="brick_place_at">Place at</string>
@@ -245,6 +246,10 @@
     <string name="times_label">times</string>
     <string name="brick_loop_end">End of loop</string>
 
+    <!-- Sensing bricks -->
+    <string name="brick_accelerometer_variable">Acceleration in</string>
+    <string name="brick_orientation_sensor_variable">Angle</string>
+    
     <!-- Actions -->
     <string name="action_tapped">tapped</string>
     <string name="action_doubleTapped">double tapped</string>
