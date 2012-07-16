@@ -58,7 +58,7 @@ public class Project implements Serializable {
 	public String description;
 
 	@XStreamOmitField
-	private boolean isDefault = false;
+	private boolean isDefaultProject = false;
 
 	public Project(Context context, String name) {
 		this.projectName = name;
@@ -121,11 +121,11 @@ public class Project implements Serializable {
 		}
 	}
 
-	public boolean isDefault() {
-		return isDefault;
+	public boolean isDefaultProject() {
+		return isDefaultProject;
 	}
 
-	public void setDefault(boolean isDefault) {
-		this.isDefault = isDefault;
+	public void setDefaultProjectFlag(boolean isDefault) {
+		this.isDefaultProject = isDefault;
 	}
 }

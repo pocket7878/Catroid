@@ -89,9 +89,9 @@ public class SetCostumeBrick implements Brick {
 					costumeData = (CostumeData) parent.getItemAtPosition(position);
 				}
 
-				if (ProjectManager.getInstance().getCurrentProject().isDefault()) {
+				if (ProjectManager.getInstance().getCurrentProject().isDefaultProject()) {
 					if (ProjectManager.getInstance().getStandardProjectSetCostumeBrickCount() == 0) {
-						ProjectManager.getInstance().getCurrentProject().setDefault(false);
+						ProjectManager.getInstance().getCurrentProject().setDefaultProjectFlag(false);
 
 					} else {
 						ProjectManager.getInstance().decrementStandardProjectCostumeCount();

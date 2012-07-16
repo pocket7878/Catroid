@@ -271,8 +271,8 @@ public class CostumeActivity extends ListActivity {
 		scriptTabActivity.selectedPosition = position;
 		scriptTabActivity.showDialog(ScriptTabActivity.DIALOG_DELETE_COSTUME);
 
-		if (currentProject.isDefault()) {
-			currentProject.setDefault(false);
+		if (currentProject.isDefaultProject()) {
+			currentProject.setDefaultProjectFlag(false);
 		}
 
 	}

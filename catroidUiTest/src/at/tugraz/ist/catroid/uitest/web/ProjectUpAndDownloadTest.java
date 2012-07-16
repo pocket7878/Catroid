@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -116,91 +117,97 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		downloadProject();
 	}
 
-	public void tryUploadingDefaultProjectBeforeChanges() {
+	public void testUploadingProjectWithDefaultName() {
+
+		Activity activity = getActivity();
 
 		try {
 			setServerURLToTestUrl();
 			UiTestUtils.createValidUser(getActivity());
 
 			defaultProject = StandardProjectHandler.createAndSaveStandardProject(
-					getActivity().getString(R.string.default_project_name), getInstrumentation().getTargetContext());
+					activity.getString(R.string.default_project_name), getInstrumentation().getTargetContext());
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
-		solo.clickOnText(getActivity().getString(R.string.upload_project));
+
+		solo.clickOnText(activity.getString(R.string.upload_project));
+		solo.sleep(500);
+		solo.clickOnButton(activity.getString(R.string.upload_button));
+		solo.waitForDialogToClose(10000);
+
+		assertTrue("Upload of the project with the default name succeeded although it should not be possible",
+				solo.searchText(activity.getString(R.string.error_upload_project_with_default_name)));
+		solo.clickOnButton(activity.getString(R.string.close));
 
 		solo.scrollUp();
 		solo.clearEditText(0);
 		solo.enterText(0, testProject);
-		solo.clickOnButton(getActivity().getString(R.string.upload_button));
+		solo.clickOnButton(activity.getString(R.string.upload_button));
+		solo.waitForDialogToClose(10000);
+		assertTrue("Upload of the default project succeeded although it should not be possible",
+				solo.searchText(activity.getString(R.string.error_upload_default_project)));
+
+	}
+
+	public void testUploadDefaultProject() {
+
+		Activity activity = getActivity();
+
+		try {
+			setServerURLToTestUrl();
+			UiTestUtils.createValidUser(activity);
+
+			defaultProject = StandardProjectHandler.createAndSaveStandardProject(
+					activity.getString(R.string.default_project_name), getInstrumentation().getTargetContext());
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		solo.clickOnText(activity.getString(R.string.upload_project));
+
+		solo.scrollUp();
+		solo.clearEditText(0);
+		solo.enterText(0, testProject);
+		solo.clickOnButton(activity.getString(R.string.upload_button));
 
 		solo.waitForDialogToClose(10000);
-		assertTrue("Upload of the default project suceeded",
-				solo.searchText(getActivity().getString(R.string.error_default_project)));
+		assertTrue("Upload of the default project succeeded although it should not be possible",
+				solo.searchText(activity.getString(R.string.error_upload_default_project)));
 
-		solo.clickOnButton(getActivity().getString(R.string.close));
-		solo.clickOnButton(getActivity().getString(R.string.cancel_button));
-		solo.clickOnButton(getActivity().getString(R.string.current_project_button));
-		solo.clickOnText("Catroid");
+		solo.clickOnButton(activity.getString(R.string.close));
+		solo.clickOnButton(activity.getString(R.string.cancel_button));
+		solo.clickOnButton(activity.getString(R.string.current_project_button));
+		solo.clickOnText(activity.getString(R.string.default_project_sprites_catroid_name));
 		solo.sleep(500);
 
 	}
 
 	public void tryUploadingDefaultProjectAfterChanges() {
-		solo.clickOnText(getActivity().getString(R.string.home));
-		solo.clickOnText(getActivity().getString(R.string.upload_project));
+		Activity activity = getActivity();
+
+		solo.clickOnText(activity.getString(R.string.home));
+		solo.clickOnText(activity.getString(R.string.upload_project));
 		solo.sleep(500);
 		solo.scrollUp();
 		solo.clearEditText(0);
 		solo.enterText(0, testProject);
-		solo.clickOnButton(getActivity().getString(R.string.upload_button));
+		solo.clickOnButton(activity.getString(R.string.upload_button));
 		solo.waitForDialogToClose(10000);
-		assertTrue("Upload of the default project after changing it not succeeded",
-				solo.searchText(getActivity().getString(R.string.success_project_upload)));
-	}
-
-	public void testUploadingProjectWithDefaultName() {
-
-		try {
-			setServerURLToTestUrl();
-			UiTestUtils.createValidUser(getActivity());
-
-			defaultProject = StandardProjectHandler.createAndSaveStandardProject(
-					getActivity().getString(R.string.default_project_name), getInstrumentation().getTargetContext());
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-
-		solo.clickOnText(getActivity().getString(R.string.upload_project));
-		solo.sleep(500);
-		solo.clickOnButton(getActivity().getString(R.string.upload_button));
-		solo.waitForDialogToClose(10000);
-
-		assertTrue("Upload of the project with default name suceeded",
-				solo.searchText(getActivity().getString(R.string.error_default_project_name)));
-		solo.clickOnButton(getActivity().getString(R.string.close));
-
-		solo.scrollUp();
-		solo.clearEditText(0);
-		solo.enterText(0, testProject);
-		solo.clickOnButton(getActivity().getString(R.string.upload_button));
-		solo.waitForDialogToClose(10000);
-		assertTrue("Upload of the default project suceeded",
-				solo.searchText(getActivity().getString(R.string.error_default_project)));
-
+		assertTrue("The default project should be uploadable after it's changed, but the upload did not succeed",
+				solo.searchText(activity.getString(R.string.success_project_upload)));
 	}
 
 	public void testUploadDefaultProjectAfterSwitchingCostumes() {
-		tryUploadingDefaultProjectBeforeChanges();
-		solo.clickOnText(getActivity().getString(R.string.default_project_sprites_catroid_normalcat));
-		solo.clickOnText(getActivity().getString(R.string.default_project_sprites_catroid_banzaicat));
+		Activity activity = getActivity();
+		solo.clickOnText(activity.getString(R.string.default_project_sprites_catroid_normalcat));
+		solo.clickOnText(activity.getString(R.string.default_project_sprites_catroid_banzaicat));
 		solo.sleep(1000);
-		assertFalse("The default flag is still set after switching the costumes", defaultProject.isDefault());
+		assertFalse("The isDefaultProject flag is still set, but it should not be after switching the costumes",
+				defaultProject.isDefaultProject());
 		tryUploadingDefaultProjectAfterChanges();
 	}
 
 	public void testUploadDefaultProjectAfterAddingCostume() {
-		tryUploadingDefaultProjectBeforeChanges();
 		ArrayList<CostumeData> costumeDataList = projectManager.getCurrentSprite().getCostumeDataList();
 		File imageFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "catroid_sunglasses.png",
 				RESOURCE_IMAGE, getActivity(), UiTestUtils.FileTypes.IMAGE);
@@ -211,14 +218,13 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		projectManager.fileChecksumContainer.addChecksum(costumeData.getChecksum(), costumeData.getAbsolutePath());
 
 		solo.sleep(1000);
-		assertFalse("The default flag is stil set after adding a costume", defaultProject.isDefault());
+		assertFalse("The isDefaultProject flag is still set, but it should not be after adding a costume",
+				defaultProject.isDefaultProject());
 		tryUploadingDefaultProjectAfterChanges();
 
 	}
 
 	public void testUploadDefaultProjectAfterAddingSound() {
-
-		tryUploadingDefaultProjectBeforeChanges();
 		ArrayList<SoundInfo> soundInfoList = projectManager.getCurrentSprite().getSoundList();
 		File soundFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "longsound.mp3",
 				RESOURCE_SOUND, getInstrumentation().getContext(), UiTestUtils.FileTypes.SOUND);
@@ -229,29 +235,28 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		projectManager.fileChecksumContainer.addChecksum(soundInfo.getChecksum(), soundInfo.getAbsolutePath());
 
 		solo.sleep(1000);
-		assertFalse("The default flag is stil set after adding a sound", defaultProject.isDefault());
+		assertFalse("The isProjectDefault flag is still set, but it should not be after adding a sound",
+				defaultProject.isDefaultProject());
 
 		tryUploadingDefaultProjectAfterChanges();
 
 	}
 
 	public void testUploadDefaultProjectAfterAddingBrick() {
-		tryUploadingDefaultProjectBeforeChanges();
-
 		UiTestUtils.addNewBrick(solo, R.string.brick_play_sound);
 		solo.sleep(1000);
-		assertFalse("The default flag is still set after adding a brick to the project", defaultProject.isDefault());
+		assertFalse("The isDefaultProject flag is still set, but it should not be after adding a brick to the project",
+				defaultProject.isDefaultProject());
 
 		tryUploadingDefaultProjectAfterChanges();
 
 	}
 
 	public void testUploadDefaultProjectAfterRemovingBrick() {
-		tryUploadingDefaultProjectBeforeChanges();
-
-		Brick brick = ProjectManager.getInstance().getCurrentScript().getBrickList().get(0);
-		ProjectManager.getInstance().getCurrentScript().removeBrick(brick);
-		assertFalse("The default flag is still set after removing a brick", defaultProject.isDefault());
+		Brick brick = projectManager.getCurrentScript().getBrickList().get(0);
+		projectManager.getCurrentScript().removeBrick(brick);
+		assertFalse("The default flag is still set, but it should not be after removing a brick",
+				defaultProject.isDefaultProject());
 
 		tryUploadingDefaultProjectAfterChanges();
 

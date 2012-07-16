@@ -137,7 +137,7 @@ public class StandardProjectHandler {
 		sprite.addScript(whenScript);
 		backgroundSprite.addScript(backgroundStartScript);
 
-		defaultProject.setDefault(true);
+		defaultProject.setDefaultProjectFlag(true);
 
 		StorageHandler.getInstance().saveProject(defaultProject);
 
