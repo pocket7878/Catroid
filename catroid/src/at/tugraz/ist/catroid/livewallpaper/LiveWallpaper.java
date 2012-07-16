@@ -14,6 +14,10 @@ public class LiveWallpaper extends WallpaperService {
 	}
 
 	private class CatWallEngine extends Engine {
+		private boolean visible = true;
+		private int width;
+		private int height;
+
 		private final Handler handler = new Handler();
 		private final Runnable run = new Runnable() {
 			public void run() {
@@ -21,13 +25,9 @@ public class LiveWallpaper extends WallpaperService {
 			}
 		};
 
-		private boolean visible = true;
-		private int width;
-		int height;
-
 		@Override
 		public void onVisibilityChanged(boolean visible) {
-			this.visible = visible;
+			this.setVisible(visible);
 			if (visible) {
 				handler.post(run);
 			} else {
@@ -38,14 +38,14 @@ public class LiveWallpaper extends WallpaperService {
 		@Override
 		public void onSurfaceDestroyed(SurfaceHolder holder) {
 			super.onSurfaceDestroyed(holder);
-			this.visible = false;
+			this.setVisible(false);
 			handler.removeCallbacks(run);
 		}
 
 		@Override
 		public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-			this.width = width;
-			this.height = height;
+			this.setWidth(width);
+			this.setHeight(height);
 			super.onSurfaceChanged(holder, format, width, height);
 		}
 
@@ -65,6 +65,40 @@ public class LiveWallpaper extends WallpaperService {
 			handler.removeCallbacks(run);
 			//handler.postDelayed(run, 1000/targetFramerate -(System.currentTimeMillis() - mLastTime));
 
+		}
+
+		/**
+		 * @return the visible
+		 */
+		@Override
+		public boolean isVisible() {
+			return visible;
+		}
+
+		/**
+		 * @param visible
+		 *            the visible to set
+		 */
+		public void setVisible(boolean visible) {
+			this.visible = visible;
+		}
+
+		@SuppressWarnings("unused")
+		public int getWidth() {
+			return width;
+		}
+
+		public void setWidth(int width) {
+			this.width = width;
+		}
+
+		@SuppressWarnings("unused")
+		public int getHeight() {
+			return height;
+		}
+
+		public void setHeight(int height) {
+			this.height = height;
 		}
 
 	}
