@@ -27,6 +27,7 @@ import java.net.URLDecoder;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.WallpaperManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -34,7 +35,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.ProjectManager;
@@ -42,7 +42,6 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
-import at.tugraz.ist.catroid.livewallpaper.LiveWallpaper;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.transfers.CheckConnection;
@@ -125,25 +124,6 @@ public class MainMenuActivity extends Activity {
 					}
 				}, false);
 		this.titleText = (TextView) findViewById(R.id.tv_title);
-
-		/***
-		 * Download Part
-		 * 
-		 */
-		final Button button = (Button) findViewById(R.id.download);
-		if (button != null) {
-			button.setOnClickListener(new View.OnClickListener() {
-
-				public void onClick(View paramView) {
-					Log.v("DEBUG", "download button was clicked");
-					Intent i = new Intent(MainMenuActivity.this, LiveWallpaper.class);
-					startService(i);
-				}
-			});
-		}
-		/**
-			 * 
-			 */
 
 	}
 
@@ -336,10 +316,11 @@ public class MainMenuActivity extends Activity {
 		}
 	}
 
-	/***
-	 * 
-	 * 
-	 */
+	public void HandleDownload(View v) {
+		Intent intent = new Intent();
+		intent.setAction(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER);
+		startActivity(intent);
+	}
 
 	public void handleWebResourcesButton(View v) {
 		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getText(R.string.catroid_website).toString()));
