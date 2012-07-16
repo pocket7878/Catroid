@@ -8,7 +8,7 @@ import at.tugraz.ist.catroid.physics.PhysicWorld;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class SetGtravityBrickTest extends AndroidTestCase {
+public class SetGravityBrickTest extends AndroidTestCase {
 
 	private float xValue = 3.50f;
 	private float yValue = 5.50f;
