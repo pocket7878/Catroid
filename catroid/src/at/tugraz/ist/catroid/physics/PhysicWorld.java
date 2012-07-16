@@ -20,15 +20,22 @@ package at.tugraz.ist.catroid.physics;
 
 import java.io.Serializable;
 
+import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Costume;
 import at.tugraz.ist.catroid.content.Sprite;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.GdxNativesLoader;
 
 public class PhysicWorld implements Serializable {
+	static {
+		GdxNativesLoader.load();
+	}
+
 	private static final long serialVersionUID = -9103964560286141267L;
 
 	private final transient World world = new World(PhysicSettings.World.DEFAULT_GRAVITY,
@@ -37,6 +44,27 @@ public class PhysicWorld implements Serializable {
 	private transient PhysicRenderer renderer; // Don't add modifier 'final'
 
 	public PhysicWorld() {
+		if (PhysicSettings.World.SURROUNDING_BOX) {
+			PhysicBodyBuilder bodyBuilder = objects.getBodyBuilder();
+			int frameWidthPixels = PhysicSettings.World.SURROUNDING_BOX_FRAME_SIZE;
+
+			float screenWidth = PhysicWorldConverter.lengthCatToBox2D(Values.SCREEN_WIDTH);
+			float screenHeight = PhysicWorldConverter.lengthCatToBox2D(Values.SCREEN_HEIGHT);
+
+			float topPos = PhysicWorldConverter.lengthCatToBox2D(-Values.SCREEN_HEIGHT / 2 - 2 * frameWidthPixels);
+			float bottomPos = PhysicWorldConverter.lengthCatToBox2D(Values.SCREEN_HEIGHT / 2 + 2 * frameWidthPixels);
+			float leftPos = PhysicWorldConverter.lengthCatToBox2D(-Values.SCREEN_WIDTH / 2 - 2 * frameWidthPixels);
+			float rightPos = PhysicWorldConverter.lengthCatToBox2D(Values.SCREEN_WIDTH / 2 + 2 * frameWidthPixels);
+
+			Body top = bodyBuilder.createBox(BodyType.StaticBody, screenWidth, frameWidthPixels * 2);
+			top.setTransform(0, topPos, 0.0f);
+			Body bottom = bodyBuilder.createBox(BodyType.StaticBody, screenWidth, frameWidthPixels * 2);
+			bottom.setTransform(0, bottomPos, 0.0f);
+			Body left = bodyBuilder.createBox(BodyType.StaticBody, frameWidthPixels * 2, screenHeight);
+			left.setTransform(leftPos, 0, 0.0f);
+			Body right = bodyBuilder.createBox(BodyType.StaticBody, frameWidthPixels * 2, screenHeight);
+			right.setTransform(rightPos, 0, 0.0f);
+		}
 	}
 
 	public void step(float deltaTime) {

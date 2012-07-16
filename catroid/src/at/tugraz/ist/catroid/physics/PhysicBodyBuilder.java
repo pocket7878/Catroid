@@ -18,7 +18,6 @@
  */
 package at.tugraz.ist.catroid.physics;
 
-import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Sprite;
 
 import com.badlogic.gdx.physics.box2d.Body;
@@ -39,27 +38,6 @@ public class PhysicBodyBuilder {
 
 	public PhysicBodyBuilder(World world) {
 		this.world = world;
-
-		if (PhysicSettings.World.SURROUNDING_BOX) {
-			int frameWidthPixels = PhysicSettings.World.SURROUNDING_BOX_FRAME_SIZE;
-
-			float screenWidth = PhysicWorldConverter.lengthCatToBox2D(Values.SCREEN_WIDTH);
-			float screenHeight = PhysicWorldConverter.lengthCatToBox2D(Values.SCREEN_HEIGHT);
-
-			float topPos = PhysicWorldConverter.lengthCatToBox2D(-Values.SCREEN_HEIGHT / 2 - 2 * frameWidthPixels);
-			float bottomPos = PhysicWorldConverter.lengthCatToBox2D(Values.SCREEN_HEIGHT / 2 + 2 * frameWidthPixels);
-			float leftPos = PhysicWorldConverter.lengthCatToBox2D(-Values.SCREEN_WIDTH / 2 - 2 * frameWidthPixels);
-			float rightPos = PhysicWorldConverter.lengthCatToBox2D(Values.SCREEN_WIDTH / 2 + 2 * frameWidthPixels);
-
-			Body top = createBox(BodyType.StaticBody, screenWidth, frameWidthPixels * 2);
-			top.setTransform(0, topPos, 0.0f);
-			Body bottom = createBox(BodyType.StaticBody, screenWidth, frameWidthPixels * 2);
-			bottom.setTransform(0, bottomPos, 0.0f);
-			Body left = createBox(BodyType.StaticBody, frameWidthPixels * 2, screenHeight);
-			left.setTransform(leftPos, 0, 0.0f);
-			Body right = createBox(BodyType.StaticBody, frameWidthPixels * 2, screenHeight);
-			right.setTransform(rightPos, 0, 0.0f);
-		}
 	}
 
 	public Body createBody(Sprite sprite) {
@@ -78,7 +56,7 @@ public class PhysicBodyBuilder {
 		return body;
 	}
 
-	private Body createBox(BodyType type, float width, float height) {
+	public Body createBox(BodyType type, float width, float height) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = type;
 
@@ -96,7 +74,7 @@ public class PhysicBodyBuilder {
 		return body;
 	}
 
-	private Body createCircle(BodyType type, float radius) {
+	public Body createCircle(BodyType type, float radius) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = type;
 

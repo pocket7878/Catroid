@@ -55,4 +55,8 @@ public class PhysicObjectContainer {
 	public Collection<Body> getBodies() {
 		return bodyMap.values();
 	}
+
+	public PhysicBodyBuilder getBodyBuilder() {
+		return builder;
+	}
 }
