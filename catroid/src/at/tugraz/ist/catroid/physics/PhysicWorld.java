@@ -48,13 +48,13 @@ public class PhysicWorld implements Serializable {
 			PhysicBodyBuilder bodyBuilder = objects.getBodyBuilder();
 			int frameWidthPixels = PhysicSettings.World.SURROUNDING_BOX_FRAME_SIZE;
 
-			float screenWidth = PhysicWorldConverter.lengthCatToBox2D(Values.SCREEN_WIDTH);
-			float screenHeight = PhysicWorldConverter.lengthCatToBox2D(Values.SCREEN_HEIGHT);
+			float screenWidth = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_WIDTH);
+			float screenHeight = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_HEIGHT);
 
-			float topPos = PhysicWorldConverter.lengthCatToBox2D(-Values.SCREEN_HEIGHT / 2 - 2 * frameWidthPixels);
-			float bottomPos = PhysicWorldConverter.lengthCatToBox2D(Values.SCREEN_HEIGHT / 2 + 2 * frameWidthPixels);
-			float leftPos = PhysicWorldConverter.lengthCatToBox2D(-Values.SCREEN_WIDTH / 2 - 2 * frameWidthPixels);
-			float rightPos = PhysicWorldConverter.lengthCatToBox2D(Values.SCREEN_WIDTH / 2 + 2 * frameWidthPixels);
+			float topPos = PhysicWorldConverter.lengthCatToBox2d(-Values.SCREEN_HEIGHT / 2 - 2 * frameWidthPixels);
+			float bottomPos = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_HEIGHT / 2 + 2 * frameWidthPixels);
+			float leftPos = PhysicWorldConverter.lengthCatToBox2d(-Values.SCREEN_WIDTH / 2 - 2 * frameWidthPixels);
+			float rightPos = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_WIDTH / 2 + 2 * frameWidthPixels);
 
 			Body top = bodyBuilder.createBox(BodyType.StaticBody, screenWidth, frameWidthPixels * 2);
 			top.setTransform(0, topPos, 0.0f);
@@ -76,8 +76,8 @@ public class PhysicWorld implements Serializable {
 	private void updateSprites() {
 		for (Sprite sprite : objects.getSprites()) {
 			Body body = objects.get(sprite);
-			Vector2 position = PhysicWorldConverter.vectBox2DToCat(body.getPosition());
-			float angle = PhysicWorldConverter.angleBox2DToCat(body.getAngle());
+			Vector2 position = PhysicWorldConverter.vecBox2dToCat(body.getPosition());
+			float angle = PhysicWorldConverter.angleBox2dToCat(body.getAngle());
 
 			Costume costume = sprite.costume;
 			costume.aquireXYWidthHeightLock();
@@ -95,7 +95,7 @@ public class PhysicWorld implements Serializable {
 	}
 
 	public void setGravity(Sprite sprite, Vector2 gravity) {
-		world.setGravity(PhysicWorldConverter.vectCatToBox2D(gravity));
+		world.setGravity(PhysicWorldConverter.vecCatToBox2d(gravity));
 	}
 
 	public void setVelocity(Sprite sprite, Vector2 velocity) {

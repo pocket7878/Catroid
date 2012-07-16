@@ -41,10 +41,10 @@ public class PhysicRenderer {
 
 		for (Body body : bodies) {
 			renderer.identity();
-			Vector2 translation = PhysicWorldConverter.vectBox2DToCat(body.getPosition());
+			Vector2 translation = PhysicWorldConverter.vecBox2dToCat(body.getPosition());
 			renderer.translate(translation.x, translation.y, 0.f);
-			float rotation = PhysicWorldConverter.angleBox2DToCat(body.getAngle());
-			renderer.rotate(0.f, 0.f, 1.f, rotation);
+			float angle = PhysicWorldConverter.angleBox2dToCat(body.getAngle());
+			renderer.rotate(0.f, 0.f, 1.f, angle);
 			for (Fixture fixture : body.getFixtureList()) {
 				switch (fixture.getType()) {
 					case Chain:
@@ -80,14 +80,14 @@ public class PhysicRenderer {
 	}
 
 	private void drawLine(Vector2 from, Vector2 to) {
-		from = PhysicWorldConverter.vectBox2DToCat(from);
-		to = PhysicWorldConverter.vectBox2DToCat(to);
+		from = PhysicWorldConverter.vecBox2dToCat(from);
+		to = PhysicWorldConverter.vecBox2dToCat(to);
 		renderer.line(from.x, from.y, to.x, to.y);
 	}
 
 	private void draw(CircleShape circle) {
-		Vector2 center = PhysicWorldConverter.vectBox2DToCat(circle.getPosition());
-		float radius = PhysicWorldConverter.lengthBox2DToCat(circle.getRadius());
+		Vector2 center = PhysicWorldConverter.vecBox2dToCat(circle.getPosition());
+		float radius = PhysicWorldConverter.lengthBox2dToCat(circle.getRadius());
 		renderer.begin(ShapeType.Circle);
 		renderer.circle(center.x, center.y, radius);
 		renderer.end();

@@ -45,11 +45,11 @@ public class PhysicBodyBuilder {
 		int[] resolution = sprite.costume.getCostumeData().getResolution();
 
 		if (resolution[0] == resolution[1]) {
-			float radius = PhysicWorldConverter.lengthCatToBox2D(resolution[0] / 2.0f);
+			float radius = PhysicWorldConverter.lengthCatToBox2d(resolution[0] / 2.0f);
 			body = createCircle(BodyType.DynamicBody, radius);
 		} else {
-			float width = PhysicWorldConverter.lengthCatToBox2D(resolution[0]);
-			float height = PhysicWorldConverter.lengthCatToBox2D(resolution[1]);
+			float width = PhysicWorldConverter.lengthCatToBox2d(resolution[0]);
+			float height = PhysicWorldConverter.lengthCatToBox2d(resolution[1]);
 			body = createBox(BodyType.DynamicBody, width, height);
 		}
 

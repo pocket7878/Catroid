@@ -2,33 +2,31 @@ package at.tugraz.ist.catroid.physics;
 
 import com.badlogic.gdx.math.Vector2;
 
-class PhysicWorldConverter {
-
+public final class PhysicWorldConverter {
 	// Ratio of pixels to meters
-	static float RATIO = 40;
+	private final static float RATIO = 40.0f;
 
-	public static float lengthCatToBox2D(float x) {
-		return x / RATIO;
+	public static float angleBox2dToCat(float angle) {
+		return (float) Math.toDegrees(angle);
 	}
 
-	public static float lengthBox2DToCat(float x) {
-		return x * RATIO;
+	public static float angleCatToBox2d(float angle) {
+		return (float) Math.toRadians(angle);
 	}
 
-	public static Vector2 vectCatToBox2D(Vector2 x) {
-		return new Vector2(x.x / RATIO, x.y / RATIO);
+	public static float lengthCatToBox2d(float length) {
+		return length / RATIO;
 	}
 
-	public static Vector2 vectBox2DToCat(Vector2 x) {
-		return new Vector2(x.x * RATIO, x.y * RATIO);
+	public static float lengthBox2dToCat(float length) {
+		return length * RATIO;
 	}
 
-	public static float angleBox2DToCat(float angle) {
-		return (float) ((angle % (2 * Math.PI)) / Math.PI * 180f);
+	public static Vector2 vecCatToBox2d(Vector2 vector) {
+		return new Vector2(lengthCatToBox2d(vector.x), lengthCatToBox2d(vector.y));
 	}
 
-	public static float angleCatToBox2D(float angle) {
-		return ((angle / 180.0f) * (float) Math.PI);
+	public static Vector2 vecBox2dToCat(Vector2 vector) {
+		return new Vector2(lengthBox2dToCat(vector.x), lengthBox2dToCat(vector.y));
 	}
-
 }
