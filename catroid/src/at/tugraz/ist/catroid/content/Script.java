@@ -32,6 +32,7 @@ public abstract class Script implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private ArrayList<Brick> brickList;
+	private Project currentProject = ProjectManager.getInstance().getCurrentProject();
 	protected transient boolean isFinished;
 	private transient volatile boolean paused;
 	private transient volatile boolean finish;
@@ -77,9 +78,8 @@ public abstract class Script implements Serializable {
 	public void addBrick(Brick brick) {
 		if (brick != null) {
 			brickList.add(brick);
-			if (ProjectManager.getInstance().getCurrentProject() != null
-					&& ProjectManager.getInstance().getCurrentProject().isDefaultProject()) {
-				ProjectManager.getInstance().getCurrentProject().setDefaultProjectFlag(false);
+			if (currentProject != null && currentProject.isDefaultProject()) {
+				currentProject.setDefaultProjectFlag(false);
 			}
 
 		}
@@ -88,9 +88,8 @@ public abstract class Script implements Serializable {
 	public void addBrick(int position, Brick brick) {
 		if (brick != null) {
 			brickList.add(position, brick);
-			if (ProjectManager.getInstance().getCurrentProject() != null
-					&& ProjectManager.getInstance().getCurrentProject().isDefaultProject()) {
-				ProjectManager.getInstance().getCurrentProject().setDefaultProjectFlag(false);
+			if (currentProject != null && currentProject.isDefaultProject()) {
+				currentProject.setDefaultProjectFlag(false);
 			}
 		}
 	}
@@ -98,9 +97,8 @@ public abstract class Script implements Serializable {
 	public void removeBrick(Brick brick) {
 		brickList.remove(brick);
 
-		if (ProjectManager.getInstance().getCurrentProject() != null
-				&& ProjectManager.getInstance().getCurrentProject().isDefaultProject()) {
-			ProjectManager.getInstance().getCurrentProject().setDefaultProjectFlag(false);
+		if (currentProject != null && currentProject.isDefaultProject()) {
+			currentProject.setDefaultProjectFlag(false);
 		}
 	}
 

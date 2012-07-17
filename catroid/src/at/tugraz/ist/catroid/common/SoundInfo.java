@@ -23,22 +23,24 @@
 package at.tugraz.ist.catroid.common;
 
 import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class SoundInfo implements Comparable<SoundInfo> {
 
 	private String name;
 	private String fileName;
+	private Project currentProject;
 	public transient boolean isPlaying = false;
 	public transient boolean isPaused = false;
 
 	public SoundInfo() {
 		isPlaying = false;
 		isPaused = false;
+		currentProject = ProjectManager.getInstance().getCurrentProject();
 
-		if (ProjectManager.getInstance().getCurrentProject() != null
-				&& ProjectManager.getInstance().getCurrentProject().isDefaultProject()) {
-			ProjectManager.getInstance().getCurrentProject().setDefaultProjectFlag(false);
+		if (currentProject != null && currentProject.isDefaultProject()) {
+			currentProject.setDefaultProjectFlag(false);
 		}
 
 	}
@@ -75,8 +77,7 @@ public class SoundInfo implements Comparable<SoundInfo> {
 	}
 
 	private String getPathToSoundDirectory() {
-		return Utils.buildPath(Utils.buildProjectPath(ProjectManager.getInstance().getCurrentProject().getName()),
-				Constants.SOUND_DIRECTORY);
+		return Utils.buildPath(Utils.buildProjectPath(currentProject.getName()), Constants.SOUND_DIRECTORY);
 	}
 
 	public int compareTo(SoundInfo soundInfo) {
