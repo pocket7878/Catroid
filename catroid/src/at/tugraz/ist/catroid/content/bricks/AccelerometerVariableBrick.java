@@ -76,15 +76,12 @@ public class AccelerometerVariableBrick implements Brick, OnItemSelectedListener
 		switch (axis) {
 			case 'X':
 				accelerometerValue = Gdx.input.getAccelerometerX();
-				System.out.println("This is the value 1 " + accelerometerValue);
 				break;
 			case 'Y':
 				accelerometerValue = Gdx.input.getAccelerometerY();
-				System.out.println("This is the value 2 " + accelerometerValue);
 				break;
 			case 'Z':
 				accelerometerValue = Gdx.input.getAccelerometerZ();
-				System.out.println("This is the value 3 " + accelerometerValue);
 				break;
 			default:
 				break;

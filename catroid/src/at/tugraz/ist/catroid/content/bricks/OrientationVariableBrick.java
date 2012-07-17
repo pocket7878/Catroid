@@ -73,15 +73,12 @@ public class OrientationVariableBrick implements Brick, OnItemSelectedListener {
 		switch (axis) {
 			case 'A':
 				orientationValue = Gdx.input.getAzimuth();
-				System.out.println("This is the value 1 " + orientationValue);
 				break;
 			case 'P':
 				orientationValue = Gdx.input.getPitch();
-				System.out.println("This is the value 2 " + orientationValue);
 				break;
 			case 'R':
 				orientationValue = Gdx.input.getRoll();
-				System.out.println("This is the value 3 " + orientationValue);
 				break;
 			default:
 				break;
