@@ -286,7 +286,7 @@
     <string name="error_load_sound">An error occurred while loading the sound.</string>
     <string name="error_internet_connection">An unknown error occurred. Check your Internet connection.</string>
     <string name="error_upload_project_with_default_name">You cannot upload a project with the name \'My first project\'. Please rename the project.</string>
-    <string name="error_upload_default_project">You cannot upload this project - it is the same as \'My first project\'. Please modify it, and upload it again.</string>
+    <string name="error_upload_default_project">You cannot upload this project because it is the same as \'My first project\'. Please modify it, and try again.</string>
 
     <!-- Notifications -->
     <string name="success_project_upload">Upload successful.</string>
