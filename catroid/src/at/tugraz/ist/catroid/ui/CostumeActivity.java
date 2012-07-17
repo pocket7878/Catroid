@@ -29,8 +29,10 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.ListActivity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -121,6 +123,10 @@ public class CostumeActivity extends ListActivity {
 				listView.setSelection(listView.getCount() - 1);
 			}
 		});
+
+		Context context = getApplicationContext();
+		String message = context.getString(R.string.success_project_upload);
+		new Builder(context).setMessage(message).setPositiveButton(R.string.ok, null).show();
 	}
 
 	private void reloadAdapter() {
