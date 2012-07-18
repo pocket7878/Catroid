@@ -296,8 +296,9 @@
     <string name="upload_description">Description:</string>
     <string name="project_rename">(Your project will be renamed.)</string>
     <string name="size_of_project">Size of project:</string>
-      <string name="notification_costume_added">The costume has been added</string>
-    <string name="notification_sound_added">The sound has been added</string>
+    <string name="notification_costume_added">The costume has been added.</string>
+    <string name="notification_background_added">The background has been added.</string>
+    <string name="notification_sound_added">The sound has been added.</string>
 
     <!-- Bluetooth, LegoNXT, Arduino -->
     <!-- Bluetooth Connection Strings -->

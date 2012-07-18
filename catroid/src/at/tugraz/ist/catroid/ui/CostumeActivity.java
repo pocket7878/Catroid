@@ -32,7 +32,6 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ListActivity;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -58,6 +57,8 @@ import at.tugraz.ist.catroid.utils.Utils;
 public class CostumeActivity extends ListActivity {
 	private ArrayList<CostumeData> costumeDataList;
 
+	private boolean costumeAdded = false;
+
 	public static final int REQUEST_SELECT_IMAGE = 0;
 	public static final int REQUEST_PAINTROID_EDIT_IMAGE = 1;
 
@@ -80,6 +81,10 @@ public class CostumeActivity extends ListActivity {
 
 		reloadAdapter();
 
+		Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
+		int currentSpriteIndex = ProjectManager.getInstance().getCurrentProject().getSpriteList()
+				.indexOf(currentSprite);
+
 		//change actionbar:
 		ScriptTabActivity scriptTabActivity = (ScriptTabActivity) getParent();
 		ActivityHelper activityHelper = scriptTabActivity.activityHelper;
@@ -88,13 +93,24 @@ public class CostumeActivity extends ListActivity {
 			activityHelper.changeClickListener(R.id.btn_action_add_button, createAddCostumeClickListener());
 			//set new icon for actionbar plus button:
 			int addButtonIcon;
-			Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
-			if (ProjectManager.getInstance().getCurrentProject().getSpriteList().indexOf(currentSprite) == 0) {
+			if (currentSpriteIndex == 0) {
 				addButtonIcon = R.drawable.ic_background;
 			} else {
 				addButtonIcon = R.drawable.ic_actionbar_shirt;
 			}
 			activityHelper.changeButtonIcon(R.id.btn_action_add_button, addButtonIcon);
+		}
+
+		if (costumeAdded) {
+			String message;
+			if (currentSpriteIndex == 0) {
+				message = scriptTabActivity.getString(R.string.notification_background_added);
+			} else {
+				message = scriptTabActivity.getString(R.string.notification_costume_added);
+			}
+
+			new Builder(scriptTabActivity).setMessage(message).setPositiveButton(R.string.ok, null).show();
+			costumeAdded = false;
 		}
 
 	}
@@ -124,15 +140,15 @@ public class CostumeActivity extends ListActivity {
 			}
 		});
 
-		Context context = getApplicationContext();
-		String message = context.getString(R.string.success_project_upload);
-		new Builder(context).setMessage(message).setPositiveButton(R.string.ok, null).show();
+		this.costumeAdded = true;
+
 	}
 
 	private void reloadAdapter() {
 		costumeDataList = ProjectManager.getInstance().getCurrentSprite().getCostumeDataList();
 		setListAdapter(new CostumeAdapter(this, R.layout.activity_costume_costumelist_item, costumeDataList));
 		((CostumeAdapter) getListAdapter()).notifyDataSetChanged();
+
 	}
 
 	@Override
@@ -151,6 +167,7 @@ public class CostumeActivity extends ListActivity {
 				loadPaintroidImageIntoCatroid(data);
 				break;
 		}
+
 	}
 
 	private void loadImageIntoCatroid(Intent intent) {
@@ -212,9 +229,11 @@ public class CostumeActivity extends ListActivity {
 
 			String imageFileName = imageFile.getName();
 			updateCostumeAdapter(imageName, imageFileName);
+
 		} catch (IOException e) {
 			Utils.displayErrorMessage(this, this.getString(R.string.error_load_image));
 		}
+
 	}
 
 	private void loadPaintroidImageIntoCatroid(Intent intent) {
@@ -264,6 +283,7 @@ public class CostumeActivity extends ListActivity {
 				intent.putExtras(bundleForPaintroid);
 				Intent chooser = Intent.createChooser(intent, getString(R.string.select_image));
 				startActivityForResult(chooser, REQUEST_SELECT_IMAGE);
+
 			}
 		};
 	}

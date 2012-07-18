@@ -1,14 +1,19 @@
 package at.tugraz.ist.catroid.uitest.ui.dialog;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.test.ActivityInstrumentationTestCase2;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
+import at.tugraz.ist.catroid.utils.Utils;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -50,24 +55,23 @@ public class AddCostumeAndSoundDialogTest extends ActivityInstrumentationTestCas
 
 		solo.clickOnText(getActivity().getString(R.string.backgrounds));
 
-		costumeDataList = projectManager.getCurrentSprite().getCostumeDataList();
+		try {
+			File imageFile = UiTestUtils.createTestMediaFile(
+					Utils.buildPath(Constants.DEFAULT_ROOT, "catroid_sunglasses.png"), RESOURCE_IMAGE, getActivity());
+			Bundle bundleForGallery = new Bundle();
+			bundleForGallery.putString("filePath", imageFile.getAbsolutePath());
+			Intent intent = new Intent(getInstrumentation().getContext(),
+					at.tugraz.ist.catroid.uitest.mockups.MockGalleryActivity.class);
+			intent.putExtras(bundleForGallery);
 
-		int oldCostumeCount = costumeDataList.size();
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("Image was not created");
+		}
 
-		File imageFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "catroid_sunglasses.png",
-				RESOURCE_IMAGE, getActivity(), UiTestUtils.FileTypes.IMAGE);
-
-		CostumeData costumeData = new CostumeData();
-		costumeData.setCostumeFilename(imageFile.getName());
-		costumeData.setCostumeName(costumeName);
-		costumeDataList.add(costumeData);
-		projectManager.fileChecksumContainer.addChecksum(costumeData.getChecksum(), costumeData.getAbsolutePath());
-
-		int newCostumeCount = costumeDataList.size();
-		assertEquals("The costume has not been added, but it should have been", oldCostumeCount + 1, newCostumeCount);
-
-		assertTrue("The notification about the added coustume could not be found",
-				solo.searchText(getActivity().getString(R.string.notification_costume_added)));
+		solo.clickOnButton(R.id.btn_action_add_button);
+		solo.clickOnText("Galery");
+		solo.sleep(20000);
 
 	}
 }
