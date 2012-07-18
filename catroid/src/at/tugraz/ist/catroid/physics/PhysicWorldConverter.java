@@ -3,8 +3,6 @@ package at.tugraz.ist.catroid.physics;
 import com.badlogic.gdx.math.Vector2;
 
 public final class PhysicWorldConverter {
-	// Ratio of pixels to meters
-	private final static float RATIO = 40.0f;
 
 	public static float angleBox2dToCat(float angle) {
 		return (float) Math.toDegrees(angle);
@@ -15,11 +13,11 @@ public final class PhysicWorldConverter {
 	}
 
 	public static float lengthCatToBox2d(float length) {
-		return length / RATIO;
+		return length / PhysicSettings.World.RATIO;
 	}
 
 	public static float lengthBox2dToCat(float length) {
-		return length * RATIO;
+		return length * PhysicSettings.World.RATIO;
 	}
 
 	public static Vector2 vecCatToBox2d(Vector2 vector) {

@@ -28,9 +28,15 @@ public class PhysicSettings {
 
 	public static class Render {
 		public final static boolean RENDER_COLLISION_FRAMES = true;
+		public final static boolean RENDER_BODIES = true;
+		public final static boolean RENDER_JOINTS = false;
+		public final static boolean RENDER_AABBs = false;
+		public final static boolean RENDER_INACTIVE_BODIES = true;
 	}
 
 	public static class World {
+		// Ratio of pixels to meters
+		public final static float RATIO = 40.0f;
 		public final static float TIMESTEP = 1.0f / 30.0f;
 		public final static int VELOCITY_ITERATIONS = 10;
 		public final static int POSITION_ITERATIONS = 10;

@@ -2,14 +2,14 @@ package at.tugraz.ist.catroid.test.physics;
 
 import junit.framework.Assert;
 import android.test.AndroidTestCase;
+import at.tugraz.ist.catroid.physics.PhysicSettings;
 import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
-import at.tugraz.ist.catroid.test.utils.TestUtils;
 
 import com.badlogic.gdx.math.Vector2;
 
 public class PhysicWorldConverterTest extends AndroidTestCase {
 
-	private float ratio = (Float) TestUtils.getPrivateField("RATIO", new PhysicWorldConverter(), false);
+	private float ratio = PhysicSettings.World.RATIO;
 
 	@Override
 	public void setUp() {

@@ -28,6 +28,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 
@@ -41,30 +42,34 @@ public class PhysicWorld implements Serializable {
 	private final transient World world = new World(PhysicSettings.World.DEFAULT_GRAVITY,
 			PhysicSettings.World.IGNORE_SLEEPING_OBJECTS);
 	private final transient PhysicObjectContainer objects = new PhysicObjectContainer(world);
-	private transient PhysicRenderer renderer; // Don't add modifier 'final'
+	private transient Box2DDebugRenderer renderer;
 
 	public PhysicWorld() {
 		if (PhysicSettings.World.SURROUNDING_BOX) {
-			PhysicBodyBuilder bodyBuilder = objects.getBodyBuilder();
-			int frameWidthPixels = PhysicSettings.World.SURROUNDING_BOX_FRAME_SIZE;
-
-			float screenWidth = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_WIDTH);
-			float screenHeight = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_HEIGHT);
-
-			float topPos = PhysicWorldConverter.lengthCatToBox2d(-Values.SCREEN_HEIGHT / 2 - 2 * frameWidthPixels);
-			float bottomPos = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_HEIGHT / 2 + 2 * frameWidthPixels);
-			float leftPos = PhysicWorldConverter.lengthCatToBox2d(-Values.SCREEN_WIDTH / 2 - 2 * frameWidthPixels);
-			float rightPos = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_WIDTH / 2 + 2 * frameWidthPixels);
-
-			Body top = bodyBuilder.createBox(BodyType.StaticBody, screenWidth, frameWidthPixels * 2);
-			top.setTransform(0, topPos, 0.0f);
-			Body bottom = bodyBuilder.createBox(BodyType.StaticBody, screenWidth, frameWidthPixels * 2);
-			bottom.setTransform(0, bottomPos, 0.0f);
-			Body left = bodyBuilder.createBox(BodyType.StaticBody, frameWidthPixels * 2, screenHeight);
-			left.setTransform(leftPos, 0, 0.0f);
-			Body right = bodyBuilder.createBox(BodyType.StaticBody, frameWidthPixels * 2, screenHeight);
-			right.setTransform(rightPos, 0, 0.0f);
+			createSurroundingBox();
 		}
+	}
+
+	private void createSurroundingBox() {
+		PhysicBodyBuilder bodyBuilder = objects.getBodyBuilder();
+
+		float boxWidth = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_WIDTH);
+		float boxHeight = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_HEIGHT);
+		float boxElementSize = PhysicSettings.World.SURROUNDING_BOX_FRAME_SIZE;
+
+		// Top Element
+		createSurroundingBoxElement(bodyBuilder, 0.0f, boxHeight / 2 + boxElementSize, boxWidth, boxElementSize * 2);
+		// Bottom Element
+		createSurroundingBoxElement(bodyBuilder, 0.0f, -boxHeight / 2 - boxElementSize, boxWidth, boxElementSize * 2);
+		// Left Element
+		createSurroundingBoxElement(bodyBuilder, -boxWidth / 2 - boxElementSize, 0.0f, boxElementSize * 2, boxHeight);
+		// Right Element
+		createSurroundingBoxElement(bodyBuilder, boxWidth / 2 + boxElementSize, 0.0f, boxElementSize * 2, boxHeight);
+	}
+
+	private void createSurroundingBoxElement(PhysicBodyBuilder builder, float x, float y, float width, float height) {
+		Body top = builder.createBox(BodyType.StaticBody, width, height);
+		top.setTransform(x, y, 0.0f);
 	}
 
 	public void step(float deltaTime) {
@@ -89,9 +94,10 @@ public class PhysicWorld implements Serializable {
 
 	public void render(Matrix4 perspectiveMatrix) {
 		if (renderer == null) {
-			renderer = new PhysicRenderer();
+			renderer = new Box2DDebugRenderer(PhysicSettings.Render.RENDER_BODIES, PhysicSettings.Render.RENDER_JOINTS,
+					PhysicSettings.Render.RENDER_AABBs, PhysicSettings.Render.RENDER_INACTIVE_BODIES);
 		}
-		renderer.render(perspectiveMatrix, objects.getBodies());
+		renderer.render(world, perspectiveMatrix.scl(PhysicSettings.World.RATIO));
 	}
 
 	public void setGravity(Sprite sprite, Vector2 gravity) {
