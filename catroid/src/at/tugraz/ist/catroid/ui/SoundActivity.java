@@ -53,6 +53,7 @@ public class SoundActivity extends ListActivity {
 	public MediaPlayer mediaPlayer;
 	private ArrayList<SoundInfo> soundInfoList;
 
+	private boolean addSoundButtonClicked = false;
 	public static boolean soundAddedFlag = false;
 
 	private final int REQUEST_SELECT_MUSIC = 0;
@@ -100,10 +101,13 @@ public class SoundActivity extends ListActivity {
 	private View.OnClickListener createAddSoundClickListener() {
 		return new View.OnClickListener() {
 			public void onClick(View v) {
+				addSoundButtonClicked = true;
+
 				Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 				intent.setType("audio/*");
 				startActivityForResult(Intent.createChooser(intent, getString(R.string.sound_select_source)),
 						REQUEST_SELECT_MUSIC);
+
 			}
 		};
 	}
@@ -138,7 +142,10 @@ public class SoundActivity extends ListActivity {
 			});
 		}
 
-		soundAddedFlag = true;
+		if (addSoundButtonClicked) {
+			soundAddedFlag = true;
+			addSoundButtonClicked = false;
+		}
 	}
 
 	public void pauseSound(SoundInfo soundInfo) {

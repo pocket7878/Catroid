@@ -72,7 +72,6 @@ public class SoundRecorderTest extends ActivityInstrumentationTestCase2<ScriptTa
 		prepareRecording();
 		recordSoundWithChangingOrientation();
 		assertSoundRecording(1);
-
 		prepareRecording();
 		recordSoundGoBackWhileRecording();
 		assertSoundRecording(2);
@@ -85,6 +84,8 @@ public class SoundRecorderTest extends ActivityInstrumentationTestCase2<ScriptTa
 		solo.setActivityOrientation(Solo.LANDSCAPE);
 		solo.setActivityOrientation(Solo.PORTRAIT);
 		solo.clickOnText(getActivity().getString(R.string.soundrecorder_record_stop));
+		solo.sleep(500);
+		solo.clickOnButton(getActivity().getString(R.string.ok));
 	}
 
 	public void recordSoundGoBackWhileRecording() throws InterruptedException {

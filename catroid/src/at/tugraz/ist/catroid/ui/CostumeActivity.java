@@ -56,6 +56,7 @@ import at.tugraz.ist.catroid.utils.Utils;
 
 public class CostumeActivity extends ListActivity {
 	private ArrayList<CostumeData> costumeDataList;
+	private boolean addCostumeButtonClicked = false;
 
 	public static boolean costumeAddedFlag = false;
 	public static final int REQUEST_SELECT_IMAGE = 0;
@@ -139,7 +140,10 @@ public class CostumeActivity extends ListActivity {
 			}
 		});
 
-		costumeAddedFlag = true;
+		if (addCostumeButtonClicked) {
+			costumeAddedFlag = true;
+			addCostumeButtonClicked = false;
+		}
 
 	}
 
@@ -271,6 +275,9 @@ public class CostumeActivity extends ListActivity {
 	private View.OnClickListener createAddCostumeClickListener() {
 		return new View.OnClickListener() {
 			public void onClick(View v) {
+
+				addCostumeButtonClicked = true;
+
 				Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 
 				Bundle bundleForPaintroid = new Bundle();
