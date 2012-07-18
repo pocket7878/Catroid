@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog.Builder;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -51,6 +52,8 @@ public class SoundActivity extends ListActivity {
 
 	public MediaPlayer mediaPlayer;
 	private ArrayList<SoundInfo> soundInfoList;
+
+	public static boolean soundAddedFlag = false;
 
 	private final int REQUEST_SELECT_MUSIC = 0;
 
@@ -84,6 +87,12 @@ public class SoundActivity extends ListActivity {
 			activityHelper.changeClickListener(R.id.btn_action_add_button, createAddSoundClickListener());
 			//set new icon for actionbar plus button:
 			activityHelper.changeButtonIcon(R.id.btn_action_add_button, R.drawable.ic_music);
+		}
+
+		if (soundAddedFlag) {
+			String message = scriptTabActivity.getString(R.string.notification_sound_added);
+			new Builder(scriptTabActivity).setMessage(message).setPositiveButton(R.string.ok, null).show();
+			soundAddedFlag = false;
 		}
 
 	}
@@ -128,6 +137,8 @@ public class SoundActivity extends ListActivity {
 				}
 			});
 		}
+
+		soundAddedFlag = true;
 	}
 
 	public void pauseSound(SoundInfo soundInfo) {
@@ -253,6 +264,11 @@ public class SoundActivity extends ListActivity {
 		scriptTabActivity.selectedSoundInfo = soundInfoList.get(position);
 		scriptTabActivity.selectedPosition = position;
 		scriptTabActivity.showDialog(ScriptTabActivity.DIALOG_DELETE_SOUND);
+
+	}
+
+	public static void setCostumeAddedFlag(boolean soundAdded) {
+		soundAddedFlag = soundAdded;
 
 	}
 

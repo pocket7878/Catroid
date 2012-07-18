@@ -57,8 +57,7 @@ import at.tugraz.ist.catroid.utils.Utils;
 public class CostumeActivity extends ListActivity {
 	private ArrayList<CostumeData> costumeDataList;
 
-	private boolean costumeAdded = false;
-
+	public static boolean costumeAddedFlag = false;
 	public static final int REQUEST_SELECT_IMAGE = 0;
 	public static final int REQUEST_PAINTROID_EDIT_IMAGE = 1;
 
@@ -101,7 +100,7 @@ public class CostumeActivity extends ListActivity {
 			activityHelper.changeButtonIcon(R.id.btn_action_add_button, addButtonIcon);
 		}
 
-		if (costumeAdded) {
+		if (costumeAddedFlag) {
 			String message;
 			if (currentSpriteIndex == 0) {
 				message = scriptTabActivity.getString(R.string.notification_background_added);
@@ -110,7 +109,7 @@ public class CostumeActivity extends ListActivity {
 			}
 
 			new Builder(scriptTabActivity).setMessage(message).setPositiveButton(R.string.ok, null).show();
-			costumeAdded = false;
+			costumeAddedFlag = false;
 		}
 
 	}
@@ -140,7 +139,7 @@ public class CostumeActivity extends ListActivity {
 			}
 		});
 
-		this.costumeAdded = true;
+		costumeAddedFlag = true;
 
 	}
 
@@ -359,4 +358,5 @@ public class CostumeActivity extends ListActivity {
 		intent.addCategory("android.intent.category.LAUNCHER");
 		startActivityForResult(intent, REQUEST_PAINTROID_EDIT_IMAGE);
 	}
+
 }

@@ -1,19 +1,17 @@
 package at.tugraz.ist.catroid.uitest.ui.dialog;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.test.ActivityInstrumentationTestCase2;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.CostumeData;
+import at.tugraz.ist.catroid.common.SoundInfo;
+import at.tugraz.ist.catroid.ui.CostumeActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid.ui.SoundActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
-import at.tugraz.ist.catroid.utils.Utils;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -26,6 +24,10 @@ public class AddCostumeAndSoundDialogTest extends ActivityInstrumentationTestCas
 	private ArrayList<CostumeData> costumeDataList;
 	private String costumeName = "costumeNametest";
 	private final int RESOURCE_IMAGE = at.tugraz.ist.catroid.uitest.R.drawable.catroid_sunglasses;
+
+	private ArrayList<SoundInfo> soundInfoList;
+	private String soundName = "testSound";
+	private final int RESOURCE_SOUND = at.tugraz.ist.catroid.uitest.R.raw.longsound;
 
 	public AddCostumeAndSoundDialogTest() {
 		super("at.tugraz.ist.catroid", ScriptTabActivity.class);
@@ -51,27 +53,57 @@ public class AddCostumeAndSoundDialogTest extends ActivityInstrumentationTestCas
 		super.tearDown();
 	}
 
+	public void addCostume() {
+		File imageFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "catroid_sunglasses.png",
+				RESOURCE_IMAGE, getActivity(), UiTestUtils.FileTypes.IMAGE);
+		CostumeData costumeData = new CostumeData();
+		costumeData.setCostumeFilename(imageFile.getName());
+		costumeData.setCostumeName(costumeName);
+		costumeDataList.add(costumeData);
+		projectManager.fileChecksumContainer.addChecksum(costumeData.getChecksum(), costumeData.getAbsolutePath());
+	}
+
 	public void testAddCostumeDialog() {
+		costumeDataList = projectManager.getCurrentSprite().getCostumeDataList();
+		int oldCostumeCount = costumeDataList.size();
+		addCostume();
+		int newCostumeCount = costumeDataList.size();
+		assertEquals("The costume has not been added, but it should have been", oldCostumeCount + 1, newCostumeCount);
 
+		solo.sleep(500);
+		CostumeActivity.costumeAddedFlag = true;
 		solo.clickOnText(getActivity().getString(R.string.backgrounds));
+		solo.sleep(500);
+		assertTrue("The notification about the added background could not be found",
+				solo.searchText(getActivity().getString(R.string.notification_background_added)));
 
-		try {
-			File imageFile = UiTestUtils.createTestMediaFile(
-					Utils.buildPath(Constants.DEFAULT_ROOT, "catroid_sunglasses.png"), RESOURCE_IMAGE, getActivity());
-			Bundle bundleForGallery = new Bundle();
-			bundleForGallery.putString("filePath", imageFile.getAbsolutePath());
-			Intent intent = new Intent(getInstrumentation().getContext(),
-					at.tugraz.ist.catroid.uitest.mockups.MockGalleryActivity.class);
-			intent.putExtras(bundleForGallery);
+	}
 
-		} catch (IOException e) {
-			e.printStackTrace();
-			fail("Image was not created");
-		}
+	public void addSound() {
+		File soundFile = UiTestUtils.saveFileToProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, "longsound.mp3",
+				RESOURCE_SOUND, getInstrumentation().getContext(), UiTestUtils.FileTypes.SOUND);
+		SoundInfo soundInfo = new SoundInfo();
+		soundInfo.setSoundFileName(soundFile.getName());
+		soundInfo.setTitle(soundName);
+		soundInfoList.add(soundInfo);
 
-		solo.clickOnButton(R.id.btn_action_add_button);
-		solo.clickOnText("Galery");
-		solo.sleep(20000);
+		ProjectManager.getInstance().fileChecksumContainer.addChecksum(soundInfo.getChecksum(),
+				soundInfo.getAbsolutePath());
+	}
+
+	public void testAddSoundDialog() {
+		soundInfoList = projectManager.getCurrentSprite().getSoundList();
+		int oldSoundCount = soundInfoList.size();
+		addSound();
+		int newSoundCount = soundInfoList.size();
+		assertEquals("The sound has not been added, but it should have been.", oldSoundCount + 1, newSoundCount);
+
+		solo.sleep(500);
+		SoundActivity.soundAddedFlag = true;
+		solo.clickOnText(getActivity().getString(R.string.sounds));
+		solo.sleep(500);
+		assertTrue("The notification about the added sound could not be found",
+				solo.searchText(getActivity().getString(R.string.notification_sound_added)));
 
 	}
 }
