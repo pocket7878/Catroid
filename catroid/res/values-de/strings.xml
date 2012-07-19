@@ -294,6 +294,10 @@
     <string name="upload_description">Beschreibung:</string>
     <string name="project_rename">(Das Projekt wird umbenannt.)</string>
     <string name="size_of_project">Größe des Projekts:</string>
+    <string name="notification_costume_added">Kostüm wurde hinzugefügt.</string>
+    <string name="notification_background_added">Hintergrund wurde hinzugefügt.</string>
+    <string name="notification_sound_added">Klang wurde hinzugefügt.</string>
+    
 
     <!-- Bluetooth Connection Strings -->
 
