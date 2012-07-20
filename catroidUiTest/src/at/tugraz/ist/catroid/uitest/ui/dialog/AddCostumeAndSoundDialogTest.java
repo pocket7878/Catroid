@@ -25,14 +25,13 @@ package at.tugraz.ist.catroid.uitest.ui.dialog;
 import java.io.File;
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.test.ActivityInstrumentationTestCase2;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.SoundInfo;
-import at.tugraz.ist.catroid.ui.CostumeActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
-import at.tugraz.ist.catroid.ui.SoundActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -86,6 +85,9 @@ public class AddCostumeAndSoundDialogTest extends ActivityInstrumentationTestCas
 	}
 
 	public void testAddCostumeDialog() {
+		Activity activity = getActivity();
+		solo.clickOnText(activity.getString(R.string.backgrounds));
+
 		costumeDataList = projectManager.getCurrentSprite().getCostumeDataList();
 		int oldCostumeCount = costumeDataList.size();
 		addCostume();
@@ -93,11 +95,17 @@ public class AddCostumeAndSoundDialogTest extends ActivityInstrumentationTestCas
 		assertEquals("The costume has not been added, but it should have been", oldCostumeCount + 1, newCostumeCount);
 
 		solo.sleep(500);
-		CostumeActivity.costumeAddedFlag = true;
-		solo.clickOnText(getActivity().getString(R.string.backgrounds));
+		Activity currentActivity = getActivity().getCurrentActivity();
+		UiTestUtils.setPrivateField("costumeAddedFlag", currentActivity, true, false);
+		boolean costumeAddedFlag = (Boolean) UiTestUtils.getPrivateField("costumeAddedFlag", currentActivity);
+		assertEquals("The costumeAddedFlag was not set as it should have been.", costumeAddedFlag, true);
+
+		solo.clickOnText(activity.getString(R.string.scripts));
+		solo.sleep(200);
+		solo.clickOnText(activity.getString(R.string.backgrounds));
 		solo.sleep(500);
 		assertTrue("The notification about the added background could not be found",
-				solo.searchText(getActivity().getString(R.string.notification_background_added)));
+				solo.searchText(activity.getString(R.string.notification_background_added)));
 
 	}
 
@@ -114,6 +122,9 @@ public class AddCostumeAndSoundDialogTest extends ActivityInstrumentationTestCas
 	}
 
 	public void testAddSoundDialog() {
+		Activity activity = getActivity();
+		solo.clickOnText(activity.getString(R.string.sounds));
+
 		soundInfoList = projectManager.getCurrentSprite().getSoundList();
 		int oldSoundCount = soundInfoList.size();
 		addSound();
@@ -121,11 +132,17 @@ public class AddCostumeAndSoundDialogTest extends ActivityInstrumentationTestCas
 		assertEquals("The sound has not been added, but it should have been.", oldSoundCount + 1, newSoundCount);
 
 		solo.sleep(500);
-		SoundActivity.soundAddedFlag = true;
-		solo.clickOnText(getActivity().getString(R.string.sounds));
+		Activity currentActivity = getActivity().getCurrentActivity();
+		UiTestUtils.setPrivateField("soundAddedFlag", currentActivity, true, false);
+		boolean soundAddedFlag = (Boolean) UiTestUtils.getPrivateField("soundAddedFlag", currentActivity);
+		assertEquals("The costumeAddedFlag was not set as it should have been.", soundAddedFlag, true);
+
+		solo.clickOnText(activity.getString(R.string.scripts));
+		solo.sleep(200);
+		solo.clickOnText(activity.getString(R.string.sounds));
 		solo.sleep(500);
 		assertTrue("The notification about the added sound could not be found",
-				solo.searchText(getActivity().getString(R.string.notification_sound_added)));
+				solo.searchText(activity.getString(R.string.notification_sound_added)));
 
 	}
 }

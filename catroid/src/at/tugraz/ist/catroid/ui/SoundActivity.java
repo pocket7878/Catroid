@@ -54,7 +54,7 @@ public class SoundActivity extends ListActivity {
 	private ArrayList<SoundInfo> soundInfoList;
 
 	private boolean addSoundButtonClicked = false;
-	public static boolean soundAddedFlag = false;
+	private boolean soundAddedFlag = false;
 
 	private final int REQUEST_SELECT_MUSIC = 0;
 
@@ -271,11 +271,6 @@ public class SoundActivity extends ListActivity {
 		scriptTabActivity.selectedSoundInfo = soundInfoList.get(position);
 		scriptTabActivity.selectedPosition = position;
 		scriptTabActivity.showDialog(ScriptTabActivity.DIALOG_DELETE_SOUND);
-
-	}
-
-	public static void setCostumeAddedFlag(boolean soundAdded) {
-		soundAddedFlag = soundAdded;
 
 	}
 

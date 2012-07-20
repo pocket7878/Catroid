@@ -56,9 +56,10 @@ import at.tugraz.ist.catroid.utils.Utils;
 
 public class CostumeActivity extends ListActivity {
 	private ArrayList<CostumeData> costumeDataList;
-	private boolean addCostumeButtonClicked = false;
 
-	public static boolean costumeAddedFlag = false;
+	private boolean addCostumeButtonClicked = false;
+	private boolean costumeAddedFlag = false;
+
 	public static final int REQUEST_SELECT_IMAGE = 0;
 	public static final int REQUEST_PAINTROID_EDIT_IMAGE = 1;
 
