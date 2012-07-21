@@ -29,7 +29,6 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -38,7 +37,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
@@ -155,7 +153,7 @@ public class ProjectActivity extends ListActivity {
 				+ ProjectManager.getInstance().getCurrentProject().getName();
 		activityHelper.setupActionBar(false, title);
 
-		activityHelper.addActionButton(R.id.btn_action_add_sprite, R.drawable.ic_plus_black, R.string.add,
+		activityHelper.addActionButton(R.id.btn_action_add_button, R.drawable.ic_plus_black, R.string.add,
 				new View.OnClickListener() {
 					public void onClick(View v) {
 						showDialog(DIALOG_NEW_SPRITE);
@@ -283,34 +281,6 @@ public class ProjectActivity extends ListActivity {
 		if (projectManager.getCurrentProject() != null) {
 			projectManager.saveProject();
 		}
-	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			Utils.saveToPreferences(this, Consts.PREF_PROJECTNAME_KEY, ProjectManager.getInstance().getCurrentProject()
-					.getName());
-			Intent intent = new Intent(this, MainMenuActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			this.startActivity(intent);
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-
-	public void handlePositiveButtonCopySprite(View v) {
-		copyDialog.handleOkButton();
-	}
-
-	public void handleNegativeButtonCopySprite(View v) {
-		copyDialog.dialog.cancel();
-	}
-
-	public void handlePositiveButtonNewSprite(View v) {
-		newSpriteDialog.handleOkButton();
-	}
-
-	public void handleNegativeButtonNewSprite(View v) {
-		newSpriteDialog.dialog.cancel();
 	}
 
 	public void handleProjectActivityItemLongClick(View view) {

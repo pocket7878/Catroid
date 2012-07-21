@@ -306,6 +306,7 @@ public class Sprite implements Serializable {
 	public void addScript(Script script) {
 		if (script != null && !scriptList.contains(script)) {
 			scriptList.add(script);
+
 		}
 	}
 
@@ -321,6 +322,14 @@ public class Sprite implements Serializable {
 
 	public int getNumberOfScripts() {
 		return scriptList.size();
+	}
+
+	public int getNumberOfBricks() {
+		int brickCount = 0;
+		for (Script s : scriptList) {
+			brickCount += s.getBrickList().size();
+		}
+		return brickCount;
 	}
 
 	public int getScriptIndex(Script script) {
@@ -355,10 +364,6 @@ public class Sprite implements Serializable {
 	@Override
 	public String toString() {
 		return name;
-	}
-
-	public int getScriptCount() {
-		return scriptList.size();
 	}
 
 	public synchronized boolean isAlive(Thread thread) {

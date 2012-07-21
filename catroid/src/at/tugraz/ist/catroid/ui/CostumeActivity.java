@@ -44,7 +44,7 @@ import android.view.View;
 import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.StorageHandler;
@@ -83,7 +83,7 @@ public class CostumeActivity extends ListActivity {
 		ActivityHelper activityHelper = scriptTabActivity.activityHelper;
 		if (activityHelper != null) {
 			//set new functionality for actionbar add button:
-			activityHelper.changeClickListener(R.id.btn_action_add_sprite, createAddCostumeClickListener());
+			activityHelper.changeClickListener(R.id.btn_action_add_button, createAddCostumeClickListener());
 			//set new icon for actionbar plus button:
 			int addButtonIcon;
 			Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
@@ -92,7 +92,7 @@ public class CostumeActivity extends ListActivity {
 			} else {
 				addButtonIcon = R.drawable.ic_actionbar_shirt;
 			}
-			activityHelper.changeButtonIcon(R.id.btn_action_add_sprite, addButtonIcon);
+			activityHelper.changeButtonIcon(R.id.btn_action_add_button, addButtonIcon);
 		}
 
 	}
@@ -107,6 +107,7 @@ public class CostumeActivity extends ListActivity {
 	}
 
 	public void updateCostumeAdapter(String name, String fileName) {
+		name = Utils.getUniqueCostumeName(name);
 		CostumeData costumeData = new CostumeData();
 		costumeData.setCostumeFilename(fileName);
 		costumeData.setCostumeName(name);
@@ -151,7 +152,7 @@ public class CostumeActivity extends ListActivity {
 		//get path of image - will work for most applications
 		Bundle bundle = intent.getExtras();
 		if (bundle != null) {
-			originalImagePath = bundle.getString(this.getString(R.string.extra_picture_path_paintroid));
+			originalImagePath = bundle.getString(Constants.EXTRA_PICTURE_PATH_PAINTROID);
 		}
 		if (originalImagePath == null || originalImagePath.equals("")) {
 			Uri imageUri = intent.getData();
@@ -212,7 +213,7 @@ public class CostumeActivity extends ListActivity {
 
 	private void loadPaintroidImageIntoCatroid(Intent intent) {
 		Bundle bundle = intent.getExtras();
-		String pathOfPaintroidImage = bundle.getString(this.getString(R.string.extra_picture_path_paintroid));
+		String pathOfPaintroidImage = bundle.getString(Constants.EXTRA_PICTURE_PATH_PAINTROID);
 
 		int[] imageDimensions = ImageEditing.getImageDimensions(pathOfPaintroidImage);
 		if (imageDimensions[0] < 0 || imageDimensions[1] < 0) {
@@ -249,7 +250,9 @@ public class CostumeActivity extends ListActivity {
 				Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 
 				Bundle bundleForPaintroid = new Bundle();
-				bundleForPaintroid.putString(CostumeActivity.this.getString(R.string.extra_picture_path_paintroid), "");
+				bundleForPaintroid.putString(Constants.EXTRA_PICTURE_PATH_PAINTROID, "");
+				bundleForPaintroid.putString(Constants.EXTRA_PICTURE_NAME_PAINTROID,
+						CostumeActivity.this.getString(R.string.default_costume_name));
 
 				intent.setType("image/*");
 				intent.putExtras(bundleForPaintroid);
@@ -261,9 +264,10 @@ public class CostumeActivity extends ListActivity {
 
 	public void handleDeleteCostumeButton(View v) {
 		int position = (Integer) v.getTag();
-		StorageHandler.getInstance().deleteFile(costumeDataList.get(position).getAbsolutePath());
-		costumeDataList.remove(position);
-		((CostumeAdapter) getListAdapter()).notifyDataSetChanged();
+		ScriptTabActivity scriptTabActivity = (ScriptTabActivity) getParent();
+		scriptTabActivity.selectedCostumeData = costumeDataList.get(position);
+		scriptTabActivity.selectedPosition = position;
+		scriptTabActivity.showDialog(ScriptTabActivity.DIALOG_DELETE_COSTUME);
 	}
 
 	public void handleRenameCostumeButton(View v) {
@@ -302,7 +306,7 @@ public class CostumeActivity extends ListActivity {
 					.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
 							Intent downloadPaintroidIntent = new Intent(Intent.ACTION_VIEW, Uri
-									.parse(Consts.PAINTROID_DOWNLOAD_LINK));
+									.parse(Constants.PAINTROID_DOWNLOAD_LINK));
 							startActivity(downloadPaintroidIntent);
 						}
 					}).setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
@@ -321,10 +325,10 @@ public class CostumeActivity extends ListActivity {
 		scriptTabActivity.selectedCostumeData = costumeDataList.get(position);
 
 		Bundle bundleForPaintroid = new Bundle();
-		bundleForPaintroid.putString(getString(R.string.extra_picture_path_paintroid), costumeDataList.get(position)
+		bundleForPaintroid.putString(Constants.EXTRA_PICTURE_PATH_PAINTROID, costumeDataList.get(position)
 				.getAbsolutePath());
-		bundleForPaintroid.putInt(getString(R.string.extra_x_value_paintroid), 0);
-		bundleForPaintroid.putInt(getString(R.string.extra_x_value_paintroid), 0);
+		bundleForPaintroid.putInt(Constants.EXTRA_X_VALUE_PAINTROID, 0);
+		bundleForPaintroid.putInt(Constants.EXTRA_X_VALUE_PAINTROID, 0);
 		intent.putExtras(bundleForPaintroid);
 		intent.addCategory("android.intent.category.LAUNCHER");
 		startActivityForResult(intent, REQUEST_PAINTROID_EDIT_IMAGE);

@@ -26,7 +26,7 @@ import java.io.File;
 import java.io.IOException;
 
 import android.content.Context;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.FileChecksumContainer;
 import at.tugraz.ist.catroid.common.MessageContainer;
 import at.tugraz.ist.catroid.common.StandardProjectHandler;
@@ -65,7 +65,11 @@ public class ProjectManager {
 
 			project = StorageHandler.getInstance().loadProject(projectName);
 			if (project == null) {
-				project = StandardProjectHandler.createAndSaveStandardProject(context);
+				project = Utils.findValidProject();
+				if (project == null) {
+					project = StandardProjectHandler.createAndSaveStandardProject(context);
+				}
+
 				if (errorMessage) {
 					Utils.displayErrorMessage(context, context.getString(R.string.error_load_project));
 					return false;
@@ -78,6 +82,9 @@ public class ProjectManager {
 
 			currentSprite = null;
 			currentScript = null;
+
+			Utils.saveToPreferences(context, Constants.PREF_PROJECTNAME_KEY, project.getName());
+
 			return true;
 		} catch (Exception e) {
 			Utils.displayErrorMessage(context, context.getString(R.string.error_load_project));
@@ -149,24 +156,21 @@ public class ProjectManager {
 			return false;
 		}
 
-		File oldProjectDirectory = new File(Utils.buildPath(Consts.DEFAULT_ROOT, project.getName()));
-		File oldProjectFile = new File(Utils.buildPath(Consts.DEFAULT_ROOT, project.getName(), project.getName()
-				+ Consts.PROJECT_EXTENTION));
+		String oldProjectPath = Utils.buildProjectPath(project.getName());
+		File oldProjectDirectory = new File(oldProjectPath);
 
-		File newProjectDirectory = new File(Utils.buildPath(Consts.DEFAULT_ROOT, newProjectName));
-		File newProjectFile = new File(Utils.buildPath(Consts.DEFAULT_ROOT, project.getName(), newProjectName
-				+ Consts.PROJECT_EXTENTION));
+		String newProjectPath = Utils.buildProjectPath(newProjectName);
+		File newProjectDirectory = new File(newProjectPath);
 
 		project.setName(newProjectName);
 
-		boolean fileRenamed = oldProjectFile.renameTo(newProjectFile);
 		boolean directoryRenamed = oldProjectDirectory.renameTo(newProjectDirectory);
 
-		if (directoryRenamed && fileRenamed) {
+		if (directoryRenamed) {
 			this.saveProject();
 		}
 
-		return (directoryRenamed && fileRenamed);
+		return (directoryRenamed);
 	}
 
 	public Sprite getCurrentSprite() {
@@ -242,4 +246,5 @@ public class ProjectManager {
 
 		return true;
 	}
+
 }

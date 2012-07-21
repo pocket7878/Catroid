@@ -35,9 +35,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
-import at.tugraz.ist.catroid.utils.Utils;
 
 public class LoadProjectDialog extends Dialog {
 	private final Context context;
@@ -58,7 +57,7 @@ public class LoadProjectDialog extends Dialog {
 		setTitle(R.string.load_project_dialog_title);
 		setCanceledOnTouchOutside(true);
 
-		File rootDirectory = new File(Consts.DEFAULT_ROOT);
+		File rootDirectory = new File(Constants.DEFAULT_ROOT);
 		searchForProjectFiles(rootDirectory);
 		adapter = new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, adapterFileList);
 
@@ -81,7 +80,7 @@ public class LoadProjectDialog extends Dialog {
 	protected void onStart() {
 		// update List:
 		adapterFileList.clear();
-		File rootDirectory = new File(Consts.DEFAULT_ROOT);
+		File rootDirectory = new File(Constants.DEFAULT_ROOT);
 		searchForProjectFiles(rootDirectory);
 		adapter.notifyDataSetChanged();
 		super.onStart();
@@ -91,9 +90,8 @@ public class LoadProjectDialog extends Dialog {
 		File[] sdFileList = directory.listFiles();
 		for (File file : sdFileList) {
 			if (file.isDirectory()) {
-				searchForProjectFiles(file);
-			} else if (file.isFile() && file.getName().endsWith(Consts.PROJECT_EXTENTION)) {
-				adapterFileList.add(Utils.getProjectName(file.getName()));
+				//searchForProjectFiles(file);
+				adapterFileList.add(file.getName());
 			}
 		}
 	}

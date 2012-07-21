@@ -45,6 +45,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 	private DragAndDropListView listView;
 	private Sprite sprite;
 	private Script scriptToEdit;
+	private boolean addNewScript;
 	private static final int DIALOG_ADD_BRICK = 2;
 
 	private void initListeners() {
@@ -65,6 +66,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 		listView.setAdapter(adapter);
 
 		registerForContextMenu(listView);
+		addNewScript = false;
 	}
 
 	@Override
@@ -76,7 +78,6 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
-
 		ProjectManager projectManager = ProjectManager.getInstance();
 		if (projectManager.getCurrentProject() != null) {
 			projectManager.saveProject();
@@ -105,22 +106,40 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 		ScriptTabActivity scriptTabActivity = (ScriptTabActivity) getParent();
 		if (scriptTabActivity != null && scriptTabActivity.activityHelper != null) {
 			//set new functionality for actionbar add button:
-			scriptTabActivity.activityHelper.changeClickListener(R.id.btn_action_add_sprite,
+			scriptTabActivity.activityHelper.changeClickListener(R.id.btn_action_add_button,
 					createAddBrickClickListener());
 			//set new icon for actionbar plus button:
-			scriptTabActivity.activityHelper.changeButtonIcon(R.id.btn_action_add_sprite, R.drawable.ic_plus_black);
+			scriptTabActivity.activityHelper.changeButtonIcon(R.id.btn_action_add_button, R.drawable.ic_plus_black);
 		}
 	}
 
 	private View.OnClickListener createAddBrickClickListener() {
 		return new View.OnClickListener() {
 			public void onClick(View v) {
+				listView.setHoveringBrick();
+				adapter.notifyDataSetChanged();
 				getParent().showDialog(DIALOG_ADD_BRICK);
 			}
 		};
 	}
 
+	public void setAddNewScript() {
+		addNewScript = true;
+	}
+
 	public void updateAdapterAfterAddNewBrick(DialogInterface dialog) {
+
+		if (addNewScript) {
+			addNewScript = false;
+		} else {
+			int visibleF = listView.getFirstVisiblePosition();
+			int visibleL = listView.getLastVisiblePosition();
+			int pos = ((visibleL - visibleF) / 2);
+			pos += visibleF;
+			pos = adapter.rearangeBricks(pos);
+			adapter.setInsertedBrickpos(pos);
+			listView.setInsertedBrick(pos);
+		}
 		adapter.notifyDataSetChanged();
 	}
 
@@ -134,7 +153,6 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
-
 		if (view.getId() == R.id.brick_list_view) {
 
 			menu.setHeaderTitle(R.string.script_context_menu_title);
@@ -166,4 +184,5 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 		}
 		return true;
 	}
+
 }

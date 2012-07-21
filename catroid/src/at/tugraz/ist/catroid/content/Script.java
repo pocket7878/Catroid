@@ -71,7 +71,6 @@ public abstract class Script implements Serializable {
 			i = executingBrickIndex;
 		}
 		isFinished = true;
-		sprite.setInactive(Thread.currentThread());
 	}
 
 	public void addBrick(Brick brick) {
@@ -139,6 +138,18 @@ public abstract class Script implements Serializable {
 			}
 		}
 		return false;
+	}
+
+	public int containsBrickOfTypeReturnsFirstIndex(Class<?> type) {
+		int i = 0;
+		for (Brick brick : brickList) {
+
+			if (brick.getClass() == type) {
+				return i;
+			}
+			i++;
+		}
+		return -1;
 	}
 
 	//
