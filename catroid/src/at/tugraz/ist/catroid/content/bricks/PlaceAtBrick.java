@@ -135,7 +135,7 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 	}
 
 	public Brick cloneCopySprite(Sprite sprite) {
-		PlaceAtBrick brick = new PlaceAtBrick(getSprite(), xPosition, yPosition);
+		PlaceAtBrick brick = new PlaceAtBrick(sprite, xPosition, yPosition);
 		return brick;
 	}
 }
