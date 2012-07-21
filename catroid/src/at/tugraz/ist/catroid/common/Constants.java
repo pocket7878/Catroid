@@ -29,6 +29,7 @@ public final class Constants {
 	public static final String PROJECTCODE_NAME = "projectcode.xml";
 	public static final String CATROID_EXTENTION = ".catroid";
 	public static final String RECORDING_EXTENTION = ".mp3";
+	public static final String SPACE = " ";
 
 	public static final String DEFAULT_ROOT = Environment.getExternalStorageDirectory().getAbsolutePath() + "/catroid";
 	public static final String TMP_PATH = DEFAULT_ROOT + "/tmp";

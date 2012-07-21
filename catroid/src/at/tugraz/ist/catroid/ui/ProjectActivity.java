@@ -37,6 +37,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
@@ -242,7 +243,7 @@ public class ProjectActivity extends ListActivity {
 			case DIALOG_COPY_SPRITE:
 				if (dialog != null && spriteToEdit != null) {
 					EditText spriteTitleInput = (EditText) dialog.findViewById(R.id.dialog_text_EditText);
-					spriteTitleInput.setText(spriteToEdit.getName() + Consts.SPACE
+					spriteTitleInput.setText(spriteToEdit.getName() + Constants.SPACE
 							+ getString(R.string.copy_sprite_extension));
 					//EditText spriteTitleInput = (EditText) dialog.findViewById(R.id.dialog_copy_sprite_editText);
 					//spriteTitleInput.setText(spriteToEdit.getName() + Consts.SPACE
