@@ -34,6 +34,7 @@ import android.view.View;
 import android.widget.ImageView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
@@ -43,12 +44,14 @@ import at.tugraz.ist.catroid.utils.Utils;
 public class ScriptActivity extends Activity implements OnCancelListener {
 	private BrickAdapter adapter;
 	private DragAndDropListView listView;
+	private Project currentProject;
 	private Sprite sprite;
 	private Script scriptToEdit;
 	private boolean addNewScript;
 	private static final int DIALOG_ADD_BRICK = 2;
 
 	private void initListeners() {
+		currentProject = ProjectManager.getInstance().getCurrentProject();
 		sprite = ProjectManager.getInstance().getCurrentSprite();
 		if (sprite == null) {
 			return;
@@ -80,7 +83,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 		super.onPause();
 
 		ProjectManager projectManager = ProjectManager.getInstance();
-		if (projectManager.getCurrentProject() != null) {
+		if (currentProject != null) {
 			projectManager.saveProject();
 		}
 	}
@@ -88,6 +91,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 	@Override
 	protected void onStart() {
 		super.onStart();
+		currentProject = ProjectManager.getInstance().getCurrentProject();
 		sprite = ProjectManager.getInstance().getCurrentSprite();
 		if (sprite == null) {
 			return;
@@ -140,6 +144,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 			listView.setInsertedBrick(pos);
 		}
 		adapter.notifyDataSetChanged();
+
 	}
 
 	public void onCancel(DialogInterface arg0) {

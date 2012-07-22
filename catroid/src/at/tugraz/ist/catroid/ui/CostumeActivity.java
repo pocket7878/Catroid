@@ -58,6 +58,9 @@ public class CostumeActivity extends ListActivity {
 	private ArrayList<CostumeData> costumeDataList;
 	private Project currentProject = ProjectManager.getInstance().getCurrentProject();
 
+	private boolean addButtonClicked = false;
+	private int costumeCountBeforeClickOnAddButton;
+
 	public static final int REQUEST_SELECT_IMAGE = 0;
 	public static final int REQUEST_PAINTROID_EDIT_IMAGE = 1;
 
@@ -89,12 +92,21 @@ public class CostumeActivity extends ListActivity {
 			//set new icon for actionbar plus button:
 			int addButtonIcon;
 			Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
-			if (ProjectManager.getInstance().getCurrentProject().getSpriteList().indexOf(currentSprite) == 0) {
+			if (currentProject.getSpriteList().indexOf(currentSprite) == 0) {
 				addButtonIcon = R.drawable.ic_background;
 			} else {
 				addButtonIcon = R.drawable.ic_actionbar_shirt;
 			}
 			activityHelper.changeButtonIcon(R.id.btn_action_add_button, addButtonIcon);
+		}
+
+		int currentCostumeCount = costumeDataList.size();
+
+		if (currentProject.isDefaultProject()) {
+			if (addButtonClicked && currentCostumeCount == costumeCountBeforeClickOnAddButton + 1) {
+				currentProject.setDefaultProjectFlag(false);
+				addButtonClicked = false;
+			}
 		}
 
 	}
@@ -123,6 +135,7 @@ public class CostumeActivity extends ListActivity {
 				listView.setSelection(listView.getCount() - 1);
 			}
 		});
+
 	}
 
 	private void reloadAdapter() {
@@ -251,6 +264,9 @@ public class CostumeActivity extends ListActivity {
 			public void onClick(View v) {
 				Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 
+				addButtonClicked = true;
+				costumeCountBeforeClickOnAddButton = costumeDataList.size();
+
 				Bundle bundleForPaintroid = new Bundle();
 				bundleForPaintroid.putString(Constants.EXTRA_PICTURE_PATH_PAINTROID, "");
 				bundleForPaintroid.putString(Constants.EXTRA_PICTURE_NAME_PAINTROID,
@@ -260,6 +276,7 @@ public class CostumeActivity extends ListActivity {
 				intent.putExtras(bundleForPaintroid);
 				Intent chooser = Intent.createChooser(intent, getString(R.string.select_image));
 				startActivityForResult(chooser, REQUEST_SELECT_IMAGE);
+
 			}
 		};
 	}

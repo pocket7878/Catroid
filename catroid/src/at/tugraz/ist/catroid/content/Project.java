@@ -58,10 +58,11 @@ public class Project implements Serializable {
 	public String description;
 
 	@XStreamOmitField
-	private boolean isDefaultProject = false;
+	private boolean isDefaultProject;
 
 	public Project(Context context, String name) {
 		this.projectName = name;
+		this.isDefaultProject = false;
 
 		ifLandscapeSwitchWidthAndHeight();
 		virtualScreenWidth = Values.SCREEN_WIDTH;

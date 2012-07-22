@@ -30,10 +30,8 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.CostumeData;
-import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.stage.NativeAppActivity;
 
@@ -84,23 +82,11 @@ public class SetCostumeBrick implements Brick {
 
 		costumebrickSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-			ProjectManager projectManager = ProjectManager.getInstance();
-			Project currentProject = ProjectManager.getInstance().getCurrentProject();
-
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				if (position == 0) {
 					costumeData = null;
 				} else {
 					costumeData = (CostumeData) parent.getItemAtPosition(position);
-				}
-
-				if (currentProject.isDefaultProject()) {
-					if (projectManager.getStandardProjectSetCostumeBrickCount() == 0) {
-						currentProject.setDefaultProjectFlag(false);
-
-					} else {
-						projectManager.decrementStandardProjectCostumeCount();
-					}
 				}
 
 			}

@@ -41,6 +41,7 @@ import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.SoundInfo;
+import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.adapter.SoundAdapter;
 import at.tugraz.ist.catroid.utils.ActivityHelper;
@@ -51,6 +52,10 @@ public class SoundActivity extends ListActivity {
 
 	public MediaPlayer mediaPlayer;
 	private ArrayList<SoundInfo> soundInfoList;
+	private Project currentProject = ProjectManager.getInstance().getCurrentProject();
+
+	private boolean addButtonClicked = false;
+	private int soundCountBeforeClickOnAddButton;
 
 	private final int REQUEST_SELECT_MUSIC = 0;
 
@@ -86,12 +91,25 @@ public class SoundActivity extends ListActivity {
 			activityHelper.changeButtonIcon(R.id.btn_action_add_button, R.drawable.ic_music);
 		}
 
+		int currentCostumeCount = soundInfoList.size();
+
+		if (currentProject.isDefaultProject()) {
+			if (addButtonClicked && currentCostumeCount == soundCountBeforeClickOnAddButton + 1) {
+				currentProject.setDefaultProjectFlag(false);
+				addButtonClicked = false;
+			}
+		}
+
 	}
 
 	private View.OnClickListener createAddSoundClickListener() {
 		return new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+
+				addButtonClicked = true;
+				soundCountBeforeClickOnAddButton = soundInfoList.size();
+
 				intent.setType("audio/*");
 				startActivityForResult(Intent.createChooser(intent, getString(R.string.sound_select_source)),
 						REQUEST_SELECT_MUSIC);
