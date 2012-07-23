@@ -134,12 +134,8 @@ public class PhysicWorld implements Serializable {
 		if (sprite.getName().equals("Background")) {
 			return;
 		}
-		int[] resolution = sprite.costume.getCostumeData().getResolution();
-		float width = PhysicWorldConverter.lengthCatToBox2d(resolution[0]);
-		float height = PhysicWorldConverter.lengthCatToBox2d(resolution[1]);
 
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width / 2f, height / 2f);
-		objects.get(sprite).setShape(shape);
+		PhysicShapeBuilder shapeBuilder = new PhysicShapeBuilder();
+		objects.get(sprite).setShape(shapeBuilder.createShape(sprite.costume));
 	}
 }
