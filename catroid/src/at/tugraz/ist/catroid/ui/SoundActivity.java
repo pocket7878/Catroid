@@ -41,6 +41,7 @@ import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.SoundInfo;
+import at.tugraz.ist.catroid.content.bricks.PlaySoundBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.adapter.SoundAdapter;
 import at.tugraz.ist.catroid.utils.ActivityHelper;
@@ -53,6 +54,8 @@ public class SoundActivity extends ListActivity {
 	private ArrayList<SoundInfo> soundInfoList;
 
 	private final int REQUEST_SELECT_MUSIC = 0;
+	public static int STARTED_FROM_SCRIPTACTIVITY = 0;
+	public static int GO_BACK_TO_SCRIPTACTIVITY = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,6 +87,11 @@ public class SoundActivity extends ListActivity {
 			activityHelper.changeClickListener(R.id.btn_action_add_button, createAddSoundClickListener());
 			//set new icon for actionbar plus button:
 			activityHelper.changeButtonIcon(R.id.btn_action_add_button, R.drawable.ic_music);
+		}
+
+		if (STARTED_FROM_SCRIPTACTIVITY == 1) {
+			STARTED_FROM_SCRIPTACTIVITY = 0;
+			activityHelper.clickOnButton(R.id.btn_action_add_button);
 		}
 
 	}
@@ -169,6 +177,15 @@ public class SoundActivity extends ListActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+
+		if (resultCode != Activity.RESULT_OK) {
+			if (GO_BACK_TO_SCRIPTACTIVITY == 1) {
+				GO_BACK_TO_SCRIPTACTIVITY = 0;
+				ScriptTabActivity.tabHost.setCurrentTab(0);
+			}
+			return;
+		}
+
 		//when new sound title is selected and ready to be added to the catroid project
 		if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_SELECT_MUSIC) {
 			String audioPath = "";
@@ -200,11 +217,22 @@ public class SoundActivity extends ListActivity {
 				String soundFileName = soundFile.getName();
 				String soundTitle = soundFileName.substring(soundFileName.indexOf('_') + 1,
 						soundFileName.lastIndexOf('.'));
+
+				if (GO_BACK_TO_SCRIPTACTIVITY == 1) {
+					PlaySoundBrick.loadedSoundTitleViaNew = soundTitle;
+				}
+
 				updateSoundAdapter(soundTitle, soundFileName);
 			} catch (Exception e) {
 				e.printStackTrace();
 				Utils.displayErrorMessage(this, this.getString(R.string.error_load_sound));
 			}
+
+			if (GO_BACK_TO_SCRIPTACTIVITY == 1) {
+				GO_BACK_TO_SCRIPTACTIVITY = 0;
+				ScriptTabActivity.tabHost.setCurrentTab(0);
+			}
+
 		}
 	}
 

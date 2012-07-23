@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -34,12 +35,17 @@ import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.stage.NativeAppActivity;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid.ui.SoundActivity;
 
 public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 	private static final long serialVersionUID = 1L;
 
 	private SoundInfo soundInfo;
 	private Sprite sprite;
+	public static String loadedSoundTitleViaNew;
+	// Spinner loses his selection after tabchange....
+	private SoundInfo oldSelectedSound;
 
 	public PlaySoundBrick(Sprite sprite) {
 		this.sprite = sprite;
@@ -74,6 +80,13 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 
 		if (sprite.getSoundList().contains(soundInfo)) {
 			soundbrickSpinner.setSelection(sprite.getSoundList().indexOf(soundInfo) + 1, true);
+			this.oldSelectedSound = sprite.getSoundList().get(sprite.getSoundList().indexOf(soundInfo));
+		} else if (loadedSoundTitleViaNew != null) {
+			oldSelectedSound = sprite.getSoundList().get(sprite.getSoundList().size() - 1);
+			soundbrickSpinner.setSelection(sprite.getSoundList().size(), true);
+			loadedSoundTitleViaNew = null;
+		} else if (oldSelectedSound != null) {
+			soundbrickSpinner.setSelection(sprite.getSoundList().indexOf(oldSelectedSound) + 1);
 		} else {
 			soundbrickSpinner.setSelection(0);
 		}
@@ -85,12 +98,17 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 		ArrayAdapter<SoundInfo> arrayAdapter = new ArrayAdapter<SoundInfo>(context,
 				android.R.layout.simple_spinner_item);
 		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		SoundInfo dummySoundInfo = new SoundInfo();
-		dummySoundInfo.setTitle(context.getString(R.string.broadcast_nothing_selected));
-		arrayAdapter.add(dummySoundInfo);
+		SoundInfo noneDummySoundInfo = new SoundInfo();
+		noneDummySoundInfo.setTitle(context.getString(R.string.brick_set_costume_none));
+		arrayAdapter.add(noneDummySoundInfo);
 		for (SoundInfo soundInfo : sprite.getSoundList()) {
 			arrayAdapter.add(soundInfo);
 		}
+
+		SoundInfo newDummySoundInfo = new SoundInfo();
+		newDummySoundInfo.setTitle(context.getString(R.string.brick_set_costume_new));
+		arrayAdapter.add(newDummySoundInfo);
+
 		return arrayAdapter;
 	}
 
@@ -113,6 +131,20 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 			soundInfo = null;
 		} else {
 			soundInfo = (SoundInfo) parent.getItemAtPosition(position);
+
+			if (soundInfo.getTitle().equals(parent.getContext().getString(R.string.brick_set_costume_new))) {
+
+				/**
+				 * This may be bad? Since I had to change ScriptTabAcitvity.tabHost to static ;)
+				 * Flags are selfexplaining...
+				 */
+				if (ScriptTabActivity.tabHost != null) {
+					SoundActivity.STARTED_FROM_SCRIPTACTIVITY = 1;
+					SoundActivity.GO_BACK_TO_SCRIPTACTIVITY = 1;
+					ScriptTabActivity.tabHost.setCurrentTab(2);
+				}
+			}
+
 		}
 	}
 

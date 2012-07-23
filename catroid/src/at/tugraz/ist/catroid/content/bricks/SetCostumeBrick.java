@@ -34,12 +34,21 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.stage.NativeAppActivity;
+import at.tugraz.ist.catroid.ui.CostumeActivity;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 
 public class SetCostumeBrick implements Brick {
 	private static final long serialVersionUID = 1L;
+	public static String loadedImageNameViaNew;
 	private Sprite sprite;
 	private CostumeData costumeData;
+	// Spinner loses his selection after tabchange....
+	private CostumeData oldSelectedCostume;
 	private transient View view;
+
+	//We need this because of the wrong behavior of OnItemSelected....
+	 
+	public static boolean startUpFalseBehavoirCheck = false;
 
 	public SetCostumeBrick(Sprite sprite) {
 		this.sprite = sprite;
@@ -82,10 +91,33 @@ public class SetCostumeBrick implements Brick {
 
 		costumebrickSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				if (position == 0) {
-					costumeData = null;
+
+				if (startUpFalseBehavoirCheck == false) {
+					startUpFalseBehavoirCheck = true;
 				} else {
-					costumeData = (CostumeData) parent.getItemAtPosition(position);
+
+					if (position == 0) {
+						costumeData = null;
+
+					} else {
+
+						costumeData = (CostumeData) parent.getItemAtPosition(position);
+
+						if (costumeData.getCostumeName().equals(context.getString(R.string.brick_set_costume_new))) {
+							costumeData = null;
+
+							/**
+							 * This may be bad? Since I had to change ScriptTabAcitvity.tabHost to static ;)
+							 * Flags are selfexplaining...
+							 */
+							if (ScriptTabActivity.tabHost != null) {
+								CostumeActivity.STARTED_FROM_SCRIPTACTIVITY = 1;
+								CostumeActivity.GO_BACK_TO_SCRIPTACTIVITY = 1;
+								ScriptTabActivity.tabHost.setCurrentTab(1);
+							}
+
+						}
+					}
 				}
 			}
 
@@ -95,6 +127,13 @@ public class SetCostumeBrick implements Brick {
 
 		if (sprite.getCostumeDataList().contains(costumeData)) {
 			costumebrickSpinner.setSelection(sprite.getCostumeDataList().indexOf(costumeData) + 1, true);
+			oldSelectedCostume = costumeData;
+		} else if (loadedImageNameViaNew != null) {
+			oldSelectedCostume = sprite.getCostumeDataList().get(sprite.getCostumeDataList().size() - 1);
+			costumebrickSpinner.setSelection(sprite.getCostumeDataList().size(), true);
+			loadedImageNameViaNew = null;
+		} else if (oldSelectedCostume != null) {
+			costumebrickSpinner.setSelection(sprite.getCostumeDataList().indexOf(oldSelectedCostume) + 1);
 		} else {
 			costumebrickSpinner.setSelection(0);
 		}
@@ -112,11 +151,17 @@ public class SetCostumeBrick implements Brick {
 				android.R.layout.simple_spinner_item);
 		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		CostumeData dummyCostumeData = new CostumeData();
-		dummyCostumeData.setCostumeName(context.getString(R.string.broadcast_nothing_selected));
+		dummyCostumeData.setCostumeName(context.getString(R.string.brick_set_costume_none));
 		arrayAdapter.add(dummyCostumeData);
+
 		for (CostumeData costumeData : sprite.getCostumeDataList()) {
 			arrayAdapter.add(costumeData);
 		}
+
+		dummyCostumeData = new CostumeData();
+		dummyCostumeData.setCostumeName(context.getString(R.string.brick_set_costume_new));
+		arrayAdapter.add(dummyCostumeData);
+
 		return arrayAdapter;
 	}
 

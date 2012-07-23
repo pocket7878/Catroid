@@ -58,7 +58,7 @@ import at.tugraz.ist.catroid.utils.Utils;
 public class ScriptTabActivity extends TabActivity implements OnDismissListener, OnCancelListener {
 	protected ActivityHelper activityHelper;
 
-	private TabHost tabHost;
+	public static TabHost tabHost;
 	private boolean addScript;
 	private boolean isCanceled;
 	public SoundInfo selectedSoundInfo;

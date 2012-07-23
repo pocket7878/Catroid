@@ -47,6 +47,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.adapter.CostumeAdapter;
 import at.tugraz.ist.catroid.utils.ActivityHelper;
@@ -58,6 +59,8 @@ public class CostumeActivity extends ListActivity {
 
 	public static final int REQUEST_SELECT_IMAGE = 0;
 	public static final int REQUEST_PAINTROID_EDIT_IMAGE = 1;
+	public static int STARTED_FROM_SCRIPTACTIVITY = 0;
+	public static int GO_BACK_TO_SCRIPTACTIVITY = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -93,6 +96,11 @@ public class CostumeActivity extends ListActivity {
 				addButtonIcon = R.drawable.ic_actionbar_shirt;
 			}
 			activityHelper.changeButtonIcon(R.id.btn_action_add_button, addButtonIcon);
+		}
+
+		if (STARTED_FROM_SCRIPTACTIVITY == 1) {
+			STARTED_FROM_SCRIPTACTIVITY = 0;
+			activityHelper.clickOnButton(R.id.btn_action_add_button);
 		}
 
 	}
@@ -134,6 +142,10 @@ public class CostumeActivity extends ListActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		if (resultCode != Activity.RESULT_OK) {
+			if (GO_BACK_TO_SCRIPTACTIVITY == 1) {
+				GO_BACK_TO_SCRIPTACTIVITY = 0;
+				ScriptTabActivity.tabHost.setCurrentTab(0);
+			}
 			return;
 		}
 
@@ -144,6 +156,12 @@ public class CostumeActivity extends ListActivity {
 			case REQUEST_PAINTROID_EDIT_IMAGE:
 				loadPaintroidImageIntoCatroid(data);
 				break;
+		}
+
+		if (GO_BACK_TO_SCRIPTACTIVITY == 1) {
+			SetCostumeBrick.startUpFalseBehavoirCheck = false;
+			GO_BACK_TO_SCRIPTACTIVITY = 0;
+			ScriptTabActivity.tabHost.setCurrentTab(0);
 		}
 	}
 
@@ -206,9 +224,15 @@ public class CostumeActivity extends ListActivity {
 
 			String imageFileName = imageFile.getName();
 			updateCostumeAdapter(imageName, imageFileName);
+
+			if (GO_BACK_TO_SCRIPTACTIVITY == 1) {
+				SetCostumeBrick.loadedImageNameViaNew = imageName;
+			}
+
 		} catch (IOException e) {
 			Utils.displayErrorMessage(this, this.getString(R.string.error_load_image));
 		}
+
 	}
 
 	private void loadPaintroidImageIntoCatroid(Intent intent) {
@@ -238,9 +262,15 @@ public class CostumeActivity extends ListActivity {
 				StorageHandler.getInstance().deleteFile(selectedCostumeData.getAbsolutePath()); //reduce usage in container or delete it
 				selectedCostumeData.setCostumeFilename(newCostumeFile.getName());
 				selectedCostumeData.resetThumbnailBitmap();
+
+				if (GO_BACK_TO_SCRIPTACTIVITY == 1) {
+					SetCostumeBrick.loadedImageNameViaNew = newCostumeFile.getName();
+				}
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+
 		}
 	}
 

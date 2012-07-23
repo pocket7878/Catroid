@@ -239,4 +239,12 @@ public class ActivityHelper {
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		activity.startActivity(intent);
 	}
+
+	public void clickOnButton(int resourceId) {
+		final ViewGroup actionBar = getActionBar();
+		View buttonView = actionBar.findViewById(resourceId);
+
+		buttonView.performClick();
+
+	}
 }
