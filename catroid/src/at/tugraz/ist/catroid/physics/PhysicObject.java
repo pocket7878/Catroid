@@ -41,6 +41,15 @@ public class PhysicObject {
 		return body;
 	}
 
+	public void setShape(Shape shape) {
+		// TODO: This code is cursed, I tell you!
+		fixtureDef.shape = shape;
+		for (Fixture fixture : body.getFixtureList()) {
+			body.destroyFixture(fixture);
+		}
+		body.createFixture(fixtureDef);
+	}
+
 	public void setType(BodyDef.BodyType type) {
 		body.setType(type);
 	}
@@ -53,11 +62,8 @@ public class PhysicObject {
 		body.setTransform(position.sub(body.getPosition()), 0.0f);
 	}
 
-	public void setShape(Shape shape) {
-		// TODO: This code is cursed, I tell you!
-		fixtureDef.shape = shape;
-		body.getFixtureList().clear();
-		body.createFixture(fixtureDef);
+	public void setMass(float mass) {
+		body.getMassData().mass = mass;
 	}
 
 	public void setDensity(float density) {

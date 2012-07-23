@@ -18,45 +18,41 @@
  */
 package at.tugraz.ist.catroid.physics;
 
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import at.tugraz.ist.catroid.content.Sprite;
 
-import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * @author robert
  * 
  */
-public class PhysicObjectContainer {
-	private final transient PhysicBodyBuilder builder;
-	private final transient Map<Sprite, Body> bodyMap = new HashMap<Sprite, Body>();
+public class PhysicObjectMap implements Iterable<Entry<Sprite, PhysicObject>> {
+	private final transient World world;
+	private final transient Map<Sprite, PhysicObject> objects = new HashMap<Sprite, PhysicObject>();
 
-	public PhysicObjectContainer(World world) {
-		builder = new PhysicBodyBuilder(world);
+	public PhysicObjectMap(World world) {
+		this.world = world;
 	}
 
-	public Body get(Sprite sprite) {
-		Body body = bodyMap.get(sprite);
-		if (body == null) {
-			body = builder.createBody(sprite);
-			bodyMap.put(sprite, body);
+	public PhysicObject get(Sprite sprite) {
+		PhysicObject physicObject = objects.get(sprite);
+		if (physicObject == null) {
+			BodyDef bodyDef = new BodyDef();
+			bodyDef.type = BodyType.DynamicBody;
+			physicObject = new PhysicObject(world.createBody(bodyDef));
+			objects.put(sprite, physicObject);
 		}
-		return body;
+		return physicObject;
 	}
 
-	public Collection<Sprite> getSprites() {
-		return bodyMap.keySet();
-	}
-
-	public Collection<Body> getBodies() {
-		return bodyMap.values();
-	}
-
-	public PhysicBodyBuilder getBodyBuilder() {
-		return builder;
+	public Iterator<Entry<Sprite, PhysicObject>> iterator() {
+		return objects.entrySet().iterator();
 	}
 }

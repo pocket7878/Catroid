@@ -24,6 +24,7 @@ package at.tugraz.ist.catroid.content;
 
 import java.util.concurrent.Semaphore;
 
+import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.CostumeData;
 
 import com.badlogic.gdx.Gdx;
@@ -161,6 +162,8 @@ public class Costume extends Image {
 
 			this.setRegion(new TextureRegion(texture));
 
+			// TODO: Is this really the best position to recognize a costume change?
+			ProjectManager.getInstance().getCurrentProject().getPhysicWorld().costumeChanged(sprite);
 			imageChanged = false;
 		}
 		imageLock.release();

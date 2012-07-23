@@ -19,6 +19,7 @@
 package at.tugraz.ist.catroid.physics;
 
 import java.io.Serializable;
+import java.util.Map.Entry;
 
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Costume;
@@ -27,8 +28,11 @@ import at.tugraz.ist.catroid.content.Sprite;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 
@@ -41,35 +45,44 @@ public class PhysicWorld implements Serializable {
 
 	private final transient World world = new World(PhysicSettings.World.DEFAULT_GRAVITY,
 			PhysicSettings.World.IGNORE_SLEEPING_OBJECTS);
-	private final transient PhysicObjectContainer objects = new PhysicObjectContainer(world);
+	private final transient PhysicObjectMap objects;
 	private transient Box2DDebugRenderer renderer;
 
 	public PhysicWorld() {
+		objects = new PhysicObjectMap(world);
 		if (PhysicSettings.World.SURROUNDING_BOX) {
 			createSurroundingBox();
 		}
 	}
 
 	private void createSurroundingBox() {
-		PhysicBodyBuilder bodyBuilder = objects.getBodyBuilder();
-
 		float boxWidth = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_WIDTH);
 		float boxHeight = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_HEIGHT);
 		float boxElementSize = PhysicSettings.World.SURROUNDING_BOX_FRAME_SIZE;
 
 		// Top Element
-		createSurroundingBoxElement(bodyBuilder, 0.0f, boxHeight / 2 + boxElementSize, boxWidth, boxElementSize * 2);
+		createSurroundingBoxElement(0.0f, boxHeight / 2 + boxElementSize, boxWidth, boxElementSize * 2);
 		// Bottom Element
-		createSurroundingBoxElement(bodyBuilder, 0.0f, -boxHeight / 2 - boxElementSize, boxWidth, boxElementSize * 2);
+		createSurroundingBoxElement(0.0f, -boxHeight / 2 - boxElementSize, boxWidth, boxElementSize * 2);
 		// Left Element
-		createSurroundingBoxElement(bodyBuilder, -boxWidth / 2 - boxElementSize, 0.0f, boxElementSize * 2, boxHeight);
+		createSurroundingBoxElement(-boxWidth / 2 - boxElementSize, 0.0f, boxElementSize * 2, boxHeight);
 		// Right Element
-		createSurroundingBoxElement(bodyBuilder, boxWidth / 2 + boxElementSize, 0.0f, boxElementSize * 2, boxHeight);
+		createSurroundingBoxElement(boxWidth / 2 + boxElementSize, 0.0f, boxElementSize * 2, boxHeight);
 	}
 
-	private void createSurroundingBoxElement(PhysicBodyBuilder builder, float x, float y, float width, float height) {
-		Body top = builder.createBox(BodyType.StaticBody, width, height);
-		top.setTransform(x, y, 0.0f);
+	private void createSurroundingBoxElement(float x, float y, float width, float height) {
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyType.StaticBody;
+
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(width / 2f, height / 2f);
+
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = shape;
+
+		Body body = world.createBody(bodyDef);
+		body.createFixture(fixtureDef);
+		body.setTransform(x, y, 0.0f);
 	}
 
 	public void step(float deltaTime) {
@@ -79,12 +92,14 @@ public class PhysicWorld implements Serializable {
 	}
 
 	private void updateSprites() {
-		for (Sprite sprite : objects.getSprites()) {
-			Body body = objects.get(sprite);
+		Body body;
+		Costume costume;
+		for (Entry<Sprite, PhysicObject> entry : objects) {
+			body = entry.getValue().getBody();
 			Vector2 position = PhysicWorldConverter.vecBox2dToCat(body.getPosition());
 			float angle = PhysicWorldConverter.angleBox2dToCat(body.getAngle());
 
-			Costume costume = sprite.costume;
+			costume = entry.getKey().costume;
 			costume.aquireXYWidthHeightLock();
 			costume.setXYPosition(position.x, position.y);
 			costume.rotation = angle;
@@ -105,11 +120,26 @@ public class PhysicWorld implements Serializable {
 	}
 
 	public void setVelocity(Sprite sprite, Vector2 velocity) {
-		Body body = objects.get(sprite);
+		Body body = objects.get(sprite).getBody();
 		body.applyLinearImpulse(velocity, body.getPosition());
 	}
 
 	public void setMass(Sprite sprite, float mass) {
-		objects.get(sprite).getMassData().mass = mass;
+		PhysicObject object = objects.get(sprite);
+		object.getBody().getMassData().mass = mass;
+		object.setPosition(PhysicWorldConverter.vecCatToBox2d(new Vector2(100, 100)));
+	}
+
+	public void costumeChanged(Sprite sprite) {
+		if (sprite.getName().equals("Background")) {
+			return;
+		}
+		int[] resolution = sprite.costume.getCostumeData().getResolution();
+		float width = PhysicWorldConverter.lengthCatToBox2d(resolution[0]);
+		float height = PhysicWorldConverter.lengthCatToBox2d(resolution[1]);
+
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(width / 2f, height / 2f);
+		objects.get(sprite).setShape(shape);
 	}
 }
