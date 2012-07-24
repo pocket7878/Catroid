@@ -25,6 +25,7 @@ package at.tugraz.ist.catroid.uitest.util;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -41,13 +42,16 @@ import java.util.List;
 import junit.framework.Assert;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.FileChecksumContainer;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
@@ -81,7 +85,7 @@ public class UiTestUtils {
 	public static final String PROJECTNAME3 = "testproject3";
 
 	public static enum FileTypes {
-		IMAGE, SOUND
+		IMAGE, SOUND, ROOT
 	};
 
 	public static void enterText(Solo solo, int editTextIndex, String text) {
@@ -121,13 +125,11 @@ public class UiTestUtils {
 		solo.sleep(50);
 		solo.clearEditText(0);
 		solo.enterText(0, value);
-		solo.goBack();
 	}
 
 	public static void clickEnterClose(Solo solo, int editTextIndex, String value) {
 		solo.clickOnEditText(editTextIndex);
 		enterText(solo, 0, value);
-		solo.goBack();
 		solo.clickOnButton(0);
 		solo.sleep(50);
 	}
@@ -177,6 +179,8 @@ public class UiTestUtils {
 		brickCategoryMap.put(R.string.brick_note, R.string.category_control);
 		brickCategoryMap.put(R.string.brick_forever, R.string.category_control);
 		brickCategoryMap.put(R.string.brick_repeat, R.string.category_control);
+
+		brickCategoryMap.put(R.string.brick_motor_action, R.string.category_lego_nxt);
 	}
 
 	public static int getBrickCategory(Solo solo, int brickStringId) {
@@ -194,19 +198,15 @@ public class UiTestUtils {
 		return brickCategoryMap.get(brickStringId);
 	}
 
-	public static void addNewBrickAndScrollDown(Solo solo, int brickStringId) {
+	public static void addNewBrick(Solo solo, int brickStringId) {
 		int categoryStringId = getBrickCategory(solo, brickStringId);
-		addNewBrickAndScrollDown(solo, categoryStringId, brickStringId);
+		addNewBrick(solo, categoryStringId, brickStringId);
 	}
 
-	public static void addNewBrickAndScrollDown(Solo solo, int categoryStringId, int brickStringId) {
-		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_add_sprite);
+	public static void addNewBrick(Solo solo, int categoryStringId, int brickStringId) {
+		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_add_button);
 		solo.clickOnText(solo.getCurrentActivity().getString(categoryStringId));
 		solo.clickOnText(solo.getCurrentActivity().getString(brickStringId));
-
-		while (solo.scrollDown()) {
-			;
-		}
 	}
 
 	public static List<Brick> createTestProject() {
@@ -275,32 +275,37 @@ public class UiTestUtils {
 	 */
 	public static File saveFileToProject(String project, String name, int fileID, Context context, FileTypes type) {
 
+		boolean withChecksum = true;
 		String filePath;
 		if (project == null || project.equalsIgnoreCase("")) {
-			filePath = Consts.DEFAULT_ROOT + "/";
+			filePath = Constants.DEFAULT_ROOT + "/";
 		} else {
 			switch (type) {
 				case IMAGE:
-					filePath = Consts.DEFAULT_ROOT + "/" + project + "/" + Consts.IMAGE_DIRECTORY + "/";
+					filePath = Constants.DEFAULT_ROOT + "/" + project + "/" + Constants.IMAGE_DIRECTORY + "/";
 					break;
 				case SOUND:
-					filePath = Consts.DEFAULT_ROOT + "/" + project + "/" + Consts.SOUND_DIRECTORY + "/";
+					filePath = Constants.DEFAULT_ROOT + "/" + project + "/" + Constants.SOUND_DIRECTORY + "/";
+					break;
+				case ROOT:
+					filePath = Constants.DEFAULT_ROOT + "/" + project + "/";
+					withChecksum = false;
 					break;
 				default:
-					filePath = Consts.DEFAULT_ROOT + "/";
+					filePath = Constants.DEFAULT_ROOT + "/";
 					break;
 			}
 		}
 		BufferedInputStream in = new BufferedInputStream(context.getResources().openRawResource(fileID),
-				Consts.BUFFER_8K);
+				Constants.BUFFER_8K);
 
 		try {
 			File file = new File(filePath + name);
 			file.getParentFile().mkdirs();
 			file.createNewFile();
 
-			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file), Consts.BUFFER_8K);
-			byte[] buffer = new byte[Consts.BUFFER_8K];
+			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file), Constants.BUFFER_8K);
+			byte[] buffer = new byte[Constants.BUFFER_8K];
 			int length = 0;
 			while ((length = in.read(buffer)) > 0) {
 				out.write(buffer, 0, length);
@@ -310,8 +315,14 @@ public class UiTestUtils {
 			out.flush();
 			out.close();
 
-			String checksum = Utils.md5Checksum(file);
-			File tempFile = new File(filePath + checksum + "_" + name);
+			String checksum;
+			if (withChecksum) {
+				checksum = Utils.md5Checksum(file) + "_";
+			} else {
+				checksum = "";
+			}
+
+			File tempFile = new File(filePath + checksum + name);
 			file.renameTo(tempFile);
 
 			return tempFile;
@@ -322,7 +333,7 @@ public class UiTestUtils {
 	}
 
 	public static boolean clearProject(String projectname) {
-		File directory = new File(Consts.DEFAULT_ROOT + "/" + projectname);
+		File directory = new File(Constants.DEFAULT_ROOT + "/" + projectname);
 		if (directory.exists()) {
 			return UtilFile.deleteDirectory(directory);
 		}
@@ -344,32 +355,42 @@ public class UiTestUtils {
 
 	public static void clearAllUtilTestProjects() {
 		projectManager.fileChecksumContainer = new FileChecksumContainer();
-		File directory = new File(Consts.DEFAULT_ROOT + "/" + PROJECTNAME1);
+		File directory = new File(Constants.DEFAULT_ROOT + "/" + PROJECTNAME1);
 		if (directory.exists()) {
 			UtilFile.deleteDirectory(directory);
 		}
 
-		directory = new File(Consts.DEFAULT_ROOT + "/" + PROJECTNAME2);
+		directory = new File(Constants.DEFAULT_ROOT + "/" + PROJECTNAME2);
 		if (directory.exists()) {
 			UtilFile.deleteDirectory(directory);
 		}
 
-		directory = new File(Consts.DEFAULT_ROOT + "/" + PROJECTNAME3);
+		directory = new File(Constants.DEFAULT_ROOT + "/" + PROJECTNAME3);
 		if (directory.exists()) {
 			UtilFile.deleteDirectory(directory);
 		}
 
-		directory = new File(Consts.DEFAULT_ROOT + "/" + DEFAULT_TEST_PROJECT_NAME);
+		directory = new File(Constants.DEFAULT_ROOT + "/" + DEFAULT_TEST_PROJECT_NAME);
 		if (directory.exists()) {
 			UtilFile.deleteDirectory(directory);
 		}
 
-		directory = new File(Consts.DEFAULT_ROOT + "/" + "defaultProject");
+		directory = new File(Constants.DEFAULT_ROOT + "/" + "defaultProject");
 		if (directory.exists()) {
 			UtilFile.deleteDirectory(directory);
 		}
 
-		directory = new File(Consts.DEFAULT_ROOT + "/" + "standardProjekt");
+		directory = new File(Constants.DEFAULT_ROOT + "/" + "standardProjekt");
+		if (directory.exists()) {
+			UtilFile.deleteDirectory(directory);
+		}
+
+		directory = new File(Constants.DEFAULT_ROOT + "/" + "My first project");
+		if (directory.exists()) {
+			UtilFile.deleteDirectory(directory);
+		}
+
+		directory = new File(Constants.DEFAULT_ROOT + "/" + "Mein erstes Projekt");
 		if (directory.exists()) {
 			UtilFile.deleteDirectory(directory);
 		}
@@ -427,9 +448,9 @@ public class UiTestUtils {
 		}
 
 		InputStream in = context.getResources().openRawResource(fileID);
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(testImage), Consts.BUFFER_8K);
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(testImage), Constants.BUFFER_8K);
 
-		byte[] buffer = new byte[Consts.BUFFER_8K];
+		byte[] buffer = new byte[Constants.BUFFER_8K];
 		int length = 0;
 
 		while ((length = in.read(buffer)) > 0) {
@@ -456,11 +477,11 @@ public class UiTestUtils {
 			assert (userRegistered);
 
 			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-			sharedPreferences.edit().putString(Consts.TOKEN, token).commit();
+			sharedPreferences.edit().putString(Constants.TOKEN, token).commit();
 
 		} catch (WebconnectionException e) {
 			e.printStackTrace();
-			assertEquals("Error creating test User. ", true, false);
+			fail("Error creating test user.");
 		}
 	}
 
@@ -488,18 +509,23 @@ public class UiTestUtils {
 		assertEquals("Pixels don't have same content.", pixelArray[3], screenPixel[3], 10);
 	}
 
-	public static void testIntegerEditText(Solo solo, int editTextIndex, int value, int editTextMinWidth, boolean assertMode) {
+	public static void testIntegerEditText(Solo solo, int editTextIndex, int value, int editTextMinWidth,
+			boolean assertMode) {
 		insertIntegerIntoEditText(solo, editTextIndex, value);
 		testEditText(solo, editTextIndex, value + "", editTextMinWidth, assertMode);
 	}
 
-	public static void testDoubleEditText(Solo solo, int editTextIndex, double value, int editTextMinWidth, boolean assertMode) {
+	public static void testDoubleEditText(Solo solo, int editTextIndex, double value, int editTextMinWidth,
+			boolean assertMode) {
 		insertDoubleIntoEditText(solo, editTextIndex, value);
 		testEditText(solo, editTextIndex, value + "", editTextMinWidth, assertMode);
 	}
 
-	private static void testEditText(Solo solo, int editTextIndex, String value, int editTextMinWidth, boolean assertMode) {
-		solo.clickOnButton(0);
+	private static void testEditText(Solo solo, int editTextIndex, String value, int editTextMinWidth,
+			boolean assertMode) {
+		String buttonOKText = solo.getCurrentActivity().getString(R.string.ok);
+		solo.waitForText(buttonOKText);
+		solo.clickOnText(buttonOKText);
 		solo.sleep(100);
 		int width = 0;
 		if (assertMode) {
@@ -510,5 +536,26 @@ public class UiTestUtils {
 		} else {
 			assertFalse("Number too long - should not be resized and fully visible", solo.searchText(value));
 		}
+	}
+
+	/**
+	 * Returns the absolute pixel y coordinates of the displayed bricks
+	 * 
+	 * @return a list of the y pixel coordinates of the center of displayed bricks
+	 */
+	public static ArrayList<Integer> getListItemYPositions(final Solo solo) {
+		ArrayList<Integer> yPositionList = new ArrayList<Integer>();
+		ListView listView = solo.getCurrentListViews().get(0);
+
+		for (int i = 0; i < listView.getChildCount(); ++i) {
+			View currentViewInList = listView.getChildAt(i);
+
+			Rect globalVisibleRect = new Rect();
+			currentViewInList.getGlobalVisibleRect(globalVisibleRect);
+			int middleYPos = globalVisibleRect.top + globalVisibleRect.height() / 2;
+			yPositionList.add(middleYPos);
+		}
+
+		return yPositionList;
 	}
 }

@@ -45,32 +45,34 @@ public class EditDialogTest extends ActivityInstrumentationTestCase2<ScriptTabAc
 
 	@Override
 	protected void tearDown() throws Exception {
-		try {
-			solo.finalize();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		getActivity().finish();
+		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
 	}
 
 	public void testIntegerDialog() {
-		UiTestUtils.addNewBrickAndScrollDown(solo, R.string.brick_place_at);
+		String brickWhenStartedText = solo.getString(R.string.brick_when_started);
+		String buttonPositiveText = solo.getString(R.string.ok);
+		solo.clickLongOnText(brickWhenStartedText);
+		solo.clickOnText(getActivity().getString(R.string.delete));
+		solo.sleep(1000);
+
+		UiTestUtils.addNewBrick(solo, R.string.brick_place_at);
+		solo.clickOnText(brickWhenStartedText);
 
 		int xPosition = 5;
 		int yPosition = 7;
 
-		int yPositionEditTextId = solo.getCurrentEditTexts().size() - 1;
-		int xPositionEditTextId = yPositionEditTextId - 1;
+		int yPositionEditTextId = 1;
+		int xPositionEditTextId = 0;
 
 		UiTestUtils.insertIntegerIntoEditText(solo, xPositionEditTextId, xPosition);
-		solo.sleep(300);
-		solo.clickOnButton(0);
+		solo.waitForText(buttonPositiveText);
+		solo.clickOnButton(buttonPositiveText);
 		solo.sleep(300);
 		UiTestUtils.insertIntegerIntoEditText(solo, yPositionEditTextId, yPosition);
-		solo.sleep(300);
-		solo.clickOnButton(0);
+		solo.waitForText(buttonPositiveText);
+		solo.clickOnButton(buttonPositiveText);
 		solo.sleep(300);
 
 		assertEquals("Wrong value in X-Position EditText", xPosition + "", solo.getEditText(xPositionEditTextId)
@@ -80,7 +82,7 @@ public class EditDialogTest extends ActivityInstrumentationTestCase2<ScriptTabAc
 	}
 
 	public void testDoubleDialog() {
-		UiTestUtils.addNewBrickAndScrollDown(solo, R.string.brick_wait);
+		UiTestUtils.addNewBrick(solo, R.string.brick_wait);
 
 		double wait = 5.9;
 
