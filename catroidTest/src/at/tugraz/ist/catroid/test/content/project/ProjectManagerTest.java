@@ -29,7 +29,7 @@ import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.test.InstrumentationTestCase;
 import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
@@ -120,8 +120,8 @@ public class ProjectManagerTest extends InstrumentationTestCase {
 		projectManager.setCurrentScript(script2);
 		SetCostumeBrick setCostumeBrick = new SetCostumeBrick(sprite2);
 		projectManager.getCurrentScript().addBrick(setCostumeBrick);
-		assertTrue("Brick not in current Script", projectManager.getCurrentScript().getBrickList().contains(
-				setCostumeBrick));
+		assertTrue("Brick not in current Script",
+				projectManager.getCurrentScript().getBrickList().contains(setCostumeBrick));
 	}
 
 	public void testRenameProject() throws IOException {
@@ -135,13 +135,11 @@ public class ProjectManagerTest extends InstrumentationTestCase {
 		}
 		projectManager.saveProject();
 
-		File oldProjectFolder = new File(Consts.DEFAULT_ROOT + "/" + oldProjectName);
-		File oldProjectFile = new File(Consts.DEFAULT_ROOT + "/" + oldProjectName + "/" + oldProjectName
-				+ Consts.PROJECT_EXTENTION);
+		File oldProjectFolder = new File(Constants.DEFAULT_ROOT + "/" + oldProjectName);
+		File oldProjectFile = new File(Constants.DEFAULT_ROOT + "/" + oldProjectName + "/" + Constants.PROJECTCODE_NAME);
 
-		File newProjectFolder = new File(Consts.DEFAULT_ROOT + "/" + newProjectName);
-		File newProjectFile = new File(Consts.DEFAULT_ROOT + "/" + newProjectName + "/" + newProjectName
-				+ Consts.PROJECT_EXTENTION);
+		File newProjectFolder = new File(Constants.DEFAULT_ROOT + "/" + newProjectName);
+		File newProjectFile = new File(Constants.DEFAULT_ROOT + "/" + newProjectName + "/" + Constants.PROJECTCODE_NAME);
 
 		String projectFileAsString = TestUtils.getProjectfileAsString(newProjectName);
 
@@ -202,8 +200,8 @@ public class ProjectManagerTest extends InstrumentationTestCase {
 		project.addSprite(thirdSprite);
 		project.addSprite(fourthSprite);
 
-		ProjectManager.getInstance().fileChecksumContainer.addChecksum(Utils.md5Checksum(image), image
-				.getAbsolutePath());
+		ProjectManager.getInstance().fileChecksumContainer.addChecksum(Utils.md5Checksum(image),
+				image.getAbsolutePath());
 
 		storageHandler.saveProject(project);
 		return project;
