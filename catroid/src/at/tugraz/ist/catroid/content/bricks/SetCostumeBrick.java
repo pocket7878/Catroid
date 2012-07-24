@@ -60,6 +60,7 @@ public class SetCostumeBrick implements Brick {
 			} else {
 				sprite.costume.setCostumeDataInternal(costumeData);
 			}
+
 		}
 	}
 
