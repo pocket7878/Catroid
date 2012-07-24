@@ -37,7 +37,7 @@ public class VersionNameAndCodeTest extends TestCase {
 
 	private static final String[] DIRECTORIES = { "../catroid", "../catroidTest", "../catroidUiTest" };
 	private static final String VERSION_CODE_REGEX = ".*android:versionCode=\"(\\d+)\".*";
-	private static final String VERSION_NAME_REGEX = ".*android:versionName=\"(\\d+\\.\\d+[a-z]?)\".*";
+	private static final String VERSION_NAME_REGEX = ".*android:versionName=\"(\\d+\\.\\d+\\.\\d+[a-z]*)\".*";
 
 	public void testVersionCodeAndNameAreTheSameAcrossProjects() throws IOException {
 		Pattern versionCodePattern = Pattern.compile(VERSION_CODE_REGEX);
@@ -67,6 +67,7 @@ public class VersionNameAndCodeTest extends TestCase {
 					versionInfos.put(directory.getName() + " versionName", matcher.group(1));
 				}
 			}
+			reader.close();
 		}
 
 		assertEquals("There was a versionName or versionCode mismatch in one of the AndroidManifest.xml files\n"
