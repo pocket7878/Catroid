@@ -119,15 +119,8 @@ public class PhysicWorld implements Serializable {
 		world.setGravity(PhysicWorldConverter.vecCatToBox2d(gravity));
 	}
 
-	public void setVelocity(Sprite sprite, Vector2 velocity) {
-		Body body = objects.get(sprite).getBody();
-		body.applyLinearImpulse(velocity, body.getPosition());
-	}
-
-	public void setMass(Sprite sprite, float mass) {
-		PhysicObject object = objects.get(sprite);
-		object.getBody().getMassData().mass = mass;
-		object.setPosition(PhysicWorldConverter.vecCatToBox2d(new Vector2(100, 100)));
+	public PhysicObject getPhysicObject(Sprite sprite) {
+		return objects.get(sprite);
 	}
 
 	public void costumeChanged(Sprite sprite) {
