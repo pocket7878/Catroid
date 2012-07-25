@@ -22,6 +22,8 @@
  */
 package at.tugraz.ist.catroid.ui.dialogs;
 
+import java.io.IOException;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -31,9 +33,9 @@ import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -128,27 +130,39 @@ public class UploadProjectDialog extends Dialog implements OnClickListener {
 	}
 
 	public void onClick(View v) {
-		ProjectManager projectManager = ProjectManager.getInstance();
-
 		switch (v.getId()) {
 			case R.id.upload_button:
 				String uploadName = projectUploadName.getText().toString();
-				if (uploadName.length() == 0) {
-					Utils.displayErrorMessage(context, context.getString(R.string.error_no_name_entered));
-					return;
-				} else if (!uploadName.equals(currentProjectName)) {
-					projectRename.setVisibility(View.VISIBLE);
-					boolean renamed = projectManager.renameProject(newProjectName, context);
-					if (!renamed) {
-						break;
+				try {
+					if (uploadName.length() == 0) {
+						Utils.displayErrorMessage(context, context.getString(R.string.error_no_name_entered));
+						return;
+					} else if (uploadName.equals(context.getString(R.string.default_project_name))) {
+						Utils.displayErrorMessage(context,
+								context.getString(R.string.error_upload_project_with_default_name));
+						return;
+					} else if (Utils.isProjectDefaultProject(context, currentProjectName)) {
+						Utils.displayErrorMessage(context, context.getString(R.string.error_upload_default_project));
+						return;
+					} else if (!uploadName.equals(currentProjectName)) {
+						projectRename.setVisibility(View.VISIBLE);
+						boolean renamed = ProjectManager.INSTANCE.renameProject(newProjectName, context);
+						if (!renamed) {
+							break;
+						}
 					}
+				} catch (IOException e) {
+					e.printStackTrace();
+					Utils.displayErrorMessage(context, context.getString(R.string.error_check_project_upload));
+					return;
 				}
 
-				projectManager.getCurrentProject().setDeviceData(context);
-				projectManager.saveProject();
+				ProjectManager.INSTANCE.getCurrentProject().setDeviceData(context);
+				ProjectManager.INSTANCE.saveProject();
 
 				dismiss();
-				String projectPath = Constants.DEFAULT_ROOT + "/" + projectManager.getCurrentProject().getName();
+				String projectPath = Constants.DEFAULT_ROOT + "/"
+						+ ProjectManager.INSTANCE.getCurrentProject().getName();
 				String projectDescription;
 
 				if (projectDescriptionField.length() != 0) {

@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.uitest.web;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,11 +34,16 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
+import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
+import at.tugraz.ist.catroid.common.StandardProjectHandler;
+import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
+import at.tugraz.ist.catroid.utils.Utils;
 import at.tugraz.ist.catroid.web.ServerCalls;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -50,6 +56,8 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 	private String newTestProject = UiTestUtils.PROJECTNAME2;
 	private String saveToken;
 	private int serverProjectId;
+
+	Project standardProject;
 
 	public ProjectUpAndDownloadTest() {
 		super("at.tugraz.ist.catroid", MainMenuActivity.class);
@@ -198,5 +206,87 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		downloadedProjectFile = new File(projectPath + "/" + Constants.PROJECTCODE_NAME);
 		assertTrue("Original Directory does not exist.", downloadedDirectory.exists());
 		assertTrue("Original Project File does not exist.", downloadedProjectFile.exists());
+	}
+
+	public void testProjectUploadWithStandardProjectName() throws Throwable {
+		if (!createAndSaveStandardProject() || standardProject == null) {
+			fail("Standard project not created");
+		}
+		solo.clickOnButton(solo.getString(R.string.my_projects));
+		solo.clickOnText(solo.getString(R.string.default_project_name), 2);
+		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_home);
+
+		solo.sleep(300);
+		setServerURLToTestUrl();
+		UiTestUtils.createValidUser(getActivity());
+
+		String uploadButtonText = solo.getString(R.string.upload_button);
+
+		solo.clickOnButton(solo.getString(R.string.upload_project));
+		solo.waitForText(uploadButtonText);
+		solo.clickOnButton(uploadButtonText);
+		solo.sleep(200);
+		assertTrue("When uploading a project with the standard project name,  the error message should be shown",
+				solo.searchText(solo.getString(R.string.error_upload_project_with_default_name)));
+
+		solo.clickOnButton(solo.getString(R.string.close));
+		while (solo.scrollUp()) {
+
+		}
+		solo.clearEditText(0);
+		solo.enterText(0, testProject);
+		solo.clickOnButton(uploadButtonText);
+		solo.waitForDialogToClose(10000);
+
+		assertTrue("Upload of unmodified standard project should not be possible, but succeeded",
+				solo.searchText(solo.getString(R.string.error_upload_default_project)));
+	}
+
+	public void testProjectUploadModifiedStandardProject() throws Throwable {
+		if (!createAndSaveStandardProject() || standardProject == null) {
+			fail("Standard project not created");
+		}
+		solo.clickOnButton(solo.getString(R.string.my_projects));
+		solo.clickOnText(solo.getString(R.string.default_project_name), 2);
+
+		solo.clickOnText(solo.getString(R.string.default_project_sprites_catroid_name));
+		solo.sleep(200);
+		solo.clickOnText(solo.getString(R.string.default_project_sprites_catroid_normalcat));
+		solo.clickOnText(solo.getString(R.string.default_project_sprites_catroid_banzaicat));
+		solo.sleep(200);
+		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_home);
+		solo.sleep(300);
+		assertFalse("Project was modified, xml should have changed",
+				Utils.isProjectDefaultProject(getInstrumentation().getTargetContext(), standardProject.getName()));
+
+		setServerURLToTestUrl();
+		UiTestUtils.createValidUser(getActivity());
+		String uploadButtonText = solo.getString(R.string.upload_button);
+		solo.clickOnButton(solo.getString(R.string.upload_project));
+		solo.waitForText(uploadButtonText);
+		while (solo.scrollUp()) {
+
+		}
+		solo.clearEditText(0);
+		solo.enterText(0, testProject);
+		solo.clickOnButton(uploadButtonText);
+		solo.waitForDialogToClose(10000);
+
+		assertTrue("Project was modified - upload should have worked, but it failed",
+				solo.searchText(solo.getString(R.string.success_project_upload)));
+
+	}
+
+	private boolean createAndSaveStandardProject() {
+		try {
+			standardProject = StandardProjectHandler.createAndSaveStandardProject(
+					solo.getString(R.string.default_project_name), getInstrumentation().getTargetContext());
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		ProjectManager.INSTANCE.setProject(standardProject);
+		StorageHandler.getInstance().saveProject(standardProject);
+		return true;
 	}
 }

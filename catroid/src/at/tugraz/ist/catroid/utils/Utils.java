@@ -30,11 +30,15 @@ package at.tugraz.ist.catroid.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 
 import android.app.Activity;
@@ -385,4 +389,93 @@ public class Utils {
 		return newTitle;
 	}
 
+	public static boolean isProjectDefaultProject(Context context, String currentProjectName) throws IOException {
+		String currentProjectProjectcode = Utils.buildPath(Constants.DEFAULT_ROOT, currentProjectName,
+				Constants.PROJECTCODE_NAME);
+		File currentProjectProjectcodeFile = new File(currentProjectProjectcode);
+
+		FileOutputStream outputStream = null;
+		InputStream inputStream = null;
+		File tempDir = new File(Constants.TMP_PATH);
+		tempDir.mkdirs();
+
+		File standardProjectProjectcodeFile = new File(Utils.buildPath(Constants.TMP_PATH,
+				"projectcode_standardproject.xml"));
+
+		if (standardProjectProjectcodeFile.exists()) {
+			standardProjectProjectcodeFile.delete();
+		}
+
+		try {
+			standardProjectProjectcodeFile.createNewFile();
+
+			inputStream = context.getResources().getAssets().open("projectcode_standardproject.xml");
+			byte[] buffer = new byte[inputStream.available()];
+			inputStream.read(buffer);
+
+			outputStream = new FileOutputStream(standardProjectProjectcodeFile);
+			outputStream.write(buffer);
+			outputStream.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+			if (outputStream != null) {
+				outputStream.close();
+			}
+			if (inputStream != null) {
+				inputStream.close();
+			}
+			UtilFile.deleteDirectory(tempDir);
+			throw new IOException();
+		}
+		if (outputStream != null) {
+			outputStream.close();
+		}
+		if (inputStream != null) {
+			inputStream.close();
+		}
+		boolean equalProjectcodeFiles = compareProjectcodeXmlFiles(currentProjectProjectcodeFile,
+				standardProjectProjectcodeFile);
+		UtilFile.deleteDirectory(tempDir);
+		return equalProjectcodeFiles;
+	}
+
+	public static boolean compareProjectcodeXmlFiles(File projectToUploadXmlFile, File standardProjectXmlFile)
+			throws FileNotFoundException {
+		StringBuilder stringBuilder = null;
+		String lineSeparation = System.getProperty("line.separator");
+		Scanner textScanner = null;
+		boolean spriteListFound = false;
+		String currentLine = "";
+
+		stringBuilder = new StringBuilder();
+		textScanner = new Scanner(new FileInputStream(projectToUploadXmlFile), "UTF-8");
+		while (textScanner.hasNextLine()) {
+			currentLine = textScanner.nextLine().toString();
+			if (currentLine.trim().contentEquals("<spriteList>")) {
+				spriteListFound = true;
+			}
+			if (spriteListFound) {
+				stringBuilder.append(currentLine + lineSeparation);
+			}
+		}
+		textScanner.close();
+		String normalizedUploadProjectXml = stringBuilder.toString();
+
+		spriteListFound = false;
+		stringBuilder = new StringBuilder();
+		textScanner = new Scanner(new FileInputStream(standardProjectXmlFile), "UTF-8");
+		while (textScanner.hasNextLine()) {
+			currentLine = textScanner.nextLine().toString();
+			if (currentLine.trim().contentEquals("<spriteList>")) {
+				spriteListFound = true;
+			}
+			if (spriteListFound) {
+				stringBuilder.append(currentLine + lineSeparation);
+			}
+		}
+		textScanner.close();
+		String normalizedStandardProjectXml = stringBuilder.toString();
+
+		return normalizedUploadProjectXml.contentEquals(normalizedStandardProjectXml);
+	}
 }

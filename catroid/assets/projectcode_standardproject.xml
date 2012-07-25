@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<Content.Project>
+  <androidVersion>10</androidVersion>
+  <catroidVersionCode>10</catroidVersionCode>
+  <catroidVersionName>0.6.0beta</catroidVersionName>
+  <deviceName>GT-I9000</deviceName>
+  <projectName>Mein erstes projektttt</projectName>
+  <screenHeight>800</screenHeight>
+  <screenWidth>480</screenWidth>
+  <spriteList>
+    <Content.Sprite>
+      <costumeDataList>
+        <Common.CostumeData>
+          <fileName>B978398F6E8D16B857AA81618F3EF879_Hintergrund</fileName>
+          <name>Hintergrund</name>
+        </Common.CostumeData>
+      </costumeDataList>
+      <name>Hintergrund</name>
+      <scriptList>
+        <Content.StartScript>
+          <brickList>
+            <Bricks.SetCostumeBrick>
+              <costumeData reference="../../../../../costumeDataList/Common.CostumeData"/>
+              <sprite reference="../../../../.."/>
+            </Bricks.SetCostumeBrick>
+          </brickList>
+          <sprite reference="../../.."/>
+        </Content.StartScript>
+      </scriptList>
+      <soundList/>
+    </Content.Sprite>
+    <Content.Sprite>
+      <costumeDataList>
+        <Common.CostumeData>
+          <fileName>7064E57016F4326F59F0B098D83EB259_Katze normal</fileName>
+          <name>Katze normal</name>
+        </Common.CostumeData>
+        <Common.CostumeData>
+          <fileName>FE5DF421A5746EC7FC916AC1B94ECC17_Banzai-Katze</fileName>
+          <name>Banzai-Katze</name>
+        </Common.CostumeData>
+        <Common.CostumeData>
+          <fileName>3673EC84679EE425A215B86B085EC292_Grinsekatze</fileName>
+          <name>Grinsekatze</name>
+        </Common.CostumeData>
+      </costumeDataList>
+      <name>Catroid</name>
+      <scriptList>
+        <Content.StartScript>
+          <brickList>
+            <Bricks.SetCostumeBrick>
+              <costumeData reference="../../../../../costumeDataList/Common.CostumeData"/>
+              <sprite reference="../../../../.."/>
+            </Bricks.SetCostumeBrick>
+          </brickList>
+          <sprite reference="../../.."/>
+        </Content.StartScript>
+        <Content.WhenScript>
+          <brickList>
+            <Bricks.SetCostumeBrick>
+              <costumeData reference="../../../../../costumeDataList/Common.CostumeData[2]"/>
+              <sprite reference="../../../../.."/>
+            </Bricks.SetCostumeBrick>
+            <Bricks.WaitBrick>
+              <sprite reference="../../../../.."/>
+              <timeToWaitInMilliSeconds>500</timeToWaitInMilliSeconds>
+            </Bricks.WaitBrick>
+            <Bricks.SetCostumeBrick>
+              <costumeData reference="../../../../../costumeDataList/Common.CostumeData[3]"/>
+              <sprite reference="../../../../.."/>
+            </Bricks.SetCostumeBrick>
+            <Bricks.WaitBrick>
+              <sprite reference="../../../../.."/>
+              <timeToWaitInMilliSeconds>500</timeToWaitInMilliSeconds>
+            </Bricks.WaitBrick>
+            <Bricks.SetCostumeBrick>
+              <costumeData reference="../../../../../costumeDataList/Common.CostumeData"/>
+              <sprite reference="../../../../.."/>
+            </Bricks.SetCostumeBrick>
+          </brickList>
+          <sprite reference="../../.."/>
+          <action>Tapped</action>
+        </Content.WhenScript>
+      </scriptList>
+      <soundList/>
+    </Content.Sprite>
+  </spriteList>
+</Content.Project>

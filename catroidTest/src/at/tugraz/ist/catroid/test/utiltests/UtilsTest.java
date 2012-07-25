@@ -25,17 +25,18 @@ package at.tugraz.ist.catroid.test.utiltests;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-import junit.framework.TestCase;
+import android.test.InstrumentationTestCase;
 import android.util.Log;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
 
-public class UtilsTest extends TestCase {
+public class UtilsTest extends InstrumentationTestCase {
 
 	private static final String TAG = UtilsTest.class.getSimpleName();
 	private final String testFileContent = "Hello, this is a Test-String";
@@ -74,6 +75,8 @@ public class UtilsTest extends TestCase {
 		if (copiedFile != null && copiedFile.exists()) {
 			copiedFile.delete();
 		}
+		File tempDir = new File(Constants.TMP_PATH);
+		UtilFile.deleteDirectory(tempDir);
 	}
 
 	public void testMD5CheckSumOfFile() {
@@ -209,5 +212,105 @@ public class UtilsTest extends TestCase {
 		String projectName1 = "test?Projekt\"1";
 		String result1 = "/mnt/sdcard/catroid/testProjekt1";
 		assertEquals("Paths are different!", result1, Utils.buildProjectPath(projectName1));
+	}
+
+	public void testCompareProjectcodeXmlFiles() throws Exception {
+		FileOutputStream outputStream = null;
+		InputStream inputStream = null;
+
+		File tempDir = new File(Constants.TMP_PATH);
+		tempDir.mkdirs();
+
+		File projectcodeXmlFile = new File(Utils.buildPath(Constants.TMP_PATH, "projectcode.xml"));
+
+		if (projectcodeXmlFile.exists()) {
+			projectcodeXmlFile.delete();
+		}
+
+		try {
+			projectcodeXmlFile.createNewFile();
+
+			inputStream = getInstrumentation().getContext().getResources().getAssets().open("projectcode.xml");
+			byte[] buffer = new byte[inputStream.available()];
+			inputStream.read(buffer);
+
+			outputStream = new FileOutputStream(projectcodeXmlFile);
+			outputStream.write(buffer);
+			outputStream.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("Projectcode xml not loaded from Assets");
+		} finally {
+			if (outputStream != null) {
+				outputStream.close();
+			}
+			if (inputStream != null) {
+				inputStream.close();
+			}
+		}
+
+		File corruptXmlFile = new File(Utils.buildPath(Constants.TMP_PATH, "projectcode_corrupt.xml"));
+
+		if (projectcodeXmlFile.exists()) {
+			projectcodeXmlFile.delete();
+		}
+
+		try {
+			projectcodeXmlFile.createNewFile();
+
+			inputStream = getInstrumentation().getContext().getResources().getAssets().open("projectcode_corrupt.xml");
+			byte[] buffer = new byte[inputStream.available()];
+			inputStream.read(buffer);
+
+			outputStream = new FileOutputStream(corruptXmlFile);
+			outputStream.write(buffer);
+			outputStream.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("Projectcode xml not loaded from Assets");
+		} finally {
+			if (outputStream != null) {
+				outputStream.close();
+			}
+			if (inputStream != null) {
+				inputStream.close();
+			}
+		}
+
+		File corruptXmlFile2 = new File(Utils.buildPath(Constants.TMP_PATH, "projectcode_corrupt2.xml"));
+
+		if (projectcodeXmlFile.exists()) {
+			projectcodeXmlFile.delete();
+		}
+
+		try {
+			projectcodeXmlFile.createNewFile();
+
+			inputStream = getInstrumentation().getContext().getResources().getAssets().open("test_project.xml");
+			byte[] buffer = new byte[inputStream.available()];
+			inputStream.read(buffer);
+
+			outputStream = new FileOutputStream(corruptXmlFile2);
+			outputStream.write(buffer);
+			outputStream.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("Projectcode xml not loaded from Assets");
+		} finally {
+			if (outputStream != null) {
+				outputStream.close();
+			}
+			if (inputStream != null) {
+				inputStream.close();
+			}
+		}
+
+		assertTrue("comparing of Xmls failed - equal files should return true",
+				Utils.compareProjectcodeXmlFiles(projectcodeXmlFile, projectcodeXmlFile));
+		assertFalse("comparing of Xmls failed - xmls differ in one line - should return false",
+				Utils.compareProjectcodeXmlFiles(corruptXmlFile, projectcodeXmlFile));
+		assertFalse("comparing of Xmls failed - completely different xmls - should return false",
+				Utils.compareProjectcodeXmlFiles(corruptXmlFile2, projectcodeXmlFile));
+		UtilFile.deleteDirectory(tempDir);
 	}
 }
