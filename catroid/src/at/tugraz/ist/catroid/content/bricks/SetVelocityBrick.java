@@ -34,7 +34,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -44,7 +43,6 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 public class SetVelocityBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private PhysicWorld physicWorld;
-	private transient PhysicObject physicObject;
 	private Sprite sprite;
 	private Vector2 velocity;
 
@@ -53,7 +51,6 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 
 	public SetVelocityBrick(PhysicWorld physicWorld, Sprite sprite, float x, float y) {
 		this.physicWorld = physicWorld;
-		physicObject = physicWorld.getPhysicObject(sprite);
 		this.sprite = sprite;
 		this.velocity = new Vector2(x, y);
 	}
@@ -63,7 +60,7 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 	}
 
 	public void execute() {
-		physicObject.getBody().applyForceToCenter(velocity);
+		physicWorld.getPhysicObject(sprite).getBody().applyForceToCenter(velocity);
 	}
 
 	public Sprite getSprite() {

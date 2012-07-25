@@ -34,7 +34,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -43,7 +42,6 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 public class SetMassBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private PhysicWorld physicWorld;
-	private transient PhysicObject physicObject;
 	private Sprite sprite;
 	private float mass;
 
@@ -52,7 +50,6 @@ public class SetMassBrick implements Brick, OnClickListener {
 
 	public SetMassBrick(PhysicWorld physicWorld, Sprite sprite, float mass) {
 		this.physicWorld = physicWorld;
-		this.physicObject = physicWorld.getPhysicObject(sprite);
 		this.sprite = sprite;
 		this.mass = mass;
 	}
@@ -62,7 +59,7 @@ public class SetMassBrick implements Brick, OnClickListener {
 	}
 
 	public void execute() {
-		physicObject.setMass(mass);
+		physicWorld.getPhysicObject(sprite).setMass(mass);
 	}
 
 	public Sprite getSprite() {
