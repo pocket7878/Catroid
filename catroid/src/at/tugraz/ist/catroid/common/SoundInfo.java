@@ -29,12 +29,11 @@ public class SoundInfo implements Comparable<SoundInfo> {
 
 	private String name;
 	private String fileName;
-	public transient boolean isPlaying = false;
-	public transient boolean isPaused = false;
+
+	public transient boolean isPlaying;
 
 	public SoundInfo() {
 		isPlaying = false;
-		isPaused = false;
 	}
 
 	public String getAbsolutePath() {

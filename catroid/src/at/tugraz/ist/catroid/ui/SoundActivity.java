@@ -28,11 +28,14 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -47,12 +50,45 @@ import at.tugraz.ist.catroid.utils.ActivityHelper;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class SoundActivity extends ListActivity {
-	private static final String TAG = SoundActivity.class.getSimpleName();
 
-	public MediaPlayer mediaPlayer;
-	private ArrayList<SoundInfo> soundInfoList;
+	private class CopyAudioFilesTask extends AsyncTask<String, Void, File> {
+		private ProgressDialog mDialog = new ProgressDialog(SoundActivity.this);
+
+		@Override
+		protected void onPreExecute() {
+			mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			mDialog.setTitle(getString(R.string.loading));
+			mDialog.show();
+		}
+
+		@Override
+		protected File doInBackground(String... path) {
+			File file = null;
+			try {
+				file = StorageHandler.getInstance().copySoundFile(path[0]);
+			} catch (IOException e) {
+				Log.e("CATROID", "Cannot load sound.", e);
+			}
+			return file;
+		}
+
+		@Override
+		protected void onPostExecute(File file) {
+			mDialog.dismiss();
+
+			if (file != null) {
+				String fileName = file.getName();
+				String soundTitle = fileName.substring(fileName.indexOf('_') + 1, fileName.lastIndexOf('.'));
+				updateSoundAdapter(soundTitle, fileName);
+			} else {
+				Utils.displayErrorMessage(SoundActivity.this, getString(R.string.error_load_sound));
+			}
+		}
+	}
 
 	private final int REQUEST_SELECT_MUSIC = 0;
+	public MediaPlayer mediaPlayer;
+	private ArrayList<SoundInfo> soundInfoList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +98,11 @@ public class SoundActivity extends ListActivity {
 		soundInfoList = ProjectManager.getInstance().getCurrentSprite().getSoundList();
 
 		setListAdapter(new SoundAdapter(this, R.layout.activity_sound_soundlist_item, soundInfoList));
+	}
 
+	@Override
+	protected void onStart() {
+		super.onStart();
 		mediaPlayer = new MediaPlayer();
 	}
 
@@ -73,7 +113,7 @@ public class SoundActivity extends ListActivity {
 			return;
 		}
 
-		stopSound(null);
+		stopSound();
 		reloadAdapter();
 
 		//change actionbar:
@@ -102,15 +142,18 @@ public class SoundActivity extends ListActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		ProjectManager projectManager = ProjectManager.getInstance();
-		if (projectManager.getCurrentProject() != null) {
-			projectManager.saveProject();
-		}
-		stopSound(null);
+		stopSound();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		mediaPlayer.reset();
+		mediaPlayer.release();
+		mediaPlayer = null;
 	}
 
 	private void updateSoundAdapter(String title, String fileName) {
-
 		title = Utils.getUniqueSoundName(title);
 
 		SoundInfo newSoundInfo = new SoundInfo();
@@ -132,78 +175,56 @@ public class SoundActivity extends ListActivity {
 
 	public void pauseSound(SoundInfo soundInfo) {
 		mediaPlayer.pause();
-
 		soundInfo.isPlaying = false;
-		soundInfo.isPaused = true;
 	}
 
-	public void stopSound(SoundInfo exceptionSoundInfo) {
-		if (exceptionSoundInfo != null && exceptionSoundInfo.isPaused) {
-			return;
+	private void stopSound() {
+		if (mediaPlayer.isPlaying()) {
+			mediaPlayer.stop();
 		}
-		mediaPlayer.stop();
 
-		for (SoundInfo soundInfo : soundInfoList) {
-			soundInfo.isPlaying = false;
-			soundInfo.isPaused = false;
+		for (int i = 0; i < soundInfoList.size(); i++) {
+			soundInfoList.get(i).isPlaying = false;
 		}
 	}
 
-	public void startSound(SoundInfo soundInfo) {
-		soundInfo.isPlaying = true;
-		if (soundInfo.isPaused) {
-			soundInfo.isPaused = false;
-			mediaPlayer.start();
+	private void startSound(SoundInfo soundInfo) {
+		if (soundInfo.isPlaying) {
 			return;
 		}
 		try {
 			mediaPlayer.reset();
+			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.setDataSource(soundInfo.getAbsolutePath());
 			mediaPlayer.prepare();
 			mediaPlayer.start();
+			soundInfo.isPlaying = true;
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e("CATROID", "Cannot start sound.", e);
 		}
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		//when new sound title is selected and ready to be added to the catroid project
+
 		if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_SELECT_MUSIC) {
 			String audioPath = "";
+			Uri audioUri = data.getData();
+			String[] filePathColumn = { MediaStore.Audio.Media.DATA };
+			Cursor cursor = managedQuery(audioUri, filePathColumn, null, null, null);
 
-			//copy music to catroid:
-			try {
-
-				//get real path of soundfile --------------------------
-				{
-					Uri audioUri = data.getData();
-					String[] proj = { MediaStore.Audio.Media.DATA };
-					Cursor actualSoundCursor = managedQuery(audioUri, proj, null, null, null);
-
-					if (actualSoundCursor != null) {
-						int actualSoundColumnIndex = actualSoundCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
-						actualSoundCursor.moveToFirst();
-						audioPath = actualSoundCursor.getString(actualSoundColumnIndex);
-					} else {
-						audioPath = audioUri.getPath();
-					}
-					Log.i(TAG, "audiopath: " + audioPath);
-				}
-				//-----------------------------------------------------
-
-				if (audioPath.equalsIgnoreCase("")) {
-					throw new IOException();
-				}
-				File soundFile = StorageHandler.getInstance().copySoundFile(audioPath);
-				String soundFileName = soundFile.getName();
-				String soundTitle = soundFileName.substring(soundFileName.indexOf('_') + 1,
-						soundFileName.lastIndexOf('.'));
-				updateSoundAdapter(soundTitle, soundFileName);
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (cursor != null) {
+				cursor.moveToFirst();
+				int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+				audioPath = cursor.getString(columnIndex);
+			} else {
+				audioPath = audioUri.getPath();
+			}
+			if (audioPath.equalsIgnoreCase("")) {
 				Utils.displayErrorMessage(this, this.getString(R.string.error_load_sound));
+			} else {
+				new CopyAudioFilesTask().execute(audioPath);
 			}
 		}
 	}
@@ -226,13 +247,14 @@ public class SoundActivity extends ListActivity {
 		final int position = (Integer) v.getTag();
 		final SoundInfo soundInfo = soundInfoList.get(position);
 
-		stopSound(soundInfo);
-		startSound(soundInfo);
+		stopSound();
+		if (!soundInfo.isPlaying) {
+			startSound(soundInfo);
+		}
 
 		mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
 			public void onCompletion(MediaPlayer mp) {
 				soundInfo.isPlaying = false;
-				soundInfo.isPaused = false;
 				((SoundAdapter) getListAdapter()).notifyDataSetChanged();
 			}
 		});
@@ -248,12 +270,10 @@ public class SoundActivity extends ListActivity {
 
 	public void handleDeleteSoundButton(View v) {
 		final int position = (Integer) v.getTag();
-		stopSound(null);
+		stopSound();
 		ScriptTabActivity scriptTabActivity = (ScriptTabActivity) getParent();
 		scriptTabActivity.selectedSoundInfo = soundInfoList.get(position);
 		scriptTabActivity.selectedPosition = position;
 		scriptTabActivity.showDialog(ScriptTabActivity.DIALOG_DELETE_SOUND);
-
 	}
-
 }
