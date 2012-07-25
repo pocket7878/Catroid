@@ -29,19 +29,15 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 
 public class SoundRecorder {
-
-	private MediaRecorder recorder = new MediaRecorder();
-	private boolean isRecording = false;
-
+	private MediaRecorder recorder;
+	private boolean isRecording;
 	private String path;
 
 	public SoundRecorder(String path) {
+		this.recorder = new MediaRecorder();
 		this.path = path;
 	}
 
-	/**
-	 * Starts a new recording.
-	 */
 	public void start() throws IOException {
 		File soundFile = new File(path);
 		if (soundFile.exists()) {
@@ -52,7 +48,6 @@ public class SoundRecorder {
 			throw new IOException("Path to file could not be created.");
 		}
 
-		// call reset() to start a new record for sure
 		recorder.reset();
 		recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 		recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -63,11 +58,9 @@ public class SoundRecorder {
 		isRecording = true;
 	}
 
-	/**
-	 * Stops a recording that has been previously started.
-	 */
 	public void stop() throws IOException {
 		recorder.stop();
+		recorder.reset();
 		recorder.release();
 		isRecording = false;
 	}
@@ -79,5 +72,4 @@ public class SoundRecorder {
 	public boolean isRecording() {
 		return isRecording;
 	}
-
 }
