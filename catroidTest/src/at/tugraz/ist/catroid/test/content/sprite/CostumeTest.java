@@ -23,12 +23,12 @@
 package at.tugraz.ist.catroid.test.content.sprite;
 
 import android.test.InstrumentationTestCase;
-import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.common.Consts;
-import at.tugraz.ist.catroid.common.CostumeData;
-import at.tugraz.ist.catroid.content.Costume;
-import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid_youtube.ProjectManager;
+import at.tugraz.ist.catroid_youtube.common.Consts;
+import at.tugraz.ist.catroid_youtube.common.CostumeData;
+import at.tugraz.ist.catroid_youtube.content.Costume;
+import at.tugraz.ist.catroid_youtube.content.Project;
+import at.tugraz.ist.catroid_youtube.content.Sprite;
 
 public class CostumeTest extends InstrumentationTestCase {
 	private Costume costume;

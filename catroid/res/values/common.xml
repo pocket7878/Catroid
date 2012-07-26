@@ -23,7 +23,7 @@
  -->
 <resources>
     <!-- Language independent -->
-    <string name="app_name">Catroid</string>
+    <string name="app_name">Catroid-Youtube</string>
     <string name="percent">%</string>
     <string name="catroid_extension_pathPattern">.*\\.catroid</string>
 

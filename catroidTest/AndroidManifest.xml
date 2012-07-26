@@ -25,7 +25,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:versionCode="10"
 	android:versionName="0.6.0beta"
-	package="at.tugraz.ist.catroid.test"
+	package="at.tugraz.ist.catroid_youtube.test"
 >
 	<application
 		android:icon="@drawable/icon"
@@ -43,10 +43,10 @@
 		android:minSdkVersion="8"
 		android:targetSdkVersion="10" />
 	<instrumentation
-		android:targetPackage="at.tugraz.ist.catroid"
+		android:targetPackage="at.tugraz.ist.catroid_youtube"
 		android:name="android.test.InstrumentationTestRunner" />
 	<!-- this instrumentation is needed to run the tests from jenkins -->
 	<instrumentation
-		android:targetPackage="at.tugraz.ist.catroid"
+		android:targetPackage="at.tugraz.ist.catroid_youtube"
 		android:name="pl.polidea.instrumentation.PolideaInstrumentationTestRunner" />
 </manifest> 

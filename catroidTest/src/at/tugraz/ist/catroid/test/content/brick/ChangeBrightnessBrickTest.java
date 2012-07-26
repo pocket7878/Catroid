@@ -23,9 +23,9 @@
 package at.tugraz.ist.catroid.test.content.brick;
 
 import android.test.AndroidTestCase;
-import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.content.bricks.ChangeBrightnessBrick;
-import at.tugraz.ist.catroid.content.bricks.ChangeGhostEffectBrick;
+import at.tugraz.ist.catroid_youtube.content.Sprite;
+import at.tugraz.ist.catroid_youtube.content.bricks.ChangeBrightnessBrick;
+import at.tugraz.ist.catroid_youtube.content.bricks.ChangeGhostEffectBrick;
 
 public class ChangeBrightnessBrickTest extends AndroidTestCase {
 

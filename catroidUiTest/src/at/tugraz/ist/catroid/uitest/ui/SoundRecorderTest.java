@@ -26,14 +26,14 @@ import java.io.File;
 import java.util.ArrayList;
 
 import android.test.ActivityInstrumentationTestCase2;
-import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.common.Consts;
-import at.tugraz.ist.catroid.common.SoundInfo;
-import at.tugraz.ist.catroid.soundrecorder.SoundRecorderActivity;
-import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
-import at.tugraz.ist.catroid.utils.Utils;
+import at.tugraz.ist.catroid_youtube.ProjectManager;
+import at.tugraz.ist.catroid_youtube.R;
+import at.tugraz.ist.catroid_youtube.common.Consts;
+import at.tugraz.ist.catroid_youtube.common.SoundInfo;
+import at.tugraz.ist.catroid_youtube.soundrecorder.SoundRecorderActivity;
+import at.tugraz.ist.catroid_youtube.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid_youtube.utils.Utils;
 
 import com.jayway.android.robotium.solo.Solo;
 

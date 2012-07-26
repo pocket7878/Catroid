@@ -23,12 +23,12 @@
 package at.tugraz.ist.catroid.uitest.stage;
 
 import android.test.ActivityInstrumentationTestCase2;
-import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.common.Values;
-import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.io.StorageHandler;
-import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
+import at.tugraz.ist.catroid_youtube.ProjectManager;
+import at.tugraz.ist.catroid_youtube.common.Values;
+import at.tugraz.ist.catroid_youtube.content.Project;
+import at.tugraz.ist.catroid_youtube.io.StorageHandler;
+import at.tugraz.ist.catroid_youtube.stage.StageActivity;
 
 import com.jayway.android.robotium.solo.Solo;
 

@@ -26,9 +26,9 @@ import java.io.File;
 import java.io.IOException;
 
 import android.test.AndroidTestCase;
-import at.tugraz.ist.catroid.common.Consts;
-import at.tugraz.ist.catroid.utils.UtilFile;
-import at.tugraz.ist.catroid.utils.UtilZip;
+import at.tugraz.ist.catroid_youtube.common.Consts;
+import at.tugraz.ist.catroid_youtube.utils.UtilFile;
+import at.tugraz.ist.catroid_youtube.utils.UtilZip;
 
 public class ZipTest extends AndroidTestCase {
 

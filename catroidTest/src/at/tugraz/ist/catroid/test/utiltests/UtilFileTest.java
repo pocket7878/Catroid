@@ -29,12 +29,12 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import android.test.InstrumentationTestCase;
-import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
-import at.tugraz.ist.catroid.utils.UtilFile;
-import at.tugraz.ist.catroid.utils.Utils;
+import at.tugraz.ist.catroid_youtube.ProjectManager;
+import at.tugraz.ist.catroid_youtube.content.Project;
+import at.tugraz.ist.catroid_youtube.content.Sprite;
+import at.tugraz.ist.catroid_youtube.utils.UtilFile;
+import at.tugraz.ist.catroid_youtube.utils.Utils;
 
 public class UtilFileTest extends InstrumentationTestCase {
 	private File testDirectory;

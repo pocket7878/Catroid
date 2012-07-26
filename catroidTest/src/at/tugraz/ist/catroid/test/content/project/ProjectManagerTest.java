@@ -28,22 +28,22 @@ import java.io.IOException;
 import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.test.InstrumentationTestCase;
-import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.common.Consts;
-import at.tugraz.ist.catroid.common.CostumeData;
-import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.content.Script;
-import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.content.StartScript;
-import at.tugraz.ist.catroid.content.bricks.ComeToFrontBrick;
-import at.tugraz.ist.catroid.content.bricks.HideBrick;
-import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
-import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
-import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
-import at.tugraz.ist.catroid.content.bricks.ShowBrick;
-import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
-import at.tugraz.ist.catroid.utils.Utils;
+import at.tugraz.ist.catroid_youtube.ProjectManager;
+import at.tugraz.ist.catroid_youtube.common.Consts;
+import at.tugraz.ist.catroid_youtube.common.CostumeData;
+import at.tugraz.ist.catroid_youtube.content.Project;
+import at.tugraz.ist.catroid_youtube.content.Script;
+import at.tugraz.ist.catroid_youtube.content.Sprite;
+import at.tugraz.ist.catroid_youtube.content.StartScript;
+import at.tugraz.ist.catroid_youtube.content.bricks.ComeToFrontBrick;
+import at.tugraz.ist.catroid_youtube.content.bricks.HideBrick;
+import at.tugraz.ist.catroid_youtube.content.bricks.PlaceAtBrick;
+import at.tugraz.ist.catroid_youtube.content.bricks.SetCostumeBrick;
+import at.tugraz.ist.catroid_youtube.content.bricks.SetSizeToBrick;
+import at.tugraz.ist.catroid_youtube.content.bricks.ShowBrick;
+import at.tugraz.ist.catroid_youtube.io.StorageHandler;
+import at.tugraz.ist.catroid_youtube.utils.Utils;
 
 public class ProjectManagerTest extends InstrumentationTestCase {
 

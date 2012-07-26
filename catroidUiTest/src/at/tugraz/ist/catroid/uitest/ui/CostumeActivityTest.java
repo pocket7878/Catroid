@@ -31,15 +31,15 @@ import android.os.Bundle;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.Display;
 import android.widget.ListAdapter;
-import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.common.Consts;
-import at.tugraz.ist.catroid.common.CostumeData;
-import at.tugraz.ist.catroid.ui.CostumeActivity;
-import at.tugraz.ist.catroid.ui.MainMenuActivity;
-import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
-import at.tugraz.ist.catroid.utils.Utils;
+import at.tugraz.ist.catroid_youtube.ProjectManager;
+import at.tugraz.ist.catroid_youtube.R;
+import at.tugraz.ist.catroid_youtube.common.Consts;
+import at.tugraz.ist.catroid_youtube.common.CostumeData;
+import at.tugraz.ist.catroid_youtube.ui.CostumeActivity;
+import at.tugraz.ist.catroid_youtube.ui.MainMenuActivity;
+import at.tugraz.ist.catroid_youtube.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid_youtube.utils.Utils;
 
 import com.jayway.android.robotium.solo.Solo;
 

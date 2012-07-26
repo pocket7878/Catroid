@@ -273,9 +273,11 @@
     <string name="load_project">Load project</string>
     <string name="upload_button">Upload</string>
     <string name="upload_project_dialog_title">Upload project</string>
+    <string name="upload_video_dialog_title">Upload video</string>
     <string name="upload_description">Description:</string>
     <string name="project_rename">(Your project will be renamed.)</string>
     <string name="size_of_project">Size of project:</string>
+    <string name="video_title">Video title:</string>
 
     <!-- Bluetooth, LegoNXT, Arduino -->
     <!-- Bluetooth Connection Strings -->

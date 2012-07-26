@@ -25,13 +25,13 @@ package at.tugraz.ist.catroid.test.common;
 import java.io.IOException;
 
 import android.test.AndroidTestCase;
-import at.tugraz.ist.catroid.common.CostumeData;
-import at.tugraz.ist.catroid.common.StandardProjectHandler;
-import at.tugraz.ist.catroid.common.Values;
-import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.content.Script;
-import at.tugraz.ist.catroid.content.WhenScript;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
+import at.tugraz.ist.catroid_youtube.common.CostumeData;
+import at.tugraz.ist.catroid_youtube.common.StandardProjectHandler;
+import at.tugraz.ist.catroid_youtube.common.Values;
+import at.tugraz.ist.catroid_youtube.content.Project;
+import at.tugraz.ist.catroid_youtube.content.Script;
+import at.tugraz.ist.catroid_youtube.content.WhenScript;
 
 public class StandardProjectHandlerTest extends AndroidTestCase {
 

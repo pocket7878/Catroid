@@ -29,14 +29,14 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.ui.CostumeActivity;
-import at.tugraz.ist.catroid.ui.MainMenuActivity;
-import at.tugraz.ist.catroid.ui.ScriptActivity;
-import at.tugraz.ist.catroid.ui.ScriptTabActivity;
-import at.tugraz.ist.catroid.ui.SoundActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
-import at.tugraz.ist.catroid.utils.Utils;
+import at.tugraz.ist.catroid_youtube.R;
+import at.tugraz.ist.catroid_youtube.ui.CostumeActivity;
+import at.tugraz.ist.catroid_youtube.ui.MainMenuActivity;
+import at.tugraz.ist.catroid_youtube.ui.ScriptActivity;
+import at.tugraz.ist.catroid_youtube.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid_youtube.ui.SoundActivity;
+import at.tugraz.ist.catroid_youtube.utils.Utils;
 
 import com.jayway.android.robotium.solo.Solo;
 

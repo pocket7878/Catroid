@@ -26,13 +26,13 @@ import java.io.IOException;
 
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.test.ActivityInstrumentationTestCase2;
-import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.io.StorageHandler;
-import at.tugraz.ist.catroid.ui.MainMenuActivity;
-import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
+import at.tugraz.ist.catroid_youtube.R;
+import at.tugraz.ist.catroid_youtube.content.Project;
+import at.tugraz.ist.catroid_youtube.content.Sprite;
+import at.tugraz.ist.catroid_youtube.io.StorageHandler;
+import at.tugraz.ist.catroid_youtube.ui.MainMenuActivity;
+import at.tugraz.ist.catroid_youtube.ui.ScriptTabActivity;
 
 import com.jayway.android.robotium.solo.Solo;
 

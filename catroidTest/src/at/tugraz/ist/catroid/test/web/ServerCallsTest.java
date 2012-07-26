@@ -25,9 +25,9 @@ package at.tugraz.ist.catroid.test.web;
 import android.test.AndroidTestCase;
 import android.util.Log;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
-import at.tugraz.ist.catroid.utils.UtilToken;
-import at.tugraz.ist.catroid.web.ServerCalls;
-import at.tugraz.ist.catroid.web.WebconnectionException;
+import at.tugraz.ist.catroid_youtube.utils.UtilToken;
+import at.tugraz.ist.catroid_youtube.web.ServerCalls;
+import at.tugraz.ist.catroid_youtube.web.WebconnectionException;
 
 /*
  * This tests need an internet connection

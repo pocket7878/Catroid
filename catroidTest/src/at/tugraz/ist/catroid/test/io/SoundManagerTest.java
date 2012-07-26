@@ -27,10 +27,10 @@ import java.io.IOException;
 
 import android.media.MediaPlayer;
 import android.test.InstrumentationTestCase;
-import at.tugraz.ist.catroid.common.Consts;
-import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.test.R;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
+import at.tugraz.ist.catroid_youtube.common.Consts;
+import at.tugraz.ist.catroid_youtube.io.SoundManager;
 
 public class SoundManagerTest extends InstrumentationTestCase {
 	private static final int LONG_TEST_SOUND = R.raw.longtestsound;

@@ -26,17 +26,18 @@ import java.io.File;
 import java.io.IOException;
 
 import android.test.InstrumentationTestCase;
-import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.common.Consts;
-import at.tugraz.ist.catroid.common.SoundInfo;
-import at.tugraz.ist.catroid.content.Costume;
-import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.io.StorageHandler;
-import at.tugraz.ist.catroid.stage.StageRecorder;
 import at.tugraz.ist.catroid.test.R;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
-import at.tugraz.ist.catroid.utils.UtilFile;
+import at.tugraz.ist.catroid_youtube.ProjectManager;
+import at.tugraz.ist.catroid_youtube.common.Consts;
+import at.tugraz.ist.catroid_youtube.common.SoundInfo;
+import at.tugraz.ist.catroid_youtube.content.Costume;
+import at.tugraz.ist.catroid_youtube.content.Project;
+import at.tugraz.ist.catroid_youtube.content.Sprite;
+import at.tugraz.ist.catroid_youtube.io.StorageHandler;
+import at.tugraz.ist.catroid_youtube.stage.StageRecorder;
+import at.tugraz.ist.catroid_youtube.utils.UtilFile;
+import at.tugraz.ist.catroid_youtube.utils.Utils;
 
 public class ScreenRecorderTest extends InstrumentationTestCase {
 	private static final int SOUND_FILE_ID = R.raw.testsound;
@@ -69,7 +70,8 @@ public class ScreenRecorderTest extends InstrumentationTestCase {
 		recorder.recordCostume(costume);
 		recorder.recordSound(soundInfo);
 		Thread.sleep(500);
-		String recordedXml = recorder.finishAndSave();
+		String currentProject = ProjectManager.getInstance().getCurrentProject().getName();
+		File recordedFile = new File(Utils.buildPath(Consts.DEFAULT_ROOT, currentProject), "record.json");
 
 		assertTrue("Costume recorded wrongly.",
 				recorder.getRecording().costumeList.get(0).first.name.equals(costume.name));

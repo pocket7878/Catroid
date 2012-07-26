@@ -35,8 +35,8 @@ import java.lang.reflect.Method;
 
 import android.content.Context;
 import android.util.Log;
-import at.tugraz.ist.catroid.common.Consts;
-import at.tugraz.ist.catroid.utils.UtilFile;
+import at.tugraz.ist.catroid_youtube.common.Consts;
+import at.tugraz.ist.catroid_youtube.utils.UtilFile;
 
 public class TestUtils {
 

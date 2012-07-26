@@ -24,11 +24,11 @@ package at.tugraz.ist.catroid.test.content.brick;
 
 import android.test.AndroidTestCase;
 import android.view.View;
-import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.content.bricks.ComeToFrontBrick;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
+import at.tugraz.ist.catroid_youtube.ProjectManager;
+import at.tugraz.ist.catroid_youtube.content.Project;
+import at.tugraz.ist.catroid_youtube.content.Sprite;
+import at.tugraz.ist.catroid_youtube.content.bricks.ComeToFrontBrick;
 
 public class ComeToFrontBrickTest extends AndroidTestCase {
 

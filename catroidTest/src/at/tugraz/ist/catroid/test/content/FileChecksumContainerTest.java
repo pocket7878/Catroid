@@ -30,14 +30,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import android.test.InstrumentationTestCase;
-import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.common.Consts;
-import at.tugraz.ist.catroid.common.FileChecksumContainer;
-import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.test.R;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
-import at.tugraz.ist.catroid.utils.Utils;
+import at.tugraz.ist.catroid_youtube.ProjectManager;
+import at.tugraz.ist.catroid_youtube.common.Consts;
+import at.tugraz.ist.catroid_youtube.common.FileChecksumContainer;
+import at.tugraz.ist.catroid_youtube.content.Project;
+import at.tugraz.ist.catroid_youtube.io.StorageHandler;
+import at.tugraz.ist.catroid_youtube.utils.Utils;
 
 public class FileChecksumContainerTest extends InstrumentationTestCase {
 

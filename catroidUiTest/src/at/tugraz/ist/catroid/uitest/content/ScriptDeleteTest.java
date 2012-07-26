@@ -25,18 +25,18 @@ package at.tugraz.ist.catroid.uitest.content;
 import java.util.ArrayList;
 
 import android.test.ActivityInstrumentationTestCase2;
-import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.content.Script;
-import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.content.StartScript;
-import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.HideBrick;
-import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
-import at.tugraz.ist.catroid.content.bricks.ShowBrick;
-import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
+import at.tugraz.ist.catroid_youtube.ProjectManager;
+import at.tugraz.ist.catroid_youtube.R;
+import at.tugraz.ist.catroid_youtube.content.Project;
+import at.tugraz.ist.catroid_youtube.content.Script;
+import at.tugraz.ist.catroid_youtube.content.Sprite;
+import at.tugraz.ist.catroid_youtube.content.StartScript;
+import at.tugraz.ist.catroid_youtube.content.bricks.Brick;
+import at.tugraz.ist.catroid_youtube.content.bricks.HideBrick;
+import at.tugraz.ist.catroid_youtube.content.bricks.SetSizeToBrick;
+import at.tugraz.ist.catroid_youtube.content.bricks.ShowBrick;
+import at.tugraz.ist.catroid_youtube.ui.ScriptTabActivity;
 
 import com.jayway.android.robotium.solo.Solo;
 
