@@ -72,7 +72,6 @@ public class SetMassBrickTest extends AndroidTestCase {
 			return executed;
 		}
 
-		@Override
 		public void setMass(Sprite sprite, float mass) {
 			executed = true;
 		}

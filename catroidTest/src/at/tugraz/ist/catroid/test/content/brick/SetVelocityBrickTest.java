@@ -76,7 +76,6 @@ public class SetVelocityBrickTest extends AndroidTestCase {
 			return executed;
 		}
 
-		@Override
 		public void setVelocity(Sprite sprite, Vector2 v) {
 			executed = true;
 		}
