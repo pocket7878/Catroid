@@ -101,7 +101,7 @@ public class SoundManagerTest extends InstrumentationTestCase {
 		SoundManager.getInstance().resume();
 		assertTrue("MediaPlayer is not playing after resume", mediaPlayer.isPlaying());
 
-		final int duration = mediaPlayer.getDuration() + 100;
+		final int duration = mediaPlayer.getDuration() + 200;
 		Thread.sleep(duration);
 
 		assertFalse("MediaPlayer is not done playing after pause and resume", mediaPlayer.isPlaying());
