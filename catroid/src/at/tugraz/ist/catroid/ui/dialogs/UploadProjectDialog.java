@@ -141,7 +141,7 @@ public class UploadProjectDialog extends Dialog implements OnClickListener {
 						Utils.displayErrorMessage(context,
 								context.getString(R.string.error_upload_project_with_default_name));
 						return;
-					} else if (Utils.isProjectDefaultProject(context, currentProjectName)) {
+					} else if (Utils.isProjectStandardProject(context, currentProjectName)) {
 						Utils.displayErrorMessage(context, context.getString(R.string.error_upload_default_project));
 						return;
 					} else if (!uploadName.equals(currentProjectName)) {

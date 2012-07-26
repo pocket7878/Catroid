@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<Content.Project>
+  <androidVersion>10</androidVersion>
+  <catroidVersionCode>10</catroidVersionCode>
+  <catroidVersionName>0.6.0beta</catroidVersionName>
+  <deviceName>GT-I9000</deviceName>
+  <projectName>xyz</projectName>
+  <screenHeight>800</screenHeight>
+  <screenWidth>480</screenWidth>
+  <spriteList>
+    <Content.Sprite>
+      <costumeDataList>

@@ -39,6 +39,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.StandardProjectHandler;
 import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
@@ -242,7 +243,105 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 				solo.searchText(solo.getString(R.string.error_upload_default_project)));
 	}
 
-	public void testProjectUploadModifiedStandardProject() throws Throwable {
+	public void testProjectUploadModifiedStandardProjectSwitchCostumes() throws Throwable {
+		goToScriptsRoutine();
+		solo.sleep(100);
+		solo.clickOnText(solo.getString(R.string.default_project_sprites_catroid_normalcat));
+		solo.clickOnText(solo.getString(R.string.default_project_sprites_catroid_banzaicat));
+		solo.sleep(200);
+		uploadTestRoutine();
+	}
+
+	public void testProjectUploadModifiedStandardProjectDeleteScript() throws Throwable {
+		goToScriptsRoutine();
+		solo.sleep(100);
+		solo.clickLongOnText(solo.getString(R.string.brick_when_started));
+		String deleteText = solo.getString(R.string.delete);
+		solo.waitForText(deleteText);
+		solo.clickOnText(deleteText);
+		solo.sleep(200);
+		uploadTestRoutine();
+	}
+
+	public void testProjectUploadModifiedStandardProjectDeleteBrick() throws Throwable {
+		goToScriptsRoutine();
+		solo.sleep(100);
+		solo.clickOnText(solo.getString(R.string.action_tapped));
+		Brick firstBrick = ProjectManager.INSTANCE.getCurrentScript().getBrick(0);
+		ProjectManager.INSTANCE.getCurrentScript().removeBrick(firstBrick);
+		solo.clickOnText(solo.getString(R.string.sounds));
+		solo.clickOnText(solo.getString(R.string.scripts));
+		solo.sleep(200);
+		uploadTestRoutine();
+	}
+
+	public void testProjectUploadModifiedStandardProjectAddBrick() throws Throwable {
+		goToScriptsRoutine();
+		solo.sleep(100);
+		solo.clickOnText(solo.getString(R.string.action_tapped));
+		UiTestUtils.addNewBrick(solo, R.string.brick_stop_all_sounds);
+		solo.clickOnText(solo.getString(R.string.brick_when_started));
+		solo.sleep(200);
+		uploadTestRoutine();
+	}
+
+	public void testProjectUploadModifiedStandardProjectModifyInput() throws Throwable {
+		goToScriptsRoutine();
+		solo.sleep(100);
+		solo.clickOnEditText(0);
+		solo.clearEditText(0);
+		solo.enterText(0, "500.0");
+		solo.sleep(200);
+		solo.clickOnText(solo.getString(R.string.ok));
+		solo.sleep(200);
+		uploadTestRoutine();
+	}
+
+	public void testProjectUploadModifiedStandardProjectDeleteCostume() throws Throwable {
+		goToScriptsRoutine();
+		solo.sleep(100);
+		solo.clickOnText(solo.getString(R.string.costumes));
+		solo.clickOnButton(solo.getString(R.string.sound_delete));
+		String buttonOkText = solo.getString(R.string.ok);
+		solo.waitForText(buttonOkText);
+		solo.clickOnText(buttonOkText);
+		solo.sleep(200);
+		uploadTestRoutine();
+	}
+
+	public void testProjectUploadModifiedStandardProjectDeleteSprite() throws Throwable {
+		if (!createAndSaveStandardProject() || standardProject == null) {
+			fail("Standard project not created");
+		}
+		solo.clickOnButton(solo.getString(R.string.my_projects));
+		solo.clickOnText(solo.getString(R.string.default_project_name), 2);
+		solo.clickLongOnText(solo.getString(R.string.default_project_sprites_catroid_name));
+		String deleteText = solo.getString(R.string.delete);
+		solo.waitForText(deleteText);
+		solo.clickOnText(deleteText);
+		solo.sleep(200);
+		uploadTestRoutine();
+	}
+
+	public void testProjectUploadModifiedStandardProjectAddSprite() throws Throwable {
+		if (!createAndSaveStandardProject() || standardProject == null) {
+			fail("Standard project not created");
+		}
+		solo.clickOnButton(solo.getString(R.string.my_projects));
+		solo.clickOnText(solo.getString(R.string.default_project_name), 2);
+
+		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_add_button);
+		solo.waitForText(solo.getString(R.string.new_sprite_dialog_title));
+
+		solo.clearEditText(0);
+		solo.enterText(0, "new sprite");
+		solo.sleep(200);
+		solo.sendKey(Solo.ENTER);
+		solo.sleep(200);
+		uploadTestRoutine();
+	}
+
+	private void goToScriptsRoutine() throws IOException {
 		if (!createAndSaveStandardProject() || standardProject == null) {
 			fail("Standard project not created");
 		}
@@ -251,13 +350,15 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 
 		solo.clickOnText(solo.getString(R.string.default_project_sprites_catroid_name));
 		solo.sleep(200);
-		solo.clickOnText(solo.getString(R.string.default_project_sprites_catroid_normalcat));
-		solo.clickOnText(solo.getString(R.string.default_project_sprites_catroid_banzaicat));
-		solo.sleep(200);
+		assertTrue("Project was not yet modified, xml should be the same",
+				Utils.isProjectStandardProject(getInstrumentation().getTargetContext(), standardProject.getName()));
+	}
+
+	private void uploadTestRoutine() throws Throwable {
 		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_home);
 		solo.sleep(300);
 		assertFalse("Project was modified, xml should have changed",
-				Utils.isProjectDefaultProject(getInstrumentation().getTargetContext(), standardProject.getName()));
+				Utils.isProjectStandardProject(getInstrumentation().getTargetContext(), standardProject.getName()));
 
 		setServerURLToTestUrl();
 		UiTestUtils.createValidUser(getActivity());
@@ -274,7 +375,6 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 
 		assertTrue("Project was modified - upload should have worked, but it failed",
 				solo.searchText(solo.getString(R.string.success_project_upload)));
-
 	}
 
 	private boolean createAndSaveStandardProject() {

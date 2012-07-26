@@ -23,9 +23,9 @@
 package at.tugraz.ist.catroid.test.utiltests;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
@@ -77,6 +77,7 @@ public class UtilsTest extends InstrumentationTestCase {
 		}
 		File tempDir = new File(Constants.TMP_PATH);
 		UtilFile.deleteDirectory(tempDir);
+		TestUtils.clearAllUtilTestProjects();
 	}
 
 	public void testMD5CheckSumOfFile() {
@@ -215,102 +216,93 @@ public class UtilsTest extends InstrumentationTestCase {
 	}
 
 	public void testCompareProjectcodeXmlFiles() throws Exception {
-		FileOutputStream outputStream = null;
-		InputStream inputStream = null;
-
 		File tempDir = new File(Constants.TMP_PATH);
 		tempDir.mkdirs();
 
-		File projectcodeXmlFile = new File(Utils.buildPath(Constants.TMP_PATH, "projectcode.xml"));
-
-		if (projectcodeXmlFile.exists()) {
-			projectcodeXmlFile.delete();
-		}
-
+		File standardProjectcodeXmlFile = new File(Utils.buildPath(Constants.TMP_PATH, "projectcode.xml"));
+		File nonStandardProjectcodeXmlFile = new File(Utils.buildPath(Constants.TMP_PATH, "projectcode_modified.xml"));
+		File nonStandardProjectcodeXmlFile2 = new File(Utils.buildPath(Constants.TMP_PATH,
+				"projectcode_testproject.xml"));
 		try {
-			projectcodeXmlFile.createNewFile();
-
-			inputStream = getInstrumentation().getContext().getResources().getAssets().open("projectcode.xml");
-			byte[] buffer = new byte[inputStream.available()];
-			inputStream.read(buffer);
-
-			outputStream = new FileOutputStream(projectcodeXmlFile);
-			outputStream.write(buffer);
-			outputStream.flush();
+			Utils.createTemporaryTestfileFromAssets(getInstrumentation().getTargetContext(),
+					standardProjectcodeXmlFile, "projectcode_standardproject.xml");
+			Utils.createTemporaryTestfileFromAssets(getInstrumentation().getContext(), nonStandardProjectcodeXmlFile,
+					"projectcode_modified.xml");
+			Utils.createTemporaryTestfileFromAssets(getInstrumentation().getContext(), nonStandardProjectcodeXmlFile2,
+					"test_project.xml");
 		} catch (IOException e) {
 			e.printStackTrace();
-			fail("Projectcode xml not loaded from Assets");
-		} finally {
-			if (outputStream != null) {
-				outputStream.close();
-			}
-			if (inputStream != null) {
-				inputStream.close();
-			}
-		}
-
-		File corruptXmlFile = new File(Utils.buildPath(Constants.TMP_PATH, "projectcode_corrupt.xml"));
-
-		if (projectcodeXmlFile.exists()) {
-			projectcodeXmlFile.delete();
-		}
-
-		try {
-			projectcodeXmlFile.createNewFile();
-
-			inputStream = getInstrumentation().getContext().getResources().getAssets().open("projectcode_corrupt.xml");
-			byte[] buffer = new byte[inputStream.available()];
-			inputStream.read(buffer);
-
-			outputStream = new FileOutputStream(corruptXmlFile);
-			outputStream.write(buffer);
-			outputStream.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-			fail("Projectcode xml not loaded from Assets");
-		} finally {
-			if (outputStream != null) {
-				outputStream.close();
-			}
-			if (inputStream != null) {
-				inputStream.close();
-			}
-		}
-
-		File corruptXmlFile2 = new File(Utils.buildPath(Constants.TMP_PATH, "projectcode_corrupt2.xml"));
-
-		if (projectcodeXmlFile.exists()) {
-			projectcodeXmlFile.delete();
-		}
-
-		try {
-			projectcodeXmlFile.createNewFile();
-
-			inputStream = getInstrumentation().getContext().getResources().getAssets().open("test_project.xml");
-			byte[] buffer = new byte[inputStream.available()];
-			inputStream.read(buffer);
-
-			outputStream = new FileOutputStream(corruptXmlFile2);
-			outputStream.write(buffer);
-			outputStream.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-			fail("Projectcode xml not loaded from Assets");
-		} finally {
-			if (outputStream != null) {
-				outputStream.close();
-			}
-			if (inputStream != null) {
-				inputStream.close();
-			}
+			fail("Error while loading File from Assets");
 		}
 
 		assertTrue("comparing of Xmls failed - equal files should return true",
-				Utils.compareProjectcodeXmlFiles(projectcodeXmlFile, projectcodeXmlFile));
+				Utils.compareProjectcodeXmlFiles(standardProjectcodeXmlFile, standardProjectcodeXmlFile));
 		assertFalse("comparing of Xmls failed - xmls differ in one line - should return false",
-				Utils.compareProjectcodeXmlFiles(corruptXmlFile, projectcodeXmlFile));
+				Utils.compareProjectcodeXmlFiles(nonStandardProjectcodeXmlFile, standardProjectcodeXmlFile));
 		assertFalse("comparing of Xmls failed - completely different xmls - should return false",
-				Utils.compareProjectcodeXmlFiles(corruptXmlFile2, projectcodeXmlFile));
+				Utils.compareProjectcodeXmlFiles(nonStandardProjectcodeXmlFile2, standardProjectcodeXmlFile));
 		UtilFile.deleteDirectory(tempDir);
+	}
+
+	public void testRemoveHeaderFromProjectcodeXml() {
+		File tempDir = new File(Constants.TMP_PATH);
+		tempDir.mkdirs();
+
+		File normalizedProjectcodeXmlFile = new File(Utils.buildPath(Constants.TMP_PATH, "normalizedXml.xml"));
+		try {
+			Utils.createTemporaryTestfileFromAssets(getInstrumentation().getContext(), normalizedProjectcodeXmlFile,
+					"normalize_test.xml");
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("Error while loading File from Assets");
+		}
+
+		String normalizedXmlString = "";
+		String expectedXmlContent = "  <spriteList>\n    <Content.Sprite>\n      <costumeDataList>\n";
+		try {
+			normalizedXmlString = Utils.removeHeaderFromProjectcodeXml(normalizedProjectcodeXmlFile);
+			assertEquals("Xml normalization failed", expectedXmlContent, normalizedXmlString);
+		} catch (FileNotFoundException e) {
+			fail("FileNotFoundException should not occur");
+		}
+
+		try {
+			File testFile = new File(Utils.buildPath(Constants.TMP_PATH, "abc.xml"));
+			normalizedXmlString = Utils.removeHeaderFromProjectcodeXml(testFile);
+			fail("Should not get here due to FileNotFoundException");
+		} catch (FileNotFoundException e) {
+			assertTrue("just to make sure the Exception is thrown correctly", true);
+		}
+	}
+
+	public void testIsProjectStandardProject() throws IOException {
+		try {
+			Utils.isProjectStandardProject(getInstrumentation().getTargetContext(), "invalidprojectname");
+			fail("Should not get here due to FileNotFoundException");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			assertTrue("just to make sure the Exception is thrown correctly", true);
+		}
+
+		TestUtils.createTestProjectOnLocalStorageWithVersionCode(0);
+		try {
+			assertFalse("Project is not standard project, comparison failed", Utils.isProjectStandardProject(
+					getInstrumentation().getTargetContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			fail("FileNotFoundException should not occur");
+		}
+
+		File testProjectProjectcodeXmlFile = new File(Utils.buildPath(Constants.DEFAULT_ROOT,
+				TestUtils.DEFAULT_TEST_PROJECT_NAME, "projectcode.xml"));
+		try {
+			Utils.createTemporaryTestfileFromAssets(getInstrumentation().getTargetContext(),
+					testProjectProjectcodeXmlFile, "projectcode_standardproject.xml");
+			assertTrue("Project is standard project, but check failed", Utils.isProjectStandardProject(
+					getInstrumentation().getTargetContext(), TestUtils.DEFAULT_TEST_PROJECT_NAME));
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("FileNotFoundException should not occur");
+		}
 	}
 }

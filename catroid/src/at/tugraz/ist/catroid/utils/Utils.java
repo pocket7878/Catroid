@@ -389,93 +389,89 @@ public class Utils {
 		return newTitle;
 	}
 
-	public static boolean isProjectDefaultProject(Context context, String currentProjectName) throws IOException {
+	public static boolean isProjectStandardProject(Context context, String currentProjectName)
+			throws FileNotFoundException, IOException {
 		String currentProjectProjectcode = Utils.buildPath(Constants.DEFAULT_ROOT, currentProjectName,
 				Constants.PROJECTCODE_NAME);
 		File currentProjectProjectcodeFile = new File(currentProjectProjectcode);
-
-		FileOutputStream outputStream = null;
-		InputStream inputStream = null;
 		File tempDir = new File(Constants.TMP_PATH);
 		tempDir.mkdirs();
 
 		File standardProjectProjectcodeFile = new File(Utils.buildPath(Constants.TMP_PATH,
 				"projectcode_standardproject.xml"));
+		try {
+			Utils.createTemporaryTestfileFromAssets(context, standardProjectProjectcodeFile,
+					"projectcode_standardproject.xml");
+			return compareProjectcodeXmlFiles(currentProjectProjectcodeFile, standardProjectProjectcodeFile);
+		} finally {
+			UtilFile.deleteDirectory(tempDir);
+		}
+	}
 
-		if (standardProjectProjectcodeFile.exists()) {
-			standardProjectProjectcodeFile.delete();
+	public static boolean compareProjectcodeXmlFiles(File projectToUploadXmlFile, File standardProjectXmlFile)
+			throws FileNotFoundException {
+		String normalizedUploadProjectXml = removeHeaderFromProjectcodeXml(projectToUploadXmlFile);
+		String normalizedStandardProjectXml = removeHeaderFromProjectcodeXml(standardProjectXmlFile);
+
+		return normalizedUploadProjectXml.contentEquals(normalizedStandardProjectXml);
+	}
+
+	public static String removeHeaderFromProjectcodeXml(File fileToNormalize) throws FileNotFoundException {
+		StringBuilder stringBuilder = null;
+		Scanner textScanner = null;
+		String lineSeparation = System.getProperty("line.separator");
+		boolean spriteListFound = false;
+		String currentLine = "";
+		final String xmlBodyStartTag = "<spriteList>";
+		String normalizedXml = "";
+
+		try {
+			stringBuilder = new StringBuilder();
+			textScanner = new Scanner(new FileInputStream(fileToNormalize), "UTF-8");
+			while (textScanner.hasNextLine()) {
+				currentLine = textScanner.nextLine().toString();
+				if (currentLine.trim().contentEquals(xmlBodyStartTag)) {
+					spriteListFound = true;
+				}
+				if (spriteListFound) {
+					stringBuilder.append(currentLine + lineSeparation);
+				}
+			}
+			normalizedXml = stringBuilder.toString();
+			return normalizedXml;
+		} finally {
+			if (textScanner != null) {
+				textScanner.close();
+			}
+		}
+	}
+
+	public static void createTemporaryTestfileFromAssets(Context context, File outputFile, String assetsInputFile)
+			throws FileNotFoundException, IOException {
+		FileOutputStream outputStream = null;
+		InputStream inputStream = null;
+
+		if (outputFile.exists()) {
+			outputFile.delete();
 		}
 
 		try {
-			standardProjectProjectcodeFile.createNewFile();
+			outputFile.createNewFile();
 
-			inputStream = context.getResources().getAssets().open("projectcode_standardproject.xml");
+			inputStream = context.getResources().getAssets().open(assetsInputFile);
 			byte[] buffer = new byte[inputStream.available()];
 			inputStream.read(buffer);
 
-			outputStream = new FileOutputStream(standardProjectProjectcodeFile);
+			outputStream = new FileOutputStream(outputFile);
 			outputStream.write(buffer);
 			outputStream.flush();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} finally {
 			if (outputStream != null) {
 				outputStream.close();
 			}
 			if (inputStream != null) {
 				inputStream.close();
 			}
-			UtilFile.deleteDirectory(tempDir);
-			throw new IOException();
 		}
-		if (outputStream != null) {
-			outputStream.close();
-		}
-		if (inputStream != null) {
-			inputStream.close();
-		}
-		boolean equalProjectcodeFiles = compareProjectcodeXmlFiles(currentProjectProjectcodeFile,
-				standardProjectProjectcodeFile);
-		UtilFile.deleteDirectory(tempDir);
-		return equalProjectcodeFiles;
-	}
-
-	public static boolean compareProjectcodeXmlFiles(File projectToUploadXmlFile, File standardProjectXmlFile)
-			throws FileNotFoundException {
-		StringBuilder stringBuilder = null;
-		String lineSeparation = System.getProperty("line.separator");
-		Scanner textScanner = null;
-		boolean spriteListFound = false;
-		String currentLine = "";
-
-		stringBuilder = new StringBuilder();
-		textScanner = new Scanner(new FileInputStream(projectToUploadXmlFile), "UTF-8");
-		while (textScanner.hasNextLine()) {
-			currentLine = textScanner.nextLine().toString();
-			if (currentLine.trim().contentEquals("<spriteList>")) {
-				spriteListFound = true;
-			}
-			if (spriteListFound) {
-				stringBuilder.append(currentLine + lineSeparation);
-			}
-		}
-		textScanner.close();
-		String normalizedUploadProjectXml = stringBuilder.toString();
-
-		spriteListFound = false;
-		stringBuilder = new StringBuilder();
-		textScanner = new Scanner(new FileInputStream(standardProjectXmlFile), "UTF-8");
-		while (textScanner.hasNextLine()) {
-			currentLine = textScanner.nextLine().toString();
-			if (currentLine.trim().contentEquals("<spriteList>")) {
-				spriteListFound = true;
-			}
-			if (spriteListFound) {
-				stringBuilder.append(currentLine + lineSeparation);
-			}
-		}
-		textScanner.close();
-		String normalizedStandardProjectXml = stringBuilder.toString();
-
-		return normalizedUploadProjectXml.contentEquals(normalizedStandardProjectXml);
 	}
 }
