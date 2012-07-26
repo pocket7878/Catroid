@@ -1,6 +1,9 @@
 package at.tugraz.ist.catroid.livewallpaper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -24,26 +28,60 @@ public class LiveWallpaper extends WallpaperService {
 
 	private ProjectManager projectManager;
 	private Project currentProject;
+	private Map<String, Bitmap> costumes;
+	private List<Sprite> spriteList;
 
 	@Override
 	public Engine onCreateEngine() {
+		costumes = new HashMap<String, Bitmap>();
 		projectManager = ProjectManager.getInstance();
 		currentProject = projectManager.getCurrentProject();
+		spriteList = currentProject.getSpriteList();
+
+		initCostumes();
 		return new CatWallEngine();
 	}
 
+	public void initCostumes() {
+		ArrayList<CostumeData> costumeDataList;
+		CostumeData costumeData;
+		String path;
+
+		for (Sprite sprite : spriteList) {
+			costumeDataList = sprite.getCostumeDataList();
+			for (int i = 0; i < costumeDataList.size(); i++) {
+				costumeData = costumeDataList.get(i);
+				path = costumeData.getAbsolutePath();
+				costumes.put(path, BitmapFactory.decodeFile(path));
+
+			}
+		}
+
+	}
+
 	private class CatWallEngine extends Engine {
-		private boolean visible = true;
+		private boolean mVisible = false;
 
 		private Paint paint;
 		private Sprite sprite;
-		private Script script;
 		private Script scriptToHandle;
+		private Brick brickToHandle;
 
-		private Canvas canvas;
+		private boolean startScript = false;
+		private boolean tappedScript = false;
 
-		private final Handler handler = new Handler();
-		private final Runnable run = new Runnable() {
+		private Bitmap costume = null;
+		private Bitmap background = null;
+
+		private float width;
+		private float height;
+
+		private int screenWidthHalf = currentProject.virtualScreenWidth / 2;
+		private int screenHeightHalf = currentProject.virtualScreenHeight / 2;
+
+		private final Handler mHandler = new Handler();
+
+		private final Runnable mUpdateDisplay = new Runnable() {
 			public void run() {
 				draw();
 			}
@@ -51,24 +89,55 @@ public class LiveWallpaper extends WallpaperService {
 
 		@Override
 		public void onVisibilityChanged(boolean visible) {
-			this.visible = visible;
+			mVisible = visible;
 			if (visible) {
-				handler.post(run);
+				startScript = true;
+				handleScript();
+				draw();
 			} else {
-				handler.removeCallbacks(run);
+				mHandler.removeCallbacks(mUpdateDisplay);
 			}
+		}
+
+		@Override
+		public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+			draw();
 		}
 
 		@Override
 		public void onSurfaceDestroyed(SurfaceHolder holder) {
 			super.onSurfaceDestroyed(holder);
-			this.visible = false;
-			handler.removeCallbacks(run);
+			mVisible = false;
+			mHandler.removeCallbacks(mUpdateDisplay);
 		}
 
-		@Override
-		public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-			super.onSurfaceChanged(holder, format, width, height);
+		public void handleScript() {
+			for (Sprite sprite : spriteList) {
+				this.sprite = sprite;
+				for (int i = 0; i < sprite.getNumberOfScripts(); i++) {
+					scriptToHandle = sprite.getScript(i);
+					for (int j = 0; j < scriptToHandle.getBrickList().size(); j++) {
+						brickToHandle = scriptToHandle.getBrick(j);
+						if (startScript && scriptToHandle instanceof StartScript) {
+							handleBrick();
+						} else if (tappedScript && scriptToHandle instanceof WhenScript) {
+							handleBrick();
+						}
+					}
+				}
+			}
+
+			resetFlag();
+		}
+
+		public void resetFlag() {
+			if (startScript) {
+				startScript = false;
+			}
+
+			if (tappedScript) {
+				tappedScript = false;
+			}
 		}
 
 		private void draw() {
@@ -79,76 +148,55 @@ public class LiveWallpaper extends WallpaperService {
 				c = holder.lockCanvas();
 				paint = new Paint();
 				if (c != null) {
-					this.canvas = c;
 
-					if (currentProject.getSpriteList() != null) {
-						List<Sprite> spriteList = currentProject.getSpriteList();
-						for (Sprite sprite : spriteList) {
-							this.sprite = sprite;
-							handleScripts();
-
+					if (background != null) {
+						c.drawBitmap(background, 0, 0, paint);
+						if (costume != null) {
+							c.drawBitmap(costume, width, height, paint);
 						}
 					}
 
 				}
+
 			} finally {
 				if (c != null) {
 					holder.unlockCanvasAndPost(c);
 				}
 			}
-			handler.removeCallbacks(run);
-			//handler.postDelayed(run, 1000/targetFramerate -(System.currentTimeMillis() - mLastTime));
-
-		}
-
-		private void handleScripts() {
-
-			int numberScripts = sprite.getNumberOfScripts();
-
-			for (int i = 0; i < numberScripts; i++) {
-				script = sprite.getScript(i);
-				if (script instanceof StartScript) {
-					scriptToHandle = script;
-					handleBricks();
-				} else if (script instanceof WhenScript) {
-					scriptToHandle = script;
-					setTouchEventsEnabled(true);
-
-				}
-
+			mHandler.removeCallbacks(mUpdateDisplay);
+			if (mVisible) {
+				mHandler.postDelayed(mUpdateDisplay, 100);
 			}
 		}
 
 		@Override
 		public void onTouchEvent(MotionEvent event) {
-			if (event.getAction() == MotionEvent.ACTION_MOVE) {
-				setTouchEventsEnabled(false);
-				handleBricks();
+			setTouchEventsEnabled(false);
+			tappedScript = true;
+			handleScript();
+
+		}
+
+		public void handleBrick() {
+			if (brickToHandle instanceof SetCostumeBrick) {
+				handleSetCostumeBrick();
 			}
 		}
 
-		private void handleBricks() {
-			int numberOfBricks = scriptToHandle.getBrickList().size();
-			for (int i = 0; i < numberOfBricks; i++) {
-				if (scriptToHandle.getBrick(i) instanceof SetCostumeBrick) {
-					handleSetCostumeBrick(scriptToHandle.getBrick(i));
-				}
-			}
-		}
-
-		private void handleSetCostumeBrick(Brick b) {
-			SetCostumeBrick brick = (SetCostumeBrick) b;
-			Bitmap bitmap = BitmapFactory.decodeFile(brick.getImagePath());
-			float width = currentProject.virtualScreenWidth / 2 - (bitmap.getWidth() / 2);
-			float height = currentProject.virtualScreenHeight / 2 - (bitmap.getHeight() / 2);
+		private void handleSetCostumeBrick() {
+			SetCostumeBrick brick = (SetCostumeBrick) brickToHandle;
+			Bitmap bitmap = costumes.get(brick.getImagePath());
+			width = screenWidthHalf - (bitmap.getWidth() / 2);
+			height = screenHeightHalf - (bitmap.getHeight() / 2);
 
 			if (sprite.getName().equals(getApplicationContext().getString(R.string.background))) {
-				canvas.drawBitmap(bitmap, 0, 0, paint);
+				background = bitmap;
 			} else {
-				canvas.drawBitmap(bitmap, width, height, paint);
+				costume = bitmap;
 			}
 
 		}
+
 	}
 
 }

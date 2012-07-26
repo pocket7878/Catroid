@@ -97,6 +97,10 @@ public class WaitBrick implements Brick, OnClickListener {
 		return new WaitBrick(getSprite(), timeToWaitInMilliSeconds);
 	}
 
+	public int getTimeToWaitInMilliSeconds() {
+		return timeToWaitInMilliSeconds;
+	}
+
 	public void onClick(View view) {
 		final Context context = view.getContext();
 
