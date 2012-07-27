@@ -112,14 +112,26 @@
             android:visibility="gone" >
         </EditText>
     </LinearLayout>
-
+
+    <ImageButton
+        android:id="@+id/imageButtonEditValuesXY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/brick_place_at_linear_layout"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/content_edit"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/ValueTextViewXY"
         style="@style/brick_text_style"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/brick_place_at_linear_layout"
+        android:layout_toLeftOf="@id/imageButtonEditValuesXY"
         android:text="@string/brick_place_at" >
+
     </TextView>
 
 </RelativeLayout>

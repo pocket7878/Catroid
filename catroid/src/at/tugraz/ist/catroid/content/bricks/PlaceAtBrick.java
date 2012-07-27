@@ -26,15 +26,18 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.content.Intent;
 import android.text.InputType;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.utils.Utils;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -44,6 +47,7 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 	private int xPosition;
 	private int yPosition;
 	private Sprite sprite;
+	private int brickId;
 
 	@XStreamOmitField
 	private transient View view;
@@ -69,6 +73,7 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 	}
 
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
+		this.brickId = brickId;
 
 		view = View.inflate(context, R.layout.brick_place_at, null);
 		TextView textX = (TextView) view.findViewById(R.id.brick_place_at_x_text_view);
@@ -87,6 +92,10 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 		editY.setVisibility(View.VISIBLE);
 		editY.setOnClickListener(this);
 
+		ImageButton editInPrestageButton = (ImageButton) view.findViewById(R.id.imageButtonEditValuesXY);
+		editInPrestageButton.setVisibility(View.VISIBLE);
+		editInPrestageButton.setOnClickListener(this);
+
 		return view;
 	}
 
@@ -102,41 +111,54 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 	public void onClick(final View view) {
 		final Context context = view.getContext();
 
-		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		final EditText input = new EditText(context);
-		if (view.getId() == R.id.brick_place_at_x_edit_text) {
-			input.setText(String.valueOf(xPosition));
-		} else if (view.getId() == R.id.brick_place_at_y_edit_text) {
-			input.setText(String.valueOf(yPosition));
-		}
-		input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
-		input.setSelectAllOnFocus(true);
-		dialog.setView(input);
-		dialog.setOnCancelListener((OnCancelListener) context);
-		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				try {
-					if (view.getId() == R.id.brick_place_at_x_edit_text) {
-						xPosition = Integer.parseInt(input.getText().toString());
-					} else if (view.getId() == R.id.brick_place_at_y_edit_text) {
-						yPosition = Integer.parseInt(input.getText().toString());
+		if (view.getId() == R.id.imageButtonEditValuesXY) {
+			Intent intent = new Intent(context, StageActivity.class);
+			intent.setAction(Intent.ACTION_EDIT);
+			intent.putExtra(StageActivity.PRESTAGE_SPRITE_TO_EDIT, getSprite().getName());
+			intent.putExtra(StageActivity.PRESTAGE_BRICK_TO_EDIT, brickId);
+			context.startActivity(intent);
+		} else {
+			AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+			final EditText input = new EditText(context);
+			if (view.getId() == R.id.brick_place_at_x_edit_text) {
+				input.setText(String.valueOf(xPosition));
+			} else if (view.getId() == R.id.brick_place_at_y_edit_text) {
+				input.setText(String.valueOf(yPosition));
+			}
+			input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+			input.setSelectAllOnFocus(true);
+			dialog.setView(input);
+			dialog.setOnCancelListener((OnCancelListener) context);
+			dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					try {
+						if (view.getId() == R.id.brick_place_at_x_edit_text) {
+							xPosition = Integer.parseInt(input.getText().toString());
+						} else if (view.getId() == R.id.brick_place_at_y_edit_text) {
+							yPosition = Integer.parseInt(input.getText().toString());
+						}
+					} catch (NumberFormatException exception) {
+						Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 					}
-				} catch (NumberFormatException exception) {
-					Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
+					dialog.cancel();
 				}
-				dialog.cancel();
-			}
-		});
-		dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.cancel();
-			}
-		});
+			});
+			dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.cancel();
+				}
+			});
 
-		AlertDialog finishedDialog = dialog.create();
-		finishedDialog.setOnShowListener(Utils.getBrickDialogOnClickListener(context, input));
+			AlertDialog finishedDialog = dialog.create();
+			finishedDialog.setOnShowListener(Utils.getBrickDialogOnClickListener(context, input));
 
-		finishedDialog.show();
+			finishedDialog.show();
+		}
+	}
 
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == 1 && requestCode == 1 && data != null) {
+
+		}
 	}
 }

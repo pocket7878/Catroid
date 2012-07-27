@@ -22,6 +22,7 @@
  */
 package at.tugraz.ist.catroid.stage;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -38,10 +39,20 @@ public class StageActivity extends AndroidApplication {
 	public static StageListener stageListener;
 	private boolean resizePossible;
 	private StageDialog stageDialog;
+	final static public String PRESTAGE_SPRITE_TO_EDIT = "at.tugraz.ist.catroid.prestage.sprite_to_edit";
+	final static public String PRESTAGE_BRICK_TO_EDIT = "at.tugraz.ist.catroid.prestage.brick_to_edit";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		if (getIntent().getAction() == Intent.ACTION_EDIT) {
+			Bundle bundle = getIntent().getExtras();
+			if (bundle.containsKey(PRESTAGE_SPRITE_TO_EDIT) && bundle.containsKey(PRESTAGE_BRICK_TO_EDIT)) {
+				String spriteToEditInPrestageMode = bundle.getString(PRESTAGE_SPRITE_TO_EDIT);
+				String brickIdToEditInPrestageMode = bundle.getString(PRESTAGE_BRICK_TO_EDIT);
+			}
+		}
 
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		stageListener = new StageListener();
