@@ -176,8 +176,6 @@ public class LiveWallpaper extends WallpaperService {
 
 		@Override
 		public void onTouchEvent(MotionEvent event) {
-			setTouchEventsEnabled(false);
-
 			if (event.getAction() == MotionEvent.ACTION_UP) {
 				if (!tappedScript) {
 					tappedScript = true;
