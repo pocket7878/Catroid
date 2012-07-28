@@ -24,6 +24,8 @@ package at.tugraz.ist.catroid.ui;
 
 import java.io.File;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -41,7 +43,9 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.livewallpaper.LiveWallpaperStage;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.transfers.CheckConnection;
@@ -63,6 +67,10 @@ public class MainMenuActivity extends Activity {
 	private ProjectManager projectManager;
 	private ActivityHelper activityHelper;
 	private TextView titleText;
+	/**
+	 * Livewalppr stage definition
+	 */
+	private LiveWallpaperStage stage;
 	public static final int DIALOG_NEW_PROJECT = 0;
 	private static final int DIALOG_LOAD_PROJECT = 1;
 	public static final int DIALOG_UPLOAD_PROJECT = 2;
@@ -341,7 +349,14 @@ public class MainMenuActivity extends Activity {
 		showDialog(DIALOG_ABOUT);
 	}
 
-	private String getProjectName(String zipUrl) {
+	public void ConvertPro(View v) {
+
+		Log.v("DEBUG", "proje adı:" + ProjectManager.getInstance().getCurrentProject().getName());
+		List liste = new ArrayList<Sprite>();
+		liste.add(ProjectManager.getInstance().getCurrentProject().getSpriteList());
+	}
+
+	public String getProjectName(String zipUrl) {
 		int projectNameIndex = zipUrl.lastIndexOf(PROJECTNAME_TAG) + PROJECTNAME_TAG.length();
 		String projectName = zipUrl.substring(projectNameIndex);
 		projectName = URLDecoder.decode(projectName);

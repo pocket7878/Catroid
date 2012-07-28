@@ -107,6 +107,14 @@
             android:text="download"
             android:onClick="HandleDownload"
             />
+        
+         <Button 
+            android:id = "@+id/convert"
+            style="@style/DashboardButton"
+            android:drawableTop="@drawable/about_selector"
+            android:onClick="ConvertPro"
+            android:text="Convert"
+            />
     </at.tugraz.ist.catroid.ui.widget.DashboardLayout>
 
 </LinearLayout>
