@@ -190,14 +190,14 @@ public class LiveWallpaper extends WallpaperService {
 
 		public void handleBrick() {
 			if (brickToHandle instanceof SetCostumeBrick) {
-				handleSetCostumeBrick(sprite.costume.getXPosition());
+			//	handleSetCostumeBrick(sprite.costume.getXPosition());
 			} else if (brickToHandle instanceof WaitBrick) {
 				((WaitBrick) brickToHandle).execute();
 			} else if (brickToHandle instanceof ChangeXByBrick) {
 				((ChangeXByBrick) brickToHandle).execute();
-			} else if (brickToHandle instanceof SetXBrick) {
-				sprite.costume.getXPosition();
-				sprite.costume.getYPosition();
+			} //else if (brickToHandle instanceof SetXBrick) {
+			//	sprite.costume.getXPosition();
+			//	sprite.costume.getYPosition();
 			}
 		}
 
@@ -205,7 +205,7 @@ public class LiveWallpaper extends WallpaperService {
 
 			SetCostumeBrick brick = (SetCostumeBrick) brickToHandle;
 			Bitmap bitmap = costumes.get(brick.getImagePath());
-			width = f;
+			//width = f;
 			height = screenHeightHalf - (bitmap.getHeight() / 2);
 			if (sprite.getName().equals(getApplicationContext().getString(R.string.background))) {
 				background = bitmap;
