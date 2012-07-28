@@ -22,6 +22,7 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.WhenScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.content.bricks.NextCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
 
@@ -30,11 +31,15 @@ public class LiveWallpaper extends WallpaperService {
 	private ProjectManager projectManager;
 	private Project currentProject;
 	private Map<String, Bitmap> costumes;
+	private Map<String, Integer> positions;
 	private List<Sprite> spriteList;
+	private ArrayList<CostumeData> costumeDataList;
 
 	@Override
 	public Engine onCreateEngine() {
 		costumes = new HashMap<String, Bitmap>();
+		positions = new HashMap<String, Integer>();
+
 		projectManager = ProjectManager.getInstance();
 		currentProject = projectManager.getCurrentProject();
 		spriteList = currentProject.getSpriteList();
@@ -44,7 +49,6 @@ public class LiveWallpaper extends WallpaperService {
 	}
 
 	public void initCostumes() {
-		ArrayList<CostumeData> costumeDataList;
 		CostumeData costumeData;
 		String path;
 
@@ -54,6 +58,7 @@ public class LiveWallpaper extends WallpaperService {
 				costumeData = costumeDataList.get(i);
 				path = costumeData.getAbsolutePath();
 				costumes.put(path, BitmapFactory.decodeFile(path));
+				positions.put(path, i);
 
 			}
 		}
@@ -73,6 +78,8 @@ public class LiveWallpaper extends WallpaperService {
 
 		private Bitmap costume = null;
 		private Bitmap background = null;
+
+		private String path = null;
 
 		private float width;
 		private float height;
@@ -141,7 +148,6 @@ public class LiveWallpaper extends WallpaperService {
 
 			if (tappedScript) {
 				tappedScript = false;
-				//setTouchEventsEnabled(true);
 			}
 		}
 
@@ -187,17 +193,24 @@ public class LiveWallpaper extends WallpaperService {
 
 		public void handleBrick() {
 			if (brickToHandle instanceof SetCostumeBrick) {
-				handleSetCostumeBrick();
+				path = ((SetCostumeBrick) brickToHandle).getImagePath();
+				handleCostumesAndBackgrounds();
+
+			} else if (brickToHandle instanceof NextCostumeBrick) {
+				if (path == null) {
+					path = costumeDataList.get(0).getAbsolutePath();
+				} else {
+					int position = positions.get(path) + 1;
+					path = costumeDataList.get(position).getAbsolutePath();
+				}
+				handleCostumesAndBackgrounds();
 			} else if (brickToHandle instanceof WaitBrick) {
 				((WaitBrick) brickToHandle).execute();
-
 			}
 		}
 
-		private void handleSetCostumeBrick() {
-
-			SetCostumeBrick brick = (SetCostumeBrick) brickToHandle;
-			Bitmap bitmap = costumes.get(brick.getImagePath());
+		public void handleCostumesAndBackgrounds() {
+			Bitmap bitmap = costumes.get(path);
 			width = screenWidthHalf - (bitmap.getWidth() / 2);
 			height = screenHeightHalf - (bitmap.getHeight() / 2);
 
@@ -207,7 +220,6 @@ public class LiveWallpaper extends WallpaperService {
 				costume = bitmap;
 				draw();
 			}
-
 		}
 	}
 
