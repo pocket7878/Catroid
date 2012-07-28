@@ -258,6 +258,15 @@ public class Sprite implements Serializable {
 		return brickCount;
 	}
 
+	public boolean containsBrick(Brick brick) {
+		for (Script script : scriptList) {
+			if (script.containsBrick(brick)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public int getScriptIndex(Script script) {
 		return scriptList.indexOf(script);
 	}

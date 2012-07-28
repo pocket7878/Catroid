@@ -180,6 +180,7 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 				ProjectManager.getInstance().setCurrentScript(lastScript);
 				adapter.setCurrentScriptPosition(lastScriptIndex);
 				adapter.notifyDataSetChanged();
+				break;
 			}
 		}
 		return true;

@@ -36,6 +36,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -65,6 +66,12 @@ public class StageListener implements ApplicationListener {
 	private boolean finished = false;
 	private boolean firstStart = true;
 	private boolean reloadProject = false;
+
+	//prestage
+	private boolean prestageMode = false;
+	private Sprite spriteToChange;
+	private Brick brickToChange;
+	private int brickToChangeType;
 
 	private boolean makeFirstScreenshot = true;
 	private String pathForScreenshot;
@@ -145,6 +152,9 @@ public class StageListener implements ApplicationListener {
 		sprites = project.getSpriteList();
 		for (Sprite sprite : sprites) {
 			stage.addActor(sprite.costume);
+			if (prestageMode && sprite != spriteToChange) {
+				//sprite.pause();
+			}
 		}
 		if (DEBUG) {
 			OrthoCamController camController = new OrthoCamController(camera);
@@ -244,8 +254,8 @@ public class StageListener implements ApplicationListener {
 			stage.clear();
 			SoundManager.getInstance().clear();
 
-			project = ProjectManager.getInstance().getCurrentProject();
-			sprites = project.getSpriteList();
+			//project = ProjectManager.getInstance().getCurrentProject();
+			//sprites = project.getSpriteList();
 			for (Sprite sprite : sprites) {
 				stage.addActor(sprite.costume);
 				sprite.pause();
@@ -436,4 +446,10 @@ public class StageListener implements ApplicationListener {
 		}
 	}
 
+	public void setPrestageObject(Sprite spriteToChange, Brick brickToChange, int type) {
+		this.prestageMode = true;
+		this.spriteToChange = spriteToChange;
+		this.brickToChange = brickToChange;
+		this.brickToChangeType = type;
+	}
 }

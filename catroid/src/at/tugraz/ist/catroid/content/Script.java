@@ -162,4 +162,16 @@ public abstract class Script implements Serializable {
 	public Brick getBrick(int index) {
 		return brickList.get(index);
 	}
+
+	public int getBrickIndex(Brick brick) {
+		return brickList.indexOf(brick);
+	}
+
+	public boolean containsBrick(Brick brick) {
+		if (brickList.indexOf(brick) == -1) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 }

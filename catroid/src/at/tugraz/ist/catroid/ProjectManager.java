@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 
 import android.content.Context;
+import android.util.Log;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.FileChecksumContainer;
 import at.tugraz.ist.catroid.common.MessageContainer;
@@ -33,6 +34,7 @@ import at.tugraz.ist.catroid.common.StandardProjectHandler;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -41,6 +43,11 @@ public class ProjectManager {
 	private Project project;
 	private Script currentScript;
 	private Sprite currentSprite;
+
+	private Brick prestageBrick;
+	private int prestageBrickType;
+	public int PRESTAGE_BRICKTYPE_PLACEAT = 0;
+
 	private static ProjectManager instance;
 
 	public FileChecksumContainer fileChecksumContainer;
@@ -82,6 +89,7 @@ public class ProjectManager {
 
 			currentSprite = null;
 			currentScript = null;
+			prestageBrick = null;
 
 			Utils.saveToPreferences(context, Constants.PREF_PROJECTNAME_KEY, project.getName());
 
@@ -115,6 +123,7 @@ public class ProjectManager {
 			project = StandardProjectHandler.createAndSaveStandardProject(context);
 			currentSprite = null;
 			currentScript = null;
+			prestageBrick = null;
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -130,6 +139,7 @@ public class ProjectManager {
 
 		currentSprite = null;
 		currentScript = null;
+		prestageBrick = null;
 		saveProject();
 	}
 
@@ -140,6 +150,7 @@ public class ProjectManager {
 	public void setProject(Project project) {
 		currentScript = null;
 		currentSprite = null;
+		prestageBrick = null;
 
 		this.project = project;
 	}
@@ -179,6 +190,7 @@ public class ProjectManager {
 
 	public void setCurrentSprite(Sprite sprite) {
 		currentSprite = sprite;
+		Log.d("currentsprite", sprite.getName());//DEBUG
 	}
 
 	public Script getCurrentScript() {
@@ -190,6 +202,29 @@ public class ProjectManager {
 			currentScript = null;
 		} else if (currentSprite.getScriptIndex(script) != -1) {
 			currentScript = script;
+			Log.d("currentscript", String.valueOf(currentSprite.getScriptIndex(script)));//DEBUG
+
+		}
+	}
+
+	public Brick getPrestageBrick() {
+		if (currentSprite.containsBrick(prestageBrick)) {
+			return prestageBrick;
+		} else {
+			return null;
+		}
+	}
+
+	public int getPrestageBrickType() {
+		return prestageBrickType;
+	}
+
+	public void setPrestageBrick(Brick brick, int type) {
+		if (brick != null && currentSprite.containsBrick(brick)) {
+			prestageBrick = brick;
+			prestageBrickType = type;
+		} else {
+			prestageBrick = null;
 		}
 	}
 

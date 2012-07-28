@@ -28,6 +28,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -35,6 +36,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.stage.StageActivity;
@@ -47,7 +49,7 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 	private int xPosition;
 	private int yPosition;
 	private Sprite sprite;
-	private int brickId;
+	private int listPosition;
 
 	@XStreamOmitField
 	private transient View view;
@@ -72,8 +74,9 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 		return this.sprite;
 	}
 
-	public View getView(Context context, int brickId, BaseAdapter adapter) {
-		this.brickId = brickId;
+	public View getView(Context context, int listPosition, BaseAdapter adapter) {
+		this.listPosition = listPosition;
+		Log.d("currentbrick id set", String.valueOf(listPosition));//DEBUG
 
 		view = View.inflate(context, R.layout.brick_place_at, null);
 		TextView textX = (TextView) view.findViewById(R.id.brick_place_at_x_text_view);
@@ -114,8 +117,10 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 		if (view.getId() == R.id.imageButtonEditValuesXY) {
 			Intent intent = new Intent(context, StageActivity.class);
 			intent.setAction(Intent.ACTION_EDIT);
-			intent.putExtra(StageActivity.PRESTAGE_SPRITE_TO_EDIT, getSprite().getName());
-			intent.putExtra(StageActivity.PRESTAGE_BRICK_TO_EDIT, brickId);
+			ProjectManager.getInstance()
+					.setPrestageBrick(this, ProjectManager.getInstance().PRESTAGE_BRICKTYPE_PLACEAT);
+			//intent.putExtra(StageActivity.PRESTAGE_SPRITE_TO_EDIT, getSprite().getName());
+			//intent.putExtra(StageActivity.PRESTAGE_BRICK_TO_EDIT, this);
 			context.startActivity(intent);
 		} else {
 			AlertDialog.Builder dialog = new AlertDialog.Builder(context);
@@ -153,12 +158,6 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 			finishedDialog.setOnShowListener(Utils.getBrickDialogOnClickListener(context, input));
 
 			finishedDialog.show();
-		}
-	}
-
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == 1 && requestCode == 1 && data != null) {
-
 		}
 	}
 }

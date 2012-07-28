@@ -46,18 +46,21 @@ public class StageActivity extends AndroidApplication {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		if (getIntent().getAction() == Intent.ACTION_EDIT) {
-			Bundle bundle = getIntent().getExtras();
-			if (bundle.containsKey(PRESTAGE_SPRITE_TO_EDIT) && bundle.containsKey(PRESTAGE_BRICK_TO_EDIT)) {
-				String spriteToEditInPrestageMode = bundle.getString(PRESTAGE_SPRITE_TO_EDIT);
-				String brickIdToEditInPrestageMode = bundle.getString(PRESTAGE_BRICK_TO_EDIT);
-			}
-		}
-
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		stageListener = new StageListener();
 		stageDialog = new StageDialog(this, stageListener, R.style.stage_dialog);
 		this.calculateScreenSizes();
+
+		if (getIntent().getAction() == Intent.ACTION_EDIT) {
+			//Bundle bundle = getIntent().getExtras();
+			//if (bundle.containsKey(PRESTAGE_SPRITE_TO_EDIT) && bundle.containsKey(PRESTAGE_BRICK_TO_EDIT)) {
+			//	String spriteToEditInPrestageMode = bundle.getString(PRESTAGE_SPRITE_TO_EDIT);
+			//	String brickIdToEditInPrestageMode = bundle.getString(PRESTAGE_BRICK_TO_EDIT);
+			//}
+			stageListener.setPrestageObject(ProjectManager.getInstance().getCurrentSprite(), ProjectManager
+					.getInstance().getPrestageBrick(), ProjectManager.getInstance().getPrestageBrickType());
+		}
+
 		initialize(stageListener, true);
 
 	}
