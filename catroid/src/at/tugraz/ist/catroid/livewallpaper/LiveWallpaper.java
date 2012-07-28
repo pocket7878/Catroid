@@ -139,9 +139,10 @@ public class LiveWallpaper extends WallpaperService {
 				startScript = false;
 			}
 
-			//			if (tappedScript) {
-			//				tappedScript = false;
-			//			}
+			if (tappedScript) {
+				tappedScript = false;
+				//setTouchEventsEnabled(true);
+			}
 		}
 
 		private void draw() {
@@ -175,12 +176,15 @@ public class LiveWallpaper extends WallpaperService {
 
 		@Override
 		public void onTouchEvent(MotionEvent event) {
-			if (event.getAction() == MotionEvent.ACTION_MOVE) {
+			setTouchEventsEnabled(false);
+
+			if (event.getAction() == MotionEvent.ACTION_UP) {
 				if (!tappedScript) {
 					tappedScript = true;
 					handleScript();
 				}
 			}
+
 		}
 
 		public void handleBrick() {
