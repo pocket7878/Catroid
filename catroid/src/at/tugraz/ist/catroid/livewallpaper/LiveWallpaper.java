@@ -11,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import at.tugraz.ist.catroid.ProjectManager;
@@ -22,7 +23,9 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.WhenScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.content.bricks.ChangeXByBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
+import at.tugraz.ist.catroid.content.bricks.SetXBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
 
 public class LiveWallpaper extends WallpaperService {
@@ -76,8 +79,8 @@ public class LiveWallpaper extends WallpaperService {
 
 		private float width;
 		private float height;
-
-		private int screenWidthHalf = currentProject.virtualScreenWidth / 2;
+		//
+		//		private int screenWidthHalf = currentProject.virtualScreenWidth / 2;
 		private int screenHeightHalf = currentProject.virtualScreenHeight / 2;
 
 		private final Handler mHandler = new Handler();
@@ -120,8 +123,10 @@ public class LiveWallpaper extends WallpaperService {
 
 				for (int i = 0; i < sprite.getNumberOfScripts(); i++) {
 					scriptToHandle = sprite.getScript(i);
+					Log.v("DEBUG", "script of sprite name:" + sprite.getScript(i).toString());
 					for (int j = 0; j < scriptToHandle.getBrickList().size(); j++) {
 						brickToHandle = scriptToHandle.getBrick(j);
+						Log.v("DEBUG", "Brick Name:" + scriptToHandle.getBrick(j).toString());
 						if (startScript && scriptToHandle instanceof StartScript) {
 							handleBrick();
 						} else if (tappedScript && scriptToHandle instanceof WhenScript) {
@@ -185,20 +190,23 @@ public class LiveWallpaper extends WallpaperService {
 
 		public void handleBrick() {
 			if (brickToHandle instanceof SetCostumeBrick) {
-				handleSetCostumeBrick();
+				handleSetCostumeBrick(sprite.costume.getXPosition());
 			} else if (brickToHandle instanceof WaitBrick) {
 				((WaitBrick) brickToHandle).execute();
-
+			} else if (brickToHandle instanceof ChangeXByBrick) {
+				((ChangeXByBrick) brickToHandle).execute();
+			} else if (brickToHandle instanceof SetXBrick) {
+				sprite.costume.getXPosition();
+				sprite.costume.getYPosition();
 			}
 		}
 
-		private void handleSetCostumeBrick() {
+		private void handleSetCostumeBrick(float f) {
 
 			SetCostumeBrick brick = (SetCostumeBrick) brickToHandle;
 			Bitmap bitmap = costumes.get(brick.getImagePath());
-			width = screenWidthHalf - (bitmap.getWidth() / 2);
+			width = f;
 			height = screenHeightHalf - (bitmap.getHeight() / 2);
-
 			if (sprite.getName().equals(getApplicationContext().getString(R.string.background))) {
 				background = bitmap;
 			} else {
@@ -207,6 +215,10 @@ public class LiveWallpaper extends WallpaperService {
 			}
 
 		}
+		/**
+		 * 
+		 */
+
 	}
 
 }
