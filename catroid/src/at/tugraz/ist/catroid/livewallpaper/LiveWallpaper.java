@@ -24,6 +24,7 @@ import at.tugraz.ist.catroid.content.WhenScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.NextCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
+import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
 
 public class LiveWallpaper extends WallpaperService {
@@ -99,7 +100,6 @@ public class LiveWallpaper extends WallpaperService {
 		public void onVisibilityChanged(boolean visible) {
 			mVisible = visible;
 			if (visible) {
-				setTouchEventsEnabled(true);
 				startScript = true;
 				tappedScript = false;
 				handleScript();
@@ -194,7 +194,7 @@ public class LiveWallpaper extends WallpaperService {
 		public void handleBrick() {
 			if (brickToHandle instanceof SetCostumeBrick) {
 				path = ((SetCostumeBrick) brickToHandle).getImagePath();
-				handleCostumesAndBackgrounds();
+				handleCostumesAndBackgrounds(costumes.get(path));
 
 			} else if (brickToHandle instanceof NextCostumeBrick) {
 				if (path == null) {
@@ -203,14 +203,18 @@ public class LiveWallpaper extends WallpaperService {
 					int position = positions.get(path) + 1;
 					path = costumeDataList.get(position).getAbsolutePath();
 				}
-				handleCostumesAndBackgrounds();
+				handleCostumesAndBackgrounds(costumes.get(path));
+			} else if (brickToHandle instanceof SetSizeToBrick) {
+				//				double size = ((SetSizeToBrick) brickToHandle).getSize();
+				//				int newWidth = (int) (costume.getWidth() * size);
+				//				int newHeight = (int) (costume.getHeight() * size);
+				//handleCostumesAndBackgrounds(Bitmap.createScaledBitmap(costume, newWidth, newHeight, false));
 			} else if (brickToHandle instanceof WaitBrick) {
 				((WaitBrick) brickToHandle).execute();
 			}
 		}
 
-		public void handleCostumesAndBackgrounds() {
-			Bitmap bitmap = costumes.get(path);
+		public void handleCostumesAndBackgrounds(Bitmap bitmap) {
 			width = screenWidthHalf - (bitmap.getWidth() / 2);
 			height = screenHeightHalf - (bitmap.getHeight() / 2);
 
@@ -218,8 +222,8 @@ public class LiveWallpaper extends WallpaperService {
 				background = bitmap;
 			} else {
 				costume = bitmap;
-				draw();
 			}
+			draw();
 		}
 	}
 
