@@ -36,6 +36,8 @@ public class WallpaperCostume {
 	private int screenWidthHalf;
 	private int screenHeightHalf;
 
+	private boolean coordsSetManually = false;
+
 	private WallpaperCostume() {
 		this.screenHeightHalf = ProjectManager.getInstance().getCurrentProject().virtualScreenHeight / 2;
 		this.screenWidthHalf = ProjectManager.getInstance().getCurrentProject().virtualScreenWidth / 2;
@@ -53,8 +55,10 @@ public class WallpaperCostume {
 		this.costumeData = costumeData;
 		Bitmap bitmap = costumeData.getImageBitmap();
 
-		this.top = screenWidthHalf - (bitmap.getWidth() / 2);
-		this.left = screenHeightHalf - (bitmap.getHeight() / 2);
+		if (!coordsSetManually) {
+			this.top = screenWidthHalf - (bitmap.getWidth() / 2);
+			this.left = screenHeightHalf - (bitmap.getHeight() / 2);
+		}
 
 		if (isBackground) {
 			this.background = bitmap;
@@ -97,6 +101,7 @@ public class WallpaperCostume {
 
 	public void setTop(float top) {
 		this.top = top;
+		coordsSetManually = true;
 	}
 
 	public float getLeft() {
@@ -105,6 +110,7 @@ public class WallpaperCostume {
 
 	public void setLeft(float left) {
 		this.left = left;
+		coordsSetManually = true;
 	}
 
 	public CostumeData getCostumeData() {
