@@ -23,9 +23,9 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.WhenScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.ChangeXByBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetXBrick;
+import at.tugraz.ist.catroid.content.bricks.SetYBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
 
 public class LiveWallpaper extends WallpaperService {
@@ -79,8 +79,8 @@ public class LiveWallpaper extends WallpaperService {
 
 		private float width;
 		private float height;
-		//
-		//		private int screenWidthHalf = currentProject.virtualScreenWidth / 2;
+
+		private int screenWidthHalf = currentProject.virtualScreenWidth / 2;
 		private int screenHeightHalf = currentProject.virtualScreenHeight / 2;
 
 		private final Handler mHandler = new Handler();
@@ -190,23 +190,31 @@ public class LiveWallpaper extends WallpaperService {
 
 		public void handleBrick() {
 			if (brickToHandle instanceof SetCostumeBrick) {
-				handleSetCostumeBrick(sprite.costume.getXPosition());
+				//				handleSetCostumeBrick(sprite.costume.getXPosition());
+				handleSetCostumeBrick();
 			} else if (brickToHandle instanceof WaitBrick) {
 				((WaitBrick) brickToHandle).execute();
-			} else if (brickToHandle instanceof ChangeXByBrick) {
-				((ChangeXByBrick) brickToHandle).execute();
-			} else if (brickToHandle instanceof SetXBrick) {
-				sprite.costume.getXPosition();
-				sprite.costume.getYPosition();
+			}
+			//				else if (brickToHandle instanceof ChangeXByBrick) {
+			//				((ChangeXByBrick) brickToHandle).execute();
+			//			}
+			else if (brickToHandle instanceof SetXBrick) {
+				((SetXBrick) brickToHandle).execute();
+			} else if (brickToHandle instanceof SetYBrick) {
+				((SetYBrick) brickToHandle).execute();
 			}
 		}
 
-		private void handleSetCostumeBrick(float f) {
+		/**
+		 * 
+		 */
+
+		private void handleSetCostumeBrick() {
 
 			SetCostumeBrick brick = (SetCostumeBrick) brickToHandle;
 			Bitmap bitmap = costumes.get(brick.getImagePath());
-			width = f;
-			height = screenHeightHalf - (bitmap.getHeight() / 2);
+			width = sprite.costume.getXPosition();
+			height = sprite.costume.getYPosition();
 			if (sprite.getName().equals(getApplicationContext().getString(R.string.background))) {
 				background = bitmap;
 			} else {
