@@ -57,7 +57,6 @@ public class LiveWallpaper extends WallpaperService {
 		public void onVisibilityChanged(boolean visible) {
 			mVisible = visible;
 			if (visible) {
-				setTouchEventsEnabled(true);
 				startScript = true;
 				tappedScript = false;
 				handleScript();
