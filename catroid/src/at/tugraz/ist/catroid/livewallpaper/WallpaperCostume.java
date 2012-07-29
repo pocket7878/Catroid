@@ -37,6 +37,7 @@ public class WallpaperCostume {
 	private int screenHeightHalf;
 
 	private boolean coordsSetManually = false;
+	private boolean costumeHidden = false;
 
 	private WallpaperCostume() {
 		this.screenHeightHalf = ProjectManager.getInstance().getCurrentProject().virtualScreenHeight / 2;
@@ -119,6 +120,14 @@ public class WallpaperCostume {
 
 	public void setCostumeData(CostumeData costumeData) {
 		this.costumeData = costumeData;
+	}
+
+	public boolean isCostumeHidden() {
+		return costumeHidden;
+	}
+
+	public void setCostumeHidden(boolean hideCostume) {
+		this.costumeHidden = hideCostume;
 	}
 
 }

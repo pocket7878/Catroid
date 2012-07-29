@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -69,11 +70,7 @@ public class ShowBrick implements Brick {
 		return new ShowBrick(getSprite());
 	}
 
-	/* (non-Javadoc)
-	 * @see at.tugraz.ist.catroid.content.bricks.Brick#executeLiveWallpaper()
-	 */
 	public void executeLiveWallpaper() {
-		// TODO Auto-generated method stub
-		
+		WallpaperCostume.getInstance().setCostumeHidden(false);
 	}
 }
