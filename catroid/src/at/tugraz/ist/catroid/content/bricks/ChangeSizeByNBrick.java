@@ -23,8 +23,7 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -33,6 +32,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class ChangeSizeByNBrick implements Brick, OnClickListener {
@@ -111,18 +111,24 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 		if (!editorActive) {
 			editorActive = true;
 			formulaEditor = new FormulaEditorDialog(context, instance);
-			formulaEditor.setOnDismissListener(new OnDismissListener() {
-				public void onDismiss(DialogInterface editor) {
+			//			formulaEditor.setOnDismissListener(new OnDismissListener() {
+			//				public void onDismiss(DialogInterface editor) {
+			//
+			//					formulaEditor.dismiss();
+			//
+			//					editorActive = false;
+			//				}
+			//			});
+			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
+			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 
-					formulaEditor.dismiss();
-
-					editorActive = false;
-				}
-			});
-			formulaEditor.show();
 		}
 
 		formulaEditor.setInputFocusAndFormula(sizeFormula);
 
+	}
+
+	public void setEditorStatus(boolean isActive) {
+		this.editorActive = isActive;
 	}
 }

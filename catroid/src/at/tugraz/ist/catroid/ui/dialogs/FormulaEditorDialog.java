@@ -36,11 +36,13 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.content.bricks.ChangeSizeByNBrick;
 import at.tugraz.ist.catroid.formulaeditor.CalcGrammarParser;
 import at.tugraz.ist.catroid.formulaeditor.CatKeyboardView;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.formulaeditor.FormulaEditorEditText;
 import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 
 public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDismissListener {
 
@@ -53,6 +55,12 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 	private LinearLayout brickSpace;
 	private View brickView;
 	private Button okButton = null;
+	public static ScriptTabActivity mScriptTabActivity;
+
+	public static void setOwnerActivity(ScriptTabActivity owner) {
+		FormulaEditorDialog.mScriptTabActivity = owner;
+
+	}
 
 	public FormulaEditorDialog(Context context, Brick brick) {
 
@@ -60,6 +68,9 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 		currentBrick = brick;
 		this.context = context;
 		this.value = 33;
+
+		mScriptTabActivity.setCurrentFormulaEditorDialog(this);
+		Log.i("info", "FormulaEditorDialog()");
 	}
 
 	@Override
@@ -77,16 +88,18 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.i("info", "FormulaEditorDialog.onCreate()");
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.dialog_formula_editor);
 
 		brickSpace = (LinearLayout) findViewById(R.id.formula_editor_brick_space);
-		brickView = currentBrick.getView(context, 0, null);
-		brickSpace.addView(brickView);
+		if (brickSpace != null) {
+			brickView = currentBrick.getView(context, 0, null);
+			brickSpace.addView(brickView);
 
-		int brickHeight = brickView.getMeasuredHeight();
-
+			int brickHeight = brickView.getMeasuredHeight();
+		}
 		//		flipView = (ViewFlipper) findViewById(R.id.catflip);
 		//		flipView.setDisplayedChild(1);
 		//		Animation slideOut = AnimationUtils.loadAnimation(context, R.anim.slide_in);
@@ -118,12 +131,33 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 		backButton.setOnClickListener(this);
 
 		textArea = (FormulaEditorEditText) findViewById(R.id.formula_editor_edit_field);
-		brickSpace.measure(0, 0);
+		if (brickSpace != null) {
+			brickSpace.measure(0, 0);
+		}
 		catKeyboardView = (CatKeyboardView) findViewById(R.id.keyboardcat);
 		catKeyboardView.setEditText(textArea);
 		catKeyboardView.setCurrentBrick(currentBrick);
 
-		textArea.init(this, brickSpace.getMeasuredHeight(), catKeyboardView);
+		this.setOnDismissListener(this);
+		if (brickSpace != null) {
+			textArea.init(this, brickSpace.getMeasuredHeight(), catKeyboardView);
+		} else {
+			textArea.init(this, 0, catKeyboardView);
+		}
+
+		Log.i("info", "FormulaEditorDialog.onCreate() at the end of method");
+	}
+
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		Log.i("info", "FormulaEditorDialog.onRestoreInstanceState()");
+		super.onRestoreInstanceState(savedInstanceState);
+	}
+
+	@Override
+	public Bundle onSaveInstanceState() {
+		Log.i("info", "FormulaEditorDialog.onSaveInstanceState()");
+		return super.onSaveInstanceState();
 	}
 
 	public void setInputFocusAndFormula(Formula formula) {
@@ -161,11 +195,13 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 
 		switch (v.getId()) {
 			case R.id.formula_editor_ok_button:
-
+				Log.i("info", "FormulaEditorDialog.onClick()  case ok_button");
 				String formulaToParse = textArea.getText().toString();
 				int err = parseFormula(formulaToParse);
 				if (err == -1) {
-					formula.refreshTextField(brickView);
+					if (brickSpace != null) {
+						formula.refreshTextField(brickView);
+					}
 					textArea.formulaSaved();
 					Toast.makeText(context, R.string.formula_editor_changes_saved, Toast.LENGTH_SHORT).show();
 				} else if (err == -2) {
@@ -188,6 +224,10 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 				if (textArea.hasChanges()) {
 					Toast.makeText(context, R.string.formula_editor_changes_discarded, Toast.LENGTH_SHORT).show();
 				}
+				Log.i("info", "FormulaEditorDialog.onClick() case back_button");
+				mScriptTabActivity.setCurrentFormulaEditorDialog(null);
+				mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
+				((ChangeSizeByNBrick) this.currentBrick).setEditorStatus(false);
 				dismiss();
 				break;
 
@@ -198,7 +238,13 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 	}
 
 	public void onDismiss(DialogInterface dialog) {
-		this.dismiss();
+
+		//		Log.i("info", "FormulaEditorDialog.onDismiss()");
+		//			mScriptTabActivity.setCurrentFormulaEditorDialog(null);
+		//		mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
+		//			((ChangeSizeByNBrick) this.currentBrick).setEditorStatus(false);
+		//			this.dismiss();
+
 	}
 
 	public void hideOkayButton() {
@@ -216,6 +262,10 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 				if (textArea.hasChanges()) {
 					Toast.makeText(context, R.string.formula_editor_changes_discarded, Toast.LENGTH_SHORT).show();
 				}
+				Log.i("info", "FormulaEditorDialog.onKeyDown()");
+				mScriptTabActivity.setCurrentFormulaEditorDialog(null);
+				mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
+				((ChangeSizeByNBrick) this.currentBrick).setEditorStatus(false);
 				this.dismiss();
 
 		}
