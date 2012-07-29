@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -68,5 +69,10 @@ public class HideBrick implements Brick {
 
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_hide, null);
+	}
+
+	public void executeLiveWallpaper() {
+		WallpaperCostume.getInstance().setCostumeHidden(true);
+
 	}
 }

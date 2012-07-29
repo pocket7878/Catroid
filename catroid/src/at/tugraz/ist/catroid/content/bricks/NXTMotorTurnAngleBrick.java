@@ -255,4 +255,12 @@ public class NXTMotorTurnAngleBrick implements Brick, OnClickListener {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see at.tugraz.ist.catroid.content.bricks.Brick#executeLiveWallpaper()
+	 */
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

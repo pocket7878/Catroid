@@ -134,4 +134,9 @@ public class WaitBrick implements Brick, OnClickListener {
 		finishedDialog.show();
 
 	}
+
+	public void executeLiveWallpaper() {
+		execute();
+
+	}
 }

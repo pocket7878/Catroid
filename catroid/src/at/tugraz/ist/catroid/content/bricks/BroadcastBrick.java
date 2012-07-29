@@ -84,6 +84,10 @@ public class BroadcastBrick implements Brick {
 		startThread.start();
 	}
 
+	public void executeLiveWallpaper() {
+
+	}
+
 	public Sprite getSprite() {
 		return sprite;
 	}

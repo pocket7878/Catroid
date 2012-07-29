@@ -33,6 +33,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
 import at.tugraz.ist.catroid.stage.NativeAppActivity;
 
 public class SetCostumeBrick implements Brick {
@@ -64,8 +65,24 @@ public class SetCostumeBrick implements Brick {
 		}
 	}
 
+	public void executeLiveWallpaper() {
+		WallpaperCostume costumeSingleton = WallpaperCostume.getInstance();
+		boolean isBackground = false;
+
+		//TODO: Don't use the hardcoded value
+		if (sprite.getName().equals("Background")) {
+			isBackground = true;
+		}
+
+		costumeSingleton.initCostumeToDraw(costumeData, isBackground);
+	}
+
 	public Sprite getSprite() {
 		return sprite;
+	}
+
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
 	}
 
 	public String getImagePath() {

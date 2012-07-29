@@ -118,4 +118,12 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
+
+	/* (non-Javadoc)
+	 * @see at.tugraz.ist.catroid.content.bricks.Brick#executeLiveWallpaper()
+	 */
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+		
+	}
 }

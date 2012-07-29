@@ -60,6 +60,10 @@ public class SetSizeToBrick implements Brick, OnClickListener {
 		return this.sprite;
 	}
 
+	public double getSize() {
+		return size;
+	}
+
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		view = View.inflate(context, R.layout.brick_set_size_to, null);
@@ -112,5 +116,13 @@ public class SetSizeToBrick implements Brick, OnClickListener {
 
 		finishedDialog.show();
 
+	}
+
+	/* (non-Javadoc)
+	 * @see at.tugraz.ist.catroid.content.bricks.Brick#executeLiveWallpaper()
+	 */
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+		
 	}
 }
