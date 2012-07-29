@@ -66,6 +66,7 @@ public class WallpaperCostume {
 		} else {
 			this.costume = bitmap;
 		}
+
 	}
 
 	public boolean touchedInsideTheCostume(float x, float y) {
@@ -78,6 +79,14 @@ public class WallpaperCostume {
 
 		return false;
 
+	}
+
+	public float getCenterXCoord() {
+		return screenWidthHalf - (costume.getWidth() / 2);
+	}
+
+	public float getCenterYCoord() {
+		return screenWidthHalf - (costume.getHeight() / 2);
 	}
 
 	public Bitmap getCostume() {

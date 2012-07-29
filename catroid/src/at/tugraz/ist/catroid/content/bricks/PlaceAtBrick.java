@@ -34,6 +34,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
 import at.tugraz.ist.catroid.utils.Utils;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -134,11 +135,13 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see at.tugraz.ist.catroid.content.bricks.Brick#executeLiveWallpaper()
-	 */
 	public void executeLiveWallpaper() {
-		// TODO Auto-generated method stub
-		
+		WallpaperCostume wallpaperCostume = WallpaperCostume.getInstance();
+		float newTop = wallpaperCostume.getCenterXCoord() + xPosition;
+		float newLeft = wallpaperCostume.getCenterYCoord() - yPosition;
+
+		wallpaperCostume.setTop(newTop);
+		wallpaperCostume.setLeft(newLeft);
+
 	}
 }
