@@ -38,6 +38,8 @@ public class CostumeData {
 	private transient static final int THUMBNAIL_WIDTH = 150;
 	private transient static final int THUMBNAIL_HEIGHT = 150;
 
+	private Bitmap imageBitmap;
+
 	public String getAbsolutePath() {
 		if (fileName != null) {
 			return Utils.buildPath(getPathToImageDirectory(), fileName);
@@ -105,6 +107,18 @@ public class CostumeData {
 		height = options.outHeight;
 
 		return new int[] { width, height };
+	}
+
+	public Bitmap getImageBitmap() {
+		if (imageBitmap == null) {
+			imageBitmap = BitmapFactory.decodeFile(getAbsolutePath());
+		}
+		return imageBitmap;
+
+	}
+
+	public void setImageBitmap(Bitmap imageBitmap) {
+		this.imageBitmap = imageBitmap;
 	}
 
 	@Override

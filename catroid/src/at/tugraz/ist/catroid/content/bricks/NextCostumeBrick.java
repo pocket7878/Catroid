@@ -33,6 +33,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
 
 public class NextCostumeBrick implements Brick {
 
@@ -110,5 +111,34 @@ public class NextCostumeBrick implements Brick {
 		}
 
 		return view;
+	}
+
+	public void executeLiveWallpaper() {
+		WallpaperCostume costumeSingleton = WallpaperCostume.getInstance();
+		CostumeData costumeData = costumeSingleton.getCostumeData();
+		final ArrayList<CostumeData> costumeDataList = sprite.getCostumeDataList();
+
+		if (costumeData == null) {
+			costumeSingleton.initCostumeToDraw(costumeDataList.get(0), false);
+		}
+
+		int positionInList = 0;
+		int costumeDataListSize = costumeDataList.size();
+
+		for (int index = 0; index < costumeDataListSize; index++) {
+			if (costumeDataList.get(index).equals(costumeData)) {
+				positionInList = index;
+				break;
+			}
+		}
+
+		if (positionInList == costumeDataListSize - 1) {
+			positionInList = 0;
+		} else {
+			positionInList++;
+		}
+
+		costumeSingleton.initCostumeToDraw(costumeDataList.get(positionInList), false);
+
 	}
 }

@@ -128,4 +128,9 @@ public class ChangeYByBrick implements Brick, OnClickListener {
 		finishedDialog.show();
 
 	}
+
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
+	}
 }

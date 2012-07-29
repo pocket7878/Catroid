@@ -40,6 +40,8 @@ public interface Brick extends Serializable {
 
 	public void execute();
 
+	public void executeLiveWallpaper();
+
 	public Sprite getSprite();
 
 	public View getView(Context context, int brickId, BaseAdapter adapter);

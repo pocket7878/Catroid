@@ -162,4 +162,9 @@ public class BroadcastReceiverBrick implements Brick {
 		return new BroadcastReceiverBrick(sprite, receiveScript);
 	}
 
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
+	}
+
 }
