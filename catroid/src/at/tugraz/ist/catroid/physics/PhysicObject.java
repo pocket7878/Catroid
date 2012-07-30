@@ -23,6 +23,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.Shape;
 
 /**
@@ -63,7 +64,9 @@ public class PhysicObject {
 	}
 
 	public void setMass(float mass) {
-		body.getMassData().mass = mass;
+		MassData massData = body.getMassData();
+		massData.mass = mass;
+		body.setMassData(massData);
 	}
 
 	public void setDensity(float density) {
