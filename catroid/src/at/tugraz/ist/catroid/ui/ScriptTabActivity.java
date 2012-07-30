@@ -154,22 +154,25 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 				Log.i("info", "Brick found! index: " + index);
 				((ChangeSizeByNBrick) currentBrick).setEditorStatus(false);
 			}
-			//TODO save index in outsate
 		}
 
+		outState.putInt("index", index);
 		super.onSaveInstanceState(outState);
 	}
 
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		Log.i("info", "ScriptTabActivity.onRestoreInstanceState()");
-		Log.i("info", "currentFormulaEditorDialog:" + this.currentFormulaEditorDialog);
 
-		int savedIndex = 0;
-		ChangeSizeByNBrick oldBrick = (ChangeSizeByNBrick) ProjectManager.getInstance().getCurrentScript()
-				.getBrickList().get(savedIndex);
-		//		oldBrick.onClick(oldBrick.getPrototypeView(getApplicationContext()));
-		oldBrick.onClick(new View(this));
+		int savedIndex = savedInstanceState.getInt("index");
+		Log.i("info", "savedIndex: " + savedIndex);
+
+		if (savedIndex != -1) {
+			ChangeSizeByNBrick oldBrick = (ChangeSizeByNBrick) ProjectManager.getInstance().getCurrentScript()
+					.getBrickList().get(savedIndex);
+			//		oldBrick.onClick(oldBrick.getPrototypeView(getApplicationContext()));
+			oldBrick.onClick(new View(this));
+		}
 		super.onRestoreInstanceState(savedInstanceState);
 	}
 
