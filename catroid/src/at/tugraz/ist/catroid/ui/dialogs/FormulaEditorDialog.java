@@ -228,6 +228,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 				mScriptTabActivity.setCurrentFormulaEditorDialog(null);
 				mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
 				((ChangeSizeByNBrick) this.currentBrick).setEditorStatus(false);
+				mScriptTabActivity.setCurrentBrick(null);
 				dismiss();
 				break;
 
@@ -243,6 +244,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 		//			mScriptTabActivity.setCurrentFormulaEditorDialog(null);
 		//		mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
 		//			((ChangeSizeByNBrick) this.currentBrick).setEditorStatus(false);
+		//		mScriptTabActivity.setCurrentBrick(null);
 		//			this.dismiss();
 
 	}
@@ -266,6 +268,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 				mScriptTabActivity.setCurrentFormulaEditorDialog(null);
 				mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
 				((ChangeSizeByNBrick) this.currentBrick).setEditorStatus(false);
+				mScriptTabActivity.setCurrentBrick(null);
 				this.dismiss();
 
 		}

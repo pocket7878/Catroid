@@ -132,4 +132,8 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 	public void setEditorStatus(boolean isActive) {
 		this.editorActive = isActive;
 	}
+
+	public boolean isEditorActive() {
+		return this.editorActive;
+	}
 }

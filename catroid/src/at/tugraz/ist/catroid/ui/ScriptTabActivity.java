@@ -99,6 +99,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 		isCanceled = false;
 		dontcreateNewBrick = false;
 		currentFormulaEditorDialog = null;
+		currentBrick = null;
 
 		setContentView(R.layout.activity_scripttab);
 		Utils.loadProjectIfNeeded(this);
@@ -140,23 +141,29 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		Log.i("info", "ScriptTabActivity.onSaveInstanceState()");
-		View view = new View(this);
-		view.setId(R.id.formula_editor_ok_button);
-		this.currentFormulaEditorDialog.onClick(view);
 
-		ArrayList<Brick> brickList = ProjectManager.getInstance().getCurrentScript().getBrickList();
-		Log.i("info", "brickList.size(): " + brickList.size());
+		int indexToSave = -1;
 
-		int index = -1;
-		for (int i = 0; i < brickList.size(); i++) {
-			if (brickList.get(i).equals(this.currentBrick)) {
-				index = i;
-				Log.i("info", "Brick found! index: " + index);
-				((ChangeSizeByNBrick) currentBrick).setEditorStatus(false);
+		if (this.currentBrick != null) {
+			if (((ChangeSizeByNBrick) currentBrick).isEditorActive()) {
+				View view = new View(this);
+				view.setId(R.id.formula_editor_ok_button);
+				this.currentFormulaEditorDialog.onClick(view);
+
+				ArrayList<Brick> brickList = ProjectManager.getInstance().getCurrentScript().getBrickList();
+				Log.i("info", "brickList.size(): " + brickList.size());
+
+				for (int i = 0; i < brickList.size(); i++) {
+					if (brickList.get(i).equals(this.currentBrick)) {
+						indexToSave = i;
+						Log.i("info", "Brick found! index: " + indexToSave);
+						((ChangeSizeByNBrick) currentBrick).setEditorStatus(false);
+					}
+				}
 			}
 		}
 
-		outState.putInt("index", index);
+		outState.putInt("index", indexToSave);
 		super.onSaveInstanceState(outState);
 	}
 
@@ -170,7 +177,6 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 		if (savedIndex != -1) {
 			ChangeSizeByNBrick oldBrick = (ChangeSizeByNBrick) ProjectManager.getInstance().getCurrentScript()
 					.getBrickList().get(savedIndex);
-			//		oldBrick.onClick(oldBrick.getPrototypeView(getApplicationContext()));
 			oldBrick.onClick(new View(this));
 		}
 		super.onRestoreInstanceState(savedInstanceState);
