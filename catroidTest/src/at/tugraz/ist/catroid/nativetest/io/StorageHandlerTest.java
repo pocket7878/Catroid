@@ -25,16 +25,16 @@ package at.tugraz.ist.catroid.nativetest.io;
 import java.io.IOException;
 
 import android.test.InstrumentationTestCase;
+import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.bricks.ComeToFrontBrick;
+import at.tugraz.ist.catroid.content.bricks.GlideToBrick;
+import at.tugraz.ist.catroid.content.bricks.HideBrick;
+import at.tugraz.ist.catroid.content.bricks.PlaySoundBrick;
+import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
+import at.tugraz.ist.catroid.content.bricks.ShowBrick;
+import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.stage.NativeAppActivity;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
-import at.tugraz.ist.catroid_youtube.content.Project;
-import at.tugraz.ist.catroid_youtube.content.bricks.ComeToFrontBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.GlideToBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.HideBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.PlaySoundBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.SetCostumeBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.ShowBrick;
-import at.tugraz.ist.catroid_youtube.io.StorageHandler;
-import at.tugraz.ist.catroid_youtube.stage.NativeAppActivity;
 
 public class StorageHandlerTest extends InstrumentationTestCase {
 	private StorageHandler storageHandler;

@@ -26,8 +26,8 @@ import java.util.Set;
 import java.util.Vector;
 
 import android.test.InstrumentationTestCase;
-import at.tugraz.ist.catroid_youtube.common.MessageContainer;
-import at.tugraz.ist.catroid_youtube.content.BroadcastScript;
+import at.tugraz.ist.catroid.common.MessageContainer;
+import at.tugraz.ist.catroid.content.BroadcastScript;
 
 public class MessageContainerTest extends InstrumentationTestCase {
 

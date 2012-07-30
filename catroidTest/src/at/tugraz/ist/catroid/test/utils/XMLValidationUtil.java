@@ -33,10 +33,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
-import at.tugraz.ist.catroid_youtube.common.Consts;
-import at.tugraz.ist.catroid_youtube.content.Project;
-import at.tugraz.ist.catroid_youtube.utils.Utils;
-import at.tugraz.ist.catroid_youtube.web.ConnectionWrapper;
+import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.utils.Utils;
+import at.tugraz.ist.catroid.web.ConnectionWrapper;
 
 public class XMLValidationUtil {
 	private static final String XML_VALIDATING_URL = "http://catroidtestserver.ist.tugraz.at/xmlSchema/validateXml.php";

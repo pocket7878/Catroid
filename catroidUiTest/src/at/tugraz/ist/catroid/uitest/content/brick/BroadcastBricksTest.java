@@ -26,17 +26,17 @@ import java.util.ArrayList;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.Smoke;
-import at.tugraz.ist.catroid_youtube.ProjectManager;
-import at.tugraz.ist.catroid_youtube.content.BroadcastScript;
-import at.tugraz.ist.catroid_youtube.content.Project;
-import at.tugraz.ist.catroid_youtube.content.Script;
-import at.tugraz.ist.catroid_youtube.content.Sprite;
-import at.tugraz.ist.catroid_youtube.content.bricks.Brick;
-import at.tugraz.ist.catroid_youtube.content.bricks.BroadcastBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.BroadcastWaitBrick;
-import at.tugraz.ist.catroid_youtube.ui.ScriptActivity;
-import at.tugraz.ist.catroid_youtube.ui.ScriptTabActivity;
-import at.tugraz.ist.catroid_youtube.ui.adapter.BrickAdapter;
+import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.content.BroadcastScript;
+import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.Script;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.content.bricks.BroadcastBrick;
+import at.tugraz.ist.catroid.content.bricks.BroadcastWaitBrick;
+import at.tugraz.ist.catroid.ui.ScriptActivity;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
 
 import com.jayway.android.robotium.solo.Solo;
 

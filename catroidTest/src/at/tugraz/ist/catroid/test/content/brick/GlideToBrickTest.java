@@ -23,13 +23,13 @@
 package at.tugraz.ist.catroid.test.content.brick;
 
 import android.test.AndroidTestCase;
-import at.tugraz.ist.catroid_youtube.content.Script;
-import at.tugraz.ist.catroid_youtube.content.Sprite;
-import at.tugraz.ist.catroid_youtube.content.StartScript;
-import at.tugraz.ist.catroid_youtube.content.bricks.GlideToBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.HideBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.PlaceAtBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.ShowBrick;
+import at.tugraz.ist.catroid.content.Script;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.StartScript;
+import at.tugraz.ist.catroid.content.bricks.GlideToBrick;
+import at.tugraz.ist.catroid.content.bricks.HideBrick;
+import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
+import at.tugraz.ist.catroid.content.bricks.ShowBrick;
 
 public class GlideToBrickTest extends AndroidTestCase {
 

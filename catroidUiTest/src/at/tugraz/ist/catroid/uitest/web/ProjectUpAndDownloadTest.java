@@ -33,12 +33,12 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
+import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
+import at.tugraz.ist.catroid.utils.UtilFile;
+import at.tugraz.ist.catroid.web.ServerCalls;
 import at.tugraz.ist.catroid_youtube.R;
-import at.tugraz.ist.catroid_youtube.common.Consts;
-import at.tugraz.ist.catroid_youtube.ui.MainMenuActivity;
-import at.tugraz.ist.catroid_youtube.utils.UtilFile;
-import at.tugraz.ist.catroid_youtube.web.ServerCalls;
 
 import com.jayway.android.robotium.solo.Solo;
 

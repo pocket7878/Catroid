@@ -23,7 +23,7 @@
 package at.tugraz.ist.catroid.uitest.content.brick;
 
 import android.test.ActivityInstrumentationTestCase2;
-import at.tugraz.ist.catroid_youtube.ui.ScriptActivity;
+import at.tugraz.ist.catroid.ui.ScriptActivity;
 
 import com.jayway.android.robotium.solo.Solo;
 

@@ -26,17 +26,17 @@ import java.io.File;
 import java.util.ArrayList;
 
 import android.test.ActivityInstrumentationTestCase2;
+import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.CostumeData;
+import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.ui.MainMenuActivity;
+import at.tugraz.ist.catroid.ui.ProjectActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
-import at.tugraz.ist.catroid_youtube.ProjectManager;
+import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid_youtube.R;
-import at.tugraz.ist.catroid_youtube.common.Consts;
-import at.tugraz.ist.catroid_youtube.common.CostumeData;
-import at.tugraz.ist.catroid_youtube.content.Project;
-import at.tugraz.ist.catroid_youtube.content.Sprite;
-import at.tugraz.ist.catroid_youtube.io.StorageHandler;
-import at.tugraz.ist.catroid_youtube.ui.MainMenuActivity;
-import at.tugraz.ist.catroid_youtube.ui.ProjectActivity;
-import at.tugraz.ist.catroid_youtube.utils.UtilFile;
 
 import com.jayway.android.robotium.solo.Solo;
 

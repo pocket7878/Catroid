@@ -31,8 +31,8 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Bitmap.CompressFormat;
 import android.os.Environment;
-import at.tugraz.ist.catroid_youtube.common.Consts;
-import at.tugraz.ist.catroid_youtube.utils.ImageEditing;
+import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.utils.ImageEditing;
 
 public class ImageEditingTest extends TestCase {
 

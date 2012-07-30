@@ -27,17 +27,17 @@ import java.io.IOException;
 
 import android.media.MediaPlayer;
 import android.test.InstrumentationTestCase;
+import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.SoundInfo;
+import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.bricks.PlaySoundBrick;
+import at.tugraz.ist.catroid.io.SoundManager;
+import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.test.R;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
-import at.tugraz.ist.catroid_youtube.ProjectManager;
-import at.tugraz.ist.catroid_youtube.common.Consts;
-import at.tugraz.ist.catroid_youtube.common.SoundInfo;
-import at.tugraz.ist.catroid_youtube.content.Project;
-import at.tugraz.ist.catroid_youtube.content.Sprite;
-import at.tugraz.ist.catroid_youtube.content.bricks.PlaySoundBrick;
-import at.tugraz.ist.catroid_youtube.io.SoundManager;
-import at.tugraz.ist.catroid_youtube.io.StorageHandler;
-import at.tugraz.ist.catroid_youtube.utils.UtilFile;
+import at.tugraz.ist.catroid.utils.UtilFile;
 
 public class PlaySoundBrickTest extends InstrumentationTestCase {
 	private static final int SOUND_FILE_ID = R.raw.testsound;

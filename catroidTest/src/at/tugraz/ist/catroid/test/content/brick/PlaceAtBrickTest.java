@@ -23,8 +23,8 @@
 package at.tugraz.ist.catroid.test.content.brick;
 
 import android.test.AndroidTestCase;
-import at.tugraz.ist.catroid_youtube.content.Sprite;
-import at.tugraz.ist.catroid_youtube.content.bricks.PlaceAtBrick;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 
 public class PlaceAtBrickTest extends AndroidTestCase {
 

@@ -32,20 +32,20 @@ import java.util.List;
 import org.json.JSONException;
 
 import android.test.AndroidTestCase;
+import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.content.BroadcastScript;
+import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.Script;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.StartScript;
+import at.tugraz.ist.catroid.content.WhenScript;
+import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.test.utils.XMLValidationUtil;
-import at.tugraz.ist.catroid_youtube.ProjectManager;
-import at.tugraz.ist.catroid_youtube.common.Consts;
-import at.tugraz.ist.catroid_youtube.content.BroadcastScript;
-import at.tugraz.ist.catroid_youtube.content.Project;
-import at.tugraz.ist.catroid_youtube.content.Script;
-import at.tugraz.ist.catroid_youtube.content.Sprite;
-import at.tugraz.ist.catroid_youtube.content.StartScript;
-import at.tugraz.ist.catroid_youtube.content.WhenScript;
-import at.tugraz.ist.catroid_youtube.content.bricks.Brick;
-import at.tugraz.ist.catroid_youtube.io.StorageHandler;
-import at.tugraz.ist.catroid_youtube.ui.dialogs.AddBrickDialog;
-import at.tugraz.ist.catroid_youtube.utils.UtilFile;
+import at.tugraz.ist.catroid.ui.dialogs.AddBrickDialog;
+import at.tugraz.ist.catroid.utils.UtilFile;
 
 public class XMLValidatingTest extends AndroidTestCase {
 	private String testProjectName = "xmlTestProjectName";

@@ -23,12 +23,12 @@
 package at.tugraz.ist.catroid.nativetest.content.brick;
 
 import android.test.InstrumentationTestCase;
-import at.tugraz.ist.catroid_youtube.ProjectManager;
-import at.tugraz.ist.catroid_youtube.common.CostumeData;
-import at.tugraz.ist.catroid_youtube.content.Project;
-import at.tugraz.ist.catroid_youtube.content.Sprite;
-import at.tugraz.ist.catroid_youtube.content.bricks.SetCostumeBrick;
-import at.tugraz.ist.catroid_youtube.stage.NativeAppActivity;
+import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.common.CostumeData;
+import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
+import at.tugraz.ist.catroid.stage.NativeAppActivity;
 
 public class SetCostumeBrickTest extends InstrumentationTestCase {
 	private String testName = "testName";

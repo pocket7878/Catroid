@@ -23,8 +23,8 @@
 package at.tugraz.ist.catroid.test.content.brick;
 
 import android.test.InstrumentationTestCase;
-import at.tugraz.ist.catroid_youtube.content.Sprite;
-import at.tugraz.ist.catroid_youtube.content.bricks.SetBrightnessBrick;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.bricks.SetBrightnessBrick;
 
 public class SetBrightnessBrickTest extends InstrumentationTestCase {
 

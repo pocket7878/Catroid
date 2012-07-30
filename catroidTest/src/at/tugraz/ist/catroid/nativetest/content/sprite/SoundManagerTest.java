@@ -24,8 +24,8 @@ package at.tugraz.ist.catroid.nativetest.content.sprite;
 
 import android.media.MediaPlayer;
 import android.test.InstrumentationTestCase;
-import at.tugraz.ist.catroid_youtube.io.SoundManager;
-import at.tugraz.ist.catroid_youtube.stage.NativeAppActivity;
+import at.tugraz.ist.catroid.io.SoundManager;
+import at.tugraz.ist.catroid.stage.NativeAppActivity;
 
 public class SoundManagerTest extends InstrumentationTestCase {
 

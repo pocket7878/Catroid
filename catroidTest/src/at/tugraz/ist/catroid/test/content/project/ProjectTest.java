@@ -25,9 +25,9 @@ package at.tugraz.ist.catroid.test.content.project;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.test.AndroidTestCase;
+import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
-import at.tugraz.ist.catroid_youtube.content.Project;
-import at.tugraz.ist.catroid_youtube.content.Sprite;
 
 public class ProjectTest extends AndroidTestCase {
 

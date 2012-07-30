@@ -30,10 +30,10 @@ import java.io.PrintWriter;
 
 import junit.framework.TestCase;
 import android.util.Log;
+import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
-import at.tugraz.ist.catroid_youtube.common.Consts;
-import at.tugraz.ist.catroid_youtube.utils.UtilFile;
-import at.tugraz.ist.catroid_youtube.utils.Utils;
+import at.tugraz.ist.catroid.utils.UtilFile;
+import at.tugraz.ist.catroid.utils.Utils;
 
 public class UtilsTest extends TestCase {
 

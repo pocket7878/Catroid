@@ -25,19 +25,19 @@ package at.tugraz.ist.catroid.test.content.brick;
 import java.io.File;
 
 import android.test.InstrumentationTestCase;
+import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.CostumeData;
+import at.tugraz.ist.catroid.common.Values;
+import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
+import at.tugraz.ist.catroid.content.bricks.TurnLeftBrick;
+import at.tugraz.ist.catroid.content.bricks.TurnRightBrick;
+import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.test.R;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
-import at.tugraz.ist.catroid_youtube.ProjectManager;
-import at.tugraz.ist.catroid_youtube.common.Consts;
-import at.tugraz.ist.catroid_youtube.common.CostumeData;
-import at.tugraz.ist.catroid_youtube.common.Values;
-import at.tugraz.ist.catroid_youtube.content.Project;
-import at.tugraz.ist.catroid_youtube.content.Sprite;
-import at.tugraz.ist.catroid_youtube.content.bricks.SetSizeToBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.TurnLeftBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.TurnRightBrick;
-import at.tugraz.ist.catroid_youtube.io.StorageHandler;
-import at.tugraz.ist.catroid_youtube.utils.UtilFile;
+import at.tugraz.ist.catroid.utils.UtilFile;
 
 public class TurnRightBrickTest extends InstrumentationTestCase {
 

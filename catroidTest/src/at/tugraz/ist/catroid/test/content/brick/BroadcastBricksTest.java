@@ -23,14 +23,14 @@
 package at.tugraz.ist.catroid.test.content.brick;
 
 import android.test.AndroidTestCase;
-import at.tugraz.ist.catroid_youtube.content.BroadcastScript;
-import at.tugraz.ist.catroid_youtube.content.Script;
-import at.tugraz.ist.catroid_youtube.content.Sprite;
-import at.tugraz.ist.catroid_youtube.content.StartScript;
-import at.tugraz.ist.catroid_youtube.content.bricks.BroadcastBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.BroadcastWaitBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.SetXBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.WaitBrick;
+import at.tugraz.ist.catroid.content.BroadcastScript;
+import at.tugraz.ist.catroid.content.Script;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.StartScript;
+import at.tugraz.ist.catroid.content.bricks.BroadcastBrick;
+import at.tugraz.ist.catroid.content.bricks.BroadcastWaitBrick;
+import at.tugraz.ist.catroid.content.bricks.SetXBrick;
+import at.tugraz.ist.catroid.content.bricks.WaitBrick;
 
 public class BroadcastBricksTest extends AndroidTestCase {
 

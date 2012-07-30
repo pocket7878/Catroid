@@ -27,14 +27,14 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import android.test.AndroidTestCase;
+import at.tugraz.ist.catroid.common.Consts;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
-import at.tugraz.ist.catroid_youtube.common.Consts;
-import at.tugraz.ist.catroid_youtube.transfers.ProjectDownloadTask;
-import at.tugraz.ist.catroid_youtube.transfers.ProjectUploadTask;
-import at.tugraz.ist.catroid_youtube.utils.UtilFile;
-import at.tugraz.ist.catroid_youtube.web.ConnectionWrapper;
-import at.tugraz.ist.catroid_youtube.web.ServerCalls;
-import at.tugraz.ist.catroid_youtube.web.WebconnectionException;
+import at.tugraz.ist.catroid.transfers.ProjectDownloadTask;
+import at.tugraz.ist.catroid.transfers.ProjectUploadTask;
+import at.tugraz.ist.catroid.utils.UtilFile;
+import at.tugraz.ist.catroid.web.ConnectionWrapper;
+import at.tugraz.ist.catroid.web.ServerCalls;
+import at.tugraz.ist.catroid.web.WebconnectionException;
 
 public class UpAndDownloadTest extends AndroidTestCase {
 

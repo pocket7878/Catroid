@@ -23,9 +23,9 @@
 package at.tugraz.ist.catroid.test.content.brick;
 
 import android.test.AndroidTestCase;
-import at.tugraz.ist.catroid_youtube.content.Sprite;
-import at.tugraz.ist.catroid_youtube.content.bricks.PointInDirectionBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.PointInDirectionBrick.Direction;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.bricks.PointInDirectionBrick;
+import at.tugraz.ist.catroid.content.bricks.PointInDirectionBrick.Direction;
 
 public class PointInDirectionBrickTest extends AndroidTestCase {
 

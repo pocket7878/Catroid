@@ -23,14 +23,14 @@
 package at.tugraz.ist.catroid.test.content.brick;
 
 import android.test.AndroidTestCase;
-import at.tugraz.ist.catroid_youtube.ProjectManager;
-import at.tugraz.ist.catroid_youtube.content.Project;
-import at.tugraz.ist.catroid_youtube.content.Script;
-import at.tugraz.ist.catroid_youtube.content.Sprite;
-import at.tugraz.ist.catroid_youtube.content.StartScript;
-import at.tugraz.ist.catroid_youtube.content.bricks.PlaceAtBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.PointToBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.SetSizeToBrick;
+import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.Script;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.StartScript;
+import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
+import at.tugraz.ist.catroid.content.bricks.PointToBrick;
+import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 
 public class PointToBrickTest extends AndroidTestCase {
 

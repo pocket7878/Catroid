@@ -28,11 +28,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
-import at.tugraz.ist.catroid_youtube.ProjectManager;
 import at.tugraz.ist.catroid_youtube.R;
-import at.tugraz.ist.catroid_youtube.content.Sprite;
-import at.tugraz.ist.catroid_youtube.ui.MainMenuActivity;
 
 import com.jayway.android.robotium.solo.Solo;
 

@@ -24,13 +24,13 @@ package at.tugraz.ist.catroid.test.content.brick;
 
 import android.test.FlakyTest;
 import android.test.InstrumentationTestCase;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.StartScript;
+import at.tugraz.ist.catroid.content.bricks.ChangeYByBrick;
+import at.tugraz.ist.catroid.content.bricks.ForeverBrick;
+import at.tugraz.ist.catroid.content.bricks.LoopBeginBrick;
+import at.tugraz.ist.catroid.content.bricks.LoopEndBrick;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
-import at.tugraz.ist.catroid_youtube.content.Sprite;
-import at.tugraz.ist.catroid_youtube.content.StartScript;
-import at.tugraz.ist.catroid_youtube.content.bricks.ChangeYByBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.ForeverBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.LoopBeginBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.LoopEndBrick;
 
 public class ForeverBrickTest extends InstrumentationTestCase {
 

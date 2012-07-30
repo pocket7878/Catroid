@@ -26,20 +26,20 @@ import java.util.ArrayList;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.Smoke;
+import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.common.SoundInfo;
+import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.Script;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.StartScript;
+import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.content.bricks.HideBrick;
+import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
+import at.tugraz.ist.catroid.content.bricks.PlaySoundBrick;
+import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
+import at.tugraz.ist.catroid.ui.ScriptActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
-import at.tugraz.ist.catroid_youtube.ProjectManager;
 import at.tugraz.ist.catroid_youtube.R;
-import at.tugraz.ist.catroid_youtube.common.SoundInfo;
-import at.tugraz.ist.catroid_youtube.content.Project;
-import at.tugraz.ist.catroid_youtube.content.Script;
-import at.tugraz.ist.catroid_youtube.content.Sprite;
-import at.tugraz.ist.catroid_youtube.content.StartScript;
-import at.tugraz.ist.catroid_youtube.content.bricks.Brick;
-import at.tugraz.ist.catroid_youtube.content.bricks.HideBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.PlaceAtBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.PlaySoundBrick;
-import at.tugraz.ist.catroid_youtube.content.bricks.SetSizeToBrick;
-import at.tugraz.ist.catroid_youtube.ui.ScriptActivity;
 
 import com.jayway.android.robotium.solo.Solo;
 

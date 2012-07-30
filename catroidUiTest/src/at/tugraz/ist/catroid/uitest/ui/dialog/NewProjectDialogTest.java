@@ -23,10 +23,10 @@
 package at.tugraz.ist.catroid.uitest.ui.dialog;
 
 import android.test.ActivityInstrumentationTestCase2;
+import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
-import at.tugraz.ist.catroid_youtube.ProjectManager;
 import at.tugraz.ist.catroid_youtube.R;
-import at.tugraz.ist.catroid_youtube.ui.MainMenuActivity;
 
 import com.jayway.android.robotium.solo.Solo;
 
