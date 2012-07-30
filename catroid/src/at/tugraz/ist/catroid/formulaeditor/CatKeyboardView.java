@@ -87,6 +87,10 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 		}
 		//Log.i("info", "CatKeyBoardView() - DisplayLanguage:" + Locale.getDefault().getDisplayLanguage());
 		this.setKeyboard(symbolsNumbers);
+
+		//		Log.i("info", "CatKeyboardView() layoutparams width: " + this.getLayoutParams().width);
+
+		//		LayoutParams relative = new LayoutParams(source);
 		//		this.symbols.setShifted(false);
 		//		this.symbols_shifted.setShifted(true);
 		//		this.setBackgroundColor(0xFF6103);
@@ -344,18 +348,21 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 	private void handleKeyboardChange() {
 
 		if (this.getKeyboard() == this.symbolsNumbers) {
-			//Log.i("info", "Keyboard change from Numbers -> Fuctions");
+			Log.i("info", "Keyboard change from Numbers -> Fuctions");
 			this.setKeyboard(this.symbolsFunctions);
+			Log.i("info", "CatKeyboardView() layoutparams width: " + this.getLayoutParams().width);
 			return;
 		}
 		if (this.getKeyboard() == this.symbolsFunctions) {
-			//Log.i("info", "Keyboard change from Functions -> Sensors");
+			Log.i("info", "Keyboard change from Functions -> Sensors");
 			this.setKeyboard(this.symbolsSensors);
+			Log.i("info", "CatKeyboardView() layoutparams width: " + this.getLayoutParams().width);
 			return;
 		}
 		if (this.getKeyboard() == this.symbolsSensors) {
-			//Log.i("info", "Keyboard change from Sensors -> Numbers");
+			Log.i("info", "Keyboard change from Sensors -> Numbers");
 			this.setKeyboard(this.symbolsNumbers);
+			Log.i("info", "CatKeyboardView() layoutparams width: " + this.getLayoutParams().width);
 			return;
 		}
 	}
