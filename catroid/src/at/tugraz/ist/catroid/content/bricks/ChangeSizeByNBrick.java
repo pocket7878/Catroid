@@ -105,7 +105,7 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 	}
 
 	public void onClick(View view) {
-
+		Log.i("info", "ChangeSizeByNBrick.onClick()--  editorActive: " + editorActive);
 		final Context context = view.getContext();
 
 		if (!editorActive) {
@@ -121,6 +121,7 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 			//			});
 			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
+			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
 
 		}
 

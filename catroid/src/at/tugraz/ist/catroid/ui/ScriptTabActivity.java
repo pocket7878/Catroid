@@ -45,6 +45,8 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.content.bricks.ChangeSizeByNBrick;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.dialogs.AddBrickDialog;
@@ -82,6 +84,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	private boolean dontcreateNewBrick;
 
 	private FormulaEditorDialog currentFormulaEditorDialog;
+	private Brick currentBrick;
 
 	private void setupTabHost() {
 		tabHost = (TabHost) findViewById(android.R.id.tabhost);
@@ -140,6 +143,20 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 		View view = new View(this);
 		view.setId(R.id.formula_editor_ok_button);
 		this.currentFormulaEditorDialog.onClick(view);
+
+		ArrayList<Brick> brickList = ProjectManager.getInstance().getCurrentScript().getBrickList();
+		Log.i("info", "brickList.size(): " + brickList.size());
+
+		int index = -1;
+		for (int i = 0; i < brickList.size(); i++) {
+			if (brickList.get(i).equals(this.currentBrick)) {
+				index = i;
+				Log.i("info", "Brick found! index: " + index);
+				((ChangeSizeByNBrick) currentBrick).setEditorStatus(false);
+			}
+			//TODO save index in outsate
+		}
+
 		super.onSaveInstanceState(outState);
 	}
 
@@ -147,6 +164,12 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		Log.i("info", "ScriptTabActivity.onRestoreInstanceState()");
 		Log.i("info", "currentFormulaEditorDialog:" + this.currentFormulaEditorDialog);
+
+		int savedIndex = 0;
+		ChangeSizeByNBrick oldBrick = (ChangeSizeByNBrick) ProjectManager.getInstance().getCurrentScript()
+				.getBrickList().get(savedIndex);
+		//		oldBrick.onClick(oldBrick.getPrototypeView(getApplicationContext()));
+		oldBrick.onClick(new View(this));
 		super.onRestoreInstanceState(savedInstanceState);
 	}
 
@@ -264,6 +287,11 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	public void setCurrentFormulaEditorDialog(FormulaEditorDialog currentFormulaEditorDialog) {
 		Log.i("info", "ScriptTabActivity.setCurrentFormulaEditorDialog(): " + currentFormulaEditorDialog);
 		this.currentFormulaEditorDialog = currentFormulaEditorDialog;
+	}
+
+	public void setCurrentBrick(Brick brick) {
+		Log.i("info", "ScriptTabActivity.setCurrentBrick(): " + brick);
+		this.currentBrick = brick;
 	}
 
 	@Override
