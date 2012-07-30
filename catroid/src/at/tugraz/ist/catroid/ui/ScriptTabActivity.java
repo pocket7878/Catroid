@@ -44,6 +44,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.SoundInfo;
+import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.ChangeSizeByNBrick;
@@ -142,28 +143,40 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	protected void onSaveInstanceState(Bundle outState) {
 		Log.i("info", "ScriptTabActivity.onSaveInstanceState()");
 
-		int indexToSave = -1;
+		int brickIndexToSave = -1;
+		int scriptIndexToSave = -1;
 
 		if (this.currentBrick != null) {
 			if (((ChangeSizeByNBrick) currentBrick).isEditorActive()) {
+
+				Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
+
+				for (int h = 0; h < currentSprite.getNumberOfScripts(); h++) {
+
+					Script script = ProjectManager.getInstance().getCurrentSprite().getScript(h);
+					ArrayList<Brick> brickList = script.getBrickList();
+
+					Log.i("info", "brickList.size(): " + brickList.size());
+
+					for (int i = 0; i < brickList.size(); i++) {
+						if (brickList.get(i).equals(this.currentBrick)) {
+							brickIndexToSave = i;
+							scriptIndexToSave = h;
+							Log.i("info", "Brick found! index: " + brickIndexToSave);
+						}
+					}
+				}
+
 				View view = new View(this);
 				view.setId(R.id.formula_editor_ok_button);
 				this.currentFormulaEditorDialog.onClick(view);
-
-				ArrayList<Brick> brickList = ProjectManager.getInstance().getCurrentScript().getBrickList();
-				Log.i("info", "brickList.size(): " + brickList.size());
-
-				for (int i = 0; i < brickList.size(); i++) {
-					if (brickList.get(i).equals(this.currentBrick)) {
-						indexToSave = i;
-						Log.i("info", "Brick found! index: " + indexToSave);
-						((ChangeSizeByNBrick) currentBrick).setEditorStatus(false);
-					}
-				}
+				((ChangeSizeByNBrick) currentBrick).setEditorStatus(false);
 			}
 		}
 
-		outState.putInt("index", indexToSave);
+		outState.putInt("brickIndex", brickIndexToSave);
+		outState.putInt("scriptIndex", scriptIndexToSave);
+
 		super.onSaveInstanceState(outState);
 	}
 
@@ -171,12 +184,14 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		Log.i("info", "ScriptTabActivity.onRestoreInstanceState()");
 
-		int savedIndex = savedInstanceState.getInt("index");
-		Log.i("info", "savedIndex: " + savedIndex);
+		int savedBrickIndex = savedInstanceState.getInt("brickIndex");
+		int savedScriptIndex = savedInstanceState.getInt("scriptIndex");
+		Log.i("info", "savedBrickIndex: " + savedBrickIndex);
+		Log.i("info", "savedScriptIndex: " + savedScriptIndex);
 
-		if (savedIndex != -1) {
-			ChangeSizeByNBrick oldBrick = (ChangeSizeByNBrick) ProjectManager.getInstance().getCurrentScript()
-					.getBrickList().get(savedIndex);
+		if (savedBrickIndex != -1) {
+			ChangeSizeByNBrick oldBrick = (ChangeSizeByNBrick) ProjectManager.getInstance().getCurrentSprite()
+					.getScript(savedScriptIndex).getBrickList().get(savedBrickIndex);
 			oldBrick.onClick(new View(this));
 		}
 		super.onRestoreInstanceState(savedInstanceState);
