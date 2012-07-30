@@ -257,7 +257,6 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 				//				}
 				//			}
 
-				requestLayout();
 				break;
 			case CatKeyEvent.KEYCODE_SPACE:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SPACE));
