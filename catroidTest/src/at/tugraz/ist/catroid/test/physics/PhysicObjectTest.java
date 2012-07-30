@@ -9,6 +9,7 @@ import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.GdxNativesLoader;
@@ -96,16 +97,30 @@ public class PhysicObjectTest extends AndroidTestCase {
 		PhysicObject object = objects.get(new Sprite("TestSprite"));
 		assertEquals(0.0f, object.getBody().getAngle());
 
-		float angle = PhysicWorldConverter.angleCatToBox2d(45.0f);
-		object.setAngle(angle);
-		assertEquals(angle, object.getBody().getAngle());
+		float[] degrees = { 45.0f, -90.0f, 500.0f };
 
-		angle = PhysicWorldConverter.angleCatToBox2d(500.0f);
-		object.setAngle(angle);
-		assertEquals(angle, object.getBody().getAngle());
+		for (float angle : degrees) {
+			float radian = PhysicWorldConverter.angleCatToBox2d(angle);
+			object.setAngle(radian);
+			assertEquals(radian, object.getBody().getAngle());
+		}
+	}
 
-		angle = PhysicWorldConverter.angleCatToBox2d(-90.0f);
-		object.setAngle(angle);
-		assertEquals(angle, object.getBody().getAngle());
+	public void testDensity() {
+		PhysicObject object = objects.get(new Sprite("TestSprite"));
+		checkDensityValues(object, 0.0f);
+
+		float[] densities = { 0.123f, -0.765f, 24.32f };
+
+		for (float density : densities) {
+			object.setDensity(density);
+			checkDensityValues(object, density);
+		}
+	}
+
+	private void checkDensityValues(PhysicObject object, float expectedDensity) {
+		for (Fixture fixture : object.getBody().getFixtureList()) {
+			assertEquals(0.0f, fixture.getDensity());
+		}
 	}
 }
