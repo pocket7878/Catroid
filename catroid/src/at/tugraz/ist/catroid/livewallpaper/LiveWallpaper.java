@@ -9,7 +9,6 @@ import android.service.wallpaper.WallpaperService;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
@@ -18,17 +17,8 @@ import at.tugraz.ist.catroid.content.bricks.Brick;
 
 public class LiveWallpaper extends WallpaperService {
 
-	private ProjectManager projectManager;
-	private Project currentProject;
-	private List<Sprite> spriteList;
-
 	@Override
 	public Engine onCreateEngine() {
-
-		projectManager = ProjectManager.getInstance();
-		currentProject = projectManager.getCurrentProject();
-		spriteList = currentProject.getSpriteList();
-
 		return new CatWallEngine();
 	}
 
@@ -78,6 +68,7 @@ public class LiveWallpaper extends WallpaperService {
 		}
 
 		public void handleScript() {
+			List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteList();
 			for (Sprite sprite : spriteList) {
 				for (int i = 0; i < sprite.getNumberOfScripts(); i++) {
 					scriptToHandle = sprite.getScript(i);
