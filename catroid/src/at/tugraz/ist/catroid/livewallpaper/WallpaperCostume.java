@@ -21,6 +21,7 @@ package at.tugraz.ist.catroid.livewallpaper;
 import android.graphics.Bitmap;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.CostumeData;
+import at.tugraz.ist.catroid.content.Project;
 
 public class WallpaperCostume {
 	private static WallpaperCostume wallpaperCostume;
@@ -40,8 +41,11 @@ public class WallpaperCostume {
 	private boolean costumeHidden = false;
 
 	private WallpaperCostume() {
-		this.screenHeightHalf = ProjectManager.getInstance().getCurrentProject().virtualScreenHeight / 2;
-		this.screenWidthHalf = ProjectManager.getInstance().getCurrentProject().virtualScreenWidth / 2;
+
+		Project currentProject = ProjectManager.getInstance().getCurrentProject();
+
+		this.screenHeightHalf = currentProject.virtualScreenHeight / 2;
+		this.screenWidthHalf = currentProject.virtualScreenWidth / 2;
 	}
 
 	public static WallpaperCostume getInstance() {
