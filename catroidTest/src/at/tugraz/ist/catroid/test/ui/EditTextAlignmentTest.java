@@ -31,7 +31,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import at.tugraz.ist.catroid_youtube.R;
+import at.tugraz.ist.catroid.R;
 
 public class EditTextAlignmentTest extends AndroidTestCase {
 

@@ -44,7 +44,7 @@ import at.tugraz.ist.catroid.content.bricks.ShowBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.utils.Utils;
-import at.tugraz.ist.catroid_youtube.R;
+import at.tugraz.ist.catroid.R;
 
 public class ProjectManagerTest extends InstrumentationTestCase {
 

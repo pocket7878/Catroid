@@ -35,7 +35,7 @@ import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.ChangeXByBrick;
 import at.tugraz.ist.catroid.ui.ScriptActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
-import at.tugraz.ist.catroid_youtube.R;
+import at.tugraz.ist.catroid.R;
 
 import com.jayway.android.robotium.solo.Solo;
 

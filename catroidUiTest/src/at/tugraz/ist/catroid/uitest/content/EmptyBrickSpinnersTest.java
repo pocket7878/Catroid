@@ -45,7 +45,7 @@ import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import at.tugraz.ist.catroid.uitest.util.XMLValidationUtil;
 import at.tugraz.ist.catroid.utils.Utils;
-import at.tugraz.ist.catroid_youtube.R;
+import at.tugraz.ist.catroid.R;
 
 import com.jayway.android.robotium.solo.Solo;
 

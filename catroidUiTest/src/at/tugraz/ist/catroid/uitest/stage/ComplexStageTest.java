@@ -42,7 +42,7 @@ import at.tugraz.ist.catroid.content.bricks.TurnLeftBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
-import at.tugraz.ist.catroid_youtube.R;
+import at.tugraz.ist.catroid.R;
 
 import com.jayway.android.robotium.solo.Solo;
 

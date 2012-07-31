@@ -39,6 +39,11 @@ import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class ScreenRecorderTest extends InstrumentationTestCase {
 	private static final int SOUND_FILE_ID = R.raw.testsound;
 	private File soundFile;
@@ -70,21 +75,39 @@ public class ScreenRecorderTest extends InstrumentationTestCase {
 		recorder.recordCostume(costume);
 		recorder.recordSound(soundInfo);
 		Thread.sleep(500);
+		recorder.finishAndSave();
+
 		String currentProject = ProjectManager.getInstance().getCurrentProject().getName();
 		File recordedFile = new File(Utils.buildPath(Consts.DEFAULT_ROOT, currentProject), "record.json");
 
-		assertTrue("Costume recorded wrongly.",
-				recorder.getRecording().costumeList.get(0).first.name.equals(costume.name));
-		assertTrue("SoundInfo recorded wrongly.",
-				recorder.getRecording().soundList.get(0).first.getTitle().equals(soundInfo.getTitle()));
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode rootNode;
+		try {
+			rootNode = mapper.readValue(recordedFile, JsonNode.class);
+			assertTrue("Duration recorded wrongly", rootNode.path("duration").doubleValue() >= 1000);
 
-		assertTrue("Duration recorded wrongly", recorder.getRecording().duration >= 1000);
+			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("name"));
+			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("filename"));
+			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("timestamp"));
+			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("alphaValue"));
+			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("rotation"));
+			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("scaleX"));
+			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("scaleY"));
+			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("show"));
+			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("visible"));
+			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("brightnessValue"));
+			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("x"));
+			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("y"));
+			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("zPosition"));
 
-		String[] expectedFields = { "<name>", "<rotation>", "<scaleX>", "<scaleY>", "<visible>", "<x>", "<y>",
-				"<zPosition>", "<fileName>", "<show>", "<brightnessValue>", "<alphaValue>", "<fileName>", "<isPlaying>" };
-		for (String field : expectedFields) {
-			assertTrue("Recorded XML doesn't contain the field: " + field, recordedXml.contains(field));
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+
 	}
 
 	private void createTestProject() throws IOException {

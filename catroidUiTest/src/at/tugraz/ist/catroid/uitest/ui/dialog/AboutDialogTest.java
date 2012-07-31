@@ -25,7 +25,7 @@ package at.tugraz.ist.catroid.uitest.ui.dialog;
 import android.test.ActivityInstrumentationTestCase2;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.utils.Utils;
-import at.tugraz.ist.catroid_youtube.R;
+import at.tugraz.ist.catroid.R;
 
 import com.jayway.android.robotium.solo.Solo;
 
