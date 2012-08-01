@@ -20,14 +20,11 @@ public class PhysicObjectTest extends AndroidTestCase {
 		GdxNativesLoader.load();
 	}
 
-	/**
-	 * Template method for density, friction and restitution. Remove comment after finding an accurate class name.
-	 */
-	private abstract class Template {
+	private abstract class FixtureTemplate {
 		protected final PhysicObject physicObject;
 		protected final float[] values;
 
-		public Template(PhysicObject physicObject, float[] values) {
+		public FixtureTemplate(PhysicObject physicObject, float[] values) {
 			this.physicObject = physicObject;
 			this.values = values;
 		}
@@ -158,7 +155,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 		PhysicObject physicObject = createPhysicObject();
 		float[] densities = { 0.123f, -0.765f, 24.32f };
 
-		Template densityTemplate = new Template(physicObject, densities) {
+		FixtureTemplate densityTemplate = new FixtureTemplate(physicObject, densities) {
 			@Override
 			protected void setValue(float value) {
 				physicObject.setDensity(value);
@@ -176,7 +173,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 		PhysicObject physicObject = createPhysicObject();
 		float[] friction = { 0.123f, -0.765f, 24.32f };
 
-		Template frictionTemplate = new Template(physicObject, friction) {
+		FixtureTemplate frictionTemplate = new FixtureTemplate(physicObject, friction) {
 			@Override
 			protected void setValue(float value) {
 				physicObject.setFriction(value);
@@ -194,7 +191,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 		PhysicObject physicObject = createPhysicObject();
 		float[] restitution = { 0.123f, -0.765f, 24.32f };
 
-		Template restitutionTemplate = new Template(physicObject, restitution) {
+		FixtureTemplate restitutionTemplate = new FixtureTemplate(physicObject, restitution) {
 			@Override
 			protected void setValue(float value) {
 				physicObject.setRestitution(value);
@@ -237,6 +234,17 @@ public class PhysicObjectTest extends AndroidTestCase {
 	}
 
 	public void testShape() {
-		// TODO: Test shape
+		PhysicObject physicObject = createPhysicObject();
+		assertTrue(physicObject.getBody().getFixtureList().size() == 1);
+
+		Shape shape = physicObject.getBody().getFixtureList().get(0).getShape();
+		assertEquals(Shape.Type.Polygon, shape.getType());
+		assertEquals(1, shape.getChildCount());
+		assertEquals(0.01f, shape.getRadius());
+
+		PolygonShape polygonShape = new PolygonShape();
+		assertEquals(0, polygonShape.getVertexCount());
+
+		// TODO: Much more testing coming soon!
 	}
 }
