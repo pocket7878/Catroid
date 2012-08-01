@@ -36,12 +36,11 @@ import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.EditText;
 import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
-public class FormulaEditorEditText extends EditText implements OnClickListener, OnTouchListener {
+public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	//	private static final BackgroundColorSpan COLOR_EDITING = new BackgroundColorSpan(0xFF00FFFF);
 	private static final BackgroundColorSpan COLOR_ERROR = new BackgroundColorSpan(0xFFF00000);
@@ -69,7 +68,6 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 	private boolean editMode = false;
 	private Spannable highlightSpan = null;
 	private Spannable errorSpan = null;
-	private boolean ignoreNextUpdate = false;
 	private boolean hasChanges = false;
 	private int numberOfVisibleLines = 0;
 	private float lineHeight = 0;
@@ -91,7 +89,6 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 
 	public void init(FormulaEditorDialog dialog, int brickHeight, CatKeyboardView ckv, Context context) {
 		this.dialog = dialog;
-		this.setOnClickListener(this);
 		this.setOnTouchListener(this);
 		this.setLongClickable(false);
 		this.setSelectAllOnFocus(false);
@@ -120,27 +117,16 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 		super.setSelection(formulaAsText.length());
 		absoluteCursorPosition = formulaAsText.length();
 		setSelection(absoluteCursorPosition - 1);
-		//scrollToEnd();
 		updateSelectionIndices();
-
-		//this.setCursorVisible(true);
-
 	}
 
 	public synchronized void updateSelectionIndices() {
-		//Log.i("info", "update selection indices");
-
-		if (ignoreNextUpdate) {
-			ignoreNextUpdate = false;
-			return;
-		}
 
 		clearSelectionHighlighting();
 		editMode = false;
 
 		selectionStartIndex = absoluteCursorPosition;
 		selectionEndIndex = absoluteCursorPosition;
-		//snapToLine();
 		//setSelection(selectionStartIndex);
 	}
 
@@ -158,21 +144,11 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 		float betweenLineOffset = 0;
 
 		if (layout != null && getText().length() > 0) {
-			//float horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
 			lineHeight = layout.getSpacingMultiplier() * this.getTextSize() + 5;
 			horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
 			verticalOffset = layout.getLineForOffset(absoluteCursorPosition);
 			verticalOffset -= (int) (scrollOffset / lineHeight);
-
 			betweenLineOffset = scrollOffset % lineHeight;
-			//Log.i("info", "Vertical: " + lineHeight + " " + betweenLineOffset + " " + scrollOffset + " " + verticalOffset);
-
-			//		if (cursorYOffset == 0 && betweenLineOffset > 2.1) { //2.0 is some margin, mostly the scroll thingy scrolls back up/down this margin after scrolling to bottom/top
-			//			betweenLineOffset -= lineHeight; //when scrollable there sometimes is half a line additionaly visible on top
-			//		}
-			//		if (cursorYOffset == numberOfVisibleLines && betweenLineOffset > 2.1) {
-			//			betweenLineOffset += lineHeight; //when scrollable there sometimes is half a line additionaly visible on top
-			//		}
 		}
 
 		float startX = horizontalOffset;
@@ -642,95 +618,16 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 
 	};
 
-	public void onClick(View v) {
-		//updateSelectionIndices();
-
-		//		TextPaint paint = this.getPaint();
-		//		paint.
-
-	}
-
 	public boolean onTouch(View v, MotionEvent motion) {
-
-		if (motion.getAction() == android.view.MotionEvent.ACTION_UP) {
-
-			//snapToLine();
-
-		} else if (motion.getAction() == android.view.MotionEvent.ACTION_DOWN) {
-
-			//float scrollOffset = this.getScrollY() % lineHeight;
-			//int betweenLineOffset = scrollOffset % 41;
-			//int snapToLineOffset = (int) ((scrollOffset + lineHeight * cursorYOffset) - betweenLineOffset);
-
-			//if (snapToLine <= lineHeight / 2) {
-
-			//} else {
-			//this.scrollTo(0, snapToLineOffset);f
-
-		} else if (motion.getAction() == android.view.MotionEvent.ACTION_CANCEL) {
-			Log.i("info", "ACTION_CANCEL");
-
-		} else {
-
-		}
-
-		boolean result = gestureDetector.onTouchEvent(motion);
-		if (result) {
-			//	invalidate();
-		}
-		//return result;
-
-		//invalidate();
-		return false;
+		return gestureDetector.onTouchEvent(motion);
 	}
-
-	//	private void snapToLine() {
-	//		float numLines = FloatMath.floor((this.getScrollY() / lineHeight));
-	//		Log.i("info", "Snap to: " + currentYScrollPosition + " " + numLines);
-	//
-	//		if (numLines > 0 && numLines + 1 <= numberOfVisibleLines) {
-	//			numLines += 0.5;
-	//		}
-	//
-	//		currentYScrollPosition = (int) (numLines * lineHeight);
-	//		this.scrollTo(0, currentYScrollPosition);
-	//	}
-	//
-	//	private void scrollToCurrentLine() {
-	//		Log.i("info", "Scroll to: " + currentYScrollPosition);
-	//		this.scrollTo(0, currentYScrollPosition);
-	//	}
-	//
-	//	private void scrollToEnd() {
-	//		Layout layout = this.getLayout();
-	//		if (layout != null) {
-	//			scrollTo(0, (int) (layout.getLineCount() * lineHeight));
-	//		}
-	//
-	//	}
-	//	@Override
-	//	public void scrollBy(int x, int y) {
-	//		Log.i("info", "Scroll by");
-	//	}
-	//
-	//	@Override
-	//	public void scrollTo(int x, int y) {
-	//		Log.i("info", "Scroll to");
-	//	}
 
 	final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.SimpleOnGestureListener() {
 		@Override
 		public boolean onDoubleTap(MotionEvent e) {
 			Log.i("info", "double tap ");
-			ignoreNextUpdate = true;
 			doSelectionAndHighlighting();
 			return true;
-		}
-
-		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-			return false;
-
 		}
 
 		@Override
@@ -742,10 +639,7 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 				int cursorY = 0;
 				int cursorXOffset = (int) motion.getX();
 				int initialScrollY = getScrollY();
-
-				int absoY = yCoordinate + initialScrollY;
 				int firstLineSize = (int) (initialScrollY % lineHeight);
-				//Log.i("rolf", "Initial scroll: " + initialScrollY + " first line: " + firstLineSize);
 
 				if (yCoordinate <= lineHeight - firstLineSize) {
 
@@ -753,7 +647,6 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 							* firstLineSize));
 					cursorY = 0;
 				} else if (yCoordinate >= numberOfVisibleLines * lineHeight - firstLineSize) {
-					//scrollBy(0, (int) (lineHeight - firstLineSize + lineHeight / 2));
 					if (!(yCoordinate > layout.getLineCount() * lineHeight - getScrollY())) {
 						scrollBy(0, (int) (lineHeight - firstLineSize + lineHeight / 2));
 						cursorY = numberOfVisibleLines;
@@ -767,34 +660,7 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 					}
 				}
 
-				//				else if (yCoordinate <= lineHeight) {
-				//					cursorY = 1;
-				//				} else if (yCoordinate >= numberOfVisibleLines * lineHeight - firstLineSize) {
-				//
-				//					scrollBy(0, firstLineSize);
-				//					//awakenScrollBars();
-				//					cursorY = numberOfVisibleLines;
-				//				} else if (yCoordinate >= (numberOfVisibleLines - 1) * lineHeight) {
-				//					cursorY = numberOfVisibleLines - 2;
-				//				} else {
-				//					int startY = (int) (lineHeight - firstLineSize);
-				//					int maxY = (int) (numberOfVisibleLines * lineHeight);
-				//					while (startY < maxY) {
-				//						cursorY++;
-				//						maxY -= lineHeight;
-				//					}
-				//					//					for (int i = (int) (yCoordinate - (lineHeight - firstLineSize)); i > 0; i -= lineHeight) {
-				//					//						cursorY++;
-				//					//					}
-				//				}
-
-				//Log.i("rolf", "CursorY: " + cursorY);
-
-				//layout.getLineCount()
 				int linesDown = (int) (initialScrollY / lineHeight);
-				//				Log.i("info",
-				//						" scrolled down lines " + linesDown + " len: " + getText().length() + " bla: "
-				//								+ layout.getLineCount());
 
 				while (cursorY + linesDown >= layout.getLineCount()) {
 					linesDown--;
@@ -808,10 +674,10 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 
 				absoluteCursorPosition = tempCursorPosition;
 
-				//postInvalidate();
+				postInvalidate();
 
-				Log.i("rolf", "clicked on: " + motion.getY() + "click in line: " + motion.getY() / lineHeight
-						+ " lines down: " + linesDown + " absoY: " + absoY + " cursor: " + tempCursorPosition);
+				Log.i("info", "clicked on: " + motion.getY() + "click in line: " + motion.getY() / lineHeight
+						+ " lines down: " + linesDown + " cursor: " + tempCursorPosition);
 				updateSelectionIndices();
 			}
 			return true;
