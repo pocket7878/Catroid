@@ -88,11 +88,8 @@ public class ComeToFrontBrick implements Brick {
 		return View.inflate(context, R.layout.brick_come_to_front, null);
 	}
 
-	/* (non-Javadoc)
-	 * @see at.tugraz.ist.catroid.content.bricks.Brick#executeLiveWallpaper()
-	 */
 	public void executeLiveWallpaper() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

@@ -114,12 +114,13 @@ public class NextCostumeBrick implements Brick {
 	}
 
 	public void executeLiveWallpaper() {
-		WallpaperCostume costumeSingleton = WallpaperCostume.getInstance();
-		CostumeData costumeData = costumeSingleton.getCostumeData();
+		WallpaperCostume wallpaperCostume = WallpaperCostume.getInstance();
+		CostumeData costumeData = wallpaperCostume.getCostumeData();
 		final ArrayList<CostumeData> costumeDataList = sprite.getCostumeDataList();
 
 		if (costumeData == null) {
-			costumeSingleton.initCostumeToDraw(costumeDataList.get(0), false);
+			wallpaperCostume.initCostumeToDraw(costumeDataList.get(0), false);
+			return;
 		}
 
 		int positionInList = 0;
@@ -138,7 +139,7 @@ public class NextCostumeBrick implements Brick {
 			positionInList++;
 		}
 
-		costumeSingleton.initCostumeToDraw(costumeDataList.get(positionInList), false);
+		wallpaperCostume.initCostumeToDraw(costumeDataList.get(positionInList), false);
 
 	}
 }

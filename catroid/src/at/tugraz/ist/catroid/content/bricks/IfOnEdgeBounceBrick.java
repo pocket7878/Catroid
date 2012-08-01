@@ -126,12 +126,9 @@ public class IfOnEdgeBounceBrick implements Brick {
 		return new IfOnEdgeBounceBrick(sprite);
 	}
 
-	/* (non-Javadoc)
-	 * @see at.tugraz.ist.catroid.content.bricks.Brick#executeLiveWallpaper()
-	 */
 	public void executeLiveWallpaper() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
