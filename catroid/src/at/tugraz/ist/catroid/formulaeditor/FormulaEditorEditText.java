@@ -181,10 +181,10 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 			//		}
 		}
 
-		float startX = horizontalOffset + 15;
-		float endX = horizontalOffset + 15;
-		float startY = (15 + scrollOffset + lineHeight * verticalOffset) - betweenLineOffset;
-		float endY = (15 + scrollOffset + lineHeight * (verticalOffset + 1)) - betweenLineOffset;
+		float startX = horizontalOffset;
+		float endX = horizontalOffset;
+		float startY = (5 + scrollOffset + lineHeight * verticalOffset) - betweenLineOffset;
+		float endY = (5 + scrollOffset + lineHeight * (verticalOffset + 1)) - betweenLineOffset;
 		canvas.drawLine(startX, startY, endX, endY, this.getPaint());
 
 	}
@@ -684,10 +684,10 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 		if (result) {
 			//	invalidate();
 		}
-		return result;
+		//return result;
 
 		//invalidate();
-		//return false;
+		return false;
 	}
 
 	//	private void snapToLine() {
@@ -812,10 +812,10 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 				absoluteCursorPosition = tempCursorPosition;
 				cursorYOffset = cursorY;
 
-				postInvalidate();
+				//postInvalidate();
 
-				//				Log.i("rolf", "clicked on: " + motion.getY() + "click in line: " + motion.getY() / lineHeight
-				//						+ " lines down: " + linesDown + " absoY: " + absoY + " cursor: " + tempCursorPosition);
+				Log.i("rolf", "clicked on: " + motion.getY() + "click in line: " + motion.getY() / lineHeight
+						+ " lines down: " + linesDown + " absoY: " + absoY + " cursor: " + tempCursorPosition);
 				updateSelectionIndices();
 			}
 			return true;
