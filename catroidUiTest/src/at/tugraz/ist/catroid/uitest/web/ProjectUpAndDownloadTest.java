@@ -47,7 +47,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 
 	private Solo solo;
 	private String testProject = UiTestUtils.PROJECTNAME1;
-	private String newTestProject = UiTestUtils.PROJECTNAME2;
+	private String newTestProject = UiTestUtils.PROJECTNAME_COMPLEX_CHARACTERS;
 	private String saveToken;
 	private int serverProjectId;
 
@@ -120,6 +120,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 	private void addABrickToProject() {
 		solo.clickInList(0);
 		UiTestUtils.addNewBrick(solo, R.string.brick_wait);
+		solo.clickOnScreen(200, 200);
 		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_home);
 	}
 
@@ -131,11 +132,13 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		solo.clearEditText(0);
 		solo.clickOnEditText(0);
 		solo.enterText(0, newTestProject);
+		assertEquals("Entered projectname is wrong.", newTestProject, solo.getEditText(0).getText().toString());
 
 		// enter a description
 		solo.clearEditText(1);
 		solo.clickOnEditText(1);
-		solo.enterText(1, "the project description");
+		solo.enterText(1, newTestProject);
+		assertEquals("Entered description is wrong.", newTestProject, solo.getEditText(1).getText().toString());
 
 		//		solo.setActivityOrientation(Solo.LANDSCAPE);
 

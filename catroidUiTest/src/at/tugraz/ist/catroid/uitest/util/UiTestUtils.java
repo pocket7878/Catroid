@@ -83,6 +83,7 @@ public class UiTestUtils {
 	public static final String PROJECTNAME1 = "testproject1";
 	public static final String PROJECTNAME2 = "testproject2";
 	public static final String PROJECTNAME3 = "testproject3";
+	public static final String PROJECTNAME_COMPLEX_CHARACTERS = "testproject4_私のプロジェクト_द्ध्र्य_العربية";
 	public static final String DEFAULT_TEST_PROJECT_NAME_MIXED_CASE = "TeStPROjeCt";
 
 	public static enum FileTypes {
@@ -370,6 +371,11 @@ public class UiTestUtils {
 		}
 
 		directory = new File(Constants.DEFAULT_ROOT + "/" + PROJECTNAME3);
+		if (directory.exists()) {
+			UtilFile.deleteDirectory(directory);
+		}
+
+		directory = new File(Constants.DEFAULT_ROOT + "/" + PROJECTNAME_COMPLEX_CHARACTERS);
 		if (directory.exists()) {
 			UtilFile.deleteDirectory(directory);
 		}
