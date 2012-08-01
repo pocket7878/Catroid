@@ -30,11 +30,9 @@ import android.view.View;
 import android.widget.Button;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.plugin.Drone.DroneConsts;
-import at.tugraz.ist.catroid.plugin.Drone.DroneServiceHandler;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.stage.StageListener;
 import at.tugraz.ist.catroid.utils.Utils;
-import at.tugraz.ist.droned.client.CatroidDrone;
 
 /**
  * @author
@@ -128,11 +126,11 @@ public class StageDialog extends Dialog {
 
 	@Override
 	public void onBackPressed() {
-		if (DroneServiceHandler.getInstance().getDrone().getSate() != CatroidDrone.State.READY) {
-			// TODO check for flying drone
-		} else {
-
-		}
+		//		if (DroneServiceHandler.getInstance().getDrone().getSate() != CatroidDrone.State.READY) {
+		//			// TODO check for flying drone
+		//		} else {
+		//
+		//		}
 		exitStage();
 	}
 

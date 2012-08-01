@@ -321,7 +321,7 @@ public class PreStageActivity extends Activity {
 		super.onDestroy();
 		// Unbind from the service
 		if (isDroneServiceRunning()) {
-			unbindService(droneServiceConnection);
+			//unbindService(droneServiceConnection);
 		}
 	}
 
