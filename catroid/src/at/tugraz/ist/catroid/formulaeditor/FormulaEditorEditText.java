@@ -73,10 +73,7 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 	private boolean hasChanges = false;
 	private int numberOfVisibleLines = 0;
 	private float lineHeight = 0;
-	private int currentYScrollPosition = 0;
 	private int absoluteCursorPosition = 0;
-	private int cursorYOffset = 0;
-	//private int cursorXOffset = 0;
 
 	FormulaEditorDialog dialog = null;
 
@@ -115,8 +112,6 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 			this.setLines(numberOfVisibleLines);
 		}
 
-		//this.setBackgroundResource(0);
-		//this.setCursorVisible(false);
 	}
 
 	public void setFieldActive(String formulaAsText) {
@@ -164,11 +159,10 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 
 		if (layout != null && getText().length() > 0) {
 			//float horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
+			lineHeight = layout.getSpacingMultiplier() * this.getTextSize() + 5;
 			horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
 			verticalOffset = layout.getLineForOffset(absoluteCursorPosition);
 			verticalOffset -= (int) (scrollOffset / lineHeight);
-
-			lineHeight = layout.getSpacingMultiplier() * this.getTextSize() + 5;
 
 			betweenLineOffset = scrollOffset % lineHeight;
 			//Log.i("info", "Vertical: " + lineHeight + " " + betweenLineOffset + " " + scrollOffset + " " + verticalOffset);
@@ -185,7 +179,7 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 		float endX = horizontalOffset;
 		float startY = (5 + scrollOffset + lineHeight * verticalOffset) - betweenLineOffset;
 		float endY = (5 + scrollOffset + lineHeight * (verticalOffset + 1)) - betweenLineOffset;
-		canvas.drawLine(startX, startY, endX, endY, this.getPaint());
+		canvas.drawLine(startX, startY, endX, endY, getPaint());
 
 	}
 
@@ -759,8 +753,11 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 							* firstLineSize));
 					cursorY = 0;
 				} else if (yCoordinate >= numberOfVisibleLines * lineHeight - firstLineSize) {
-					scrollBy(0, (int) (lineHeight - firstLineSize + lineHeight / 2));
-					cursorY = numberOfVisibleLines;
+					//scrollBy(0, (int) (lineHeight - firstLineSize + lineHeight / 2));
+					if (!(yCoordinate > layout.getLineCount() * lineHeight - getScrollY())) {
+						scrollBy(0, (int) (lineHeight - firstLineSize + lineHeight / 2));
+						cursorY = numberOfVisibleLines;
+					}
 				} else {
 					for (int i = 1; i <= numberOfVisibleLines; i++) {
 						if (yCoordinate <= ((lineHeight - firstLineSize) + i * lineHeight)) {
@@ -810,7 +807,6 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 				}
 
 				absoluteCursorPosition = tempCursorPosition;
-				cursorYOffset = cursorY;
 
 				//postInvalidate();
 
