@@ -29,7 +29,7 @@
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="15" />
+        android:targetSdkVersion="10" />
         
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -68,6 +68,15 @@
                     android:pathPattern="@string/catroid_extension_pathPattern"
                     android:scheme="http" />
 			</intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="*"
+                    android:mimeType="application/zip"
+                    android:pathPattern=".*\\.catroid"
+                    android:scheme="file" />
+            </intent-filter>
 		</activity>
 		<activity
 			android:name=".stage.StageActivity"
@@ -75,10 +84,9 @@
 			android:label="@string/stage"
             android:screenOrientation="portrait"
 			android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"/>
-		<activity 
+ 		<activity
             android:name=".stage.PreStageActivity"
-            android:screenOrientation="portrait" android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"/>ConnectThreadConnectThreadConnectThread
-        <activity android:name=".ui.ProjectActivity" />
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.ScriptActivity" />
         <activity android:name=".ui.SpriteActivity" />
         <activity android:name=".ui.ScriptTabActivity" />

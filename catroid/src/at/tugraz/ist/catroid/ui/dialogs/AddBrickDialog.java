@@ -249,7 +249,6 @@ public class AddBrickDialog extends Dialog {
 		adapter = new PrototypeBrickAdapter(this.scriptTabActivity, brickMap.get(category));
 
 		listView.setAdapter(adapter);
-
 		listView.setOnItemClickListener(new ListView.OnItemClickListener() {
 
 			@Override
