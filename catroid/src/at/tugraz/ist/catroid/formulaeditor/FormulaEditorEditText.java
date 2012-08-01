@@ -117,7 +117,6 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 
 		//this.setBackgroundResource(0);
 		//this.setCursorVisible(false);
-		//
 	}
 
 	public void setFieldActive(String formulaAsText) {
@@ -125,6 +124,7 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 		this.setText(formulaAsText);
 		super.setSelection(formulaAsText.length());
 		absoluteCursorPosition = formulaAsText.length();
+		setSelection(absoluteCursorPosition - 1);
 		//scrollToEnd();
 		updateSelectionIndices();
 
@@ -153,31 +153,38 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		Log.i("info", absoluteCursorPosition + " " + cursorYOffset);
+		//Log.i("info", absoluteCursorPosition + " " + cursorYOffset);
 		//int textPosition = cursorPosition;
 
 		Layout layout = this.getLayout();
-		Log.i("info", "Scroll: " + this.getScrollY());
 		float scrollOffset = this.getScrollY();
-		//float horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
-		float horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
+		float horizontalOffset = 0;
+		int verticalOffset = 0;
+		float betweenLineOffset = 0;
 
-		lineHeight = layout.getSpacingMultiplier() * this.getTextSize() + 5;
+		if (layout != null && getText().length() > 0) {
+			//float horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
+			horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
+			verticalOffset = layout.getLineForOffset(absoluteCursorPosition);
+			verticalOffset -= (int) (scrollOffset / lineHeight);
 
-		float betweenLineOffset = scrollOffset % lineHeight;
-		Log.i("info", "Vertical: " + lineHeight + " " + betweenLineOffset + " " + scrollOffset + " " + cursorYOffset);
+			lineHeight = layout.getSpacingMultiplier() * this.getTextSize() + 5;
 
-		if (cursorYOffset == 0 && betweenLineOffset > 2.1) { //2.0 is some margin, mostly the scroll thingy scrolls back up/down this margin after scrolling to bottom/top
-			betweenLineOffset -= lineHeight; //when scrollable there sometimes is half a line additionaly visible on top
-		}
-		if (cursorYOffset == numberOfVisibleLines && betweenLineOffset > 2.1) {
-			betweenLineOffset += lineHeight; //when scrollable there sometimes is half a line additionaly visible on top
+			betweenLineOffset = scrollOffset % lineHeight;
+			//Log.i("info", "Vertical: " + lineHeight + " " + betweenLineOffset + " " + scrollOffset + " " + verticalOffset);
+
+			//		if (cursorYOffset == 0 && betweenLineOffset > 2.1) { //2.0 is some margin, mostly the scroll thingy scrolls back up/down this margin after scrolling to bottom/top
+			//			betweenLineOffset -= lineHeight; //when scrollable there sometimes is half a line additionaly visible on top
+			//		}
+			//		if (cursorYOffset == numberOfVisibleLines && betweenLineOffset > 2.1) {
+			//			betweenLineOffset += lineHeight; //when scrollable there sometimes is half a line additionaly visible on top
+			//		}
 		}
 
 		float startX = horizontalOffset + 15;
 		float endX = horizontalOffset + 15;
-		float startY = (15 + scrollOffset + lineHeight * cursorYOffset) - betweenLineOffset;
-		float endY = (15 + scrollOffset + lineHeight * (cursorYOffset + 1)) - betweenLineOffset;
+		float startY = (15 + scrollOffset + lineHeight * verticalOffset) - betweenLineOffset;
+		float endY = (15 + scrollOffset + lineHeight * (verticalOffset + 1)) - betweenLineOffset;
 		canvas.drawLine(startX, startY, endX, endY, this.getPaint());
 
 	}
@@ -498,7 +505,7 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 		}
 
 		absoluteCursorPosition = selectionEndIndex;
-		Log.i("info", "Cursor Pos: " + absoluteCursorPosition);
+		//Log.i("info", "Cursor Pos: " + absoluteCursorPosition);
 
 	}
 
@@ -555,7 +562,7 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 
 		if (editMode) {
 			text.replace(selectionStartIndex, selectionEndIndex, newElement);
-
+			selectionEndIndex = selectionStartIndex + newElement.length();
 			editMode = false;
 		} else {
 
@@ -652,46 +659,8 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 	public boolean onTouch(View v, MotionEvent motion) {
 
 		if (motion.getAction() == android.view.MotionEvent.ACTION_UP) {
-			Layout layout = this.getLayout();
-			if (layout != null) {
 
-				int yCoordinate = (int) motion.getY();
-				//Log.i("info", "Raw Y: " + yCoordinate + " lc: " + this.getLineCount());
-				//				if (yCoordinate <= 15) { //would snap to line above 0 if any exists
-				//					yCoordinate = 15;
-				//				} else if (yCoordinate > lineHeight * this.getLineCount()) {
-				//
-				//				}
-				int cursorY = (layout.getLineForVertical(yCoordinate));
-				int cursorXOffset = (int) motion.getX();
-
-				//layout.getLineCount()
-				int linesDown = (int) (getScrollY() / lineHeight);
-				//				Log.i("info",
-				//						" scrolled down lines " + linesDown + " len: " + getText().length() + " bla: "
-				//								+ layout.getLineCount());
-
-				while (cursorY + linesDown >= layout.getLineCount()) {
-					linesDown--;
-				}
-
-				int tempCursorPosition = layout.getOffsetForHorizontal(cursorY + linesDown, cursorXOffset);
-
-				while (tempCursorPosition > getText().length()) {
-					tempCursorPosition--;
-				}
-
-				absoluteCursorPosition = tempCursorPosition;
-				cursorYOffset = cursorY;
-				//absoluteCursorPosition = relativeCursorPosition + scrolledOverCharacters;
-				//TODO absolute pos!
-				//absoluteCursorPosition = cursorPositionAbsolute;
-				//				Log.i("info", "YOff: " + layout.getLineForVertical((int) motion.getY()) + " Corr: " + cursorYOffset
-				//						+ " num lines: " + layout.getLineCount());
-
-				updateSelectionIndices();
-				//snapToLine();
-			}
+			//snapToLine();
 
 		} else if (motion.getAction() == android.view.MotionEvent.ACTION_DOWN) {
 
@@ -711,8 +680,14 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 
 		}
 
-		gestureDetector.onTouchEvent(motion);
-		return false;
+		boolean result = gestureDetector.onTouchEvent(motion);
+		if (result) {
+			//	invalidate();
+		}
+		return result;
+
+		//invalidate();
+		//return false;
 	}
 
 	//	private void snapToLine() {
@@ -739,6 +714,15 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 	//		}
 	//
 	//	}
+	//	@Override
+	//	public void scrollBy(int x, int y) {
+	//		Log.i("info", "Scroll by");
+	//	}
+	//
+	//	@Override
+	//	public void scrollTo(int x, int y) {
+	//		Log.i("info", "Scroll to");
+	//	}
 
 	final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.SimpleOnGestureListener() {
 		@Override
@@ -748,6 +732,96 @@ public class FormulaEditorEditText extends EditText implements OnClickListener, 
 			doSelectionAndHighlighting();
 			return true;
 		}
+
+		@Override
+		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+			return false;
+
+		}
+
+		@Override
+		public boolean onSingleTapUp(MotionEvent motion) {
+			Layout layout = getLayout();
+			if (layout != null) {
+
+				int yCoordinate = (int) motion.getY();
+				int cursorY = 0;
+				int cursorXOffset = (int) motion.getX();
+				int initialScrollY = getScrollY();
+
+				int absoY = yCoordinate + initialScrollY;
+				int firstLineSize = (int) (initialScrollY % lineHeight);
+				//Log.i("rolf", "Initial scroll: " + initialScrollY + " first line: " + firstLineSize);
+
+				if (yCoordinate <= lineHeight - firstLineSize) {
+
+					scrollBy(0, (int) (initialScrollY > lineHeight ? -1 * (firstLineSize + lineHeight / 2) : -1
+							* firstLineSize));
+					cursorY = 0;
+				} else if (yCoordinate >= numberOfVisibleLines * lineHeight - firstLineSize) {
+					scrollBy(0, (int) (lineHeight - firstLineSize + lineHeight / 2));
+					cursorY = numberOfVisibleLines;
+				} else {
+					for (int i = 1; i <= numberOfVisibleLines; i++) {
+						if (yCoordinate <= ((lineHeight - firstLineSize) + i * lineHeight)) {
+							cursorY = i;
+							break;
+						}
+					}
+				}
+
+				//				else if (yCoordinate <= lineHeight) {
+				//					cursorY = 1;
+				//				} else if (yCoordinate >= numberOfVisibleLines * lineHeight - firstLineSize) {
+				//
+				//					scrollBy(0, firstLineSize);
+				//					//awakenScrollBars();
+				//					cursorY = numberOfVisibleLines;
+				//				} else if (yCoordinate >= (numberOfVisibleLines - 1) * lineHeight) {
+				//					cursorY = numberOfVisibleLines - 2;
+				//				} else {
+				//					int startY = (int) (lineHeight - firstLineSize);
+				//					int maxY = (int) (numberOfVisibleLines * lineHeight);
+				//					while (startY < maxY) {
+				//						cursorY++;
+				//						maxY -= lineHeight;
+				//					}
+				//					//					for (int i = (int) (yCoordinate - (lineHeight - firstLineSize)); i > 0; i -= lineHeight) {
+				//					//						cursorY++;
+				//					//					}
+				//				}
+
+				//Log.i("rolf", "CursorY: " + cursorY);
+
+				//layout.getLineCount()
+				int linesDown = (int) (initialScrollY / lineHeight);
+				//				Log.i("info",
+				//						" scrolled down lines " + linesDown + " len: " + getText().length() + " bla: "
+				//								+ layout.getLineCount());
+
+				while (cursorY + linesDown >= layout.getLineCount()) {
+					linesDown--;
+				}
+
+				int tempCursorPosition = layout.getOffsetForHorizontal(cursorY + linesDown, cursorXOffset);
+
+				while (tempCursorPosition > getText().length()) {
+					tempCursorPosition--;
+				}
+
+				absoluteCursorPosition = tempCursorPosition;
+				cursorYOffset = cursorY;
+
+				postInvalidate();
+
+				//				Log.i("rolf", "clicked on: " + motion.getY() + "click in line: " + motion.getY() / lineHeight
+				//						+ " lines down: " + linesDown + " absoY: " + absoY + " cursor: " + tempCursorPosition);
+				updateSelectionIndices();
+			}
+			return true;
+
+		}
+
 	});
 
 	@Override
