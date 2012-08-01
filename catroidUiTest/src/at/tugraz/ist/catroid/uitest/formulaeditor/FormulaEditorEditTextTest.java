@@ -106,12 +106,13 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 	public void testDeletingAndSelectionAndParseErrors() {
 
 		solo.clickOnEditText(0);
-		solo.clickOnEditText(1);
+		//		solo.clickOnEditText(1);
+		//
+		//		solo.clearEditText(1);
 
-		solo.clearEditText(1);
+		clearEditTextWithDeletes(1);
 		solo.enterText(1, "8 +cos( 0 + 1 - 2)++ 76");
 		this.clickOnKey("9");
-
 		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
 		solo.sleep(500);
 		this.clickOnKey("del");
@@ -120,8 +121,10 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		this.clickOnKey("del");
 
 		assertEquals("Text not deleted correctly", "98 + 76", solo.getEditText(1).getText().toString());
-
-		solo.clearEditText(1);
+		//
+		//				solo.clearEditText(1);
+		//
+		clearEditTextWithDeletes(1);
 		solo.enterText(1, "8 +cos(+ 0 + 1 - 2) 76");
 		this.clickOnKey("9");
 		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
@@ -132,7 +135,9 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 		assertEquals("Text not deleted correctly", "98 + 76", solo.getEditText(1).getText().toString());
 
-		solo.clearEditText(1);
+		//				solo.clearEditText(1);
+
+		clearEditTextWithDeletes(1);
 		solo.enterText(1, "8 +rand( 0 ,+ 0 ) 76");
 		this.clickOnKey("9");
 		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
@@ -143,7 +148,9 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 		assertEquals("Text not deleted correctly", "98 + 76", solo.getEditText(1).getText().toString());
 
-		solo.clearEditText(1);
+		//		solo.clearEditText(1);
+
+		clearEditTextWithDeletes(1);
 		solo.enterText(1, "8 + rand( 0 +sin(+ 0 ) , 1 ) + 76");
 		this.clickOnKey("9");
 		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
@@ -156,20 +163,37 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 		assertEquals("Text not deleted correctly", "98 + rand( 0 , 1 ) + 76", solo.getEditText(1).getText().toString());
 
-		solo.clearEditText(1);
+		//		solo.clearEditText(1);
+
+		clearEditTextWithDeletes(1);
 		solo.enterText(1, "8 +X_Ananazz++ 76");
 		this.clickOnKey("9");
 		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
 		solo.sleep(500);
 		this.clickOnKey("del");
 		this.clickOnKey("del");
-		this.clickOnKey("del");
+		//		this.clickOnKey("del");
+		//		this.clickOnKey("del");
+		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
 		this.clickOnKey("del");
 
 		assertEquals("Text not deleted correctly", "98 + 76", solo.getEditText(1).getText().toString());
 
 		solo.clickOnButton(2);
 
+	}
+
+	private void clearEditTextWithDeletes(int index) {
+		int noChangesIndex = 0;
+		int lastEditTextLength = solo.getEditText(1).getText().length();
+		while (solo.getEditText(1).getText().length() > 0) {
+			if (lastEditTextLength == solo.getEditText(1).getText().length() && ++noChangesIndex == 2) {
+				solo.clickOnEditText(1);
+				noChangesIndex = 0;
+			}
+			lastEditTextLength = solo.getEditText(1).getText().length();
+			this.clickOnKey("del");
+		}
 	}
 
 	private void createProject(String projectName) throws InterruptedException {
