@@ -92,7 +92,7 @@ public class StageRecorder {
 	public void recordCostume(Costume costume) {
 		try {
 			jsonGenerator.writeStartObject();
-			jsonGenerator.writeStringField("name", costume.name);
+			jsonGenerator.writeStringField("name", costume.getSprite().getName());
 			if (costume.getCostumeData() != null) {
 				jsonGenerator.writeStringField("filename", costume.getCostumeData().getCostumeFileName());
 			}

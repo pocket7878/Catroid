@@ -44,7 +44,7 @@ python record.py test.zip 'Video Title' 'Video Description'
 class SoundInfo:
     def __init__(self, filename, isPlaying, timestamp):
         self.filename = Values.changed_filenames[filename]
-        self.isPlaying = isPlaying == 'true'
+        self.isPlaying = isPlaying
         self.timestamp = int(timestamp)
 
 class Costume:
@@ -151,13 +151,15 @@ def unzip_project(path_to_archive):
             os.makedirs(os.path.join(Values.path_to_project, filename))
         elif not filename.endswith('.nomedia'):
             if filename.startswith('images/'):
-                shutil.copyfileobj(archive.open(filename), open(os.path.join(Values.path_to_project, 'images', 'image' + str(images_count)), 'w'))
-                Values.changed_filenames[filename.decode('utf-8').split('/')[1]] = 'image' + str(images_count)
+                new_filename = 'image' + str(images_count)
                 images_count += 1
+                shutil.copyfileobj(archive.open(filename), open(os.path.join(Values.path_to_project, 'images', new_filename), 'w'))
+                Values.changed_filenames[filename.decode('utf-8').split('/')[1]] = new_filename
             elif filename.startswith('sounds/'):
-                shutil.copyfileobj(archive.open(filename), open(os.path.join(Values.path_to_project, 'sounds', 'sound' + str(sounds_count)), 'w'))
-                Values.changed_filenames[filename.decode('utf-8').split('/')[1]] = 'sound' + str(sounds_count)
+                new_filename = 'sound' + str(sounds_count) + '.' + filename.decode('utf-8').split('/')[1].rsplit('.')[1]
                 sounds_count += 1
+                shutil.copyfileobj(archive.open(filename), open(os.path.join(Values.path_to_project, 'sounds', new_filename), 'w'))
+                Values.changed_filenames[filename.decode('utf-8').split('/')[1]] = new_filename
             else:
                 shutil.copyfileobj(archive.open(filename), open(os.path.join(Values.path_to_project, filename), 'w'))
 
@@ -268,7 +270,6 @@ def add_sound(soundEvents):
             sound_mix_command = 'sox -V1 \'{0}\' -r 44100 {3} trim 0 {1} pad {2} 0 '\
                                     .format( os.path.join(Values.path_to_project, 'sounds', sounds[0][0]), str((sounds[0][2] - sounds[0][1])/1000.0), str(sounds[0][1]/1000.0), '\'' + os.path.join(Values.path_to_project, 'soundtrack.mp3') + '\'' )
 
-        
         os.system(sound_mix_command)
     if os.path.exists(os.path.join(Values.path_to_project, 'soundtrack.mp3')):
         os.system('ffmpeg -i "{0}" -i "{1}" "{2}"'.format(os.path.join(Values.path_to_project, 'soundtrack.mp3'), os.path.join(Values.path_to_project, 'video.avi'), os.path.join(Values.path_to_project, 'out.avi')))

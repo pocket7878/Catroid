@@ -379,12 +379,11 @@ public class Costume extends Image implements Cloneable {
 		return brightness;
 	}
 
-	@Override
-	public Costume clone() throws CloneNotSupportedException {
-		return (Costume) super.clone();
-	}
-
 	public CostumeData getCostumeData() {
 		return costumeData;
+	}
+
+	public Sprite getSprite() {
+		return sprite;
 	}
 }
