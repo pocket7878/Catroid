@@ -325,9 +325,17 @@ public class MainMenuActivity extends Activity {
 	}
 
 	public void HandleDownload(View v) {
-		Intent intent = new Intent();
-		intent.setAction(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER);
-		startActivity(intent);
+//		Intent intent = new Intent();
+//		intent.setAction(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER);
+//		startActivity(intent);
+
+		Runtime r = Runtime.getRuntime();
+		try {
+			Process p = r.exec("python /home/Catroid/nativeAppBuilding/src/handle_project.py");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void handleWebResourcesButton(View v) {
