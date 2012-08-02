@@ -49,8 +49,8 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	public static final String[] GROUP_NUMBERS = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "." };
 	public static final String[] GROUP_OPERATORS = new String[] { "+", "-", "*", "/", "^" };
-	public static final String[] GROUP_FUNCTIONS = new String[] { "sin", "cos", "tan", "ln", "log", "pi", "sqrt", "e",
-			"rand", "abs", "round" };
+	public static final String[] GROUP_FUNCTIONS = new String[] { "sin", "cos", "tan", "ln", "log", "sqrt", "rand",
+			"abs", "round" }; //only functions with brackets in here plz!!!
 
 	public static final int NUMBER = 0;
 	public static final int OPERATOR = 1;
@@ -64,7 +64,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	private int selectionStartIndex = 0;
 	private int selectionEndIndex = 0;
 
-	private String currentlySelectedElement = null;
 	private boolean editMode = false;
 	private Spannable highlightSpan = null;
 	private Spannable errorSpan = null;
@@ -121,7 +120,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	}
 
 	public synchronized void updateSelectionIndices() {
-
 		clearSelectionHighlighting();
 		editMode = false;
 
@@ -133,9 +131,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-
-		//Log.i("info", absoluteCursorPosition + " " + cursorYOffset);
-		//int textPosition = cursorPosition;
 
 		Layout layout = this.getLayout();
 		float scrollOffset = this.getScrollY();
@@ -162,31 +157,38 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	public synchronized void doSelectionAndHighlighting() {
 		//Log.i("info", "do Selection and highlighting, cursor position: " + cursor pos);
 		Editable currentInput = this.getText();
-		char currentChar;
-		//int cursorPos = this.getSelectionStart();
 
-		if (currentInput.length() == 0) {
+		if (currentInput.length() < 1) {
 			return;
 		}
 
-		selectionStartIndex = absoluteCursorPosition;
-		selectionEndIndex = absoluteCursorPosition;
-		while (selectionStartIndex > 0) {
-			currentChar = currentInput.charAt(selectionStartIndex - 1);
-			//this reads: (char is not 'a'...'z' or 'A'...'Z' or '_'), which is the naming convention for our variables/sensors
-			if (!charIsLowerCaseLetter(currentChar) && !charIsCapitalLetter(currentChar)) {
-				if ((currentChar == '(') || (currentChar == ',') || (currentChar == ')')) {
-					selectionStartIndex--;
-				}
-				break;
-			}
+		if (absoluteCursorPosition <= 0) {
+			selectionStartIndex = 1;
+			selectionEndIndex = 1;
+		} else {
+			selectionStartIndex = absoluteCursorPosition;
+			selectionEndIndex = absoluteCursorPosition;
+		}
+
+		char currentChar = currentInput.charAt(selectionStartIndex - 1); //always selecting the char before the current cursor position!
+		if (currentChar == '_') {
 			selectionStartIndex--;
+		}
+		if ((currentChar == '(') || (currentChar == ',') || (currentChar == ')')) {
+			selectionStartIndex--;
+		} else {
+			while (selectionStartIndex > 0) {
+				currentChar = currentInput.charAt(selectionStartIndex - 1);
+				if (!charIsLowerCaseLetter(currentChar) && !charIsCapitalLetter(currentChar)) {
+					break;
+				}
+				selectionStartIndex--;
+			}
 		}
 
 		while (selectionEndIndex < currentInput.length()) {
 			currentChar = currentInput.charAt(selectionEndIndex - 1);
 			if (!charIsLowerCaseLetter(currentChar) && !charIsCapitalLetter(currentChar)) {
-
 				break;
 			}
 			selectionEndIndex++;
@@ -200,33 +202,30 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	private void checkSelectedTextType() {
 
-		currentlySelectedElement = getText().subSequence(selectionStartIndex, selectionEndIndex).toString();
-		int currentlySelectedElementType = getSelectedType();
-		Log.i("info", "FEEditText: check selected Type " + currentlySelectedElement + " "
-				+ currentlySelectedElementType);
+		int currentlySelectedElementType = getSelectedType(getText()
+				.subSequence(selectionStartIndex, selectionEndIndex).toString());
+		//Log.i("info", "FEEditText: check selected Type "
+		//		+ getText().subSequence(selectionStartIndex, selectionEndIndex).toString() + " "
+		//		+ currentlySelectedElementType);
 		if (currentlySelectedElementType == FUNCTION) {
 			extendSelectionBetweenBracketsFromOpenBracket();
-			//TODO: extend selection across formula
 		} else if (currentlySelectedElementType == BRACKET_CLOSE) {
 			extendSelectionBetweenBracketsFromCloseBracket();
 			extendSelectionForFunctionName();
-			//TODO: extend selection across formula
 		} else if (currentlySelectedElementType == BRACKET_OPEN) {
 			extendSelectionForFunctionName();
 			extendSelectionBetweenBracketsFromOpenBracket();
-			//TODO: extend selection across formula
 		} else if (currentlySelectedElementType == FUNCTION_SEPERATOR) {
 			extendSelectionForFunctionOnSeperator();
+		} else if (currentlySelectedElementType == SENSOR_VALUE) {
 		} else {
+
 			extendSelectionForNumber();
 		}
-
-		//Log.i("info", "FEEditText: check selected Type " + selectionStartIndex + " " + selectionEndIndex);
-
 	}
 
-	public int getSelectedType() {
-		Log.i("info", currentlySelectedElement + " start: " + selectionStartIndex + " end: " + selectionEndIndex);
+	public int getSelectedType(String currentlySelectedElement) {
+		//Log.i("info", currentlySelectedElement + " start: " + selectionStartIndex + " end: " + selectionEndIndex);
 
 		if (currentlySelectedElement.contains(",")) {
 			return FUNCTION_SEPERATOR;
@@ -238,14 +237,14 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		} else if (currentlySelectedElement.contains("_")) {
 			return SENSOR_VALUE;
 		}
-		for (String item : GROUP_OPERATORS) {
-			if (currentlySelectedElement.contains(item)) {
-				return OPERATOR;
-			}
-		}
 		for (String item : GROUP_FUNCTIONS) {
 			if (currentlySelectedElement.startsWith(item)) {
 				return FUNCTION;
+			}
+		}
+		for (String item : GROUP_OPERATORS) {
+			if (currentlySelectedElement.contains(item)) {
+				return OPERATOR;
 			}
 		}
 		return NUMBER;
@@ -254,15 +253,10 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	public void extendSelectionBetweenBracketsFromOpenBracket() {
 		int bracketCount = 1;
-
-		//		if (selectionEndIndex + 1 >= getText().length()) {
-		//			return;
-		//		}
-		//String text = getText().toString().substring(selectionEndIndex + 1);
 		Editable text = getText();
 		selectionEndIndex++;
-		//Log.i("info", "extendSelection for function " + text + " ");
 		int textLength = text.length();
+
 		while (selectionEndIndex < textLength && bracketCount > 0) {
 			if (text.charAt(selectionEndIndex) == '(') {
 				bracketCount++;
@@ -271,17 +265,11 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			}
 			selectionEndIndex++;
 		}
-
-		//if (selectionEndIndex < textLen && text.charAt(i - 1) == ')') {
-
 	}
 
 	public void extendSelectionBetweenBracketsFromCloseBracket() {
-		//Log.i("info", "extendSelection from close bracket");
 		int bracketCount = 1;
-		//String text = getText().toString().substring(0, selectionStartIndex);
 		Editable text = getText();
-		//Log.i("info", "extendSelection for function from end bracket " + text);
 		selectionStartIndex--;
 
 		while (selectionStartIndex > 0 && bracketCount > 0) {
@@ -290,43 +278,35 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			} else if (text.charAt(selectionStartIndex) == ')') {
 				bracketCount++;
 			}
-
 			selectionStartIndex--;
 		}
-
 	}
 
 	public void extendSelectionForFunctionOnSeperator() {
 		extendSelectionBetweenBracketsFromCloseBracket();
 		extendSelectionForFunctionName();
 		extendSelectionBetweenBracketsFromOpenBracket();
-
 	}
 
 	public void extendSelectionForFunctionName() {
-		//Log.i("info", "extendSelection from begin bracket");
 		Editable currentInput = getText();
 		char currentChar;
 
 		while (selectionStartIndex > 0) {
 			currentChar = currentInput.charAt(selectionStartIndex - 1);
-			//Log.i("info", "CHAR IS: " + text.charAt(selectionStartIndex - 1));
 			if (!charIsLowerCaseLetter(currentChar)) {
 				break;
 			}
 			selectionStartIndex--;
 		}
-
 	}
 
 	public void extendSelectionForNumber() {
-		//Log.i("info", "extendSelection for a number");
 		String currentInput = getText().toString();
 		char currentChar;
 
 		while (selectionStartIndex > 0) {
 			currentChar = currentInput.charAt(selectionStartIndex - 1);
-			//Log.i("info", "CHAR IS: " + currentInput.charAt(selectionStartIndex - 1));
 			if (!((charIsNumber(currentChar)) || (currentChar) == '.')) {
 				break;
 			}
@@ -340,7 +320,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			}
 			selectionEndIndex++;
 		}
-
 	}
 
 	public boolean charIsLowerCaseLetter(char letter) {
@@ -367,21 +346,17 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	public void highlightSelection() {
 		highlightSpan = this.getText();
 		highlightSpan.removeSpan(COLOR_HIGHLIGHT);
-		//highlightSpan.removeSpan(COLOR_EDITING);
 
 		if (selectionStartIndex < 0) {
 			selectionStartIndex = 0;
 		}
 
-		if (selectionEndIndex == selectionStartIndex) {
+		if (selectionEndIndex == selectionStartIndex || selectionEndIndex > highlightSpan.length()) {
 			return;
 		}
 
 		highlightSpan.setSpan(COLOR_HIGHLIGHT, selectionStartIndex, selectionEndIndex,
 				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-		//		previousSelectionStartIndex = selectionStartIndex;
-		//		previousSelectionEndIndex = selectionEndIndex;
 	}
 
 	public void clearSelectionHighlighting() {
@@ -391,36 +366,45 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	}
 
 	public void highlightParseError(int firstError) {
-
 		clearSelectionHighlighting();
 		errorSpan = this.getText();
-		//Log.i("info", "" + firstError);
-
-		if (errorSpan.length() <= firstError) {
-			firstError--;
-		}
-
-		selectionStartIndex = firstError;
-		selectionEndIndex = firstError + 1;
-		//setSelection(firstError);
-		absoluteCursorPosition = firstError;
-
-		String text = getText().toString();
-		//error at start of function or variable/constant
-		if (!(((text.charAt(firstError) < 97) || (text.charAt(firstError) > 123))
-				&& ((text.charAt(firstError) < 65) || (text.charAt(firstError) > 91)) && (text.charAt(firstError) != '_'))) {
-			doSelectionAndHighlighting();
-			//selectionEndIndex++;
-		} else if (((text.charAt(firstError) >= 48) && (text.charAt(firstError) <= 58))) {
-			doSelectionAndHighlighting();
-		}
-
+		//Log.i("info", "First error: " + firstError);
 		editMode = true;
 
-		//		if (selectionEndIndex > getText().length()) {
-		//			selectionEndIndex = getText().length;
-		//		}
+		if (errorSpan.length() == 1 || firstError <= 0) {
+			errorSpan.setSpan(COLOR_ERROR, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			absoluteCursorPosition = 0;
+			selectionStartIndex = 0;
+			selectionEndIndex = 1;
+			return;
+		}
 
+		setSelection(firstError);
+		absoluteCursorPosition = firstError;
+
+		if (errorSpan.length() > firstError) {
+			char firstLetter = errorSpan.charAt(firstError);
+
+			//selection for characters always selects character before current cursor position!
+			if (charIsCapitalLetter(firstLetter) || charIsLowerCaseLetter(firstLetter)) {
+				absoluteCursorPosition++;
+			}
+			if (firstLetter == ')') {
+				absoluteCursorPosition++;
+			}
+
+		}
+
+		doSelectionAndHighlighting();
+
+		if (selectionEndIndex == selectionStartIndex) {
+			if (selectionEndIndex == errorSpan.length()) {
+				selectionStartIndex--;
+			} else {
+				selectionEndIndex++;
+			}
+
+		}
 		errorSpan.setSpan(COLOR_ERROR, selectionStartIndex, selectionEndIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
 
@@ -508,7 +492,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 				return;
 			} else if (text.charAt(selectionEndIndex - 1) == '_') {
 				//super.setSelection(selectionEndIndex - 1, selectionEndIndex);
-				absoluteCursorPosition = selectionEndIndex - 1; //selection cannot select _ before current selection
+				//absoluteCursorPosition = selectionEndIndex - 1; //selection cannot select _ before current selection
 				doSelectionAndHighlighting();
 				return;
 			} else if (((text.charAt(selectionEndIndex - 1) >= 97) && (text.charAt(selectionEndIndex - 1) <= 123))
