@@ -27,7 +27,7 @@ import java.io.IOException;
 
 import android.test.InstrumentationTestCase;
 import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.content.Costume;
 import at.tugraz.ist.catroid.content.Project;
@@ -54,7 +54,7 @@ public class ScreenRecorderTest extends InstrumentationTestCase {
 
 	@Override
 	protected void setUp() throws Exception {
-		File directory = new File(Consts.DEFAULT_ROOT + "/" + projectName);
+		File directory = new File(Constants.DEFAULT_ROOT + "/" + projectName);
 		UtilFile.deleteDirectory(directory);
 		createTestProject();
 
@@ -73,32 +73,29 @@ public class ScreenRecorderTest extends InstrumentationTestCase {
 		Thread.sleep(500);
 		assertTrue("Recorder didn't started at time.", recorder.getTime() >= 500);
 		recorder.recordCostume(costume);
-		recorder.recordSound(soundInfo);
 		Thread.sleep(500);
 		recorder.finishAndSave();
 
 		String currentProject = ProjectManager.getInstance().getCurrentProject().getName();
-		File recordedFile = new File(Utils.buildPath(Consts.DEFAULT_ROOT, currentProject), "record.json");
+		File recordedFile = new File(Utils.buildPath(Constants.DEFAULT_ROOT, currentProject), "record.json");
 
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode rootNode;
 		try {
 			rootNode = mapper.readValue(recordedFile, JsonNode.class);
 			assertTrue("Duration recorded wrongly", rootNode.path("duration").doubleValue() >= 1000);
-
-			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("name"));
-			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("filename"));
-			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("timestamp"));
-			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("alphaValue"));
-			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("rotation"));
-			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("scaleX"));
-			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("scaleY"));
-			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("show"));
-			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("visible"));
-			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("brightnessValue"));
-			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("x"));
-			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("y"));
-			assertTrue("Duration recorded wrongly", rootNode.path("costumes").get(0).has("zPosition"));
+			assertTrue("Name not recorded", rootNode.path("costumes").get(0).has("name"));
+			assertTrue("Timestamp not recorded", rootNode.path("costumes").get(0).has("timestamp"));
+			assertTrue("Alpha value not recorded", rootNode.path("costumes").get(0).has("alphaValue"));
+			assertTrue("Rotation not recorded", rootNode.path("costumes").get(0).has("rotation"));
+			assertTrue("y scale not recorded", rootNode.path("costumes").get(0).has("scaleX"));
+			assertTrue("x scale not recorded", rootNode.path("costumes").get(0).has("scaleY"));
+			assertTrue("Show not recorded", rootNode.path("costumes").get(0).has("show"));
+			assertTrue("Visibility not recorded", rootNode.path("costumes").get(0).has("visible"));
+			assertTrue("Brightness not recorded", rootNode.path("costumes").get(0).has("brightnessValue"));
+			assertTrue("x coordinate not recorded", rootNode.path("costumes").get(0).has("x"));
+			assertTrue("y coordinate not recorded", rootNode.path("costumes").get(0).has("y"));
+			assertTrue("zPosition not recorded", rootNode.path("costumes").get(0).has("zPosition"));
 
 		} catch (JsonParseException e) {
 			e.printStackTrace();

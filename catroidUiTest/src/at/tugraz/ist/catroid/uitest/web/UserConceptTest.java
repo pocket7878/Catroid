@@ -22,11 +22,13 @@
  */
 package at.tugraz.ist.catroid.uitest.web;
 
+import junit.framework.AssertionFailedError;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
-import at.tugraz.ist.catroid.common.Consts;
+import android.widget.EditText;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import at.tugraz.ist.catroid.web.ServerCalls;
@@ -48,20 +50,15 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 	public void setUp() throws Exception {
 		solo = new Solo(getInstrumentation(), getActivity());
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		saveToken = prefs.getString(Consts.TOKEN, "0");
+		saveToken = prefs.getString(Constants.TOKEN, "0");
 	}
 
 	@Override
 	public void tearDown() throws Exception {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		prefs.edit().putString(Consts.TOKEN, saveToken).commit();
+		prefs.edit().putString(Constants.TOKEN, saveToken).commit();
 		UiTestUtils.setPrivateField("emailForUiTests", ServerCalls.getInstance(), null, false);
-		try {
-			solo.finalize();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		getActivity().finish();
+		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
 	}
@@ -69,7 +66,7 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 	public void testRegisterNewUser() throws Throwable {
 		setTestUrl();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		prefs.edit().putString(Consts.TOKEN, null).commit();
+		prefs.edit().putString(Constants.TOKEN, null).commit();
 
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
 		solo.sleep(1000);
@@ -78,7 +75,6 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 
 		assertNotNull("Upload Dialog is not shown.",
 				solo.getText(getActivity().getString(R.string.upload_project_dialog_title)));
-		solo.sleep(2000);
 	}
 
 	public void testRegisterWithValidTokenSaved() throws Throwable {
@@ -90,14 +86,13 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 
 		assertNotNull("Upload Dialog is not shown.",
 				solo.getText(getActivity().getString(R.string.upload_project_dialog_title)));
-		solo.sleep(2000);
 	}
 
 	public void testTokenPersistance() throws Throwable {
 		setTestUrl();
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		prefs.edit().putString(Consts.TOKEN, "").commit();
+		prefs.edit().putString(Constants.TOKEN, "").commit();
 
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
 		solo.sleep(1000);
@@ -111,15 +106,13 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 
 		assertNotNull("Upload Dialog is not shown.",
 				solo.getText(getActivity().getString(R.string.upload_project_dialog_title)));
-		solo.sleep(2000);
 	}
 
 	public void testRegisterWithWrongToken() throws Throwable {
-
 		setTestUrl();
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		prefs.edit().putString(Consts.TOKEN, "wrong_token").commit();
+		prefs.edit().putString(Constants.TOKEN, "wrong_token").commit();
 
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
 		solo.sleep(4000);
@@ -127,14 +120,13 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 
 		assertNotNull("Login Dialog is not shown.",
 				solo.getText(getActivity().getString(R.string.upload_project_dialog_title)));
-		solo.sleep(2000);
 	}
 
 	public void testRegisterWithShortPassword() throws Throwable {
 		setTestUrl();
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		prefs.edit().putString(Consts.TOKEN, null).commit();
+		prefs.edit().putString(Constants.TOKEN, null).commit();
 
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
 		solo.sleep(1000);
@@ -144,7 +136,6 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		solo.clickOnButton(0);
 		assertNotNull("Login Dialog is not shown.",
 				solo.getText(getActivity().getString(R.string.login_register_dialog_title)));
-		solo.sleep(2000);
 	}
 
 	public void testOrientationChange() throws Throwable {
@@ -153,17 +144,28 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		String testText2 = "testText2";
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		prefs.edit().putString(Consts.TOKEN, null).commit();
+		prefs.edit().putString(Constants.TOKEN, null).commit();
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
 		solo.sleep(500);
 		solo.clearEditText(0);
 		solo.enterText(0, testText1);
 		solo.setActivityOrientation(Solo.LANDSCAPE);
 		assertTrue("EditTextField got cleared after changing orientation", solo.searchText(testText1));
-		solo.clickOnEditText(1);
-		solo.clearEditText(1);
+		EditText passwordField = (EditText) solo.getView(R.id.password);
+		// sometimes, the keyboard overlaps the password textview
+		// if the click cannot be performed, an AssertionFailedError is thrown
+		// goBack makes the keyboard disappear, and then the click should work
+		// could be a workaround for other unstable tests - then this would be moved to UiTestUitls
+		try {
+			solo.clickOnView(passwordField);
+		} catch (AssertionFailedError e) {
+			solo.goBack();
+			solo.clickOnView(passwordField);
+		}
+		solo.clearEditText(passwordField);
 		solo.enterText(1, testText2);
 		solo.setActivityOrientation(Solo.PORTRAIT);
+		solo.sleep(200);
 		assertTrue("EditTextField got cleared after changing orientation", solo.searchText(testText1));
 		assertTrue("EditTextField got cleared after changing orientation", solo.searchText(testText2));
 	}
@@ -177,7 +179,6 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 	}
 
 	private void fillLoginDialog(boolean correct) {
-
 		assertNotNull("Login Dialog is not shown.",
 				solo.getText(getActivity().getString(R.string.login_register_dialog_title)));
 
@@ -185,7 +186,6 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		String testUser = "testUser" + System.currentTimeMillis();
 		solo.clearEditText(0);
 		solo.enterText(0, testUser);
-		solo.goBack();
 		// enter a password
 		String testPassword;
 		if (correct) {
@@ -206,7 +206,5 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		solo.setActivityOrientation(Solo.PORTRAIT);
 
 		solo.clickOnButton(0);
-
-		solo.waitForDialogToClose(10000);
 	}
 }

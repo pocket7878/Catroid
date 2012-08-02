@@ -572,7 +572,7 @@ public class BrickAdapter extends BaseAdapter implements DragAndDropListener {
 	public int getCount() {
 
 		int count = 0;
-		for (int i = 0; i < sprite.getScriptCount(); i++) {
+		for (int i = 0; i < sprite.getNumberOfScripts(); i++) {
 			count += getBrickCount(i) + 1;
 		}
 		return count;
@@ -695,7 +695,7 @@ public class BrickAdapter extends BaseAdapter implements DragAndDropListener {
 	}
 
 	public int getScriptCount() {
-		return sprite.getScriptCount();
+		return sprite.getNumberOfScripts();
 	}
 
 	public void setTouchedScript(int index) {
@@ -716,13 +716,13 @@ public class BrickAdapter extends BaseAdapter implements DragAndDropListener {
 	}
 
 	public int getSpriteSize() {
-		return sprite.getScriptCount();
+		return sprite.getNumberOfScripts();
 	}
 
 	private int getBrickPosition() {
 		int brickCount = 0;
 
-		for (int count = 0; count < sprite.getScriptCount(); count++) {
+		for (int count = 0; count < sprite.getNumberOfScripts(); count++) {
 			brickCount += sprite.getScript(count).getBrickList().size() + 1;
 		}
 

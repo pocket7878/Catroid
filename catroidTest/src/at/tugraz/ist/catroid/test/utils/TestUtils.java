@@ -35,7 +35,13 @@ import java.lang.reflect.Method;
 
 import android.content.Context;
 import android.util.Log;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.common.Constants;
+import at.tugraz.ist.catroid.common.FileChecksumContainer;
+import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.Script;
+import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.utils.UtilFile;
 
 public class TestUtils {
@@ -43,6 +49,10 @@ public class TestUtils {
 	private static final String TAG = TestUtils.class.getSimpleName();
 	public static final int TYPE_IMAGE_FILE = 0;
 	public static final int TYPE_SOUND_FILE = 1;
+	public static final String DEFAULT_TEST_PROJECT_NAME = "testProject";
+
+	private TestUtils() {
+	};
 
 	/**
 	 * saves a file into the project folder
@@ -65,17 +75,17 @@ public class TestUtils {
 
 		String filePath;
 		if (project == null || project.equalsIgnoreCase("")) {
-			filePath = Consts.DEFAULT_ROOT + "/" + name;
+			filePath = Constants.DEFAULT_ROOT + "/" + name;
 		} else {
 			switch (type) {
 				case TYPE_IMAGE_FILE:
-					filePath = Consts.DEFAULT_ROOT + "/" + project + "/" + Consts.IMAGE_DIRECTORY + "/" + name;
+					filePath = Constants.DEFAULT_ROOT + "/" + project + "/" + Constants.IMAGE_DIRECTORY + "/" + name;
 					break;
 				case TYPE_SOUND_FILE:
-					filePath = Consts.DEFAULT_ROOT + "/" + project + "/" + Consts.SOUND_DIRECTORY + "/" + name;
+					filePath = Constants.DEFAULT_ROOT + "/" + project + "/" + Constants.SOUND_DIRECTORY + "/" + name;
 					break;
 				default:
-					filePath = Consts.DEFAULT_ROOT + "/" + name;
+					filePath = Constants.DEFAULT_ROOT + "/" + name;
 					break;
 			}
 		}
@@ -84,7 +94,7 @@ public class TestUtils {
 	}
 
 	public static boolean clearProject(String projectname) {
-		File directory = new File(Consts.DEFAULT_ROOT + "/" + projectname);
+		File directory = new File(Constants.DEFAULT_ROOT + "/" + projectname);
 		if (directory.exists()) {
 			return UtilFile.deleteDirectory(directory);
 		}
@@ -100,9 +110,9 @@ public class TestUtils {
 		}
 
 		InputStream in = context.getResources().openRawResource(fileID);
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(testImage), Consts.BUFFER_8K);
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(testImage), Constants.BUFFER_8K);
 
-		byte[] buffer = new byte[Consts.BUFFER_8K];
+		byte[] buffer = new byte[Constants.BUFFER_8K];
 		int length = 0;
 
 		while ((length = in.read(buffer)) > 0) {
@@ -117,14 +127,14 @@ public class TestUtils {
 	}
 
 	public static String getProjectfileAsString(String projectName) {
-		File projectFile = new File(Consts.DEFAULT_ROOT + "/" + projectName + "/" + Consts.PROJECTCODE_NAME);
+		File projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName + "/" + Constants.PROJECTCODE_NAME);
 		if (!projectFile.exists()) {
 			return null;
 		}
 		StringBuilder contents = new StringBuilder();
 
 		try {
-			BufferedReader input = new BufferedReader(new FileReader(projectFile), Consts.BUFFER_8K);
+			BufferedReader input = new BufferedReader(new FileReader(projectFile), Constants.BUFFER_8K);
 			try {
 				String line = null;
 				while ((line = input.readLine()) != null) {
@@ -180,5 +190,44 @@ public class TestUtils {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private static class ProjectWithVersionCode extends Project {
+		static final long serialVersionUID = 1L;
+		private final int mCatroidVersionCode;
+
+		public ProjectWithVersionCode(String name, int catroidVersionCode) {
+			super(null, name);
+			mCatroidVersionCode = catroidVersionCode;
+		}
+
+		@Override
+		public int getCatroidVersionCode() {
+			return mCatroidVersionCode;
+		}
+	}
+
+	public static void createTestProjectOnLocalStorageWithVersionCode(int versionCode) {
+		Project project = new ProjectWithVersionCode(DEFAULT_TEST_PROJECT_NAME, versionCode);
+		Sprite firstSprite = new Sprite("cat");
+		Script testScript = new StartScript(firstSprite);
+
+		firstSprite.addScript(testScript);
+		project.addSprite(firstSprite);
+
+		ProjectManager.INSTANCE.fileChecksumContainer = new FileChecksumContainer();
+		ProjectManager.INSTANCE.setProject(project);
+		ProjectManager.INSTANCE.setCurrentSprite(firstSprite);
+		ProjectManager.INSTANCE.setCurrentScript(testScript);
+		ProjectManager.INSTANCE.saveProject();
+	}
+
+	public static void clearAllUtilTestProjects() {
+		ProjectManager.INSTANCE.fileChecksumContainer = new FileChecksumContainer();
+
+		File directory = new File(Constants.DEFAULT_ROOT + "/" + DEFAULT_TEST_PROJECT_NAME);
+		if (directory.exists()) {
+			UtilFile.deleteDirectory(directory);
+		}
 	}
 }

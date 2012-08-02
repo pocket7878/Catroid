@@ -26,10 +26,11 @@ import java.io.File;
 import java.util.ArrayList;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -41,8 +42,11 @@ import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
+import at.tugraz.ist.catroid.ui.MyProjectsActivity;
+import at.tugraz.ist.catroid.ui.ProjectActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
+import at.tugraz.ist.catroid.utils.Utils;
 import at.tugraz.ist.catroid.R;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -52,6 +56,8 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 	private String testProject = UiTestUtils.PROJECTNAME1;
 	private String testProject2 = UiTestUtils.PROJECTNAME2;
 	private String testProject3 = UiTestUtils.PROJECTNAME3;
+	private String projectNameWithBlacklistedCharacters = "<H/ey, lo\"ok, :I'\\m s*pe?ci>al! ?äö|üß<>";
+	private String projectNameWithWhitelistedCharacters = "[Hey+, =lo_ok. I'm; -special! ?äöüß<>]";
 
 	public MainMenuActivityTest() {
 		super("at.tugraz.ist.catroid", MainMenuActivity.class);
@@ -59,122 +65,167 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 
 	@Override
 	public void setUp() throws Exception {
-		UiTestUtils.clearAllUtilTestProjects();
+		super.setUp();
 		solo = new Solo(getInstrumentation(), getActivity());
 	}
 
 	@Override
 	public void tearDown() throws Exception {
-		try {
-			solo.finalize();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		getActivity().finish();
+		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
+		UtilFile.deleteDirectory(new File(Utils.buildProjectPath(projectNameWithBlacklistedCharacters)));
+		UtilFile.deleteDirectory(new File(Utils.buildProjectPath(projectNameWithWhitelistedCharacters)));
 		super.tearDown();
 	}
 
 	public void testCreateNewProject() {
-		File directory = new File(Consts.DEFAULT_ROOT + "/" + testProject);
+		File directory = new File(Constants.DEFAULT_ROOT + "/" + testProject);
 		UtilFile.deleteDirectory(directory);
 		assertFalse("testProject was not deleted!", directory.exists());
 
+		String hintNewProjectText = solo.getString(R.string.new_project_dialog_hint);
+
 		solo.clickOnButton(getActivity().getString(R.string.new_project));
+		solo.waitForText(hintNewProjectText);
+		EditText addNewProjectEditText = solo.getEditText(0);
+		//check if hint is set
+		assertEquals("Not the proper hint set", hintNewProjectText, addNewProjectEditText.getHint());
+		assertEquals("There should no text be set", "", addNewProjectEditText.getText().toString());
 		solo.setActivityOrientation(Solo.PORTRAIT);
-		solo.sleep(300);
+		solo.sleep(100);
 		solo.clearEditText(0);
 		solo.enterText(0, testProject);
 		solo.setActivityOrientation(Solo.LANDSCAPE);
-		solo.sleep(300);
-		assertTrue("EditText field got cleared after changing orientation", solo.searchText(testProject));
-		solo.sleep(600);
-		solo.setActivityOrientation(Solo.PORTRAIT);
 		solo.sleep(200);
-		//solo.goBack();
-		solo.clickOnButton(0);
-		solo.sleep(400);
+		assertTrue("EditText field got cleared after changing orientation", solo.searchText(testProject));
+		solo.sleep(100);
+		solo.setActivityOrientation(Solo.PORTRAIT);
+		solo.sleep(100);
+		String buttonOKText = solo.getString(R.string.ok);
+		solo.waitForText(buttonOKText);
+		solo.clickOnText(buttonOKText);
+		solo.waitForActivity(ProjectActivity.class.getSimpleName());
 
-		File file = new File(Consts.DEFAULT_ROOT + "/" + testProject + "/" + Consts.PROJECTCODE_NAME);
+		File file = new File(Constants.DEFAULT_ROOT + "/" + testProject + "/" + Constants.PROJECTCODE_NAME);
 		assertTrue(testProject + " was not created!", file.exists());
 	}
 
 	public void testCreateNewProjectErrors() {
 		solo.clickOnButton(getActivity().getString(R.string.new_project));
-
 		solo.setActivityOrientation(Solo.PORTRAIT);
-		solo.sleep(300);
+		solo.sleep(100);
 		solo.clearEditText(0);
 		solo.enterText(0, "");
 		solo.setActivityOrientation(Solo.LANDSCAPE);
-		solo.sleep(300);
-
+		solo.sleep(200);
 		assertTrue("EditText field got cleared after changing orientation", solo.searchText(""));
-		solo.sleep(600);
-		solo.setActivityOrientation(Solo.PORTRAIT);
-		solo.goBack();
-		solo.sendKey(Solo.ENTER);
 		solo.sleep(100);
+		solo.setActivityOrientation(Solo.PORTRAIT);
+		solo.sleep(100);
+		solo.sendKey(Solo.ENTER);
 
 		assertTrue("No error message was displayed upon creating a project with an empty name.",
 				solo.searchText(getActivity().getString(R.string.error_no_name_entered)));
-
 		solo.clickOnButton(0);
 
-		File directory = new File(Consts.DEFAULT_ROOT + "/" + testProject);
+		File directory = new File(Constants.DEFAULT_ROOT + "/" + testProject);
 		directory.mkdirs();
 		solo.sleep(50);
 
-		//solo.clickOnEditText(0);
-
 		solo.setActivityOrientation(Solo.PORTRAIT);
-		solo.sleep(300);
+		solo.sleep(100);
 		solo.clearEditText(0);
 		solo.enterText(0, testProject);
 		solo.setActivityOrientation(Solo.LANDSCAPE);
-		solo.sleep(300);
+		solo.sleep(200);
 		assertTrue("EditText field got cleared after changing orientation", solo.searchText(testProject));
-		solo.sleep(600);
-		solo.setActivityOrientation(Solo.PORTRAIT);
-		solo.clickOnButton(0);
 		solo.sleep(100);
+		solo.setActivityOrientation(Solo.PORTRAIT);
+		solo.sleep(100);
+		solo.clickOnButton(0);
+
+		assertTrue("No error message was displayed upon creating a project with the same name twice.",
+				solo.searchText(getActivity().getString(R.string.error_project_exists)));
+		solo.clickOnButton(0);
+
+		directory = new File(Utils.buildProjectPath("te?st"));
+		String name = "te/st:";
+		directory.mkdirs();
+		solo.sleep(50);
+		solo.setActivityOrientation(Solo.PORTRAIT);
+		solo.sleep(100);
+		solo.clearEditText(0);
+		solo.enterText(0, name);
+		solo.setActivityOrientation(Solo.LANDSCAPE);
+		solo.sleep(200);
+		assertTrue("EditText field got cleared after changing orientation", solo.searchText(name));
+		solo.sleep(100);
+		solo.setActivityOrientation(Solo.PORTRAIT);
+		solo.sleep(100);
+		solo.clickOnButton(0);
 
 		assertTrue("No error message was displayed upon creating a project with the same name twice.",
 				solo.searchText(getActivity().getString(R.string.error_project_exists)));
 
-	}
-
-	public void testCreateNewProjectWithSpecialCharacters() {
-		final String projectNameWithSpecialCharacters = "Hey, look, I'm special! ?äöüß<>";
-
-		solo.clickOnButton(getActivity().getString(R.string.new_project));
-
-		solo.setActivityOrientation(Solo.PORTRAIT);
-		solo.sleep(300);
-		solo.clearEditText(0);
-		solo.enterText(0, projectNameWithSpecialCharacters);
-		solo.setActivityOrientation(Solo.LANDSCAPE);
-		solo.sleep(600);
-		solo.setActivityOrientation(Solo.PORTRAIT);
-		//solo.goBack();
-		solo.clickOnButton(0);
-		solo.sleep(100);
-
-		assertEquals("Project name with special characters was not set properly", ProjectManager.getInstance()
-				.getCurrentProject().getName(), projectNameWithSpecialCharacters);
-
-		File directory = new File(Consts.DEFAULT_ROOT + "/" + projectNameWithSpecialCharacters);
 		UtilFile.deleteDirectory(directory);
 	}
 
+	public void testCreateNewProjectWithBlacklistedCharacters() {
+		String directoryPath = Utils.buildProjectPath(projectNameWithBlacklistedCharacters);
+		File directory = new File(directoryPath);
+		UtilFile.deleteDirectory(directory);
+
+		solo.clickOnButton(getActivity().getString(R.string.new_project));
+		solo.setActivityOrientation(Solo.PORTRAIT);
+		solo.sleep(100);
+		solo.clearEditText(0);
+		solo.enterText(0, projectNameWithBlacklistedCharacters);
+		solo.setActivityOrientation(Solo.LANDSCAPE);
+		solo.sleep(200);
+		solo.setActivityOrientation(Solo.PORTRAIT);
+		solo.sleep(100);
+		String buttonOKText = solo.getString(R.string.ok);
+		solo.waitForText(buttonOKText);
+		solo.clickOnText(buttonOKText);
+		solo.waitForActivity(ProjectActivity.class.getSimpleName());
+
+		File file = new File(Utils.buildPath(directoryPath, Constants.PROJECTCODE_NAME));
+		assertTrue("Project with blacklisted characters was not created!", file.exists());
+	}
+
+	public void testCreateNewProjectWithWhitelistedCharacters() {
+		String directoryPath = Utils.buildProjectPath(projectNameWithWhitelistedCharacters);
+		File directory = new File(directoryPath);
+		UtilFile.deleteDirectory(directory);
+
+		solo.clickOnButton(getActivity().getString(R.string.new_project));
+		solo.setActivityOrientation(Solo.PORTRAIT);
+		solo.sleep(100);
+		solo.clearEditText(0);
+		solo.enterText(0, projectNameWithWhitelistedCharacters);
+		solo.setActivityOrientation(Solo.LANDSCAPE);
+		solo.sleep(200);
+		solo.setActivityOrientation(Solo.PORTRAIT);
+		solo.sleep(100);
+		String buttonOKText = solo.getString(R.string.ok);
+		solo.waitForText(buttonOKText);
+		solo.clickOnText(buttonOKText);
+		solo.waitForActivity(ProjectActivity.class.getSimpleName());
+
+		File file = new File(Utils.buildPath(directoryPath, Constants.PROJECTCODE_NAME));
+		assertTrue("Project file with whitelisted characters was not created!", file.exists());
+	}
+
 	public void testLoadProject() {
-		File directory = new File(Consts.DEFAULT_ROOT + "/" + testProject2);
+		File directory = new File(Constants.DEFAULT_ROOT + "/" + testProject2);
 		UtilFile.deleteDirectory(directory);
 		assertFalse(testProject2 + " was not deleted!", directory.exists());
 
 		createTestProject(testProject2);
+		solo.sleep(200);
 
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
+		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
 		solo.clickOnText(testProject2);
 		ListView spritesList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
 		Sprite first = (Sprite) spritesList.getItemAtPosition(1);
@@ -185,21 +236,24 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		assertEquals("Sprite at index 3 is not \"horse\"!", "horse", third.getName());
 		Sprite fourth = (Sprite) spritesList.getItemAtPosition(4);
 		assertEquals("Sprite at index 4 is not \"pig\"!", "pig", fourth.getName());
-		solo.goBack();
 	}
 
 	public void testResume() {
-		File directory = new File(Consts.DEFAULT_ROOT + "/" + testProject3);
+		File directory = new File(Constants.DEFAULT_ROOT + "/" + testProject3);
 		UtilFile.deleteDirectory(directory);
 		assertFalse(testProject3 + " was not deleted!", directory.exists());
 
 		createTestProject(testProject3);
+		solo.sleep(200);
 
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
+		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
 		solo.clickOnText(testProject3);
+		solo.waitForActivity(ProjectActivity.class.getSimpleName());
 		solo.goBack();
-
+		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
 		solo.clickOnButton(getActivity().getString(R.string.current_project_button));
+		solo.waitForActivity(ProjectActivity.class.getSimpleName());
 
 		ListView spritesList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
 		Sprite first = (Sprite) spritesList.getItemAtPosition(1);
@@ -214,22 +268,41 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 
 	public void testAboutCatroid() {
 		solo.clickOnButton(getActivity().getString(R.string.about));
+		solo.sleep(200);
 		ArrayList<TextView> textViewList = solo.getCurrentTextViews(null);
 
 		assertEquals("Title is not correct!", getActivity().getString(R.string.about_title), textViewList.get(0)
 				.getText().toString());
 		assertEquals("About text not correct!", getActivity().getString(R.string.about_text), textViewList.get(1)
 				.getText().toString());
-		assertEquals("Link text is not correct!", getActivity().getString(R.string.about_link_text), textViewList
-				.get(2).getText().toString());
+		assertEquals("Link text is not correct!", getActivity().getString(R.string.about_catroid_license_link_text),
+				textViewList.get(2).getText().toString());
+	}
+
+	public void testShouldDisplayDialogIfVersionNumberTooHigh() throws Throwable {
+		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
+
+		boolean result = UiTestUtils.createTestProjectOnLocalStorageWithVersionCode(Integer.MAX_VALUE);
+		assertTrue("Could not create test project.", result);
+
+		runTestOnUiThread(new Runnable() {
+			public void run() {
+				ProjectManager.INSTANCE.loadProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, getActivity(), true);
+			}
+		});
+
+		solo.getText(solo.getString(R.string.error_project_compatability), true);
+		solo.clickOnButton(0);
+		solo.waitForDialogToClose(500);
 	}
 
 	public void testPlayButton() {
+		// FIXME
 		//		UiTestUtils.clickOnImageButton(solo, R.id.btn_action_play);
 		//		solo.assertCurrentActivity("StageActivity not showing!", StageActivity.class);
 	}
 
-	//edit this to work with login dialog
+	// TODO edit this to work with login dialog
 
 	//	public void testRenameToExistingProject() {
 	//		createTestProject(existingProject);
@@ -246,7 +319,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 	//	}
 
 	//	public void testDefaultProject() throws IOException {
-	//		File directory = new File(Consts.DEFAULT_ROOT + "/" + getActivity().getString(R.string.default_project_name));
+	//		File directory = new File(Constants.DEFAULT_ROOT + "/" + getActivity().getString(R.string.default_project_name));
 	//		UtilFile.deleteDirectory(directory);
 	//
 	//		StorageHandler handler = StorageHandler.getInstance();
@@ -258,7 +331,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 	//		assertNotNull("Bitmap is null", bitmap);
 	//		assertTrue("Sprite not visible", project.getCurrentProject().getSpriteList().get(1).isVisible());
 	//
-	//		directory = new File(Consts.DEFAULT_ROOT + "/" + getActivity().getString(R.string.default_project_name));
+	//		directory = new File(Constants.DEFAULT_ROOT + "/" + getActivity().getString(R.string.default_project_name));
 	//		UtilFile.deleteDirectory(directory);
 	//	}
 
@@ -302,5 +375,4 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 
 		storageHandler.saveProject(project);
 	}
-
 }

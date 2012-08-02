@@ -33,7 +33,7 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
@@ -43,12 +43,13 @@ import at.tugraz.ist.catroid.R;
 import com.jayway.android.robotium.solo.Solo;
 
 public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
+	private static final String TEST_FILE_DOWNLOAD_URL = "http://catroidtest.ist.tugraz.at/catroid/download/";
+
 	private Solo solo;
 	private String testProject = UiTestUtils.PROJECTNAME1;
 	private String newTestProject = UiTestUtils.PROJECTNAME2;
 	private String saveToken;
 	private int serverProjectId;
-	private static final String TEST_FILE_DOWNLOAD_URL = "http://catroidtest.ist.tugraz.at/catroid/download/";
 
 	public ProjectUpAndDownloadTest() {
 		super("at.tugraz.ist.catroid", MainMenuActivity.class);
@@ -60,19 +61,14 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 	public void setUp() throws Exception {
 		solo = new Solo(getInstrumentation(), getActivity());
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		saveToken = prefs.getString(Consts.TOKEN, "0");
+		saveToken = prefs.getString(Constants.TOKEN, "0");
 	}
 
 	@Override
 	public void tearDown() throws Exception {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		prefs.edit().putString(Consts.TOKEN, saveToken).commit();
-		try {
-			solo.finalize();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		getActivity().finish();
+		prefs.edit().putString(Constants.TOKEN, saveToken).commit();
+		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
 	}
@@ -91,6 +87,11 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		createTestProject(testProject);
 		addABrickToProject();
 
+		//intent to the main activity is sent since changing activity orientation is not working
+		//after executing line "UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_home);" 
+		Intent intent = new Intent(getActivity(), MainMenuActivity.class);
+		getActivity().startActivity(intent);
+
 		UiTestUtils.createValidUser(getActivity());
 
 		uploadProject();
@@ -101,7 +102,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 	}
 
 	private void createTestProject(String projectToCreate) {
-		File directory = new File(Consts.DEFAULT_ROOT + "/" + projectToCreate);
+		File directory = new File(Constants.DEFAULT_ROOT + "/" + projectToCreate);
 		if (directory.exists()) {
 			UtilFile.deleteDirectory(directory);
 		}
@@ -109,11 +110,10 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 
 		solo.clickOnButton(getActivity().getString(R.string.new_project));
 		solo.enterText(0, projectToCreate);
-		solo.goBack();
-		solo.clickOnButton(0);
+		solo.clickOnButton(solo.getString(R.string.ok));
 		solo.sleep(2000);
 
-		File file = new File(Consts.DEFAULT_ROOT + "/" + projectToCreate + "/" + Consts.PROJECTCODE_NAME);
+		File file = new File(Constants.DEFAULT_ROOT + "/" + projectToCreate + "/" + Constants.PROJECTCODE_NAME);
 		assertTrue(projectToCreate + " was not created!", file.exists());
 	}
 
@@ -137,9 +137,15 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		solo.clickOnEditText(1);
 		solo.enterText(1, "the project description");
 
+		//		solo.setActivityOrientation(Solo.LANDSCAPE);
+
 		solo.clickOnButton(getActivity().getString(R.string.upload_button));
 
+		solo.sleep(500);
+
 		try {
+			solo.setActivityOrientation(Solo.LANDSCAPE);
+
 			solo.waitForDialogToClose(10000);
 			assertTrue("Upload failed. Internet connection?",
 					solo.searchText(getActivity().getString(R.string.success_project_upload)));
@@ -150,12 +156,12 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 
 			solo.clickOnButton(0);
 		} catch (JSONException e) {
-			assertFalse("json exception orrured", true);
+			fail("JSON exception orrured");
 		}
 	}
 
 	private void downloadProject() {
-		String downloadUrl = TEST_FILE_DOWNLOAD_URL + serverProjectId + Consts.CATROID_EXTENTION;
+		String downloadUrl = TEST_FILE_DOWNLOAD_URL + serverProjectId + Constants.CATROID_EXTENTION;
 		downloadUrl += "?fname=" + newTestProject;
 
 		Intent intent = new Intent(getActivity(), MainMenuActivity.class);
@@ -166,15 +172,31 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		boolean waitResult = solo.waitForActivity("MainMenuActivity", 10000);
 		assertTrue("Download takes too long.", waitResult);
 		assertTrue("Testproject2 not loaded.", solo.searchText(newTestProject));
-		assertNotNull("Download not successful.",
+		assertTrue("OverwriteRenameDialog not showed.",
+				solo.searchText(getActivity().getString(R.string.overwrite_text)));
+
+		solo.clickOnText(getActivity().getString(R.string.overwrite_rename));
+		assertTrue("No text field to enter new name.", solo.searchEditText(newTestProject));
+		solo.clickOnButton(getActivity().getString(R.string.ok));
+		assertTrue("No error showed because of duplicate names.",
+				solo.searchText(getActivity().getString(R.string.error_project_exists)));
+		solo.clickOnButton(getActivity().getString(R.string.close));
+		solo.clearEditText(0);
+		solo.enterText(0, testProject);
+		solo.clickOnButton(getActivity().getString(R.string.ok));
+		assertTrue("Download not successful.",
 				solo.searchText(getActivity().getString(R.string.success_project_download)));
 
-		String projectPath = Consts.DEFAULT_ROOT + "/" + newTestProject;
+		String projectPath = Constants.DEFAULT_ROOT + "/" + testProject;
 		File downloadedDirectory = new File(projectPath);
-		File downloadedProjectFile = new File(projectPath + "/" + Consts.PROJECTCODE_NAME);
+		File downloadedProjectFile = new File(projectPath + "/" + Constants.PROJECTCODE_NAME);
 		assertTrue("Downloaded Directory does not exist.", downloadedDirectory.exists());
-		assertTrue("Project File does not exist.", downloadedProjectFile.exists());
+		assertTrue("Downloaded Project File does not exist.", downloadedProjectFile.exists());
 
+		projectPath = Constants.DEFAULT_ROOT + "/" + newTestProject;
+		downloadedDirectory = new File(projectPath);
+		downloadedProjectFile = new File(projectPath + "/" + Constants.PROJECTCODE_NAME);
+		assertTrue("Original Directory does not exist.", downloadedDirectory.exists());
+		assertTrue("Original Project File does not exist.", downloadedProjectFile.exists());
 	}
-
 }

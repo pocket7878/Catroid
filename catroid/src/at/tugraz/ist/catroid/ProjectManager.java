@@ -26,7 +26,7 @@ import java.io.File;
 import java.io.IOException;
 
 import android.content.Context;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.FileChecksumContainer;
 import at.tugraz.ist.catroid.common.MessageContainer;
 import at.tugraz.ist.catroid.common.StandardProjectHandler;
@@ -42,7 +42,7 @@ public class ProjectManager {
 	private Project project;
 	private Script currentScript;
 	private Sprite currentSprite;
-	private static ProjectManager instance;
+	public static final ProjectManager INSTANCE = new ProjectManager();
 
 	public FileChecksumContainer fileChecksumContainer;
 	public MessageContainer messageContainer;
@@ -53,25 +53,32 @@ public class ProjectManager {
 	}
 
 	public static ProjectManager getInstance() {
-		if (instance == null) {
-			instance = new ProjectManager();
-		}
-		return instance;
+		return INSTANCE;
 	}
 
 	public boolean loadProject(String projectName, Context context, boolean errorMessage) {
 		try {
 			fileChecksumContainer = new FileChecksumContainer();
 			messageContainer = new MessageContainer();
-
 			project = StorageHandler.getInstance().loadProject(projectName);
+
 			if (project == null) {
-				project = StandardProjectHandler.createAndSaveStandardProject(context);
+				project = Utils.findValidProject();
+				if (project == null) {
+					project = StandardProjectHandler.createAndSaveStandardProject(context);
+				}
 				if (errorMessage) {
 					Utils.displayErrorMessage(context, context.getString(R.string.error_load_project));
 					return false;
 				}
+			} else if (project.getCatroidVersionCode() > Utils.getVersionCode(context)) {
+				if (errorMessage) {
+					Utils.displayErrorMessage(context, context.getString(R.string.error_project_compatability));
+					// TODO show dialog to download latest catroid version instead
+				}
+				return false;
 			}
+
 			// adapt name of background sprite to the current language and place
 			// on lowest layer
 			project.getSpriteList().get(0).setName(context.getString(R.string.background));
@@ -79,6 +86,9 @@ public class ProjectManager {
 
 			currentSprite = null;
 			currentScript = null;
+
+			Utils.saveToPreferences(context, Constants.PREF_PROJECTNAME_KEY, project.getName());
+
 			return true;
 		} catch (Exception e) {
 			Utils.displayErrorMessage(context, context.getString(R.string.error_load_project));
@@ -95,11 +105,11 @@ public class ProjectManager {
 		}
 	}
 
-	public void saveProject() {
+	public boolean saveProject() {
 		if (project == null) {
-			return;
+			return false;
 		}
-		StorageHandler.getInstance().saveProject(project);
+		return StorageHandler.getInstance().saveProject(project);
 	}
 
 	public boolean initializeDefaultProject(Context context) {
@@ -145,27 +155,37 @@ public class ProjectManager {
 	}
 
 	public boolean renameProject(String newProjectName, Context context) {
-		if (StorageHandler.getInstance().projectExists(newProjectName)) {
+		if (StorageHandler.getInstance().projectExistsCheckCase(newProjectName)) {
 			Utils.displayErrorMessage(context, context.getString(R.string.error_project_exists));
 			return false;
 		}
 
-		File oldProjectDirectory = new File(Utils.buildPath(Consts.DEFAULT_ROOT, project.getName()));
-		File oldProjectFile = new File(Utils.buildPath(Consts.DEFAULT_ROOT, project.getName(), Consts.PROJECTCODE_NAME));
+		String oldProjectPath = Utils.buildProjectPath(project.getName());
+		File oldProjectDirectory = new File(oldProjectPath);
 
-		File newProjectDirectory = new File(Utils.buildPath(Consts.DEFAULT_ROOT, newProjectName));
-		File newProjectFile = new File(Utils.buildPath(Consts.DEFAULT_ROOT, project.getName(), Consts.PROJECTCODE_NAME));
+		String newProjectPath = Utils.buildProjectPath(newProjectName);
+		File newProjectDirectory = new File(newProjectPath);
 
-		project.setName(newProjectName);
+		boolean directoryRenamed = false;
 
-		boolean fileRenamed = oldProjectFile.renameTo(newProjectFile);
-		boolean directoryRenamed = oldProjectDirectory.renameTo(newProjectDirectory);
+		if (oldProjectPath.equalsIgnoreCase(newProjectPath)) {
+			String tmpProjectPath = Utils.buildProjectPath(createTemporaryDirectoryName(newProjectName));
+			File tmpProjectDirectory = new File(tmpProjectPath);
+			directoryRenamed = oldProjectDirectory.renameTo(tmpProjectDirectory);
+			if (directoryRenamed) {
+				directoryRenamed = tmpProjectDirectory.renameTo(newProjectDirectory);
+			}
+		} else {
 
-		if (directoryRenamed && fileRenamed) {
+			directoryRenamed = oldProjectDirectory.renameTo(newProjectDirectory);
+		}
+
+		if (directoryRenamed) {
+			project.setName(newProjectName);
 			this.saveProject();
 		}
 
-		return (directoryRenamed && fileRenamed);
+		return (directoryRenamed);
 	}
 
 	public Sprite getCurrentSprite() {
@@ -240,5 +260,16 @@ public class ProjectManager {
 		currentScript = project.getSpriteList().get(this.getCurrentSpritePosition()).getScript(position);
 
 		return true;
+	}
+
+	private String createTemporaryDirectoryName(String projectDirectoryName) {
+		String temporaryDirectorySuffix = "_tmp";
+		String temporaryDirectoryName = projectDirectoryName + temporaryDirectorySuffix;
+		int suffixCounter = 0;
+		while (StorageHandler.getInstance().projectExistsIgnoreCase(temporaryDirectoryName)) {
+			temporaryDirectoryName = projectDirectoryName + temporaryDirectorySuffix + suffixCounter;
+			suffixCounter++;
+		}
+		return temporaryDirectoryName;
 	}
 }

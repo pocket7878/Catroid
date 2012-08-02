@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 
 public class UtilFile {
 	public static final int TYPE_IMAGE_FILE = 0;
@@ -95,30 +95,30 @@ public class UtilFile {
 
 		String filePath;
 		if (project == null || project.equalsIgnoreCase("")) {
-			filePath = Utils.buildPath(Consts.DEFAULT_ROOT, name);
+			filePath = Utils.buildProjectPath(name);
 		} else {
 			switch (type) {
 				case TYPE_IMAGE_FILE:
-					filePath = Utils.buildPath(Consts.DEFAULT_ROOT, project, Consts.IMAGE_DIRECTORY, name);
+					filePath = Utils.buildPath(Utils.buildProjectPath(project), Constants.IMAGE_DIRECTORY, name);
 					break;
 				case TYPE_SOUND_FILE:
-					filePath = Utils.buildPath(Consts.DEFAULT_ROOT, project, Consts.SOUND_DIRECTORY, name);
+					filePath = Utils.buildPath(Utils.buildProjectPath(project), Constants.SOUND_DIRECTORY, name);
 					break;
 				default:
-					filePath = Utils.buildPath(Consts.DEFAULT_ROOT, name);
+					filePath = Utils.buildProjectPath(name);
 					break;
 			}
 		}
 		BufferedInputStream in = new BufferedInputStream(context.getResources().openRawResource(fileID),
-				Consts.BUFFER_8K);
+				Constants.BUFFER_8K);
 
 		try {
 			File file = new File(filePath);
 			file.getParentFile().mkdirs();
 			file.createNewFile();
 
-			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file), Consts.BUFFER_8K);
-			byte[] buffer = new byte[Consts.BUFFER_8K];
+			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file), Constants.BUFFER_8K);
+			byte[] buffer = new byte[Constants.BUFFER_8K];
 			int length = 0;
 			while ((length = in.read(buffer)) > 0) {
 				out.write(buffer, 0, length);
@@ -142,7 +142,12 @@ public class UtilFile {
 		List<String> projectList = new ArrayList<String>();
 		File[] sdFileList = directory.listFiles();
 		for (File file : sdFileList) {
-			if (file.isDirectory()) {
+			FilenameFilter filenameFilter = new FilenameFilter() {
+				public boolean accept(File dir, String filename) {
+					return filename.contentEquals(Constants.PROJECTCODE_NAME);
+				}
+			};
+			if (file.isDirectory() && file.list(filenameFilter).length != 0) {
 				projectList.add(file.getName());
 			}
 		}
@@ -154,7 +159,7 @@ public class UtilFile {
 		File[] sdFileList = directory.listFiles();
 		FilenameFilter filenameFilter = new FilenameFilter() {
 			public boolean accept(File dir, String filename) {
-				return filename.contentEquals(Consts.PROJECTCODE_NAME);
+				return filename.contentEquals(Constants.PROJECTCODE_NAME);
 			}
 		};
 		for (File file : sdFileList) {

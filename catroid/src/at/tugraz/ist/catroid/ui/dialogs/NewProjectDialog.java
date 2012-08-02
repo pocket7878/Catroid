@@ -33,7 +33,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
@@ -42,7 +42,8 @@ import at.tugraz.ist.catroid.utils.Utils;
 public class NewProjectDialog extends TextDialog {
 
 	public NewProjectDialog(Activity activity) {
-		super(activity, activity.getString(R.string.new_project_dialog_title), null);
+		super(activity, activity.getString(R.string.new_project_dialog_title), activity
+				.getString(R.string.new_project_dialog_hint));
 		initKeyAndClickListener();
 	}
 
@@ -54,7 +55,7 @@ public class NewProjectDialog extends TextDialog {
 			return;
 		}
 
-		if (StorageHandler.getInstance().projectExists(projectName)) {
+		if (StorageHandler.getInstance().projectExistsIgnoreCase(projectName)) {
 			Utils.displayErrorMessage(activity, activity.getString(R.string.error_project_exists));
 			return;
 		}
@@ -66,9 +67,10 @@ public class NewProjectDialog extends TextDialog {
 			activity.dismissDialog(MainMenuActivity.DIALOG_NEW_PROJECT);
 		}
 
-		Utils.saveToPreferences(activity, Consts.PREF_PROJECTNAME_KEY, projectName);
+		Utils.saveToPreferences(activity, Constants.PREF_PROJECTNAME_KEY, projectName);
 		Intent intent = new Intent(activity, ProjectActivity.class);
 		activity.startActivity(intent);
+		input.setText(null);
 		activity.dismissDialog(MainMenuActivity.DIALOG_NEW_PROJECT);
 	}
 
@@ -91,6 +93,7 @@ public class NewProjectDialog extends TextDialog {
 
 		buttonNegative.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				input.setText(null);
 				activity.dismissDialog(MainMenuActivity.DIALOG_NEW_PROJECT);
 			}
 		});

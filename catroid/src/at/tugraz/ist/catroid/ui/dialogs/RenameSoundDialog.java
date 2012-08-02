@@ -89,11 +89,12 @@ public class RenameSoundDialog {
 		String newSoundTitle = (input.getText().toString()).trim();
 		String oldSoundTitle = scriptTabActivity.selectedSoundInfo.getTitle();
 
-		if (newSoundTitle.equalsIgnoreCase(oldSoundTitle)) {
+		if (newSoundTitle.equals(oldSoundTitle)) {
 			scriptTabActivity.dismissDialog(ScriptTabActivity.DIALOG_RENAME_SOUND);
 			return;
 		}
 		if (newSoundTitle != null && !newSoundTitle.equalsIgnoreCase("")) {
+			newSoundTitle = Utils.getUniqueSoundName(newSoundTitle);
 			scriptTabActivity.selectedSoundInfo.setTitle(newSoundTitle);
 			((SoundAdapter) ((SoundActivity) scriptTabActivity.getCurrentActivity()).getListAdapter())
 					.notifyDataSetChanged(); //TODO: this is madness!

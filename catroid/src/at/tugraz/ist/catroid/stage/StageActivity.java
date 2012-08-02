@@ -34,7 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
@@ -155,7 +155,7 @@ public class StageActivity extends AndroidApplication {
 		Dialog dialog;
 		ProjectManager projectManager = ProjectManager.getInstance();
 		if (projectManager.getCurrentProject() != null
-				&& StorageHandler.getInstance().projectExists(projectManager.getCurrentProject().getName())) {
+				&& StorageHandler.getInstance().projectExistsIgnoreCase(projectManager.getCurrentProject().getName())) {
 			projectManager.saveProject();
 		}
 
@@ -183,8 +183,8 @@ public class StageActivity extends AndroidApplication {
 				EditText videoDescriptionField = (EditText) dialog.findViewById(R.id.video_description_upload);
 				EditText videotUploadName = (EditText) dialog.findViewById(R.id.video_name_upload);
 				TextView sizeOfProject = (TextView) dialog.findViewById(R.id.dialog_upload_size_of_project);
-				sizeOfProject.setText(UtilFile
-						.getSizeAsString(new File(Consts.DEFAULT_ROOT + "/" + currentProjectName)));
+				sizeOfProject.setText(UtilFile.getSizeAsString(new File(Constants.DEFAULT_ROOT + "/"
+						+ currentProjectName)));
 
 				videotUploadName.setText(ProjectManager.getInstance().getCurrentProject().getName());
 				videoDescriptionField.setText("");
@@ -202,7 +202,7 @@ public class StageActivity extends AndroidApplication {
 
 	public void uploadRecordedStage() {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		String token = preferences.getString(Consts.TOKEN, null);
+		String token = preferences.getString(Constants.TOKEN, null);
 
 		if (token == null || token.length() == 0 || token.equals("0")) {
 			showDialog(DIALOG_LOGIN_REGISTER);

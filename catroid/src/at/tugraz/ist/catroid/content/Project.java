@@ -46,7 +46,6 @@ public class Project implements Serializable {
 	private int androidVersion;
 	@SuppressWarnings("unused")
 	private String catroidVersionName;
-	@SuppressWarnings("unused")
 	private int catroidVersionCode;
 
 	@XStreamAlias("screenWidth")
@@ -102,6 +101,10 @@ public class Project implements Serializable {
 
 	public String getName() {
 		return projectName;
+	}
+
+	public int getCatroidVersionCode() {
+		return catroidVersionCode;
 	}
 
 	public void setDeviceData(Context context) {

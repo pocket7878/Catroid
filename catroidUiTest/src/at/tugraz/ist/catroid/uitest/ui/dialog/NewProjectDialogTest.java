@@ -23,6 +23,8 @@
 package at.tugraz.ist.catroid.uitest.ui.dialog;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.Button;
+import android.widget.EditText;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
@@ -47,31 +49,45 @@ public class NewProjectDialogTest extends ActivityInstrumentationTestCase2<MainM
 
 	@Override
 	protected void tearDown() throws Exception {
-		try {
-			solo.finalize();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		getActivity().finish();
+		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
 	}
 
 	public void testNewProjectDialog() {
-
 		solo.clickOnButton(getActivity().getString(R.string.new_project));
-
+		solo.waitForText(solo.getString(R.string.new_project_dialog_title));
 		int nameEditTextId = solo.getCurrentEditTexts().size() - 1;
-
 		UiTestUtils.enterText(solo, nameEditTextId, testingproject);
-
 		solo.sendKey(Solo.ENTER);
-
-		solo.sleep(1000);
-
+		solo.sleep(300);
 		assertTrue("New Project is not testingproject!", ProjectManager.getInstance().getCurrentProject().getName()
 				.equals(UiTestUtils.PROJECTNAME1));
-
 	}
 
+	public void testPositiveButtonDisabledOnCreate() {
+		solo.clickOnButton(getActivity().getString(R.string.new_project));
+		Button okButton = (Button) solo.getView(R.id.dialog_text_ok);
+		assertFalse("New project ok button is enabled!", okButton.isEnabled());
+	}
+
+	public void testPositiveButtonChangesState() {
+		solo.clickOnButton(getActivity().getString(R.string.new_project));
+		Button okButton = (Button) solo.getView(R.id.dialog_text_ok);
+		EditText editText = (EditText) solo.getView(R.id.dialog_text_EditText);
+
+		assertTrue("EditText was not empty", editText.getText().length() == 0);
+
+		final String projectName = "MyTestProject";
+		UiTestUtils.enterText(solo, 0, projectName);
+
+		assertEquals("Wrong projectname in EditText - should be MyTestProject", projectName, editText.getText()
+				.toString());
+		assertTrue("New project ok button not enabled!", okButton.isEnabled());
+
+		UiTestUtils.enterText(solo, 0, "");
+
+		assertEquals("EditText was not empty", "", editText.getText().toString());
+		assertFalse("New project ok button not disabled!", okButton.isEnabled());
+	}
 }

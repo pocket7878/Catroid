@@ -81,9 +81,9 @@ public class SoundActivity extends ListActivity {
 		ActivityHelper activityHelper = scriptTabActivity.activityHelper;
 		if (activityHelper != null) {
 			//set new functionality for actionbar add button:
-			activityHelper.changeClickListener(R.id.btn_action_add_sprite, createAddSoundClickListener());
+			activityHelper.changeClickListener(R.id.btn_action_add_button, createAddSoundClickListener());
 			//set new icon for actionbar plus button:
-			activityHelper.changeButtonIcon(R.id.btn_action_add_sprite, R.drawable.ic_music);
+			activityHelper.changeButtonIcon(R.id.btn_action_add_button, R.drawable.ic_music);
 		}
 
 	}
@@ -111,7 +111,7 @@ public class SoundActivity extends ListActivity {
 
 	private void updateSoundAdapter(String title, String fileName) {
 
-		title = searchForNonExistingTitle(title, 0);
+		title = Utils.getUniqueSoundName(title);
 
 		SoundInfo newSoundInfo = new SoundInfo();
 		newSoundInfo.setTitle(title);
@@ -128,22 +128,6 @@ public class SoundActivity extends ListActivity {
 				}
 			});
 		}
-	}
-
-	private String searchForNonExistingTitle(String title, int nextNumber) {
-		// search for sounds with the same title
-		String newTitle;
-		if (nextNumber == 0) {
-			newTitle = title;
-		} else {
-			newTitle = title + nextNumber;
-		}
-		for (SoundInfo soundInfo : soundInfoList) {
-			if (soundInfo.getTitle().equals(newTitle)) {
-				return searchForNonExistingTitle(title, ++nextNumber);
-			}
-		}
-		return newTitle;
 	}
 
 	public void pauseSound(SoundInfo soundInfo) {
@@ -264,11 +248,12 @@ public class SoundActivity extends ListActivity {
 
 	public void handleDeleteSoundButton(View v) {
 		final int position = (Integer) v.getTag();
-
 		stopSound(null);
-		StorageHandler.getInstance().deleteFile(soundInfoList.get(position).getAbsolutePath());
-		soundInfoList.remove(position);
-		((SoundAdapter) getListAdapter()).notifyDataSetChanged();
+		ScriptTabActivity scriptTabActivity = (ScriptTabActivity) getParent();
+		scriptTabActivity.selectedSoundInfo = soundInfoList.get(position);
+		scriptTabActivity.selectedPosition = position;
+		scriptTabActivity.showDialog(ScriptTabActivity.DIALOG_DELETE_SOUND);
+
 	}
 
 }

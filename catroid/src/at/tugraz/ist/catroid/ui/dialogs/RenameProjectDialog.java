@@ -29,7 +29,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.MyProjectsActivity;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -43,16 +43,13 @@ public class RenameProjectDialog extends TextDialog {
 
 	public void handleOkButton() {
 		String newProjectName = (input.getText().toString()).trim();
-		String oldProjectName = (((MyProjectsActivity) activity).projectToEdit.getName());
+		String oldProjectName = (((MyProjectsActivity) activity).projectToEdit.projectName);
 
-		if (newProjectName.equalsIgnoreCase(oldProjectName)) {
+		if (newProjectName.equals(oldProjectName)) {
 			activity.dismissDialog(MyProjectsActivity.DIALOG_RENAME_PROJECT);
 			return;
 		}
-		if (StorageHandler.getInstance().projectExists(newProjectName)) {
-			Utils.displayErrorMessage(activity, activity.getString(R.string.error_project_exists));
-			return;
-		}
+
 		if (newProjectName != null && !newProjectName.equalsIgnoreCase("")) {
 
 			ProjectManager projectManager = ProjectManager.getInstance();
@@ -61,7 +58,7 @@ public class RenameProjectDialog extends TextDialog {
 			if (oldProjectName.equalsIgnoreCase(currentProjectName)) {
 				projectManager.renameProject(newProjectName, activity);
 				((MyProjectsActivity) activity).updateProjectTitle();
-				Utils.saveToPreferences(activity, Consts.PREF_PROJECTNAME_KEY, newProjectName);
+				Utils.saveToPreferences(activity, Constants.PREF_PROJECTNAME_KEY, newProjectName);
 			} else {
 				projectManager.loadProject(oldProjectName, activity, false);
 				projectManager.renameProject(newProjectName, activity);
@@ -80,8 +77,8 @@ public class RenameProjectDialog extends TextDialog {
 			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
 					String newProjectName = (input.getText().toString()).trim();
-					String oldProjectName = (((MyProjectsActivity) activity).projectToEdit.getName());
-					if (((MyProjectsActivity) activity).projectAlreadyExists(newProjectName)
+					String oldProjectName = (((MyProjectsActivity) activity).projectToEdit.projectName);
+					if (StorageHandler.getInstance().projectExistsCheckCase(newProjectName)
 							&& !newProjectName.equalsIgnoreCase(oldProjectName)) {
 						Utils.displayErrorMessage(activity, activity.getString(R.string.error_project_exists));
 					} else if (newProjectName.equalsIgnoreCase("")) {

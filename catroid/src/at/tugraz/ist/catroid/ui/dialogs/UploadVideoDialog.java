@@ -40,7 +40,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.transfers.VideoUploadTask;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -129,7 +129,7 @@ public class UploadVideoDialog extends Dialog implements OnClickListener {
 				projectManager.saveProject();
 
 				dismiss();
-				String projectPath = Consts.DEFAULT_ROOT + "/" + projectManager.getCurrentProject().getName();
+				String projectPath = Constants.DEFAULT_ROOT + "/" + projectManager.getCurrentProject().getName();
 				String videoDescription;
 
 				if (videoDescriptionField.length() != 0) {
@@ -139,7 +139,7 @@ public class UploadVideoDialog extends Dialog implements OnClickListener {
 				}
 
 				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-				String token = prefs.getString(Consts.TOKEN, "0");
+				String token = prefs.getString(Constants.TOKEN, "0");
 				String projectName = ProjectManager.getInstance().getCurrentProject().getName();
 				new VideoUploadTask(context, projectName, videoName, videoDescription, projectPath, token).execute();
 				break;

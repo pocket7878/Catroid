@@ -29,7 +29,7 @@ import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
 import android.view.View;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
@@ -39,10 +39,10 @@ import at.tugraz.ist.catroid.R;
 import com.jayway.android.robotium.solo.Solo;
 
 public class UploadDialogTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
-	private Solo solo;
 	private String testProject = UiTestUtils.PROJECTNAME1;
 	private String newTestProject = UiTestUtils.PROJECTNAME2;
 
+	private Solo solo;
 	private String saveToken;
 
 	public UploadDialogTest() {
@@ -56,20 +56,14 @@ public class UploadDialogTest extends ActivityInstrumentationTestCase2<MainMenuA
 		solo = new Solo(getInstrumentation(), getActivity());
 		super.setUp();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		saveToken = prefs.getString(Consts.TOKEN, "0");
+		saveToken = prefs.getString(Constants.TOKEN, "0");
 	}
 
 	@Override
 	public void tearDown() throws Exception {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		prefs.edit().putString(Consts.TOKEN, saveToken).commit();
-		UiTestUtils.clearAllUtilTestProjects();
-		try {
-			solo.finalize();
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		getActivity().finish();
+		prefs.edit().putString(Constants.TOKEN, saveToken).commit();
+		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
 	}
@@ -85,6 +79,7 @@ public class UploadDialogTest extends ActivityInstrumentationTestCase2<MainMenuA
 	public void testUploadDialog() throws Throwable {
 		setServerURLToTestURL();
 		createTestProject();
+		solo.sleep(200);
 		UiTestUtils.createValidUser(getActivity());
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
 		solo.waitForDialogToClose(5000);
@@ -109,29 +104,31 @@ public class UploadDialogTest extends ActivityInstrumentationTestCase2<MainMenuA
 		assertEquals("rename View is hidden.", renameView.getVisibility(), View.VISIBLE);
 
 		solo.clickOnButton(getActivity().getString(R.string.cancel_button));
-
 	}
 
 	public void testOrientationChange() throws Throwable {
 		setServerURLToTestURL();
 		createTestProject();
+		solo.sleep(200);
 		String testText1 = "testText1";
 		String testText2 = "testText2";
 		UiTestUtils.createValidUser(getActivity());
 		solo.clickOnText(getActivity().getString(R.string.upload_project));
-		solo.sleep(500);
+		solo.sleep(200);
 		solo.clearEditText(0);
 		solo.enterText(0, testText1);
 		solo.setActivityOrientation(Solo.LANDSCAPE);
+		solo.sleep(200);
 		assertTrue("EditTextField got cleared after changing orientation", solo.searchText(testText1));
 		solo.setActivityOrientation(Solo.PORTRAIT);
+		solo.sleep(100);
 		solo.enterText(1, testText2);
 
 		assertTrue("EditTextField got cleared after changing orientation", solo.searchText(testText2));
 	}
 
 	private void createTestProject() {
-		File directory = new File(Consts.DEFAULT_ROOT + "/" + testProject);
+		File directory = new File(Constants.DEFAULT_ROOT + "/" + testProject);
 		if (directory.exists()) {
 			UtilFile.deleteDirectory(directory);
 		}
@@ -139,11 +136,10 @@ public class UploadDialogTest extends ActivityInstrumentationTestCase2<MainMenuA
 
 		solo.clickOnButton(getActivity().getString(R.string.new_project));
 		solo.enterText(0, testProject);
-		solo.goBack();
-		solo.clickOnButton(0);
+		solo.clickOnButton(solo.getString(R.string.ok));
 		solo.sleep(2000);
 
-		File file = new File(Consts.DEFAULT_ROOT + "/" + testProject + "/" + Consts.PROJECTCODE_NAME);
+		File file = new File(Constants.DEFAULT_ROOT + "/" + testProject + "/" + Constants.PROJECTCODE_NAME);
 		assertTrue(testProject + " was not created!", file.exists());
 		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_home);
 	}

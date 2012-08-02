@@ -25,7 +25,6 @@ package at.tugraz.ist.catroid.content;
 import java.util.concurrent.Semaphore;
 
 import at.tugraz.ist.catroid.common.CostumeData;
-import at.tugraz.ist.catroid.utils.Utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -33,7 +32,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.actors.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class Costume extends Image implements Cloneable {
 	protected Semaphore xYWidthHeightLock = new Semaphore(1);
@@ -54,7 +53,6 @@ public class Costume extends Image implements Cloneable {
 	public boolean costumeChanged;
 
 	public Costume(Sprite sprite) {
-		super(Utils.getUniqueName());
 		this.sprite = sprite;
 		this.x = 0f;
 		this.y = 0f;
@@ -88,6 +86,9 @@ public class Costume extends Image implements Cloneable {
 		float height = this.height;
 		xYWidthHeightLock.release();
 
+		// We use Y-down, libgdx Y-up. This is the fix for accurate y-axis detection
+		y = height - y;
+
 		if (x >= 0 && x <= width && y >= 0 && y <= height) {
 			if (currentAlphaPixmap != null && ((currentAlphaPixmap.getPixel((int) x, (int) y) & 0x000000FF) > 10)) {
 				sprite.startWhenScripts("Tapped");
@@ -110,7 +111,7 @@ public class Costume extends Image implements Cloneable {
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		checkImageChanged();
-		if (this.show && this.region != null) {
+		if (this.show && this.getRegion() != null) {
 			super.draw(batch, this.alphaValue);
 		}
 	}
@@ -127,7 +128,7 @@ public class Costume extends Image implements Cloneable {
 				this.width = 0f;
 				this.height = 0f;
 				xYWidthHeightLock.release();
-				this.region = new TextureRegion();
+				this.setRegion(new TextureRegion());
 				imageChanged = false;
 				imageLock.release();
 				return;
@@ -163,7 +164,7 @@ public class Costume extends Image implements Cloneable {
 			Texture texture = new Texture(pixmap);
 			pixmap.dispose();
 
-			this.region = new TextureRegion(texture);
+			this.setRegion(new TextureRegion(texture));
 
 			imageChanged = false;
 		}
@@ -206,8 +207,8 @@ public class Costume extends Image implements Cloneable {
 
 	public void disposeTextures() {
 		disposeTexturesLock.acquireUninterruptibly();
-		if (this.region != null && this.region.getTexture() != null) {
-			this.region.getTexture().dispose();
+		if (this.getRegion() != null && this.getRegion().getTexture() != null) {
+			this.getRegion().getTexture().dispose();
 		}
 		if (currentAlphaPixmap != null) {
 			currentAlphaPixmap.dispose();

@@ -78,7 +78,6 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 	@Override
 	protected void onPause() {
 		super.onPause();
-
 		ProjectManager projectManager = ProjectManager.getInstance();
 		if (projectManager.getCurrentProject() != null) {
 			projectManager.saveProject();
@@ -107,16 +106,18 @@ public class ScriptActivity extends Activity implements OnCancelListener {
 		ScriptTabActivity scriptTabActivity = (ScriptTabActivity) getParent();
 		if (scriptTabActivity != null && scriptTabActivity.activityHelper != null) {
 			//set new functionality for actionbar add button:
-			scriptTabActivity.activityHelper.changeClickListener(R.id.btn_action_add_sprite,
+			scriptTabActivity.activityHelper.changeClickListener(R.id.btn_action_add_button,
 					createAddBrickClickListener());
 			//set new icon for actionbar plus button:
-			scriptTabActivity.activityHelper.changeButtonIcon(R.id.btn_action_add_sprite, R.drawable.ic_plus_black);
+			scriptTabActivity.activityHelper.changeButtonIcon(R.id.btn_action_add_button, R.drawable.ic_plus_black);
 		}
 	}
 
 	private View.OnClickListener createAddBrickClickListener() {
 		return new View.OnClickListener() {
 			public void onClick(View v) {
+				listView.setHoveringBrick();
+				adapter.notifyDataSetChanged();
 				getParent().showDialog(DIALOG_ADD_BRICK);
 			}
 		};

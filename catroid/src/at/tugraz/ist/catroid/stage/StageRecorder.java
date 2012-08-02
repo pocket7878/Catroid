@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 import android.speech.tts.TextToSpeech;
 import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.common.Consts;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.content.Costume;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -32,7 +32,7 @@ public class StageRecorder {
 
 	public void start() {
 		String currentProject = ProjectManager.getInstance().getCurrentProject().getName();
-		File recordedFile = new File(Utils.buildPath(Consts.DEFAULT_ROOT, currentProject), "record.json");
+		File recordedFile = new File(Utils.buildPath(Constants.DEFAULT_ROOT, currentProject), "record.json");
 		if (recordedFile.exists()) {
 			recordedFile.delete();
 		}
@@ -44,7 +44,7 @@ public class StageRecorder {
 
 		try {
 			jsonGenerator = jsonFactory.createJsonGenerator(new FileOutputStream(new File(Utils.buildPath(
-					Consts.DEFAULT_ROOT, currentProject), "record.json")));
+					Constants.DEFAULT_ROOT, currentProject), "record.json")));
 			jsonGenerator.writeStartObject();
 			jsonGenerator.writeNumberField("screenWidth",
 					ProjectManager.getInstance().getCurrentProject().virtualScreenWidth);
@@ -123,8 +123,8 @@ public class StageRecorder {
 		soundInfo.setSoundFileName(filename);
 		soundInfo.setTitle(filename);
 		soundInfo.isPlaying = true;
-		textToSpeech.synthesizeToFile(text, speakParameter, Consts.DEFAULT_ROOT + "/"
-				+ ProjectManager.getInstance().getCurrentProject().getName() + "/" + Consts.SOUND_DIRECTORY + "/"
+		textToSpeech.synthesizeToFile(text, speakParameter, Constants.DEFAULT_ROOT + "/"
+				+ ProjectManager.getInstance().getCurrentProject().getName() + "/" + Constants.SOUND_DIRECTORY + "/"
 				+ filename);
 		recordSound(soundInfo);
 	}

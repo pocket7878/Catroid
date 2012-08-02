@@ -89,11 +89,12 @@ public class RenameCostumeDialog {
 		String newCostumeName = (input.getText().toString()).trim();
 		String oldCostumeName = scriptTabActivity.selectedCostumeData.getCostumeName();
 
-		if (newCostumeName.equalsIgnoreCase(oldCostumeName)) {
+		if (newCostumeName.equals(oldCostumeName)) {
 			scriptTabActivity.dismissDialog(ScriptTabActivity.DIALOG_RENAME_COSTUME);
 			return;
 		}
 		if (newCostumeName != null && !newCostumeName.equalsIgnoreCase("")) {
+			newCostumeName = Utils.getUniqueCostumeName(newCostumeName);
 			scriptTabActivity.selectedCostumeData.setCostumeName(newCostumeName);
 			((CostumeAdapter) ((CostumeActivity) scriptTabActivity.getCurrentActivity()).getListAdapter())
 					.notifyDataSetChanged(); //TODO: this is madness!
@@ -101,6 +102,7 @@ public class RenameCostumeDialog {
 			Utils.displayErrorMessage(scriptTabActivity, scriptTabActivity.getString(R.string.costumename_invalid));
 			return;
 		}
+
 		scriptTabActivity.dismissDialog(ScriptTabActivity.DIALOG_RENAME_COSTUME);
 	}
 
