@@ -369,9 +369,9 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		clearSelectionHighlighting();
 		errorSpan = this.getText();
 		//Log.i("info", "First error: " + firstError);
-		editMode = true;
+		editMode = false;
 
-		if (errorSpan.length() == 1 || firstError <= 0) {
+		if (errorSpan.length() == 1 || firstError == 0) {
 			errorSpan.setSpan(COLOR_ERROR, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			absoluteCursorPosition = 0;
 			selectionStartIndex = 0;
@@ -381,31 +381,39 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 		setSelection(firstError);
 		absoluteCursorPosition = firstError;
+		selectionEndIndex = firstError;
+		selectionStartIndex = firstError;
 
-		if (errorSpan.length() > firstError) {
-			char firstLetter = errorSpan.charAt(firstError);
-
-			//selection for characters always selects character before current cursor position!
-			if (charIsCapitalLetter(firstLetter) || charIsLowerCaseLetter(firstLetter)) {
-				absoluteCursorPosition++;
-			}
-			if (firstLetter == ')') {
-				absoluteCursorPosition++;
-			}
-
+		if (firstError < errorSpan.length() - 1) {
+			errorSpan.setSpan(COLOR_ERROR, firstError, firstError + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		} else {
+			errorSpan.setSpan(COLOR_ERROR, firstError - 1, firstError, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		}
 
-		doSelectionAndHighlighting();
-
-		if (selectionEndIndex == selectionStartIndex) {
-			if (selectionEndIndex == errorSpan.length()) {
-				selectionStartIndex--;
-			} else {
-				selectionEndIndex++;
-			}
-
-		}
-		errorSpan.setSpan(COLOR_ERROR, selectionStartIndex, selectionEndIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		//		if (errorSpan.length() > firstError) {
+		//			char firstLetter = errorSpan.charAt(firstError);
+		//
+		//			//selection for characters always selects character before current cursor position!
+		//			if (charIsCapitalLetter(firstLetter) || charIsLowerCaseLetter(firstLetter)) {
+		//				absoluteCursorPosition++;
+		//			}
+		//			if (firstLetter == ')') {
+		//				absoluteCursorPosition++;
+		//			}
+		//
+		//		}
+		//
+		//		doSelectionAndHighlighting();
+		//
+		//		if (selectionEndIndex == selectionStartIndex) {
+		//			if (selectionEndIndex == errorSpan.length()) {
+		//				selectionStartIndex--;
+		//			} else {
+		//				selectionEndIndex++;
+		//			}
+		//
+		//		}
+		//errorSpan.setSpan(COLOR_ERROR, selectionStartIndex, selectionEndIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
 
 	//	public void highlightSelectionCurrentlyEditing() {
@@ -426,25 +434,19 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		clearSelectionHighlighting();
 
 		String text = getText().toString();
-		//int cursor = this.getSelectionStart();
-		if (absoluteCursorPosition > 0
-				&& absoluteCursorPosition < text.length()
-				&& !editMode
-				&& ((((text.charAt(absoluteCursorPosition) >= 97) && (text.charAt(absoluteCursorPosition) <= 123))
-						|| ((text.charAt(absoluteCursorPosition) >= 65) && (text.charAt(absoluteCursorPosition) <= 91)) || (text
-						.charAt(absoluteCursorPosition) == '_')))
-				&& (!(((text.charAt(absoluteCursorPosition - 1) < 97) || (text.charAt(absoluteCursorPosition - 1) > 123))
-						&& ((text.charAt(absoluteCursorPosition - 1) < 65) || (text.charAt(absoluteCursorPosition - 1) > 91)) && (text
-						.charAt(absoluteCursorPosition - 1) != '_')))) {
-			doSelectionAndHighlighting();
-			editMode = true;
-			return;
-		}
+		if (absoluteCursorPosition > 0 && absoluteCursorPosition < text.length() && !editMode) {
 
-		//		Log.i("info", "Key pressed: " + catKey.getDisplayLabelString());
-		//		Log.i("info",
-		//				"KeyCode:" + catKey.getKeyCode() + " ScanCode:" + catKey.getScanCode() + " MetaState:"
-		//						+ catKey.getMetaState() + " DisplayLabel:" + catKey.getDisplayLabel());
+			char currentChar = text.charAt(absoluteCursorPosition);
+			char charBefore = text.charAt(absoluteCursorPosition - 1);
+
+			//when the user tries to write into a function/variable/sensor, we highlight it!
+			if ((((charIsCapitalLetter(currentChar) || charIsLowerCaseLetter(currentChar) || (currentChar == '_'))) && ((charIsCapitalLetter(charBefore) || charIsLowerCaseLetter(charBefore)
+					&& charBefore != '_')))) {
+				doSelectionAndHighlighting();
+				editMode = true;
+				return;
+			}
+		}
 
 		if (catKey.getKeyCode() == KeyEvent.KEYCODE_DEL) {
 			deleteOneCharAtCurrentPosition();
@@ -475,31 +477,20 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			selectionEndIndex = selectionStartIndex;
 			editMode = false;
 		} else {
-			if (text.charAt(selectionEndIndex - 1) == ',') {
-				//super.setSelection(selectionEndIndex - 1, selectionEndIndex);
-				//absoluteCursorPosition = selectionEndIndex - 1;
+			char currentChar = text.charAt(selectionEndIndex - 1);
+			if (currentChar == ',') {
 				doSelectionAndHighlighting();
 				return;
-			} else if (text.charAt(selectionEndIndex - 1) == ')') {
-				//super.setSelection(selectionEndIndex - 1, selectionEndIndex);
-				//absoluteCursorPosition = selectionEndIndex - 1;
+			} else if (currentChar == ')') {
 				doSelectionAndHighlighting();
 				return;
-			} else if (text.charAt(selectionEndIndex - 1) == '(') {
-				//super.setSelection(selectionEndIndex - 1, selectionEndIndex);
-				//absoluteCursorPosition = selectionEndIndex - 1;
+			} else if (currentChar == '(') {
 				doSelectionAndHighlighting();
 				return;
-			} else if (text.charAt(selectionEndIndex - 1) == '_') {
-				//super.setSelection(selectionEndIndex - 1, selectionEndIndex);
-				//absoluteCursorPosition = selectionEndIndex - 1; //selection cannot select _ before current selection
+			} else if (currentChar == '_') {
 				doSelectionAndHighlighting();
 				return;
-			} else if (((text.charAt(selectionEndIndex - 1) >= 97) && (text.charAt(selectionEndIndex - 1) <= 123))
-					|| ((text.charAt(selectionEndIndex - 1) >= 65) && (text.charAt(selectionEndIndex - 1) <= 91))
-					|| (text.charAt(selectionEndIndex - 1) == '_')) {
-				//super.setSelection(selectionEndIndex - 1, selectionEndIndex);
-				//absoluteCursorPosition = selectionEndIndex - 1;
+			} else if (charIsCapitalLetter(currentChar) || charIsLowerCaseLetter(currentChar) || (currentChar == '_')) {
 				doSelectionAndHighlighting();
 				return;
 			}
@@ -536,11 +527,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	public boolean getEditMode() {
 		return editMode;
 	}
-
-	//	private void updateCursorPosition(int position) {
-	//		cursorPosition = position;
-	//		updateSelectionIndices();
-	//	}
 
 	public boolean hasChanges() {
 		return hasChanges;
@@ -634,8 +620,8 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 				postInvalidate();
 
-				Log.i("info", "clicked on: " + motion.getY() + "click in line: " + motion.getY() / lineHeight
-						+ " lines down: " + linesDown + " cursor: " + tempCursorPosition);
+				//				Log.i("info", "clicked on: " + motion.getY() + "click in line: " + motion.getY() / lineHeight
+				//						+ " lines down: " + linesDown + " cursor: " + tempCursorPosition);
 				updateSelectionIndices();
 			}
 			return true;
