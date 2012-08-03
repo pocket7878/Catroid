@@ -84,6 +84,7 @@ public class IfThenElseBrick implements Brick, OnClickListener, OnItemSelectedLi
 	public IfThenElseBrick(Sprite sprite, int conditionToCheck1, LogicOperator logicOperator, int conditionToCheck2) {
 		this.sprite = sprite;
 		this.logicOperator = logicOperator;
+		this.operator = logicOperator.getLogicOperator();
 		conditionToCheckFormula1 = new Formula(Integer.toString(conditionToCheck1));
 		conditionToCheckFormula2 = new Formula(Integer.toString(conditionToCheck2));
 	}
@@ -92,6 +93,7 @@ public class IfThenElseBrick implements Brick, OnClickListener, OnItemSelectedLi
 			Formula conditionToCheck2) {
 		this.sprite = sprite;
 		this.logicOperator = logicOperator;
+		this.operator = logicOperator.getLogicOperator();
 		conditionToCheckFormula1 = conditionToCheck1;
 		conditionToCheckFormula2 = conditionToCheck2;
 	}
@@ -243,7 +245,7 @@ public class IfThenElseBrick implements Brick, OnClickListener, OnItemSelectedLi
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 		logicOperator = LogicOperator.values()[position];
 		this.position = position;
-		operator = logicOperator.getLogicOperator();
+		this.operator = logicOperator.getLogicOperator();
 	}
 
 	public void onNothingSelected(AdapterView<?> arg0) {

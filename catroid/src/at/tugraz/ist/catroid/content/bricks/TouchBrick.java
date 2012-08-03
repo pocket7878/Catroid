@@ -72,6 +72,7 @@ public class TouchBrick implements Brick {
 	public void execute() {
 		final ArrayList<Sprite> spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject()
 				.getSpriteList();
+
 		if (!spriteList.contains(touchedSprite)) {
 			touchedSprite = null;
 		}
@@ -79,8 +80,6 @@ public class TouchBrick implements Brick {
 		if (touchedSprite == null) {
 			touchedSprite = this.sprite;
 		}
-
-		//boolean collided = false;
 
 		Script script = touchEndBrick.getScript();
 		if (!this.checkCollision(sprite, touchedSprite)) {
