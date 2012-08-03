@@ -41,6 +41,8 @@ import at.tugraz.ist.catroid.content.bricks.ChangeVolumeByBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeXByBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeYByBrick;
 import at.tugraz.ist.catroid.content.bricks.GoNStepsBackBrick;
+import at.tugraz.ist.catroid.content.bricks.IfThenElseBrick;
+import at.tugraz.ist.catroid.content.bricks.IfThenElseBrick.LogicOperator;
 import at.tugraz.ist.catroid.content.bricks.MoveNStepsBrick;
 import at.tugraz.ist.catroid.content.bricks.NoteBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
@@ -311,6 +313,33 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 		script.addBrick(waitBrick);
 
 		clickEditTextGoBackAndClickAgain();
+	}
+
+	public void testIfThenElseBrick() {
+		IfThenElseBrick ifThenElse = new IfThenElseBrick(sprite, 40, LogicOperator.MORE_THAN, 40);
+		script.addBrick(ifThenElse);
+
+		solo.clickOnText(getActivity().getString(R.string.current_project_button));
+		solo.clickOnText(spriteName);
+		solo.clickOnText(">");
+		solo.goBack();
+		solo.goBack();
+		solo.assertCurrentActivity("not in ProjectActivity", ProjectActivity.class);
+		solo.clickOnText(spriteName);
+		solo.clickOnText(">");
+		solo.assertCurrentActivity("not in scripttabactivity", ScriptTabActivity.class);
+		solo.goBack();
+		solo.goBack();
+		solo.goBack();
+
+		clickEditTextGoBackAndClickAgain();
+
+		solo.goBack();
+		solo.goBack();
+		solo.assertCurrentActivity("not in ProjectActivity", ProjectActivity.class);
+		solo.clickOnText(spriteName);
+		solo.clickOnEditText(1);
+		solo.assertCurrentActivity("not in scripttabactivity", ScriptTabActivity.class);
 	}
 
 	public void clickEditTextGoBackAndClickAgain() {

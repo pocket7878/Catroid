@@ -85,6 +85,7 @@ import at.tugraz.ist.catroid.content.bricks.SetYBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
 import at.tugraz.ist.catroid.content.bricks.SpeakBrick;
 import at.tugraz.ist.catroid.content.bricks.StopAllSoundsBrick;
+import at.tugraz.ist.catroid.content.bricks.TouchBrick;
 import at.tugraz.ist.catroid.content.bricks.TurnLeftBrick;
 import at.tugraz.ist.catroid.content.bricks.TurnRightBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
@@ -166,6 +167,10 @@ public class AddBrickDialog extends Dialog {
 		controlBrickList.add(new ForeverBrick(sprite));
 		controlBrickList.add(new RepeatBrick(sprite, 3));
 		brickMap.put(context.getString(R.string.category_control), controlBrickList);
+
+		List<Brick> sensingBrickList = new ArrayList<Brick>();
+		sensingBrickList.add(new TouchBrick(sprite, sprite));
+		brickMap.put(context.getString(R.string.category_sensing), sensingBrickList);
 
 		List<Brick> legoNXTBrickList = new ArrayList<Brick>();
 		legoNXTBrickList.add(new NXTMotorTurnAngleBrick(sprite, NXTMotorTurnAngleBrick.Motor.MOTOR_A, 180));

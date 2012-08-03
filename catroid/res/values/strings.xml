@@ -187,6 +187,7 @@
     <string name="category_looks">Looks</string>
     <string name="category_sound">Sound</string>
     <string name="category_control">Control</string>
+    <string name="category_sensing">Sensing</string>
     <string name="category_lego_nxt">Lego NXT</string>
 
     <!-- Motion bricks -->
@@ -251,6 +252,10 @@
     <string name="brick_loop_end">End of loop</string>
 	<string name="brick_if">If</string>
 	<string name="brick_else">End of if</string>
+	
+	<!-- Sensing bricks -->
+    <string name="brick_touch">If touches</string>
+    <string name="brick_touch_end">End of if touch</string>
 	
     <!-- Actions -->
     <string name="action_tapped">tapped</string>

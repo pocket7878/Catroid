@@ -80,6 +80,7 @@ public class BrickCategoryDialog extends Dialog {
 		categories.add(inflater.inflate(R.layout.brick_category_looks, null));
 		categories.add(inflater.inflate(R.layout.brick_category_sound, null));
 		categories.add(inflater.inflate(R.layout.brick_category_control, null));
+		categories.add(inflater.inflate(R.layout.brick_category_sensing, null));
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
 		if (prefs.getBoolean("setting_mindstorm_bricks", false)) {
