@@ -31,10 +31,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
-import at.tugraz.ist.catroid.livewallpaper.UploadProject;
 import at.tugraz.ist.catroid.utils.UtilDeviceInfo;
 import at.tugraz.ist.catroid.utils.UtilZip;
 import at.tugraz.ist.catroid.utils.Utils;
+import at.tugraz.ist.catroid.web.ServerCalls;
 import at.tugraz.ist.catroid.web.WebconnectionException;
 
 public class ProjectUploadTask extends AsyncTask<Void, Void, Boolean> {
@@ -102,7 +102,7 @@ public class ProjectUploadTask extends AsyncTask<Void, Void, Boolean> {
 			String userEmail = UtilDeviceInfo.getUserEmail(context);
 			String language = UtilDeviceInfo.getUserLanguageCode(context);
 
-			UploadProject.getInstance().uploadProject(projectName, projectDescription, zipFileString, userEmail,
+			ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString, userEmail,
 					language, token);
 			zipFile.delete();
 			return true;

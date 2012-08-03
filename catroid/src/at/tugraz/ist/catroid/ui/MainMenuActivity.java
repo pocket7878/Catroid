@@ -23,13 +23,11 @@
 package at.tugraz.ist.catroid.ui;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.WallpaperManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -43,16 +41,12 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.StorageHandler;
-import at.tugraz.ist.catroid.livewallpaper.LiveWallpaperStage;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
-import at.tugraz.ist.catroid.transfers.CheckConnection;
 import at.tugraz.ist.catroid.transfers.CheckTokenTask;
 import at.tugraz.ist.catroid.transfers.ProjectDownloadTask;
 import at.tugraz.ist.catroid.ui.dialogs.AboutDialog;
-import at.tugraz.ist.catroid.ui.dialogs.DialogLoginRegister;
 import at.tugraz.ist.catroid.ui.dialogs.LoadProjectDialog;
 import at.tugraz.ist.catroid.ui.dialogs.LoginRegisterDialog;
 import at.tugraz.ist.catroid.ui.dialogs.NewProjectDialog;
@@ -67,10 +61,7 @@ public class MainMenuActivity extends Activity {
 	private ProjectManager projectManager;
 	private ActivityHelper activityHelper;
 	private TextView titleText;
-	/**
-	 * Livewalppr stage definition
-	 */
-	private LiveWallpaperStage stage;
+
 	public static final int DIALOG_NEW_PROJECT = 0;
 	private static final int DIALOG_LOAD_PROJECT = 1;
 	public static final int DIALOG_UPLOAD_PROJECT = 2;
@@ -169,9 +160,6 @@ public class MainMenuActivity extends Activity {
 				break;
 			case DIALOG_UPLOAD:
 				dialog = new UploadToLocalDialog(this);
-				break;
-			case DIALOG_LOGIN:
-				dialog = new DialogLoginRegister(this);
 				break;
 			default:
 				dialog = null;
@@ -308,30 +296,15 @@ public class MainMenuActivity extends Activity {
 		}
 	}
 
-	/***
-	 * 
-	 * uploading Local server
-	 * 
-	 */
-	public void HandleUpload(View v) {
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		String local_token = preferences.getString(Constants.TOKEN, null);
-
-		if (local_token == null || local_token.length() == 0 || local_token.equals("0")) {
-			showDialog(DIALOG_LOGIN);
-		} else {
-			new CheckConnection(this, local_token).execute();
-		}
-	}
-
 	public void HandleDownload(View v) {
-//		Intent intent = new Intent();
-//		intent.setAction(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER);
-//		startActivity(intent);
+		//		Intent intent = new Intent();
+		//		intent.setAction(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER);
+		//		startActivity(intent);
 
 		Runtime r = Runtime.getRuntime();
 		try {
-			Process p = r.exec("python /home/Catroid/nativeAppBuilding/src/handle_project.py");
+			/* Process p = */r.exec("python /home/Catroid/nativeAppBuilding/src/handle_project.py");
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -355,13 +328,6 @@ public class MainMenuActivity extends Activity {
 
 	public void handleAboutCatroidButton(View v) {
 		showDialog(DIALOG_ABOUT);
-	}
-
-	public void ConvertPro(View v) {
-
-		Log.v("DEBUG", "proje adı:" + ProjectManager.getInstance().getCurrentProject().getName());
-		List liste = new ArrayList<Sprite>();
-		liste.add(ProjectManager.getInstance().getCurrentProject().getSpriteList());
 	}
 
 	public String getProjectName(String zipUrl) {
