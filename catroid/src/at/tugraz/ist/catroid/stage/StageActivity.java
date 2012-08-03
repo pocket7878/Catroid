@@ -32,6 +32,7 @@ import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
+import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
 public class StageActivity extends AndroidApplication {
 
@@ -60,8 +61,12 @@ public class StageActivity extends AndroidApplication {
 			stageListener.setPrestageObject(ProjectManager.getInstance().getCurrentSprite(), ProjectManager
 					.getInstance().getPrestageBrick(), ProjectManager.getInstance().getPrestageBrickType());
 		}
+		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+		config.useAccelerometer = false;
+		config.useCompass = false;
+		config.useWakelock = true;
 
-		initialize(stageListener, true);
+		initialize(stageListener, config);
 
 	}
 
