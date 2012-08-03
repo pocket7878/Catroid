@@ -118,6 +118,21 @@ public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptAct
 		assertEquals("Value in Brick is not updated", yPosition, actualYPosition);
 	}
 
+	public void testPrestage() {
+		ProjectManager.getInstance().deleteCurrentProject();
+		createTestProject();
+		//solo.clickOnImageButton(editButtonPosition);
+		solo.clickOnView(solo.getView(R.id.imageButtonEditValuesXY));
+		boolean activityLoaded = solo.waitForActivity("StageActivity");
+		//solo.getCurrentActivity().
+		assertTrue(activityLoaded);
+		solo.sleep(2000);
+		solo.goBack();
+		solo.clickOnView(solo.getView(R.id.exit_stage_button));
+		solo.sleep(2000);
+		assertTrue(solo.waitForView(solo.getView(R.id.imageButtonEditValuesXY)));
+	}
+
 	public void testResizeInputFields() {
 		ProjectManager.getInstance().deleteCurrentProject();
 		createTestProject();

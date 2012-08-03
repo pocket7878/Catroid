@@ -297,15 +297,15 @@ public class StageListener implements ApplicationListener {
 			}
 			firstStart = false;
 		}
-		if (!paused) {
+		if (!paused && !prestageMode) {
 			stage.act(Gdx.graphics.getDeltaTime());
 		}
 
-		if (!finished) {
+		if (!finished && !prestageMode) {
 			stage.draw();
 		}
 
-		if (makeFirstScreenshot && !NativeAppActivity.isRunning()) {
+		if (makeFirstScreenshot && !prestageMode && !NativeAppActivity.isRunning()) {
 			File file = new File(pathForScreenshot + SCREENSHOT_FILE_NAME);
 			if (!file.exists()) {
 				File noMediaFile = new File(pathForScreenshot + ".nomedia");
@@ -448,6 +448,7 @@ public class StageListener implements ApplicationListener {
 
 	public void setPrestageObject(Sprite spriteToChange, Brick brickToChange, int type) {
 		this.prestageMode = true;
+		this.axesOn = true;
 		this.spriteToChange = spriteToChange;
 		this.brickToChange = brickToChange;
 		this.brickToChangeType = type;
