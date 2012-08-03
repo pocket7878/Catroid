@@ -103,12 +103,66 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 	}
 
 	@Smoke
+	public void testDiscardChanges() {
+
+		solo.clickOnEditText(0);
+		clearEditTextWithDeletes(1);
+		this.clickOnKey("9");
+		this.clickOnKey("9");
+		this.clickOnKey(".");
+		this.clickOnKey("9");
+		this.clickOnKey("9");
+		solo.sleep(50);
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_discard));
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_discard));
+		solo.sleep(50);
+		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_changes_discarded)));
+		assertEquals("Wrong text in FormulaEditor", "0.0 ", solo.getEditText(1).getText().toString());
+		solo.clickOnButton(2);
+	}
+
+	@Smoke
+	public void testErrorInFirstAndLastCharacters() {
+
+		solo.clickOnEditText(0);
+		clearEditTextWithDeletes(1);
+		this.clickOnKey("+");
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
+		solo.sleep(50);
+		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
+		clearEditTextWithDeletes(1);
+		this.clickOnKey("1");
+		this.clickOnKey("+");
+		this.clickOnKey("1");
+		this.clickOnKey("+");
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
+		solo.sleep(50);
+		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
+
+		solo.clickOnButton(2);
+		solo.clickOnButton(2);
+	}
+
+	@Smoke
 	public void testDeletingAndSelectionAndParseErrors() {
 
 		solo.clickOnEditText(0);
 		//		solo.clickOnEditText(1);
 		//
 		//		solo.clearEditText(1);
+
+		clearEditTextWithDeletes(1);
+		solo.enterText(1, "8 + XACC_+5YACC_ + 76");
+		this.clickOnKey("9");
+		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
+		solo.sleep(500);
+		this.clickOnKey("del");
+		this.clickOnKey("del");
+		this.clickOnKey("del");
+		this.clickOnKey("del");
+		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
+
+		assertEquals("Text not deleted correctly", "98 + XACC_ + 76", solo.getEditText(1).getText().toString());
 
 		clearEditTextWithDeletes(1);
 		solo.enterText(1, "8 +cos( 0 + 1 - 2)++ 76");
@@ -163,22 +217,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 		assertEquals("Text not deleted correctly", "98 + rand( 0 , 1 ) + 76", solo.getEditText(1).getText().toString());
 
-		//		solo.clearEditText(1);
-
-		clearEditTextWithDeletes(1);
-		solo.enterText(1, "8 +X_Ananazz++ 76");
-		this.clickOnKey("9");
-		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
-		solo.sleep(500);
-		this.clickOnKey("del");
-		this.clickOnKey("del");
-		//		this.clickOnKey("del");
-		//		this.clickOnKey("del");
-		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
-		this.clickOnKey("del");
-
-		assertEquals("Text not deleted correctly", "98 + 76", solo.getEditText(1).getText().toString());
-
+		solo.clickOnButton(2);
 		solo.clickOnButton(2);
 
 	}

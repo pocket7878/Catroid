@@ -28,6 +28,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,6 +54,8 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 	private LinearLayout brickSpace;
 	private View brickView;
 	private Button okButton = null;
+	private long confirmBack = 0;
+	private long confirmDiscard = 0;
 
 	public FormulaEditorDialog(Context context, Brick brick) {
 
@@ -111,7 +114,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 		okButton = (Button) findViewById(R.id.formula_editor_ok_button);
 		okButton.setOnClickListener(this);
 
-		Button cancelButton = (Button) findViewById(R.id.formula_editor_cancel_button);
+		Button cancelButton = (Button) findViewById(R.id.formula_editor_discard_button);
 		cancelButton.setOnClickListener(this);
 
 		Button backButton = (Button) findViewById(R.id.formula_editor_back_button);
@@ -149,7 +152,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 		FormulaElement parserFormulaElement = parser.parseFormula();
 
 		if (parserFormulaElement == null) {
-			Toast.makeText(context, R.string.formula_editor_parse_fail, Toast.LENGTH_SHORT).show();
+			showToast(R.string.formula_editor_parse_fail);
 			return parser.getErrorCharacterPosition();
 		} else {
 			formula.setRoot(parserFormulaElement);
@@ -167,34 +170,53 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 				if (err == -1) {
 					formula.refreshTextField(brickView);
 					textArea.formulaSaved();
-					Toast.makeText(context, R.string.formula_editor_changes_saved, Toast.LENGTH_SHORT).show();
+					showToast(R.string.formula_editor_changes_saved);
 				} else if (err == -2) {
 					//Crashed it like a BOSS! 
-					return;
 				} else {
 					textArea.highlightParseError(err);
 				}
 
 				break;
 
-			case R.id.formula_editor_cancel_button:
-				textArea.formulaSaved();
-				textArea.setFieldActive(formula.getEditTextRepresentation());
-				Toast.makeText(context, R.string.formula_editor_changes_discarded, Toast.LENGTH_SHORT).show();
-				showOkayButton();
+			case R.id.formula_editor_discard_button:
+				if (textArea.hasChanges()) {
+					if (System.currentTimeMillis() <= confirmDiscard + 2000) {
+						showToast(R.string.formula_editor_changes_discarded);
+						textArea.setFieldActive(formula.getEditTextRepresentation());
+						showOkayButton();
+					} else {
+						showToast(R.string.formula_editor_confirm_discard);
+						confirmDiscard = System.currentTimeMillis();
+					}
+				}
+
 				break;
 
 			case R.id.formula_editor_back_button:
 				if (textArea.hasChanges()) {
-					Toast.makeText(context, R.string.formula_editor_changes_discarded, Toast.LENGTH_SHORT).show();
+					if (System.currentTimeMillis() <= confirmBack + 2000) {
+						showToast(R.string.formula_editor_changes_discarded);
+						dismiss();
+					} else {
+						showToast(R.string.formula_editor_confirm_discard);
+						confirmBack = System.currentTimeMillis();
+					}
+				} else {
+					dismiss();
 				}
-				dismiss();
 				break;
 
 			default:
 				break;
 
 		}
+	}
+
+	public void showToast(int ressourceId) {
+		Toast userInfo = Toast.makeText(context, ressourceId, Toast.LENGTH_SHORT);
+		userInfo.setGravity(Gravity.TOP, 0, 10);
+		userInfo.show();
 	}
 
 	public void onDismiss(DialogInterface dialog) {

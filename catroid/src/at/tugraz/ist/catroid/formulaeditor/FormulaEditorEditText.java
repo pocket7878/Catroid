@@ -111,9 +111,10 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	}
 
 	public void setFieldActive(String formulaAsText) {
-		this.setEnabled(true);
-		this.setText(formulaAsText);
+		setEnabled(true);
+		setText(formulaAsText);
 		super.setSelection(formulaAsText.length());
+		formulaSaved();
 		absoluteCursorPosition = formulaAsText.length();
 		setSelection(absoluteCursorPosition - 1);
 		updateSelectionIndices();
@@ -379,17 +380,16 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			return;
 		}
 
-		setSelection(firstError);
-		absoluteCursorPosition = firstError;
-		selectionEndIndex = firstError;
-		selectionStartIndex = firstError;
-
 		if (firstError < errorSpan.length() - 1) {
-			errorSpan.setSpan(COLOR_ERROR, firstError, firstError + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			errorSpan.setSpan(COLOR_ERROR, firstError, ++firstError, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		} else {
 			errorSpan.setSpan(COLOR_ERROR, firstError - 1, firstError, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		}
 
+		setSelection(firstError);
+		absoluteCursorPosition = firstError;
+		selectionEndIndex = firstError;
+		selectionStartIndex = firstError;
 		//		if (errorSpan.length() > firstError) {
 		//			char firstLetter = errorSpan.charAt(firstError);
 		//
@@ -415,12 +415,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		//		}
 		//errorSpan.setSpan(COLOR_ERROR, selectionStartIndex, selectionEndIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
-
-	//	public void highlightSelectionCurrentlyEditing() {
-	//		Spannable str = this.getText();
-	//
-	//		str.setSpan(COLOR_EDITING, selectionStartIndex, selectionEndIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-	//	}
 
 	public void checkAndModifyKeyInput(CatKeyEvent catKey) {
 		hasChanges = true;

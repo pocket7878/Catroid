@@ -78,12 +78,8 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 	}
 
 	public void testFormulaEditorDialogAndSimpleInterpretation() {
-		//		String brickWhenStartedText = solo.getString(R.string.brick_when_started);
-		//		solo.clickLongOnText(brickWhenStartedText);
-		//		solo.clickOnText(getActivity().getString(R.string.delete));
-		//		solo.sleep(500);
-
-		//		UiTestUtils.addNewBrick(solo, R.string.brick_place_at);
+		//		All tests that need the custom keyboard should be in the file FormulaEditorEditTextTest!
+		//		Note solo.enterText() modifications to the text are undetectable to FormulaEditorEditText.
 
 		String newXFormula = "10 + 12 - 2 * 3 - 4 ";
 		int newXValue = 10 + 12 - 2 * 3 - 4;
@@ -105,13 +101,6 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
 		solo.sleep(50);
 		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_changes_saved)));
-
-		solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, "++++");
-		solo.clickOnButton(solo.getString(R.string.formula_editor_button_discard));
-		solo.sleep(50);
-		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_changes_discarded)));
-		assertEquals("Wrong text in FormulaEditor", newXFormula, solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
-				.getText().toString());
 
 		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
 		solo.clearEditText(FORMULA_EDITOR_EDIT_TEXT_ID);

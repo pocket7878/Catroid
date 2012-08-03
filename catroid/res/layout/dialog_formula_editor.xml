@@ -90,7 +90,7 @@
             android:text="@string/formula_editor_button_save" />
         
         <Button
-            android:id="@+id/formula_editor_cancel_button"
+            android:id="@+id/formula_editor_discard_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/formula_editor_button_discard" 
@@ -101,7 +101,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/formula_editor_button_return" 
-            android:layout_toRightOf="@id/formula_editor_cancel_button"/>
+            android:layout_toRightOf="@id/formula_editor_discard_button"/>
 	</RelativeLayout>
 	
 	
