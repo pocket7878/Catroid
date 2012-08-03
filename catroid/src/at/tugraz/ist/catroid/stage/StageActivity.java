@@ -62,6 +62,7 @@ public class StageActivity extends AndroidApplication {
 					.getInstance().getPrestageBrick(), ProjectManager.getInstance().getPrestageBrickType());
 		}
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+		config.useGL20 = true;
 		config.useAccelerometer = false;
 		config.useCompass = false;
 		config.useWakelock = true;

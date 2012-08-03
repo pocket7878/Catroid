@@ -297,11 +297,11 @@ public class StageListener implements ApplicationListener {
 			}
 			firstStart = false;
 		}
-		if (!paused && !prestageMode) {
+		if (!paused) {
 			stage.act(Gdx.graphics.getDeltaTime());
 		}
 
-		if (!finished && !prestageMode) {
+		if (!finished) {
 			stage.draw();
 		}
 
