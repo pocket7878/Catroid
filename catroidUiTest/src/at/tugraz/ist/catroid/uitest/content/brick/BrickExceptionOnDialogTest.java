@@ -70,6 +70,8 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 	private Sprite sprite;
 	private Script script;
 	private final String spriteName = "cat";
+	private static final int NO_FORMULA_EDITOR_BRICK = 3;
+	private static final int FORMULA_EDITOR_BRICK = 2;
 
 	public BrickExceptionOnDialogTest() {
 		super("at.tugraz.ist.catroid", MainMenuActivity.class);
@@ -126,42 +128,42 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 		ChangeBrightnessBrick brightnessBrick = new ChangeBrightnessBrick(sprite, 40);
 		script.addBrick(brightnessBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 	}
 
 	public void testChangeGhostEffectBrick() {
 		ChangeGhostEffectBrick ghostBrick = new ChangeGhostEffectBrick(sprite, 40);
 		script.addBrick(ghostBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 	}
 
 	public void testChangeSizeByNBrick() {
 		ChangeSizeByNBrick sizeByNBrick = new ChangeSizeByNBrick(sprite, 40);
 		script.addBrick(sizeByNBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 	}
 
 	public void testChangeVolumeByBrick() {
 		ChangeVolumeByBrick changeVolumeBrick = new ChangeVolumeByBrick(sprite, 40);
 		script.addBrick(changeVolumeBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 	}
 
 	public void testChangeXByBrick() {
 		ChangeXByBrick changeXByBrick = new ChangeXByBrick(sprite, 40);
 		script.addBrick(changeXByBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 	}
 
 	public void testChangeYByBrick() {
 		ChangeYByBrick changeYByBrick = new ChangeYByBrick(sprite, 40);
 		script.addBrick(changeYByBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 	}
 
 	//TODO test glideToBrick
@@ -170,21 +172,21 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 		GoNStepsBackBrick nStepsBackBrick = new GoNStepsBackBrick(sprite, 40);
 		script.addBrick(nStepsBackBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 	}
 
 	public void testMoveNStepsBrick() {
 		MoveNStepsBrick nStepsBrick = new MoveNStepsBrick(sprite, 40);
 		script.addBrick(nStepsBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 	}
 
 	public void testNoteBrick() {
 		NoteBrick noteBrick = new NoteBrick(sprite);
 		script.addBrick(noteBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(NO_FORMULA_EDITOR_BRICK);
 	}
 
 	//TODO test nxt
@@ -192,9 +194,8 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 		PlaceAtBrick placeAtBrick = new PlaceAtBrick(sprite, 40, 40);
 		script.addBrick(placeAtBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 
-		solo.goBack();
 		solo.goBack();
 		solo.goBack();
 		solo.assertCurrentActivity("not in ProjectActivity", ProjectActivity.class);
@@ -254,74 +255,75 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 		RepeatBrick repeatbrick = new RepeatBrick(sprite, 3);
 		script.addBrick(repeatbrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 	}
 
 	public void testSetBrightnessBrick() {
 		SetBrightnessBrick setBrightnessBrick = new SetBrightnessBrick(sprite, 4);
 		script.addBrick(setBrightnessBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 	}
 
 	public void testSetGhostEffectBrick() {
 		SetGhostEffectBrick ghostEffectBrick = new SetGhostEffectBrick(sprite, 4);
 		script.addBrick(ghostEffectBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 	}
 
 	public void testSetSizeToBrick() {
 		SetSizeToBrick setSizeToBrick = new SetSizeToBrick(sprite, 4);
 		script.addBrick(setSizeToBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 	}
 
 	public void testSetVolumeToBrick() {
 		SetVolumeToBrick setVolumeToBrick = new SetVolumeToBrick(sprite, 4);
 		script.addBrick(setVolumeToBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 	}
 
 	public void testSetXBrick() {
 		SetXBrick setXBrick = new SetXBrick(sprite, 4);
 		script.addBrick(setXBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 	}
 
 	public void testSetYBrick() {
 		SetYBrick setYBrick = new SetYBrick(sprite, 4);
 		script.addBrick(setYBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 	}
 
 	public void testSpeakBrick() {
 		SpeakBrick speakBrick = new SpeakBrick(sprite, "I say lol");
 		script.addBrick(speakBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(NO_FORMULA_EDITOR_BRICK);
 	}
 
 	public void testWaitBrick() {
 		WaitBrick waitBrick = new WaitBrick(sprite, 500);
 		script.addBrick(waitBrick);
 
-		clickEditTextGoBackAndClickAgain();
+		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 	}
 
-	public void clickEditTextGoBackAndClickAgain() {
+	public void clickEditTextGoBackAndClickAgain(int timesToGoBack) {
 		solo.clickOnText(getActivity().getString(R.string.current_project_button));
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
 		solo.clickOnText(spriteName);
 		solo.waitForActivity(ScriptTabActivity.class.getSimpleName());
 		solo.clickOnEditText(0);
 		solo.sleep(100);
-		solo.goBack();
-		solo.goBack();
+		for (int i = 0; i < timesToGoBack; i++) {
+			solo.goBack();
+		}
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
 		solo.assertCurrentActivity("not in ProjectActivity", ProjectActivity.class);
 		solo.clickOnText(spriteName);

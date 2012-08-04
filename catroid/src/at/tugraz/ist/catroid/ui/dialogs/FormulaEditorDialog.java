@@ -88,8 +88,6 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 		brickView = currentBrick.getView(context, 0, null);
 		brickSpace.addView(brickView);
 
-		int brickHeight = brickView.getMeasuredHeight();
-
 		//		flipView = (ViewFlipper) findViewById(R.id.catflip);
 		//		flipView.setDisplayedChild(1);
 		//		Animation slideOut = AnimationUtils.loadAnimation(context, R.anim.slide_in);
@@ -236,9 +234,16 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 		switch (keyCode) {
 			case KeyEvent.KEYCODE_BACK:
 				if (textArea.hasChanges()) {
-					Toast.makeText(context, R.string.formula_editor_changes_discarded, Toast.LENGTH_SHORT).show();
+					if (System.currentTimeMillis() <= confirmBack + 2000) {
+						showToast(R.string.formula_editor_changes_discarded);
+						dismiss();
+					} else {
+						showToast(R.string.formula_editor_confirm_discard);
+						confirmBack = System.currentTimeMillis();
+					}
+				} else {
+					dismiss();
 				}
-				this.dismiss();
 
 		}
 

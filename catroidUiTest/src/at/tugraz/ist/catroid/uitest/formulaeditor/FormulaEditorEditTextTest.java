@@ -23,14 +23,7 @@
 
 package at.tugraz.ist.catroid.uitest.formulaeditor;
 
-import java.util.HashMap;
-import java.util.Vector;
-
-import android.graphics.Point;
 import android.test.suitebuilder.annotation.Smoke;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.TypedValue;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Project;
@@ -50,17 +43,8 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 	private Solo solo;
 	private Sprite firstSprite;
 	private Brick changeBrick;
-	private Vector<Vector<String>> keyString;
-	private HashMap<String, Point> keyMap;
 
-	private float amountOfDisplayspaceUsedForKeyboard;
-	private float keyboardHeight;
-	private int displayWidth;
-	private int displayHeight;
-	private int buttonsEachColumns;
-	private int buttonsEachRow;
-	private int buttonWidth;
-	private float buttonHeight;
+	private CatKeyboardClicker catKeyboardClicker;
 
 	public FormulaEditorEditTextTest() {
 		super("at.tugraz.ist.catroid", ScriptTabActivity.class);
@@ -71,18 +55,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 		createProject("testProjectCatKeyboard");
 		this.solo = new Solo(getInstrumentation(), getActivity());
-		this.keyString = new Vector<Vector<String>>();
-		this.keyString.add(new Vector<String>());
-		this.keyString.add(new Vector<String>());
-		this.keyString.add(new Vector<String>());
-
-		this.keyMap = new HashMap<String, Point>();
-		this.buttonsEachColumns = 5;
-		this.buttonsEachRow = 4;
-
-		this.calculateCoordinatesOnScreen();
-		this.createKeyStrings();
-		this.setCoordinatesForKeys();
+		catKeyboardClicker = new CatKeyboardClicker(solo);
 
 	}
 
@@ -106,12 +79,12 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 	public void testDiscardChanges() {
 
 		solo.clickOnEditText(0);
-		clearEditTextWithDeletes(1);
-		this.clickOnKey("9");
-		this.clickOnKey("9");
-		this.clickOnKey(".");
-		this.clickOnKey("9");
-		this.clickOnKey("9");
+		catKeyboardClicker.clearEditTextWithDeletes(1);
+		catKeyboardClicker.clickOnKey("9");
+		catKeyboardClicker.clickOnKey("9");
+		catKeyboardClicker.clickOnKey(".");
+		catKeyboardClicker.clickOnKey("9");
+		catKeyboardClicker.clickOnKey("9");
 		solo.sleep(50);
 		solo.clickOnButton(solo.getString(R.string.formula_editor_button_discard));
 		solo.clickOnButton(solo.getString(R.string.formula_editor_button_discard));
@@ -125,16 +98,16 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 	public void testErrorInFirstAndLastCharacters() {
 
 		solo.clickOnEditText(0);
-		clearEditTextWithDeletes(1);
-		this.clickOnKey("+");
+		catKeyboardClicker.clearEditTextWithDeletes(1);
+		catKeyboardClicker.clickOnKey("+");
 		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
 		solo.sleep(50);
 		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
-		clearEditTextWithDeletes(1);
-		this.clickOnKey("1");
-		this.clickOnKey("+");
-		this.clickOnKey("1");
-		this.clickOnKey("+");
+		catKeyboardClicker.clearEditTextWithDeletes(1);
+		catKeyboardClicker.clickOnKey("1");
+		catKeyboardClicker.clickOnKey("+");
+		catKeyboardClicker.clickOnKey("1");
+		catKeyboardClicker.clickOnKey("+");
 		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
 		solo.sleep(50);
 		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
@@ -151,88 +124,75 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		//
 		//		solo.clearEditText(1);
 
-		clearEditTextWithDeletes(1);
+		catKeyboardClicker.clearEditTextWithDeletes(1);
 		solo.enterText(1, "8 + XACC_+5YACC_ + 76");
-		this.clickOnKey("9");
+		catKeyboardClicker.clickOnKey("9");
 		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
 		solo.sleep(500);
-		this.clickOnKey("del");
-		this.clickOnKey("del");
-		this.clickOnKey("del");
-		this.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
 		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
 
 		assertEquals("Text not deleted correctly", "98 + XACC_ + 76", solo.getEditText(1).getText().toString());
 
-		clearEditTextWithDeletes(1);
+		catKeyboardClicker.clearEditTextWithDeletes(1);
 		solo.enterText(1, "8 +cos( 0 + 1 - 2)++ 76");
-		this.clickOnKey("9");
+		catKeyboardClicker.clickOnKey("9");
 		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
 		solo.sleep(500);
-		this.clickOnKey("del");
-		this.clickOnKey("del");
-		this.clickOnKey("del");
-		this.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
 
 		assertEquals("Text not deleted correctly", "98 + 76", solo.getEditText(1).getText().toString());
 		//
 		//				solo.clearEditText(1);
 		//
-		clearEditTextWithDeletes(1);
+		catKeyboardClicker.clearEditTextWithDeletes(1);
 		solo.enterText(1, "8 +cos(+ 0 + 1 - 2) 76");
-		this.clickOnKey("9");
+		catKeyboardClicker.clickOnKey("9");
 		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
 		solo.sleep(500);
-		this.clickOnKey("del");
-		this.clickOnKey("del");
-		this.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
 
 		assertEquals("Text not deleted correctly", "98 + 76", solo.getEditText(1).getText().toString());
 
 		//				solo.clearEditText(1);
 
-		clearEditTextWithDeletes(1);
+		catKeyboardClicker.clearEditTextWithDeletes(1);
 		solo.enterText(1, "8 +rand( 0 ,+ 0 ) 76");
-		this.clickOnKey("9");
+		catKeyboardClicker.clickOnKey("9");
 		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
 		solo.sleep(500);
-		this.clickOnKey("del");
-		this.clickOnKey("del");
-		this.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
 
 		assertEquals("Text not deleted correctly", "98 + 76", solo.getEditText(1).getText().toString());
 
 		//		solo.clearEditText(1);
 
-		clearEditTextWithDeletes(1);
+		catKeyboardClicker.clearEditTextWithDeletes(1);
 		solo.enterText(1, "8 + rand( 0 +sin(+ 0 ) , 1 ) + 76");
-		this.clickOnKey("9");
+		catKeyboardClicker.clickOnKey("9");
 		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
 		solo.sleep(500);
-		this.clickOnKey("del");
-		this.clickOnKey("del");
-		this.clickOnKey("del");
-		this.clickOnKey("del");
-		this.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
 
 		assertEquals("Text not deleted correctly", "98 + rand( 0 , 1 ) + 76", solo.getEditText(1).getText().toString());
 
 		solo.clickOnButton(2);
 		solo.clickOnButton(2);
 
-	}
-
-	private void clearEditTextWithDeletes(int index) {
-		int noChangesIndex = 0;
-		int lastEditTextLength = solo.getEditText(1).getText().length();
-		while (solo.getEditText(1).getText().length() > 0) {
-			if (lastEditTextLength == solo.getEditText(1).getText().length() && ++noChangesIndex == 2) {
-				solo.clickOnEditText(1);
-				noChangesIndex = 0;
-			}
-			lastEditTextLength = solo.getEditText(1).getText().length();
-			this.clickOnKey("del");
-		}
 	}
 
 	private void createProject(String projectName) throws InterruptedException {
@@ -247,133 +207,6 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 		ProjectManager.getInstance().setProject(project);
 		ProjectManager.getInstance().setCurrentSprite(firstSprite);
-
-	}
-
-	private void clickOnKey(String key) {
-
-		Point keyOnScreen = this.keyMap.get(key);
-		Log.i("info", "clickOnKey(" + key + ")" + "x:" + keyOnScreen.x + "y:" + keyOnScreen.y);
-		solo.clickOnScreen(keyOnScreen.x, keyOnScreen.y);
-
-	}
-
-	private void createKeyStrings() {
-		// Clicking keys on screen in this order:
-		//0,7,4,1,
-		//.,8,5,2,
-		//space,9,6,3,
-		//space2,del,*,+,
-		//shift,enter,/,-
-		keyString.get(0).add("0");
-		keyString.get(0).add("7");
-		keyString.get(0).add("4");
-		keyString.get(0).add("1");
-		keyString.get(0).add(".");
-		keyString.get(0).add("8");
-		keyString.get(0).add("5");
-		keyString.get(0).add("2");
-		keyString.get(0).add("space");
-		keyString.get(0).add("9");
-		keyString.get(0).add("6");
-		keyString.get(0).add("3");
-		keyString.get(0).add("space2");
-		keyString.get(0).add("del");
-		keyString.get(0).add("*");
-		keyString.get(0).add("+");
-		keyString.get(0).add("keyboardswitch");
-		keyString.get(0).add("^");
-		keyString.get(0).add("/");
-		keyString.get(0).add("-");
-
-		keyString.get(1).add("pi");
-		keyString.get(1).add("rand");
-		keyString.get(1).add("ln");
-		keyString.get(1).add("sin");
-		keyString.get(1).add("e");
-		keyString.get(1).add("rand2");
-		keyString.get(1).add("log");
-		keyString.get(1).add("cos");
-		keyString.get(1).add("space");
-		keyString.get(1).add("rand3");
-		keyString.get(1).add("sqrt");
-		keyString.get(1).add("tan");
-		keyString.get(1).add("space2");
-		keyString.get(1).add("del");
-		keyString.get(1).add("*");
-		keyString.get(1).add("+");
-		keyString.get(1).add("keyboardswitch");
-		keyString.get(1).add("^");
-		keyString.get(1).add("/");
-		keyString.get(1).add("-");
-
-		keyString.get(2).add("freecookies");
-		keyString.get(2).add("pitch");
-		keyString.get(2).add("z-accel");
-		keyString.get(2).add("x-accel");
-		keyString.get(2).add("freecookies2");
-		keyString.get(2).add(null);
-		keyString.get(2).add(null);
-		keyString.get(2).add(null);
-		keyString.get(2).add("space");
-		keyString.get(2).add("roll");
-		keyString.get(2).add("azimuth");
-		keyString.get(2).add("y-accel");
-		keyString.get(2).add("space2");
-		keyString.get(2).add("del");
-		keyString.get(2).add("*");
-		keyString.get(2).add("+");
-		keyString.get(2).add("keyboardswitch");
-		keyString.get(2).add("^");
-		keyString.get(2).add("/");
-		keyString.get(2).add("-");
-
-	}
-
-	private void setCoordinatesForKeys() {
-		//Setting x,y coordinates for each key
-		int z = 0;
-		for (int h = 0; h < this.keyString.size(); h++) {
-			for (int i = 0; i < buttonsEachColumns; i++) {
-				for (int j = 0; j < buttonsEachRow; j++) {
-
-					Log.i("info", "setUp()" + " i:" + i + " j:" + j + " z:" + z + " h:" + h);
-					int x = i * buttonWidth + buttonWidth / 2;
-					int y = displayHeight - (j * (int) buttonHeight + (int) buttonHeight / 2);
-					this.keyMap.put(this.keyString.get(h).get(z), new Point(x, y));
-					++z;
-					z = z % keyString.get(h).size();
-
-				}
-			}
-		}
-	}
-
-	private void calculateCoordinatesOnScreen() {
-
-		DisplayMetrics currentDisplayMetrics = new DisplayMetrics();
-		solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getMetrics(currentDisplayMetrics);
-
-		Log.i("info", "DisplayMetrics" + "width:" + currentDisplayMetrics.widthPixels + " height:"
-				+ currentDisplayMetrics.heightPixels);
-
-		float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, currentDisplayMetrics);
-		Log.i("info", "pixel: " + px);
-
-		this.displayWidth = currentDisplayMetrics.widthPixels;
-		this.displayHeight = currentDisplayMetrics.heightPixels;
-
-		this.keyboardHeight = this.buttonsEachRow * 50.0f * px;
-		Log.i("info", "keyboardHeight: " + this.keyboardHeight);
-
-		this.amountOfDisplayspaceUsedForKeyboard = this.displayHeight / this.keyboardHeight;
-		Log.i("info", "amountOfDisplayspaceUsedForKeyboard: " + this.amountOfDisplayspaceUsedForKeyboard);
-
-		this.buttonWidth = displayWidth / buttonsEachColumns;
-		float divisor = this.amountOfDisplayspaceUsedForKeyboard * this.buttonsEachRow;
-		Log.i("info", "divisor: " + divisor);
-		this.buttonHeight = displayHeight / divisor;
-		Log.i("info", "buttonHeight: " + this.buttonHeight);
 
 	}
 }

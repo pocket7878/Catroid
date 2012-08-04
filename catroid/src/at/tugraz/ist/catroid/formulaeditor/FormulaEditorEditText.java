@@ -140,6 +140,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		float betweenLineOffset = 0;
 
 		if (layout != null && getText().length() > 0) {
+
 			lineHeight = layout.getSpacingMultiplier() * this.getTextSize() + 5;
 			horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
 			verticalOffset = layout.getLineForOffset(absoluteCursorPosition);
@@ -534,7 +535,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	@Override
 	public void setSelection(int index) {
-		//scrollToCurrentLine();
 		//This is only used to get the scrollbar to the right position easily
 		super.setSelection(index);
 

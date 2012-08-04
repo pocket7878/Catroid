@@ -37,6 +37,7 @@ import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid.uitest.formulaeditor.CatKeyboardClicker;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -72,22 +73,30 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 		double duration = 1.5;
 		int xPosition = 123;
 		int yPosition = 567;
-		//UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, Y_TO_CHANGE, "yMovementFormula", changeYByBrick);
+
 		solo.clickOnEditText(0);
-		solo.clearEditText(3);
-		solo.enterText(3, String.valueOf(duration));
+		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
+		catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(3);
+		for (char item : (String.valueOf(duration).toCharArray())) {
+			catKeyboardClicker.clickOnKey("" + item);
+		}
+
 		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
 		solo.sleep(200);
 
 		solo.clickOnEditText(1);
-		solo.clearEditText(3);
-		solo.enterText(3, String.valueOf(xPosition));
+		catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(3);
+		for (char item : (String.valueOf(xPosition).toCharArray())) {
+			catKeyboardClicker.clickOnKey("" + item);
+		}
 		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
 		solo.sleep(200);
 
 		solo.clickOnEditText(2);
-		solo.clearEditText(3);
-		solo.enterText(3, String.valueOf(yPosition));
+		catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(3);
+		for (char item : (String.valueOf(yPosition).toCharArray())) {
+			catKeyboardClicker.clickOnKey("" + item);
+		}
 		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
 		solo.sleep(200);
 
