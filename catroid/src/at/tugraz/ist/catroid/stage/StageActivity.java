@@ -52,6 +52,12 @@ public class StageActivity extends AndroidApplication {
 		stageDialog = new StageDialog(this, stageListener, R.style.stage_dialog);
 		this.calculateScreenSizes();
 
+		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+		config.useGL20 = true;
+		config.useAccelerometer = false;
+		config.useCompass = false;
+		config.useWakelock = true;
+
 		if (getIntent().getAction() == Intent.ACTION_EDIT) {
 			//Bundle bundle = getIntent().getExtras();
 			//if (bundle.containsKey(PRESTAGE_SPRITE_TO_EDIT) && bundle.containsKey(PRESTAGE_BRICK_TO_EDIT)) {
@@ -60,12 +66,8 @@ public class StageActivity extends AndroidApplication {
 			//}
 			stageListener.setPrestageObject(ProjectManager.getInstance().getCurrentSprite(), ProjectManager
 					.getInstance().getPrestageBrick(), ProjectManager.getInstance().getPrestageBrickType());
+			config.useWakelock = false;
 		}
-		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		config.useGL20 = true;
-		config.useAccelerometer = false;
-		config.useCompass = false;
-		config.useWakelock = true;
 
 		initialize(stageListener, config);
 

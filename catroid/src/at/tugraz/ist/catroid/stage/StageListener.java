@@ -52,6 +52,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -152,9 +153,6 @@ public class StageListener implements ApplicationListener {
 		sprites = project.getSpriteList();
 		for (Sprite sprite : sprites) {
 			stage.addActor(sprite.costume);
-			if (prestageMode && sprite != spriteToChange) {
-				//sprite.pause();
-			}
 		}
 		if (DEBUG) {
 			OrthoCamController camController = new OrthoCamController(camera);
@@ -163,6 +161,10 @@ public class StageListener implements ApplicationListener {
 			multiplexer.addProcessor(stage);
 			Gdx.input.setInputProcessor(multiplexer);
 			fpsLogger = new FPSLogger();
+		} else if (prestageMode) {
+			PreStageGestureListener gestureListener = new PreStageGestureListener();
+			gestureListener.setActorToChange(spriteToChange.costume);
+			Gdx.input.setInputProcessor(new GestureDetector(gestureListener));
 		} else {
 			Gdx.input.setInputProcessor(stage);
 		}
@@ -297,6 +299,7 @@ public class StageListener implements ApplicationListener {
 			}
 			firstStart = false;
 		}
+
 		if (!paused) {
 			stage.act(Gdx.graphics.getDeltaTime());
 		}
@@ -351,6 +354,14 @@ public class StageListener implements ApplicationListener {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(background, -virtualWidthHalf, -virtualHeightHalf, virtualWidth, virtualHeight);
+
+		if (prestageMode) {
+			spriteToChange.costume.act(Gdx.graphics.getDeltaTime());
+			if (!finished) {
+				spriteToChange.costume.draw(batch, Gdx.graphics.getDeltaTime());
+			}
+		}
+
 		batch.end();
 	}
 
