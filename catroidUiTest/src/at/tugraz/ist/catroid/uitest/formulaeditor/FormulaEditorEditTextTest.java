@@ -32,6 +32,10 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.ChangeSizeByNBrick;
+import at.tugraz.ist.catroid.content.bricks.WaitBrick;
+import at.tugraz.ist.catroid.formulaeditor.CalcGrammarParser;
+import at.tugraz.ist.catroid.formulaeditor.Formula;
+import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
@@ -43,6 +47,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 	private Solo solo;
 	private Sprite firstSprite;
 	private Brick changeBrick;
+	Script startScript1;
 
 	private CatKeyboardClicker catKeyboardClicker;
 
@@ -115,6 +120,74 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		solo.clickOnButton(2);
 		solo.clickOnButton(2);
 	}
+
+	@Smoke
+	public void testTextCursorAndScrolling() {
+
+		float xCoordinate = 60;
+		float waitBrickOffset = 99;
+		float greenBarOffset = 5;
+		int lineHeight = 41;
+		int visibleLines = 7;
+		int totalLinesForTheInput = 12;
+		float yCoordinate = waitBrickOffset + greenBarOffset + 5;
+
+		Formula longFormula = createVeryLongFormula();
+		WaitBrick waitBrick = new WaitBrick(firstSprite, longFormula);
+		startScript1.addBrick(waitBrick);
+		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
+
+		solo.clickOnEditText(1);
+		solo.sleep(500);
+		for (int i = 0; i <= totalLinesForTheInput - visibleLines; i++) {
+			solo.clickOnScreen(xCoordinate, yCoordinate); //scroll edittext to top, solo 2 stupid q.q
+		}
+		assertTrue("Text could not be found!", solo.searchText("999999999999999999")); //note always ALL the text can be found by solo, not just the part currently visible due to scroll position 
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		assertFalse("Wrong line deleted!", solo.searchText("999999999999999999"));
+		assertTrue("Wrong number of characters deleted!", solo.searchText("9999999999999999"));
+
+		assertTrue("Text could not be found!", solo.searchText("666666666666666666"));
+		solo.clickOnScreen(xCoordinate, yCoordinate + 3 * lineHeight);
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		assertFalse("Wrong line deleted!", solo.searchText("666666666666666666"));
+		assertTrue("Wrong number of characters deleted!", solo.searchText("6666666666666666"));
+
+		solo.sleep(500);
+		for (int i = 0; i < totalLinesForTheInput - visibleLines; i++) {
+			solo.clickOnScreen(xCoordinate, yCoordinate + 7 * lineHeight); //scroll edittext to bottom, solo 2 stupid q.q
+		}
+		assertTrue("Text could not be found!", solo.searchText("222222222222222222"));
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		assertFalse("Wrong line deleted!", solo.searchText("222222222222222222"));
+		assertTrue("Wrong number of characters deleted!", solo.searchText("2222222222222222"));
+
+		solo.goBack();
+		solo.goBack();
+	}
+
+	private Formula createVeryLongFormula() {
+
+		CalcGrammarParser parser = CalcGrammarParser
+				.getFormulaParser("999999999999999999 + 888888888888888888 + 777777777777777777 + 666666666666666666 + 555555555555555555 + 444444444444444444 + 333333333333333333 + 333333333333333333 + 111111111111111111 + 000000000000000000 + 111111111111111111 + 222222222222222222");
+		FormulaElement root = parser.parseFormula();
+		Formula formula = new Formula(root);
+
+		return formula;
+	}
+
+	//	private Formula createLongFormula() {
+	//
+	//		CalcGrammarParser parser = CalcGrammarParser
+	//				.getFormulaParser("999999999999999999 + 888888888888888888 + 777777777777777777");
+	//		FormulaElement root = parser.parseFormula();
+	//		Formula formula = new Formula(root);
+	//
+	//		return formula;
+	//	}
 
 	@Smoke
 	public void testDeletingAndSelectionAndParseErrors() {
@@ -199,7 +272,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 		this.project = new Project(null, projectName);
 		firstSprite = new Sprite("nom nom nom");
-		Script startScript1 = new StartScript(firstSprite);
+		startScript1 = new StartScript(firstSprite);
 		changeBrick = new ChangeSizeByNBrick(firstSprite, 0);
 		firstSprite.addScript(startScript1);
 		startScript1.addBrick(changeBrick);

@@ -45,7 +45,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	//	private static final BackgroundColorSpan COLOR_EDITING = new BackgroundColorSpan(0xFF00FFFF);
 	private static final BackgroundColorSpan COLOR_ERROR = new BackgroundColorSpan(0xFFF00000);
 	private static final BackgroundColorSpan COLOR_HIGHLIGHT = new BackgroundColorSpan(0xFFFFFF00);
-	private static final BackgroundColorSpan COLOR_NORMAL = new BackgroundColorSpan(0xFFFFFFFF);
 
 	public static final String[] GROUP_NUMBERS = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "." };
 	public static final String[] GROUP_OPERATORS = new String[] { "+", "-", "*", "/", "^" };
@@ -614,8 +613,8 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 				postInvalidate();
 
-				//				Log.i("info", "clicked on: " + motion.getY() + "click in line: " + motion.getY() / lineHeight
-				//						+ " lines down: " + linesDown + " cursor: " + tempCursorPosition);
+				Log.i("info", "clicked on y: " + motion.getY() + "x: " + motion.getX() + " lines down: " + linesDown
+						+ " cursor: " + tempCursorPosition);
 				updateSelectionIndices();
 			}
 			return true;

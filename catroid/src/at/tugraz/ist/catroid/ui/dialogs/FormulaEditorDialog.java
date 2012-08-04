@@ -162,7 +162,6 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 
 		switch (v.getId()) {
 			case R.id.formula_editor_ok_button:
-
 				String formulaToParse = textArea.getText().toString();
 				int err = parseFormula(formulaToParse);
 				if (err == -1) {
