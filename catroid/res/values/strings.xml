@@ -59,7 +59,6 @@
     <string name="load">Load</string>
     <string name="about">About Catroid</string>
     <string name="upload_project">Upload Project</string>
-    <string name="local_upload_project"> Local Upload Project</string>
 
     <!-- Settings activity -->
     <string name="pref_category_mindstorm">Lego Mindstorms settings</string>
