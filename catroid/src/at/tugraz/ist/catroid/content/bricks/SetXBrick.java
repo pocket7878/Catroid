@@ -121,7 +121,5 @@ public class SetXBrick implements Brick, OnClickListener {
 	}
 
 	public void executeLiveWallpaper() {
-		// TODO Auto-generated method stub
-
 	}
 }

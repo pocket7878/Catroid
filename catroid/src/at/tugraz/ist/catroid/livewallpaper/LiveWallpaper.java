@@ -96,9 +96,9 @@ public class LiveWallpaper extends WallpaperService {
 				startScript = false;
 			}
 
-			//			if (tappedScript) {
-			//				tappedScript = false;
-			//			}
+			if (tappedScript) {
+				tappedScript = false;
+			}
 		}
 
 		private void draw() {

@@ -23,11 +23,11 @@
 package at.tugraz.ist.catroid.ui;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URLDecoder;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.WallpaperManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -296,19 +296,11 @@ public class MainMenuActivity extends Activity {
 		}
 	}
 
-	public void HandleDownload(View v) {
-		//		Intent intent = new Intent();
-		//		intent.setAction(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER);
-		//		startActivity(intent);
+	public void handleLiveWallpaper(View v) {
+		Intent intent = new Intent();
+		intent.setAction(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER);
+		startActivity(intent);
 
-		Runtime r = Runtime.getRuntime();
-		try {
-			/* Process p = */r.exec("python /home/Catroid/nativeAppBuilding/src/handle_project.py");
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void handleWebResourcesButton(View v) {

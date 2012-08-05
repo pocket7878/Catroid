@@ -85,14 +85,6 @@ public class WallpaperCostume {
 
 	}
 
-	public float getCenterXCoord() {
-		return screenWidthHalf - (costume.getWidth() / 2);
-	}
-
-	public float getCenterYCoord() {
-		return screenWidthHalf - (costume.getHeight() / 2);
-	}
-
 	public Bitmap getCostume() {
 		return costume;
 	}
