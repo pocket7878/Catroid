@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import at.tugraz.ist.catroid.ProjectManager;
@@ -72,8 +73,10 @@ public class LiveWallpaper extends WallpaperService {
 			for (Sprite sprite : spriteList) {
 				for (int i = 0; i < sprite.getNumberOfScripts(); i++) {
 					scriptToHandle = sprite.getScript(i);
+					Log.v("DEBUG", "script of sprite name:" + sprite.getScript(i).toString());
 					for (int j = 0; j < scriptToHandle.getBrickList().size(); j++) {
 						brickToHandle = scriptToHandle.getBrick(j);
+						Log.v("DEBUG", "Brick Name:" + scriptToHandle.getBrick(j).toString());
 						if (startScript && scriptToHandle instanceof StartScript) {
 							brickToHandle.executeLiveWallpaper();
 							draw();
@@ -93,9 +96,9 @@ public class LiveWallpaper extends WallpaperService {
 				startScript = false;
 			}
 
-			if (tappedScript) {
-				tappedScript = false;
-			}
+			//			if (tappedScript) {
+			//				tappedScript = false;
+			//			}
 		}
 
 		private void draw() {
@@ -131,7 +134,6 @@ public class LiveWallpaper extends WallpaperService {
 
 		@Override
 		public void onTouchEvent(MotionEvent event) {
-
 			if (event.getAction() == MotionEvent.ACTION_UP) {
 				if (!tappedScript && wallpaperCostume.touchedInsideTheCostume(event.getX(), event.getY())) {
 					tappedScript = true;

@@ -92,21 +92,16 @@
             android:onClick="handleAboutCatroidButton"
             android:text="@string/about" />
         
-        <Button 
-            android:id = "@+id/local_upload_project"
-            style="@style/DashboardButton"
-            android:drawableTop="@drawable/upload_selector"
-            android:onClick="HandleUpload"
-            android:text="@string/local_upload_project"
-            />
         
         <Button 
             android:id = "@+id/download"
             style="@style/DashboardButton"
             android:drawableTop="@drawable/about_selector"
-            android:text="download"
+            android:text="Livewallpaper"
             android:onClick="HandleDownload"
             />
+        
+
     </at.tugraz.ist.catroid.ui.widget.DashboardLayout>
 
 </LinearLayout>
