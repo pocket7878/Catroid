@@ -34,6 +34,7 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.NextCostumeBrick;
+import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetXBrick;
 import at.tugraz.ist.catroid.content.bricks.SetYBrick;
@@ -179,6 +180,19 @@ public class LiveWallpaperTest extends AndroidTestCase {
 		Brick brick = new SetYBrick(catroidSprite, 60);
 		brick.executeLiveWallpaper();
 		float y = Values.SCREEN_HEIGHT / 2 - (wallpaperCostume.getCostume().getHeight() / 2) - 60;
+		assertEquals("The y coordinate was not set properly", y, wallpaperCostume.getLeftCoordinateToDraw());
+
+	}
+
+	public void testPlaceAtBrick() {
+		wallpaperCostume.initCostumeToDraw(catroidSprite.getCostumeDataList().get(0), false);
+
+		Brick brick = new PlaceAtBrick(catroidSprite, 28, 36);
+		brick.executeLiveWallpaper();
+		float x = Values.SCREEN_WIDTH / 2 - (wallpaperCostume.getCostume().getWidth() / 2) + 28;
+		float y = Values.SCREEN_HEIGHT / 2 - (wallpaperCostume.getCostume().getHeight() / 2) - 36;
+
+		assertEquals("The x coordinate was not set properly", x, wallpaperCostume.getTopCoordinateToDraw());
 		assertEquals("The y coordinate was not set properly", y, wallpaperCostume.getLeftCoordinateToDraw());
 
 	}
