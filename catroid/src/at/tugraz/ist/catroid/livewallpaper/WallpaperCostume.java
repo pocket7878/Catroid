@@ -36,21 +36,21 @@ public class WallpaperCostume {
 	private Bitmap costume = null;
 	private Bitmap background = null;
 
-	private float top;
-	private float left;
+	private float X;
+	private float Y;
 
-	private int screenWidthHalf;
-	private int screenHeightHalf;
+	private int centerXCoord;
+	private int centerYCoord;
 
-	private boolean coordsSetManually = false;
-	private boolean costumeHidden = false;
+	private boolean coordsSetManuallyFlag = false;
+	private boolean costumeHiddenFlag = false;
 
 	private WallpaperCostume() {
 
 		Project currentProject = ProjectManager.getInstance().getCurrentProject();
 
-		this.screenHeightHalf = currentProject.virtualScreenHeight / 2;
-		this.screenWidthHalf = currentProject.virtualScreenWidth / 2;
+		this.centerYCoord = currentProject.virtualScreenHeight / 2;
+		this.centerXCoord = currentProject.virtualScreenWidth / 2;
 	}
 
 	public static WallpaperCostume getInstance() {
@@ -65,11 +65,6 @@ public class WallpaperCostume {
 		this.costumeData = costumeData;
 		Bitmap bitmap = costumeData.getImageBitmap();
 
-		if (!coordsSetManually) {
-			this.top = screenWidthHalf - (bitmap.getWidth() / 2);
-			this.left = screenHeightHalf - (bitmap.getHeight() / 2);
-		}
-
 		if (isBackground) {
 			this.background = bitmap;
 		} else {
@@ -78,7 +73,26 @@ public class WallpaperCostume {
 
 	}
 
+	public float getTopCoordinateToDraw() {
+		float top = centerXCoord - this.costume.getWidth() / 2;
+		if (coordsSetManuallyFlag) {
+			top += X;
+		}
+		return top;
+	}
+
+	public float getLeftCoordinateToDraw() {
+		float left = centerYCoord - this.costume.getHeight() / 2;
+		if (coordsSetManuallyFlag) {
+			left -= Y;
+		}
+		return left;
+
+	}
+
 	public boolean touchedInsideTheCostume(float x, float y) {
+		float top = getTopCoordinateToDraw();
+		float left = getLeftCoordinateToDraw();
 		float right = costume.getWidth() + top;
 		float bottom = costume.getHeight() + left;
 
@@ -106,24 +120,6 @@ public class WallpaperCostume {
 		this.background = background;
 	}
 
-	public float getTop() {
-		return top;
-	}
-
-	public void setTop(float top) {
-		this.top = top;
-		coordsSetManually = true;
-	}
-
-	public float getLeft() {
-		return left;
-	}
-
-	public void setLeft(float left) {
-		this.left = left;
-		coordsSetManually = true;
-	}
-
 	public CostumeData getCostumeData() {
 		return costumeData;
 	}
@@ -133,11 +129,39 @@ public class WallpaperCostume {
 	}
 
 	public boolean isCostumeHidden() {
-		return costumeHidden;
+		return costumeHiddenFlag;
 	}
 
-	public void setCostumeHidden(boolean hideCostume) {
-		this.costumeHidden = hideCostume;
+	public void setCostumeHiddenFlag(boolean hideCostume) {
+		this.costumeHiddenFlag = hideCostume;
+	}
+
+	public boolean isCoordsSetManuallyFlag() {
+		return coordsSetManuallyFlag;
+	}
+
+	public boolean isCoordsSetManually() {
+		return coordsSetManuallyFlag;
+	}
+
+	public void setCoordsSetManuallyFlag(boolean coordsSetManuallyFlag) {
+		this.coordsSetManuallyFlag = coordsSetManuallyFlag;
+	}
+
+	public float getX() {
+		return X;
+	}
+
+	public void setX(float x) {
+		X = x;
+	}
+
+	public float getY() {
+		return Y;
+	}
+
+	public void setY(float y) {
+		Y = y;
 	}
 
 }

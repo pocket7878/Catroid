@@ -137,8 +137,8 @@ public class LiveWallpaper extends WallpaperService {
 						c.drawBitmap(wallpaperCostume.getBackground(), 0, 0, paint);
 						if (wallpaperCostume.getCostume() != null && !wallpaperCostume.isCostumeHidden()) {
 
-							c.drawBitmap(wallpaperCostume.getCostume(), wallpaperCostume.getTop(),
-									wallpaperCostume.getLeft(), paint);
+							c.drawBitmap(wallpaperCostume.getCostume(), wallpaperCostume.getTopCoordinateToDraw(),
+									wallpaperCostume.getLeftCoordinateToDraw(), paint);
 						}
 					}
 

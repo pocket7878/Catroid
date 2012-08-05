@@ -71,6 +71,6 @@ public class ShowBrick implements Brick {
 	}
 
 	public void executeLiveWallpaper() {
-		WallpaperCostume.getInstance().setCostumeHidden(false);
+		WallpaperCostume.getInstance().setCostumeHiddenFlag(false);
 	}
 }
