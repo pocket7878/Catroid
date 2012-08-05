@@ -72,7 +72,7 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 		UiTestUtils.clearAllUtilTestProjects();
 		this.project = null;
 		super.tearDown();
-		Thread.sleep(1000);
+		Thread.sleep(1000); //This has to be sleep as solo is destroyed. Not sleeping might cause the next test to fail
 	}
 
 	@Smoke
@@ -152,6 +152,7 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 		catKeyboardClicker.clickOnKey("del");
 
 		solo.clickOnButton(2);
+		solo.clickOnButton(2);
 
 	}
 
@@ -209,6 +210,7 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 		catKeyboardClicker.clickOnKey("del");
 
 		solo.clickOnButton(2);
+		solo.clickOnButton(2);
 	}
 
 	public void testKeysFromSensorKeyboard() {
@@ -251,6 +253,7 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 		assertEquals("Wrong button clicked", "AZIM_", text.getText().toString().substring(0, "AZIM_".length()));
 		catKeyboardClicker.clickOnKey("del");
 
+		solo.clickOnButton(2);
 		solo.clickOnButton(2);
 	}
 

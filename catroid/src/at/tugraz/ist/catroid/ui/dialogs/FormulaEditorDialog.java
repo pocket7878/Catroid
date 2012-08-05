@@ -27,7 +27,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -68,7 +67,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
 		//for function keys
-		Log.i("info", "Key: " + event.getKeyCode());
+		//Log.i("info", "Key: " + event.getKeyCode());
 
 		if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
 
@@ -158,6 +157,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 		return -1;
 	}
 
+	@Override
 	public void onClick(View v) {
 
 		switch (v.getId()) {
@@ -216,6 +216,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 		userInfo.show();
 	}
 
+	@Override
 	public void onDismiss(DialogInterface dialog) {
 		this.dismiss();
 	}

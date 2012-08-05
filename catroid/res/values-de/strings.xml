@@ -338,6 +338,5 @@
     <string name="formula_editor_confirm_discard">Alle Änderungen werden verworfen! Zum Bestätigen erneut klicken.</string>
      
     <!-- Num Pad Strings -->
-    <string name="ime_name">CatTastatur</string>
 
 </resources>

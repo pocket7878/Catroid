@@ -105,6 +105,8 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 		solo.clickOnText(spriteName);
 		solo.clickOnText(buttonNewText);
 		solo.assertCurrentActivity("not in scripttabactivity", ScriptTabActivity.class);
+		solo.goBack();
+		solo.goBack();
 	}
 
 	public void testBroadcastWaitBrick() {
@@ -122,6 +124,8 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 		solo.clickOnText(spriteName);
 		solo.clickOnText(buttonNewText);
 		solo.assertCurrentActivity("not in scripttabactivity", ScriptTabActivity.class);
+		solo.goBack();
+		solo.goBack();
 	}
 
 	public void testChangeBrightnessBrick() {
@@ -196,12 +200,12 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 
 		clickEditTextGoBackAndClickAgain(FORMULA_EDITOR_BRICK);
 
-		solo.goBack();
-		solo.goBack();
 		solo.assertCurrentActivity("not in ProjectActivity", ProjectActivity.class);
 		solo.clickOnText(spriteName);
 		solo.clickOnEditText(1);
 		solo.assertCurrentActivity("not in scripttabactivity", ScriptTabActivity.class);
+		solo.goBack();
+		solo.goBack();
 	}
 
 	public void testPlaySoundBrick() {
@@ -218,6 +222,8 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 		solo.clickOnText(spriteName);
 		solo.clickOnText(spinnerNothingSelectedText);
 		solo.assertCurrentActivity("not in scripttabactivity", ScriptTabActivity.class);
+		solo.goBack();
+		solo.goBack();
 	}
 
 	public void testSetCostumeBrick() {
@@ -234,6 +240,8 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 		solo.clickOnText(spriteName);
 		solo.clickOnText(spinnerNothingSelectedText);
 		solo.assertCurrentActivity("not in scripttabactivity", ScriptTabActivity.class);
+		solo.goBack();
+		solo.goBack();
 	}
 
 	public void testPointInDirectionBrick() {
@@ -249,6 +257,8 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 		solo.clickOnText(spriteName);
 		solo.clickOnText("90");
 		solo.assertCurrentActivity("not in scripttabactivity", ScriptTabActivity.class);
+		solo.goBack();
+		solo.goBack();
 	}
 
 	public void testRepeatBrick() {
@@ -330,6 +340,8 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 		solo.waitForActivity(ScriptTabActivity.class.getSimpleName());
 		solo.clickOnEditText(0);
 		solo.assertCurrentActivity("not in scripttabactivity", ScriptTabActivity.class);
+		solo.goBack();
+		solo.goBack();
 	}
 
 	public void createProject() {

@@ -75,14 +75,14 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 			//			this.symbols_shifted = new CatKeyboard(this.getContext(), R.xml.symbols_de_shift);
 			this.symbolsFunctions = new CatKeyboard(this.getContext(), R.xml.symbols_de_functions);
 			this.symbolsSensors = new CatKeyboard(this.getContext(), R.xml.symbols_de_sensors);
-			Log.i("info", "FormulaEditorDialog.onCreate() - DisplayLanguage is DE");
+			//Log.i("info", "FormulaEditorDialog.onCreate() - DisplayLanguage is DE");
 
 		} else {//if (Locale.getDefault().getDisplayLanguage().contentEquals(Locale.ENGLISH.getDisplayLanguage())) {
 			this.symbolsNumbers = new CatKeyboard(this.getContext(), R.xml.symbols_eng_numbers);
 			//			this.symbols_shifted = new CatKeyboard(this.getContext(), R.xml.symbols_eng_shift);
 			this.symbolsFunctions = new CatKeyboard(this.getContext(), R.xml.symbols_eng_functions);
 			this.symbolsSensors = new CatKeyboard(this.getContext(), R.xml.symbols_eng_sensors);
-			Log.i("info", "FormulaEditorDialog.onCreate() - DisplayLanguage is ENG");
+			//Log.i("info", "FormulaEditorDialog.onCreate() - DisplayLanguage is ENG");
 
 		}
 		//Log.i("info", "CatKeyBoardView() - DisplayLanguage:" + Locale.getDefault().getDisplayLanguage());
@@ -139,6 +139,7 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 	 * 
 	 * @see android.inputmethodservice.KeyboardView.OnKeyboardActionListener#onKey(int, int[])
 	 */
+	@Override
 	public void onKey(int primaryCode, int[] keyCodes) {
 		//Log.i("info", "CatKeyboarView.onKey(), primaryCode:" + String.valueOf(primaryCode));
 
@@ -418,16 +419,19 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 		//		super.swipeUp();
 	}
 
+	@Override
 	public void onPress(int primaryCode) {
 		//		Log.i("info", "CatKeybaordView.onPress(): " + primaryCode);
 
 	}
 
+	@Override
 	public void onRelease(int primaryCode) {
 		//		Log.i("info", "CatKeybaordView.onRelease(): " + primaryCode);
 
 	}
 
+	@Override
 	public void onText(CharSequence text) {
 		//		Log.i("info", "CatKeybaordView.onText(): ");
 
