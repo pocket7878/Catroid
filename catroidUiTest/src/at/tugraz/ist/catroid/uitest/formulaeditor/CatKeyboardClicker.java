@@ -77,13 +77,13 @@ public class CatKeyboardClicker {
 
 	public void clearEditTextWithDeletes(int index) {
 		int noChangesIndex = 0;
-		int lastEditTextLength = solo.getEditText(1).getText().length();
-		while (solo.getEditText(1).getText().length() > 0) {
-			if (lastEditTextLength == solo.getEditText(1).getText().length() && ++noChangesIndex == 2) {
-				solo.clickOnEditText(1);
+		int lastEditTextLength = solo.getEditText(index).getText().length();
+		while (solo.getEditText(index).getText().length() > 0) {
+			if (lastEditTextLength == solo.getEditText(index).getText().length() && ++noChangesIndex == 2) {
+				solo.clickOnEditText(index);
 				noChangesIndex = 0;
 			}
-			lastEditTextLength = solo.getEditText(1).getText().length();
+			lastEditTextLength = solo.getEditText(index).getText().length();
 			this.clickOnKey("del");
 		}
 	}
