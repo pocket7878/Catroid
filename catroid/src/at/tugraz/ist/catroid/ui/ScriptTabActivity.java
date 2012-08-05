@@ -194,6 +194,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 					.getScript(savedScriptIndex).getBrickList().get(savedBrickIndex);
 			oldBrick.onClick(new View(this));
 		}
+
 		super.onRestoreInstanceState(savedInstanceState);
 	}
 
