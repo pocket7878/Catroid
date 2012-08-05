@@ -151,6 +151,20 @@ public class PhysicObjectTest extends AndroidTestCase {
 		}
 	}
 
+	public void testAngleAndPosition() {
+		PhysicObject physicObject = createPhysicObject();
+		assertEquals(0.0f, physicObject.getBody().getAngle());
+		assertEquals(new Vector2(), physicObject.getBody().getPosition());
+
+		float angle = PhysicWorldConverter.angleCatToBox2d(13.56f);
+		Vector2 position = new Vector2(12.34f, 56.78f);
+		physicObject.setAngle(angle);
+		physicObject.setPosition(position);
+
+		assertEquals(angle, physicObject.getBody().getAngle());
+		assertEquals(position, physicObject.getBody().getPosition());
+	}
+
 	public void testDensity() {
 		PhysicObject physicObject = createPhysicObject();
 		float[] densities = { 0.123f, -0.765f, 24.32f };

@@ -56,11 +56,11 @@ public class PhysicObject {
 	}
 
 	public void setAngle(float angle) {
-		body.setTransform(0.0f, 0.0f, angle);
+		body.setTransform(body.getPosition(), angle);
 	}
 
 	public void setPosition(Vector2 position) {
-		body.setTransform(position.sub(body.getPosition()), 0.0f);
+		body.setTransform(position, body.getAngle());
 	}
 
 	public void setMass(float mass) {
