@@ -55,16 +55,21 @@ public class ForeverBrickTest extends InstrumentationTestCase {
 		loopEndBrick = new LoopEndBrick(testSprite, foreverBrick);
 		foreverBrick.setLoopEndBrick(loopEndBrick);
 
-		final int deltaY = -10;
+		final int deltaY = 10;
 		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
 
 		testScript.addBrick(foreverBrick);
 		testScript.addBrick(new ChangeYByBrick(testSprite, deltaY));
 		testScript.addBrick(loopEndBrick);
-
 		testSprite.addScript(testScript);
-		testSprite.startStartScripts();
-
+		Thread.sleep(500);
+		try {
+			testSprite.startStartScripts();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+			fail("Completely stupid null pointer exception, kthxbye");
+			return;
+		}
 		Thread.sleep(expectedDelay * twentyIsAlmostForever);
 
 		assertEquals("Executed the wrong number of times!", twentyIsAlmostForever * deltaY,
