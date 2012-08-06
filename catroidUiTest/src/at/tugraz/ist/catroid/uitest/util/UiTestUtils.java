@@ -83,7 +83,7 @@ public class UiTestUtils {
 	private static ProjectManager projectManager = ProjectManager.getInstance();
 	private static SparseIntArray brickCategoryMap;
 
-	public static final String DEFAULT_TEST_PROJECT_NAME = "testProject";
+	public static final String DEFAULT_TEST_PROJECT_NAME = "testAProject";
 	public static final String PROJECTNAME1 = "testproject1";
 	public static final String PROJECTNAME2 = "testproject2";
 	public static final String PROJECTNAME3 = "testproject3";
