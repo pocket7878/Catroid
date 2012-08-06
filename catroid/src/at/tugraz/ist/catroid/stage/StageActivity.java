@@ -40,8 +40,9 @@ public class StageActivity extends AndroidApplication {
 	public static StageListener stageListener;
 	private boolean resizePossible;
 	private StageDialog stageDialog;
-	final static public String PRESTAGE_SPRITE_TO_EDIT = "at.tugraz.ist.catroid.prestage.sprite_to_edit";
-	final static public String PRESTAGE_BRICK_TO_EDIT = "at.tugraz.ist.catroid.prestage.brick_to_edit";
+
+	//final static public String PRESTAGE_SPRITE_TO_EDIT = "at.tugraz.ist.catroid.prestage.sprite_to_edit";
+	//final static public String PRESTAGE_BRICK_TO_EDIT = "at.tugraz.ist.catroid.prestage.brick_to_edit";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

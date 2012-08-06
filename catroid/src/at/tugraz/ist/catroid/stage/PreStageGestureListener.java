@@ -22,7 +22,6 @@
  */
 package at.tugraz.ist.catroid.stage;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -30,6 +29,12 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class PreStageGestureListener implements GestureListener {
 
 	private Actor actorToChange = null;
+	private float startScaleX;
+	private float startScaleY;
+	private float startOriginalDistance = -1;
+
+	private float startRotation;
+	private Vector2 startInitialFirstPointer;
 
 	public void setActorToChange(Actor actorToChange) {
 		this.actorToChange = actorToChange;
@@ -52,7 +57,7 @@ public class PreStageGestureListener implements GestureListener {
 	}
 
 	public boolean pan(int x, int y, int deltaX, int deltaY) {
-		if (actorToChange != null) {
+		if (actorToChange != null && false) {
 			actorToChange.x += deltaX;
 			actorToChange.y -= deltaY;
 			return true;
@@ -61,10 +66,25 @@ public class PreStageGestureListener implements GestureListener {
 	}
 
 	public boolean zoom(float originalDistance, float currentDistance) {
-		if (actorToChange != null) {
-			Gdx.app.log("PreStage", actorToChange.scaleX + "% " + originalDistance + " " + currentDistance);
-			actorToChange.scaleX -= (originalDistance - currentDistance) / originalDistance / 100;
-			actorToChange.scaleY -= (originalDistance - currentDistance) / originalDistance / 100;
+		if (actorToChange != null && false) {
+			//Gdx.app.log("PreStage", actorToChange.scaleX + "% " + originalDistance + " " + currentDistance);
+			if (startOriginalDistance != originalDistance) {
+				startOriginalDistance = originalDistance;
+				this.startScaleX = actorToChange.scaleX;
+				this.startScaleY = actorToChange.scaleY;
+			}
+			//actorToChange.scaleX = startScaleX - (originalDistance - currentDistance) / originalDistance;
+			//actorToChange.scaleY = startScaleY - (originalDistance - currentDistance) / originalDistance;
+			actorToChange.scaleX = startScaleX / originalDistance * currentDistance;
+			actorToChange.scaleY = startScaleY / originalDistance * currentDistance;
+			if (actorToChange.scaleX < 0.01F) {
+				actorToChange.scaleX = 0.01F;
+			}
+			if (actorToChange.scaleY < 0.01F) {
+				actorToChange.scaleY = 0.01F;
+			}
+			//actorToChange.scaleX = startScaleX - currentDistance / originalDistance;
+			//actorToChange.scaleY = startScaleY - currentDistance / originalDistance;
 			return true;
 		}
 		return false;
@@ -72,6 +92,20 @@ public class PreStageGestureListener implements GestureListener {
 
 	public boolean pinch(Vector2 initialFirstPointer, Vector2 initialSecondPointer, Vector2 firstPointer,
 			Vector2 secondPointer) {
+		if (actorToChange != null) {
+			Vector2 vec1 = initialSecondPointer.sub(initialFirstPointer);
+			Vector2 vec2 = secondPointer.sub(firstPointer);
+			float angle = vec1.angle() - vec2.angle();
+			//Gdx.app.log("PreStage", initialFirstPointer + " " + initialSecondPointer + " " + firstPointer + " "
+			//		+ secondPointer);
+			if (startInitialFirstPointer == initialFirstPointer) {
+				startRotation = actorToChange.rotation;
+				startInitialFirstPointer = initialFirstPointer;
+			}
+			actorToChange.rotation = startRotation + angle;
+			actorToChange.rotation = actorToChange.rotation % 360F;
+			return true;
+		}
 		return false;
 	}
 
