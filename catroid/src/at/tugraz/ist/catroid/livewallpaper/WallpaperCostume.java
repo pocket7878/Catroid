@@ -61,6 +61,11 @@ public class WallpaperCostume {
 		return wallpaperCostume;
 	}
 
+	public void resetCostume() {
+		this.coordsSetManuallyFlag = false;
+		this.costumeHiddenFlag = false;
+	}
+
 	public void initCostumeToDraw(CostumeData costumeData, boolean isBackground) {
 		this.costumeData = costumeData;
 		Bitmap bitmap = costumeData.getImageBitmap();
