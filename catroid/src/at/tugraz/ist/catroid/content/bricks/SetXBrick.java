@@ -125,7 +125,7 @@ public class SetXBrick implements Brick, OnClickListener {
 		WallpaperCostume wallpaperCostume = WallpaperCostume.getInstance();
 
 		wallpaperCostume.setCoordsSetManuallyFlag(true);
-		wallpaperCostume.setX(xPosition);
+		wallpaperCostume.setTop(xPosition);
 
 	}
 }

@@ -36,8 +36,8 @@ public class WallpaperCostume {
 	private Bitmap costume = null;
 	private Bitmap background = null;
 
-	private float X;
-	private float Y;
+	private float top;
+	private float left;
 
 	private int centerXCoord;
 	private int centerYCoord;
@@ -67,32 +67,43 @@ public class WallpaperCostume {
 
 		if (isBackground) {
 			this.background = bitmap;
-		} else {
-			this.costume = bitmap;
+			return;
+		}
+
+		this.costume = bitmap;
+
+		if (!coordsSetManuallyFlag) {
+			setTop(0);
+			setLeft(0);
 		}
 
 	}
 
-	public float getTopCoordinateToDraw() {
-		float top = centerXCoord - this.costume.getWidth() / 2;
-		if (coordsSetManuallyFlag) {
-			top += X;
-		}
+	public float getTop() {
 		return top;
 	}
 
-	public float getLeftCoordinateToDraw() {
-		float left = centerYCoord - this.costume.getHeight() / 2;
-		if (coordsSetManuallyFlag) {
-			left -= Y;
-		}
-		return left;
+	public void setTop(float x) {
+		this.top = centerXCoord - (this.costume.getWidth() / 2) + x;
+	}
 
+	public float getLeft() {
+		return left;
+	}
+
+	public void setLeft(float y) {
+		this.left = centerYCoord - (this.costume.getHeight() / 2) - y;
+	}
+
+	public void changeTopBy(float x) {
+		this.top += x;
+	}
+
+	public void changeLeftBy(float y) {
+		this.left -= y;
 	}
 
 	public boolean touchedInsideTheCostume(float x, float y) {
-		float top = getTopCoordinateToDraw();
-		float left = getLeftCoordinateToDraw();
 		float right = costume.getWidth() + top;
 		float bottom = costume.getHeight() + left;
 
@@ -146,22 +157,6 @@ public class WallpaperCostume {
 
 	public void setCoordsSetManuallyFlag(boolean coordsSetManuallyFlag) {
 		this.coordsSetManuallyFlag = coordsSetManuallyFlag;
-	}
-
-	public float getX() {
-		return X;
-	}
-
-	public void setX(float x) {
-		X = x;
-	}
-
-	public float getY() {
-		return Y;
-	}
-
-	public void setY(float y) {
-		Y = y;
 	}
 
 }

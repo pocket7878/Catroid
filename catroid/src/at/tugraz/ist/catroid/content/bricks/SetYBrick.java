@@ -124,7 +124,7 @@ public class SetYBrick implements Brick, OnClickListener {
 	public void executeLiveWallpaper() {
 		WallpaperCostume wallpaperCostume = WallpaperCostume.getInstance();
 		wallpaperCostume.setCoordsSetManuallyFlag(true);
-		wallpaperCostume.setY(yPosition);
+		wallpaperCostume.setLeft(yPosition);
 
 	}
 }
