@@ -35,6 +35,12 @@ public class ComeToFrontBrickTest extends AndroidTestCase {
 	@Override
 	public void tearDown() {
 		TestUtils.clearProject("testProject");
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void testComeToFront() {
