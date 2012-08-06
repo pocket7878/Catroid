@@ -67,7 +67,7 @@ public class PointToBrickTest extends AndroidTestCase {
 		ProjectManager.getInstance().setCurrentScript(startScript1);
 
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(1500);
 		} catch (InterruptedException e) {
 		}
 
