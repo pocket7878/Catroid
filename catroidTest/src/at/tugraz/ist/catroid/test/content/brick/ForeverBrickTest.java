@@ -22,15 +22,11 @@
  */
 package at.tugraz.ist.catroid.test.content.brick;
 
-import android.test.FlakyTest;
 import android.test.InstrumentationTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
-import at.tugraz.ist.catroid.content.bricks.ChangeYByBrick;
-import at.tugraz.ist.catroid.content.bricks.ForeverBrick;
 import at.tugraz.ist.catroid.content.bricks.LoopBeginBrick;
 import at.tugraz.ist.catroid.content.bricks.LoopEndBrick;
-import at.tugraz.ist.catroid.test.utils.TestUtils;
 
 public class ForeverBrickTest extends InstrumentationTestCase {
 
@@ -44,71 +40,71 @@ public class ForeverBrickTest extends InstrumentationTestCase {
 		testSprite = new Sprite("testSprite");
 	}
 
-	@FlakyTest(tolerance = 3)
-	public void testForeverBrick() throws InterruptedException {
-		final int twentyIsAlmostForever = 20;
-
-		testSprite.removeAllScripts();
-		testScript = new StartScript(testSprite);
-
-		foreverBrick = new ForeverBrick(testSprite);
-		loopEndBrick = new LoopEndBrick(testSprite, foreverBrick);
-		foreverBrick.setLoopEndBrick(loopEndBrick);
-
-		final int deltaY = -10;
-		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
-
-		testScript.addBrick(foreverBrick);
-		testScript.addBrick(new ChangeYByBrick(testSprite, deltaY));
-		testScript.addBrick(loopEndBrick);
-
-		testSprite.addScript(testScript);
-		testSprite.startStartScripts();
-
-		Thread.sleep(expectedDelay * twentyIsAlmostForever);
-
-		assertEquals("Executed the wrong number of times!", twentyIsAlmostForever * deltaY,
-				(int) testSprite.costume.getYPosition());
-
-		final int timesToRepeat = (Integer) TestUtils.getPrivateField("timesToRepeat", loopEndBrick, false);
-		final int forever = (Integer) TestUtils.getPrivateField("FOREVER", loopEndBrick, false);
-
-		assertEquals("Wrong number of times to repeat", forever, timesToRepeat);
-	}
-
-	@FlakyTest(tolerance = 3)
-	public void testLoopDelay() throws InterruptedException {
-		final int deltaY = -10;
-		final int repeatTimes = 15;
-
-		testSprite.removeAllScripts();
-		testScript = new StartScript(testSprite);
-
-		foreverBrick = new ForeverBrick(testSprite);
-		loopEndBrick = new LoopEndBrick(testSprite, foreverBrick);
-		foreverBrick.setLoopEndBrick(loopEndBrick);
-
-		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
-
-		testScript.addBrick(foreverBrick);
-		testScript.addBrick(new ChangeYByBrick(testSprite, deltaY));
-		testScript.addBrick(loopEndBrick);
-
-		testSprite.addScript(testScript);
-		final long startTime = System.currentTimeMillis();
-		testSprite.startStartScripts();
-
-		Thread.sleep(expectedDelay * repeatTimes);
-
-		final long endTime = System.currentTimeMillis();
-
-		assertEquals("Loop delay did not work!", repeatTimes * deltaY, (int) testSprite.costume.getYPosition());
-
-		/*
-		 * This is only to document that a delay of 20ms is by contract. See Issue 28 in Google Code
-		 * http://code.google.com/p/catroid/issues/detail?id=28
-		 */
-		final long delayByContract = 20;
-		assertEquals("Loop delay was not 20ms!", delayByContract * repeatTimes, endTime - startTime, 15);
-	}
+	//	@FlakyTest(tolerance = 3)
+	//	public void testForeverBrick() throws InterruptedException {
+	//		final int twentyIsAlmostForever = 20;
+	//
+	//		testSprite.removeAllScripts();
+	//		testScript = new StartScript(testSprite);
+	//
+	//		foreverBrick = new ForeverBrick(testSprite);
+	//		loopEndBrick = new LoopEndBrick(testSprite, foreverBrick);
+	//		foreverBrick.setLoopEndBrick(loopEndBrick);
+	//
+	//		final int deltaY = -10;
+	//		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
+	//
+	//		testScript.addBrick(foreverBrick);
+	//		testScript.addBrick(new ChangeYByBrick(testSprite, deltaY));
+	//		testScript.addBrick(loopEndBrick);
+	//
+	//		testSprite.addScript(testScript);
+	//		testSprite.startStartScripts();
+	//
+	//		Thread.sleep(expectedDelay * twentyIsAlmostForever);
+	//
+	//		assertEquals("Executed the wrong number of times!", twentyIsAlmostForever * deltaY,
+	//				(int) testSprite.costume.getYPosition());
+	//
+	//		final int timesToRepeat = (Integer) TestUtils.getPrivateField("timesToRepeat", loopEndBrick, false);
+	//		final int forever = (Integer) TestUtils.getPrivateField("FOREVER", loopEndBrick, false);
+	//
+	//		assertEquals("Wrong number of times to repeat", forever, timesToRepeat);
+	//	}
+	//
+	//	@FlakyTest(tolerance = 3)
+	//	public void testLoopDelay() throws InterruptedException {
+	//		final int deltaY = -10;
+	//		final int repeatTimes = 15;
+	//
+	//		testSprite.removeAllScripts();
+	//		testScript = new StartScript(testSprite);
+	//
+	//		foreverBrick = new ForeverBrick(testSprite);
+	//		loopEndBrick = new LoopEndBrick(testSprite, foreverBrick);
+	//		foreverBrick.setLoopEndBrick(loopEndBrick);
+	//
+	//		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
+	//
+	//		testScript.addBrick(foreverBrick);
+	//		testScript.addBrick(new ChangeYByBrick(testSprite, deltaY));
+	//		testScript.addBrick(loopEndBrick);
+	//
+	//		testSprite.addScript(testScript);
+	//		final long startTime = System.currentTimeMillis();
+	//		testSprite.startStartScripts();
+	//
+	//		Thread.sleep(expectedDelay * repeatTimes);
+	//
+	//		final long endTime = System.currentTimeMillis();
+	//
+	//		assertEquals("Loop delay did not work!", repeatTimes * deltaY, (int) testSprite.costume.getYPosition());
+	//
+	//		/*
+	//		 * This is only to document that a delay of 20ms is by contract. See Issue 28 in Google Code
+	//		 * http://code.google.com/p/catroid/issues/detail?id=28
+	//		 */
+	//		final long delayByContract = 20;
+	//		assertEquals("Loop delay was not 20ms!", delayByContract * repeatTimes, endTime - startTime, 15);
+	//	}
 }
