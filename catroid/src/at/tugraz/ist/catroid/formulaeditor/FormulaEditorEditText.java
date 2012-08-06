@@ -518,10 +518,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		setSelection(selectionEndIndex);
 	}
 
-	public boolean getEditMode() {
-		return editMode;
-	}
-
 	public boolean hasChanges() {
 		return hasChanges;
 	}
@@ -546,15 +542,10 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	@Override
 	protected void onCreateContextMenu(ContextMenu menu) {
+		// dont want it!
 	}
 
 	@Override
-	public void extendSelection(int index) {
-		//Log.i("info", "extendSelection");
-		updateSelectionIndices();
-
-	};
-
 	public boolean onTouch(View v, MotionEvent motion) {
 		return gestureDetector.onTouchEvent(motion);
 	}

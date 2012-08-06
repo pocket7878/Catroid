@@ -47,7 +47,6 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 	private final Context context;
 	private Brick currentBrick;
 	private FormulaEditorEditText textArea;
-	private int value;
 	private Formula formula = null;
 	private CatKeyboardView catKeyboardView;
 	private LinearLayout brickSpace;
@@ -57,11 +56,9 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 	private long confirmDiscard = 0;
 
 	public FormulaEditorDialog(Context context, Brick brick) {
-
 		super(context, R.style.dialog_fullscreen);
 		currentBrick = brick;
 		this.context = context;
-		this.value = 33;
 	}
 
 	@Override
@@ -131,17 +128,13 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 		if (formula == this.formula) {
 			return;
 		} else if (textArea.hasChanges() == true) {
-			Toast.makeText(context, R.string.formula_editor_save_first, Toast.LENGTH_SHORT).show();
+			showToast(R.string.formula_editor_save_first);
 			return;
 		}
 
 		this.formula = formula;
 		textArea.setFieldActive(formula.getEditTextRepresentation());
 
-	}
-
-	public int getReturnValue() {
-		return value;
 	}
 
 	private int parseFormula(String formulaToParse) {
@@ -244,11 +237,8 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 				} else {
 					dismiss();
 				}
-
 		}
-
 		return textArea.catKeyboardView.onKeyDown(keyCode, event);
-
 	}
 
 }

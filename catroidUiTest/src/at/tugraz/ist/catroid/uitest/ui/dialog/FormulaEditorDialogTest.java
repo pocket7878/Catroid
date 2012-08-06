@@ -33,6 +33,7 @@ import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid.uitest.formulaeditor.CatKeyboardClicker;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -77,9 +78,30 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 		ProjectManager.getInstance().setCurrentScript(script);
 	}
 
+	public void testFormulaEditorChangeFormulaWithoutSaving() {
+		int X_POS_EDIT_TEXT_ID = 0;
+		int Y_POS_EDIT_TEXT_ID = 1;
+
+		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
+
+		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		catKeyboardClicker.clickOnKey("1");
+		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
+		solo.sleep(50);
+		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_save_first)));
+
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_return));
+		solo.sleep(100);
+		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_confirm_discard)));
+		solo.goBack();
+		solo.goBack();
+
+	}
+
 	public void testFormulaEditorDialogAndSimpleInterpretation() {
-		//		All tests that need the custom keyboard should be in the file FormulaEditorEditTextTest!
 		//		Note solo.enterText() modifications to the text are undetectable to FormulaEditorEditText.
+		//		Also text via solo.enterText() *must* be longer than the original text!!!
+		//		Use CatKeyboardClicker for full functionality, is a lot slower and inconvenient! Will do just fine here without
 
 		String newXFormula = "10 + 12 - 2 * 3 - 4 ";
 		int newXValue = 10 + 12 - 2 * 3 - 4;

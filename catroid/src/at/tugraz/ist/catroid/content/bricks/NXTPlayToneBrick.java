@@ -39,7 +39,6 @@ import at.tugraz.ist.catroid.LegoNXT.LegoNXT;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
-import at.tugraz.ist.catroid.ui.dialogs.EditIntegerDialog;
 import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class NXTPlayToneBrick implements Brick, OnClickListener, OnSeekBarChangeListener {
@@ -58,7 +57,6 @@ public class NXTPlayToneBrick implements Brick, OnClickListener, OnSeekBarChange
 	private transient EditText editFreq;
 	private transient EditText editSeekBarValue;
 	private transient SeekBar frequencyBar;
-	private transient EditIntegerDialog dialogFreq;
 
 	private Formula hertzFormula;
 	private Formula durationInMsFormula;
@@ -78,10 +76,12 @@ public class NXTPlayToneBrick implements Brick, OnClickListener, OnSeekBarChange
 		durationInMsFormula = new Formula(Integer.toString(duration));
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return BLUETOOTH_LEGO_NXT;
 	}
 
+	@Override
 	public void execute() {
 		int interpretHertz = Math.min(MAX_FREQ_IN_HERTZ, hertzFormula.interpret(Double.valueOf(hertz)).intValue());
 		interpretHertz = Math.max(MIN_FREQ_IN_HERTZ, interpretHertz);
@@ -92,10 +92,12 @@ public class NXTPlayToneBrick implements Brick, OnClickListener, OnSeekBarChange
 
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		View view = View.inflate(context, R.layout.brick_nxt_play_tone, null);
 		SeekBar noClick = (SeekBar) view.findViewById(R.id.seekBarNXTToneFrequency);
@@ -108,6 +110,7 @@ public class NXTPlayToneBrick implements Brick, OnClickListener, OnSeekBarChange
 		return new NXTPlayToneBrick(getSprite(), hertz, durationInMs);
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		Log.i("info", "NXTPlayToneBrick: getView");
 
@@ -166,6 +169,7 @@ public class NXTPlayToneBrick implements Brick, OnClickListener, OnSeekBarChange
 
 		Button freqDown = (Button) brickView.findViewById(R.id.freq_down_btn);
 		freqDown.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 
 				if (hertz <= 200) {
@@ -180,6 +184,7 @@ public class NXTPlayToneBrick implements Brick, OnClickListener, OnSeekBarChange
 
 		Button freqUp = (Button) brickView.findViewById(R.id.freq_up_btn);
 		freqUp.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 
 				if (hertz >= 14000) {
@@ -195,6 +200,7 @@ public class NXTPlayToneBrick implements Brick, OnClickListener, OnSeekBarChange
 		return brickView;
 	}
 
+	@Override
 	public void onProgressChanged(SeekBar freqBar, int progress, boolean fromUser) {
 		Log.i("info", "onProgressChanged: enter");
 		Log.i("info", "onProgressChanged.freqBarValue = " + freqBar.getProgress());
@@ -211,10 +217,12 @@ public class NXTPlayToneBrick implements Brick, OnClickListener, OnSeekBarChange
 
 	}
 
+	@Override
 	public void onStartTrackingTouch(SeekBar freqBar) {
 
 	}
 
+	@Override
 	public void onStopTrackingTouch(SeekBar freqBar) {
 
 	}
@@ -241,6 +249,7 @@ public class NXTPlayToneBrick implements Brick, OnClickListener, OnSeekBarChange
 		freqBar.setProgress(hertz / 100);
 	}
 
+	@Override
 	public void onClick(final View view) {
 		final Context context = view.getContext();
 
@@ -248,6 +257,7 @@ public class NXTPlayToneBrick implements Brick, OnClickListener, OnSeekBarChange
 			editorActive = true;
 			formulaEditor = new FormulaEditorDialog(context, instance);
 			formulaEditor.setOnDismissListener(new OnDismissListener() {
+				@Override
 				public void onDismiss(DialogInterface editor) {
 
 					//size = formulaEditor.getReturnValue();

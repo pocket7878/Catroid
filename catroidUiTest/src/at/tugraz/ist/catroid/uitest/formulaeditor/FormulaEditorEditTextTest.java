@@ -100,6 +100,32 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 	}
 
 	@Smoke
+	public void testDoubleClickNumberSelection() {
+		float xCoordinate = 60;
+		float waitBrickOffset = 99;
+		float greenBarOffset = 5;
+		float yCoordinate = waitBrickOffset + greenBarOffset + 5;
+
+		solo.clickOnEditText(0);
+		catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(1);
+
+		for (int i = 0; i < 6; i++) {
+			catKeyboardClicker.clickOnKey("1");
+		}
+		assertTrue("Text not found", solo.searchText("11111"));
+		//There is no doubleclick in robotium q.q, this is a workaround!
+		solo.clickOnScreen(xCoordinate, yCoordinate);
+		solo.drag(xCoordinate, xCoordinate + 1, yCoordinate, yCoordinate, 50);
+
+		catKeyboardClicker.clickOnKey("del");
+
+		assertFalse("Text found but shouldnt", solo.searchText("1"));
+
+		solo.clickOnButton(2);
+		solo.clickOnButton(2);
+	}
+
+	@Smoke
 	public void testErrorInFirstAndLastCharacters() {
 
 		solo.clickOnEditText(0);

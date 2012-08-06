@@ -42,7 +42,6 @@ import at.tugraz.ist.catroid.LegoNXT.LegoNXT;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
-import at.tugraz.ist.catroid.ui.dialogs.EditIntegerDialog;
 import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnClickListener {
@@ -65,7 +64,6 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 	private transient EditText editSpeed;
 	private transient EditText editSeekBarValue;
 	private transient SeekBar speedBar;
-	private transient EditIntegerDialog dialogSpeed;
 
 	private Formula speedFormula;
 
@@ -90,10 +88,12 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 		speedFormula = new Formula(sliderElement);
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return BLUETOOTH_LEGO_NXT;
 	}
 
+	@Override
 	public void execute() {
 		speed = Math.min(MAX_SPEED, speedFormula.interpret().intValue());
 		speed = Math.max(MIN_SPEED, speed);
@@ -108,10 +108,12 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		View view = View.inflate(context, R.layout.brick_nxt_motor_action, null);
 		SeekBar noClick = (SeekBar) view.findViewById(R.id.seekBarSpeedMotorAction);
@@ -124,6 +126,7 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 		return new NXTMotorActionBrick(getSprite(), motorEnum, speed);
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		if (instance == null) {
@@ -151,11 +154,13 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 		motorSpinner.setAdapter(motorAdapter);
 		motorSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
+			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
 				motorEnum = Motor.values()[position];
 				motor = motorEnum.name();
 			}
 
+			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
 
@@ -181,6 +186,7 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 
 		Button speedDown = (Button) brickView.findViewById(R.id.speed_down_btn);
 		speedDown.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 
 				if (speed <= -100) {
@@ -195,6 +201,7 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 
 		Button speedUp = (Button) brickView.findViewById(R.id.speed_up_btn);
 		speedUp.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 
 				if (speed >= 100) {
@@ -210,6 +217,7 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 		return brickView;
 	}
 
+	@Override
 	public void onProgressChanged(SeekBar speedBar, int progress, boolean fromUser) {
 		if (!fromUser) {
 			if (progress == 0) {//Robotium fromUser=false
@@ -224,10 +232,12 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 
 	}
 
+	@Override
 	public void onStartTrackingTouch(SeekBar speedBar) {
 
 	}
 
+	@Override
 	public void onStopTrackingTouch(SeekBar speedBar) {
 
 	}
@@ -248,6 +258,7 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 
 	}
 
+	@Override
 	public void onClick(View view) {
 		final Context context = view.getContext();
 
@@ -255,6 +266,7 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 			editorActive = true;
 			formulaEditor = new FormulaEditorDialog(context, instance);
 			formulaEditor.setOnDismissListener(new OnDismissListener() {
+				@Override
 				public void onDismiss(DialogInterface editor) {
 
 					//size = formulaEditor.getReturnValue();
