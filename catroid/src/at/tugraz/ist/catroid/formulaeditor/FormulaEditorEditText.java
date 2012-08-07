@@ -70,7 +70,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	private int numberOfVisibleLines = 0;
 	private float lineHeight = 0;
 	private int absoluteCursorPosition = 0;
-	private FormulaEditorHistory history = null;
+	private static FormulaEditorHistory history = null;
 
 	FormulaEditorDialog formulaEditorDialog = null;
 
@@ -137,6 +137,15 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		}
 	}
 
+	public void restoreFieldFromPreviousHistory() {
+		FormulaEditorHistoryElement currentState = history.getCurrentState();
+		setInputTextAndPosition(currentState.text, currentState.cursorPosition, currentState.selectionStart,
+				currentState.selectionEnd);
+		setEnabled(true);
+		formulaEditorDialog.makeUndoButtonClickable(history.undoIsPossible());
+		formulaEditorDialog.makeRedoButtonClickable(history.redoIsPossible());
+	}
+
 	public synchronized void updateSelectionIndices() {
 		clearSelectionHighlighting();
 		editMode = false;
@@ -157,6 +166,10 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		float betweenLineOffset = 0;
 
 		if (layout != null && getText().length() > 0) {
+
+			//			if (absoluteCursorPosition > getText().length()) { //old fix for landscape switches
+			//				absoluteCursorPosition = getText().length() - 1;
+			//			}
 
 			lineHeight = layout.getSpacingMultiplier() * this.getTextSize() + 5;
 			horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);

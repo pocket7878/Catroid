@@ -227,7 +227,6 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.clickOnKey("del");
 		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
 
 		assertEquals("Text not deleted correctly", "98 + XACC_ + 76", solo.getEditText(1).getText().toString());
@@ -237,7 +236,6 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		catKeyboardClicker.clickOnKey("9");
 		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
 		solo.sleep(500);
-		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
@@ -253,7 +251,6 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		solo.sleep(500);
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.clickOnKey("del");
 
 		assertEquals("Text not deleted correctly", "98 + 76", solo.getEditText(1).getText().toString());
 
@@ -266,7 +263,6 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		solo.sleep(500);
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.clickOnKey("del");
 
 		assertEquals("Text not deleted correctly", "98 + 76", solo.getEditText(1).getText().toString());
 
@@ -277,7 +273,6 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		catKeyboardClicker.clickOnKey("9");
 		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
 		solo.sleep(500);
-		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
