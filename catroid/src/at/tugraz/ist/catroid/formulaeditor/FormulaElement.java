@@ -136,14 +136,14 @@ public class FormulaElement implements Serializable {
 		return root;
 	}
 
-	public Double interpretRecursive(Double sliderValue) {
+	public Double interpretRecursive() {
 
 		if (type == ElementType.VALUE) {
 			return Double.parseDouble(value);
 		} else if (type == ElementType.OPERATOR) {
 			if (leftChild != null) {// binär operator
-				Double left = leftChild.interpretRecursive(sliderValue);
-				Double right = rightChild.interpretRecursive(sliderValue);
+				Double left = leftChild.interpretRecursive();
+				Double right = rightChild.interpretRecursive();
 
 				if (value.equals("+")) {
 					return left + right;
@@ -161,7 +161,7 @@ public class FormulaElement implements Serializable {
 					return java.lang.Math.pow(left, right);
 				}
 			} else {//unär operators
-				Double right = rightChild.interpretRecursive(sliderValue);
+				Double right = rightChild.interpretRecursive();
 				//				if (value.equals("+")) {
 				//					return right;
 				//				}
@@ -173,7 +173,7 @@ public class FormulaElement implements Serializable {
 		} else if (type == ElementType.FUNCTION) {
 			Double left = 0.0d;
 			if (leftChild != null) {
-				left = leftChild.interpretRecursive(sliderValue);
+				left = leftChild.interpretRecursive();
 			}
 
 			if (value.equals("sin")) {
@@ -196,7 +196,7 @@ public class FormulaElement implements Serializable {
 			}
 			if (value.equals("rand")) {
 				double min = left;
-				double max = rightChild.interpretRecursive(sliderValue);
+				double max = rightChild.interpretRecursive();
 				return min + (java.lang.Math.random() * (max - min));
 			}
 			if (value.equals("abs")) {
@@ -206,27 +206,24 @@ public class FormulaElement implements Serializable {
 				return (double) java.lang.Math.round(left);
 			}
 		} else if (type == ElementType.SENSOR) {
-			if (value.equals("XACC_")) {
+			if (value.equals("X_ACCELERATION_")) {
 				//Log.i("info", "Acc-X: " + Gdx.input.getAccelerometerX());
 				return Double.valueOf(Gdx.input.getAccelerometerX());
 			}
-			if (value.equals("YACC_")) {
+			if (value.equals("Y_ACCELERATION_")) {
 				return Double.valueOf(Gdx.input.getAccelerometerY());
 			}
-			if (value.equals("ZACC_")) {
+			if (value.equals("Z_ACCELERATION_")) {
 				return Double.valueOf(Gdx.input.getAccelerometerZ());
 			}
-			if (value.equals("AZIM_")) {
+			if (value.equals("AZIMUTH_ORIENTATION_")) {
 				return Double.valueOf(Gdx.input.getAzimuth());
 			}
-			if (value.equals("PITCH_")) {
+			if (value.equals("PITCH_ORIENTATION_")) {
 				return Double.valueOf(Gdx.input.getPitch());
 			}
-			if (value.equals("ROLL_")) {
+			if (value.equals("ROLL_ORIENTATION_")) {
 				return Double.valueOf(Gdx.input.getRoll());
-			}
-			if (value.equals("SLIDER_")) {
-				return (sliderValue == null ? 0.0 : sliderValue);
 			}
 		} else if (type == ElementType.CONSTANT) {
 			if (value.equals("pi")) {

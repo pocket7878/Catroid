@@ -1,27 +1,4 @@
-/**
- *  Catroid: An on-device graphical programming language for Android devices
- *  Copyright (C) 2010-2011 The Catroid Team
- *  (<http://code.google.com/p/catroid/wiki/Credits>)
- *  
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Affero General Public License as
- *  published by the Free Software Foundation, either version 3 of the
- *  License, or (at your option) any later version.
- *  
- *  An additional term exception under section 7 of the GNU Affero
- *  General Public License, version 3, is available at
- *  http://www.catroid.org/catroid_license_additional_term
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Affero General Public License for more details.
- *   
- *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-// $ANTLR 3.4 src/CalcGrammar.g 2012-07-26 14:42:36
-
+// $ANTLR 3.4 src/CalcGrammar.g 2012-08-07 18:40:54
 package at.tugraz.ist.catroid.formulaeditor;
 
 import org.antlr.runtime.CharStream;
@@ -712,8 +689,8 @@ public class CalcGrammarLexer extends Lexer {
 		try {
 			int _type = SENSOR;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// src/CalcGrammar.g:313:11: ( 'XACC_' | 'YACC_' | 'ZACC_' | 'AZIM_' | 'PITCH_' | 'ROLL_' | 'SLIDER_' )
-			int alt7 = 7;
+			// src/CalcGrammar.g:313:11: ( 'X_ACCELERATION_' | 'Y_ACCELERATION_' | 'Z_ACCELERATION_' | 'AZIMUTH_ORIENTATION_' | 'PITCH_ORIENTATION_' | 'ROLL_ORIENTATION_' )
+			int alt7 = 6;
 			switch (input.LA(1)) {
 				case 'X': {
 					alt7 = 1;
@@ -739,10 +716,6 @@ public class CalcGrammarLexer extends Lexer {
 					alt7 = 6;
 				}
 					break;
-				case 'S': {
-					alt7 = 7;
-				}
-					break;
 				default:
 					NoViableAltException nvae = new NoViableAltException("", 7, 0, input);
 
@@ -752,51 +725,44 @@ public class CalcGrammarLexer extends Lexer {
 
 			switch (alt7) {
 				case 1:
-				// src/CalcGrammar.g:313:15: 'XACC_'
+				// src/CalcGrammar.g:313:15: 'X_ACCELERATION_'
 				{
-					match("XACC_");
+					match("X_ACCELERATION_");
 
 				}
 					break;
 				case 2:
-				// src/CalcGrammar.g:313:23: 'YACC_'
+				// src/CalcGrammar.g:313:33: 'Y_ACCELERATION_'
 				{
-					match("YACC_");
+					match("Y_ACCELERATION_");
 
 				}
 					break;
 				case 3:
-				// src/CalcGrammar.g:313:31: 'ZACC_'
+				// src/CalcGrammar.g:313:51: 'Z_ACCELERATION_'
 				{
-					match("ZACC_");
+					match("Z_ACCELERATION_");
 
 				}
 					break;
 				case 4:
-				// src/CalcGrammar.g:313:39: 'AZIM_'
+				// src/CalcGrammar.g:313:69: 'AZIMUTH_ORIENTATION_'
 				{
-					match("AZIM_");
+					match("AZIMUTH_ORIENTATION_");
 
 				}
 					break;
 				case 5:
-				// src/CalcGrammar.g:313:47: 'PITCH_'
+				// src/CalcGrammar.g:313:92: 'PITCH_ORIENTATION_'
 				{
-					match("PITCH_");
+					match("PITCH_ORIENTATION_");
 
 				}
 					break;
 				case 6:
-				// src/CalcGrammar.g:313:56: 'ROLL_'
+				// src/CalcGrammar.g:313:113: 'ROLL_ORIENTATION_'
 				{
-					match("ROLL_");
-
-				}
-					break;
-				case 7:
-				// src/CalcGrammar.g:313:64: 'SLIDER_'
-				{
-					match("SLIDER_");
+					match("ROLL_ORIENTATION_");
 
 				}
 					break;
@@ -935,9 +901,9 @@ public class CalcGrammarLexer extends Lexer {
 				int LA9_5 = input.LA(2);
 
 				if ((LA9_5 == 'i')) {
-					int LA9_24 = input.LA(3);
+					int LA9_23 = input.LA(3);
 
-					if (((LA9_24 >= 'a' && LA9_24 <= 'z'))) {
+					if (((LA9_23 >= 'a' && LA9_23 <= 'z'))) {
 						alt9 = 14;
 					} else {
 						alt9 = 5;
@@ -1033,7 +999,7 @@ public class CalcGrammarLexer extends Lexer {
 			case 'X': {
 				int LA9_16 = input.LA(2);
 
-				if ((LA9_16 == 'A')) {
+				if ((LA9_16 == '_')) {
 					alt9 = 15;
 				} else {
 					alt9 = 16;
@@ -1043,7 +1009,7 @@ public class CalcGrammarLexer extends Lexer {
 			case 'Y': {
 				int LA9_17 = input.LA(2);
 
-				if ((LA9_17 == 'A')) {
+				if ((LA9_17 == '_')) {
 					alt9 = 15;
 				} else {
 					alt9 = 16;
@@ -1053,7 +1019,7 @@ public class CalcGrammarLexer extends Lexer {
 			case 'Z': {
 				int LA9_18 = input.LA(2);
 
-				if ((LA9_18 == 'A')) {
+				if ((LA9_18 == '_')) {
 					alt9 = 15;
 				} else {
 					alt9 = 16;
@@ -1090,16 +1056,6 @@ public class CalcGrammarLexer extends Lexer {
 				}
 			}
 				break;
-			case 'S': {
-				int LA9_22 = input.LA(2);
-
-				if ((LA9_22 == 'L')) {
-					alt9 = 15;
-				} else {
-					alt9 = 16;
-				}
-			}
-				break;
 			case 'B':
 			case 'C':
 			case 'D':
@@ -1115,6 +1071,7 @@ public class CalcGrammarLexer extends Lexer {
 			case 'N':
 			case 'O':
 			case 'Q':
+			case 'S':
 			case 'T':
 			case 'U':
 			case 'V':

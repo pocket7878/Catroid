@@ -68,11 +68,7 @@ public class Formula implements Serializable {
 	public Double interpret() {
 
 		//Log.i("info", root.getTreeString());
-		return root.interpretRecursive(null);
-	}
-
-	public Double interpret(Double sliderValue) {
-		return root.interpretRecursive(sliderValue);
+		return root.interpretRecursive();
 	}
 
 	public String getEditTextRepresentation() {
