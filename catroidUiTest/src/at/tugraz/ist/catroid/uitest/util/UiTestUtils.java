@@ -83,7 +83,7 @@ public class UiTestUtils {
 	private static ProjectManager projectManager = ProjectManager.getInstance();
 	private static SparseIntArray brickCategoryMap;
 
-	public static final String DEFAULT_TEST_PROJECT_NAME = "testAProject";
+	public static final String DEFAULT_TEST_PROJECT_NAME = "testProject";
 	public static final String PROJECTNAME1 = "testproject1";
 	public static final String PROJECTNAME2 = "testproject2";
 	public static final String PROJECTNAME3 = "testproject3";
@@ -585,17 +585,18 @@ public class UiTestUtils {
 		solo.clickOnEditText(editTextNumber);
 		//solo.clearEditText(numberOfEditTextsInBrick); 
 		//solo.enterText(numberOfEditTextsInBrick, newValue + ""); //would only work if old text was shorter than newValue! 
-		catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(numberOfEditTextsInBrick);
+		//catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(numberOfEditTextsInBrick);
+		catKeyboardClicker.clickOnKey("del");
 		for (char item : (Double.toString(newValue).toCharArray())) {
 			catKeyboardClicker.clickOnKey("" + item);
 		}
 
 		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
-		solo.sleep(300);
+		solo.sleep(200);
 		assertEquals("Text not updated within FormulaEditor", newValue,
 				Double.parseDouble(solo.getEditText(editTextNumber).getText().toString()));
 		solo.clickOnButton(solo.getString(R.string.formula_editor_button_return));
-		solo.sleep(300);
+		solo.sleep(200);
 
 		Formula formula = (Formula) UiTestUtils.getPrivateField(fieldName, theBrick);
 
@@ -604,6 +605,32 @@ public class UiTestUtils {
 				Double.parseDouble(solo.getEditText(editTextNumber).getText().toString()));
 
 	}
+
+	/**
+	 * For bricks using the FormulaEditor. Tests no value larger than the bricks maximum being calculated by interpret
+	 * TODO: NOT POSSIBLE YET, maximum values are still defined by Brick after interpret.
+	 */
+	//	public static void testBrickWithFormulaEditorForMaxValue(Solo solo, int editTextNumber,
+	//			int numberOfEditTextsInBrick, double tooHighValue, double maximumValue, String fieldName, Object theBrick) {
+	//
+	//		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
+	//		solo.clickOnEditText(editTextNumber);
+	//		//solo.clearEditText(numberOfEditTextsInBrick); 
+	//		//solo.enterText(numberOfEditTextsInBrick, newValue + ""); //would only work if old text was shorter than newValue! 
+	//		catKeyboardClicker.clickOnKey("del");
+	//		for (char item : (Double.toString(tooHighValue).toCharArray())) {
+	//			catKeyboardClicker.clickOnKey("" + item);
+	//		}
+	//
+	//		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
+	//		solo.clickOnButton(solo.getString(R.string.formula_editor_button_return));
+	//		solo.sleep(200);
+	//
+	//		Formula formula = (Formula) UiTestUtils.getPrivateField(fieldName, theBrick);
+	//
+	//		assertEquals("Wrong text in field", maximumValue, formula.interpret());
+	//
+	//	}
 
 	/**
 	 * Returns the absolute pixel y coordinates of the displayed bricks

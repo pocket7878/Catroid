@@ -415,7 +415,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		//delete second project
 		solo.clickLongOnText(UiTestUtils.PROJECTNAME1, 2);
 		solo.clickOnText(buttonDeleteText, 1);
-		solo.sleep(500);
+		solo.sleep(1000);
 		assertFalse("project " + UiTestUtils.PROJECTNAME1 + " is still visible",
 				solo.searchText(UiTestUtils.PROJECTNAME1, 1));
 		assertNotSame("the deleted project is still the current project", UiTestUtils.DEFAULT_TEST_PROJECT_NAME,
