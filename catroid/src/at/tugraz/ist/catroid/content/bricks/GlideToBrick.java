@@ -67,10 +67,12 @@ public class GlideToBrick implements Brick, OnClickListener {
 		durationInSecondsFormula = durationInMilliSeconds;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 
 		Double temp = durationInSecondsFormula.interpret() * 1000;
@@ -142,6 +144,7 @@ public class GlideToBrick implements Brick, OnClickListener {
 		sprite.costume.releaseXYWidthHeightLock();
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
@@ -150,6 +153,7 @@ public class GlideToBrick implements Brick, OnClickListener {
 		return durationInSecondsFormula.interpret().intValue();
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (instance == null) {
 			instance = this;
@@ -186,6 +190,7 @@ public class GlideToBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_glide_to, null);
 	}
@@ -195,6 +200,7 @@ public class GlideToBrick implements Brick, OnClickListener {
 		return new GlideToBrick(getSprite(), xDestinationFormula, yDestinationFormula, durationInSecondsFormula);
 	}
 
+	@Override
 	public void onClick(View view) {
 		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
@@ -206,21 +212,19 @@ public class GlideToBrick implements Brick, OnClickListener {
 			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
+		}
+		switch (view.getId()) {
+			case R.id.brick_glide_to_x_edit_text:
+				formulaEditor.setInputFocusAndFormula(xDestinationFormula);
+				break;
 
-			switch (view.getId()) {
-				case R.id.brick_glide_to_x_edit_text:
-					formulaEditor.setInputFocusAndFormula(xDestinationFormula);
-					break;
+			case R.id.brick_glide_to_y_edit_text:
+				formulaEditor.setInputFocusAndFormula(yDestinationFormula);
+				break;
 
-				case R.id.brick_glide_to_y_edit_text:
-					formulaEditor.setInputFocusAndFormula(yDestinationFormula);
-					break;
-
-				case R.id.brick_glide_to_duration_edit_text:
-					formulaEditor.setInputFocusAndFormula(durationInSecondsFormula);
-					break;
-			}
-
+			case R.id.brick_glide_to_duration_edit_text:
+				formulaEditor.setInputFocusAndFormula(durationInSecondsFormula);
+				break;
 		}
 
 		//		AlertDialog.Builder dialog = new AlertDialog.Builder(context);

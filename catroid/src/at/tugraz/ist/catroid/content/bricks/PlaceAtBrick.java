@@ -64,10 +64,12 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 		yPositionFormula = yPosition;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		int xPosition = xPositionFormula.interpret().intValue();
 		int yPosition = yPositionFormula.interpret().intValue();
@@ -77,10 +79,12 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 		sprite.costume.releaseXYWidthHeightLock();
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		if (instance == null) {
@@ -113,6 +117,7 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_place_at, null);
 	}
@@ -122,6 +127,7 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 		return new PlaceAtBrick(getSprite(), xPositionFormula, yPositionFormula);
 	}
 
+	@Override
 	public void onClick(View view) {
 		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
@@ -133,16 +139,18 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
+		}
+		switch (view.getId()) {
+			case R.id.brick_place_at_x_edit_text:
+				formulaEditor.setInputFocusAndFormula(xPositionFormula);
+				break;
 
-			switch (view.getId()) {
-				case R.id.brick_place_at_x_edit_text:
-					formulaEditor.setInputFocusAndFormula(xPositionFormula);
-					break;
-
-				case R.id.brick_place_at_y_edit_text:
-					formulaEditor.setInputFocusAndFormula(yPositionFormula);
-					break;
-			}
+			case R.id.brick_place_at_y_edit_text:
+				formulaEditor.setInputFocusAndFormula(yPositionFormula);
+				break;
+			default:
+				formulaEditor.setInputFocusAndFormula(null);
+				break;
 		}
 
 	}

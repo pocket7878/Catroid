@@ -66,7 +66,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	private boolean editMode = false;
 	private Spannable highlightSpan = null;
 	private Spannable errorSpan = null;
-	private boolean hasChanges = false;
 	private int numberOfVisibleLines = 0;
 	private float lineHeight = 0;
 	private int absoluteCursorPosition = 0;
@@ -91,7 +90,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		this.setOnTouchListener(this);
 		this.setLongClickable(false);
 		this.setSelectAllOnFocus(false);
-		this.setEnabled(false);
+		//this.setEnabled(false);
 		//this.setBackgroundColor(getResources().getColor(R.color.transparent));
 		this.catKeyboardView = ckv;
 		this.setCursorVisible(false);
@@ -110,10 +109,10 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	}
 
-	public void setFieldActive(String formulaAsText) {
-		setEnabled(true);
+	public void enterNewFormula(String formulaAsText) {
+		//setEnabled(true);
 		setText(formulaAsText);
-		formulaSaved();
+		//formulaSaved();
 		absoluteCursorPosition = formulaAsText.length();
 		setSelection(absoluteCursorPosition - 1);
 		selectionStartIndex = 0;
@@ -141,9 +140,12 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		FormulaEditorHistoryElement currentState = history.getCurrentState();
 		setInputTextAndPosition(currentState.text, currentState.cursorPosition, currentState.selectionStart,
 				currentState.selectionEnd);
-		setEnabled(true);
+		//setEnabled(true);
 		formulaEditorDialog.makeUndoButtonClickable(history.undoIsPossible());
 		formulaEditorDialog.makeRedoButtonClickable(history.redoIsPossible());
+		if (!history.hasUnsavedChanges()) {
+			formulaEditorDialog.makeOkButtonBackButton();
+		}
 	}
 
 	public synchronized void updateSelectionIndices() {
@@ -167,9 +169,9 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 		if (layout != null && getText().length() > 0) {
 
-			//			if (absoluteCursorPosition > getText().length()) { //old fix for landscape switches
-			//				absoluteCursorPosition = getText().length() - 1;
-			//			}
+			if (absoluteCursorPosition > getText().length()) { // fix for landscape switches
+				absoluteCursorPosition = getText().length() - 1;
+			}
 
 			lineHeight = layout.getSpacingMultiplier() * this.getTextSize() + 5;
 			horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
@@ -490,7 +492,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			appendToTextFieldAtCurrentPosition(newElement);
 		}
 
-		hasChanges = true;
 		formulaEditorDialog.makeOkButtonSaveButton();
 
 		//absoluteCursorPosition = selectionEndIndex;
@@ -577,11 +578,11 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	}
 
 	public boolean hasChanges() {
-		return hasChanges;
+		return history.hasUnsavedChanges();
 	}
 
 	public void formulaSaved() {
-		hasChanges = false;
+		history.changesSaved();
 		formulaEditorDialog.makeOkButtonBackButton();
 		errorSpan = this.getText();
 		errorSpan.removeSpan(COLOR_ERROR);
@@ -589,7 +590,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	public boolean undo() {
 		FormulaEditorHistoryElement lastStep = history.backward();
-		hasChanges = true;
 		setInputTextAndPosition(lastStep.text, lastStep.cursorPosition, lastStep.selectionStart, lastStep.selectionEnd);
 
 		return history.undoIsPossible();
@@ -597,7 +597,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	public boolean redo() {
 		FormulaEditorHistoryElement nextStep = history.forward();
-		hasChanges = true;
 		setInputTextAndPosition(nextStep.text, nextStep.cursorPosition, nextStep.selectionStart, nextStep.selectionEnd);
 
 		return history.redoIsPossible();

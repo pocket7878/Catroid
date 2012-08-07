@@ -56,10 +56,12 @@ public class WaitBrick implements Brick, OnClickListener {
 		this.timeToWaitInSecondsFormula = timeToWaitInSecondsFormula;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		Double t = timeToWaitInSecondsFormula.interpret() * 1000;
 		int timeToWaitInMilliSeconds = t.intValue();
@@ -83,10 +85,12 @@ public class WaitBrick implements Brick, OnClickListener {
 		}
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		if (instance == null) {
@@ -108,6 +112,7 @@ public class WaitBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_wait, null);
 	}
@@ -117,6 +122,7 @@ public class WaitBrick implements Brick, OnClickListener {
 		return new WaitBrick(getSprite(), timeToWaitInSecondsFormula);
 	}
 
+	@Override
 	public void onClick(View view) {
 		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
@@ -128,9 +134,8 @@ public class WaitBrick implements Brick, OnClickListener {
 			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
-
-			formulaEditor.setInputFocusAndFormula(this.timeToWaitInSecondsFormula);
 		}
+		formulaEditor.setInputFocusAndFormula(this.timeToWaitInSecondsFormula);
 
 	}
 }

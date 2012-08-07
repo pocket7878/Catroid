@@ -32,6 +32,7 @@ public class FormulaEditorHistory {
 	private Stack<FormulaEditorHistoryElement> undoStack = null;
 	private Stack<FormulaEditorHistoryElement> redoStack = null;
 	private FormulaEditorHistoryElement current = null;
+	private boolean hasUnsavedChanges = false;
 
 	//	public Formula() {
 	//		root = new FormulaElement(FormulaElement.ElementType.VALUE, "0", null);
@@ -45,6 +46,7 @@ public class FormulaEditorHistory {
 
 	public void push(String text, int cursorPosition, int selectionStart, int selectionEnd) {
 
+		hasUnsavedChanges = true;
 		undoStack.push(current);
 		current = new FormulaEditorHistoryElement(text, cursorPosition, selectionStart, selectionEnd);
 		//undoStack.push(new FormulaEditorHistoryElement(text, cursorPosition, selectionStart, selectionEnd));
@@ -59,7 +61,7 @@ public class FormulaEditorHistory {
 	public FormulaEditorHistoryElement backward() {
 		//FormulaEditorHistoryElement topElement = null;
 		redoStack.push(current);
-
+		hasUnsavedChanges = true;
 		if (!undoStack.empty()) {
 			current = undoStack.pop();
 			//redoStack.push(current);
@@ -70,6 +72,7 @@ public class FormulaEditorHistory {
 	public FormulaEditorHistoryElement forward() {
 		//FormulaEditorHistoryElement bottomElement = null;
 		undoStack.push(current);
+		hasUnsavedChanges = true;
 		if (!redoStack.empty()) {
 			current = redoStack.pop();
 			//undoStack.push(bottomElement);
@@ -97,6 +100,14 @@ public class FormulaEditorHistory {
 
 	public boolean redoIsPossible() {
 		return !redoStack.empty();
+	}
+
+	public boolean hasUnsavedChanges() {
+		return hasUnsavedChanges;
+	}
+
+	public void changesSaved() {
+		hasUnsavedChanges = false;
 	}
 
 }
