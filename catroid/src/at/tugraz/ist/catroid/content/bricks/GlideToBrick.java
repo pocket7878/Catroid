@@ -23,8 +23,7 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -33,6 +32,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class GlideToBrick implements Brick, OnClickListener {
@@ -48,7 +48,6 @@ public class GlideToBrick implements Brick, OnClickListener {
 
 	private transient Brick instance = null;
 	private transient FormulaEditorDialog formulaEditor;
-	public transient boolean editorActive = false;
 
 	private transient View view;
 
@@ -196,36 +195,32 @@ public class GlideToBrick implements Brick, OnClickListener {
 		return new GlideToBrick(getSprite(), xDestinationFormula, yDestinationFormula, durationInSecondsFormula);
 	}
 
-	public void onClick(final View view) {
+	public void onClick(View view) {
+		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
 
-		if (!editorActive) {
-			editorActive = true;
+		if (!FormulaEditorDialog.mScriptTabActivity.isEditorActive()) {
+			FormulaEditorDialog.mScriptTabActivity.setEditorStatus(true);
 			formulaEditor = new FormulaEditorDialog(context, instance);
-			formulaEditor.setOnDismissListener(new OnDismissListener() {
-				public void onDismiss(DialogInterface editor) {
 
-					//size = formulaEditor.getReturnValue();
-					formulaEditor.dismiss();
+			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
+			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
+			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
 
-					editorActive = false;
-				}
-			});
-			formulaEditor.show();
-		}
+			switch (view.getId()) {
+				case R.id.brick_glide_to_x_edit_text:
+					formulaEditor.setInputFocusAndFormula(xDestinationFormula);
+					break;
 
-		switch (view.getId()) {
-			case R.id.brick_glide_to_x_edit_text:
-				formulaEditor.setInputFocusAndFormula(xDestinationFormula);
-				break;
+				case R.id.brick_glide_to_y_edit_text:
+					formulaEditor.setInputFocusAndFormula(yDestinationFormula);
+					break;
 
-			case R.id.brick_glide_to_y_edit_text:
-				formulaEditor.setInputFocusAndFormula(yDestinationFormula);
-				break;
+				case R.id.brick_glide_to_duration_edit_text:
+					formulaEditor.setInputFocusAndFormula(durationInSecondsFormula);
+					break;
+			}
 
-			case R.id.brick_glide_to_duration_edit_text:
-				formulaEditor.setInputFocusAndFormula(durationInSecondsFormula);
-				break;
 		}
 
 		//		AlertDialog.Builder dialog = new AlertDialog.Builder(context);

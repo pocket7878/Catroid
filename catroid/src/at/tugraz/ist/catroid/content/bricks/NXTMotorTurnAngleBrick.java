@@ -219,4 +219,8 @@ public class NXTMotorTurnAngleBrick implements Brick {
 
 		return brickView;
 	}
+
+	public void onClick(View view) {
+
+	}
 }

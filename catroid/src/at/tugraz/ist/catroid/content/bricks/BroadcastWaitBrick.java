@@ -190,4 +190,8 @@ public class BroadcastWaitBrick implements Brick {
 		return new BroadcastWaitBrick(sprite);
 	}
 
+	public void onClick(View view) {
+
+	}
+
 }

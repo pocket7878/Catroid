@@ -189,4 +189,7 @@ public class PointToBrick implements Brick {
 		return new PointToBrick(sprite, pointedSprite);
 	}
 
+	public void onClick(View view) {
+
+	}
 }

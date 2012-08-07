@@ -67,4 +67,8 @@ public class ForeverBrick extends LoopBeginBrick {
 		return View.inflate(context, R.layout.brick_forever, null);
 	}
 
+	public void onClick(View view) {
+
+	}
+
 }

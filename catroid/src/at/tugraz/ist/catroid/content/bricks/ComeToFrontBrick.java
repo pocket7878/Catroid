@@ -88,4 +88,8 @@ public class ComeToFrontBrick implements Brick {
 		return View.inflate(context, R.layout.brick_come_to_front, null);
 	}
 
+	public void onClick(View view) {
+
+	}
+
 }

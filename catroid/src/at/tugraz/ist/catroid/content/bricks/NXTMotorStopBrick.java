@@ -117,4 +117,8 @@ public class NXTMotorStopBrick implements Brick, OnItemSelectedListener {
 
 	}
 
+	public void onClick(View view) {
+
+	}
+
 }

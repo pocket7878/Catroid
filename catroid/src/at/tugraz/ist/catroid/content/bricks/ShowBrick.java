@@ -69,4 +69,7 @@ public class ShowBrick implements Brick {
 		return new ShowBrick(getSprite());
 	}
 
+	public void onClick(View view) {
+
+	}
 }

@@ -71,4 +71,8 @@ public class StopAllSoundsBrick implements Brick {
 		return View.inflate(context, R.layout.brick_stop_all_sounds, null);
 	}
 
+	public void onClick(View view) {
+
+	}
+
 }

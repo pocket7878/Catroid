@@ -47,7 +47,6 @@ import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.ChangeSizeByNBrick;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.dialogs.AddBrickDialog;
@@ -191,8 +190,8 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 		Log.i("info", "savedScriptIndex: " + savedScriptIndex);
 
 		if (savedBrickIndex != -1) {
-			ChangeSizeByNBrick oldBrick = (ChangeSizeByNBrick) ProjectManager.getInstance().getCurrentSprite()
-					.getScript(savedScriptIndex).getBrickList().get(savedBrickIndex);
+			Brick oldBrick = ProjectManager.getInstance().getCurrentSprite().getScript(savedScriptIndex).getBrickList()
+					.get(savedBrickIndex);
 			oldBrick.onClick(new View(this));
 		}
 
