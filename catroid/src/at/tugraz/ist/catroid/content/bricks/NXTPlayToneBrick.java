@@ -23,7 +23,12 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
+
 import android.util.Log;
+
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
+
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -49,25 +54,29 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 	private static final int MAX_DURATION = Integer.MAX_VALUE;
 
 	private Sprite sprite;
-	private int hertz;
-	private int durationInMs;
 
 	private transient EditText editFreq;
 
-	private Formula hertzFormula;
+	
+
+private Formula frequencyFormula;
 	private Formula durationInMsFormula;
 
 	private transient Brick instance = null;
 	private transient FormulaEditorDialog formulaEditor;
 
 	public NXTPlayToneBrick(Sprite sprite, int hertz, int duration) {
-		Log.i("info", "NXTPlayToneBrick: Konstruktor");
 		this.sprite = sprite;
-		this.hertz = hertz;
-		this.durationInMs = duration;
 
-		hertzFormula = new Formula(Integer.toString(hertz));
-		durationInMsFormula = new Formula(Integer.toString(duration));
+		this.frequencyFormula = new Formula(Integer.toString(hertz));
+		this.durationInMsFormula = new Formula(Integer.toString(duration));
+	}
+
+	public NXTPlayToneBrick(Sprite sprite, Formula frequencyFormula, Formula durationFormula) {
+		this.sprite = sprite;
+
+		this.frequencyFormula = frequencyFormula;
+		this.durationInMsFormula = durationFormula;
 	}
 
 	@Override
@@ -77,12 +86,12 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		int interpretHertz = Math.min(MAX_FREQ_IN_HERTZ, hertzFormula.interpret(Double.valueOf(hertz)).intValue());
-		interpretHertz = Math.max(MIN_FREQ_IN_HERTZ, interpretHertz);
-		durationInMs = Math.min(MAX_DURATION, durationInMsFormula.interpret().intValue());
+		int interpretFrequency = Math.min(MAX_FREQ_IN_HERTZ, frequencyFormula.interpret().intValue());
+		interpretFrequency = Math.max(MIN_FREQ_IN_HERTZ, interpretFrequency);
+		int durationInMs = Math.min(MAX_DURATION, durationInMsFormula.interpret().intValue());
 		durationInMs = Math.max(MIN_DURATION, durationInMs);
 
-		LegoNXT.sendBTCPlayToneMessage(hertz, durationInMs);
+		LegoNXT.sendBTCPlayToneMessage(interpretFrequency, durationInMs);
 
 	}
 
@@ -99,7 +108,7 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new NXTPlayToneBrick(getSprite(), hertz, durationInMs);
+		return new NXTPlayToneBrick(getSprite(), frequencyFormula, durationInMsFormula);
 	}
 
 	@Override
@@ -129,8 +138,8 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 		TextView textFreq = (TextView) brickView.findViewById(R.id.nxt_tone_freq_text_view);
 		editFreq = (EditText) brickView.findViewById(R.id.nxt_tone_freq_edit_text);
 		//		editFreq.setText(String.valueOf(hertz / 100));
-		hertzFormula.setTextFieldId(R.id.nxt_tone_freq_edit_text);
-		hertzFormula.refreshTextField(brickView);
+		frequencyFormula.setTextFieldId(R.id.nxt_tone_freq_edit_text);
+		frequencyFormula.refreshTextField(brickView);
 
 		textFreq.setVisibility(View.GONE);
 		editFreq.setVisibility(View.VISIBLE);
@@ -154,7 +163,7 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
 			switch (view.getId()) {
 				case R.id.nxt_tone_freq_edit_text:
-					formulaEditor.setInputFocusAndFormula(hertzFormula);
+					formulaEditor.setInputFocusAndFormula(frequencyFormula);
 					break;
 				case R.id.nxt_tone_duration_edit_text:
 					formulaEditor.setInputFocusAndFormula(durationInMsFormula);
