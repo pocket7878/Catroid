@@ -27,8 +27,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -98,7 +98,6 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 		if (brickSpace != null) {
 			brickView = currentBrick.getView(context, 0, null);
 			brickSpace.addView(brickView);
-
 
 			int brickHeight = brickView.getMeasuredHeight();
 		}
@@ -199,6 +198,10 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 			case R.id.formula_editor_ok_button:
 				Log.i("info", "FormulaEditorDialog.onClick()  case ok_button");
 				if (buttonIsBackButton == true) {
+					mScriptTabActivity.setCurrentFormulaEditorDialog(null);
+					mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
+					mScriptTabActivity.setEditorStatus(false);
+					mScriptTabActivity.setCurrentBrick(null);
 					dismiss();
 				} else {
 					String formulaToParse = formulaEditorEditText.getText().toString();
