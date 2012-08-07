@@ -171,6 +171,8 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 			return;
 		} else if (restorePreviousTextField) {
 			restorePreviousTextField = false;
+			this.formula = formula;
+			makeOkButtonSaveButton();
 			formulaEditorEditText.restoreFieldFromPreviousHistory();
 			return;
 		} else if (formulaEditorEditText.hasChanges() == true) {
@@ -211,6 +213,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 					dismiss();
 				} else {
 					String formulaToParse = formulaEditorEditText.getText().toString();
+					Log.i("info", "Formula: " + formulaToParse);
 					int err = parseFormula(formulaToParse);
 					if (err == -1) {
 						if (brickSpace != null) {
