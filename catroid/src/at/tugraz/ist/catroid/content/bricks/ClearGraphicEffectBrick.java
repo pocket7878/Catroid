@@ -70,4 +70,8 @@ public class ClearGraphicEffectBrick implements Brick {
 		return new ClearGraphicEffectBrick(getSprite());
 	}
 
+	public void onClick(View view) {
+
+	}
+
 }

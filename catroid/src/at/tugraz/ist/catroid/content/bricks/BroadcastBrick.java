@@ -189,4 +189,8 @@ public class BroadcastBrick implements Brick {
 		return new BroadcastBrick(sprite);
 	}
 
+	public void onClick(View view) {
+
+	}
+
 }

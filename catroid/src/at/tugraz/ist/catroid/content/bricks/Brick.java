@@ -50,4 +50,6 @@ public interface Brick extends Serializable {
 
 	public int getRequiredResources();
 
+	public void onClick(View view);
+
 }

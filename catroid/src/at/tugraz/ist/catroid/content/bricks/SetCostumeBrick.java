@@ -140,4 +140,8 @@ public class SetCostumeBrick implements Brick {
 
 	}
 
+	public void onClick(View view) {
+
+	}
+
 }

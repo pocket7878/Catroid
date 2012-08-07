@@ -109,4 +109,8 @@ public class WhenBrick implements Brick {
 		return new WhenBrick(getSprite(), whenScript);
 	}
 
+	public void onClick(View view) {
+
+	}
+
 }

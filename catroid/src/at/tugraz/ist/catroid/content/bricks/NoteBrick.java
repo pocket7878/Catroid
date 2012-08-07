@@ -121,4 +121,8 @@ public class NoteBrick implements Brick {
 		return new NoteBrick(this.sprite, this.note);
 	}
 
+	public void onClick(View view) {
+
+	}
+
 }

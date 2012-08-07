@@ -107,4 +107,8 @@ public class LoopEndBrick implements Brick {
 		return null;
 	}
 
+	public void onClick(View view) {
+
+	}
+
 }
