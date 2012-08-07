@@ -208,6 +208,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 					mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
 					mScriptTabActivity.setEditorStatus(false);
 					mScriptTabActivity.setCurrentBrick(null);
+					dismiss();
 				} else {
 					String formulaToParse = formulaEditorEditText.getText().toString();
 					int err = parseFormula(formulaToParse);
