@@ -201,7 +201,7 @@ public class CatKeyboardClicker {
 		displayWidth = currentDisplayMetrics.widthPixels;
 		displayHeight = currentDisplayMetrics.heightPixels;
 
-		keyboardHeight = buttonsEachRow * 50.0f * px;
+		keyboardHeight = buttonsEachRow * 42 * px;
 		Log.i("info", "keyboardHeight: " + keyboardHeight);
 
 		amountOfDisplayspaceUsedForKeyboard = displayHeight / keyboardHeight;
