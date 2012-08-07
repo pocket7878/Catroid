@@ -388,9 +388,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		clearSelectionHighlighting();
 		errorSpan = this.getText();
 		//Log.i("info", "First error: " + firstError);
-		editMode = false;
-
-		if (errorSpan.length() == 1 || firstError == 0) {
+		if (errorSpan.length() <= 1 || firstError == 0) {
 			if (errorSpan.length() == 0) {
 				append(" ");
 			}
@@ -398,19 +396,27 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			absoluteCursorPosition = 0;
 			selectionStartIndex = 0;
 			selectionEndIndex = 1;
+			editMode = true;
 			return;
 		}
 
-		if (firstError < errorSpan.length() - 1) {
+		if (firstError < errorSpan.length()) {
+			editMode = (charIsLowerCaseLetter(errorSpan.charAt(firstError)) || charIsCapitalLetter(errorSpan
+					.charAt(firstError))) ? false : true;
+			selectionStartIndex = firstError;
 			errorSpan.setSpan(COLOR_ERROR, firstError, ++firstError, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			selectionEndIndex = firstError;
 		} else {
+			Log.i("info", "ELSE!!!");
+			editMode = (charIsLowerCaseLetter(errorSpan.charAt(firstError - 1)) || charIsCapitalLetter(errorSpan
+					.charAt(firstError - 1))) ? false : true;
 			errorSpan.setSpan(COLOR_ERROR, firstError - 1, firstError, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			selectionStartIndex = firstError - 1;
+			selectionEndIndex = firstError;
 		}
 
 		setSelection(firstError);
 		absoluteCursorPosition = firstError;
-		selectionEndIndex = firstError;
-		selectionStartIndex = firstError;
 		//		if (errorSpan.length() > firstError) {
 		//			char firstLetter = errorSpan.charAt(firstError);
 		//
@@ -454,12 +460,14 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			char currentChar = text.charAt(absoluteCursorPosition);
 			char charBefore = text.charAt(absoluteCursorPosition - 1);
 
-			//when the user tries to write into a function/variable/sensor, we highlight it!
-			if ((((charIsCapitalLetter(currentChar) || charIsLowerCaseLetter(currentChar) || (currentChar == '_'))) && ((charIsCapitalLetter(charBefore) || charIsLowerCaseLetter(charBefore)
+			//when the user tries to write into a function/variable/sensor, we delete it!
+			if ((((charIsCapitalLetter(currentChar) || charIsLowerCaseLetter(currentChar) || (currentChar == '_') || (currentChar == '('))) && ((charIsCapitalLetter(charBefore) || charIsLowerCaseLetter(charBefore)
 					&& charBefore != '_')))) {
 				doSelectionAndHighlighting();
 				editMode = true;
-				return;
+				if (!(catKey.getKeyCode() == KeyEvent.KEYCODE_DEL)) {
+					return;
+				}
 			}
 		}
 
@@ -495,25 +503,28 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			editMode = false;
 		} else {
 			char currentChar = text.charAt(selectionEndIndex - 1);
-			if (currentChar == ',') {
+			if (currentChar == ',' || currentChar == ')' || currentChar == '(' || currentChar == '_') {
 				doSelectionAndHighlighting();
-				return;
-			} else if (currentChar == ')') {
-				doSelectionAndHighlighting();
-				return;
-			} else if (currentChar == '(') {
-				doSelectionAndHighlighting();
-				return;
-			} else if (currentChar == '_') {
-				doSelectionAndHighlighting();
-				return;
-			} else if (charIsCapitalLetter(currentChar) || charIsLowerCaseLetter(currentChar) || (currentChar == '_')) {
-				doSelectionAndHighlighting();
-				return;
+				text.replace(selectionStartIndex, selectionEndIndex, "");
+				selectionEndIndex = selectionStartIndex;
+				//return;
+				//			} else if () {
+				//				doSelectionAndHighlighting();
+				//				return;
+				//			} else if () {
+				//				doSelectionAndHighlighting();
+				//				return;
+				//			} else if () {
+				//				doSelectionAndHighlighting();
+				//				return;
+				//			} else if (charIsCapitalLetter(currentChar) || charIsLowerCaseLetter(currentChar)) {
+				//				doSelectionAndHighlighting();
+				//				return;
+			} else {
+				text.replace(selectionEndIndex - 1, selectionEndIndex, "");
+				selectionEndIndex--;
+				selectionStartIndex = selectionEndIndex;
 			}
-			text.replace(selectionEndIndex - 1, selectionEndIndex, "");
-			selectionEndIndex--;
-			selectionStartIndex = selectionEndIndex;
 		}
 
 		setText(text);

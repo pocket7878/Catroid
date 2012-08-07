@@ -82,74 +82,10 @@ public class NXTPlayToneBrickTest extends ActivityInstrumentationTestCase2<Scrip
 				getActivity().getAdapter().getChild(groupCount - 1, 0));
 		assertNotNull("TextView does not exist.", solo.getText(getActivity().getString(R.string.nxt_play_tone)));
 
-		String buttonPositiveText = solo.getString(R.string.ok);
+		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 2, SET_DURATION, "durationInMsFormula", playToneBrick);
 
-		solo.clickOnEditText(0);
-		solo.clearEditText(0);
-		solo.enterText(0, SET_DURATION + "");
-		solo.clickOnButton(buttonPositiveText);
+		UiTestUtils.testBrickWithFormulaEditor(solo, 1, 2, SET_FREQUENCY, "frequencyFormula", playToneBrick);
 
-		double duration = (Integer) UiTestUtils.getPrivateField("durationInMs", playToneBrick);
-		assertEquals("Wrong text in field.", SET_DURATION, duration / 1000);
-		assertEquals("Value in Brick is not updated.", SET_DURATION + "", solo.getEditText(0).getText().toString());
-
-		assertEquals("SeekBar is at wrong position", SET_FREQUENCY_INITIALLY, solo.getCurrentProgressBars().get(0)
-				.getProgress());
-
-		solo.clickOnEditText(1);
-		solo.clearEditText(0);
-		solo.enterText(0, SET_FREQUENCY + "");
-		solo.clickOnButton(buttonPositiveText);
-
-		int hertz = (Integer) UiTestUtils.getPrivateField("hertz", playToneBrick);
-		assertEquals("Wrong text in field.", SET_FREQUENCY * 100, hertz);
-		assertEquals("Value in Brick is not updated.", SET_FREQUENCY + "", solo.getEditText(1).getText().toString());
-		assertEquals("SeekBar is at wrong position", SET_FREQUENCY, solo.getCurrentProgressBars().get(0).getProgress());
-
-		solo.setProgressBar(0, SET_FREQUENCY_INITIALLY);
-		solo.sleep(200);
-
-		hertz = (Integer) UiTestUtils.getPrivateField("hertz", playToneBrick);
-		assertEquals("Wrong text in field.", SET_FREQUENCY_INITIALLY * 100, hertz);
-		assertEquals("Value in Brick is not updated.", SET_FREQUENCY_INITIALLY + "", solo.getEditText(1).getText()
-				.toString());
-		assertEquals("SeekBar is at wrong position", SET_FREQUENCY_INITIALLY, solo.getCurrentProgressBars().get(0)
-				.getProgress());
-
-		solo.clickOnButton(0);
-
-		int freq_btn = (Integer) UiTestUtils.getPrivateField("hertz", playToneBrick);
-		assertEquals("Wrong text in field.", freq_btn, hertz - 100);
-		assertEquals("Value in Brick is not updated.", (hertz - 1) / 100 + "", solo.getEditText(1).getText().toString());
-		assertEquals("SeekBar is at wrong position", (hertz - 1) / 100, solo.getCurrentProgressBars().get(0)
-				.getProgress());
-
-		solo.clickOnButton(1);
-
-		freq_btn = (Integer) UiTestUtils.getPrivateField("hertz", playToneBrick);
-		assertEquals("Wrong text in field.", freq_btn, hertz);
-		assertEquals("Value in Brick is not updated.", hertz / 100 + "", solo.getEditText(1).getText().toString());
-		assertEquals("SeekBar is at wrong position", hertz / 100, solo.getCurrentProgressBars().get(0).getProgress());
-
-		solo.setProgressBar(0, MIN_FREQ / 100);
-		solo.sleep(200);
-		solo.clickOnButton(0);
-		solo.clickOnButton(0);
-
-		hertz = (Integer) UiTestUtils.getPrivateField("hertz", playToneBrick);
-		assertEquals("Wrong text in field.", hertz, MIN_FREQ);
-		assertEquals("Value in Brick is not updated.", hertz / 100 + "", solo.getEditText(1).getText().toString());
-		assertEquals("SeekBar is at wrong position", hertz / 100, solo.getCurrentProgressBars().get(0).getProgress());
-
-		solo.setProgressBar(0, MAX_FREQ / 100);
-		solo.sleep(200);
-		solo.clickOnButton(1);
-		solo.clickOnButton(1);
-
-		hertz = (Integer) UiTestUtils.getPrivateField("hertz", playToneBrick);
-		assertEquals("Wrong text in field.", hertz, MAX_FREQ);
-		assertEquals("Value in Brick is not updated.", hertz / 100 + "", solo.getEditText(1).getText().toString());
-		assertEquals("SeekBar is at wrong position", hertz / 100, solo.getCurrentProgressBars().get(0).getProgress());
 	}
 
 	private void createProject() {
