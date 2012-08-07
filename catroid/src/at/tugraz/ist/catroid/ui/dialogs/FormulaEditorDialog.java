@@ -36,7 +36,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.ChangeSizeByNBrick;
 import at.tugraz.ist.catroid.formulaeditor.CalcGrammarParser;
 import at.tugraz.ist.catroid.formulaeditor.CatKeyboardView;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
@@ -227,7 +226,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 				Log.i("info", "FormulaEditorDialog.onClick() case back_button");
 				mScriptTabActivity.setCurrentFormulaEditorDialog(null);
 				mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
-				((ChangeSizeByNBrick) this.currentBrick).setEditorStatus(false);
+				mScriptTabActivity.setEditorStatus(false);
 				mScriptTabActivity.setCurrentBrick(null);
 				dismiss();
 				break;
@@ -243,7 +242,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 		//		Log.i("info", "FormulaEditorDialog.onDismiss()");
 		//			mScriptTabActivity.setCurrentFormulaEditorDialog(null);
 		//		mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
-		//			((ChangeSizeByNBrick) this.currentBrick).setEditorStatus(false);
+		//							mScriptTabActivity.setEditorStatus(false);
 		//		mScriptTabActivity.setCurrentBrick(null);
 		//			this.dismiss();
 
@@ -267,7 +266,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 				Log.i("info", "FormulaEditorDialog.onKeyDown()");
 				mScriptTabActivity.setCurrentFormulaEditorDialog(null);
 				mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
-				((ChangeSizeByNBrick) this.currentBrick).setEditorStatus(false);
+				mScriptTabActivity.setEditorStatus(false);
 				mScriptTabActivity.setCurrentBrick(null);
 				this.dismiss();
 

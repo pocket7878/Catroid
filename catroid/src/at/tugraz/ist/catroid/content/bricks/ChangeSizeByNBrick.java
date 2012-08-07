@@ -39,7 +39,7 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private Sprite sprite;
 	private Formula sizeFormula;
-	public transient boolean editorActive = false;
+	//	public transient boolean editorActive = false;
 
 	private transient ChangeSizeByNBrick instance = null;
 	private transient FormulaEditorDialog formulaEditor;
@@ -105,11 +105,13 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 	}
 
 	public void onClick(View view) {
-		Log.i("info", "ChangeSizeByNBrick.onClick()--  editorActive: " + editorActive);
+		Log.i("info",
+				"ChangeSizeByNBrick.onClick()--  editorActive: "
+						+ FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
 
-		if (!editorActive) {
-			editorActive = true;
+		if (!FormulaEditorDialog.mScriptTabActivity.isEditorActive()) {
+			FormulaEditorDialog.mScriptTabActivity.setEditorStatus(true);
 			formulaEditor = new FormulaEditorDialog(context, instance);
 			//			formulaEditor.setOnDismissListener(new OnDismissListener() {
 			//				public void onDismiss(DialogInterface editor) {
@@ -129,11 +131,4 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 
 	}
 
-	public void setEditorStatus(boolean isActive) {
-		this.editorActive = isActive;
-	}
-
-	public boolean isEditorActive() {
-		return this.editorActive;
-	}
 }

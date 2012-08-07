@@ -86,6 +86,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 
 	private FormulaEditorDialog currentFormulaEditorDialog;
 	private Brick currentBrick;
+	private boolean editorActive;
 
 	private void setupTabHost() {
 		tabHost = (TabHost) findViewById(android.R.id.tabhost);
@@ -147,7 +148,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 		int scriptIndexToSave = -1;
 
 		if (this.currentBrick != null) {
-			if (((ChangeSizeByNBrick) currentBrick).isEditorActive()) {
+			if (this.isEditorActive()) {
 
 				Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
 
@@ -170,7 +171,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 				View view = new View(this);
 				view.setId(R.id.formula_editor_ok_button);
 				this.currentFormulaEditorDialog.onClick(view);
-				((ChangeSizeByNBrick) currentBrick).setEditorStatus(false);
+				this.setEditorStatus(false);
 			}
 		}
 
@@ -317,6 +318,14 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	public void setCurrentBrick(Brick brick) {
 		Log.i("info", "ScriptTabActivity.setCurrentBrick(): " + brick);
 		this.currentBrick = brick;
+	}
+
+	public void setEditorStatus(boolean isActive) {
+		this.editorActive = isActive;
+	}
+
+	public boolean isEditorActive() {
+		return this.editorActive;
 	}
 
 	@Override
