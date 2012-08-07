@@ -32,7 +32,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
@@ -52,14 +51,12 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 	private Sprite sprite;
 	private String motor;
 	private transient Motor motorEnum;
-	private int speed;
 
 	private static final int NO_DELAY = 0;
 	private static final int MIN_SPEED = -100;
 	private static final int MAX_SPEED = 100;
 
 	private transient EditText editSpeed;
-	private transient SeekBar speedBar;
 
 	private Formula speedFormula;
 
@@ -78,9 +75,16 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 		this.sprite = sprite;
 		this.motorEnum = motor;
 		this.motor = motorEnum.name();
-		this.speed = speed;
 
-		speedFormula = new Formula(Integer.toString(speed));
+		this.speedFormula = new Formula(Integer.toString(speed));
+	}
+
+	public NXTMotorActionBrick(Sprite sprite, Motor motor, Formula speedFormula) {
+		this.sprite = sprite;
+		this.motorEnum = motor;
+		this.motor = motorEnum.name();
+
+		this.speedFormula = speedFormula;
 	}
 
 	@Override
@@ -90,7 +94,7 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		speed = Math.min(MAX_SPEED, speedFormula.interpret().intValue());
+		int speed = Math.min(MAX_SPEED, speedFormula.interpret().intValue());
 		speed = Math.max(MIN_SPEED, speed);
 
 		if (motorEnum.equals(Motor.MOTOR_A_C)) {
@@ -116,7 +120,7 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new NXTMotorActionBrick(getSprite(), motorEnum, speed);
+		return new NXTMotorActionBrick(getSprite(), motorEnum, speedFormula);
 	}
 
 	@Override
