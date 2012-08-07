@@ -31,20 +31,17 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.LegoNXT.LegoNXT;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
-import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
 import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
-public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnClickListener {
+public class NXTMotorActionBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	public static final int REQUIRED_RESSOURCES = BLUETOOTH_LEGO_NXT;
 
@@ -62,7 +59,6 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 	private static final int MAX_SPEED = 100;
 
 	private transient EditText editSpeed;
-	private transient EditText editSeekBarValue;
 	private transient SeekBar speedBar;
 
 	private Formula speedFormula;
@@ -84,8 +80,7 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 		this.motor = motorEnum.name();
 		this.speed = speed;
 
-		FormulaElement sliderElement = new FormulaElement(FormulaElement.ElementType.SENSOR, "SLIDER_", null);
-		speedFormula = new Formula(sliderElement);
+		speedFormula = new Formula(Integer.toString(speed));
 	}
 
 	@Override
@@ -116,8 +111,6 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 	@Override
 	public View getPrototypeView(Context context) {
 		View view = View.inflate(context, R.layout.brick_nxt_motor_action, null);
-		SeekBar noClick = (SeekBar) view.findViewById(R.id.seekBarSpeedMotorAction);
-		noClick.setEnabled(false);
 		return view;
 	}
 
@@ -170,88 +163,7 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 
 		motorSpinner.setSelection(motorEnum.ordinal());
 
-		speedBar = (SeekBar) brickView.findViewById(R.id.seekBarSpeedMotorAction);
-		speedBar.setOnSeekBarChangeListener(this);
-		speedBar.setMax(MAX_SPEED * 2);
-		speedBar.setEnabled(true);
-
-		TextView textSeekBarValue = (TextView) brickView.findViewById(R.id.motor_action_seekBar_text_view);
-		editSeekBarValue = (EditText) brickView.findViewById(R.id.motor_action_seekBar_edit_text);
-
-		textSeekBarValue.setVisibility(View.GONE);
-		editSeekBarValue.setVisibility(View.VISIBLE);
-
-		speedToSeekBarVal();
-		speedToSeekBarEditText();
-
-		Button speedDown = (Button) brickView.findViewById(R.id.speed_down_btn);
-		speedDown.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-				if (speed <= -100) {
-					return;
-				}
-
-				speed--;
-				speedToSeekBarVal();
-				speedToSeekBarEditText();
-			}
-		});
-
-		Button speedUp = (Button) brickView.findViewById(R.id.speed_up_btn);
-		speedUp.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-				if (speed >= 100) {
-					return;
-				}
-
-				speed++;
-				speedToSeekBarVal();
-				speedToSeekBarEditText();
-			}
-		});
-
 		return brickView;
-	}
-
-	@Override
-	public void onProgressChanged(SeekBar speedBar, int progress, boolean fromUser) {
-		if (!fromUser) {
-			if (progress == 0) {//Robotium fromUser=false
-				return;
-			}
-		}
-
-		if (progress != (speed + 100)) {
-			seekbarValToSpeed();
-			speedToSeekBarEditText();
-		}
-
-	}
-
-	@Override
-	public void onStartTrackingTouch(SeekBar speedBar) {
-
-	}
-
-	@Override
-	public void onStopTrackingTouch(SeekBar speedBar) {
-
-	}
-
-	private void speedToSeekBarEditText() {
-		editSeekBarValue.setText(String.valueOf(speed));
-	}
-
-	private void seekbarValToSpeed() {
-		speed = speedBar.getProgress() - 100;
-	}
-
-	private void speedToSeekBarVal() {
-		speedBar.setProgress(speed + 100);
 	}
 
 	public void onNothingSelected(AdapterView<?> arg0) {
