@@ -119,6 +119,8 @@ public class Costume extends Image {
 		if (imageChanged) {
 			this.disposeTextures();
 			currentAlphaPixmap = null;
+			/* the following block is not testable with Robotium UITests */
+			/* ----> */
 			if (costumeData == null) {
 				xYWidthHeightLock.acquireUninterruptibly();
 				this.x += this.width / 2f;
@@ -131,7 +133,7 @@ public class Costume extends Image {
 				imageLock.release();
 				return;
 			}
-
+			/* <---- */
 			Pixmap pixmap;
 			if (internalPath) {
 				pixmap = new Pixmap(Gdx.files.internal(costumeData.getAbsolutePath()));
