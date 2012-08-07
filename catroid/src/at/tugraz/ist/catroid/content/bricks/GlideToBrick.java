@@ -225,6 +225,9 @@ public class GlideToBrick implements Brick, OnClickListener {
 			case R.id.brick_glide_to_duration_edit_text:
 				formulaEditor.setInputFocusAndFormula(durationInSecondsFormula);
 				break;
+			default:
+				formulaEditor.setInputFocusAndFormula(null);
+				break;
 		}
 
 		//		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
