@@ -1,5 +1,5 @@
 /**
-+ *  Catroid: An on-device graphical programming language for Android devices
+ *  Catroid: An on-device graphical programming language for Android devices
  *  Copyright (C) 2010-2011 The Catroid Team
  *  (<http://code.google.com/p/catroid/wiki/Credits>)
  *  
