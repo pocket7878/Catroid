@@ -53,6 +53,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 	public FormulaEditorEditTextTest() {
 		super("at.tugraz.ist.catroid", ScriptTabActivity.class);
+
 	}
 
 	@Override
