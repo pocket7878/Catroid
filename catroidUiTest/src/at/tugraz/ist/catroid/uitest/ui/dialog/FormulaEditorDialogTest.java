@@ -42,8 +42,13 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 	private Solo solo;
 	private Project project;
 	private PlaceAtBrick placeAtBrick;
+	CatKeyboardClicker catKeyboardClicker = null;
 	private static final int INITIAL_X = 8;
 	private static final int INITIAL_Y = 7;
+
+	private static final int X_POS_EDIT_TEXT_ID = 0;
+	private static final int Y_POS_EDIT_TEXT_ID = 1;
+	private static final int FORMULA_EDITOR_EDIT_TEXT_ID = 2;
 
 	public FormulaEditorDialogTest() {
 		super("at.tugraz.ist.catroid", ScriptTabActivity.class);
@@ -54,6 +59,7 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 		super.setUp();
 		createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
+		catKeyboardClicker = new CatKeyboardClicker(solo);
 	}
 
 	@Override
@@ -79,20 +85,18 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 	}
 
 	public void testFormulaEditorChangeFormulaWithoutSaving() {
-		int X_POS_EDIT_TEXT_ID = 0;
-		int Y_POS_EDIT_TEXT_ID = 1;
-
-		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
 		catKeyboardClicker.clickOnKey("1");
 		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
 		solo.sleep(50);
-		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_save_first)));
+		assertTrue("Error message for switching from an unsaved formula not found",
+				solo.searchText(solo.getString(R.string.formula_editor_save_first)));
 
-		solo.clickOnButton(solo.getString(R.string.formula_editor_button_return));
+		solo.goBack();
 		solo.sleep(100);
-		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_confirm_discard)));
+		assertTrue("Confirmation message for discarding changes in formula not found",
+				solo.searchText(solo.getString(R.string.formula_editor_confirm_discard)));
 		solo.goBack();
 		solo.goBack();
 
@@ -100,36 +104,37 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 
 	public void testFormulaEditorDialogAndSimpleInterpretation() {
 		//		Note solo.enterText() modifications to the text are undetectable to FormulaEditorEditText.
-		//		Also text via solo.enterText() *must* be longer than the original text!!!
+		//		Text via solo.enterText() *must* be longer than the original text!!! To be safe use CatKeyboardKlicker to clear!
 		//		Use CatKeyboardClicker for full functionality, is a lot slower and inconvenient! Will do just fine here without
 
 		String newXFormula = "10 + 12 - 2 * 3 - 4 ";
 		int newXValue = 10 + 12 - 2 * 3 - 4;
 		String newYFormula = "rand( cos( 90 ) , 10 * sin( 90 ) ) ";
 
-		int X_POS_EDIT_TEXT_ID = 0;
-		int Y_POS_EDIT_TEXT_ID = 1;
-		int FORMULA_EDITOR_EDIT_TEXT_ID = 2;
-
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		solo.clearEditText(FORMULA_EDITOR_EDIT_TEXT_ID);
+		catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(FORMULA_EDITOR_EDIT_TEXT_ID);
 		solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, "999 " + newXFormula);
+		catKeyboardClicker.clickOnKey("9");
 		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
 		solo.sleep(50);
-		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
+		assertTrue("Save failed toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
 
 		solo.clearEditText(FORMULA_EDITOR_EDIT_TEXT_ID);
 		solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, newXFormula);
 		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
 		solo.sleep(50);
-		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_changes_saved)));
+		assertTrue("Changes saved toast not found",
+				solo.searchText(solo.getString(R.string.formula_editor_changes_saved)));
 
 		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
+		catKeyboardClicker.clickOnKey("1");
 		solo.clearEditText(FORMULA_EDITOR_EDIT_TEXT_ID);
 		solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, newYFormula);
+
 		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
 		solo.sleep(50);
-		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_changes_saved)));
+		assertTrue("Changes saved toast not found",
+				solo.searchText(solo.getString(R.string.formula_editor_changes_saved)));
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
 		solo.sleep(50);
@@ -141,7 +146,7 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 		assertEquals("Wrong text in FormulaEditor", newYFormula, solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
 				.getText().toString());
 
-		solo.clickOnButton(solo.getString(R.string.formula_editor_button_return));
+		solo.goBack();
 		solo.sleep(300);
 
 		//Interpretation test
@@ -156,4 +161,47 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 
 	}
 
+	public void testSimpleUndo() {
+
+		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(FORMULA_EDITOR_EDIT_TEXT_ID);
+
+		catKeyboardClicker.clickOnKey("1");
+		catKeyboardClicker.clickOnKey("-");
+		catKeyboardClicker.clickOnKey("2");
+		catKeyboardClicker.clickOnKey("*");
+		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.clickOnKey("cos");
+		catKeyboardClicker.clickOnKey("sin");
+		catKeyboardClicker.clickOnKey("tan");
+
+		assertEquals("Wrong text in field", "1-2*cos( sin( tan( 0 ) ) )", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+				.getText().toString());
+
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_undo));
+		solo.sleep(50);
+		assertEquals("Undo did something wrong", "1-2*cos( sin( 0 ) )", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+				.getText().toString());
+
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_undo));
+		solo.sleep(50);
+		assertEquals("Undo did something wrong", "1-2*cos( 0 )", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+				.getText().toString());
+
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_undo));
+		solo.sleep(50);
+		assertEquals("Undo did something wrong", "1-2*", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
+				.toString());
+
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_undo));
+		solo.sleep(50);
+		assertEquals("Undo did something wrong", "1-2", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
+				.toString());
+
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_return));
+
+		assertEquals("Undo did something wrong", "1 - 2", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString());
+
+	}
 }

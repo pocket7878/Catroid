@@ -90,18 +90,19 @@
             android:text="@string/formula_editor_button_save" />
         
         <Button
-            android:id="@+id/formula_editor_discard_button"
+            android:id="@+id/formula_editor_undo_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/formula_editor_button_discard" 
+            android:text="@string/formula_editor_button_undo"
             android:layout_toRightOf="@id/formula_editor_ok_button"/>
 
         <Button
-            android:id="@+id/formula_editor_back_button"
+            android:id="@+id/formula_editor_redo_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/formula_editor_button_return" 
-            android:layout_toRightOf="@id/formula_editor_discard_button"/>
+            android:text="@string/formula_editor_button_redo"
+            android:layout_toRightOf="@id/formula_editor_undo_button"/>
+        
 	</RelativeLayout>
 	
 	

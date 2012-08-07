@@ -70,8 +70,9 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	private int numberOfVisibleLines = 0;
 	private float lineHeight = 0;
 	private int absoluteCursorPosition = 0;
+	private FormulaEditorHistory history = null;
 
-	FormulaEditorDialog dialog = null;
+	FormulaEditorDialog formulaEditorDialog = null;
 
 	public FormulaEditorEditText(Context context) {
 		super(context);
@@ -86,7 +87,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	}
 
 	public void init(FormulaEditorDialog dialog, int brickHeight, CatKeyboardView ckv, Context context) {
-		this.dialog = dialog;
+		this.formulaEditorDialog = dialog;
 		this.setOnTouchListener(this);
 		this.setLongClickable(false);
 		this.setSelectAllOnFocus(false);
@@ -112,11 +113,28 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	public void setFieldActive(String formulaAsText) {
 		setEnabled(true);
 		setText(formulaAsText);
-		super.setSelection(formulaAsText.length());
 		formulaSaved();
 		absoluteCursorPosition = formulaAsText.length();
 		setSelection(absoluteCursorPosition - 1);
-		updateSelectionIndices();
+		selectionStartIndex = 0;
+		selectionEndIndex = formulaAsText.length();
+		highlightSelection();
+		editMode = true;
+
+		history = new FormulaEditorHistory(formulaAsText, absoluteCursorPosition, selectionStartIndex,
+				selectionEndIndex);
+	}
+
+	public void setInputTextAndPosition(String formulaAsText, int cursorPosition, int selectionStart, int selectionEnd) {
+		setText(formulaAsText);
+		absoluteCursorPosition = cursorPosition;
+		setSelection(cursorPosition);
+		selectionStartIndex = selectionStart;
+		selectionEndIndex = selectionEnd;
+		if (selectionStartIndex < selectionEndIndex) {
+			highlightSelection();
+			editMode = true;
+		}
 	}
 
 	public synchronized void updateSelectionIndices() {
@@ -373,6 +391,9 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		editMode = false;
 
 		if (errorSpan.length() == 1 || firstError == 0) {
+			if (errorSpan.length() == 0) {
+				append(" ");
+			}
 			errorSpan.setSpan(COLOR_ERROR, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			absoluteCursorPosition = 0;
 			selectionStartIndex = 0;
@@ -417,7 +438,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	}
 
 	public void checkAndModifyKeyInput(CatKeyEvent catKey) {
-		hasChanges = true;
+
 		String newElement = null;
 		if (catKey.getKeyCode() == CatKeyEvent.KEYCODE_COMMA) {
 			newElement = ".";
@@ -448,13 +469,15 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			appendToTextFieldAtCurrentPosition(newElement);
 		}
 
-		if (getText().length() == 0) {
-			dialog.hideOkayButton();
-		} else {
-			dialog.showOkayButton();
-		}
+		hasChanges = true;
+		formulaEditorDialog.makeOkButtonSaveButton();
 
-		absoluteCursorPosition = selectionEndIndex;
+		//absoluteCursorPosition = selectionEndIndex;
+		//updateSelectionIndices();
+
+		history.push(getText().toString(), absoluteCursorPosition, absoluteCursorPosition, absoluteCursorPosition);
+		formulaEditorDialog.makeUndoButtonClickable(true);
+
 		//Log.i("info", "Cursor Pos: " + absoluteCursorPosition);
 
 	}
@@ -495,6 +518,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 		setText(text);
 		setSelection(selectionEndIndex);
+		absoluteCursorPosition = selectionEndIndex;
 	}
 
 	private void appendToTextFieldAtCurrentPosition(String newElement) {
@@ -509,12 +533,22 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			selectionEndIndex = selectionStartIndex + newElement.length();
 			editMode = false;
 		} else {
-
 			text.insert(selectionEndIndex, newElement);
 			selectionEndIndex += newElement.length();
+			selectionStartIndex = selectionEndIndex - newElement.length();
+		}
+		setText(text);
+
+		if (newElement.length() > 1 && newElement.contains("(")) {
+			absoluteCursorPosition = selectionStartIndex + newElement.indexOf("(") + 3;
+			selectionStartIndex = absoluteCursorPosition - 1;
+			selectionEndIndex = absoluteCursorPosition;
+			editMode = true;
+			highlightSelection();
+		} else {
+			absoluteCursorPosition = selectionEndIndex;
 		}
 
-		setText(text);
 		setSelection(selectionEndIndex);
 	}
 
@@ -524,8 +558,25 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	public void formulaSaved() {
 		hasChanges = false;
+		formulaEditorDialog.makeOkButtonBackButton();
 		errorSpan = this.getText();
 		errorSpan.removeSpan(COLOR_ERROR);
+	}
+
+	public boolean undo() {
+		FormulaEditorHistoryElement lastStep = history.backward();
+		hasChanges = true;
+		setInputTextAndPosition(lastStep.text, lastStep.cursorPosition, lastStep.selectionStart, lastStep.selectionEnd);
+
+		return history.undoIsPossible();
+	}
+
+	public boolean redo() {
+		FormulaEditorHistoryElement nextStep = history.forward();
+		hasChanges = true;
+		setInputTextAndPosition(nextStep.text, nextStep.cursorPosition, nextStep.selectionStart, nextStep.selectionEnd);
+
+		return history.redoIsPossible();
 	}
 
 	@Override
@@ -555,6 +606,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		public boolean onDoubleTap(MotionEvent e) {
 			Log.i("info", "double tap ");
 			doSelectionAndHighlighting();
+			history.updateCurrentSelection(absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
 			return true;
 		}
 
@@ -604,9 +656,10 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 				postInvalidate();
 
-				Log.i("info", "clicked on y: " + motion.getY() + "x: " + motion.getX() + " lines down: " + linesDown
-						+ " cursor: " + tempCursorPosition);
+				//				Log.i("info", "clicked on y: " + motion.getY() + "x: " + motion.getX() + " lines down: " + linesDown
+				//						+ " cursor: " + tempCursorPosition);
 				updateSelectionIndices();
+				history.updateCurrentSelection(absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
 			}
 			return true;
 

@@ -46,14 +46,16 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 
 	private final Context context;
 	private Brick currentBrick;
-	private FormulaEditorEditText textArea;
+	private FormulaEditorEditText formulaEditorEditText;
 	private Formula formula = null;
 	private CatKeyboardView catKeyboardView;
 	private LinearLayout brickSpace;
 	private View brickView;
 	private Button okButton = null;
+	private Button undoButton = null;
+	private Button redoButton = null;
 	private long confirmBack = 0;
-	private long confirmDiscard = 0;
+	private boolean buttonIsBackButton = true;
 
 	public FormulaEditorDialog(Context context, Brick brick) {
 		super(context, R.style.dialog_fullscreen);
@@ -108,32 +110,35 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 		okButton = (Button) findViewById(R.id.formula_editor_ok_button);
 		okButton.setOnClickListener(this);
 
-		Button cancelButton = (Button) findViewById(R.id.formula_editor_discard_button);
-		cancelButton.setOnClickListener(this);
+		undoButton = (Button) findViewById(R.id.formula_editor_undo_button);
+		undoButton.setOnClickListener(this);
 
-		Button backButton = (Button) findViewById(R.id.formula_editor_back_button);
-		backButton.setOnClickListener(this);
+		redoButton = (Button) findViewById(R.id.formula_editor_redo_button);
+		redoButton.setOnClickListener(this);
 
-		textArea = (FormulaEditorEditText) findViewById(R.id.formula_editor_edit_field);
+		formulaEditorEditText = (FormulaEditorEditText) findViewById(R.id.formula_editor_edit_field);
 		brickSpace.measure(0, 0);
 		catKeyboardView = (CatKeyboardView) findViewById(R.id.keyboardcat);
-		catKeyboardView.setEditText(textArea);
+		catKeyboardView.setEditText(formulaEditorEditText);
 		catKeyboardView.setCurrentBrick(currentBrick);
 
-		textArea.init(this, brickSpace.getMeasuredHeight(), catKeyboardView, context);
+		formulaEditorEditText.init(this, brickSpace.getMeasuredHeight(), catKeyboardView, context);
+		makeRedoButtonClickable(false);
+		makeUndoButtonClickable(false);
 	}
 
 	public void setInputFocusAndFormula(Formula formula) {
 
 		if (formula == this.formula) {
 			return;
-		} else if (textArea.hasChanges() == true) {
+		} else if (formulaEditorEditText.hasChanges() == true) {
 			showToast(R.string.formula_editor_save_first);
 			return;
 		}
 
 		this.formula = formula;
-		textArea.setFieldActive(formula.getEditTextRepresentation());
+		makeOkButtonBackButton();
+		formulaEditorEditText.setFieldActive(formula.getEditTextRepresentation());
 
 	}
 
@@ -155,45 +160,36 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 
 		switch (v.getId()) {
 			case R.id.formula_editor_ok_button:
-				String formulaToParse = textArea.getText().toString();
-				int err = parseFormula(formulaToParse);
-				if (err == -1) {
-					formula.refreshTextField(brickView);
-					textArea.formulaSaved();
-					showToast(R.string.formula_editor_changes_saved);
-				} else if (err == -2) {
-					//Crashed it like a BOSS! 
-				} else {
-					textArea.highlightParseError(err);
-				}
-
-				break;
-
-			case R.id.formula_editor_discard_button:
-				if (textArea.hasChanges()) {
-					if (System.currentTimeMillis() <= confirmDiscard + 2000) {
-						showToast(R.string.formula_editor_changes_discarded);
-						textArea.setFieldActive(formula.getEditTextRepresentation());
-						showOkayButton();
-					} else {
-						showToast(R.string.formula_editor_confirm_discard);
-						confirmDiscard = System.currentTimeMillis();
-					}
-				}
-
-				break;
-
-			case R.id.formula_editor_back_button:
-				if (textArea.hasChanges()) {
-					if (System.currentTimeMillis() <= confirmBack + 2000) {
-						showToast(R.string.formula_editor_changes_discarded);
-						dismiss();
-					} else {
-						showToast(R.string.formula_editor_confirm_discard);
-						confirmBack = System.currentTimeMillis();
-					}
-				} else {
+				if (buttonIsBackButton == true) {
 					dismiss();
+				} else {
+					String formulaToParse = formulaEditorEditText.getText().toString();
+					int err = parseFormula(formulaToParse);
+					if (err == -1) {
+						formula.refreshTextField(brickView);
+						formulaEditorEditText.formulaSaved();
+						showToast(R.string.formula_editor_changes_saved);
+					} else if (err == -2) {
+						//Crashed it like a BOSS! 
+					} else {
+						formulaEditorEditText.highlightParseError(err);
+					}
+				}
+				break;
+
+			case R.id.formula_editor_undo_button:
+				makeUndoButtonClickable(formulaEditorEditText.undo());
+				makeRedoButtonClickable(true);
+				if (buttonIsBackButton) {
+					makeOkButtonSaveButton();
+				}
+				break;
+
+			case R.id.formula_editor_redo_button:
+				makeRedoButtonClickable(formulaEditorEditText.redo());
+				makeUndoButtonClickable(true);
+				if (buttonIsBackButton) {
+					makeOkButtonSaveButton();
 				}
 				break;
 
@@ -214,19 +210,29 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 		this.dismiss();
 	}
 
-	public void hideOkayButton() {
-		okButton.setClickable(false);
+	public void makeUndoButtonClickable(boolean clickable) {
+		undoButton.setClickable(clickable);
 	}
 
-	public void showOkayButton() {
-		okButton.setClickable(true);
+	public void makeRedoButtonClickable(boolean clickable) {
+		redoButton.setClickable(clickable);
+	}
+
+	public void makeOkButtonSaveButton() {
+		okButton.setText(R.string.formula_editor_button_save);
+		buttonIsBackButton = false;
+	}
+
+	public void makeOkButtonBackButton() {
+		okButton.setText(R.string.formula_editor_button_return);
+		buttonIsBackButton = true;
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 			case KeyEvent.KEYCODE_BACK:
-				if (textArea.hasChanges()) {
+				if (formulaEditorEditText.hasChanges()) {
 					if (System.currentTimeMillis() <= confirmBack + 2000) {
 						showToast(R.string.formula_editor_changes_discarded);
 						dismiss();
@@ -238,7 +244,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 					dismiss();
 				}
 		}
-		return textArea.catKeyboardView.onKeyDown(keyCode, event);
+		return formulaEditorEditText.catKeyboardView.onKeyDown(keyCode, event);
 	}
 
 }

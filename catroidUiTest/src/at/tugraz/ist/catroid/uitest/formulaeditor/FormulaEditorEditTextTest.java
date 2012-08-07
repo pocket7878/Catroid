@@ -81,22 +81,22 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 	}
 
 	@Smoke
-	public void testDiscardChanges() {
+	public void testGoBackToDiscardChanges() {
 
 		solo.clickOnEditText(0);
-		catKeyboardClicker.clearEditTextWithDeletes(1);
+		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("9");
 		catKeyboardClicker.clickOnKey("9");
 		catKeyboardClicker.clickOnKey(".");
 		catKeyboardClicker.clickOnKey("9");
 		catKeyboardClicker.clickOnKey("9");
 		solo.sleep(50);
-		solo.clickOnButton(solo.getString(R.string.formula_editor_button_discard));
-		solo.clickOnButton(solo.getString(R.string.formula_editor_button_discard));
-		solo.sleep(50);
+		solo.goBack();
+		solo.goBack();
+
 		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_changes_discarded)));
-		assertEquals("Wrong text in FormulaEditor", "0.0 ", solo.getEditText(1).getText().toString());
-		solo.clickOnButton(2);
+		assertEquals("Wrong text in FormulaEditor", "0.0 ", solo.getEditText(0).getText().toString());
+
 	}
 
 	@Smoke
@@ -107,7 +107,8 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		float yCoordinate = waitBrickOffset + greenBarOffset + 5;
 
 		solo.clickOnEditText(0);
-		catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(1);
+		//catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(1);
+		catKeyboardClicker.clickOnKey("del");
 
 		for (int i = 0; i < 6; i++) {
 			catKeyboardClicker.clickOnKey("1");
@@ -121,15 +122,19 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 		assertFalse("Text found but shouldnt", solo.searchText("1"));
 
-		solo.clickOnButton(2);
-		solo.clickOnButton(2);
+		solo.goBack();
+		solo.goBack();
 	}
 
 	@Smoke
-	public void testErrorInFirstAndLastCharacters() {
+	public void testErrorInFirstAndLastCharactersAndEmptyFormula() {
 
 		solo.clickOnEditText(0);
-		catKeyboardClicker.clearEditTextWithDeletes(1);
+		//catKeyboardClicker.clearEditTextWithDeletes(1);
+		catKeyboardClicker.clickOnKey("del");
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
+		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
+		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("+");
 		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
 		solo.sleep(50);
@@ -143,8 +148,8 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		solo.sleep(50);
 		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
 
-		solo.clickOnButton(2);
-		solo.clickOnButton(2);
+		solo.goBack();
+		solo.goBack();
 	}
 
 	@Smoke
@@ -205,25 +210,15 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		return formula;
 	}
 
-	//	private Formula createLongFormula() {
-	//
-	//		CalcGrammarParser parser = CalcGrammarParser
-	//				.getFormulaParser("999999999999999999 + 888888888888888888 + 777777777777777777");
-	//		FormulaElement root = parser.parseFormula();
-	//		Formula formula = new Formula(root);
-	//
-	//		return formula;
-	//	}
-
 	@Smoke
 	public void testDeletingAndSelectionAndParseErrors() {
+		//		Note solo.enterText() modifications to the text are undetectable to FormulaEditorEditText.
+		//		Text via solo.enterText() *must* be longer than the original text!!! To be safe use CatKeyboardKlicker to clear!
+		//		Use CatKeyboardClicker for full functionality, is a lot slower and inconvenient! Will do just fine here without
 
 		solo.clickOnEditText(0);
-		//		solo.clickOnEditText(1);
-		//
-		//		solo.clearEditText(1);
 
-		catKeyboardClicker.clearEditTextWithDeletes(1);
+		catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(1);
 		solo.enterText(1, "8 + XACC_+5YACC_ + 76");
 		catKeyboardClicker.clickOnKey("9");
 		solo.clickOnButton(getActivity().getString(R.string.formula_editor_button_save));
@@ -289,8 +284,8 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 		assertEquals("Text not deleted correctly", "98 + rand( 0 , 1 ) + 76", solo.getEditText(1).getText().toString());
 
-		solo.clickOnButton(2);
-		solo.clickOnButton(2);
+		solo.goBack();
+		solo.goBack();
 
 	}
 

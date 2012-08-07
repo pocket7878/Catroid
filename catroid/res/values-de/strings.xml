@@ -328,8 +328,9 @@
     <!-- Formula Editor Strings -->
     <string name="dialog_formula_editor_title">Formel Editor</string>
     <string name="formula_editor_button_save">Speichern</string>
-    <string name="formula_editor_button_discard">Verwerfen</string>
     <string name="formula_editor_button_return">Zurück</string>
+    <string name="formula_editor_button_undo">Rückgängig</string>
+    <string name="formula_editor_button_redo">Wiederholen</string>
     <string name="formula_editor_save_first">Änderungen zuerst speichern oder verwerfen!</string>
     <string name="formula_editor_changes_saved">Änderungen gespeichert!</string>
     <string name="formula_editor_changes_discarded">Änderungen verworfen!</string>
