@@ -83,6 +83,10 @@ public class FormulaEditorHistory {
 		current.selectionEnd = selectionEnd;
 	}
 
+	public FormulaEditorHistoryElement getCurrentState() {
+		return current;
+	}
+
 	public void updateCurrentCursor(int cursorPosition) {
 		current.cursorPosition = cursorPosition;
 	}

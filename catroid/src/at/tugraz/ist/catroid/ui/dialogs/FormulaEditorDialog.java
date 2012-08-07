@@ -27,8 +27,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -59,6 +59,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 	private long confirmBack = 0;
 	private boolean buttonIsBackButton = true;
 	public static ScriptTabActivity mScriptTabActivity;
+	private static boolean restorePreviousTextField = false;
 
 	public static void setOwnerActivity(ScriptTabActivity owner) {
 		FormulaEditorDialog.mScriptTabActivity = owner;
@@ -98,7 +99,6 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 		if (brickSpace != null) {
 			brickView = currentBrick.getView(context, 0, null);
 			brickSpace.addView(brickView);
-
 
 			int brickHeight = brickView.getMeasuredHeight();
 		}
@@ -161,12 +161,17 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 	@Override
 	public Bundle onSaveInstanceState() {
 		Log.i("info", "FormulaEditorDialog.onSaveInstanceState()");
+		restorePreviousTextField = true;
 		return super.onSaveInstanceState();
 	}
 
 	public void setInputFocusAndFormula(Formula formula) {
 
 		if (formula == this.formula) {
+			return;
+		} else if (restorePreviousTextField) {
+			restorePreviousTextField = false;
+			formulaEditorEditText.restoreFieldFromPreviousHistory();
 			return;
 		} else if (formulaEditorEditText.hasChanges() == true) {
 			showToast(R.string.formula_editor_save_first);
@@ -199,7 +204,10 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 			case R.id.formula_editor_ok_button:
 				Log.i("info", "FormulaEditorDialog.onClick()  case ok_button");
 				if (buttonIsBackButton == true) {
-					dismiss();
+					mScriptTabActivity.setCurrentFormulaEditorDialog(null);
+					mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
+					mScriptTabActivity.setEditorStatus(false);
+					mScriptTabActivity.setCurrentBrick(null);
 				} else {
 					String formulaToParse = formulaEditorEditText.getText().toString();
 					int err = parseFormula(formulaToParse);
@@ -209,6 +217,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 						}
 						formulaEditorEditText.formulaSaved();
 						showToast(R.string.formula_editor_changes_saved);
+						//dismiss();
 					} else if (err == -2) {
 						//Crashed it like a BOSS! 
 					} else {
@@ -231,11 +240,6 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 				if (buttonIsBackButton) {
 					makeOkButtonSaveButton();
 				}
-				Log.i("info", "FormulaEditorDialog.onClick() case back_button");
-				mScriptTabActivity.setCurrentFormulaEditorDialog(null);
-				mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
-				mScriptTabActivity.setEditorStatus(false);
-				mScriptTabActivity.setCurrentBrick(null);
 				break;
 
 			default:
