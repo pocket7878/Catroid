@@ -204,4 +204,54 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 		assertEquals("Undo did something wrong", "1 - 2", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString());
 
 	}
+
+	public void testComplexUndoRedo() {
+
+		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(FORMULA_EDITOR_EDIT_TEXT_ID);
+
+		catKeyboardClicker.clickOnKey("9");
+		catKeyboardClicker.clickOnKey("-");
+		catKeyboardClicker.clickOnKey("8");
+		catKeyboardClicker.clickOnKey("*");
+		catKeyboardClicker.clickOnKey("7");
+		catKeyboardClicker.clickOnKey("9");
+		catKeyboardClicker.clickOnKey("-");
+		catKeyboardClicker.clickOnKey("8");
+		catKeyboardClicker.clickOnKey("*");
+		catKeyboardClicker.clickOnKey("7");
+		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.clickOnKey("cos");
+		catKeyboardClicker.clickOnKey("sin");
+		catKeyboardClicker.clickOnKey("tan");
+
+		assertEquals("Wrong text in field", "1-2*cos( sin( tan( 0 ) ) )", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+				.getText().toString());
+
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_undo));
+		solo.sleep(50);
+		assertEquals("Undo did something wrong", "1-2*cos( sin( 0 ) )", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+				.getText().toString());
+
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_undo));
+		solo.sleep(50);
+		assertEquals("Undo did something wrong", "1-2*cos( 0 )", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+				.getText().toString());
+
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_undo));
+		solo.sleep(50);
+		assertEquals("Undo did something wrong", "1-2*", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
+				.toString());
+
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_undo));
+		solo.sleep(50);
+		assertEquals("Undo did something wrong", "1-2", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
+				.toString());
+
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
+		solo.clickOnButton(solo.getString(R.string.formula_editor_button_return));
+
+		assertEquals("Undo did something wrong", "1 - 2", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString());
+
+	}
 }
