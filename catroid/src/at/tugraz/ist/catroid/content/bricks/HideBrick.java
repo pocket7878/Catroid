@@ -70,4 +70,8 @@ public class HideBrick implements Brick {
 		return View.inflate(context, R.layout.brick_hide, null);
 	}
 
+	public void onClick(View view) {
+
+	}
+
 }

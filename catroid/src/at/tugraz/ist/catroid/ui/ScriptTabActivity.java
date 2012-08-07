@@ -32,6 +32,7 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -43,13 +44,16 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.SoundInfo;
+import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.dialogs.AddBrickDialog;
 import at.tugraz.ist.catroid.ui.dialogs.BrickCategoryDialog;
 import at.tugraz.ist.catroid.ui.dialogs.DeleteCostumeDialog;
 import at.tugraz.ist.catroid.ui.dialogs.DeleteSoundDialog;
+import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 import at.tugraz.ist.catroid.ui.dialogs.RenameCostumeDialog;
 import at.tugraz.ist.catroid.ui.dialogs.RenameSoundDialog;
 import at.tugraz.ist.catroid.utils.ActivityHelper;
@@ -75,8 +79,13 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	public static final int DIALOG_ADD_BRICK = 3;
 	public static final int DIALOG_DELETE_COSTUME = 4;
 	public static final int DIALOG_DELETE_SOUND = 5;
+	public static final int DIALOG_FORMULA = 6;
 
 	private boolean dontcreateNewBrick;
+
+	private FormulaEditorDialog currentFormulaEditorDialog;
+	private Brick currentBrick;
+	private boolean editorActive;
 
 	private void setupTabHost() {
 		tabHost = (TabHost) findViewById(android.R.id.tabhost);
@@ -85,10 +94,13 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.i("info", "ScriptTabActivity.onCreate()");
 		super.onCreate(savedInstanceState);
 		addScript = false;
 		isCanceled = false;
 		dontcreateNewBrick = false;
+		currentFormulaEditorDialog = null;
+		currentBrick = null;
 
 		setContentView(R.layout.activity_scripttab);
 		Utils.loadProjectIfNeeded(this);
@@ -119,13 +131,76 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 		setUpActionBar();
 		if (getLastNonConfigurationInstance() != null) {
 			selectedCategory = (String) ((ArrayList<?>) getLastNonConfigurationInstance()).get(0);
+			Log.i("info", "selectedCategory: " + selectedCategory);
 			selectedCostumeData = (CostumeData) ((ArrayList<?>) getLastNonConfigurationInstance()).get(1);
 			selectedSoundInfo = (SoundInfo) ((ArrayList<?>) getLastNonConfigurationInstance()).get(2);
 		}
+
+		FormulaEditorDialog.setOwnerActivity(this);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		Log.i("info", "ScriptTabActivity.onSaveInstanceState()");
+
+		int brickIndexToSave = -1;
+		int scriptIndexToSave = -1;
+
+		if (this.currentBrick != null) {
+			if (this.isEditorActive()) {
+
+				Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
+
+				for (int h = 0; h < currentSprite.getNumberOfScripts(); h++) {
+
+					Script script = ProjectManager.getInstance().getCurrentSprite().getScript(h);
+					ArrayList<Brick> brickList = script.getBrickList();
+
+					Log.i("info", "brickList.size(): " + brickList.size());
+
+					for (int i = 0; i < brickList.size(); i++) {
+						if (brickList.get(i).equals(this.currentBrick)) {
+							brickIndexToSave = i;
+							scriptIndexToSave = h;
+							Log.i("info", "Brick found! index: " + brickIndexToSave);
+						}
+					}
+				}
+
+				View view = new View(this);
+				view.setId(R.id.formula_editor_ok_button);
+				this.currentFormulaEditorDialog.onClick(view);
+				this.setEditorStatus(false);
+			}
+		}
+
+		outState.putInt("brickIndex", brickIndexToSave);
+		outState.putInt("scriptIndex", scriptIndexToSave);
+
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		Log.i("info", "ScriptTabActivity.onRestoreInstanceState()");
+
+		int savedBrickIndex = savedInstanceState.getInt("brickIndex");
+		int savedScriptIndex = savedInstanceState.getInt("scriptIndex");
+		Log.i("info", "savedBrickIndex: " + savedBrickIndex);
+		Log.i("info", "savedScriptIndex: " + savedScriptIndex);
+
+		if (savedBrickIndex != -1) {
+			Brick oldBrick = ProjectManager.getInstance().getCurrentSprite().getScript(savedScriptIndex).getBrickList()
+					.get(savedBrickIndex);
+			oldBrick.onClick(new View(this));
+		}
+
+		super.onRestoreInstanceState(savedInstanceState);
 	}
 
 	@Override
 	public ArrayList<Object> onRetainNonConfigurationInstance() {
+		Log.i("info", "ScriptTabActivity.onRetainNonConfigurationInstance()");
 		ArrayList<Object> savedMember = new ArrayList<Object>();
 		savedMember.add(selectedCategory);
 		savedMember.add(selectedCostumeData);
@@ -134,6 +209,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	}
 
 	private void setUpActionBar() {
+		Log.i("info", "ScriptTabActivity.setUpActionBar()");
 		activityHelper = new ActivityHelper(this);
 
 		String title = this.getResources().getString(R.string.sprite_name) + " "
@@ -153,6 +229,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.i("info", "ScriptTabActivity.onActivityResult()");
 		if (requestCode == PreStageActivity.REQUEST_RESOURCES_INIT && resultCode == RESULT_OK) {
 			Intent intent = new Intent(ScriptTabActivity.this, StageActivity.class);
 			startActivity(intent);
@@ -160,6 +237,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	}
 
 	private void setupTab(Integer drawableId, final String tag, Intent intent) {
+		Log.i("info", "ScriptTabActivity.setupTab()");
 		View tabview = createTabView(drawableId, tabHost.getContext(), tag);
 
 		TabSpec setContent = tabHost.newTabSpec(tag).setIndicator(tabview).setContent(intent);
@@ -168,6 +246,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	}
 
 	private static View createTabView(Integer id, final Context context, final String text) {
+		Log.i("info", "ScriptTabActivity.createTabView()");
 		View view = LayoutInflater.from(context).inflate(R.layout.activity_tabscriptactivity_tabs, null);
 		TextView tabTextView = (TextView) view.findViewById(R.id.tabsText);
 		ImageView tabImageView = (ImageView) view.findViewById(R.id.tabsIcon);
@@ -182,6 +261,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
+		Log.i("info", "ScriptTabActivity.onCreateDialog()");
 		Dialog dialog = null;
 		switch (id) {
 			case DIALOG_RENAME_SOUND:
@@ -218,6 +298,10 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 					dialog = deleteSoundDialog.createDialog();
 				}
 				break;
+			case DIALOG_FORMULA:
+				dialog = this.currentFormulaEditorDialog;
+				Log.i("info", "case: DIALOG_FORMULA" + dialog);
+				break;
 			default:
 				dialog = null;
 				break;
@@ -225,8 +309,27 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 		return dialog;
 	}
 
+	public void setCurrentFormulaEditorDialog(FormulaEditorDialog currentFormulaEditorDialog) {
+		Log.i("info", "ScriptTabActivity.setCurrentFormulaEditorDialog(): " + currentFormulaEditorDialog);
+		this.currentFormulaEditorDialog = currentFormulaEditorDialog;
+	}
+
+	public void setCurrentBrick(Brick brick) {
+		Log.i("info", "ScriptTabActivity.setCurrentBrick(): " + brick);
+		this.currentBrick = brick;
+	}
+
+	public void setEditorStatus(boolean isActive) {
+		this.editorActive = isActive;
+	}
+
+	public boolean isEditorActive() {
+		return this.editorActive;
+	}
+
 	@Override
 	protected void onPrepareDialog(int id, Dialog dialog) {
+		Log.i("info", "ScriptTabActivity.onPrepareDialog()");
 		switch (id) {
 			case DIALOG_RENAME_SOUND:
 				EditText soundTitleInput = (EditText) dialog.findViewById(R.id.dialog_rename_sound_editText);
@@ -235,6 +338,12 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 			case DIALOG_RENAME_COSTUME:
 				EditText costumeTitleInput = (EditText) dialog.findViewById(R.id.dialog_rename_costume_editText);
 				costumeTitleInput.setText(selectedCostumeData.getCostumeName());
+				break;
+			case DIALOG_FORMULA:
+				//				dialog = this.currentFormulaEditorDialog;
+				Log.i("info", "case DIALOG_FORMULA" + " dialog: " + dialog + " currentFormulaEditorDialog: "
+						+ this.currentFormulaEditorDialog);
+				//				this.showDialog(DIALOG_FORMULA, null);
 				break;
 		}
 	}
@@ -272,7 +381,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	}
 
 	public void onDismiss(DialogInterface dialogInterface) {
-
+		Log.i("info", "ScriptTabActivity.onDismiss()");
 		if (!dontcreateNewBrick) {
 			if (!isCanceled) {
 				if (addScript) {

@@ -151,4 +151,8 @@ public class SpeakBrick implements Brick {
 		return new SpeakBrick(this.sprite, this.text);
 	}
 
+	public void onClick(View view) {
+
+	}
+
 }

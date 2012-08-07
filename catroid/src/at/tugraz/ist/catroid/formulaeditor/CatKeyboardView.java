@@ -76,6 +76,7 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 			this.symbolsFunctions = new CatKeyboard(this.getContext(), R.xml.symbols_de_functions);
 			this.symbolsSensors = new CatKeyboard(this.getContext(), R.xml.symbols_de_sensors);
 			//Log.i("info", "FormulaEditorDialog.onCreate() - DisplayLanguage is DE");
+			Log.i("info", "CatKeyboardView.onCreate() - DisplayLanguage is DE");
 
 		} else {//if (Locale.getDefault().getDisplayLanguage().contentEquals(Locale.ENGLISH.getDisplayLanguage())) {
 			this.symbolsNumbers = new CatKeyboard(this.getContext(), R.xml.symbols_eng_numbers);
@@ -83,10 +84,15 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 			this.symbolsFunctions = new CatKeyboard(this.getContext(), R.xml.symbols_eng_functions);
 			this.symbolsSensors = new CatKeyboard(this.getContext(), R.xml.symbols_eng_sensors);
 			//Log.i("info", "FormulaEditorDialog.onCreate() - DisplayLanguage is ENG");
+			Log.i("info", "CatKeyboardView.onCreate() - DisplayLanguage is ENG");
 
 		}
 		//Log.i("info", "CatKeyBoardView() - DisplayLanguage:" + Locale.getDefault().getDisplayLanguage());
 		this.setKeyboard(symbolsNumbers);
+
+		//		Log.i("info", "CatKeyboardView() layoutparams width: " + this.getLayoutParams().width);
+
+		//		LayoutParams relative = new LayoutParams(source);
 		//		this.symbols.setShifted(false);
 		//		this.symbols_shifted.setShifted(true);
 		//		this.setBackgroundColor(0xFF6103);
@@ -258,7 +264,6 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 				//				}
 				//			}
 
-				requestLayout();
 				break;
 			case CatKeyEvent.KEYCODE_SPACE:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SPACE));
@@ -346,18 +351,21 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 	private void handleKeyboardChange() {
 
 		if (this.getKeyboard() == this.symbolsNumbers) {
-			//Log.i("info", "Keyboard change from Numbers -> Fuctions");
+			Log.i("info", "Keyboard change from Numbers -> Fuctions");
 			this.setKeyboard(this.symbolsFunctions);
+			Log.i("info", "CatKeyboardView() layoutparams width: " + this.getLayoutParams().width);
 			return;
 		}
 		if (this.getKeyboard() == this.symbolsFunctions) {
-			//Log.i("info", "Keyboard change from Functions -> Sensors");
+			Log.i("info", "Keyboard change from Functions -> Sensors");
 			this.setKeyboard(this.symbolsSensors);
+			Log.i("info", "CatKeyboardView() layoutparams width: " + this.getLayoutParams().width);
 			return;
 		}
 		if (this.getKeyboard() == this.symbolsSensors) {
-			//Log.i("info", "Keyboard change from Sensors -> Numbers");
+			Log.i("info", "Keyboard change from Sensors -> Numbers");
 			this.setKeyboard(this.symbolsNumbers);
+			Log.i("info", "CatKeyboardView() layoutparams width: " + this.getLayoutParams().width + " ");
 			return;
 		}
 	}

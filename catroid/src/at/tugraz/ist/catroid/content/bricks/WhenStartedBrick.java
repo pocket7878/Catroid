@@ -73,4 +73,8 @@ public class WhenStartedBrick implements Brick {
 		return new WhenStartedBrick(getSprite(), script);
 	}
 
+	public void onClick(View view) {
+
+	}
+
 }
