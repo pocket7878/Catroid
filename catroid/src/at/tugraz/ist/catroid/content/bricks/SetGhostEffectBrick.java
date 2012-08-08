@@ -56,15 +56,18 @@ public class SetGhostEffectBrick implements Brick, OnClickListener {
 		transparencyFormula = ghostEffectValue;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		double transparency = transparencyFormula.interpret();
 		sprite.costume.setAlphaValue((100f - (float) transparency) / 100);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
@@ -73,6 +76,7 @@ public class SetGhostEffectBrick implements Brick, OnClickListener {
 	//		return transparency;
 	//	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		if (instance == null) {
@@ -96,6 +100,7 @@ public class SetGhostEffectBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_set_ghost_effect, null);
 	}
@@ -105,6 +110,7 @@ public class SetGhostEffectBrick implements Brick, OnClickListener {
 		return new SetGhostEffectBrick(getSprite(), transparencyFormula);
 	}
 
+	@Override
 	public void onClick(View view) {
 		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
@@ -116,9 +122,8 @@ public class SetGhostEffectBrick implements Brick, OnClickListener {
 			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
-
-			formulaEditor.setInputFocusAndFormula(this.transparencyFormula);
 		}
+		formulaEditor.setInputFocusAndFormula(this.transparencyFormula);
 
 		//		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
 		//		final EditText input = new EditText(context);

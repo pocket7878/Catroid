@@ -61,10 +61,12 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 		xMovementFormula = xMovement;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		int xMovement = xMovementFormula.interpret().intValue();
 
@@ -83,10 +85,12 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 		sprite.costume.releaseXYWidthHeightLock();
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (instance == null) {
 			instance = this;
@@ -105,6 +109,7 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_change_x, null);
 	}
@@ -114,6 +119,7 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 		return new ChangeXByBrick(getSprite(), xMovementFormula);
 	}
 
+	@Override
 	public void onClick(View view) {
 		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
@@ -125,9 +131,8 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
-
-			formulaEditor.setInputFocusAndFormula(this.xMovementFormula);
 		}
+		formulaEditor.setInputFocusAndFormula(this.xMovementFormula);
 
 	}
 
