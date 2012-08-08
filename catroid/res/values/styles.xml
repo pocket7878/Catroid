@@ -80,6 +80,7 @@
     <style name="dialog_fullscreen">
 		<item name="android:windowFullscreen">true</item>
 		<item name="android:windowNoTitle">true</item>
+		
 	</style>
 
 </resources>

@@ -73,7 +73,10 @@
         android:visibility="visible"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+	    android:keyTextColor="#0000ff"
+		android:keyPreviewHeight="0sp"
+		/>
     
 	<RelativeLayout
 	    xmlns:android="http://schemas.android.com/apk/res/android"

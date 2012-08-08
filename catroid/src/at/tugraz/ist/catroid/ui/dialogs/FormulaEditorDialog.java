@@ -145,19 +145,26 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 	}
 
 	public void setInputFocusAndFormula(Formula newFormula) {
+
 		if (restorePreviousTextField) { //after orientation switch
 			restorePreviousTextField = false;
 			if (!formulaEditorEditText.restoreFieldFromPreviousHistory()) { //history is only deleted when editor is shut down by user!
 				formulaEditorEditText.enterNewFormula(newFormula.getEditTextRepresentation()); // this happens when onSaveInstanceState() is being called but not by orientation change (e.g.user turns off screen)
 			}
+			refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
 		} else if (newFormula == activeFormula) {
+
 			if (!formulaEditorEditText.hasChanges()) {
 				formulaEditorEditText.enterNewFormula(activeFormula.getEditTextRepresentation());
 			} else {
 				formulaEditorEditText.quickSelect();
 			}
+			refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
 		} else {
 			if (!formulaEditorEditText.hasChanges()) {
+				if (activeFormula != null) {
+					activeFormula.refreshTextField(brickView);
+				}
 				activeFormula = newFormula;
 				makeOkButtonBackButton();
 				formulaEditorEditText.enterNewFormula(newFormula.getEditTextRepresentation());
@@ -300,6 +307,10 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 
 		}
 		return formulaEditorEditText.catKeyboardView.onKeyDown(keyCode, event);
+	}
+
+	public void refreshFormulaPreviewString(String formulaString) {
+		activeFormula.refreshTextField(brickView, formulaEditorEditText.getText().toString());
 	}
 
 }
