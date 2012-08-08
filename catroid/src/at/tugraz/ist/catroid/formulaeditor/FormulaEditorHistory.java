@@ -86,6 +86,13 @@ public class FormulaEditorHistory {
 		current.selectionEnd = selectionEnd;
 	}
 
+	public void clear() {
+		undoStack.clear();
+		redoStack.clear();
+		current = null;
+		hasUnsavedChanges = false;
+	}
+
 	public FormulaEditorHistoryElement getCurrentState() {
 		return current;
 	}

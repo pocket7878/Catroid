@@ -58,20 +58,24 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 		changeGhostEffectFormula = changeGhostEffect;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		double changeGhostEffect = changeGhostEffectFormula.interpret() / -100.0;
 		sprite.costume.changeAlphaValueBy((float) changeGhostEffect);
 
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		if (instance == null) {
@@ -93,6 +97,7 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_change_ghost_effect, null);
 	}
@@ -102,6 +107,7 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 		return new ChangeGhostEffectBrick(getSprite(), changeGhostEffectFormula);
 	}
 
+	@Override
 	public void onClick(View view) {
 		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
@@ -113,9 +119,8 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
-
-			formulaEditor.setInputFocusAndFormula(this.changeGhostEffectFormula);
 		}
+		formulaEditor.setInputFocusAndFormula(this.changeGhostEffectFormula);
 
 	}
 

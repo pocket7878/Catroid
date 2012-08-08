@@ -151,6 +151,7 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 			default:
 				formulaEditor.setInputFocusAndFormula(null);
 				break;
+
 		}
 
 	}

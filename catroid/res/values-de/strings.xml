@@ -331,12 +331,12 @@
     <string name="formula_editor_button_return">Zurück</string>
     <string name="formula_editor_button_undo">Rückgängig</string>
     <string name="formula_editor_button_redo">Wiederholen</string>
-    <string name="formula_editor_save_first">Änderungen zuerst speichern oder verwerfen!</string>
+    <string name="formula_editor_save_first">Änderungen zuerst speichern!</string>
     <string name="formula_editor_changes_saved">Änderungen gespeichert!</string>
     <string name="formula_editor_changes_discarded">Änderungen verworfen!</string>
     <string name="formula_editor_parse_fail">Fehler in der Eingabe! Änderungen nicht gespeichert.</string>
     <string name="formula_nothing_selected">Bitte Wert eingeben!</string>
-    <string name="formula_editor_confirm_discard">Alle Änderungen werden verworfen! Zum Bestätigen erneut klicken.</string>
+    <string name="formula_editor_confirm_discard">Änderungen verwerfen, zum Bestätigen erneut klicken.</string>
      
     <!-- Num Pad Strings -->
 

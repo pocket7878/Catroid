@@ -54,6 +54,7 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 		timesToRepeatFormula = timesToRepeat;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
@@ -76,6 +77,7 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 		return new RepeatBrick(getSprite(), timesToRepeatFormula);
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		if (instance == null) {
@@ -97,10 +99,12 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_repeat, null);
 	}
 
+	@Override
 	public void onClick(View view) {
 		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
@@ -112,9 +116,8 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
-
-			formulaEditor.setInputFocusAndFormula(this.timesToRepeatFormula);
 		}
+		formulaEditor.setInputFocusAndFormula(this.timesToRepeatFormula);
 
 	}
 
