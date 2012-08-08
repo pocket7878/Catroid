@@ -52,13 +52,16 @@
         android:visibility="visible"
         android:layout_alignParentBottom="true"
         android:layout_width="216pt"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+	    android:keyTextColor="#000fff"
+		android:keyPreviewHeight="0sp"
+		/>
     
 	<RelativeLayout
 	    xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:id="@+id/editor_button_bar"
 	    android:layout_alignParentBottom="true"
-	    android:layout_width="72pt"
+	    android:layout_width="76pt"
       android:layout_height="168dp" 
 	    android:layout_toRightOf="@id/keyboardcat"
 	    style="@android:style/ButtonBar">
