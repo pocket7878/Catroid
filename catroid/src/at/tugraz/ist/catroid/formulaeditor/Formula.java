@@ -87,16 +87,22 @@ public class Formula implements Serializable {
 	}
 
 	public void refreshTextField(View view) {
-		if (formulaTextFieldId != null && root != null) {
+		if (formulaTextFieldId != null && root != null && view != null) {
 			EditText formulaTextField = (EditText) view.findViewById(formulaTextFieldId);
+			if (formulaTextField == null) {
+				return;
+			}
 			formulaTextField.setText(textRepresentation);
 		}
 
 	}
 
 	public void refreshTextField(View view, String formulaString) {
-		if (formulaTextFieldId != null && root != null) {
+		if (formulaTextFieldId != null && root != null && view != null) {
 			EditText formulaTextField = (EditText) view.findViewById(formulaTextFieldId);
+			if (formulaTextField == null) {
+				return;
+			}
 			formulaTextField.setText(formulaString);
 		}
 	}
