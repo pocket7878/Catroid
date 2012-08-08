@@ -51,14 +51,14 @@
         android:id="@+id/keyboardcat"
         android:visibility="visible"
         android:layout_alignParentBottom="true"
-        android:layout_width="500dp"
-        android:layout_height="150dp"/>
+        android:layout_width="450dp"
+        android:layout_height="168dp"/>
     
 	<RelativeLayout
 	    xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:id="@+id/editor_button_bar"
 	    android:layout_alignParentBottom="true"
-	    android:layout_width="100dp"
+	    android:layout_width="150dp"
 	    android:layout_height="168dp" 
 	    android:layout_toRightOf="@id/keyboardcat"
 	    style="@android:style/ButtonBar">
@@ -74,14 +74,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/formula_editor_button_undo"
-            android:layout_toRightOf="@id/formula_editor_ok_button"/>
+            android:layout_below="@id/formula_editor_ok_button"/>
 
         <Button
             android:id="@+id/formula_editor_redo_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/formula_editor_button_redo"
-            android:layout_toRightOf="@id/formula_editor_undo_button"/>
+            android:layout_below="@id/formula_editor_undo_button"/>
 	</RelativeLayout> 
 	
 	
