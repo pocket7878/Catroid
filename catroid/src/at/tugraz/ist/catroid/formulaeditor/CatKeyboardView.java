@@ -354,18 +354,21 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 			Log.i("info", "Keyboard change from Numbers -> Fuctions");
 			this.setKeyboard(this.symbolsFunctions);
 			Log.i("info", "CatKeyboardView() layoutparams width: " + this.getLayoutParams().width);
+			Log.i("info", "CatKeyboardView() layoutparams height: " + this.getLayoutParams().height);
 			return;
 		}
 		if (this.getKeyboard() == this.symbolsFunctions) {
 			Log.i("info", "Keyboard change from Functions -> Sensors");
 			this.setKeyboard(this.symbolsSensors);
 			Log.i("info", "CatKeyboardView() layoutparams width: " + this.getLayoutParams().width);
+			Log.i("info", "CatKeyboardView() layoutparams height: " + this.getLayoutParams().height);
 			return;
 		}
 		if (this.getKeyboard() == this.symbolsSensors) {
 			Log.i("info", "Keyboard change from Sensors -> Numbers");
 			this.setKeyboard(this.symbolsNumbers);
 			Log.i("info", "CatKeyboardView() layoutparams width: " + this.getLayoutParams().width + " ");
+			Log.i("info", "CatKeyboardView() layoutparams height: " + this.getLayoutParams().height);
 			return;
 		}
 	}
