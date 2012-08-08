@@ -40,8 +40,6 @@ import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import com.jayway.android.robotium.solo.Solo;
 
 public class NXTPlayToneBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
-	private static final int MIN_FREQ = 200;
-	private static final int MAX_FREQ = 14000;
 	private static final double SET_DURATION = 3.0;
 	private static final int SET_FREQUENCY = 70;
 	private static final int SET_FREQUENCY_INITIALLY = 20;

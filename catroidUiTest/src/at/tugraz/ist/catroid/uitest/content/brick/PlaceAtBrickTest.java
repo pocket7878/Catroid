@@ -39,6 +39,7 @@ import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaySoundBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.ui.ScriptActivity;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -48,13 +49,13 @@ import com.jayway.android.robotium.solo.Solo;
  * @author Daniel Burtscher
  * 
  */
-public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
+public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptTabActivity> {
 	private Solo solo;
 	private Project project;
 	private PlaceAtBrick placeAtBrick;
 
 	public PlaceAtBrickTest() {
-		super("at.tugraz.ist.catroid", ScriptActivity.class);
+		super("at.tugraz.ist.catroid", ScriptTabActivity.class);
 	}
 
 	@Override
@@ -72,8 +73,9 @@ public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptAct
 
 	@Smoke
 	public void testPlaceAtBrick() throws InterruptedException {
-		int childrenCount = getActivity().getAdapter().getChildCountFromLastGroup();
-		int groupCount = getActivity().getAdapter().getGroupCount();
+		int childrenCount = ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter()
+				.getChildCountFromLastGroup();
+		int groupCount = ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter().getGroupCount();
 
 		assertEquals("Incorrect number of bricks.", 5, solo.getCurrentListViews().get(0).getChildCount());
 		assertEquals("Incorrect number of bricks.", 4, childrenCount);
@@ -81,17 +83,17 @@ public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptAct
 		ArrayList<Brick> projectBrickList = project.getSpriteList().get(0).getScript(0).getBrickList();
 		assertEquals("Incorrect number of bricks.", 4, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0),
-				getActivity().getAdapter().getChild(groupCount - 1, 0));
+		assertEquals("Wrong Brick instance.", projectBrickList.get(0), ((ScriptActivity) getActivity()
+				.getCurrentActivity()).getAdapter().getChild(groupCount - 1, 0));
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(1),
-				getActivity().getAdapter().getChild(groupCount - 1, 1));
+		assertEquals("Wrong Brick instance.", projectBrickList.get(1), ((ScriptActivity) getActivity()
+				.getCurrentActivity()).getAdapter().getChild(groupCount - 1, 1));
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(2),
-				getActivity().getAdapter().getChild(groupCount - 1, 2));
+		assertEquals("Wrong Brick instance.", projectBrickList.get(2), ((ScriptActivity) getActivity()
+				.getCurrentActivity()).getAdapter().getChild(groupCount - 1, 2));
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(3),
-				getActivity().getAdapter().getChild(groupCount - 1, 3));
+		assertEquals("Wrong Brick instance.", projectBrickList.get(3), ((ScriptActivity) getActivity()
+				.getCurrentActivity()).getAdapter().getChild(groupCount - 1, 3));
 		assertNotNull("TextView does not exist", solo.getText(getActivity().getString(R.string.brick_place_at)));
 
 		int xPosition = 987;
