@@ -36,16 +36,17 @@ import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.PointToBrick;
 import at.tugraz.ist.catroid.ui.ScriptActivity;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
 
-public class PointToBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
+public class PointToBrickTest extends ActivityInstrumentationTestCase2<ScriptTabActivity> {
 	private Solo solo;
 	private Project project;
 
 	public PointToBrickTest() {
-		super("at.tugraz.ist.catroid", ScriptActivity.class);
+		super("at.tugraz.ist.catroid", ScriptTabActivity.class);
 	}
 
 	@Override
@@ -63,7 +64,8 @@ public class PointToBrickTest extends ActivityInstrumentationTestCase2<ScriptAct
 
 	@Smoke
 	public void testPointToBrickTest() throws InterruptedException {
-		int childrenCount = getActivity().getAdapter().getChildCountFromLastGroup();
+		int childrenCount = ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter()
+				.getChildCountFromLastGroup();
 
 		assertEquals("Incorrect number of bricks.", 3, solo.getCurrentListViews().get(0).getChildCount());
 		assertEquals("Incorrect number of bricks.", 2, childrenCount);

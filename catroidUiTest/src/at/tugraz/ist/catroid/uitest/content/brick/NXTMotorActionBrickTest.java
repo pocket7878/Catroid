@@ -36,11 +36,12 @@ import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.NXTMotorActionBrick;
 import at.tugraz.ist.catroid.ui.ScriptActivity;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
 
-public class NXTMotorActionBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
+public class NXTMotorActionBrickTest extends ActivityInstrumentationTestCase2<ScriptTabActivity> {
 	private static final int SET_SPEED = 30;
 	private static final int SET_SPEED_INITIALLY = -70;
 
@@ -49,7 +50,7 @@ public class NXTMotorActionBrickTest extends ActivityInstrumentationTestCase2<Sc
 	private NXTMotorActionBrick motorBrick;
 
 	public NXTMotorActionBrickTest() {
-		super("at.tugraz.ist.catroid", ScriptActivity.class);
+		super("at.tugraz.ist.catroid", ScriptTabActivity.class);
 	}
 
 	@Override
@@ -67,8 +68,9 @@ public class NXTMotorActionBrickTest extends ActivityInstrumentationTestCase2<Sc
 
 	@Smoke
 	public void testNXTMotorActionBrick() {
-		int childrenCount = getActivity().getAdapter().getChildCountFromLastGroup();
-		int groupCount = getActivity().getAdapter().getGroupCount();
+		int childrenCount = ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter()
+				.getChildCountFromLastGroup();
+		int groupCount = ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter().getGroupCount();
 
 		assertEquals("Incorrect number of bricks.", 2, solo.getCurrentListViews().get(0).getChildCount());
 		assertEquals("Incorrect number of bricks.", 1, childrenCount);
@@ -76,8 +78,8 @@ public class NXTMotorActionBrickTest extends ActivityInstrumentationTestCase2<Sc
 		ArrayList<Brick> projectBrickList = project.getSpriteList().get(0).getScript(0).getBrickList();
 		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0),
-				getActivity().getAdapter().getChild(groupCount - 1, 0));
+		assertEquals("Wrong Brick instance.", projectBrickList.get(0), ((ScriptActivity) getActivity()
+				.getCurrentActivity()).getAdapter().getChild(groupCount - 1, 0));
 		assertNotNull("TextView does not exist.", solo.getText(getActivity().getString(R.string.brick_motor_action)));
 		assertNotNull("TextView does not exist.", solo.getText(getActivity().getString(R.string.motor_speed)));
 

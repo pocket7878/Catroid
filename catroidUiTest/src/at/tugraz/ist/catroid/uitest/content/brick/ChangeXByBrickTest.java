@@ -35,11 +35,12 @@ import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.ChangeXByBrick;
 import at.tugraz.ist.catroid.ui.ScriptActivity;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
 
-public class ChangeXByBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
+public class ChangeXByBrickTest extends ActivityInstrumentationTestCase2<ScriptTabActivity> {
 	private static final int X_TO_CHANGE = 17;
 
 	private Solo solo;
@@ -47,7 +48,7 @@ public class ChangeXByBrickTest extends ActivityInstrumentationTestCase2<ScriptA
 	private ChangeXByBrick changeXByBrick;
 
 	public ChangeXByBrickTest() {
-		super("at.tugraz.ist.catroid", ScriptActivity.class);
+		super("at.tugraz.ist.catroid", ScriptTabActivity.class);
 	}
 
 	@Override
@@ -65,8 +66,9 @@ public class ChangeXByBrickTest extends ActivityInstrumentationTestCase2<ScriptA
 
 	@Smoke
 	public void testChangeXByBrick() {
-		int childrenCount = getActivity().getAdapter().getChildCountFromLastGroup();
-		int groupCount = getActivity().getAdapter().getGroupCount();
+		int childrenCount = ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter()
+				.getChildCountFromLastGroup();
+		int groupCount = ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter().getGroupCount();
 
 		assertEquals("Incorrect number of bricks.", 2, solo.getCurrentListViews().get(0).getChildCount());
 		assertEquals("Incorrect number of bricks.", 1, childrenCount);
@@ -74,8 +76,8 @@ public class ChangeXByBrickTest extends ActivityInstrumentationTestCase2<ScriptA
 		ArrayList<Brick> projectBrickList = project.getSpriteList().get(0).getScript(0).getBrickList();
 		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0),
-				getActivity().getAdapter().getChild(groupCount - 1, 0));
+		assertEquals("Wrong Brick instance.", projectBrickList.get(0), ((ScriptActivity) getActivity()
+				.getCurrentActivity()).getAdapter().getChild(groupCount - 1, 0));
 		assertNotNull("TextView does not exist.", solo.getText(getActivity().getString(R.string.brick_change_x_by)));
 
 		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, X_TO_CHANGE, "xMovementFormula", changeXByBrick);

@@ -23,12 +23,12 @@
 package at.tugraz.ist.catroid.uitest.content.brick;
 
 import android.test.ActivityInstrumentationTestCase2;
-import at.tugraz.ist.catroid.ui.ScriptActivity;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
 
-public class SpeakBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
+public class SpeakBrickTest extends ActivityInstrumentationTestCase2<ScriptTabActivity> {
 	private Solo solo;
 
 	//	private Project project;
@@ -38,7 +38,7 @@ public class SpeakBrickTest extends ActivityInstrumentationTestCase2<ScriptActiv
 	//	private String testString2 = "";
 
 	public SpeakBrickTest() {
-		super("at.tugraz.ist.catroid", ScriptActivity.class);
+		super("at.tugraz.ist.catroid", ScriptTabActivity.class);
 	}
 
 	@Override
@@ -57,8 +57,8 @@ public class SpeakBrickTest extends ActivityInstrumentationTestCase2<ScriptActiv
 	/*
 	 * @Smoke
 	 * public void testSpeakBrick() {
-	 * int childrenCount = getActivity().getAdapter().getChildCountFromLastGroup();
-	 * int groupCount = getActivity().getAdapter().getGroupCount();
+	 * int childrenCount = ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter().getChildCountFromLastGroup();
+	 * int groupCount = ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter().getGroupCount();
 	 * 
 	 * assertEquals("Incorrect number of bricks.", 2, solo.getCurrentListViews().get(0).getChildCount());
 	 * assertEquals("Incorrect number of bricks.", 1, childrenCount);
@@ -67,7 +67,7 @@ public class SpeakBrickTest extends ActivityInstrumentationTestCase2<ScriptActiv
 	 * assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 	 * 
 	 * assertEquals("Wrong Brick instance.", projectBrickList.get(0),
-	 * getActivity().getAdapter().getChild(groupCount - 1, 0));
+	 * ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter().getChild(groupCount - 1, 0));
 	 * assertNotNull("TextView does not exist.",
 	 * solo.getText(getActivity().getString(at.tugraz.ist.catroid.R.string.brick_speak)));
 	 * 
