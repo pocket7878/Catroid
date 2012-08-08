@@ -614,15 +614,20 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	public boolean undo() {
 		FormulaEditorHistoryElement lastStep = history.backward();
-		setInputTextAndPosition(lastStep.text, lastStep.cursorPosition, lastStep.selectionStart, lastStep.selectionEnd);
+		if (lastStep != null) {
+			setInputTextAndPosition(lastStep.text, lastStep.cursorPosition, lastStep.selectionStart,
+					lastStep.selectionEnd);
+		}
 
 		return history.undoIsPossible();
 	}
 
 	public boolean redo() {
 		FormulaEditorHistoryElement nextStep = history.forward();
-		setInputTextAndPosition(nextStep.text, nextStep.cursorPosition, nextStep.selectionStart, nextStep.selectionEnd);
-
+		if (nextStep != null) {
+			setInputTextAndPosition(nextStep.text, nextStep.cursorPosition, nextStep.selectionStart,
+					nextStep.selectionEnd);
+		}
 		return history.redoIsPossible();
 	}
 
