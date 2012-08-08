@@ -113,15 +113,20 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		//setEnabled(true);
 		setText(formulaAsText);
 		//formulaSaved();
-		absoluteCursorPosition = formulaAsText.length();
-		setSelection(absoluteCursorPosition - 1);
-		selectionStartIndex = 0;
-		selectionEndIndex = formulaAsText.length();
-		highlightSelection();
+		//		absoluteCursorPosition = formulaAsText.length();
+		//		setSelection(absoluteCursorPosition - 1);
+		//		selectionStartIndex = 0;
+		//		selectionEndIndex = formulaAsText.length();
+		//		highlightSelection();
+		quickSelect();
 		editMode = true;
 
-		history = new FormulaEditorHistory(formulaAsText, absoluteCursorPosition, selectionStartIndex,
-				selectionEndIndex);
+		if (history == null) {
+			history = new FormulaEditorHistory(formulaAsText, absoluteCursorPosition, selectionStartIndex,
+					selectionEndIndex);
+		} else {
+			history.clear();
+		}
 	}
 
 	public void setInputTextAndPosition(String formulaAsText, int cursorPosition, int selectionStart, int selectionEnd) {
@@ -136,16 +141,20 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		}
 	}
 
-	public void restoreFieldFromPreviousHistory() {
+	public boolean restoreFieldFromPreviousHistory() {
 		FormulaEditorHistoryElement currentState = history.getCurrentState();
+		if (currentState == null) {
+			return false;
+		}
 		setInputTextAndPosition(currentState.text, currentState.cursorPosition, currentState.selectionStart,
 				currentState.selectionEnd);
 		//setEnabled(true);
 		formulaEditorDialog.makeUndoButtonClickable(history.undoIsPossible());
 		formulaEditorDialog.makeRedoButtonClickable(history.redoIsPossible());
-		if (!history.hasUnsavedChanges()) {
-			formulaEditorDialog.makeOkButtonBackButton();
+		if (history.hasUnsavedChanges()) {
+			formulaEditorDialog.makeOkButtonSaveButton();
 		}
+		return true;
 	}
 
 	public synchronized void updateSelectionIndices() {
@@ -580,14 +589,27 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	}
 
 	public boolean hasChanges() {
-		return history.hasUnsavedChanges();
+		return history == null ? false : history.hasUnsavedChanges();
 	}
 
 	public void formulaSaved() {
 		history.changesSaved();
 		formulaEditorDialog.makeOkButtonBackButton();
-		errorSpan = this.getText();
-		errorSpan.removeSpan(COLOR_ERROR);
+		//		errorSpan = this.getText();
+		//		errorSpan.removeSpan(COLOR_ERROR);
+	}
+
+	public void endEdit() {
+		history.clear();
+	}
+
+	public void quickSelect() {
+		selectionStartIndex = 0;
+		selectionEndIndex = getText().length();
+		absoluteCursorPosition = selectionEndIndex;
+		setSelection(absoluteCursorPosition - 1);
+		highlightSelection();
+		editMode = true;
 	}
 
 	public boolean undo() {
@@ -629,7 +651,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.SimpleOnGestureListener() {
 		@Override
 		public boolean onDoubleTap(MotionEvent e) {
-			Log.i("info", "double tap ");
+			//Log.i("info", "double tap ");
 			doSelectionAndHighlighting();
 			history.updateCurrentSelection(absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
 			return true;

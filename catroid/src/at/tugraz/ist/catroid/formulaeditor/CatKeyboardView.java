@@ -75,6 +75,7 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 			//			this.symbols_shifted = new CatKeyboard(this.getContext(), R.xml.symbols_de_shift);
 			this.symbolsFunctions = new CatKeyboard(this.getContext(), R.xml.symbols_de_functions);
 			this.symbolsSensors = new CatKeyboard(this.getContext(), R.xml.symbols_de_sensors);
+
 			//Log.i("info", "FormulaEditorDialog.onCreate() - DisplayLanguage is DE");
 			Log.i("info", "CatKeyboardView.onCreate() - DisplayLanguage is DE");
 
@@ -88,6 +89,7 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 
 		}
 		//Log.i("info", "CatKeyBoardView() - DisplayLanguage:" + Locale.getDefault().getDisplayLanguage());
+
 		this.setKeyboard(symbolsNumbers);
 
 		//		Log.i("info", "CatKeyboardView() layoutparams width: " + this.getLayoutParams().width);
@@ -226,7 +228,6 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 				break;
 			case KeyEvent.KEYCODE_SHIFT_RIGHT:
 				this.handleKeyboardChange();
-
 				//				String displayLanguage = Locale.getDefault().getDisplayLanguage();
 				//				if (displayLanguage.contentEquals(Locale.ENGLISH.getDisplayLanguage())) {
 				//				if (!this.isShifted) {

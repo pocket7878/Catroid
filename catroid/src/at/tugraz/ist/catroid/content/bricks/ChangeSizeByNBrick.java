@@ -57,10 +57,12 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 		sizeFormula = size;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		double size = sizeFormula.interpret();
 		float newSize = sprite.costume.getSize() + ((float) size / 100f);
@@ -70,10 +72,12 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 		sprite.costume.setSize(newSize);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		if (instance == null) {
@@ -95,6 +99,7 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_change_size_by_n, null);
 	}
@@ -104,6 +109,7 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 		return new ChangeSizeByNBrick(getSprite(), sizeFormula);
 	}
 
+	@Override
 	public void onClick(View view) {
 		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
@@ -115,9 +121,8 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
-
-			formulaEditor.setInputFocusAndFormula(sizeFormula);
 		}
+		formulaEditor.setInputFocusAndFormula(sizeFormula);
 
 	}
 

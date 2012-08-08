@@ -55,10 +55,12 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 		volumeFormula = volume;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		float volume = volumeFormula.interpret().floatValue();
 
@@ -70,10 +72,12 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 		SoundManager.getInstance().setVolume(volume);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		if (instance == null) {
@@ -97,6 +101,7 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_set_volume_to, null);
 	}
@@ -106,6 +111,7 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 		return new SetVolumeToBrick(getSprite(), volumeFormula);
 	}
 
+	@Override
 	public void onClick(View view) {
 		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
@@ -117,9 +123,8 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
-
-			formulaEditor.setInputFocusAndFormula(this.volumeFormula);
 		}
+		formulaEditor.setInputFocusAndFormula(this.volumeFormula);
 
 	}
 }

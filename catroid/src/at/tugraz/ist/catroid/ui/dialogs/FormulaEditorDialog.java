@@ -101,23 +101,6 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 			brickSpace.addView(brickView);
 
 		}
-		//		flipView = (ViewFlipper) findViewById(R.id.catflip);
-		//		flipView.setDisplayedChild(1);
-		//		Animation slideOut = AnimationUtils.loadAnimation(context, R.anim.slide_in);
-		//		flipView.setOutAnimation(slideOut);
-		//		Animation slideIn = AnimationUtils.loadAnimation(context, R.anim.slide_out);
-		//		flipView.setInAnimation(slideIn);
-		//
-		//		flipView.setOnTouchListener(new OnTouchListener() {
-		//			public boolean onTouch(View v, MotionEvent event) {
-		//
-		//				gestureDetector.onTouchEvent(event);
-		//				return true;
-		//			}
-		//		});
-		//		gestureDetector = new GestureDetector(context, this);
-		//LinearLayout brickSpace = (LinearLayout) findViewById(R.id.formula_editor_brick_space);
-		//brickSpace.addView(currentBrick.getView(context, 0, null));
 
 		setTitle(R.string.dialog_formula_editor_title);
 		setCanceledOnTouchOutside(true);
@@ -141,60 +124,54 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 
 		makeRedoButtonClickable(false);
 		makeUndoButtonClickable(false);
+		makeOkButtonBackButton();
 		this.setOnDismissListener(this);
 		if (brickSpace != null) {
 			formulaEditorEditText.init(this, brickSpace.getMeasuredHeight(), catKeyboardView, context);
 		} else {
 			formulaEditorEditText.init(this, 0, catKeyboardView, context);
 		}
-		//Log.i("info", "FormulaEditorDialog.onCreate() at the end of method");
 	}
 
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
-		//Log.i("info", "FormulaEditorDialog.onRestoreInstanceState()");
 		super.onRestoreInstanceState(savedInstanceState);
 	}
 
 	@Override
 	public Bundle onSaveInstanceState() {
-		//Log.i("info", "FormulaEditorDialog.onSaveInstanceState()");
 		restorePreviousTextField = true;
 		return super.onSaveInstanceState();
 	}
 
 	public void setInputFocusAndFormula(Formula newFormula) {
-		Log.i("rolf", "set input focus");
-		if (newFormula == null) {
-			Log.i("rolf", "new formula null");
-			if (restorePreviousTextField) {
-				restorePreviousTextField = false;
-				formulaEditorEditText.restoreFieldFromPreviousHistory();
-				refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
+
+		if (restorePreviousTextField) { //after orientation switch
+			restorePreviousTextField = false;
+			if (!formulaEditorEditText.restoreFieldFromPreviousHistory()) { //history is only deleted when editor is shut down by user!
+				formulaEditorEditText.enterNewFormula(newFormula.getEditTextRepresentation()); // this happens when onSaveInstanceState() is being called but not by orientation change (e.g.user turns off screen)
+				//				refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
 			}
-			return;
 		} else if (newFormula == activeFormula) {
-			Log.i("rolf", "new is already active");
-			//formulaEditorEditText.restoreFieldFromPreviousHistory();
-			//			if (formulaEditorEditText.getText().length() == 0) {
-			formulaEditorEditText.enterNewFormula(activeFormula.getEditTextRepresentation());
-			refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
-			//			}
-			return;
-		}
-		//		else if (formulaEditorEditText.hasChanges() == true) {
-		//			showToast(R.string.formula_editor_save_first);
-		//			return;
-		//		}
 
-		if (activeFormula != null) {
-			activeFormula.refreshTextField(brickView);
-		}
-		activeFormula = newFormula;
+			if (!formulaEditorEditText.hasChanges()) {
+				formulaEditorEditText.enterNewFormula(activeFormula.getEditTextRepresentation());
+			} else {
+				formulaEditorEditText.quickSelect();
+			}
+		} else {
+			if (!formulaEditorEditText.hasChanges()) {
+				if (activeFormula != null) {
+					activeFormula.refreshTextField(brickView);
+				}
+				activeFormula = newFormula;
+				makeOkButtonBackButton();
+				formulaEditorEditText.enterNewFormula(newFormula.getEditTextRepresentation());
+			} else {
+				showToast(R.string.formula_editor_save_first);
+			}
 
-		makeOkButtonBackButton();
-		formulaEditorEditText.enterNewFormula(newFormula.getEditTextRepresentation());
-		refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
+		}
 
 	}
 
@@ -216,16 +193,15 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 
 		switch (v.getId()) {
 			case R.id.formula_editor_ok_button:
-				Log.i("info", "FormulaEditorDialog.onClick()  case ok_button");
-				if (buttonIsBackButton == true) {
+				if (buttonIsBackButton) {
 					mScriptTabActivity.setCurrentFormulaEditorDialog(null);
 					mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
 					mScriptTabActivity.setEditorStatus(false);
 					mScriptTabActivity.setCurrentBrick(null);
+					formulaEditorEditText.endEdit();
 					dismiss();
 				} else {
 					String formulaToParse = formulaEditorEditText.getText().toString();
-					Log.i("info", "Formula: " + formulaToParse);
 					int err = parseFormula(formulaToParse);
 					if (err == -1) {
 						if (brickSpace != null) {
@@ -312,6 +288,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 						mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
 						mScriptTabActivity.setEditorStatus(false);
 						mScriptTabActivity.setCurrentBrick(null);
+						formulaEditorEditText.endEdit();
 						dismiss();
 					} else {
 						showToast(R.string.formula_editor_confirm_discard);
@@ -323,6 +300,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 					mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
 					mScriptTabActivity.setEditorStatus(false);
 					mScriptTabActivity.setCurrentBrick(null);
+					formulaEditorEditText.endEdit();
 					dismiss();
 				}
 

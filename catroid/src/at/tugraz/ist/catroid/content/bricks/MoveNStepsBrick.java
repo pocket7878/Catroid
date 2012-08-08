@@ -59,10 +59,12 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 		stepsFormula = steps;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		double steps = stepsFormula.interpret().doubleValue();
 
@@ -78,10 +80,12 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (instance == null) {
 			instance = this;
@@ -103,6 +107,7 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.brick_move_n_steps, null);
@@ -114,6 +119,7 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 		return new MoveNStepsBrick(getSprite(), stepsFormula);
 	}
 
+	@Override
 	public void onClick(View view) {
 		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
@@ -125,9 +131,8 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
-
-			formulaEditor.setInputFocusAndFormula(this.stepsFormula);
 		}
+		formulaEditor.setInputFocusAndFormula(this.stepsFormula);
 
 	}
 }

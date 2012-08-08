@@ -134,8 +134,8 @@ public class WaitBrick implements Brick, OnClickListener {
 			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
-
-			formulaEditor.setInputFocusAndFormula(this.timeToWaitInSecondsFormula);
 		}
+		formulaEditor.setInputFocusAndFormula(this.timeToWaitInSecondsFormula);
+
 	}
 }

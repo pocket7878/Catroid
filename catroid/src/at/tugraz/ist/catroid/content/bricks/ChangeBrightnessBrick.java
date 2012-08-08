@@ -57,10 +57,12 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 		changeBrightnessFormula = changeBrightness;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		//		sprite.costume.changeBrightnessValueBy((float) (this.changeBrightness / 100));
 		double changeBrightness = changeBrightnessFormula.interpret() / 100;
@@ -68,6 +70,7 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 		sprite.costume.changeBrightnessValueBy((float) changeBrightness);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
@@ -76,6 +79,7 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 	//		return changeBrightness;
 	//	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (instance == null) {
 			instance = this;
@@ -97,6 +101,7 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_change_brightness, null);
 	}
@@ -106,6 +111,7 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 		return new ChangeBrightnessBrick(getSprite(), changeBrightnessFormula);
 	}
 
+	@Override
 	public void onClick(View view) {
 		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
@@ -117,9 +123,8 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
-
-			formulaEditor.setInputFocusAndFormula(this.changeBrightnessFormula);
 		}
+		formulaEditor.setInputFocusAndFormula(this.changeBrightnessFormula);
 
 		//		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
 		//		final EditText input = new EditText(context);

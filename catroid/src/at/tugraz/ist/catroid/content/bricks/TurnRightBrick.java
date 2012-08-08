@@ -58,19 +58,23 @@ public class TurnRightBrick implements Brick, OnClickListener {
 		this.degreesFormula = degreesFormula;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		float degrees = degreesFormula.interpret().floatValue();
 		sprite.costume.rotation = (sprite.costume.rotation % 360) - degrees;
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		if (instance == null) {
@@ -91,6 +95,7 @@ public class TurnRightBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_turn_right, null);
 	}
@@ -100,6 +105,7 @@ public class TurnRightBrick implements Brick, OnClickListener {
 		return new TurnRightBrick(getSprite(), degreesFormula);
 	}
 
+	@Override
 	public void onClick(View view) {
 		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
@@ -111,9 +117,8 @@ public class TurnRightBrick implements Brick, OnClickListener {
 			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
-
-			formulaEditor.setInputFocusAndFormula(this.degreesFormula);
 		}
+		formulaEditor.setInputFocusAndFormula(this.degreesFormula);
 
 	}
 }
