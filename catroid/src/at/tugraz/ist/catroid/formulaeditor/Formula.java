@@ -93,4 +93,11 @@ public class Formula implements Serializable {
 		}
 
 	}
+
+	public void refreshTextField(View view, String formulaString) {
+		if (formulaTextFieldId != null && root != null) {
+			EditText formulaTextField = (EditText) view.findViewById(formulaTextFieldId);
+			formulaTextField.setText(formulaString);
+		}
+	}
 }

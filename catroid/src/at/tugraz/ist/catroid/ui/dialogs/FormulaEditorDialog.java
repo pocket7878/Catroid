@@ -170,6 +170,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 			if (restorePreviousTextField) {
 				restorePreviousTextField = false;
 				formulaEditorEditText.restoreFieldFromPreviousHistory();
+				refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
 			}
 			return;
 		} else if (newFormula == activeFormula) {
@@ -177,6 +178,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 			//formulaEditorEditText.restoreFieldFromPreviousHistory();
 			//			if (formulaEditorEditText.getText().length() == 0) {
 			formulaEditorEditText.enterNewFormula(activeFormula.getEditTextRepresentation());
+			refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
 			//			}
 			return;
 		}
@@ -185,9 +187,14 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 		//			return;
 		//		}
 
+		if (activeFormula != null) {
+			activeFormula.refreshTextField(brickView);
+		}
 		activeFormula = newFormula;
+
 		makeOkButtonBackButton();
 		formulaEditorEditText.enterNewFormula(newFormula.getEditTextRepresentation());
+		refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
 
 	}
 
@@ -321,6 +328,10 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 
 		}
 		return formulaEditorEditText.catKeyboardView.onKeyDown(keyCode, event);
+	}
+
+	public void refreshFormulaPreviewString(String formulaString) {
+		activeFormula.refreshTextField(brickView, formulaEditorEditText.getText().toString());
 	}
 
 }

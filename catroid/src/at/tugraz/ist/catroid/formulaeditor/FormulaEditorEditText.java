@@ -502,6 +502,8 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 		//Log.i("info", "Cursor Pos: " + absoluteCursorPosition);
 
+		formulaEditorDialog.refreshFormulaPreviewString(this.getText().toString());
+
 	}
 
 	public void deleteOneCharAtCurrentPosition() {
