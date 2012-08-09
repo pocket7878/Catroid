@@ -265,8 +265,8 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("azimuth");
-		assertEquals("Wrong button clicked", "AZIM_ORIENTATION_",
-				text.getText().toString().substring(0, "AZIM_ORIENTATION_".length()));
+		assertEquals("Wrong button clicked", "AZIMUTH_ORIENTATION_",
+				text.getText().toString().substring(0, "AZIMUTH_ORIENTATION_".length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		solo.clickOnButton(2);
