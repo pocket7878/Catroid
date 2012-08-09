@@ -65,18 +65,6 @@ public class SetCostumeBrick implements Brick {
 		}
 	}
 
-	public void executeLiveWallpaper() {
-		WallpaperCostume costumeSingleton = WallpaperCostume.getInstance();
-		boolean isBackground = false;
-
-		//TODO: Don't use the hardcoded value
-		if (sprite.getName().equals("Background")) {
-			isBackground = true;
-		}
-
-		costumeSingleton.initCostumeToDraw(costumeData, isBackground);
-	}
-
 	public Sprite getSprite() {
 		return sprite;
 	}
@@ -156,5 +144,15 @@ public class SetCostumeBrick implements Brick {
 
 		return clonedBrick;
 
+	}
+
+	public void executeLiveWallpaper() {
+
+		//TODO: refactor the hard-coded value
+		if (sprite.getName().equals("Background")) {
+			WallpaperCostume.getInstance().initCostumeToDraw(costumeData, true);
+		} else {
+			WallpaperCostume.getInstance().initCostumeToDraw(costumeData, false);
+		}
 	}
 }

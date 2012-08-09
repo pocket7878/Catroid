@@ -1,7 +1,31 @@
+/**
+ *  Catroid: An on-device graphical programming language for Android devices
+ *  Copyright (C) 2010-2011 The Catroid Team
+ *  (<http://code.google.com/p/catroid/wiki/Credits>)
+ *  
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *  
+ *  An additional term exception under section 7 of the GNU Affero
+ *  General Public License, version 3, is available at
+ *  http://www.catroid.org/catroid_license_additional_term
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Affero General Public License for more details.
+ *   
+ *  You should have received a copy of the GNU Affero General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package at.tugraz.ist.catroid.livewallpaper;
 
 import java.util.List;
 
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
@@ -10,7 +34,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
@@ -19,31 +42,33 @@ import at.tugraz.ist.catroid.content.bricks.Brick;
 
 public class LiveWallpaper extends WallpaperService {
 
-	private ProjectManager projectManager;
-	private Project currentProject;
-	private List<Sprite> spriteList;
+	public static final String SHARED_PREFS_NAME = "livewallpapersettings";
 
 	@Override
 	public Engine onCreateEngine() {
-
-		projectManager = ProjectManager.getInstance();
-		currentProject = projectManager.getCurrentProject();
-		spriteList = currentProject.getSpriteList();
-
 		return new CatWallEngine();
 	}
 
-	private class CatWallEngine extends Engine {
+	private class CatWallEngine extends Engine implements SharedPreferences.OnSharedPreferenceChangeListener {
 		private boolean mVisible = false;
 
 		private Paint paint;
 		private Script scriptToHandle;
 		private Brick brickToHandle;
+		private SharedPreferences mPreferences;
 
 		private boolean startScript = false;
 		private boolean tappedScript = false;
 
+		private boolean licence = true;
+
 		private WallpaperCostume wallpaperCostume = WallpaperCostume.getInstance();
+
+		public CatWallEngine() {
+			mPreferences = LiveWallpaper.this.getSharedPreferences(SHARED_PREFS_NAME, 0);
+			mPreferences.registerOnSharedPreferenceChangeListener(this);
+			onSharedPreferenceChanged(mPreferences, null);
+		}
 
 		private final Handler mHandler = new Handler();
 
@@ -79,6 +104,7 @@ public class LiveWallpaper extends WallpaperService {
 		}
 
 		public void handleScript() {
+			List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteList();
 			for (Sprite sprite : spriteList) {
 				for (int i = 0; i < sprite.getNumberOfScripts(); i++) {
 					scriptToHandle = sprite.getScript(i);
@@ -105,9 +131,9 @@ public class LiveWallpaper extends WallpaperService {
 				startScript = false;
 			}
 
-			//			if (tappedScript) {
-			//				tappedScript = false;
-			//			}
+			if (tappedScript) {
+				tappedScript = false;
+			}
 		}
 
 		private void draw() {
@@ -150,6 +176,18 @@ public class LiveWallpaper extends WallpaperService {
 				}
 			}
 
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * android.content.SharedPreferences.OnSharedPreferenceChangeListener#onSharedPreferenceChanged(android.content
+		 * .SharedPreferences, java.lang.String)
+		 */
+		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+			// TODO Auto-generated method stub
+			licence = sharedPreferences.getBoolean("licence", true);
 		}
 	}
 

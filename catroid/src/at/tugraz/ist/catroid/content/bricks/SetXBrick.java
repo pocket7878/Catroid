@@ -35,7 +35,6 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.utils.Utils;
-import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -121,11 +120,6 @@ public class SetXBrick implements Brick, OnClickListener {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see at.tugraz.ist.catroid.content.bricks.Brick#executeLiveWallpaper()
-	 */
 	public void executeLiveWallpaper() {
-		// TODO Auto-generated method stub
-        	WallpaperCostume.getInstance().setLeft(xPosition);	
 	}
 }

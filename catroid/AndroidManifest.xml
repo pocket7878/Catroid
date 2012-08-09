@@ -102,8 +102,13 @@
         <activity android:name=".ui.MyProjectsActivity" 
         	android:noHistory="true"/>
         <activity
-            android:name=".ui.SettingsActivity"
-            android:theme="@style/settings_activity" />
+            android:name=".livewallpaper.LiveWallpaperSettings"
+            android:theme="@android:style/Theme.Light.WallpaperSettings">
+             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+            </activity>
+            
         <activity
             android:name=".bluetooth.DeviceListActivity"
             android:theme="@android:style/Theme.Dialog" />
@@ -120,14 +125,6 @@
 		
             </intent-filter>
         </activity>		
-        <activity android:name=".livewallpaper.LiveWallpaperStage">
-            <intent-filter>
- 
-                <action android:name="android.intent.action.MAIN" />
- 
-                <category android:name="android.intent.category.LAUNCHER" />
- 
-            </intent-filter>
-        </activity>
+      
     </application>
 </manifest>

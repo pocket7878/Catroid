@@ -98,7 +98,7 @@
             style="@style/DashboardButton"
             android:drawableTop="@drawable/about_selector"
             android:text="Livewallpaper"
-            android:onClick="HandleDownload"
+            android:onClick="handleLiveWallpaper"
             />
         
 

@@ -247,11 +247,8 @@ public class NXTPlayToneBrick implements Brick, OnClickListener, OnSeekBarChange
 		finishedDialog.show();
 	}
 
-	/* (non-Javadoc)
-	 * @see at.tugraz.ist.catroid.content.bricks.Brick#executeLiveWallpaper()
-	 */
 	public void executeLiveWallpaper() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

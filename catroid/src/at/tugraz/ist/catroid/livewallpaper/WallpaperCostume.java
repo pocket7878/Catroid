@@ -1,31 +1,40 @@
 /**
  *  Catroid: An on-device graphical programming language for Android devices
- *  Copyright (C) 2010  Catroid development team 
+ *  Copyright (C) 2010-2011 The Catroid Team
  *  (<http://code.google.com/p/catroid/wiki/Credits>)
- *
+ *  
  *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
+ *  it under the terms of the GNU Affero General Public License as
+ *  published by the Free Software Foundation, either version 3 of the
+ *  License, or (at your option) any later version.
+ *  
+ *  An additional term exception under section 7 of the GNU Affero
+ *  General Public License, version 3, is available at
+ *  http://www.catroid.org/catroid_license_additional_term
+ *  
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
+ *  GNU Affero General Public License for more details.
+ *   
+ *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package at.tugraz.ist.catroid.livewallpaper;
 
 import android.graphics.Bitmap;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.CostumeData;
+import at.tugraz.ist.catroid.content.Costume;
+import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.Sprite;
 
 public class WallpaperCostume {
 	private static WallpaperCostume wallpaperCostume;
 
 	private CostumeData costumeData;
+	private Costume backgroundCostume;
 
 	private Bitmap costume = null;
 	private Bitmap background = null;
@@ -38,10 +47,14 @@ public class WallpaperCostume {
 
 	private boolean coordsSetManually = false;
 	private boolean costumeHidden = false;
+	private boolean sizeSetManually = false;
 
 	private WallpaperCostume() {
-		this.screenHeightHalf = ProjectManager.getInstance().getCurrentProject().virtualScreenHeight / 2;
-		this.screenWidthHalf = ProjectManager.getInstance().getCurrentProject().virtualScreenWidth / 2;
+
+		Project currentProject = ProjectManager.getInstance().getCurrentProject();
+
+		this.screenHeightHalf = currentProject.virtualScreenHeight / 2;
+		this.screenWidthHalf = currentProject.virtualScreenWidth / 2;
 	}
 
 	public static WallpaperCostume getInstance() {
@@ -65,6 +78,14 @@ public class WallpaperCostume {
 			this.background = bitmap;
 		} else {
 			this.costume = bitmap;
+
+		}
+
+	}
+
+	public void initSetSize(Sprite sprite, Bitmap bitmap, double size) {
+		if (sprite.getName().equals("Background")) {
+			bitmap.setDensity((int) size);
 		}
 	}
 

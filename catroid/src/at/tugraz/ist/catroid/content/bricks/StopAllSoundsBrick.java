@@ -71,11 +71,8 @@ public class StopAllSoundsBrick implements Brick {
 		return View.inflate(context, R.layout.brick_stop_all_sounds, null);
 	}
 
-	/* (non-Javadoc)
-	 * @see at.tugraz.ist.catroid.content.bricks.Brick#executeLiveWallpaper()
-	 */
 	public void executeLiveWallpaper() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

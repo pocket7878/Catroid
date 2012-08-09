@@ -118,11 +118,11 @@ public class SetSizeToBrick implements Brick, OnClickListener {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see at.tugraz.ist.catroid.content.bricks.Brick#executeLiveWallpaper()
-	 */
 	public void executeLiveWallpaper() {
 		// TODO Auto-generated method stub
-		
+		//		if (sprite.getName().equals("Background")) {
+		//			CostumeData bitmap;
+		//			WallpaperCostume.getInstance().initSetSize(getSprite(), (CostumeData) bitmap, size);
+		//		}
 	}
 }
