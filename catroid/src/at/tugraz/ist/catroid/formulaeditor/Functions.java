@@ -20,37 +20,35 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.tugraz.ist.catroid.content.bricks;
+package at.tugraz.ist.catroid.formulaeditor;
 
-import java.io.Serializable;
+import java.util.EnumSet;
 
-import android.content.Context;
-import android.view.View;
-import android.widget.BaseAdapter;
-import at.tugraz.ist.catroid.content.Sprite;
+public enum Functions {
+	//PLUS("+", 0), MINUS("-", 0), MULT("*", 1), DIVIDE("/", 1), MOD("%", 1), POW("^", 2);
+	SIN("sin"), COS("cos"), TAN("tan"), LN("ln"), LOG("log"), SQRT("sqrt"), RAND("rand");
+	private final String functionName;
 
-public interface Brick extends Serializable {
+	Functions(String value) {
+		this.functionName = value;
+	}
 
-	//use bitwise | for using multiple ressources in a brick
-	public static final int NO_RESOURCES = 0x0;
-	//	public static final int SOUND_MANAGER = 0x1;
-	public static final int TEXT_TO_SPEECH = 0x2;
-	public static final int BLUETOOTH_LEGO_NXT = 0x4;
+	//	public static Functions geFunctionByValue(String value) {
+	//		for (Functions fct : EnumSet.allOf(Functions.class)) {
+	//			if (fct.value.equals(value)) {
+	//				return fct;
+	//			}
+	//		}
+	//		return null;
+	//	}
 
-	//	public static final int BLUETOOTH_ARDUINO = 0x8;
-
-	public void execute();
-
-	public Sprite getSprite();
-
-	public View getView(Context context, int brickId, BaseAdapter adapter);
-
-	public View getPrototypeView(Context context);
-
-	public Brick clone();
-
-	public int getRequiredResources();
-
-	public void onClick(View view);
+	public static boolean isFunction(String value) {
+		for (Functions fct : EnumSet.allOf(Functions.class)) {
+			if (value.startsWith(fct.functionName)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

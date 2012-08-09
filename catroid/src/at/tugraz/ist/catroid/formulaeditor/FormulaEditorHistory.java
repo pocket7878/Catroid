@@ -28,7 +28,7 @@ import android.util.Log;
 
 public class FormulaEditorHistory {
 
-	private static final int MAXIMUM_HISTORY_LENGTH = 20;
+	private static final int MAXIMUM_HISTORY_LENGTH = 15;
 	private Stack<FormulaEditorHistoryElement> undoStack = null;
 	private Stack<FormulaEditorHistoryElement> redoStack = null;
 	private FormulaEditorHistoryElement current = null;
@@ -46,11 +46,17 @@ public class FormulaEditorHistory {
 
 	public void push(String text, int cursorPosition, int selectionStart, int selectionEnd) {
 
-		hasUnsavedChanges = true;
-		undoStack.push(current);
+		if (current != null && current.text.equals(text)) {
+			return;
+		}
+
+		if (current != null) {
+			undoStack.push(current);
+		}
 		current = new FormulaEditorHistoryElement(text, cursorPosition, selectionStart, selectionEnd);
 		//undoStack.push(new FormulaEditorHistoryElement(text, cursorPosition, selectionStart, selectionEnd));
 		redoStack.clear();
+		hasUnsavedChanges = true;
 		Log.i("info", "history size: " + undoStack.size());
 		if (undoStack.size() > MAXIMUM_HISTORY_LENGTH) {
 			undoStack.removeElementAt(0);
@@ -84,6 +90,10 @@ public class FormulaEditorHistory {
 		current.cursorPosition = cursorPosition;
 		current.selectionStart = selectionStart;
 		current.selectionEnd = selectionEnd;
+	}
+
+	public void init(String text, int cursorPosition, int selectionStart, int selectionEnd) {
+		current = new FormulaEditorHistoryElement(text, cursorPosition, selectionStart, selectionEnd);
 	}
 
 	public void clear() {
