@@ -103,6 +103,29 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 
 	}
 
+	public void testOnTheFlyUpdateOfBrickEditText() {
+
+		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		catKeyboardClicker.clickOnKey("1");
+
+		assertEquals("Wrong text in FormulaEditor", "1", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
+				.toString());
+		assertEquals("Wrong text in FormulaEditor", "1", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString());
+
+		catKeyboardClicker.clickOnKey("2");
+
+		assertEquals("Wrong text in FormulaEditor", "12", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
+				.toString());
+		assertEquals("Wrong text in FormulaEditor", "12", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString());
+
+		solo.goBack();
+		solo.goBack();
+
+		assertEquals("Wrong text in FormulaEditor", INITIAL_X + " ", solo.getEditText(X_POS_EDIT_TEXT_ID).getText()
+				.toString());
+
+	}
+
 	public void testFormulaEditorDialogAndSimpleInterpretation() {
 		//		Note solo.enterText() modifications to the text are undetectable to FormulaEditorEditText.
 		//		Text via solo.enterText() *must* be longer than the original text!!! To be safe use CatKeyboardKlicker to clear!
