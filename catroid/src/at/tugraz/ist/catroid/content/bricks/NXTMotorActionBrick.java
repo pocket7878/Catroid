@@ -42,7 +42,6 @@ import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class NXTMotorActionBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
-	public static final int REQUIRED_RESSOURCES = BLUETOOTH_LEGO_NXT;
 
 	public static enum Motor {
 		MOTOR_A, MOTOR_B, MOTOR_C, MOTOR_A_C
@@ -169,13 +168,8 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 		return brickView;
 	}
 
-	public void onNothingSelected(AdapterView<?> arg0) {
-
-	}
-
 	@Override
 	public void onClick(View view) {
-		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
 
 		if (!FormulaEditorDialog.mScriptTabActivity.isEditorActive()) {
@@ -185,9 +179,8 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
-
-			formulaEditor.setInputFocusAndFormula(this.speedFormula);
 		}
+		formulaEditor.setInputFocusAndFormula(this.speedFormula);
 
 		//		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
 		//		final EditText input = new EditText(context);

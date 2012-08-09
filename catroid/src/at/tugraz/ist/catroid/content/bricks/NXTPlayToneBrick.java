@@ -38,7 +38,6 @@ import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class NXTPlayToneBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
-	public static final int REQUIRED_RESSOURCES = BLUETOOTH_LEGO_NXT;
 
 	private static final int MIN_FREQ_IN_HERTZ = 200;
 	private static final int MAX_FREQ_IN_HERTZ = 14000;
