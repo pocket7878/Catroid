@@ -93,8 +93,7 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		int speed = Math.min(MAX_SPEED, speedFormula.interpret().intValue());
-		speed = Math.max(MIN_SPEED, speed);
+		int speed = speedFormula.interpretInteger(MIN_SPEED, MAX_SPEED);
 
 		if (motorEnum.equals(Motor.MOTOR_A_C)) {
 			LegoNXT.sendBTCMotorMessage(NO_DELAY, Motor.MOTOR_A.ordinal(), speed, 0);

@@ -65,9 +65,9 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 	@Override
 	public void execute() {
 		//		sprite.costume.changeBrightnessValueBy((float) (this.changeBrightness / 100));
-		double changeBrightness = changeBrightnessFormula.interpret() / 100;
+		float changeBrightness = changeBrightnessFormula.interpretFloat() / 100F;
 
-		sprite.costume.changeBrightnessValueBy((float) changeBrightness);
+		sprite.costume.changeBrightnessValueBy(changeBrightness);
 	}
 
 	@Override

@@ -76,10 +76,8 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		int interpretFrequency = Math.min(MAX_FREQ_IN_HERTZ, frequencyFormula.interpret().intValue());
-		interpretFrequency = Math.max(MIN_FREQ_IN_HERTZ, interpretFrequency);
-		int durationInMs = Math.min(MAX_DURATION, durationInMsFormula.interpret().intValue());
-		durationInMs = Math.max(MIN_DURATION, durationInMs);
+		int interpretFrequency = frequencyFormula.interpretInteger(MIN_FREQ_IN_HERTZ, MAX_FREQ_IN_HERTZ);
+		int durationInMs = durationInMsFormula.interpretInteger(MIN_DURATION, MAX_DURATION);
 
 		LegoNXT.sendBTCPlayToneMessage(interpretFrequency, durationInMs);
 

@@ -66,7 +66,7 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		double steps = stepsFormula.interpret().doubleValue();
+		float steps = stepsFormula.interpretFloat();
 
 		sprite.costume.aquireXYWidthHeightLock();
 

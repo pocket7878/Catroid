@@ -65,10 +65,60 @@ public class Formula implements Serializable {
 	//		this.formulaTextFieldId = formulaTextFieldId;
 	//	}
 
-	public Double interpret() {
+	//	public Double interpret() {
+	//
+	//		//Log.i("info", root.getTreeString());
+	//
+	//		return root.interpretRecursive();
+	//	}
 
-		//Log.i("info", root.getTreeString());
-		return root.interpretRecursive();
+	public int interpretInteger() {
+		return interpretInteger(1, 0);
+	}
+
+	public int interpretInteger(int minValue, int maxValue) {
+		Object interpretedValue = root.interpretRecursive();
+
+		int interpretedIntValue = 0;
+
+		if (interpretedValue.getClass().equals(Double.class)) {
+			interpretedIntValue = ((Double) interpretedValue).intValue();
+		} else if (interpretedValue.getClass().equals(Integer.class)) {
+			interpretedIntValue = ((Integer) interpretedValue).intValue();
+		}
+
+		if (minValue <= maxValue) {
+
+			interpretedIntValue = Math.min(maxValue, interpretedIntValue);
+			interpretedIntValue = Math.max(minValue, interpretedIntValue);
+		}
+
+		return interpretedIntValue;
+
+	}
+
+	public float interpretFloat() {
+		return interpretFloat(1f, 0f);
+	}
+
+	public float interpretFloat(float minValue, float maxValue) {
+		Object interpretedValue = root.interpretRecursive();
+
+		float interpretedFloatValue = 0;
+
+		if (interpretedValue.getClass().equals(Double.class)) {
+			interpretedFloatValue = ((Double) interpretedValue).floatValue();
+		} else if (interpretedValue.getClass().equals(Integer.class)) {
+			interpretedFloatValue = ((Integer) interpretedValue).floatValue();
+		}
+
+		if (minValue <= maxValue) {
+
+			interpretedFloatValue = Math.min(maxValue, interpretedFloatValue);
+			interpretedFloatValue = Math.max(minValue, interpretedFloatValue);
+		}
+
+		return interpretedFloatValue;
 	}
 
 	public String getEditTextRepresentation() {

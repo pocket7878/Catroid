@@ -75,8 +75,7 @@ public class GlideToBrick implements Brick, OnClickListener {
 	@Override
 	public void execute() {
 
-		Double temp = durationInSecondsFormula.interpret() * 1000;
-		int durationInMilliSeconds = temp.intValue();
+		int durationInMilliSeconds = (int) (durationInSecondsFormula.interpretFloat() * 1000f);
 		/* That's the way how an action is made */
 		//		Action action = MoveBy.$(xDestination, yDestination, this.durationInMilliSeconds / 1000);
 		//		final CountDownLatch latch = new CountDownLatch(1);
@@ -124,10 +123,10 @@ public class GlideToBrick implements Brick, OnClickListener {
 		if (!sprite.isAlive(Thread.currentThread())) {
 			// -stay at last position
 		} else {
-			double xDest = xDestinationFormula.interpret();
-			double yDest = yDestinationFormula.interpret();
+			float xDest = xDestinationFormula.interpretFloat();
+			float yDest = yDestinationFormula.interpretFloat();
 			sprite.costume.aquireXYWidthHeightLock();
-			sprite.costume.setXYPosition((float) xDest, (float) yDest);
+			sprite.costume.setXYPosition(xDest, yDest);
 			sprite.costume.releaseXYWidthHeightLock();
 		}
 	}
@@ -137,8 +136,8 @@ public class GlideToBrick implements Brick, OnClickListener {
 		float xPosition = sprite.costume.getXPosition();
 		float yPosition = sprite.costume.getYPosition();
 
-		xPosition += ((float) timePassed / duration) * (xDestinationFormula.interpret() - xPosition);
-		yPosition += ((float) timePassed / duration) * (yDestinationFormula.interpret() - yPosition);
+		xPosition += ((float) timePassed / duration) * (xDestinationFormula.interpretFloat() - xPosition);
+		yPosition += ((float) timePassed / duration) * (yDestinationFormula.interpretFloat() - yPosition);
 
 		sprite.costume.setXYPosition(xPosition, yPosition);
 		sprite.costume.releaseXYWidthHeightLock();
@@ -150,7 +149,7 @@ public class GlideToBrick implements Brick, OnClickListener {
 	}
 
 	public int getDurationInMilliSeconds() {
-		return durationInSecondsFormula.interpret().intValue();
+		return durationInSecondsFormula.interpretInteger();
 	}
 
 	@Override

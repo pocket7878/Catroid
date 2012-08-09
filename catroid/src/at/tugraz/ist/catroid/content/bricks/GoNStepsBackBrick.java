@@ -61,7 +61,7 @@ public class GoNStepsBackBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		int steps = stepsFormula.interpret().intValue();
+		int steps = stepsFormula.interpretInteger();
 
 		int zPosition = sprite.costume.zPosition;
 		if (steps > 0 && (zPosition - steps) > zPosition) {

@@ -68,7 +68,7 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		int xMovement = xMovementFormula.interpret().intValue();
+		int xMovement = xMovementFormula.interpretInteger();
 
 		sprite.costume.aquireXYWidthHeightLock();
 		int xPosition = (int) sprite.costume.getXPosition();
