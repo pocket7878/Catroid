@@ -46,10 +46,11 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	private static final BackgroundColorSpan COLOR_ERROR = new BackgroundColorSpan(0xFFF00000);
 	private static final BackgroundColorSpan COLOR_HIGHLIGHT = new BackgroundColorSpan(0xFFFFFF00);
 
-	public static final String[] GROUP_NUMBERS = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "." };
-	public static final String[] GROUP_OPERATORS = new String[] { "+", "-", "*", "/", "^" };
-	public static final String[] GROUP_FUNCTIONS = new String[] { "sin", "cos", "tan", "ln", "log", "sqrt", "rand",
-			"abs", "round" }; //only functions with brackets in here plz!!!
+	//public static final String[] GROUP_OPERATORS = new String[] { "+", "-", "*", "/", "^" };
+	//public static final String[] GROUP_FUNCTIONS = new String[] { "sin", "cos", "tan", "ln", "log", "sqrt", "rand",
+	//		"abs", "round" }; //only functions with brackets in here plz!!!
+	//	public static final String[] GROUP_SENSORS = new String[] { "X_ACCELERATION_", "Y_ACCELERATION_",
+	//			"Z_ACCELERATION_", "AZIMUTH_ORIENTATION_", "PITCH_ORIENTATION_", "ROLL_ORIENTATION_" };
 
 	public static final int NUMBER = 0;
 	public static final int OPERATOR = 1;
@@ -125,7 +126,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			history = new FormulaEditorHistory(formulaAsText, absoluteCursorPosition, selectionStartIndex,
 					selectionEndIndex);
 		} else {
-			history.clear();
+			history.init(formulaAsText, absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
 		}
 	}
 
@@ -261,6 +262,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		} else if (currentlySelectedElementType == FUNCTION_SEPERATOR) {
 			extendSelectionForFunctionOnSeperator();
 		} else if (currentlySelectedElementType == SENSOR_VALUE) {
+			extendSelectionForSensorValue();
 		} else {
 
 			extendSelectionForNumber();
@@ -272,29 +274,23 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 		if (currentlySelectedElement.contains(",")) {
 			return FUNCTION_SEPERATOR;
-
 		} else if (currentlySelectedElement.contains(")")) {
 			return BRACKET_CLOSE;
 		} else if (currentlySelectedElement.contains("(")) {
 			return BRACKET_OPEN;
 		} else if (currentlySelectedElement.contains("_")) {
 			return SENSOR_VALUE;
+		} else if (Operators.isOperator(currentlySelectedElement)) {
+			return OPERATOR;
+		} else if (Functions.isFunction(currentlySelectedElement)) {
+			return FUNCTION;
 		}
-		for (String item : GROUP_FUNCTIONS) {
-			if (currentlySelectedElement.startsWith(item)) {
-				return FUNCTION;
-			}
-		}
-		for (String item : GROUP_OPERATORS) {
-			if (currentlySelectedElement.contains(item)) {
-				return OPERATOR;
-			}
-		}
+
 		return NUMBER;
 
 	}
 
-	public void extendSelectionBetweenBracketsFromOpenBracket() {
+	private void extendSelectionBetweenBracketsFromOpenBracket() {
 		int bracketCount = 1;
 		Editable text = getText();
 		selectionEndIndex++;
@@ -310,7 +306,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		}
 	}
 
-	public void extendSelectionBetweenBracketsFromCloseBracket() {
+	private void extendSelectionBetweenBracketsFromCloseBracket() {
 		int bracketCount = 1;
 		Editable text = getText();
 		selectionStartIndex--;
@@ -325,13 +321,13 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		}
 	}
 
-	public void extendSelectionForFunctionOnSeperator() {
+	private void extendSelectionForFunctionOnSeperator() {
 		extendSelectionBetweenBracketsFromCloseBracket();
 		extendSelectionForFunctionName();
 		extendSelectionBetweenBracketsFromOpenBracket();
 	}
 
-	public void extendSelectionForFunctionName() {
+	private void extendSelectionForFunctionName() {
 		Editable currentInput = getText();
 		char currentChar;
 
@@ -344,7 +340,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		}
 	}
 
-	public void extendSelectionForNumber() {
+	private void extendSelectionForNumber() {
 		String currentInput = getText().toString();
 		char currentChar;
 
@@ -365,6 +361,34 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		}
 	}
 
+	private void extendSelectionForSensorValue() {
+		String temp = getText().toString().substring(selectionStartIndex, selectionEndIndex);
+
+		if (Sensors.isStartOfSensorName(temp)) {
+			extendSelectionForSensorValueFromFront();
+		} else if (Sensors.isEndOfSensorName(temp)) {
+			extendSelectionForSensorValueFromEnd();
+		}
+
+	}
+
+	private void extendSelectionForSensorValueFromEnd() {
+		Editable text = getText();
+		selectionStartIndex--;
+		while (selectionStartIndex > 0 && charIsCapitalLetter(text.charAt(selectionStartIndex - 1))) {
+			selectionStartIndex--;
+		}
+	}
+
+	private void extendSelectionForSensorValueFromFront() {
+		Editable text = getText();
+		selectionEndIndex++;
+		while (selectionEndIndex < text.length() && text.charAt(selectionEndIndex) != '_') {
+			selectionEndIndex++;
+		}
+		selectionEndIndex++;
+	}
+
 	public boolean charIsLowerCaseLetter(char letter) {
 		if (letter >= 97 && letter <= 123) { //ASCII a...z
 			return true;
@@ -381,6 +405,13 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	public boolean charIsNumber(char letter) {
 		if (letter >= 48 && letter <= 58) { //ASCII 0...9
+			return true;
+		}
+		return false;
+	}
+
+	public boolean charIsWhitespace(char letter) {
+		if (letter == 32) { //ASCII 0...9
 			return true;
 		}
 		return false;
@@ -425,15 +456,16 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		}
 
 		if (firstError < errorSpan.length()) {
-			editMode = (charIsLowerCaseLetter(errorSpan.charAt(firstError)) || charIsCapitalLetter(errorSpan
-					.charAt(firstError))) ? false : true;
+			editMode = (charIsLowerCaseLetter(errorSpan.charAt(firstError))
+					|| charIsCapitalLetter(errorSpan.charAt(firstError)) || errorSpan.charAt(firstError) == ')' || errorSpan
+					.charAt(firstError) == ',') ? false : true;
 			selectionStartIndex = firstError;
 			errorSpan.setSpan(COLOR_ERROR, firstError, ++firstError, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			selectionEndIndex = firstError;
 		} else {
-			Log.i("info", "ELSE!!!");
-			editMode = (charIsLowerCaseLetter(errorSpan.charAt(firstError - 1)) || charIsCapitalLetter(errorSpan
-					.charAt(firstError - 1))) ? false : true;
+			editMode = (charIsLowerCaseLetter(errorSpan.charAt(firstError - 1))
+					|| charIsCapitalLetter(errorSpan.charAt(firstError - 1)) || errorSpan.charAt(firstError - 1) == ')') ? false
+					: true;
 			errorSpan.setSpan(COLOR_ERROR, firstError - 1, firstError, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			selectionStartIndex = firstError - 1;
 			selectionEndIndex = firstError;
@@ -528,23 +560,11 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			editMode = false;
 		} else {
 			char currentChar = text.charAt(selectionEndIndex - 1);
-			if (currentChar == ',' || currentChar == ')' || currentChar == '(' || currentChar == '_') {
+			if (currentChar == ',' || currentChar == ')' || currentChar == '(' || currentChar == '_'
+					|| charIsLowerCaseLetter(currentChar)) { //isLowerCaseLetter possible for parameterless functions, the others get treated in checkAndModifyKeyInput!
 				doSelectionAndHighlighting();
 				text.replace(selectionStartIndex, selectionEndIndex, "");
 				selectionEndIndex = selectionStartIndex;
-				//return;
-				//			} else if () {
-				//				doSelectionAndHighlighting();
-				//				return;
-				//			} else if () {
-				//				doSelectionAndHighlighting();
-				//				return;
-				//			} else if () {
-				//				doSelectionAndHighlighting();
-				//				return;
-				//			} else if (charIsCapitalLetter(currentChar) || charIsLowerCaseLetter(currentChar)) {
-				//				doSelectionAndHighlighting();
-				//				return;
 			} else {
 				text.replace(selectionEndIndex - 1, selectionEndIndex, "");
 				selectionEndIndex--;
@@ -560,9 +580,9 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	private void appendToTextFieldAtCurrentPosition(String newElement) {
 		Editable text = getText();
 
-		if (newElement.equals("null")) { //Spacebar!
-			newElement = " ";
-		}
+		//		if (newElement.equals("null")) { //Spacebar, removed!
+		//			newElement = " ";
+		//		}
 
 		if (editMode) {
 			text.replace(selectionStartIndex, selectionEndIndex, newElement);
@@ -573,9 +593,30 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			selectionEndIndex += newElement.length();
 			selectionStartIndex = selectionEndIndex - newElement.length();
 		}
+
+		//insert whitespace if none exists before/after new element
+		if (newElement.length() > 1 || Operators.isOperator(newElement)) {
+			if (selectionStartIndex > 0 && !charIsWhitespace(text.charAt(selectionStartIndex - 1))) {
+				text.insert(selectionStartIndex++, " ");
+				selectionEndIndex++;
+				absoluteCursorPosition++;
+			}
+			if (selectionEndIndex < text.length() && !charIsWhitespace(text.charAt(selectionEndIndex))) {
+				text.insert(selectionEndIndex++, " ");
+			}
+		} else if (selectionStartIndex > 0 && !charIsWhitespace(text.charAt(selectionStartIndex - 1))
+				&& !charIsNumber(text.charAt(selectionStartIndex - 1))
+				&& !(text.charAt(selectionStartIndex - 1) == '.')) {
+			text.insert(selectionStartIndex++, " ");
+			selectionEndIndex++;
+			absoluteCursorPosition++;
+		}
+
 		setText(text);
 
-		if (newElement.length() > 1 && newElement.contains("(")) {
+		//move cursor to first function parameter
+		Log.i("info", "Function: " + Functions.isFunction(newElement));
+		if (newElement.length() > 1 && Functions.isFunction(newElement)) {
 			absoluteCursorPosition = selectionStartIndex + newElement.indexOf("(") + 3;
 			selectionStartIndex = absoluteCursorPosition - 1;
 			selectionEndIndex = absoluteCursorPosition;

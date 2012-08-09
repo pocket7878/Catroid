@@ -44,7 +44,6 @@ import at.tugraz.ist.catroid.content.Sprite;
 
 public class NXTMotorTurnAngleBrick implements Brick {
 	private static final long serialVersionUID = 1L;
-	public static final int REQUIRED_RESSOURCES = BLUETOOTH_LEGO_NXT;
 
 	public static enum Motor {
 		MOTOR_A, MOTOR_B, MOTOR_C, MOTOR_A_C

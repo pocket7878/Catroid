@@ -49,22 +49,22 @@
     >
 
     <Row>
-        <Key android:codes="1100" android:keyLabel="X-Acceleration" android:keyWidth="50%p" android:keyEdgeFlags="left"/>
+        <Key android:codes="1100" android:keyLabel="X-Beschleunigung" android:keyWidth="50%p" android:keyEdgeFlags="left"/>
 		<Key android:codes="67" android:keyIcon="@drawable/sym_keyboard_delete" android:keyWidth="50%p" android:isRepeatable="true" android:keyEdgeFlags="right" />
     </Row>
     
     <Row>
-	    <Key android:codes="1101" android:keyLabel="Y-Acceleration" android:keyWidth="50%p" android:keyEdgeFlags="left" />
-        <Key android:codes="1103" android:keyLabel="Azimuth Orientation" android:keyWidth="50%p" android:keyEdgeFlags="right" />
+	    <Key android:codes="1101" android:keyLabel="Y-Beschleunigung" android:keyWidth="50%p" android:keyEdgeFlags="left" />
+        <Key android:codes="1103" android:keyLabel="Azimuth Ausrichtung" android:keyWidth="50%p" android:keyEdgeFlags="right" />
     </Row>
     
     <Row>
-	    <Key android:codes="1102" android:keyLabel="Z-Acceleration" android:keyWidth="50%p" android:keyEdgeFlags="left"/>
-        <Key android:codes="1105" android:keyLabel="Roll Orientation" android:keyWidth="50%p" />
+	    <Key android:codes="1102" android:keyLabel="Z-Beschleunigung" android:keyWidth="50%p" android:keyEdgeFlags="left"/>
+        <Key android:codes="1105" android:keyLabel="Roll Ausrichtung" android:keyWidth="50%p" android:keyEdgeFlags="right"/>
     </Row> 
     
     <Row  android:rowEdgeFlags="bottom">
-        <Key android:codes="1104" android:keyLabel="Pitch Orientation" android:keyWidth="50%p" android:keyEdgeFlags="left"/>
+        <Key android:codes="1104" android:keyLabel="Pitch Ausrichtung" android:keyWidth="50%p" android:keyEdgeFlags="left"/>
         <Key android:codes="60" android:keyLabel="°°O" android:keyWidth="50%p" android:isModifier="true" android:keyEdgeFlags="right" />
     </Row>
     

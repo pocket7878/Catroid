@@ -45,6 +45,7 @@
         android:scrollbars="vertical"
         android:hint="@string/formula_nothing_selected"
         android:textSize="@dimen/text_size_large" 
+        android:background="@color/transparent"
         />
       
    <at.tugraz.ist.catroid.formulaeditor.CatKeyboardView
@@ -53,7 +54,7 @@
         android:layout_alignParentBottom="true"
         android:layout_width="216pt"
         android:layout_height="wrap_content"
-	    android:keyTextColor="#000fff"
+	    android:keyTextColor="#ffffff"
 		android:keyPreviewHeight="0sp"
 		/>
     

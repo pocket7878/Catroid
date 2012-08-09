@@ -50,6 +50,7 @@ import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.dialogs.AddBrickDialog;
+import at.tugraz.ist.catroid.ui.dialogs.AddCostumeDialog;
 import at.tugraz.ist.catroid.ui.dialogs.BrickCategoryDialog;
 import at.tugraz.ist.catroid.ui.dialogs.DeleteCostumeDialog;
 import at.tugraz.ist.catroid.ui.dialogs.DeleteSoundDialog;
@@ -72,6 +73,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	private RenameCostumeDialog renameCostumeDialog;
 	private DeleteCostumeDialog deleteCostumeDialog;
 	private DeleteSoundDialog deleteSoundDialog;
+	private AddCostumeDialog addCostumeDialog;
 	public String selectedCategory;
 	public static final int DIALOG_RENAME_COSTUME = 0;
 	public static final int DIALOG_RENAME_SOUND = 1;
@@ -79,7 +81,8 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	public static final int DIALOG_ADD_BRICK = 3;
 	public static final int DIALOG_DELETE_COSTUME = 4;
 	public static final int DIALOG_DELETE_SOUND = 5;
-	public static final int DIALOG_FORMULA = 6;
+	public static final int DIALOG_ADD_COSTUME = 6;
+	public static final int DIALOG_FORMULA = 7;
 
 	private boolean dontcreateNewBrick;
 
@@ -94,7 +97,6 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Log.i("info", "ScriptTabActivity.onCreate()");
 		super.onCreate(savedInstanceState);
 		addScript = false;
 		isCanceled = false;
@@ -131,7 +133,6 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 		setUpActionBar();
 		if (getLastNonConfigurationInstance() != null) {
 			selectedCategory = (String) ((ArrayList<?>) getLastNonConfigurationInstance()).get(0);
-			Log.i("info", "selectedCategory: " + selectedCategory);
 			selectedCostumeData = (CostumeData) ((ArrayList<?>) getLastNonConfigurationInstance()).get(1);
 			selectedSoundInfo = (SoundInfo) ((ArrayList<?>) getLastNonConfigurationInstance()).get(2);
 		}
@@ -141,7 +142,6 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		Log.i("info", "ScriptTabActivity.onSaveInstanceState()");
 
 		int brickIndexToSave = -1;
 		int scriptIndexToSave = -1;
@@ -156,13 +156,10 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 					Script script = ProjectManager.getInstance().getCurrentSprite().getScript(h);
 					ArrayList<Brick> brickList = script.getBrickList();
 
-					Log.i("info", "brickList.size(): " + brickList.size());
-
 					for (int i = 0; i < brickList.size(); i++) {
 						if (brickList.get(i).equals(this.currentBrick)) {
 							brickIndexToSave = i;
 							scriptIndexToSave = h;
-							Log.i("info", "Brick found! index: " + brickIndexToSave);
 						}
 					}
 				}
@@ -182,8 +179,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
-		Log.i("info", "ScriptTabActivity.onRestoreInstanceState()");
-
+		
 		int savedBrickIndex = savedInstanceState.getInt("brickIndex");
 		int savedScriptIndex = savedInstanceState.getInt("scriptIndex");
 		Log.i("info", "savedBrickIndex: " + savedBrickIndex);
@@ -200,7 +196,6 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 
 	@Override
 	public ArrayList<Object> onRetainNonConfigurationInstance() {
-		Log.i("info", "ScriptTabActivity.onRetainNonConfigurationInstance()");
 		ArrayList<Object> savedMember = new ArrayList<Object>();
 		savedMember.add(selectedCategory);
 		savedMember.add(selectedCostumeData);
@@ -209,7 +204,6 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	}
 
 	private void setUpActionBar() {
-		Log.i("info", "ScriptTabActivity.setUpActionBar()");
 		activityHelper = new ActivityHelper(this);
 
 		String title = this.getResources().getString(R.string.sprite_name) + " "
@@ -230,7 +224,6 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.i("info", "ScriptTabActivity.onActivityResult()");
 		if (requestCode == PreStageActivity.REQUEST_RESOURCES_INIT && resultCode == RESULT_OK) {
 			Intent intent = new Intent(ScriptTabActivity.this, StageActivity.class);
 			startActivity(intent);
@@ -238,7 +231,6 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	}
 
 	private void setupTab(Integer drawableId, final String tag, Intent intent) {
-		Log.i("info", "ScriptTabActivity.setupTab()");
 		View tabview = createTabView(drawableId, tabHost.getContext(), tag);
 
 		TabSpec setContent = tabHost.newTabSpec(tag).setIndicator(tabview).setContent(intent);
@@ -247,7 +239,6 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	}
 
 	private static View createTabView(Integer id, final Context context, final String text) {
-		Log.i("info", "ScriptTabActivity.createTabView()");
 		View view = LayoutInflater.from(context).inflate(R.layout.activity_tabscriptactivity_tabs, null);
 		TextView tabTextView = (TextView) view.findViewById(R.id.tabsText);
 		ImageView tabImageView = (ImageView) view.findViewById(R.id.tabsIcon);
@@ -262,7 +253,6 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		Log.i("info", "ScriptTabActivity.onCreateDialog()");
 		Dialog dialog = null;
 		switch (id) {
 			case DIALOG_RENAME_SOUND:
@@ -299,9 +289,12 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 					dialog = deleteSoundDialog.createDialog();
 				}
 				break;
+			case DIALOG_ADD_COSTUME:
+				addCostumeDialog = new AddCostumeDialog(this);
+				dialog = addCostumeDialog;
+				break;
 			case DIALOG_FORMULA:
 				dialog = this.currentFormulaEditorDialog;
-				Log.i("info", "case: DIALOG_FORMULA" + dialog);
 				break;
 			default:
 				dialog = null;
@@ -383,7 +376,6 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 
 	@Override
 	public void onDismiss(DialogInterface dialogInterface) {
-		Log.i("info", "ScriptTabActivity.onDismiss()");
 		if (!dontcreateNewBrick) {
 			if (!isCanceled) {
 				if (addScript) {
@@ -411,5 +403,9 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 
 	public void setDontcreateNewBrick() {
 		dontcreateNewBrick = true;
+	}
+
+	public AddCostumeDialog getAddCostumeDialog() {
+		return addCostumeDialog;
 	}
 }
