@@ -27,49 +27,39 @@ import android.content.DialogInterface.OnKeyListener;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.MyProjectsActivity;
 import at.tugraz.ist.catroid.utils.Utils;
 
-public class RenameProjectDialog extends TextDialog {
+/**
+ * @author Jakob
+ * 
+ */
+public class CopyProjectDialog extends TextDialog {
 
-	public RenameProjectDialog(MyProjectsActivity myProjectsActivity, String projectName) {
-		super(myProjectsActivity, myProjectsActivity.getString(R.string.rename_project), null);
+	public CopyProjectDialog(MyProjectsActivity myProjectActivity) {
+		super(myProjectActivity, myProjectActivity.getString(R.string.copy_project_dialog_title), null);
 		initKeyListenerAndClickListener();
 	}
 
 	public void handleOkButton() {
 		String newProjectName = (input.getText().toString()).trim();
-		String oldProjectName = (((MyProjectsActivity) activity).projectToEdit.projectName);
-
-		if (newProjectName.equals(oldProjectName)) {
-			activity.dismissDialog(MyProjectsActivity.DIALOG_RENAME_PROJECT);
-			return;
-		}
 
 		if (newProjectName != null && !newProjectName.equalsIgnoreCase("")) {
 
-			ProjectManager projectManager = ProjectManager.getInstance();
-			String currentProjectName = projectManager.getCurrentProject().getName();
-			// check if is current project
-			if (oldProjectName.equalsIgnoreCase(currentProjectName)) {
-				projectManager.renameProject(newProjectName, activity);
-				((MyProjectsActivity) activity).updateProjectTitle();
-				Utils.saveToPreferences(activity, Constants.PREF_PROJECTNAME_KEY, newProjectName);
+			if (StorageHandler.getInstance().projectExistsIgnoreCase(newProjectName)) {
+				Utils.displayErrorMessage(activity, activity.getString(R.string.error_project_exists));
+				return;
 			} else {
-				projectManager.loadProject(oldProjectName, activity, false);
-				projectManager.renameProject(newProjectName, activity);
-				projectManager.loadProject(currentProjectName, activity, false);
+				StorageHandler.getInstance().copyProject(newProjectName);
 			}
 			((MyProjectsActivity) activity).initAdapter();
 		} else {
 			Utils.displayErrorMessage(activity, activity.getString(R.string.notification_invalid_text_entered));
 			return;
 		}
-		activity.dismissDialog(MyProjectsActivity.DIALOG_RENAME_PROJECT);
+		activity.dismissDialog(MyProjectsActivity.DIALOG_COPY_PROJECT);
 	}
 
 	private void initKeyListenerAndClickListener() {
@@ -78,9 +68,7 @@ public class RenameProjectDialog extends TextDialog {
 			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
 					String newProjectName = (input.getText().toString()).trim();
-					String oldProjectName = (((MyProjectsActivity) activity).projectToEdit.projectName);
-					if (StorageHandler.getInstance().projectExistsCheckCase(newProjectName)
-							&& !newProjectName.equalsIgnoreCase(oldProjectName)) {
+					if (StorageHandler.getInstance().projectExistsCheckCase(newProjectName)) {
 						Utils.displayErrorMessage(activity, activity.getString(R.string.error_project_exists));
 					} else if (newProjectName.equalsIgnoreCase("")) {
 						Utils.displayErrorMessage(activity,
@@ -104,7 +92,7 @@ public class RenameProjectDialog extends TextDialog {
 		buttonNegative.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				activity.dismissDialog(MyProjectsActivity.DIALOG_RENAME_PROJECT);
+				activity.dismissDialog(MyProjectsActivity.DIALOG_COPY_PROJECT);
 			}
 		});
 	}

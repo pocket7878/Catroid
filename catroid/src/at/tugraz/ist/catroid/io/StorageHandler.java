@@ -289,7 +289,49 @@ public class StorageHandler {
 		}
 	}
 
-	private File copyFile(File destinationFile, File sourceFile, File directory) throws IOException {
+	public void copyProject(String newProjectName) {
+		String oldProjectName = ProjectManager.getInstance().getCurrentProject().getName();
+		File oldProjectRootDirectory = new File(Utils.buildProjectPath(oldProjectName));
+		File newProjectRootDirectory = new File(Utils.buildProjectPath(newProjectName));
+
+		try {
+			copyDirectory(oldProjectRootDirectory, newProjectRootDirectory);
+			Project copiedProject = loadProject(newProjectName);
+			copiedProject.setName(newProjectName);
+			saveProject(copiedProject);
+		} catch (IOException e) {
+			deleteDirectory(newProjectRootDirectory);
+			Log.e("CATROID", "Error while copying project, destroy newly created directories.", e);
+		}
+	}
+
+	private void copyDirectory(File sourceFile, File destinationFile) throws IOException {
+		if (sourceFile.isDirectory()) {
+
+			destinationFile.mkdirs();
+			for (String subDirectoryName : sourceFile.list()) {
+				copyDirectory(new File(sourceFile, subDirectoryName), new File(destinationFile, subDirectoryName));
+			}
+		} else {
+			copyFileIgnoreCheckSum(sourceFile, destinationFile, null);
+		}
+	}
+
+	private void deleteDirectory(File sourceFile) {
+		for (File currentFile : sourceFile.listFiles()) {
+			if (currentFile.isDirectory()) {
+				deleteDirectory(currentFile);
+			}
+			if (!currentFile.delete()) {
+				Log.e("CATROID", "Error while deleting file.");
+			}
+		}
+		if (!sourceFile.delete()) {
+			Log.e("CATROID", "Error while deleting file.");
+		}
+	}
+
+	private File copyFile(File sourceFile, File destinationFile, File directory) throws IOException {
 		FileInputStream inputStream = new FileInputStream(sourceFile);
 		FileChannel inputChannel = inputStream.getChannel();
 		FileOutputStream outputStream = new FileOutputStream(destinationFile);
@@ -331,5 +373,50 @@ public class StorageHandler {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private File copyFileWithCheckSum(File sourceFile, File destinationFile, File directory) throws IOException {
+		File copiedFile = copyFile(sourceFile, destinationFile, directory);
+		addChecksum(sourceFile, destinationFile);
+
+		return copiedFile;
+	}
+
+	private void copyFileIgnoreCheckSum(File sourceFile, File destinationFile, File directory) throws IOException {
+		copyFiles(sourceFile, destinationFile, directory);
+	}
+
+	private File copyFiles(File sourceFile, File destinationFile, File file) throws IOException {
+		FileInputStream inputStream = new FileInputStream(sourceFile);
+		FileChannel inputChannel = inputStream.getChannel();
+		FileOutputStream outputStream = new FileOutputStream(destinationFile);
+		FileChannel outputChannel = outputStream.getChannel();
+
+		try {
+			inputChannel.transferTo(0, inputChannel.size(), outputChannel);
+			return destinationFile;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (inputChannel != null) {
+				inputChannel.close();
+			}
+			if (inputStream != null) {
+				inputStream.close();
+			}
+			if (outputChannel != null) {
+				outputChannel.close();
+			}
+			if (outputStream != null) {
+				outputStream.close();
+			}
+		}
+	}
+
+	private void addChecksum(File sourceFile, File destinationFile) {
+		String checksumSource = Utils.md5Checksum(sourceFile);
+		FileChecksumContainer fileChecksumContainer = ProjectManager.getInstance().getFileChecksumContainer();
+		fileChecksumContainer.addChecksum(checksumSource, destinationFile.getAbsolutePath());
 	}
 }

@@ -45,6 +45,7 @@ import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.adapter.ProjectAdapter;
+import at.tugraz.ist.catroid.ui.dialogs.CopyProjectDialog;
 import at.tugraz.ist.catroid.ui.dialogs.CustomIconContextMenu;
 import at.tugraz.ist.catroid.ui.dialogs.NewProjectDialog;
 import at.tugraz.ist.catroid.ui.dialogs.RenameProjectDialog;
@@ -69,6 +70,9 @@ public class MyProjectsActivity extends ListActivity {
 	public static final int DIALOG_RENAME_PROJECT = 5;
 
 	public static final int DIALOG_SET_DESCRIPTION = 6;
+
+	public static final int DIALOG_COPY_PROJECT = 7;
+	public static final int CONTEXT_MENU_COPY_PROJECT = 8;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -174,6 +178,8 @@ public class MyProjectsActivity extends ListActivity {
 				CONTEXT_MENU_ITEM_DESCRIPTION);
 		iconContextMenu.addItem(resources, this.getString(R.string.delete), R.drawable.ic_context_delete,
 				CONTEXT_MENU_ITEM_DELETE);
+		iconContextMenu
+				.addItem(resources, this.getString(R.string.copy), R.drawable.ic_copy, CONTEXT_MENU_COPY_PROJECT);
 
 		iconContextMenu.setOnClickListener(new CustomIconContextMenu.IconContextMenuOnClickListener() {
 			@Override
@@ -187,6 +193,9 @@ public class MyProjectsActivity extends ListActivity {
 						break;
 					case CONTEXT_MENU_ITEM_DELETE:
 						deleteProject();
+						break;
+					case CONTEXT_MENU_COPY_PROJECT:
+						showDialog(DIALOG_COPY_PROJECT);
 						break;
 				}
 			}
@@ -240,6 +249,9 @@ public class MyProjectsActivity extends ListActivity {
 				break;
 			case DIALOG_NEW_PROJECT:
 				dialog = (new NewProjectDialog(this)).dialog;
+				break;
+			case DIALOG_COPY_PROJECT:
+				dialog = (new CopyProjectDialog(this)).dialog;
 				break;
 			default:
 				dialog = null;
