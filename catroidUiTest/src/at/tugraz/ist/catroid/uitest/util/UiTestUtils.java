@@ -137,7 +137,9 @@ public class UiTestUtils {
 		solo.clickOnEditText(editTextId);
 		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
 
-		catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(editorEditTextId);
+		//catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(editorEditTextId);
+		catKeyboardClicker.clickOnKey("del");
+
 		for (char item : (value.toCharArray())) {
 			catKeyboardClicker.clickOnKey("" + item);
 		}

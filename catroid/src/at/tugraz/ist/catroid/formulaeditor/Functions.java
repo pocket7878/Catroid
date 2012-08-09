@@ -24,42 +24,27 @@ package at.tugraz.ist.catroid.formulaeditor;
 
 import java.util.EnumSet;
 
-public enum Operators {
-	PLUS("+", 0), MINUS("-", 0), MULT("*", 1), DIVIDE("/", 1), MOD("%", 1), POW("^", 2);
+public enum Functions {
+	//PLUS("+", 0), MINUS("-", 0), MULT("*", 1), DIVIDE("/", 1), MOD("%", 1), POW("^", 2);
+	SIN("sin"), COS("cos"), TAN("tan"), LN("ln"), LOG("log"), SQRT("sqrt"), RAND("rand");
+	private final String functionName;
 
-	private final String operatorRepresentation;
-	private final Integer priority;
-
-	Operators(String value, Integer priority) {
-		this.operatorRepresentation = value;
-		this.priority = priority;
+	Functions(String value) {
+		this.functionName = value;
 	}
 
-	public int compareOperatorTo(Operators op) {
-		int returnVa = 0;
-		if (priority > op.priority) {
-			returnVa = 1;
-		} else if (priority == op.priority) {
-			returnVa = 0;
-		} else if (priority < op.priority) {
-			returnVa = -1;
-		}
+	//	public static Functions geFunctionByValue(String value) {
+	//		for (Functions fct : EnumSet.allOf(Functions.class)) {
+	//			if (fct.value.equals(value)) {
+	//				return fct;
+	//			}
+	//		}
+	//		return null;
+	//	}
 
-		return returnVa;
-	}
-
-	public static Operators getOperatorByValue(String value) {
-		for (Operators op : EnumSet.allOf(Operators.class)) {
-			if (op.operatorRepresentation.equals(value)) {
-				return op;
-			}
-		}
-		return null;
-	}
-
-	public static boolean isOperator(String value) {
-		for (Operators op : EnumSet.allOf(Operators.class)) {
-			if (op.operatorRepresentation.equals(value)) {
+	public static boolean isFunction(String value) {
+		for (Functions fct : EnumSet.allOf(Functions.class)) {
+			if (value.startsWith(fct.functionName)) {
 				return true;
 			}
 		}

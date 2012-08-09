@@ -24,42 +24,37 @@ package at.tugraz.ist.catroid.formulaeditor;
 
 import java.util.EnumSet;
 
-public enum Operators {
-	PLUS("+", 0), MINUS("-", 0), MULT("*", 1), DIVIDE("/", 1), MOD("%", 1), POW("^", 2);
+public enum Sensors {
+	//PLUS("+", 0), MINUS("-", 0), MULT("*", 1), DIVIDE("/", 1), MOD("%", 1), POW("^", 2);
+	X_ACCELERATION_("X_ACCELERATION_"), Y_ACCELERATION_("Y_ACCELERATION_"), Z_ACCELERATION_("Z_ACCELERATION_"), AZIMUTH_ORIENTATION_(
+			"AZIMUTH_ORIENTATION_"), PITCH_ORIENTATION_("PITCH_ORIENTATION_"), ROLL_ORIENTATION_("ROLL_ORIENTATION_");
+	private final String sensorName;
 
-	private final String operatorRepresentation;
-	private final Integer priority;
-
-	Operators(String value, Integer priority) {
-		this.operatorRepresentation = value;
-		this.priority = priority;
+	Sensors(String value) {
+		this.sensorName = value;
 	}
 
-	public int compareOperatorTo(Operators op) {
-		int returnVa = 0;
-		if (priority > op.priority) {
-			returnVa = 1;
-		} else if (priority == op.priority) {
-			returnVa = 0;
-		} else if (priority < op.priority) {
-			returnVa = -1;
-		}
+	//	public static Functions geFunctionByValue(String value) {
+	//		for (Functions fct : EnumSet.allOf(Functions.class)) {
+	//			if (fct.value.equals(value)) {
+	//				return fct;
+	//			}
+	//		}
+	//		return null;
+	//	}
 
-		return returnVa;
-	}
-
-	public static Operators getOperatorByValue(String value) {
-		for (Operators op : EnumSet.allOf(Operators.class)) {
-			if (op.operatorRepresentation.equals(value)) {
-				return op;
+	public static boolean isStartOfSensorName(String value) {
+		for (Sensors fct : EnumSet.allOf(Sensors.class)) {
+			if (fct.sensorName.startsWith(value)) {
+				return true;
 			}
 		}
-		return null;
+		return false;
 	}
 
-	public static boolean isOperator(String value) {
-		for (Operators op : EnumSet.allOf(Operators.class)) {
-			if (op.operatorRepresentation.equals(value)) {
+	public static boolean isEndOfSensorName(String value) {
+		for (Sensors fct : EnumSet.allOf(Sensors.class)) {
+			if (fct.sensorName.endsWith(value)) {
 				return true;
 			}
 		}
