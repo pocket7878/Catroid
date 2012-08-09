@@ -49,29 +49,23 @@
     >
 
     <Row>
-        <Key android:codes="1100" android:keyLabel="X-Sensor" android:keyWidth="30%p" android:keyEdgeFlags="left"/>
-        <Key android:codes="1101" android:keyLabel="Y-Sensor" android:keyWidth="30%p" />
-        <Key android:codes="81" android:keyLabel="+"/>
-        <Key android:codes="69" android:keyLabel="-" android:keyEdgeFlags="right"/>
+        <Key android:codes="1100" android:keyLabel="X-Acceleration" android:keyWidth="50%p" android:keyEdgeFlags="left"/>
+		<Key android:codes="67" android:keyIcon="@drawable/sym_keyboard_delete" android:keyWidth="50%p" android:isRepeatable="true" android:keyEdgeFlags="right" />
     </Row>
     
     <Row>
-        <Key android:codes="1102" android:keyLabel="Z-Sensor" android:keyWidth="30%p" android:keyEdgeFlags="left"/>
-        <Key android:codes="1103" android:keyLabel="Azimuth" android:keyWidth="30%p" />
-        <Key android:codes="17" android:keyLabel="*"/>
-        <Key android:codes="76" android:keyLabel="/" android:keyEdgeFlags="right"/>
+	    <Key android:codes="1101" android:keyLabel="Y-Acceleration" android:keyWidth="50%p" android:keyEdgeFlags="left" />
+        <Key android:codes="1103" android:keyLabel="Azimuth Orientation" android:keyWidth="50%p" android:keyEdgeFlags="right" />
     </Row>
     
     <Row>
-        <Key android:codes="1104" android:keyLabel="Pitch" android:keyWidth="30%p" android:keyEdgeFlags="left"/>
-        <Key android:codes="1105" android:keyLabel="Roll" android:keyWidth="30%p" />
-        <Key android:codes="67" android:keyIcon="@drawable/sym_keyboard_delete" android:isRepeatable="true"/>
-        <Key android:codes="26" android:keyLabel="^" android:keyEdgeFlags="right"/>
+	    <Key android:codes="1102" android:keyLabel="Z-Acceleration" android:keyWidth="50%p" android:keyEdgeFlags="left"/>
+        <Key android:codes="1105" android:keyLabel="Roll Orientation" android:keyWidth="50%p" />
     </Row> 
     
     <Row  android:rowEdgeFlags="bottom">
-        <Key android:codes="0" android:keyLabel="" android:keyWidth="40%p" />
-        <Key android:codes="60" android:keyLabel="°°O" android:keyWidth="40%p" android:isModifier="true" android:keyEdgeFlags="right" />
-	</Row>
+        <Key android:codes="1104" android:keyLabel="Pitch Orientation" android:keyWidth="50%p" android:keyEdgeFlags="left"/>
+        <Key android:codes="60" android:keyLabel="°°O" android:keyWidth="50%p" android:isModifier="true" android:keyEdgeFlags="right" />
+    </Row>
     
 </Keyboard>
