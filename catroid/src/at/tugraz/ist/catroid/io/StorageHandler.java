@@ -295,7 +295,7 @@ public class StorageHandler {
 		File newProjectRootDirectory = new File(Utils.buildProjectPath(newProjectName));
 
 		try {
-			copyDirectory(oldProjectRootDirectory, newProjectRootDirectory);
+			copyDirectory(newProjectRootDirectory, oldProjectRootDirectory);
 			Project copiedProject = loadProject(newProjectName);
 			copiedProject.setName(newProjectName);
 			saveProject(copiedProject);
@@ -305,15 +305,15 @@ public class StorageHandler {
 		}
 	}
 
-	private void copyDirectory(File sourceFile, File destinationFile) throws IOException {
+	private void copyDirectory(File destinationFile, File sourceFile) throws IOException {
 		if (sourceFile.isDirectory()) {
 
 			destinationFile.mkdirs();
 			for (String subDirectoryName : sourceFile.list()) {
-				copyDirectory(new File(sourceFile, subDirectoryName), new File(destinationFile, subDirectoryName));
+				copyDirectory(new File(destinationFile, subDirectoryName), new File(sourceFile, subDirectoryName));
 			}
 		} else {
-			copyFileWithoutCheckSum(sourceFile, destinationFile, null);
+			copyFileWithoutCheckSum(destinationFile, sourceFile, null);
 		}
 	}
 
@@ -377,18 +377,18 @@ public class StorageHandler {
 		}
 	}
 
-	private File copyFileAddCheckSum(File sourceFile, File destinationFile, File directory) throws IOException {
-		File copiedFile = copyFile(sourceFile, destinationFile, directory);
-		addChecksum(sourceFile, destinationFile);
+	private File copyFileAddCheckSum(File destinationFile, File sourceFile, File directory) throws IOException {
+		File copiedFile = copyFile(destinationFile, sourceFile, directory);
+		addChecksum(destinationFile, sourceFile);
 
 		return copiedFile;
 	}
 
-	private void copyFileWithoutCheckSum(File sourceFile, File destinationFile, File directory) throws IOException {
-		copyFile(sourceFile, destinationFile, directory);
+	private void copyFileWithoutCheckSum(File destinationFile, File sourceFile, File directory) throws IOException {
+		copyFile(destinationFile, sourceFile, directory);
 	}
 
-	private File copyFile(File sourceFile, File destinationFile, File directory) throws IOException {
+	private File copyFile(File destinationFile, File sourceFile, File directory) throws IOException {
 		FileInputStream inputStream = new FileInputStream(sourceFile);
 		FileChannel inputChannel = inputStream.getChannel();
 		FileOutputStream outputStream = new FileOutputStream(destinationFile);
@@ -416,7 +416,7 @@ public class StorageHandler {
 		}
 	}
 
-	private void addChecksum(File sourceFile, File destinationFile) {
+	private void addChecksum(File destinationFile, File sourceFile) {
 		String checksumSource = Utils.md5Checksum(sourceFile);
 		FileChecksumContainer fileChecksumContainer = ProjectManager.getInstance().getFileChecksumContainer();
 		fileChecksumContainer.addChecksum(checksumSource, destinationFile.getAbsolutePath());
