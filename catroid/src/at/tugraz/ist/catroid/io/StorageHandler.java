@@ -210,7 +210,7 @@ public class StorageHandler {
 		File outputFile = new File(Utils.buildPath(soundDirectory.getAbsolutePath(), inputFileChecksum + "_"
 				+ inputFile.getName()));
 
-		return copyFile(outputFile, inputFile, soundDirectory);
+		return copyFileAddCheckSum(outputFile, inputFile, soundDirectory);
 	}
 
 	public File copyImage(String currentProjectName, String inputFilePath, String newName) throws IOException {
@@ -242,7 +242,7 @@ public class StorageHandler {
 				}
 			}
 			File outputFile = new File(newFilePath);
-			return copyFile(outputFile, inputFile, imageDirectory);
+			return copyFileAddCheckSum(outputFile, inputFile, imageDirectory);
 		} else {
 			File outputFile = new File(Utils.buildPath(imageDirectory.getAbsolutePath(), inputFile.getName()));
 			return copyAndResizeImage(outputFile, inputFile, imageDirectory);
@@ -313,7 +313,7 @@ public class StorageHandler {
 				copyDirectory(new File(sourceFile, subDirectoryName), new File(destinationFile, subDirectoryName));
 			}
 		} else {
-			copyFileIgnoreCheckSum(sourceFile, destinationFile, null);
+			copyFileWithoutCheckSum(sourceFile, destinationFile, null);
 		}
 	}
 
@@ -331,37 +331,39 @@ public class StorageHandler {
 		}
 	}
 
-	private File copyFile(File sourceFile, File destinationFile, File directory) throws IOException {
-		FileInputStream inputStream = new FileInputStream(sourceFile);
-		FileChannel inputChannel = inputStream.getChannel();
-		FileOutputStream outputStream = new FileOutputStream(destinationFile);
-		FileChannel outputChannel = outputStream.getChannel();
-
-		String checksumSource = Utils.md5Checksum(sourceFile);
-		FileChecksumContainer fileChecksumContainer = ProjectManager.getInstance().getFileChecksumContainer();
-
-		try {
-			inputChannel.transferTo(0, inputChannel.size(), outputChannel);
-			fileChecksumContainer.addChecksum(checksumSource, destinationFile.getAbsolutePath());
-			return destinationFile;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			if (inputChannel != null) {
-				inputChannel.close();
-			}
-			if (inputStream != null) {
-				inputStream.close();
-			}
-			if (outputChannel != null) {
-				outputChannel.close();
-			}
-			if (outputStream != null) {
-				outputStream.close();
-			}
-		}
-	}
+	/*
+	 * private File copyFile(File sourceFile, File destinationFile, File directory) throws IOException {
+	 * FileInputStream inputStream = new FileInputStream(sourceFile);
+	 * FileChannel inputChannel = inputStream.getChannel();
+	 * FileOutputStream outputStream = new FileOutputStream(destinationFile);
+	 * FileChannel outputChannel = outputStream.getChannel();
+	 * 
+	 * String checksumSource = Utils.md5Checksum(sourceFile);
+	 * FileChecksumContainer fileChecksumContainer = ProjectManager.getInstance().getFileChecksumContainer();
+	 * 
+	 * try {
+	 * inputChannel.transferTo(0, inputChannel.size(), outputChannel);
+	 * fileChecksumContainer.addChecksum(checksumSource, destinationFile.getAbsolutePath());
+	 * return destinationFile;
+	 * } catch (IOException e) {
+	 * e.printStackTrace();
+	 * return null;
+	 * } finally {
+	 * if (inputChannel != null) {
+	 * inputChannel.close();
+	 * }
+	 * if (inputStream != null) {
+	 * inputStream.close();
+	 * }
+	 * if (outputChannel != null) {
+	 * outputChannel.close();
+	 * }
+	 * if (outputStream != null) {
+	 * outputStream.close();
+	 * }
+	 * }
+	 * }
+	 */
 
 	public void deleteFile(String filepath) {
 		FileChecksumContainer container = ProjectManager.getInstance().getFileChecksumContainer();
@@ -375,18 +377,18 @@ public class StorageHandler {
 		}
 	}
 
-	private File copyFileWithCheckSum(File sourceFile, File destinationFile, File directory) throws IOException {
+	private File copyFileAddCheckSum(File sourceFile, File destinationFile, File directory) throws IOException {
 		File copiedFile = copyFile(sourceFile, destinationFile, directory);
 		addChecksum(sourceFile, destinationFile);
 
 		return copiedFile;
 	}
 
-	private void copyFileIgnoreCheckSum(File sourceFile, File destinationFile, File directory) throws IOException {
-		copyFiles(sourceFile, destinationFile, directory);
+	private void copyFileWithoutCheckSum(File sourceFile, File destinationFile, File directory) throws IOException {
+		copyFile(sourceFile, destinationFile, directory);
 	}
 
-	private File copyFiles(File sourceFile, File destinationFile, File file) throws IOException {
+	private File copyFile(File sourceFile, File destinationFile, File directory) throws IOException {
 		FileInputStream inputStream = new FileInputStream(sourceFile);
 		FileChannel inputChannel = inputStream.getChannel();
 		FileOutputStream outputStream = new FileOutputStream(destinationFile);
