@@ -90,7 +90,6 @@ public class ChangeVolumeByBrick implements Brick, OnClickListener {
 		if (instance == null) {
 			instance = this;
 		}
-
 		view = View.inflate(context, R.layout.brick_change_volume_by, null);
 
 		TextView text = (TextView) view.findViewById(R.id.brick_change_volume_by_text_view);
@@ -119,7 +118,6 @@ public class ChangeVolumeByBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
 
 		if (!FormulaEditorDialog.mScriptTabActivity.isEditorActive()) {

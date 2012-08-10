@@ -273,6 +273,11 @@ public class PreStageActivity extends Activity {
 		}
 	}
 
+	public void makeToast(String text) {
+		Toast.makeText(this.getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+	}
+
+	@SuppressWarnings("deprecation")
 	public static void textToSpeech(String text, OnUtteranceCompletedListener listener,
 			HashMap<String, String> speakParameter) {
 		textToSpeech.setOnUtteranceCompletedListener(listener);

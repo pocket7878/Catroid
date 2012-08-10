@@ -340,6 +340,6 @@
     <string name="formula_nothing_selected">Define the brick´s input value</string>
     <string name="formula_editor_confirm_discard">Discarding changes! Press again to confirm.</string>
      
-    <!-- Num Pad Strings -->
-    
+     <!-- Other Strings -->
+     <string name="select_image">Select image</string>
 </resources>

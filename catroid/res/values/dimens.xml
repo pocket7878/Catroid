@@ -31,6 +31,10 @@
     <dimen name="key_height">42dp</dimen>
     <dimen name="candidate_font_height">16sp</dimen>
     <dimen name="candidate_vertical_padding">6sp</dimen>
-    <dimen name="text_size_large">24sp</dimen>
-    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="tab_widget_height">40dip</dimen>
+    <dimen name="text_size_small">13sp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+	<dimen name="text_size_large">18sp</dimen>
+	<dimen name="text_size_xlarge">20sp</dimen>
+	<dimen name="text_size_xxlarge">24sp</dimen>
 </resources>

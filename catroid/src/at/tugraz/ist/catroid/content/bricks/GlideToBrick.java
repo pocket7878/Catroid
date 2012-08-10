@@ -202,7 +202,6 @@ public class GlideToBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
 
 		if (!FormulaEditorDialog.mScriptTabActivity.isEditorActive()) {

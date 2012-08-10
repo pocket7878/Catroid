@@ -176,7 +176,6 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 			FormulaEditorDialog.mScriptTabActivity.setEditorStatus(true);
 			formulaEditor = new FormulaEditorDialog(context, instance);
 
-			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
 		}

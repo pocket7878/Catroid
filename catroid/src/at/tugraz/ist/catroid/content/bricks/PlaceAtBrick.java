@@ -129,14 +129,12 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		//Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
 		final Context context = view.getContext();
 
 		if (!FormulaEditorDialog.mScriptTabActivity.isEditorActive()) {
 			FormulaEditorDialog.mScriptTabActivity.setEditorStatus(true);
 			formulaEditor = new FormulaEditorDialog(context, instance);
 
-			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
 			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
 		}

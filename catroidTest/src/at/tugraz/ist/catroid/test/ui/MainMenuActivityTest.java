@@ -22,32 +22,31 @@
  */
 package at.tugraz.ist.catroid.test.ui;
 
-import android.content.Intent;
-import android.test.ActivityUnitTestCase;
+import android.test.ActivityInstrumentationTestCase2;
+import android.test.UiThreadTest;
 import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.test.utils.TestMainMenuActivity;
+import at.tugraz.ist.catroid.ui.MainMenuActivity;
 
-public class MainMenuActivityTest extends ActivityUnitTestCase<TestMainMenuActivity> {
+public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
+
 	public MainMenuActivityTest() {
-		super(TestMainMenuActivity.class);
+		super(MainMenuActivity.class);
 	}
-
+	
 	@Override
-	protected void setUp() throws Exception {
+		protected void setUp() throws Exception {
 		super.setUp();
 	}
-
+	
 	@Override
-	protected void tearDown() throws Exception {
+		protected void tearDown() throws Exception {
 		super.tearDown();
 	}
-
-	public void testShouldNotCrashIfProjectIsNull() {
-		startActivity(new Intent(), null, null);
-
+	
+	@UiThreadTest
+		public void testShouldNotCrashIfProjectIsNull() {
 		ProjectManager.getInstance().setProject(null);
-
-		getActivity().onPostCreate(null);
+		getInstrumentation().callActivityOnPostCreate(getActivity(), null);
 		assertTrue("Test failed!", true);
 	}
 }

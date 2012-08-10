@@ -121,7 +121,5 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
 		}
 		formulaEditor.setInputFocusAndFormula(this.changeGhostEffectFormula);
-
 	}
-
 }

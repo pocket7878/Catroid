@@ -38,7 +38,7 @@ public class SpeakBrickTest extends ActivityInstrumentationTestCase2<ScriptTabAc
 	//	private String testString2 = "";
 
 	public SpeakBrickTest() {
-		super("at.tugraz.ist.catroid", ScriptTabActivity.class);
+		super(ScriptTabActivity.class);
 	}
 
 	@Override
@@ -49,6 +49,7 @@ public class SpeakBrickTest extends ActivityInstrumentationTestCase2<ScriptTabAc
 
 	@Override
 	public void tearDown() throws Exception {
+		UiTestUtils.goBackToHome(getInstrumentation());
 		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();

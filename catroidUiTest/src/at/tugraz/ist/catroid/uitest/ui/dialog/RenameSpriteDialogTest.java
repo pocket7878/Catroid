@@ -38,6 +38,7 @@ import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import com.jayway.android.robotium.solo.Solo;
 
 public class RenameSpriteDialogTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
+
 	private Solo solo;
 	private String testProject = UiTestUtils.PROJECTNAME1;
 	private String cat = "cat";
@@ -45,7 +46,7 @@ public class RenameSpriteDialogTest extends ActivityInstrumentationTestCase2<Mai
 	private String catMixedCase = "CaT";
 
 	public RenameSpriteDialogTest() {
-		super("at.tugraz.ist.catroid", MainMenuActivity.class);
+		super(MainMenuActivity.class);
 	}
 
 	@Override
@@ -57,6 +58,7 @@ public class RenameSpriteDialogTest extends ActivityInstrumentationTestCase2<Mai
 
 	@Override
 	public void tearDown() throws Exception {
+		UiTestUtils.goBackToHome(getInstrumentation());
 		solo.finishOpenedActivities();
 		ProjectManager.getInstance().deleteCurrentProject();
 		UiTestUtils.clearAllUtilTestProjects();
@@ -67,6 +69,7 @@ public class RenameSpriteDialogTest extends ActivityInstrumentationTestCase2<Mai
 		createTestProject(testProject);
 		solo.sleep(200);
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
+		solo.sleep(1000);
 		assertTrue("Cannot click on project.", UiTestUtils.clickOnTextInList(solo, testProject));
 		solo.clickLongOnText(cat);
 

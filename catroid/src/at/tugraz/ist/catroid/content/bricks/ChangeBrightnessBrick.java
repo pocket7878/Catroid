@@ -47,6 +47,10 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 	private transient Brick instance = null;
 	private transient FormulaEditorDialog formulaEditor;
 
+	public ChangeBrightnessBrick(){
+		
+	}
+	
 	public ChangeBrightnessBrick(Sprite sprite, double changeBrightness) {
 		this.sprite = sprite;
 		changeBrightnessFormula = new Formula(Double.toString(changeBrightness));

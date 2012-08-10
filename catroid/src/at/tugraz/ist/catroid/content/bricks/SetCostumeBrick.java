@@ -137,7 +137,6 @@ public class SetCostumeBrick implements Brick {
 		}
 
 		return clonedBrick;
-
 	}
 
 	public void onClick(View view) {
