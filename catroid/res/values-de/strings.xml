@@ -30,6 +30,7 @@
     <string name="brick">Baustein</string>
     <string name="cancel_button">Abbrechen</string>
     <string name="rename">Umbenennen</string>
+   	<string name="copy">Kopieren</string> 
     <string name="delete">Löschen</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
@@ -138,6 +139,9 @@
     <!-- Rename Dialog -->
     <string name="rename_hint">Name</string>
     <string name="rename_button">umbenennen</string>
+    
+	<!-- Copy Project Dialog -->
+	<string name="copy_project_dialog_title">Kopiere Project</string>
 
     <!-- New sprite dialog -->
     <string name="new_sprite_dialog_default_sprite_name">Mein Objekt</string>

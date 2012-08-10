@@ -300,7 +300,7 @@ public class StorageHandler {
 			copiedProject.setName(newProjectName);
 			saveProject(copiedProject);
 		} catch (IOException e) {
-			deleteDirectory(newProjectRootDirectory);
+			UtilFile.deleteDirectory(newProjectRootDirectory);
 			Log.e("CATROID", "Error while copying project, destroy newly created directories.", e);
 		}
 	}
