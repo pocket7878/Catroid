@@ -48,7 +48,7 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 	private CatKeyboardClicker catKeyboardClicker;
 
 	public CatKeyboardTest() {
-		super("at.tugraz.ist.catroid", ScriptTabActivity.class);
+		super(ScriptTabActivity.class);
 	}
 
 	@Override

@@ -52,7 +52,7 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 	private static final int FORMULA_EDITOR_EDIT_TEXT_ID = 2;
 
 	public FormulaEditorDialogTest() {
-		super("at.tugraz.ist.catroid", ScriptTabActivity.class);
+		super(ScriptTabActivity.class);
 	}
 
 	@Override

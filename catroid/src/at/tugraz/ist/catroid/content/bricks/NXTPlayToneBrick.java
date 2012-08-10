@@ -23,7 +23,6 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -146,7 +145,7 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 			FormulaEditorDialog.mScriptTabActivity.setEditorStatus(true);
 			formulaEditor = new FormulaEditorDialog(context, instance);
 		}
-		
+
 		FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
 		FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
 		switch (view.getId()) {

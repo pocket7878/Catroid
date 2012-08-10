@@ -52,7 +52,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 	private CatKeyboardClicker catKeyboardClicker;
 
 	public FormulaEditorEditTextTest() {
-		super("at.tugraz.ist.catroid", ScriptTabActivity.class);
+		super(ScriptTabActivity.class);
 
 	}
 
