@@ -175,11 +175,11 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 
 		//Interpretation test
 		Formula formula = (Formula) UiTestUtils.getPrivateField("xPositionFormula", placeAtBrick);
-		assertEquals("Wrong text in field", newXValue, formula.interpret().intValue());
+		assertEquals("Wrong text in field", newXValue, formula.interpretInteger());
 
 		formula = (Formula) UiTestUtils.getPrivateField("yPositionFormula", placeAtBrick);
 
-		int newYValue = formula.interpret().intValue();
+		int newYValue = formula.interpretInteger();
 		Log.i("info", "" + newYValue);
 		assertTrue("Wrong text in field", newYValue >= 0 && newYValue <= 10);
 

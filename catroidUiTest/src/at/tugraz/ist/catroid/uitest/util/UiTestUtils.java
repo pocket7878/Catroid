@@ -602,7 +602,7 @@ public class UiTestUtils {
 
 		Formula formula = (Formula) UiTestUtils.getPrivateField(fieldName, theBrick);
 
-		assertEquals("Wrong text in field", newValue, formula.interpret());
+		assertEquals("Wrong text in field", newValue, (double) formula.interpretFloat());
 		assertEquals("Text not updated in the brick list", newValue,
 				Double.parseDouble(solo.getEditText(editTextNumber).getText().toString()));
 

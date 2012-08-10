@@ -123,15 +123,15 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 		GlideToBrick glideToBrick = (GlideToBrick) brickList.get(0);
 
 		Formula formula = (Formula) UiTestUtils.getPrivateField("durationInSecondsFormula", glideToBrick);
-		Double temp = formula.interpret().doubleValue();
+		float temp = formula.interpretFloat();
 
 		assertEquals("Wrong duration input in Glide to brick", Math.round(duration * 1000), Math.round(temp * 1000));
 		formula = (Formula) UiTestUtils.getPrivateField("xDestinationFormula", glideToBrick);
-		int temp2 = formula.interpret().intValue();
+		float temp2 = formula.interpretFloat();
 		assertEquals("Wrong x input in Glide to brick", xPosition, temp2);
 
 		formula = (Formula) UiTestUtils.getPrivateField("yDestinationFormula", glideToBrick);
-		temp2 = formula.interpret().intValue();
+		temp2 = formula.interpretFloat();
 		assertEquals("Wrong y input in Glide to brick", yPosition, temp2);
 	}
 
