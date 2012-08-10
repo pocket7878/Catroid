@@ -22,16 +22,18 @@
  */
 package at.tugraz.ist.catroid.ui.dialogs;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -44,7 +46,7 @@ import at.tugraz.ist.catroid.formulaeditor.FormulaEditorEditText;
 import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 
-public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDismissListener {
+public class FormulaEditorDialog extends DialogFragment implements OnClickListener, OnKeyListener {
 
 	private final Context context;
 	private Brick currentBrick;
@@ -67,81 +69,77 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 	}
 
 	public FormulaEditorDialog(Context context, Brick brick) {
-		super(context, R.style.dialog_fullscreen);
+		//super(context, R.style.dialog_fullscreen);
 		currentBrick = brick;
 		this.context = context;
 
-		mScriptTabActivity.setCurrentFormulaEditorDialog(this);
+		//mScriptTabActivity.setCurrentFormulaEditorDialog(this);
 		Log.i("info", "FormulaEditorDialog()");
 	}
 
+	//	@Override
+	//	public boolean dispatchKeyEvent(KeyEvent event) {
+	//		//for function keys
+	//		//Log.i("info", "Key: " + event.getKeyCode());
+	//
+	//		if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+	//
+	//		}
+	//		super.dispatchKeyEvent(event);
+	//		return false;
+	//
+	//	};
+
 	@Override
-	public boolean dispatchKeyEvent(KeyEvent event) {
-		//for function keys
-		//Log.i("info", "Key: " + event.getKeyCode());
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		Log.i("info", "FormulaEditorDialog.onCreateView()");
 
-		if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+		View dialogView = inflater.inflate(R.layout.dialog_formula_editor, container, false);
 
-		}
-		super.dispatchKeyEvent(event);
-		return false;
-
-	};
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		Log.i("info", "FormulaEditorDialog.onCreate()");
-		super.onCreate(savedInstanceState);
-
-		setContentView(R.layout.dialog_formula_editor);
-
-		brickSpace = (LinearLayout) findViewById(R.id.formula_editor_brick_space);
+		brickSpace = (LinearLayout) dialogView.findViewById(R.id.formula_editor_brick_space);
 		if (brickSpace != null) {
 			brickView = currentBrick.getView(context, 0, null);
 			brickSpace.addView(brickView);
-
 		}
 
-		setTitle(R.string.dialog_formula_editor_title);
-		setCanceledOnTouchOutside(true);
+		//view.setTitle(R.string.dialog_formula_editor_title);
+		//setCanceledOnTouchOutside(true);
 
-		okButton = (Button) findViewById(R.id.formula_editor_ok_button);
+		okButton = (Button) dialogView.findViewById(R.id.formula_editor_ok_button);
 		okButton.setOnClickListener(this);
 
-		undoButton = (Button) findViewById(R.id.formula_editor_undo_button);
+		undoButton = (Button) dialogView.findViewById(R.id.formula_editor_undo_button);
 		undoButton.setOnClickListener(this);
 
-		redoButton = (Button) findViewById(R.id.formula_editor_redo_button);
+		redoButton = (Button) dialogView.findViewById(R.id.formula_editor_redo_button);
 		redoButton.setOnClickListener(this);
 
-		formulaEditorEditText = (FormulaEditorEditText) findViewById(R.id.formula_editor_edit_field);
+		formulaEditorEditText = (FormulaEditorEditText) dialogView.findViewById(R.id.formula_editor_edit_field);
 		if (brickSpace != null) {
 			brickSpace.measure(0, 0);
 		}
-		catKeyboardView = (CatKeyboardView) findViewById(R.id.keyboardcat);
+		catKeyboardView = (CatKeyboardView) dialogView.findViewById(R.id.keyboardcat);
 		catKeyboardView.setEditText(formulaEditorEditText);
 		catKeyboardView.setCurrentBrick(currentBrick);
 
 		makeRedoButtonClickable(false);
 		makeUndoButtonClickable(false);
 		makeOkButtonBackButton();
-		this.setOnDismissListener(this);
+		//dialogView.setOnDismissListener(this);
 		if (brickSpace != null) {
 			formulaEditorEditText.init(this, brickSpace.getMeasuredHeight(), catKeyboardView, context);
 		} else {
 			formulaEditorEditText.init(this, 0, catKeyboardView, context);
 		}
+
+		dialogView.setOnKeyListener(this);
+
+		return dialogView;
 	}
 
 	@Override
-	public void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
-	}
-
-	@Override
-	public Bundle onSaveInstanceState() {
+	public void onSaveInstanceState(Bundle outState) {
 		restorePreviousTextField = true;
-		return super.onSaveInstanceState();
 	}
 
 	public void setInputFocusAndFormula(Formula newFormula) {
@@ -196,7 +194,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 			case R.id.formula_editor_ok_button:
 				if (buttonIsBackButton) {
 					mScriptTabActivity.setCurrentFormulaEditorDialog(null);
-					mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
+					//mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
 					mScriptTabActivity.setEditorStatus(false);
 					mScriptTabActivity.setCurrentBrick(null);
 					formulaEditorEditText.endEdit();
@@ -278,7 +276,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	public boolean onKey(View v, int keyCode, KeyEvent event) {
 		switch (keyCode) {
 			case KeyEvent.KEYCODE_BACK:
 				if (formulaEditorEditText.hasChanges()) {
@@ -286,7 +284,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 						showToast(R.string.formula_editor_changes_discarded);
 						Log.i("info", "FormulaEditorDialog.onKeyDown()");
 						mScriptTabActivity.setCurrentFormulaEditorDialog(null);
-						mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
+						//mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
 						mScriptTabActivity.setEditorStatus(false);
 						mScriptTabActivity.setCurrentBrick(null);
 						formulaEditorEditText.endEdit();
@@ -298,7 +296,7 @@ public class FormulaEditorDialog extends Dialog implements OnClickListener, OnDi
 				} else {
 					Log.i("info", "FormulaEditorDialog.onKeyDown()");
 					mScriptTabActivity.setCurrentFormulaEditorDialog(null);
-					mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
+					//mScriptTabActivity.removeDialog(ScriptTabActivity.DIALOG_FORMULA);
 					mScriptTabActivity.setEditorStatus(false);
 					mScriptTabActivity.setCurrentBrick(null);
 					formulaEditorEditText.endEdit();

@@ -24,7 +24,6 @@ package at.tugraz.ist.catroid.ui;
 
 import java.util.ArrayList;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -252,54 +251,54 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 	///////////////////////////
 	//REMOVE ALL BELOW
 	///////////////////////////
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		Dialog dialog = null;
-		switch (id) {
-		//			case DIALOG_RENAME_SOUND:
-		//				if (selectedSoundInfo != null) {
-		//					renameSoundDialog = new RenameSoundDialog(this);
-		//					dialog = renameSoundDialog.createDialog(selectedSoundInfo);
-		//				}
-		//				break;
-		//			case DIALOG_RENAME_COSTUME:
-		//				if (selectedCostumeData != null) {
-		//					renameCostumeDialog = new RenameCostumeDialog(this);
-		//					dialog = renameCostumeDialog.createDialog(selectedCostumeData);
-		//				}
-		//				break;
-		//			case DIALOG_BRICK_CATEGORY:
-		//				dialog = new BrickCategoryDialog(this);
-		//				dialog.setOnDismissListener(this);
-		//				dialog.setOnCancelListener(this);
-		//				break;
-		//			case DIALOG_ADD_BRICK:
-		//				if (selectedCategory != null) {
-		//					dialog = new AddBrickDialog(this, selectedCategory);
-		//				}
-		//				break;
-		//			case DIALOG_DELETE_COSTUME:
-		//				if (selectedCostumeData != null) {
-		//					deleteCostumeDialog = new DeleteCostumeDialog(this);
-		//					dialog = deleteCostumeDialog.createDialog();
-		//				}
-		//				break;
-		//			case DIALOG_DELETE_SOUND:
-		//				if (selectedSoundInfo != null) {
-		//					deleteSoundDialog = new DeleteSoundDialog(this);
-		//					dialog = deleteSoundDialog.createDialog();
-		//				}
-		//				break;
-		//			case DIALOG_ADD_COSTUME:
-		//				addCostumeDialog = new AddCostumeDialog(this);
-		//				dialog = addCostumeDialog;
-		//				break;
-			case DIALOG_FORMULA:
-				dialog = this.currentFormulaEditorDialog;
-				break;
-		}
-		return dialog;
-	}
+	//	@Override
+	//	protected Dialog onCreateDialog(int id) {
+	//		Dialog dialog = null;
+	//		switch (id) {
+	//		//			case DIALOG_RENAME_SOUND:
+	//		//				if (selectedSoundInfo != null) {
+	//		//					renameSoundDialog = new RenameSoundDialog(this);
+	//		//					dialog = renameSoundDialog.createDialog(selectedSoundInfo);
+	//		//				}
+	//		//				break;
+	//		//			case DIALOG_RENAME_COSTUME:
+	//		//				if (selectedCostumeData != null) {
+	//		//					renameCostumeDialog = new RenameCostumeDialog(this);
+	//		//					dialog = renameCostumeDialog.createDialog(selectedCostumeData);
+	//		//				}
+	//		//				break;
+	//		//			case DIALOG_BRICK_CATEGORY:
+	//		//				dialog = new BrickCategoryDialog(this);
+	//		//				dialog.setOnDismissListener(this);
+	//		//				dialog.setOnCancelListener(this);
+	//		//				break;
+	//		//			case DIALOG_ADD_BRICK:
+	//		//				if (selectedCategory != null) {
+	//		//					dialog = new AddBrickDialog(this, selectedCategory);
+	//		//				}
+	//		//				break;
+	//		//			case DIALOG_DELETE_COSTUME:
+	//		//				if (selectedCostumeData != null) {
+	//		//					deleteCostumeDialog = new DeleteCostumeDialog(this);
+	//		//					dialog = deleteCostumeDialog.createDialog();
+	//		//				}
+	//		//				break;
+	//		//			case DIALOG_DELETE_SOUND:
+	//		//				if (selectedSoundInfo != null) {
+	//		//					deleteSoundDialog = new DeleteSoundDialog(this);
+	//		//					dialog = deleteSoundDialog.createDialog();
+	//		//				}
+	//		//				break;
+	//		//			case DIALOG_ADD_COSTUME:
+	//		//				addCostumeDialog = new AddCostumeDialog(this);
+	//		//				dialog = addCostumeDialog;
+	//		//				break;
+	//			case DIALOG_FORMULA:
+	//				dialog = this.currentFormulaEditorDialog;
+	//				break;
+	//		}
+	//		return dialog;
+	//	}
 
 	public void setCurrentFormulaEditorDialog(FormulaEditorDialog currentFormulaEditorDialog) {
 		this.currentFormulaEditorDialog = currentFormulaEditorDialog;
@@ -311,31 +310,32 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 
 	public void setEditorStatus(boolean isActive) {
 		this.editorActive = isActive;
+
 	}
 
 	public boolean isEditorActive() {
 		return this.editorActive;
 	}
 
-	@Override
-	protected void onPrepareDialog(int id, Dialog dialog) {
-		switch (id) {
-		//			case DIALOG_RENAME_SOUND:
-		//				EditText soundTitleInput = (EditText) dialog.findViewById(R.id.dialog_rename_sound_editText);
-		//				soundTitleInput.setText(selectedSoundInfo.getTitle());
-		//				break;
-		//			case DIALOG_RENAME_COSTUME:
-		//				EditText costumeTitleInput = (EditText) dialog.findViewById(R.id.dialog_rename_costume_editText);
-		//				costumeTitleInput.setText(selectedCostumeData.getCostumeName());
-		//				break;
-			case DIALOG_FORMULA:
-				//				dialog = this.currentFormulaEditorDialog;
-				Log.i("info", "case DIALOG_FORMULA" + " dialog: " + dialog + " currentFormulaEditorDialog: "
-						+ this.currentFormulaEditorDialog);
-				//				this.showDialog(DIALOG_FORMULA, null);
-				break;
-		}
-	}
+	//	@Override
+	//	protected void onPrepareDialog(int id, Dialog dialog) {
+	//		switch (id) {
+	//		//			case DIALOG_RENAME_SOUND:
+	//		//				EditText soundTitleInput = (EditText) dialog.findViewById(R.id.dialog_rename_sound_editText);
+	//		//				soundTitleInput.setText(selectedSoundInfo.getTitle());
+	//		//				break;
+	//		//			case DIALOG_RENAME_COSTUME:
+	//		//				EditText costumeTitleInput = (EditText) dialog.findViewById(R.id.dialog_rename_costume_editText);
+	//		//				costumeTitleInput.setText(selectedCostumeData.getCostumeName());
+	//		//				break;
+	//			case DIALOG_FORMULA:
+	//				//				dialog = this.currentFormulaEditorDialog;
+	//				Log.i("info", "case DIALOG_FORMULA" + " dialog: " + dialog + " currentFormulaEditorDialog: "
+	//						+ this.currentFormulaEditorDialog);
+	//				//				this.showDialog(DIALOG_FORMULA, null);
+	//				break;
+	//		}
+	//	}
 
 	//	public void handlePositiveButtonRenameSound(View v) {
 	//		renameSoundDialog.handleOkButton();

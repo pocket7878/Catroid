@@ -71,19 +71,23 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	private float lineHeight = 0;
 	private int absoluteCursorPosition = 0;
 	private static FormulaEditorHistory history = null;
+	private Context context;
 
 	FormulaEditorDialog formulaEditorDialog = null;
 
 	public FormulaEditorEditText(Context context) {
 		super(context);
+		this.context = context;
 	}
 
 	public FormulaEditorEditText(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		this.context = context;
 	}
 
 	public FormulaEditorEditText(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
+		this.context = context;
 	}
 
 	public void init(FormulaEditorDialog dialog, int brickHeight, CatKeyboardView ckv, Context context) {
@@ -694,7 +698,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		return gestureDetector.onTouchEvent(motion);
 	}
 
-	final GestureDetector gestureDetector = new GestureDetector(new GestureDetector.SimpleOnGestureListener() {
+	final GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
 		@Override
 		public boolean onDoubleTap(MotionEvent e) {
 			//Log.i("info", "double tap ");
