@@ -406,6 +406,11 @@ public class UiTestUtils {
 		if (directory.exists()) {
 			UtilFile.deleteDirectory(directory);
 		}
+
+		directory = new File(Constants.DEFAULT_ROOT + "/" + COPIED_PROJECT_NAME);
+		if (directory.exists()) {
+			UtilFile.deleteDirectory(directory);
+		}
 	}
 
 	public static Object getPrivateField(String fieldName, Object object) {

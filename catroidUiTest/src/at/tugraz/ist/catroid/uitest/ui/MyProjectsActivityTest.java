@@ -715,10 +715,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 				projectManager.getCurrentProject().description.equalsIgnoreCase(lorem));
 	}
 
-	public void testCopyProject() {
-		unzip = true;
-		saveProjectsToZip();
-
+	public void testCopyCurrentProject() {
 		createProjects();
 
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
@@ -766,10 +763,23 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		assertTrue("Checksum should be the same", oldChecksum.equals(copiedCostumeChecksum));
 	}
 
-	public void testCopyProjectMixedCase() {
-		unzip = true;
-		saveProjectsToZip();
+	public void testCopyProject() {
+		createProjects();
 
+		solo.clickOnButton(getActivity().getString(R.string.my_projects));
+		solo.sleep(300);
+		solo.clickLongOnText(UiTestUtils.PROJECTNAME1);
+		solo.sleep(200);
+		solo.clickOnText(getActivity().getString(R.string.copy));
+		solo.sleep(200);
+		solo.clearEditText(0);
+		UiTestUtils.enterText(solo, 0, UiTestUtils.COPIED_PROJECT_NAME);
+		solo.sendKey(Solo.ENTER);
+		solo.sleep(200);
+		assertTrue("Did not copy the selected project", solo.searchText(UiTestUtils.COPIED_PROJECT_NAME, true));
+	}
+
+	public void testCopyProjectMixedCase() {
 		createProjects();
 
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
@@ -787,9 +797,6 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 	}
 
 	public void testCopyProjectNoName() {
-		unzip = true;
-		saveProjectsToZip();
-
 		createProjects();
 
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));

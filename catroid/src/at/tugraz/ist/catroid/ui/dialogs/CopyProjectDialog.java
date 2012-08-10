@@ -46,6 +46,7 @@ public class CopyProjectDialog extends TextDialog {
 
 	public void handleOkButton() {
 		String newProjectName = (input.getText().toString()).trim();
+		String oldProjectName = (((MyProjectsActivity) activity).projectToEdit.projectName);
 
 		if (newProjectName != null && !newProjectName.equalsIgnoreCase("")) {
 
@@ -53,7 +54,7 @@ public class CopyProjectDialog extends TextDialog {
 				Utils.displayErrorMessage(activity, activity.getString(R.string.error_project_exists));
 				return;
 			} else {
-				UtilFile.copyProject(newProjectName);
+				UtilFile.copyProject(newProjectName, oldProjectName);
 			}
 			((MyProjectsActivity) activity).initAdapter();
 		} else {

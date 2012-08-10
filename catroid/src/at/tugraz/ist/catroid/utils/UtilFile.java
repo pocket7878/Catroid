@@ -35,7 +35,6 @@ import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
-import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
@@ -178,8 +177,7 @@ public class UtilFile {
 		return projectList;
 	}
 
-	public static void copyProject(String newProjectName) {
-		String oldProjectName = ProjectManager.getInstance().getCurrentProject().getName();
+	public static void copyProject(String newProjectName, String oldProjectName) {
 		File oldProjectRootDirectory = new File(Utils.buildProjectPath(oldProjectName));
 		File newProjectRootDirectory = new File(Utils.buildProjectPath(newProjectName));
 
