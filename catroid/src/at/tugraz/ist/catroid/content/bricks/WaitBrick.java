@@ -123,15 +123,16 @@ public class WaitBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		final Context context = view.getContext();
+		ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
 
-		if (!FormulaEditorDialog.mScriptTabActivity.isEditorActive()) {
-			FormulaEditorDialog.mScriptTabActivity.setEditorStatus(true);
-			formulaEditor = new FormulaEditorDialog(context, instance);
+		//if (!FormulaEditorDialog.mScriptTabActivity.isEditorActive()) {
+		//FormulaEditorDialog.mScriptTabActivity.setEditorStatus(true);
+		formulaEditor = new FormulaEditorDialog(activity, instance);
+		formulaEditor.show(activity.getSupportFragmentManager(), "formula_editor");
 
-			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
-			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
-		}
+		//FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
+		//FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
+		//}
 		formulaEditor.setInputFocusAndFormula(this.timeToWaitInSecondsFormula);
 
 	}

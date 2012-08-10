@@ -76,7 +76,7 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 
 	private FormulaEditorDialog currentFormulaEditorDialog;
 	private Brick currentBrick;
-	private boolean editorActive;
+	private boolean editorActive = false;
 
 	private TabHost tabHost;
 

@@ -91,6 +91,14 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 	//	};
 
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		Log.i("info", "FormulaEditorDialog.onCreate()");
+		super.onCreate(savedInstanceState);
+		setStyle(STYLE_NO_FRAME, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.i("info", "FormulaEditorDialog.onCreateView()");
 
@@ -115,6 +123,7 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 		redoButton.setOnClickListener(this);
 
 		formulaEditorEditText = (FormulaEditorEditText) dialogView.findViewById(R.id.formula_editor_edit_field);
+		Log.i("info", "edittext: " + formulaEditorEditText);
 		if (brickSpace != null) {
 			brickSpace.measure(0, 0);
 		}
@@ -132,6 +141,8 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 			formulaEditorEditText.init(this, 0, catKeyboardView, context);
 		}
 
+		//
+
 		dialogView.setOnKeyListener(this);
 
 		return dialogView;
@@ -143,6 +154,11 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 	}
 
 	public void setInputFocusAndFormula(Formula newFormula) {
+
+		Log.i("info", "edittext is: " + formulaEditorEditText);
+		if (formulaEditorEditText == null) {
+			return;
+		}
 
 		if (restorePreviousTextField) { //after orientation switch
 			restorePreviousTextField = false;
