@@ -178,6 +178,7 @@ public class MyProjectsActivity extends ListActivity {
 				CONTEXT_MENU_ITEM_DESCRIPTION);
 		iconContextMenu.addItem(resources, this.getString(R.string.delete), R.drawable.ic_context_delete,
 				CONTEXT_MENU_ITEM_DELETE);
+		//TODO: Insert real drawable for copy project
 		iconContextMenu
 				.addItem(resources, this.getString(R.string.copy), R.drawable.ic_copy, CONTEXT_MENU_COPY_PROJECT);
 
@@ -268,6 +269,10 @@ public class MyProjectsActivity extends ListActivity {
 			case DIALOG_RENAME_PROJECT:
 				EditText renameProjectEditText = (EditText) dialog.findViewById(R.id.dialog_text_EditText);
 				renameProjectEditText.setText(projectToEdit.projectName);
+				break;
+			case DIALOG_COPY_PROJECT:
+				EditText copyProjectEditText = (EditText) dialog.findViewById(R.id.dialog_text_EditText);
+				copyProjectEditText.setText("");
 				break;
 			case DIALOG_SET_DESCRIPTION:
 				EditText descriptionEditText = (EditText) dialog.findViewById(R.id.dialog_text_EditText);

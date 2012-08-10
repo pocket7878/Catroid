@@ -30,7 +30,6 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.channels.FileChannel;
 import java.util.List;
 
 import android.graphics.Bitmap;
@@ -289,82 +288,6 @@ public class StorageHandler {
 		}
 	}
 
-	public void copyProject(String newProjectName) {
-		String oldProjectName = ProjectManager.getInstance().getCurrentProject().getName();
-		File oldProjectRootDirectory = new File(Utils.buildProjectPath(oldProjectName));
-		File newProjectRootDirectory = new File(Utils.buildProjectPath(newProjectName));
-
-		try {
-			copyDirectory(newProjectRootDirectory, oldProjectRootDirectory);
-			Project copiedProject = loadProject(newProjectName);
-			copiedProject.setName(newProjectName);
-			saveProject(copiedProject);
-		} catch (IOException e) {
-			UtilFile.deleteDirectory(newProjectRootDirectory);
-			Log.e("CATROID", "Error while copying project, destroy newly created directories.", e);
-		}
-	}
-
-	private void copyDirectory(File destinationFile, File sourceFile) throws IOException {
-		if (sourceFile.isDirectory()) {
-
-			destinationFile.mkdirs();
-			for (String subDirectoryName : sourceFile.list()) {
-				copyDirectory(new File(destinationFile, subDirectoryName), new File(sourceFile, subDirectoryName));
-			}
-		} else {
-			copyFileWithoutCheckSum(destinationFile, sourceFile, null);
-		}
-	}
-
-	private void deleteDirectory(File sourceFile) {
-		for (File currentFile : sourceFile.listFiles()) {
-			if (currentFile.isDirectory()) {
-				deleteDirectory(currentFile);
-			}
-			if (!currentFile.delete()) {
-				Log.e("CATROID", "Error while deleting file.");
-			}
-		}
-		if (!sourceFile.delete()) {
-			Log.e("CATROID", "Error while deleting file.");
-		}
-	}
-
-	/*
-	 * private File copyFile(File sourceFile, File destinationFile, File directory) throws IOException {
-	 * FileInputStream inputStream = new FileInputStream(sourceFile);
-	 * FileChannel inputChannel = inputStream.getChannel();
-	 * FileOutputStream outputStream = new FileOutputStream(destinationFile);
-	 * FileChannel outputChannel = outputStream.getChannel();
-	 * 
-	 * String checksumSource = Utils.md5Checksum(sourceFile);
-	 * FileChecksumContainer fileChecksumContainer = ProjectManager.getInstance().getFileChecksumContainer();
-	 * 
-	 * try {
-	 * inputChannel.transferTo(0, inputChannel.size(), outputChannel);
-	 * fileChecksumContainer.addChecksum(checksumSource, destinationFile.getAbsolutePath());
-	 * return destinationFile;
-	 * } catch (IOException e) {
-	 * e.printStackTrace();
-	 * return null;
-	 * } finally {
-	 * if (inputChannel != null) {
-	 * inputChannel.close();
-	 * }
-	 * if (inputStream != null) {
-	 * inputStream.close();
-	 * }
-	 * if (outputChannel != null) {
-	 * outputChannel.close();
-	 * }
-	 * if (outputStream != null) {
-	 * outputStream.close();
-	 * }
-	 * }
-	 * }
-	 */
-
 	public void deleteFile(String filepath) {
 		FileChecksumContainer container = ProjectManager.getInstance().getFileChecksumContainer();
 		try {
@@ -378,42 +301,10 @@ public class StorageHandler {
 	}
 
 	private File copyFileAddCheckSum(File destinationFile, File sourceFile, File directory) throws IOException {
-		File copiedFile = copyFile(destinationFile, sourceFile, directory);
+		File copiedFile = UtilFile.copyFile(destinationFile, sourceFile, directory);
 		addChecksum(destinationFile, sourceFile);
 
 		return copiedFile;
-	}
-
-	private void copyFileWithoutCheckSum(File destinationFile, File sourceFile, File directory) throws IOException {
-		copyFile(destinationFile, sourceFile, directory);
-	}
-
-	private File copyFile(File destinationFile, File sourceFile, File directory) throws IOException {
-		FileInputStream inputStream = new FileInputStream(sourceFile);
-		FileChannel inputChannel = inputStream.getChannel();
-		FileOutputStream outputStream = new FileOutputStream(destinationFile);
-		FileChannel outputChannel = outputStream.getChannel();
-
-		try {
-			inputChannel.transferTo(0, inputChannel.size(), outputChannel);
-			return destinationFile;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			if (inputChannel != null) {
-				inputChannel.close();
-			}
-			if (inputStream != null) {
-				inputStream.close();
-			}
-			if (outputChannel != null) {
-				outputChannel.close();
-			}
-			if (outputStream != null) {
-				outputStream.close();
-			}
-		}
 	}
 
 	private void addChecksum(File destinationFile, File sourceFile) {

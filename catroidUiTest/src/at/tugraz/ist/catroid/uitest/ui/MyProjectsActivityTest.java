@@ -786,35 +786,24 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		assertTrue("No or wrong error message shown", solo.searchText(errorMessageProjectExists));
 	}
 
-	/*
-	 * public void testCopyProjectFileAccessDenied() {
-	 * unzip = true;
-	 * saveProjectsToZip();
-	 * 
-	 * createProjects();
-	 * 
-	 * solo.clickOnButton(getActivity().getString(R.string.my_projects));
-	 * String projectPath = Utils.buildProjectPath(UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-	 * File projectCode = new File(Utils.buildPath(projectPath, Constants.PROJECTCODE_NAME));
-	 * 
-	 * try {
-	 * Runtime.getRuntime().exec("chmod 111 " + Utils.buildPath(projectPath, Constants.PROJECTCODE_NAME));
-	 * } catch (IOException e) {
-	 * e.printStackTrace();
-	 * }
-	 * 
-	 * solo.sleep(500);
-	 * solo.clickLongOnText(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, 2, true);
-	 * solo.sleep(200);
-	 * solo.clickOnText(getActivity().getString(R.string.copy));
-	 * solo.sleep(200);
-	 * solo.clearEditText(0);
-	 * UiTestUtils.enterText(solo, 0, UiTestUtils.COPIED_PROJECT_NAME);
-	 * solo.sendKey(Solo.ENTER);
-	 * solo.sleep(200);
-	 * 
-	 * }
-	 */
+	public void testCopyProjectNoName() {
+		unzip = true;
+		saveProjectsToZip();
+
+		createProjects();
+
+		solo.clickOnButton(getActivity().getString(R.string.my_projects));
+		solo.sleep(300);
+		solo.clickLongOnText(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, 2, true);
+		solo.sleep(200);
+		solo.clickOnText(getActivity().getString(R.string.copy));
+		solo.sleep(200);
+		solo.clearEditText(0);
+		solo.sendKey(Solo.ENTER);
+		solo.sleep(200);
+		String notificationEmptyString = solo.getString(R.string.notification_invalid_text_entered);
+		assertTrue("No or wrong error message shown", solo.searchText(notificationEmptyString));
+	}
 
 	public void createProjects() {
 		Project project1 = new Project(getActivity(), UiTestUtils.DEFAULT_TEST_PROJECT_NAME);

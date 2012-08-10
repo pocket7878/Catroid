@@ -30,6 +30,7 @@ import android.view.View.OnClickListener;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.MyProjectsActivity;
+import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
 
 /**
@@ -52,7 +53,7 @@ public class CopyProjectDialog extends TextDialog {
 				Utils.displayErrorMessage(activity, activity.getString(R.string.error_project_exists));
 				return;
 			} else {
-				StorageHandler.getInstance().copyProject(newProjectName);
+				UtilFile.copyProject(newProjectName);
 			}
 			((MyProjectsActivity) activity).initAdapter();
 		} else {
