@@ -3,9 +3,9 @@ package at.tugraz.ist.catroid.ui.dialogs;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -22,14 +22,12 @@ import at.tugraz.ist.catroid.formulaeditor.CatKeyboardView;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.formulaeditor.FormulaEditorEditText;
 import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
-import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 
 public class FormulaEditorDialog extends DialogFragment implements OnClickListener, OnKeyListener {
 
 	private Context context;
 	private static Brick currentBrick = null;
 	private static Formula currentFormula = null;
-	private static boolean isActive = false;
 	private FormulaEditorEditText formulaEditorEditText;
 	private CatKeyboardView catKeyboardView;
 	private LinearLayout brickSpace;
@@ -40,11 +38,6 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 	private long confirmBack = 0;
 	private boolean buttonIsBackButton = true;
 	public boolean restoreInstance = false;
-	public static ScriptTabActivity mScriptTabActivity = null;
-
-	public static void setOwnerActivity(ScriptTabActivity owner) {
-		//mScriptTabActivity = owner;
-	}
 
 	public FormulaEditorDialog() {
 		//do not remove, used for orientation change
@@ -61,12 +54,11 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Log.i("info", "FormulaEditorDialog.onCreate()");
 		if (savedInstanceState != null) {
 			restoreInstance = savedInstanceState.getBoolean("restoreInstance");
 		}
 		super.onCreate(savedInstanceState);
-		setStyle(STYLE_NO_FRAME, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+		setStyle(STYLE_NO_FRAME, R.style.dialog_fullscreen);
 
 	}
 
@@ -107,30 +99,19 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 		makeRedoButtonClickable(false);
 		makeUndoButtonClickable(false);
 		makeOkButtonBackButton();
+
 		if (brickSpace != null) {
-			formulaEditorEditText.init(this, brickSpace.getMeasuredHeight(), catKeyboardView, context);
+			formulaEditorEditText.init(this, brickSpace.getMeasuredHeight(), catKeyboardView);
 		} else {
-			formulaEditorEditText.init(this, 0, catKeyboardView, context);
+			formulaEditorEditText.init(this, 0, catKeyboardView);
 		}
 
-		setInputFocusAndFormula(currentFormula);
+		setInputFormula(currentFormula);
 		getDialog().setOnKeyListener(this);
-
 		return dialogView;
 	}
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		isActive = true;
-	}
-
-	public void setInputFocusAndFormula(Formula newFormula) {
-
-		Log.i("info", "edittext is: " + formulaEditorEditText + okButton + undoButton + redoButton);
-		//		if (formulaEditorEditText == null) {
-		//			return;
-		//		}
+	public void setInputFormula(Formula newFormula) {
 
 		if (restoreInstance) { //after orientation switch
 			restoreInstance = false;
@@ -138,10 +119,19 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 				formulaEditorEditText.enterNewFormula(newFormula.getEditTextRepresentation()); // this happens when onSaveInstanceState() is being called but not by orientation change (e.g.user turns off screen)
 			}
 			refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
+
+			int orientation = getResources().getConfiguration().orientation;
+			if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+				currentFormula.highlightTextField(brickView,
+						getResources().getDrawable(R.drawable.edit_text_formula_editor_selected));
+			}
 		} else if (newFormula == currentFormula) {
 
 			if (!formulaEditorEditText.hasChanges()) {
+				currentFormula.removeTextFieldHighlighting(brickView);
 				formulaEditorEditText.enterNewFormula(currentFormula.getEditTextRepresentation());
+				currentFormula.highlightTextField(brickView,
+						getResources().getDrawable(R.drawable.edit_text_formula_editor_selected));
 			} else {
 				formulaEditorEditText.quickSelect();
 			}
@@ -152,7 +142,10 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 					currentFormula.refreshTextField(brickView);
 				}
 				formulaEditorEditText.endEdit();
+				currentFormula.removeTextFieldHighlighting(brickView);
 				currentFormula = newFormula;
+				currentFormula.highlightTextField(brickView,
+						getResources().getDrawable(R.drawable.edit_text_formula_editor_selected));
 				makeOkButtonBackButton();
 				formulaEditorEditText.enterNewFormula(newFormula.getEditTextRepresentation());
 			} else {
@@ -182,7 +175,7 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 		switch (v.getId()) {
 			case R.id.formula_editor_ok_button:
 				if (buttonIsBackButton) {
-					dismissDialog();
+					onUserDismiss();
 				} else {
 					String formulaToParse = formulaEditorEditText.getText().toString();
 					int err = parseFormula(formulaToParse);
@@ -228,22 +221,11 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 		userInfo.show();
 	}
 
-	//	@Override
-	//	public void onDismiss(DialogInterface di) {
-	//
-	//		super.onDismiss(di);
-	//	}
-
-	private void dismissDialog() { //dont override onDismiss, this must not be called on orientation change
+	private void onUserDismiss() { //dont override onDismiss, this must not be called on orientation change
 		formulaEditorEditText.endEdit();
-		isActive = false;
 		currentFormula = null;
 		currentBrick = null;
 		dismiss();
-	}
-
-	public static boolean isActive() {
-		return isActive;
 	}
 
 	public void makeUndoButtonClickable(boolean clickable) {
@@ -273,15 +255,13 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 					if (formulaEditorEditText.hasChanges()) {
 						if (System.currentTimeMillis() <= confirmBack + 2000) {
 							showToast(R.string.formula_editor_changes_discarded);
-							Log.i("info", "FormulaEditorDialog.onKeyDown()");
-							dismissDialog();
+							onUserDismiss();
 						} else {
 							showToast(R.string.formula_editor_confirm_discard);
 							confirmBack = System.currentTimeMillis();
 						}
 					} else {
-						Log.i("info", "FormulaEditorDialog.onKeyDown()");
-						dismissDialog();
+						onUserDismiss();
 					}
 					break;
 				default:
@@ -296,6 +276,7 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 
 	public void refreshFormulaPreviewString(String formulaString) {
 		currentFormula.refreshTextField(brickView, formulaEditorEditText.getText().toString());
+
 	}
 
 }

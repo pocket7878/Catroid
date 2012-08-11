@@ -102,6 +102,7 @@
     </style>
     
     <style name="dialog_fullscreen">
+        <item name="android:windowBackground">@color/formula_editor_background</item>
 		<item name="android:windowFullscreen">true</item>
 		<item name="android:windowNoTitle">true</item>
 		

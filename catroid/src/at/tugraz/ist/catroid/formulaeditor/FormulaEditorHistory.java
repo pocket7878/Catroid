@@ -34,10 +34,6 @@ public class FormulaEditorHistory {
 	private FormulaEditorHistoryElement current = null;
 	private boolean hasUnsavedChanges = false;
 
-	//	public Formula() {
-	//		root = new FormulaElement(FormulaElement.ElementType.VALUE, "0", null);
-	//		textRepresentation = "0";
-	//	}
 	public FormulaEditorHistory(String text, int cursorPosition, int selectionStart, int selectionEnd) {
 		current = new FormulaEditorHistoryElement(text, cursorPosition, selectionStart, selectionEnd);
 		undoStack = new Stack<FormulaEditorHistoryElement>();

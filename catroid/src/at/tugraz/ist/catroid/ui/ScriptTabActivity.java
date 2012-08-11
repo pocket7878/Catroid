@@ -73,7 +73,6 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 	private TabsPagerAdapter tabsAdapter;
 
 	private FormulaEditorDialog formulaEditorDialog = null;
-	private boolean editorActive = false;
 
 	private TabHost tabHost;
 
@@ -116,7 +115,6 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 		//			formulaEditorDialog.show(getSupportFragmentManager(), "formula_editor_dialog");
 		//		}
 
-		FormulaEditorDialog.setOwnerActivity(this);
 	}
 
 	@Override
@@ -210,58 +208,6 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 		return getTabFragment(tabHost.getCurrentTab());
 	}
 
-	///////////////////////////
-	//REMOVE ALL BELOW
-	///////////////////////////
-	//	@Override
-	//	protected Dialog onCreateDialog(int id) {
-	//		Dialog dialog = null;
-	//		switch (id) {
-	//		//			case DIALOG_RENAME_SOUND:
-	//		//				if (selectedSoundInfo != null) {
-	//		//					renameSoundDialog = new RenameSoundDialog(this);
-	//		//					dialog = renameSoundDialog.createDialog(selectedSoundInfo);
-	//		//				}
-	//		//				break;
-	//		//			case DIALOG_RENAME_COSTUME:
-	//		//				if (selectedCostumeData != null) {
-	//		//					renameCostumeDialog = new RenameCostumeDialog(this);
-	//		//					dialog = renameCostumeDialog.createDialog(selectedCostumeData);
-	//		//				}
-	//		//				break;
-	//		//			case DIALOG_BRICK_CATEGORY:
-	//		//				dialog = new BrickCategoryDialog(this);
-	//		//				dialog.setOnDismissListener(this);
-	//		//				dialog.setOnCancelListener(this);
-	//		//				break;
-	//		//			case DIALOG_ADD_BRICK:
-	//		//				if (selectedCategory != null) {
-	//		//					dialog = new AddBrickDialog(this, selectedCategory);
-	//		//				}
-	//		//				break;
-	//		//			case DIALOG_DELETE_COSTUME:
-	//		//				if (selectedCostumeData != null) {
-	//		//					deleteCostumeDialog = new DeleteCostumeDialog(this);
-	//		//					dialog = deleteCostumeDialog.createDialog();
-	//		//				}
-	//		//				break;
-	//		//			case DIALOG_DELETE_SOUND:
-	//		//				if (selectedSoundInfo != null) {
-	//		//					deleteSoundDialog = new DeleteSoundDialog(this);
-	//		//					dialog = deleteSoundDialog.createDialog();
-	//		//				}
-	//		//				break;
-	//		//			case DIALOG_ADD_COSTUME:
-	//		//				addCostumeDialog = new AddCostumeDialog(this);
-	//		//				dialog = addCostumeDialog;
-	//		//				break;
-	//			case DIALOG_FORMULA:
-	//				dialog = this.currentFormulaEditorDialog;
-	//				break;
-	//		}
-	//		return dialog;
-	//	}
-
 	public void showFormulaEditorDialog(Brick brick, Formula formula) {
 
 		Log.i("info", "FEDialog exists? " + getSupportFragmentManager().findFragmentByTag("formula_editor_dialog"));
@@ -274,24 +220,8 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 				formulaEditorDialog = (FormulaEditorDialog) getSupportFragmentManager().findFragmentByTag(
 						"formula_editor_dialog");
 			}
-			formulaEditorDialog.setInputFocusAndFormula(formula);
+			formulaEditorDialog.setInputFormula(formula);
 		}
-	}
-
-	public void setFormulaEditorDialog(FormulaEditorDialog currentFormulaEditorDialog) {
-		this.formulaEditorDialog = currentFormulaEditorDialog;
-	}
-
-	public void setCurrentBrick(Brick brick) {
-	}
-
-	public void setEditorStatus(boolean isActive) {
-		this.editorActive = isActive;
-
-	}
-
-	public boolean isEditorActive() {
-		return this.editorActive;
 	}
 
 }

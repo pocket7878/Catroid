@@ -24,6 +24,7 @@
 package at.tugraz.ist.catroid.formulaeditor;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.text.Editable;
 import android.text.Layout;
@@ -46,12 +47,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	private static final BackgroundColorSpan COLOR_ERROR = new BackgroundColorSpan(0xFFF00000);
 	private static final BackgroundColorSpan COLOR_HIGHLIGHT = new BackgroundColorSpan(0xFFFFFF00);
 
-	//public static final String[] GROUP_OPERATORS = new String[] { "+", "-", "*", "/", "^" };
-	//public static final String[] GROUP_FUNCTIONS = new String[] { "sin", "cos", "tan", "ln", "log", "sqrt", "rand",
-	//		"abs", "round" }; //only functions with brackets in here plz!!!
-	//	public static final String[] GROUP_SENSORS = new String[] { "X_ACCELERATION_", "Y_ACCELERATION_",
-	//			"Z_ACCELERATION_", "AZIMUTH_ORIENTATION_", "PITCH_ORIENTATION_", "ROLL_ORIENTATION_" };
-
 	public static final int NUMBER = 0;
 	public static final int OPERATOR = 1;
 	public static final int FUNCTION_SEPERATOR = 2;
@@ -60,16 +55,17 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	public static final int BRACKET_OPEN = 5;
 	public static final int SENSOR_VALUE = 6;
 
-	public CatKeyboardView catKeyboardView;
 	private int selectionStartIndex = 0;
 	private int selectionEndIndex = 0;
+	private int absoluteCursorPosition = 0;
 
 	private boolean editMode = false;
 	private Spannable highlightSpan = null;
 	private Spannable errorSpan = null;
 	private int numberOfVisibleLines = 0;
 	private float lineHeight = 0;
-	private int absoluteCursorPosition = 0;
+
+	public CatKeyboardView catKeyboardView;
 	private static FormulaEditorHistory history = null;
 	private Context context;
 
@@ -90,41 +86,32 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		this.context = context;
 	}
 
-	public void init(FormulaEditorDialog dialog, int brickHeight, CatKeyboardView ckv, Context context) {
+	public void init(FormulaEditorDialog dialog, int brickHeight, CatKeyboardView ckv) {
 		this.formulaEditorDialog = dialog;
 		this.setOnTouchListener(this);
 		this.setLongClickable(false);
 		this.setSelectAllOnFocus(false);
-		//this.setEnabled(false);
-		//this.setBackgroundColor(getResources().getColor(R.color.transparent));
 		this.catKeyboardView = ckv;
 		this.setCursorVisible(false);
 
-		//setText(getText(), selectable ? BufferType.SPANNABLE : BufferType.NORMAL);
-		if (brickHeight < 100) { //this height seems buggy for some high bricks, still need it...
+		int orientation = dialog.getResources().getConfiguration().orientation;
+		if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			numberOfVisibleLines = 5;
+		} else if (brickHeight < 100) { //this height seems buggy for some high bricks, still need it...
 			numberOfVisibleLines = 7;
-			this.setLines(numberOfVisibleLines);
 		} else if (brickHeight < 200) {
 			numberOfVisibleLines = 6;
-			this.setLines(numberOfVisibleLines);
 		} else {
 			numberOfVisibleLines = 4;
-			this.setLines(numberOfVisibleLines);
+
 		}
+		this.setLines(numberOfVisibleLines);
 
 	}
 
 	public void enterNewFormula(String formulaAsText) {
-		//setEnabled(true);
 		setText(formulaAsText);
-		//formulaSaved();
-		//		absoluteCursorPosition = formulaAsText.length();
-		//		setSelection(absoluteCursorPosition - 1);
-		//		selectionStartIndex = 0;
-		//		selectionEndIndex = formulaAsText.length();
-		//		highlightSelection();
 		quickSelect();
-		editMode = true;
 
 		if (history == null) {
 			history = new FormulaEditorHistory(formulaAsText, absoluteCursorPosition, selectionStartIndex,
@@ -153,7 +140,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		}
 		setInputTextAndPosition(currentState.text, currentState.cursorPosition, currentState.selectionStart,
 				currentState.selectionEnd);
-		//setEnabled(true);
 		formulaEditorDialog.makeUndoButtonClickable(history.undoIsPossible());
 		formulaEditorDialog.makeRedoButtonClickable(history.redoIsPossible());
 		if (history.hasUnsavedChanges()) {
@@ -183,9 +169,9 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 		if (layout != null && getText().length() > 0) {
 
-			if (absoluteCursorPosition > getText().length()) { // fix for landscape switches
-				absoluteCursorPosition = getText().length() - 1;
-			}
+			//			if (absoluteCursorPosition > getText().length()) { // fix for landscape switches
+			//				absoluteCursorPosition = getText().length() - 1;
+			//			}
 
 			lineHeight = layout.getSpacingMultiplier() * this.getTextSize() + 5;
 			horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);

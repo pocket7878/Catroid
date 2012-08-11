@@ -56,6 +56,8 @@
 	    android:id="@+id/formula_editor_green_bar_top"
 	    android:layout_width = "wrap_content"
 	    android:layout_height = "5dp"
+	    android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
 	    android:background="@drawable/green_bar"
 	    android:layout_above="@id/formula_editor_edit_field"
     />
@@ -64,6 +66,8 @@
 	    android:id="@+id/formula_editor_green_bar_bottom"
 	    android:layout_width = "wrap_content"
 	    android:layout_height = "5dp"
+	    android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
 	    android:background="@drawable/green_bar"
 	    android:layout_below="@id/formula_editor_edit_field"
 	/>  

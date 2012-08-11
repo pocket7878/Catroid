@@ -31,8 +31,8 @@
 	android:shape="rectangle">
 
     <gradient
-        android:startColor="@color/white"
-        android:endColor="@color/white"
+        android:startColor="@color/formula_editor_background"
+        android:endColor="@color/formula_editor_background"
         android:centerColor="#5DFC0A" />
     
 </shape>

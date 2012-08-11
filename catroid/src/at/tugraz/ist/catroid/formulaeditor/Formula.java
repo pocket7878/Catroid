@@ -24,6 +24,7 @@ package at.tugraz.ist.catroid.formulaeditor;
 
 import java.io.Serializable;
 
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.EditText;
 
@@ -34,6 +35,7 @@ public class Formula implements Serializable {
 	private transient FormulaElement root;
 	private String textRepresentation = "0";
 	private transient Integer formulaTextFieldId = null;
+	private transient Drawable originalEditTextDrawable = null;
 
 	//	public Formula() {
 	//		root = new FormulaElement(FormulaElement.ElementType.VALUE, "0", null);
@@ -106,4 +108,32 @@ public class Formula implements Serializable {
 			formulaTextField.setText(formulaString);
 		}
 	}
+
+	public void removeTextFieldHighlighting(View brickView) {
+		EditText formulaTextField = (EditText) brickView.findViewById(formulaTextFieldId);
+		if (originalEditTextDrawable == null) {
+			originalEditTextDrawable = formulaTextField.getBackground();
+		}
+		int width = formulaTextField.getWidth();
+		formulaTextField.setBackgroundDrawable(originalEditTextDrawable);
+		formulaTextField.setWidth(width);
+	}
+
+	//	public void highlightTextField(View brickView) {
+	//		EditText formulaTextField = (EditText) brickView.findViewById(formulaTextFieldId);
+	//		formulaTextField.setTextColor(0xf0f0);
+	//	}
+
+	public void highlightTextField(View brickView, Drawable id) {
+		EditText formulaTextField = (EditText) brickView.findViewById(formulaTextFieldId);
+
+		if (originalEditTextDrawable == null) {
+			originalEditTextDrawable = formulaTextField.getBackground();
+		}
+		int width = formulaTextField.getWidth();
+		width = Math.max(width, 130);
+		formulaTextField.setBackgroundDrawable(id);
+		formulaTextField.setWidth(width);
+	}
+
 }
