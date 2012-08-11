@@ -99,6 +99,7 @@ public class LiveWallpaper extends WallpaperService {
 		@Override
 		public void onSurfaceDestroyed(SurfaceHolder holder) {
 			super.onSurfaceDestroyed(holder);
+			WallpaperCostume.getInstance().resetCostume();
 			mVisible = false;
 			mHandler.removeCallbacks(mUpdateDisplay);
 		}

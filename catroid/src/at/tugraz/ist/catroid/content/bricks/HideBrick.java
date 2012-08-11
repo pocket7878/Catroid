@@ -72,7 +72,7 @@ public class HideBrick implements Brick {
 	}
 
 	public void executeLiveWallpaper() {
-		WallpaperCostume.getInstance().setCostumeHidden(true);
+		WallpaperCostume.getInstance().setCostumeHiddenFlag(true);
 
 	}
 }

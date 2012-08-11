@@ -29,6 +29,7 @@ import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Costume;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.Project;
 
 public class WallpaperCostume {
 	private static WallpaperCostume wallpaperCostume;
@@ -42,19 +43,18 @@ public class WallpaperCostume {
 	private float top;
 	private float left;
 
-	private int screenWidthHalf;
-	private int screenHeightHalf;
+	private int centerXCoord;
+	private int centerYCoord;
 
-	private boolean coordsSetManually = false;
-	private boolean costumeHidden = false;
-	private boolean sizeSetManually = false;
+	private boolean coordsSetManuallyFlag = false;
+	private boolean costumeHiddenFlag = false;
 
 	private WallpaperCostume() {
 
 		Project currentProject = ProjectManager.getInstance().getCurrentProject();
 
-		this.screenHeightHalf = currentProject.virtualScreenHeight / 2;
-		this.screenWidthHalf = currentProject.virtualScreenWidth / 2;
+		this.centerYCoord = currentProject.virtualScreenHeight / 2;
+		this.centerXCoord = currentProject.virtualScreenWidth / 2;
 	}
 
 	public static WallpaperCostume getInstance() {
@@ -65,28 +65,51 @@ public class WallpaperCostume {
 		return wallpaperCostume;
 	}
 
+	public void resetCostume() {
+		this.coordsSetManuallyFlag = false;
+		this.costumeHiddenFlag = false;
+	}
+
 	public void initCostumeToDraw(CostumeData costumeData, boolean isBackground) {
 		this.costumeData = costumeData;
 		Bitmap bitmap = costumeData.getImageBitmap();
 
-		if (!coordsSetManually) {
-			this.top = screenWidthHalf - (bitmap.getWidth() / 2);
-			this.left = screenHeightHalf - (bitmap.getHeight() / 2);
-		}
-
 		if (isBackground) {
 			this.background = bitmap;
-		} else {
-			this.costume = bitmap;
+			return;
+		}
 
+		this.costume = bitmap;
+
+		if (!coordsSetManuallyFlag) {
+			setTop(0);
+			setLeft(0);
 		}
 
 	}
 
-	public void initSetSize(Sprite sprite, Bitmap bitmap, double size) {
-		if (sprite.getName().equals("Background")) {
-			bitmap.setDensity((int) size);
-		}
+	public float getTop() {
+		return top;
+	}
+
+	public void setTop(float x) {
+		this.top = centerXCoord - (this.costume.getWidth() / 2) + x;
+	}
+
+	public float getLeft() {
+		return left;
+	}
+
+	public void setLeft(float y) {
+		this.left = centerYCoord - (this.costume.getHeight() / 2) - y;
+	}
+
+	public void changeTopBy(float x) {
+		this.top += x;
+	}
+
+	public void changeLeftBy(float y) {
+		this.left -= y;
 	}
 
 	public boolean touchedInsideTheCostume(float x, float y) {
@@ -117,24 +140,6 @@ public class WallpaperCostume {
 		this.background = background;
 	}
 
-	public float getTop() {
-		return top;
-	}
-
-	public void setTop(float top) {
-		this.top = top;
-		coordsSetManually = true;
-	}
-
-	public float getLeft() {
-		return left;
-	}
-
-	public void setLeft(float left) {
-		this.left = left;
-		coordsSetManually = true;
-	}
-
 	public CostumeData getCostumeData() {
 		return costumeData;
 	}
@@ -144,11 +149,23 @@ public class WallpaperCostume {
 	}
 
 	public boolean isCostumeHidden() {
-		return costumeHidden;
+		return costumeHiddenFlag;
 	}
 
-	public void setCostumeHidden(boolean hideCostume) {
-		this.costumeHidden = hideCostume;
+	public void setCostumeHiddenFlag(boolean hideCostume) {
+		this.costumeHiddenFlag = hideCostume;
+	}
+
+	public boolean isCoordsSetManuallyFlag() {
+		return coordsSetManuallyFlag;
+	}
+
+	public boolean isCoordsSetManually() {
+		return coordsSetManuallyFlag;
+	}
+
+	public void setCoordsSetManuallyFlag(boolean coordsSetManuallyFlag) {
+		this.coordsSetManuallyFlag = coordsSetManuallyFlag;
 	}
 
 }

@@ -124,5 +124,6 @@ public class SetSizeToBrick implements Brick, OnClickListener {
 		//			CostumeData bitmap;
 		//			WallpaperCostume.getInstance().initSetSize(getSprite(), (CostumeData) bitmap, size);
 		//		}
+
 	}
 }
