@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -32,7 +33,6 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class WaitBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
@@ -43,7 +43,6 @@ public class WaitBrick implements Brick, OnClickListener {
 	private Formula timeToWaitInSecondsFormula;
 
 	private transient Brick instance = null;
-	private transient FormulaEditorDialog formulaEditor;
 
 	public WaitBrick(Sprite sprite, int timeToWaitInMilliseconds) {
 		this.sprite = sprite;
@@ -123,22 +122,14 @@ public class WaitBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
+		ScriptTabActivity activity = null;
+		if (view.getContext().getClass().equals(ScriptTabActivity.class)) {
+			activity = (ScriptTabActivity) view.getContext();
+		} else {
+			activity = (ScriptTabActivity) ((ContextWrapper) view.getContext()).getBaseContext();
+		}
+
 		activity.showFormulaEditorDialog(this, timeToWaitInSecondsFormula);
-
-		//if (!FormulaEditorDialog.mScriptTabActivity.isEditorActive()) {
-		//FormulaEditorDialog.mScriptTabActivity.setEditorStatus(true);
-		//		FragmentTransaction ft = activity.getSupportFragmentManager().beginTransaction();
-		//		FormulaEditorDialog newFragment = new FormulaEditorDialog(activity, instance);
-		//		newFragment.show(ft, "dialog");
-		//
-		//		formulaEditor = new FormulaEditorDialog(activity, instance);
-		//		formulaEditor.show(activity.getSupportFragmentManager(), "formula_editor");
-
-		//FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
-		//FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
-		//}
-		//newFragment.setInputFocusAndFormula(this.timeToWaitInSecondsFormula);
 
 	}
 }

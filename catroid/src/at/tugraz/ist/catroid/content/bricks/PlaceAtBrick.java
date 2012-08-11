@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -128,65 +129,24 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		final Context context = view.getContext();
-
-		if (!FormulaEditorDialog.mScriptTabActivity.isEditorActive()) {
-			FormulaEditorDialog.mScriptTabActivity.setEditorStatus(true);
-			formulaEditor = new FormulaEditorDialog(context, instance);
-
-			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
-			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
+		ScriptTabActivity activity = null;
+		if (view.getContext().getClass().equals(ScriptTabActivity.class)) {
+			activity = (ScriptTabActivity) view.getContext();
+		} else {
+			activity = (ScriptTabActivity) ((ContextWrapper) view.getContext()).getBaseContext();
 		}
+
 		switch (view.getId()) {
 			case R.id.brick_place_at_x_edit_text:
-				formulaEditor.setInputFocusAndFormula(xPositionFormula);
+				activity.showFormulaEditorDialog(this, xPositionFormula);
 				break;
 
 			case R.id.brick_place_at_y_edit_text:
-				formulaEditor.setInputFocusAndFormula(yPositionFormula);
-				break;
-			default:
-				formulaEditor.setInputFocusAndFormula(null);
+				activity.showFormulaEditorDialog(this, yPositionFormula);
 				break;
 
 		}
 
 	}
-
-	//		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-	//		final EditText input = new EditText(context);
-	//		if (view.getId() == R.id.brick_place_at_x_edit_text) {
-	//			input.setText(String.valueOf(xPosition));
-	//		} else if (view.getId() == R.id.brick_place_at_y_edit_text) {
-	//			input.setText(String.valueOf(yPosition));
-	//		}
-	//		input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
-	//		input.setSelectAllOnFocus(true);
-	//		dialog.setView(input);
-	//		dialog.setOnCancelListener((OnCancelListener) context);
-	//		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
-	//			public void onClick(DialogInterface dialog, int which) {
-	//				try {
-	//					if (view.getId() == R.id.brick_place_at_x_edit_text) {
-	//						xPosition = Integer.parseInt(input.getText().toString());
-	//					} else if (view.getId() == R.id.brick_place_at_y_edit_text) {
-	//						yPosition = Integer.parseInt(input.getText().toString());
-	//					}
-	//				} catch (NumberFormatException exception) {
-	//					Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
-	//				}
-	//				dialog.cancel();
-	//			}
-	//		});
-	//		dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
-	//			public void onClick(DialogInterface dialog, int which) {
-	//				dialog.cancel();
-	//			}
-	//		});
-	//
-	//		AlertDialog finishedDialog = dialog.create();
-	//		finishedDialog.setOnShowListener(Utils.getBrickDialogOnClickListener(context, input));
-	//
-	//		finishedDialog.show();
 
 }

@@ -28,7 +28,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -73,17 +72,15 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 	private ViewPager viewPager;
 	private TabsPagerAdapter tabsAdapter;
 
-	private FormulaEditorDialog formulaEditorDialog;
-	private Brick currentBrick;
+	private FormulaEditorDialog formulaEditorDialog = null;
 	private boolean editorActive = false;
 
 	private TabHost tabHost;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.i("info", "" + savedInstanceState);
 		super.onCreate(savedInstanceState);
-		formulaEditorDialog = null;
-		currentBrick = null;
 
 		setContentView(R.layout.activity_scripttab);
 		Utils.loadProjectIfNeeded(this);
@@ -112,61 +109,14 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 		setupTab(costumeIcon, costumeLabel, CostumeFragment.class, null);
 		setupTab(R.drawable.ic_tab_sounds_selector, getString(R.string.sounds), SoundFragment.class, null);
 
+		//		if (savedInstanceState != null) {
+		//			Log.i("info", "" + savedInstanceState);
+		//			formulaEditorDialog = (FormulaEditorDialog) getSupportFragmentManager().getFragment(savedInstanceState,
+		//					"formEd");
+		//			formulaEditorDialog.show(getSupportFragmentManager(), "formula_editor_dialog");
+		//		}
+
 		FormulaEditorDialog.setOwnerActivity(this);
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-
-		//		int brickIndexToSave = -1;
-		//		int scriptIndexToSave = -1;
-		//
-		//		if (this.currentBrick != null) {
-		//			if (this.isEditorActive()) {
-		//
-		//				Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
-		//
-		//				for (int h = 0; h < currentSprite.getNumberOfScripts(); h++) {
-		//
-		//					Script script = ProjectManager.getInstance().getCurrentSprite().getScript(h);
-		//					ArrayList<Brick> brickList = script.getBrickList();
-		//
-		//					for (int i = 0; i < brickList.size(); i++) {
-		//						if (brickList.get(i).equals(this.currentBrick)) {
-		//							brickIndexToSave = i;
-		//							scriptIndexToSave = h;
-		//						}
-		//					}
-		//				}
-		//
-		//				View view = new View(this);
-		//				view.setId(R.id.formula_editor_ok_button);
-		//				//this.currentFormulaEditorDialog.onClick(view);
-		//				this.setEditorStatus(false);
-		//			}
-		//		}
-		//
-		//		outState.putInt("brickIndex", brickIndexToSave);
-		//		outState.putInt("scriptIndex", scriptIndexToSave);
-		//
-		super.onSaveInstanceState(outState);
-	}
-
-	@Override
-	public void onRestoreInstanceState(Bundle savedInstanceState) {
-
-		//		int savedBrickIndex = savedInstanceState.getInt("brickIndex");
-		//		int savedScriptIndex = savedInstanceState.getInt("scriptIndex");
-		//		Log.i("info", "savedBrickIndex: " + savedBrickIndex);
-		//		Log.i("info", "savedScriptIndex: " + savedScriptIndex);
-		//
-		//		if (savedBrickIndex != -1) {
-		//			Brick oldBrick = ProjectManager.getInstance().getCurrentSprite().getScript(savedScriptIndex).getBrickList()
-		//					.get(savedBrickIndex);
-		//			oldBrick.onClick(new View(this));
-		//		}
-
-		super.onRestoreInstanceState(savedInstanceState);
 	}
 
 	@Override
@@ -193,6 +143,19 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 		return super.onOptionsItemSelected(item);
 
 	}
+
+	//	@Override
+	//	protected void onSaveInstanceState(Bundle outState) {
+	//		if (getSupportFragmentManager().findFragmentByTag("formula_editor_dialog") != null) {
+	//			getSupportFragmentManager().putFragment(outState, "formEd", formulaEditorDialog);
+	//			//getSupportFragmentManager().beginTransaction().remove(formulaEditorDialog).commit();
+	//			//formulaEditorDialog.dismiss();
+	//		}
+	//		//outState.putBoolean("formulaEditorStatus", formulaEditorDialog.isActive());
+	//		//getSupportFragmentManager().saveFragmentInstanceState(formulaEditorDialog)
+	//
+	//		super.onSaveInstanceState(outState);
+	//	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -301,22 +264,25 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 
 	public void showFormulaEditorDialog(Brick brick, Formula formula) {
 
-		if (formulaEditorDialog == null) {
-			formulaEditorDialog = new FormulaEditorDialog(this, brick, formula);
-			formulaEditorDialog.show(getSupportFragmentManager(), "dialog_formula_editor");
+		Log.i("info", "FEDialog exists? " + getSupportFragmentManager().findFragmentByTag("formula_editor_dialog"));
+
+		if (getSupportFragmentManager().findFragmentByTag("formula_editor_dialog") == null) {
+			formulaEditorDialog = new FormulaEditorDialog(brick, formula);
+			formulaEditorDialog.show(getSupportFragmentManager(), "formula_editor_dialog");
 		} else {
+			if (formulaEditorDialog == null) {
+				formulaEditorDialog = (FormulaEditorDialog) getSupportFragmentManager().findFragmentByTag(
+						"formula_editor_dialog");
+			}
 			formulaEditorDialog.setInputFocusAndFormula(formula);
 		}
-		//((FormulaEditorDialog)getSupportFragmentManager().findFragmentByTag("dialog_formula_editor"));
-
 	}
 
-	public void setCurrentFormulaEditorDialog(FormulaEditorDialog currentFormulaEditorDialog) {
+	public void setFormulaEditorDialog(FormulaEditorDialog currentFormulaEditorDialog) {
 		this.formulaEditorDialog = currentFormulaEditorDialog;
 	}
 
 	public void setCurrentBrick(Brick brick) {
-		this.currentBrick = brick;
 	}
 
 	public void setEditorStatus(boolean isActive) {
@@ -328,102 +294,4 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 		return this.editorActive;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.support.v4.app.FragmentActivity#onKeyDown(int, android.view.KeyEvent)
-	 */
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		Log.i("rolf", "ScriptTab key down!");
-		// TODO Auto-generated method stub
-		return super.onKeyDown(keyCode, event);
-	}
-
-	//	@Override
-	//	protected void onPrepareDialog(int id, Dialog dialog) {
-	//		switch (id) {
-	//		//			case DIALOG_RENAME_SOUND:
-	//		//				EditText soundTitleInput = (EditText) dialog.findViewById(R.id.dialog_rename_sound_editText);
-	//		//				soundTitleInput.setText(selectedSoundInfo.getTitle());
-	//		//				break;
-	//		//			case DIALOG_RENAME_COSTUME:
-	//		//				EditText costumeTitleInput = (EditText) dialog.findViewById(R.id.dialog_rename_costume_editText);
-	//		//				costumeTitleInput.setText(selectedCostumeData.getCostumeName());
-	//		//				break;
-	//			case DIALOG_FORMULA:
-	//				//				dialog = this.currentFormulaEditorDialog;
-	//				Log.i("info", "case DIALOG_FORMULA" + " dialog: " + dialog + " currentFormulaEditorDialog: "
-	//						+ this.currentFormulaEditorDialog);
-	//				//				this.showDialog(DIALOG_FORMULA, null);
-	//				break;
-	//		}
-	//	}
-
-	//	public void handlePositiveButtonRenameSound(View v) {
-	//		renameSoundDialog.handleOkButton();
-	//	}
-	//
-	//	public void handleNegativeButtonRenameSound(View v) {
-	//		dismissDialog(DIALOG_RENAME_SOUND);
-	//	}
-	//
-	//	public void handlePositiveButtonRenameCostume(View v) {
-	//		renameCostumeDialog.handleOkButton();
-	//	}
-	//
-	//	public void handleNegativeButtonRenameCostume(View v) {
-	//		dismissDialog(DIALOG_RENAME_COSTUME);
-	//	}
-	//
-	//	public void handlePositiveButtonDeleteCostume(View v) {
-	//		deleteCostumeDialog.handleOkButton();
-	//	}
-	//
-	//	public void handleNegativeButtonDeleteCostume(View v) {
-	//		dismissDialog(DIALOG_DELETE_COSTUME);
-	//	}
-	//
-	//	public void handlePositiveButtonDeleteSound(View v) {
-	//		deleteSoundDialog.handleOkButton();
-	//	}
-	//
-	//	public void handleNegativeButtonDeleteSound(View v) {
-	//		dismissDialog(DIALOG_DELETE_SOUND);
-	//	}
-
-	//	@Override
-	//	public void onDismiss(DialogInterface dialogInterface) {
-	//		if (!dontcreateNewBrick) {
-	//			if (!isCanceled) {
-	//				if (addScript) {
-	//
-	//					((ScriptActivity) getCurrentActivity()).setAddNewScript();
-	//					addScript = false;
-	//				}
-	//
-	//				((ScriptActivity) getCurrentActivity()).updateAdapterAfterAddNewBrick(dialogInterface);
-	//
-	//			}
-	//			isCanceled = false;
-	//		}
-	//		dontcreateNewBrick = false;
-	//	}
-
-	//	@Override
-	//	public void onCancel(DialogInterface dialog) {
-	//		isCanceled = true;
-	//	}
-	//
-	//	public void setNewScript() {
-	//		addScript = true;
-	//	}
-	//
-	//	public void setDontcreateNewBrick() {
-	//		dontcreateNewBrick = true;
-	//	}
-
-	//	public AddCostumeDialog getAddCostumeDialog() {
-	//		return addCostumeDialog;
-	//	}
 }

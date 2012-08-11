@@ -646,6 +646,8 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	public void endEdit() {
 		history.clear();
+		formulaEditorDialog.makeRedoButtonClickable(false);
+		formulaEditorDialog.makeUndoButtonClickable(false);
 	}
 
 	public void quickSelect() {
