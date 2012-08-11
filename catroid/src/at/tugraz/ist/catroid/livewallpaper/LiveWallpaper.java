@@ -60,7 +60,7 @@ public class LiveWallpaper extends WallpaperService {
 		private boolean startScript = false;
 		private boolean tappedScript = false;
 
-		private boolean licence = true;
+		private String licence = " licence ";
 
 		private WallpaperCostume wallpaperCostume = WallpaperCostume.getInstance();
 
@@ -187,8 +187,8 @@ public class LiveWallpaper extends WallpaperService {
 		 */
 		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 			// TODO Auto-generated method stub
-			licence = sharedPreferences.getBoolean("licence", true);
-		}
-	}
 
+		}
+
+	}
 }

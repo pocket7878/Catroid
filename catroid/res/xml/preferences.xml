@@ -22,14 +22,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" 
-    android:title="@string/livewallpaper_settings_title"
+    android:title="@string/settings"
 	android:key="livewallpaper_settings">
-
-	<CheckBoxPreference android:key="livewallpaper_settings"
-		android:summary="@string/livewallpaper_settings"
-		android:title="@string/livewallpaper_settings_title"
-		android:entries="@string/livewallpaper_settings"/>
-	
+   	
+      	<ListPreference
+                android:title="@string/livewallpaper_settings_title"
+                android:key="FirstEditTextPref"
+                android:summary="@string/livewallpaper_licence_summary"
+                android:entries="@array/list"
+                android:entryValues="@array/list" />
+                
+        	
     <PreferenceCategory android:title="@string/pref_category_mindstorm" >
         <CheckBoxPreference
             android:defaultValue="false"

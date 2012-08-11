@@ -18,7 +18,6 @@
  */
 package at.tugraz.ist.catroid.livewallpaper;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import at.tugraz.ist.catroid.R;
@@ -27,38 +26,12 @@ import at.tugraz.ist.catroid.R;
  * @author simgeszgn
  * 
  */
-public class LiveWallpaperSettings extends PreferenceActivity implements
-		SharedPreferences.OnSharedPreferenceChangeListener {
+public class LiveWallpaperSettings extends PreferenceActivity {
 
 	@Override
-	protected void onCreate(Bundle icicle) {
-		super.onCreate(icicle);
-		getPreferenceManager().setSharedPreferencesName(LiveWallpaper.SHARED_PREFS_NAME);
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
-		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	protected void onDestroy() {
-		getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-		super.onDestroy();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * android.content.SharedPreferences.OnSharedPreferenceChangeListener#onSharedPreferenceChanged(android.content.
-	 * SharedPreferences, java.lang.String)
-	 */
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-		// TODO Auto-generated method stub
 
 	}
-
 }
