@@ -47,7 +47,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.content.bricks.Brick;
 
 public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyboardActionListener {
 
@@ -58,7 +57,8 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 	//	CatKeyboard symbols_shifted;
 	private CatKeyboard symbolsFunctions;
 	private CatKeyboard symbolsSensors;
-	private Brick currentBrick;
+
+	//private Brick currentBrick;
 
 	public CatKeyboardView(Context context, AttributeSet attrs) {
 		super(context, attrs);

@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -33,15 +34,11 @@ import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 	private static final long serialVersionUID = 1L;
 
 	private Formula timesToRepeatFormula;
-
-	private transient Brick instance = null;
-	private transient FormulaEditorDialog formulaEditor;
 
 	public RepeatBrick(Sprite sprite, int timesToRepeat) {
 		this.sprite = sprite;
@@ -79,10 +76,6 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
-		if (instance == null) {
-			instance = this;
-		}
-
 		View view = View.inflate(context, R.layout.brick_repeat, null);
 
 		TextView text = (TextView) view.findViewById(R.id.brick_repeat_text_view);
@@ -105,16 +98,14 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		final Context context = view.getContext();
-
-		if (!FormulaEditorDialog.mScriptTabActivity.isEditorActive()) {
-			FormulaEditorDialog.mScriptTabActivity.setEditorStatus(true);
-			formulaEditor = new FormulaEditorDialog(context, instance);
-
-			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
-			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
+		ScriptTabActivity activity = null;
+		if (view.getContext().getClass().equals(ScriptTabActivity.class)) {
+			activity = (ScriptTabActivity) view.getContext();
+		} else {
+			activity = (ScriptTabActivity) ((ContextWrapper) view.getContext()).getBaseContext();
 		}
-		formulaEditor.setInputFocusAndFormula(this.timesToRepeatFormula);
+
+		activity.showFormulaEditorDialog(this, timesToRepeatFormula);
 
 	}
 

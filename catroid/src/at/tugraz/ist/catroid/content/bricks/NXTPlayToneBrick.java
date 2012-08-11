@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -33,7 +34,6 @@ import at.tugraz.ist.catroid.LegoNXT.LegoNXT;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class NXTPlayToneBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
@@ -49,9 +49,6 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 
 	private Formula frequencyFormula;
 	private Formula durationInMsFormula;
-
-	private transient Brick instance = null;
-	private transient FormulaEditorDialog formulaEditor;
 
 	public NXTPlayToneBrick(Sprite sprite, int hertz, int duration) {
 		this.sprite = sprite;
@@ -101,9 +98,6 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 
 	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
-		if (instance == null) {
-			instance = this;
-		}
 
 		View brickView = View.inflate(context, R.layout.brick_nxt_play_tone, null);
 
@@ -139,24 +133,19 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		final Context context = view.getContext();
-
-		if (!FormulaEditorDialog.mScriptTabActivity.isEditorActive()) {
-			FormulaEditorDialog.mScriptTabActivity.setEditorStatus(true);
-			formulaEditor = new FormulaEditorDialog(context, instance);
+		ScriptTabActivity activity = null;
+		if (view.getContext().getClass().equals(ScriptTabActivity.class)) {
+			activity = (ScriptTabActivity) view.getContext();
+		} else {
+			activity = (ScriptTabActivity) ((ContextWrapper) view.getContext()).getBaseContext();
 		}
 
-		FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
-		FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
 		switch (view.getId()) {
 			case R.id.nxt_tone_freq_edit_text:
-				formulaEditor.setInputFocusAndFormula(frequencyFormula);
+				activity.showFormulaEditorDialog(this, frequencyFormula);
 				break;
 			case R.id.nxt_tone_duration_edit_text:
-				formulaEditor.setInputFocusAndFormula(durationInMsFormula);
-				break;
-			default:
-				formulaEditor.setInputFocusAndFormula(null);
+				activity.showFormulaEditorDialog(this, durationInMsFormula);
 				break;
 		}
 

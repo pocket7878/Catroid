@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -32,7 +33,6 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class TurnLeftBrick implements Brick, OnClickListener {
 
@@ -42,9 +42,6 @@ public class TurnLeftBrick implements Brick, OnClickListener {
 	private transient View view;
 
 	private Formula degreesFormula;
-
-	private transient Brick instance = null;
-	private transient FormulaEditorDialog formulaEditor;
 
 	public TurnLeftBrick(Sprite sprite, double degrees) {
 		this.sprite = sprite;
@@ -73,9 +70,6 @@ public class TurnLeftBrick implements Brick, OnClickListener {
 
 	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
-		if (instance == null) {
-			instance = this;
-		}
 
 		view = View.inflate(context, R.layout.brick_turn_left, null);
 
@@ -103,44 +97,14 @@ public class TurnLeftBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		final Context context = view.getContext();
-
-		if (!FormulaEditorDialog.mScriptTabActivity.isEditorActive()) {
-			FormulaEditorDialog.mScriptTabActivity.setEditorStatus(true);
-			formulaEditor = new FormulaEditorDialog(context, instance);
-
-			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
-			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
+		ScriptTabActivity activity = null;
+		if (view.getContext().getClass().equals(ScriptTabActivity.class)) {
+			activity = (ScriptTabActivity) view.getContext();
+		} else {
+			activity = (ScriptTabActivity) ((ContextWrapper) view.getContext()).getBaseContext();
 		}
-		formulaEditor.setInputFocusAndFormula(this.degreesFormula);
 
-		//		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		//		final EditText input = new EditText(context);
-		//		input.setText(String.valueOf(degrees));
-		//		input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-		//		input.setSelectAllOnFocus(true);
-		//		dialog.setView(input);
-		//		dialog.setOnCancelListener((OnCancelListener) context);
-		//		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
-		//			public void onClick(DialogInterface dialog, int which) {
-		//				try {
-		//					degrees = Double.parseDouble(input.getText().toString());
-		//				} catch (NumberFormatException exception) {
-		//					Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
-		//				}
-		//				dialog.cancel();
-		//			}
-		//		});
-		//		dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
-		//			public void onClick(DialogInterface dialog, int which) {
-		//				dialog.cancel();
-		//			}
-		//		});
-		//
-		//		AlertDialog finishedDialog = dialog.create();
-		//		finishedDialog.setOnShowListener(Utils.getBrickDialogOnClickListener(context, input));
-		//
-		//		finishedDialog.show();
+		activity.showFormulaEditorDialog(this, degreesFormula);
 
 	}
 }

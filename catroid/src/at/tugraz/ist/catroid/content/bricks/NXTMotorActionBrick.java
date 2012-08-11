@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -37,7 +38,6 @@ import at.tugraz.ist.catroid.LegoNXT.LegoNXT;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class NXTMotorActionBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
@@ -57,9 +57,6 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 	private transient EditText editSpeed;
 
 	private Formula speedFormula;
-
-	private transient Brick instance = null;
-	private transient FormulaEditorDialog formulaEditor;
 
 	protected Object readResolve() {
 		if (motor != null) {
@@ -123,10 +120,6 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
-		if (instance == null) {
-			instance = this;
-		}
-
 		View brickView = View.inflate(context, R.layout.brick_nxt_motor_action, null);
 
 		TextView textSpeed = (TextView) brickView.findViewById(R.id.motor_action_speed_text_view);
@@ -169,54 +162,14 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		final Context context = view.getContext();
-
-		if (!FormulaEditorDialog.mScriptTabActivity.isEditorActive()) {
-			FormulaEditorDialog.mScriptTabActivity.setEditorStatus(true);
-			formulaEditor = new FormulaEditorDialog(context, instance);
-
-			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
-			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
+		ScriptTabActivity activity = null;
+		if (view.getContext().getClass().equals(ScriptTabActivity.class)) {
+			activity = (ScriptTabActivity) view.getContext();
+		} else {
+			activity = (ScriptTabActivity) ((ContextWrapper) view.getContext()).getBaseContext();
 		}
-		formulaEditor.setInputFocusAndFormula(this.speedFormula);
 
-		//		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-		//		final EditText input = new EditText(context);
-		//		input.setText(String.valueOf(speed));
-		//		input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
-		//		input.setSelectAllOnFocus(true);
-		//		dialog.setView(input);
-		//		dialog.setOnCancelListener((OnCancelListener) context);
-		//		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
-		//			public void onClick(DialogInterface dialog, int which) {
-		//				try {
-		//					int newSpeed = Integer.parseInt(input.getText().toString());
-		//					if (newSpeed > MAX_SPEED) {
-		//						newSpeed = MAX_SPEED;
-		//						Toast.makeText(context, R.string.number_to_big, Toast.LENGTH_SHORT).show();
-		//					} else if (newSpeed < MIN_SPEED) {
-		//						newSpeed = MIN_SPEED;
-		//						Toast.makeText(context, R.string.number_to_small, Toast.LENGTH_SHORT).show();
-		//					}
-		//					speed = newSpeed;
-		//					speedToSeekBarVal();
-		//				} catch (NumberFormatException exception) {
-		//					Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
-		//				}
-		//				dialog.cancel();
-		//			}
-		//		});
-		//		dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
-		//			public void onClick(DialogInterface dialog, int which) {
-		//				dialog.cancel();
-		//			}
-		//		});
-		//
-		//		AlertDialog finishedDialog = dialog.create();
-		//		finishedDialog.setOnShowListener(Utils.getBrickDialogOnClickListener(context, input));
-		//
-		//		finishedDialog.show();
-
+		activity.showFormulaEditorDialog(this, speedFormula);
 	}
 
 }

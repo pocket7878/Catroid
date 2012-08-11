@@ -23,7 +23,7 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.ContextWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -33,7 +33,6 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
@@ -44,7 +43,6 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 	private Formula changeGhostEffectFormula;
 
 	private transient Brick instance = null;
-	private transient FormulaEditorDialog formulaEditor;
 
 	public ChangeGhostEffectBrick(Sprite sprite, double changeGhostEffect) {
 		this.sprite = sprite;
@@ -109,17 +107,13 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		Log.i("info", "Brick.onClick() editorActive: " + FormulaEditorDialog.mScriptTabActivity.isEditorActive());
-		final Context context = view.getContext();
-
-		if (!FormulaEditorDialog.mScriptTabActivity.isEditorActive()) {
-			FormulaEditorDialog.mScriptTabActivity.setEditorStatus(true);
-			formulaEditor = new FormulaEditorDialog(context, instance);
-
-			Log.i("", "getOwnerActivity()" + FormulaEditorDialog.mScriptTabActivity);
-			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
-			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
+		ScriptTabActivity activity = null;
+		if (view.getContext().getClass().equals(ScriptTabActivity.class)) {
+			activity = (ScriptTabActivity) view.getContext();
+		} else {
+			activity = (ScriptTabActivity) ((ContextWrapper) view.getContext()).getBaseContext();
 		}
-		formulaEditor.setInputFocusAndFormula(this.changeGhostEffectFormula);
+
+		activity.showFormulaEditorDialog(this, changeGhostEffectFormula);
 	}
 }

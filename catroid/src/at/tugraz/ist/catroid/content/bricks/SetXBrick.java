@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -32,7 +33,6 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -44,9 +44,6 @@ public class SetXBrick implements Brick, OnClickListener {
 	private transient View view;
 
 	private Formula xPositionFormula;
-
-	private transient Brick instance = null;
-	private transient FormulaEditorDialog formulaEditor;
 
 	public SetXBrick(Sprite sprite, int xPosition) {
 		this.sprite = sprite;
@@ -79,9 +76,7 @@ public class SetXBrick implements Brick, OnClickListener {
 
 	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
-		if (instance == null) {
-			instance = this;
-		}
+
 		view = View.inflate(context, R.layout.brick_set_x, null);
 
 		TextView textX = (TextView) view.findViewById(R.id.brick_set_x_text_view);
@@ -109,16 +104,13 @@ public class SetXBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		final Context context = view.getContext();
-
-		if (!FormulaEditorDialog.mScriptTabActivity.isEditorActive()) {
-			FormulaEditorDialog.mScriptTabActivity.setEditorStatus(true);
-			formulaEditor = new FormulaEditorDialog(context, instance);
-
-			FormulaEditorDialog.mScriptTabActivity.showDialog(ScriptTabActivity.DIALOG_FORMULA, null);
-			FormulaEditorDialog.mScriptTabActivity.setCurrentBrick(this);
+		ScriptTabActivity activity = null;
+		if (view.getContext().getClass().equals(ScriptTabActivity.class)) {
+			activity = (ScriptTabActivity) view.getContext();
+		} else {
+			activity = (ScriptTabActivity) ((ContextWrapper) view.getContext()).getBaseContext();
 		}
-		formulaEditor.setInputFocusAndFormula(this.xPositionFormula);
 
+		activity.showFormulaEditorDialog(this, xPositionFormula);
 	}
 }

@@ -33,7 +33,6 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -46,9 +45,6 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 
 	@XStreamOmitField
 	private transient View view;
-
-	private transient Brick instance = null;
-	private transient FormulaEditorDialog formulaEditor;
 
 	public PlaceAtBrick(Sprite sprite, int xPosition, int yPosition) {
 		this.sprite = sprite;
@@ -86,10 +82,6 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 
 	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
-
-		if (instance == null) {
-			instance = this;
-		}
 
 		view = View.inflate(context, R.layout.brick_place_at, null);
 		TextView textX = (TextView) view.findViewById(R.id.brick_place_at_x_text_view);

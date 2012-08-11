@@ -37,12 +37,9 @@ import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 public class WaitBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private Sprite sprite;
-
 	private transient View view;
 
 	private Formula timeToWaitInSecondsFormula;
-
-	private transient Brick instance = null;
 
 	public WaitBrick(Sprite sprite, int timeToWaitInMilliseconds) {
 		this.sprite = sprite;
@@ -90,10 +87,6 @@ public class WaitBrick implements Brick, OnClickListener {
 
 	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
-
-		if (instance == null) {
-			instance = this;
-		}
 
 		view = View.inflate(context, R.layout.brick_wait, null);
 
