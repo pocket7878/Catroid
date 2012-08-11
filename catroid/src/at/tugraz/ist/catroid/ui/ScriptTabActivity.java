@@ -22,14 +22,13 @@
  */
 package at.tugraz.ist.catroid.ui;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -37,9 +36,9 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.adapter.TabsPagerAdapter;
@@ -74,7 +73,7 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 	private ViewPager viewPager;
 	private TabsPagerAdapter tabsAdapter;
 
-	private FormulaEditorDialog currentFormulaEditorDialog;
+	private FormulaEditorDialog formulaEditorDialog;
 	private Brick currentBrick;
 	private boolean editorActive = false;
 
@@ -83,7 +82,7 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		currentFormulaEditorDialog = null;
+		formulaEditorDialog = null;
 		currentBrick = null;
 
 		setContentView(R.layout.activity_scripttab);
@@ -119,53 +118,53 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 
-		int brickIndexToSave = -1;
-		int scriptIndexToSave = -1;
-
-		if (this.currentBrick != null) {
-			if (this.isEditorActive()) {
-
-				Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
-
-				for (int h = 0; h < currentSprite.getNumberOfScripts(); h++) {
-
-					Script script = ProjectManager.getInstance().getCurrentSprite().getScript(h);
-					ArrayList<Brick> brickList = script.getBrickList();
-
-					for (int i = 0; i < brickList.size(); i++) {
-						if (brickList.get(i).equals(this.currentBrick)) {
-							brickIndexToSave = i;
-							scriptIndexToSave = h;
-						}
-					}
-				}
-
-				View view = new View(this);
-				view.setId(R.id.formula_editor_ok_button);
-				//this.currentFormulaEditorDialog.onClick(view);
-				this.setEditorStatus(false);
-			}
-		}
-
-		outState.putInt("brickIndex", brickIndexToSave);
-		outState.putInt("scriptIndex", scriptIndexToSave);
-
+		//		int brickIndexToSave = -1;
+		//		int scriptIndexToSave = -1;
+		//
+		//		if (this.currentBrick != null) {
+		//			if (this.isEditorActive()) {
+		//
+		//				Sprite currentSprite = ProjectManager.getInstance().getCurrentSprite();
+		//
+		//				for (int h = 0; h < currentSprite.getNumberOfScripts(); h++) {
+		//
+		//					Script script = ProjectManager.getInstance().getCurrentSprite().getScript(h);
+		//					ArrayList<Brick> brickList = script.getBrickList();
+		//
+		//					for (int i = 0; i < brickList.size(); i++) {
+		//						if (brickList.get(i).equals(this.currentBrick)) {
+		//							brickIndexToSave = i;
+		//							scriptIndexToSave = h;
+		//						}
+		//					}
+		//				}
+		//
+		//				View view = new View(this);
+		//				view.setId(R.id.formula_editor_ok_button);
+		//				//this.currentFormulaEditorDialog.onClick(view);
+		//				this.setEditorStatus(false);
+		//			}
+		//		}
+		//
+		//		outState.putInt("brickIndex", brickIndexToSave);
+		//		outState.putInt("scriptIndex", scriptIndexToSave);
+		//
 		super.onSaveInstanceState(outState);
 	}
 
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 
-		int savedBrickIndex = savedInstanceState.getInt("brickIndex");
-		int savedScriptIndex = savedInstanceState.getInt("scriptIndex");
-		Log.i("info", "savedBrickIndex: " + savedBrickIndex);
-		Log.i("info", "savedScriptIndex: " + savedScriptIndex);
-
-		if (savedBrickIndex != -1) {
-			Brick oldBrick = ProjectManager.getInstance().getCurrentSprite().getScript(savedScriptIndex).getBrickList()
-					.get(savedBrickIndex);
-			oldBrick.onClick(new View(this));
-		}
+		//		int savedBrickIndex = savedInstanceState.getInt("brickIndex");
+		//		int savedScriptIndex = savedInstanceState.getInt("scriptIndex");
+		//		Log.i("info", "savedBrickIndex: " + savedBrickIndex);
+		//		Log.i("info", "savedScriptIndex: " + savedScriptIndex);
+		//
+		//		if (savedBrickIndex != -1) {
+		//			Brick oldBrick = ProjectManager.getInstance().getCurrentSprite().getScript(savedScriptIndex).getBrickList()
+		//					.get(savedBrickIndex);
+		//			oldBrick.onClick(new View(this));
+		//		}
 
 		super.onRestoreInstanceState(savedInstanceState);
 	}
@@ -300,8 +299,20 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 	//		return dialog;
 	//	}
 
+	public void showFormulaEditorDialog(Brick brick, Formula formula) {
+
+		if (formulaEditorDialog == null) {
+			formulaEditorDialog = new FormulaEditorDialog(this, brick, formula);
+			formulaEditorDialog.show(getSupportFragmentManager(), "dialog_formula_editor");
+		} else {
+			formulaEditorDialog.setInputFocusAndFormula(formula);
+		}
+		//((FormulaEditorDialog)getSupportFragmentManager().findFragmentByTag("dialog_formula_editor"));
+
+	}
+
 	public void setCurrentFormulaEditorDialog(FormulaEditorDialog currentFormulaEditorDialog) {
-		this.currentFormulaEditorDialog = currentFormulaEditorDialog;
+		this.formulaEditorDialog = currentFormulaEditorDialog;
 	}
 
 	public void setCurrentBrick(Brick brick) {
@@ -315,6 +326,18 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 
 	public boolean isEditorActive() {
 		return this.editorActive;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.support.v4.app.FragmentActivity#onKeyDown(int, android.view.KeyEvent)
+	 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		Log.i("rolf", "ScriptTab key down!");
+		// TODO Auto-generated method stub
+		return super.onKeyDown(keyCode, event);
 	}
 
 	//	@Override

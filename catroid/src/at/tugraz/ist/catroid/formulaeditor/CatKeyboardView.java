@@ -38,7 +38,6 @@
 
 package at.tugraz.ist.catroid.formulaeditor;
 
-import java.util.ArrayList;
 import java.util.Locale;
 
 import android.content.Context;
@@ -116,20 +115,20 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 		this.editText = editText;
 	}
 
-	public void setCurrentBrick(Brick currentBrick) {
-		this.currentBrick = currentBrick;
-		Log.i("info", "currentBrick:" + this.currentBrick);
-
-		if (this.currentBrick.toString().startsWith("at.tugraz.ist.catroid.content.bricks.NXTMotorActionBri")
-				|| this.currentBrick.toString().startsWith("at.tugraz.catroid.content.bricks.NXTPlayToneBri")) {
-			Log.i("info", "SeekBar Bricket selected:");
-			ArrayList<Key> sensorKeys = (ArrayList<Key>) this.symbolsSensors.getKeys();
-			Key slider = sensorKeys.get(sensorKeys.size() - 3);
-			slider.label = new String("Slider");
-			slider.codes[0] = CatKeyEvent.KEYCODE_SENSOR7;
-
-		}
-	}
+	//	public void setCurrentBrick(Brick currentBrick) {
+	//		this.currentBrick = currentBrick;
+	//		Log.i("info", "currentBrick:" + this.currentBrick);
+	//
+	//		if (this.currentBrick.toString().startsWith("at.tugraz.ist.catroid.content.bricks.NXTMotorActionBri")
+	//				|| this.currentBrick.toString().startsWith("at.tugraz.catroid.content.bricks.NXTPlayToneBri")) {
+	//			Log.i("info", "SeekBar Bricket selected:");
+	//			ArrayList<Key> sensorKeys = (ArrayList<Key>) this.symbolsSensors.getKeys();
+	//			Key slider = sensorKeys.get(sensorKeys.size() - 3);
+	//			slider.label = new String("Slider");
+	//			slider.codes[0] = CatKeyEvent.KEYCODE_SENSOR7;
+	//
+	//		}
+	//	}
 
 	@Override
 	protected boolean onLongPress(Key key) {
