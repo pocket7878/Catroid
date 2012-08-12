@@ -24,8 +24,6 @@ package at.tugraz.ist.catroid.formulaeditor;
 
 import java.util.Stack;
 
-import android.util.Log;
-
 public class FormulaEditorHistory {
 
 	private static final int MAXIMUM_HISTORY_LENGTH = 15;
@@ -50,10 +48,9 @@ public class FormulaEditorHistory {
 			undoStack.push(current);
 		}
 		current = new FormulaEditorHistoryElement(text, cursorPosition, selectionStart, selectionEnd);
-		//undoStack.push(new FormulaEditorHistoryElement(text, cursorPosition, selectionStart, selectionEnd));
 		redoStack.clear();
 		hasUnsavedChanges = true;
-		Log.i("info", "history size: " + undoStack.size());
+		//Log.i("info", "history size: " + undoStack.size());
 		if (undoStack.size() > MAXIMUM_HISTORY_LENGTH) {
 			undoStack.removeElementAt(0);
 		}
@@ -61,23 +58,19 @@ public class FormulaEditorHistory {
 	}
 
 	public FormulaEditorHistoryElement backward() {
-		//FormulaEditorHistoryElement topElement = null;
 		redoStack.push(current);
 		hasUnsavedChanges = true;
 		if (!undoStack.empty()) {
 			current = undoStack.pop();
-			//redoStack.push(current);
 		}
 		return current;
 	}
 
 	public FormulaEditorHistoryElement forward() {
-		//FormulaEditorHistoryElement bottomElement = null;
 		undoStack.push(current);
 		hasUnsavedChanges = true;
 		if (!redoStack.empty()) {
 			current = redoStack.pop();
-			//undoStack.push(bottomElement);
 		}
 		return current;
 	}

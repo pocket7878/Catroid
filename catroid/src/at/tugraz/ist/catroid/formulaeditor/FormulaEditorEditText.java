@@ -637,6 +637,9 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	}
 
 	public void quickSelect() {
+		if (getText().length() < 1) {
+			return;
+		}
 		selectionStartIndex = 0;
 		selectionEndIndex = getText().length();
 		absoluteCursorPosition = selectionEndIndex;

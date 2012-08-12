@@ -28,7 +28,6 @@ import java.util.Vector;
 
 import android.graphics.Point;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -70,7 +69,7 @@ public class CatKeyboardClicker {
 	public void clickOnKey(String key) {
 
 		Point keyOnScreen = keyMap.get(key);
-		Log.i("info", "clickOnKey(" + key + ")" + "x:" + keyOnScreen.x + "y:" + keyOnScreen.y);
+		//Log.i("info", "clickOnKey(" + key + ")" + "x:" + keyOnScreen.x + "y:" + keyOnScreen.y);
 		solo.clickOnScreen(keyOnScreen.x, keyOnScreen.y);
 
 	}
@@ -175,7 +174,7 @@ public class CatKeyboardClicker {
 			for (int i = 0; i < buttonsEachColumns; i++) {
 				for (int j = 0; j < buttonsEachRow; j++) {
 
-					Log.i("info", "setUp()" + " i:" + i + " j:" + j + " z:" + z + " h:" + h);
+					//Log.i("info", "setUp()" + " i:" + i + " j:" + j + " z:" + z + " h:" + h);
 					int x = i * buttonWidth + buttonWidth / 2;
 					int y = displayHeight - (j * (int) buttonHeight + (int) buttonHeight / 2);
 					keyMap.put(keyString.get(h).get(z), new Point(x, y));
@@ -192,26 +191,26 @@ public class CatKeyboardClicker {
 		DisplayMetrics currentDisplayMetrics = new DisplayMetrics();
 		solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getMetrics(currentDisplayMetrics);
 
-		Log.i("info", "DisplayMetrics" + "width:" + currentDisplayMetrics.widthPixels + " height:"
-				+ currentDisplayMetrics.heightPixels);
+		//Log.i("info", "DisplayMetrics" + "width:" + currentDisplayMetrics.widthPixels + " height:"
+		//		+ currentDisplayMetrics.heightPixels);
 
 		float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, currentDisplayMetrics);
-		Log.i("info", "pixel: " + px);
+		//Log.i("info", "pixel: " + px);
 
 		displayWidth = currentDisplayMetrics.widthPixels;
 		displayHeight = currentDisplayMetrics.heightPixels;
 
 		keyboardHeight = buttonsEachRow * 42 * px;
-		Log.i("info", "keyboardHeight: " + keyboardHeight);
+		//Log.i("info", "keyboardHeight: " + keyboardHeight);
 
 		amountOfDisplayspaceUsedForKeyboard = displayHeight / keyboardHeight;
-		Log.i("info", "amountOfDisplayspaceUsedForKeyboard: " + amountOfDisplayspaceUsedForKeyboard);
+		//Log.i("info", "amountOfDisplayspaceUsedForKeyboard: " + amountOfDisplayspaceUsedForKeyboard);
 
 		buttonWidth = displayWidth / buttonsEachColumns;
 		float divisor = amountOfDisplayspaceUsedForKeyboard * buttonsEachRow;
-		Log.i("info", "divisor: " + divisor);
+		//Log.i("info", "divisor: " + divisor);
 		buttonHeight = displayHeight / divisor;
-		Log.i("info", "buttonHeight: " + buttonHeight);
+		//Log.i("info", "buttonHeight: " + buttonHeight);
 
 	}
 }
