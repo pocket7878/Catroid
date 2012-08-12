@@ -85,7 +85,7 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 		ProjectManager.getInstance().setCurrentScript(script);
 	}
 
-	public void testFormulaEditorChangeFormulaWithoutSaving() {
+	public void testChangeFormulaWithoutSaving() {
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
 		catKeyboardClicker.clickOnKey("1");
@@ -126,7 +126,7 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 
 	}
 
-	public void testFormulaEditorDialogAndSimpleInterpretation() {
+	public void testDialogAndSimpleInterpretation() {
 		//		Note solo.enterText() modifications to the text are undetectable to FormulaEditorEditText.
 		//		Text via solo.enterText() *must* be longer than the original text!!! To be safe use CatKeyboardKlicker to clear!
 		//		Use CatKeyboardClicker for full functionality, is a lot slower and inconvenient! Will do just fine here without
@@ -310,4 +310,52 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 		solo.goBack();
 
 	}
+
+	public void testOrientationChanges() {
+
+		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.clickOnKey("rand");
+
+		solo.setActivityOrientation(Solo.LANDSCAPE);
+
+		solo.sleep(500);
+		assertEquals("Wrong text after oprientation switch", "rand( 0 , 1 )",
+				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
+
+		solo.clickOnButton(0);
+
+		solo.goBack();
+		solo.sleep(50);
+		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		assertEquals("Wrong text after oprientation switch", "rand( 0 , 1 ) ", solo.getEditText(X_POS_EDIT_TEXT_ID)
+				.getText().toString());
+		solo.setActivityOrientation(Solo.PORTRAIT);
+		solo.sleep(500);
+
+		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.clickOnKey("sin");
+		catKeyboardClicker.clickOnKey("cos");
+
+		solo.sleep(500);
+		solo.setActivityOrientation(Solo.LANDSCAPE);
+		solo.sleep(500);
+		solo.setActivityOrientation(Solo.PORTRAIT);
+
+		assertEquals("Wrong text after oprientation switch", "sin( cos( 0 ) )",
+				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
+
+		solo.clickOnButton(1);
+		solo.clickOnButton(1);
+		solo.clickOnButton(0);
+		solo.goBack();
+		solo.sleep(50);
+		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		assertEquals("Wrong text after oprientation switch", "rand( 0 , 1 ) ",
+				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
+
+		solo.goBack();
+
+	}
+
 }

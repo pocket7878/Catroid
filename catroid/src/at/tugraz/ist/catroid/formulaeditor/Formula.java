@@ -24,6 +24,7 @@ package at.tugraz.ist.catroid.formulaeditor;
 
 import java.io.Serializable;
 
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.EditText;
@@ -109,7 +110,11 @@ public class Formula implements Serializable {
 		}
 	}
 
-	public void removeTextFieldHighlighting(View brickView) {
+	public void removeTextFieldHighlighting(View brickView, int orientation) {
+		if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			return;
+		}
+
 		EditText formulaTextField = (EditText) brickView.findViewById(formulaTextFieldId);
 		if (originalEditTextDrawable == null) {
 			originalEditTextDrawable = formulaTextField.getBackground();
@@ -119,12 +124,11 @@ public class Formula implements Serializable {
 		formulaTextField.setWidth(width);
 	}
 
-	//	public void highlightTextField(View brickView) {
-	//		EditText formulaTextField = (EditText) brickView.findViewById(formulaTextFieldId);
-	//		formulaTextField.setTextColor(0xf0f0);
-	//	}
+	public void highlightTextField(View brickView, Drawable id, int orientation) {
+		if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			return;
+		}
 
-	public void highlightTextField(View brickView, Drawable id) {
 		EditText formulaTextField = (EditText) brickView.findViewById(formulaTextFieldId);
 
 		if (originalEditTextDrawable == null) {

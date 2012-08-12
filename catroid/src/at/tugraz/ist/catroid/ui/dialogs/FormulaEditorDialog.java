@@ -3,7 +3,6 @@ package at.tugraz.ist.catroid.ui.dialogs;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
@@ -113,6 +112,8 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 
 	public void setInputFormula(Formula newFormula) {
 
+		int orientation = getResources().getConfiguration().orientation;
+
 		if (restoreInstance) { //after orientation switch
 			restoreInstance = false;
 			if (!formulaEditorEditText.restoreFieldFromPreviousHistory()) { //history is only deleted when editor is shut down by  user!
@@ -120,18 +121,16 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 			}
 			refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
 
-			int orientation = getResources().getConfiguration().orientation;
-			if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-				currentFormula.highlightTextField(brickView,
-						getResources().getDrawable(R.drawable.edit_text_formula_editor_selected));
-			}
+			currentFormula.highlightTextField(brickView,
+					getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
+
 		} else if (newFormula == currentFormula) {
 
 			if (!formulaEditorEditText.hasChanges()) {
-				currentFormula.removeTextFieldHighlighting(brickView);
+				currentFormula.removeTextFieldHighlighting(brickView, orientation);
 				formulaEditorEditText.enterNewFormula(currentFormula.getEditTextRepresentation());
 				currentFormula.highlightTextField(brickView,
-						getResources().getDrawable(R.drawable.edit_text_formula_editor_selected));
+						getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
 			} else {
 				formulaEditorEditText.quickSelect();
 			}
@@ -142,10 +141,10 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 					currentFormula.refreshTextField(brickView);
 				}
 				formulaEditorEditText.endEdit();
-				currentFormula.removeTextFieldHighlighting(brickView);
+				currentFormula.removeTextFieldHighlighting(brickView, orientation);
 				currentFormula = newFormula;
 				currentFormula.highlightTextField(brickView,
-						getResources().getDrawable(R.drawable.edit_text_formula_editor_selected));
+						getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
 				makeOkButtonBackButton();
 				formulaEditorEditText.enterNewFormula(newFormula.getEditTextRepresentation());
 			} else {
