@@ -20,27 +20,27 @@ package at.tugraz.ist.catroid.physics.commands;
 
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.physics.PhysicObject;
+import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
+
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * @author robert
  * 
  */
-public abstract class PhysicCommand {
+public class PhysicSetXCommand extends PhysicCommand {
 
-	protected final PhysicObject physicObject;
-	protected final Brick brick;
-
-	public PhysicCommand(PhysicObject physicObject, Brick brick) {
-		this.physicObject = physicObject;
-		this.brick = brick;
+	public PhysicSetXCommand(PhysicObject physicObject, Brick brick) {
+		super(physicObject, brick);
 	}
-
-	public Brick getBrick() {
-		return brick;
-	}
-
-	public abstract void execute();
 
 	@Override
-	protected abstract PhysicCommand clone();
+	public void execute() {
+		physicObject.setPosition(PhysicWorldConverter.vecCatToBox2d(new Vector2(0.0f, 300.0f)));
+	}
+
+	@Override
+	protected PhysicCommand clone() {
+		return new PhysicSetXCommand(physicObject, brick);
+	}
 }
