@@ -62,14 +62,9 @@ public class ForeverBrickTest extends InstrumentationTestCase {
 		testScript.addBrick(new ChangeYByBrick(testSprite, deltaY));
 		testScript.addBrick(loopEndBrick);
 		testSprite.addScript(testScript);
-		Thread.sleep(500);
-		try {
-			testSprite.startStartScripts();
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-			fail("Completely stupid null pointer exception, kthxbye");
-			return;
-		}
+		Thread.sleep(1000);
+		testSprite.startStartScripts();
+
 		Thread.sleep(expectedDelay * twentyIsAlmostForever);
 
 		assertEquals("Executed the wrong number of times!", twentyIsAlmostForever * deltaY,
