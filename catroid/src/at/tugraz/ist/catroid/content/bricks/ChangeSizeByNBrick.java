@@ -36,22 +36,22 @@ import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 public class ChangeSizeByNBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private Sprite sprite;
-	private Formula sizeFormula;
+	private Formula size;
 	//	public transient boolean editorActive = false;
 
 	private transient ChangeSizeByNBrick instance = null;
 	private transient View view;
 
-	public ChangeSizeByNBrick(Sprite sprite, double size) {
+	public ChangeSizeByNBrick(Sprite sprite, double sizeValue) {
 		this.sprite = sprite;
 
-		sizeFormula = new Formula(Double.toString(size));
+		size = new Formula(Double.toString(sizeValue));
 	}
 
 	public ChangeSizeByNBrick(Sprite sprite, Formula size) {
 		this.sprite = sprite;
 
-		sizeFormula = size;
+		this.size = size;
 	}
 
 	@Override
@@ -61,8 +61,8 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		double size = sizeFormula.interpret();
-		float newSize = sprite.costume.getSize() + ((float) size / 100f);
+		double sizeValue = size.interpret();
+		float newSize = sprite.costume.getSize() + ((float) sizeValue / 100f);
 		if (newSize < 0f) {
 			newSize = 0f;
 		}
@@ -85,8 +85,8 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 
 		TextView text = (TextView) view.findViewById(R.id.brick_change_size_by_text_view);
 		EditText edit = (EditText) view.findViewById(R.id.brick_change_size_by_edit_text);
-		sizeFormula.setTextFieldId(R.id.brick_change_size_by_edit_text);
-		sizeFormula.refreshTextField(view);
+		size.setTextFieldId(R.id.brick_change_size_by_edit_text);
+		size.refreshTextField(view);
 
 		text.setVisibility(View.GONE);
 		edit.setVisibility(View.VISIBLE);
@@ -103,12 +103,12 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new ChangeSizeByNBrick(getSprite(), sizeFormula);
+		return new ChangeSizeByNBrick(getSprite(), size);
 	}
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, sizeFormula);
+		FormulaEditorDialog.showDialog(view, this, size);
 	}
 
 }

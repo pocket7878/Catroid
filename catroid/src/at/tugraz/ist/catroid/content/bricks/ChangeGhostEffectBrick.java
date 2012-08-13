@@ -39,20 +39,20 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 
 	private transient View view;
 
-	private Formula changeGhostEffectFormula;
+	private Formula changeGhostEffect;
 
 	private transient Brick instance = null;
 
-	public ChangeGhostEffectBrick(Sprite sprite, double changeGhostEffect) {
+	public ChangeGhostEffectBrick(Sprite sprite, double changeGhostEffectValue) {
 		this.sprite = sprite;
 
-		changeGhostEffectFormula = new Formula(Double.toString(changeGhostEffect));
+		changeGhostEffect = new Formula(Double.toString(changeGhostEffectValue));
 	}
 
 	public ChangeGhostEffectBrick(Sprite sprite, Formula changeGhostEffect) {
 		this.sprite = sprite;
 
-		changeGhostEffectFormula = changeGhostEffect;
+		this.changeGhostEffect = changeGhostEffect;
 	}
 
 	@Override
@@ -62,8 +62,8 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		double changeGhostEffect = changeGhostEffectFormula.interpret() / -100.0;
-		sprite.costume.changeAlphaValueBy((float) changeGhostEffect);
+		double changeGhostEffectValue = changeGhostEffect.interpret() / -100.0;
+		sprite.costume.changeAlphaValueBy((float) changeGhostEffectValue);
 
 	}
 
@@ -84,8 +84,8 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 		TextView textX = (TextView) view.findViewById(R.id.brick_change_ghost_effect_text_view);
 		EditText editX = (EditText) view.findViewById(R.id.brick_change_ghost_effect_edit_text);
 
-		changeGhostEffectFormula.setTextFieldId(R.id.brick_change_ghost_effect_edit_text);
-		changeGhostEffectFormula.refreshTextField(view);
+		changeGhostEffect.setTextFieldId(R.id.brick_change_ghost_effect_edit_text);
+		changeGhostEffect.refreshTextField(view);
 
 		textX.setVisibility(View.GONE);
 		editX.setVisibility(View.VISIBLE);
@@ -101,11 +101,11 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new ChangeGhostEffectBrick(getSprite(), changeGhostEffectFormula);
+		return new ChangeGhostEffectBrick(getSprite(), changeGhostEffect);
 	}
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, changeGhostEffectFormula);
+		FormulaEditorDialog.showDialog(view, this, changeGhostEffect);
 	}
 }

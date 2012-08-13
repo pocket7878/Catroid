@@ -39,18 +39,18 @@ public class ChangeVolumeByBrick implements Brick, OnClickListener {
 
 	private Sprite sprite;
 	private transient View view;
-	private Formula volumeFormula;
+	private Formula volume;
 
-	public ChangeVolumeByBrick(Sprite sprite, double changeVolume) {
+	public ChangeVolumeByBrick(Sprite sprite, double changeVolumeValue) {
 		this.sprite = sprite;
 
-		volumeFormula = new Formula(Double.toString(changeVolume));
+		volume = new Formula(Double.toString(changeVolumeValue));
 	}
 
-	public ChangeVolumeByBrick(Sprite sprite, Formula changeVolume) {
+	public ChangeVolumeByBrick(Sprite sprite, Formula volume) {
 		this.sprite = sprite;
 
-		volumeFormula = changeVolume;
+		this.volume = volume;
 	}
 
 	@Override
@@ -60,10 +60,10 @@ public class ChangeVolumeByBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		double volume = volumeFormula.interpret();
+		double volumeValue = volume.interpret();
 
 		float currentVolume = SoundManager.getInstance().getVolume();
-		currentVolume += volume;
+		currentVolume += volumeValue;
 		if (currentVolume < 0.0f) {
 			currentVolume = 0.0f;
 		} else if (currentVolume > 100.0f) {
@@ -84,8 +84,8 @@ public class ChangeVolumeByBrick implements Brick, OnClickListener {
 
 		TextView text = (TextView) view.findViewById(R.id.brick_change_volume_by_text_view);
 		EditText edit = (EditText) view.findViewById(R.id.brick_change_volume_by_edit_text);
-		volumeFormula.setTextFieldId(R.id.brick_change_volume_by_edit_text);
-		volumeFormula.refreshTextField(view);
+		volume.setTextFieldId(R.id.brick_change_volume_by_edit_text);
+		volume.refreshTextField(view);
 
 		text.setVisibility(View.GONE);
 		edit.setVisibility(View.VISIBLE);
@@ -103,12 +103,12 @@ public class ChangeVolumeByBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new ChangeVolumeByBrick(getSprite(), volumeFormula);
+		return new ChangeVolumeByBrick(getSprite(), volume);
 	}
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, volumeFormula);
+		FormulaEditorDialog.showDialog(view, this, volume);
 	}
 
 }

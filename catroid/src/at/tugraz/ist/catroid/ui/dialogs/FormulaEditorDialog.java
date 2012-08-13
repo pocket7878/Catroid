@@ -30,6 +30,7 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 	/**
 	 * 
 	 */
+	public static final String FRAGMENT_TAG_FORMULA_EDITOR = "formula_editor_dialog";
 	private static final int PARSER_OK = -1;
 	private static final int PARSER_STACK_OVERFLOW = -2;
 	private Context context;
@@ -48,10 +49,6 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 
 	public FormulaEditorDialog() {
 		//do not remove, used for orientation change
-	}
-
-	public FormulaEditorDialog(Context ctx, Brick brick) {
-
 	}
 
 	public FormulaEditorDialog(Brick brick, Formula formula) {
@@ -84,12 +81,12 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 		}
 
 		FormulaEditorDialog formulaEditorDialog = null;
-		if (activity.getSupportFragmentManager().findFragmentByTag("formula_editor_dialog") == null) {
+		if (activity.getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG_FORMULA_EDITOR) == null) {
 			formulaEditorDialog = new FormulaEditorDialog(brick, formula);
-			formulaEditorDialog.show(activity.getSupportFragmentManager(), "formula_editor_dialog");
+			formulaEditorDialog.show(activity.getSupportFragmentManager(), FRAGMENT_TAG_FORMULA_EDITOR);
 		} else {
 			formulaEditorDialog = (FormulaEditorDialog) activity.getSupportFragmentManager().findFragmentByTag(
-					"formula_editor_dialog");
+					FRAGMENT_TAG_FORMULA_EDITOR);
 			formulaEditorDialog.setInputFormula(formula);
 		}
 	}
@@ -144,7 +141,7 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 		if (restoreInstance) { //after orientation switch
 			restoreInstance = false;
 			if (!formulaEditorEditText.restoreFieldFromPreviousHistory()) { //history is only deleted when editor is shut down by  user!
-				formulaEditorEditText.enterNewFormula(newFormula.getEditTextRepresentation()); // this happens when onSaveInstanceState() is being called but not by orientation change (e.g.user turns off screen)
+				formulaEditorEditText.enterNewFormula(newFormula.toString()); // this happens when onSaveInstanceState() is being called but not by orientation change (e.g.user turns off screen)
 			}
 			refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
 
@@ -155,7 +152,7 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 
 			if (!formulaEditorEditText.hasChanges()) {
 				currentFormula.removeTextFieldHighlighting(brickView, orientation);
-				formulaEditorEditText.enterNewFormula(currentFormula.getEditTextRepresentation());
+				formulaEditorEditText.enterNewFormula(currentFormula.toString());
 				currentFormula.highlightTextField(brickView,
 						getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
 			} else {
@@ -173,7 +170,7 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 				currentFormula.highlightTextField(brickView,
 						getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
 				makeOkButtonBackButton();
-				formulaEditorEditText.enterNewFormula(newFormula.getEditTextRepresentation());
+				formulaEditorEditText.enterNewFormula(newFormula.toString());
 			} else {
 				showToast(R.string.formula_editor_save_first);
 			}

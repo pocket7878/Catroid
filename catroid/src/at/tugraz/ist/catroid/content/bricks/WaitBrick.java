@@ -91,7 +91,6 @@ public class WaitBrick implements Brick, OnClickListener {
 
 		TextView text = (TextView) view.findViewById(R.id.brick_wait_text_view);
 		EditText edit = (EditText) view.findViewById(R.id.brick_wait_edit_text);
-		edit.setText(timeToWaitInSecondsFormula.getEditTextRepresentation());
 		timeToWaitInSecondsFormula.setTextFieldId(R.id.brick_wait_edit_text);
 		timeToWaitInSecondsFormula.refreshTextField(view);
 

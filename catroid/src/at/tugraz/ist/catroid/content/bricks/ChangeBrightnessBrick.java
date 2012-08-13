@@ -40,7 +40,7 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 
 	private transient View view;
 
-	private Formula changeBrightnessFormula;
+	private Formula changeBrightness;
 
 	private transient Brick instance = null;
 
@@ -48,14 +48,14 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 
 	}
 
-	public ChangeBrightnessBrick(Sprite sprite, double changeBrightness) {
+	public ChangeBrightnessBrick(Sprite sprite, double changeBrightnessValue) {
 		this.sprite = sprite;
-		changeBrightnessFormula = new Formula(Double.toString(changeBrightness));
+		changeBrightness = new Formula(Double.toString(changeBrightnessValue));
 	}
 
 	public ChangeBrightnessBrick(Sprite sprite, Formula changeBrightness) {
 		this.sprite = sprite;
-		changeBrightnessFormula = changeBrightness;
+		this.changeBrightness = changeBrightness;
 	}
 
 	@Override
@@ -66,9 +66,9 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 	@Override
 	public void execute() {
 		//		sprite.costume.changeBrightnessValueBy((float) (this.changeBrightness / 100));
-		double changeBrightness = changeBrightnessFormula.interpret() / 100;
+		double changeBrightnessValue = changeBrightness.interpret() / 100;
 
-		sprite.costume.changeBrightnessValueBy((float) changeBrightness);
+		sprite.costume.changeBrightnessValueBy((float) changeBrightnessValue);
 	}
 
 	@Override
@@ -86,8 +86,8 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 
 		TextView textX = (TextView) view.findViewById(R.id.brick_change_brightness_text_view);
 		EditText editX = (EditText) view.findViewById(R.id.brick_change_brightness_edit_text);
-		changeBrightnessFormula.setTextFieldId(R.id.brick_change_brightness_edit_text);
-		changeBrightnessFormula.refreshTextField(view);
+		changeBrightness.setTextFieldId(R.id.brick_change_brightness_edit_text);
+		changeBrightness.refreshTextField(view);
 
 		textX.setVisibility(View.GONE);
 		editX.setVisibility(View.VISIBLE);
@@ -104,12 +104,12 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new ChangeBrightnessBrick(getSprite(), changeBrightnessFormula);
+		return new ChangeBrightnessBrick(getSprite(), changeBrightness);
 	}
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, changeBrightnessFormula);
+		FormulaEditorDialog.showDialog(view, this, changeBrightness);
 	}
 
 }

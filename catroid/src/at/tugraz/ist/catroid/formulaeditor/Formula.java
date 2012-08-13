@@ -59,8 +59,9 @@ public class Formula implements Serializable {
 	}
 
 	public Formula(String value) {
-		root = new FormulaElement(FormulaElement.ElementType.VALUE, value, null);
-		textRepresentation = root.getEditTextRepresentation();
+		textRepresentation = value;
+		CalcGrammarParser parser = CalcGrammarParser.getFormulaParser(textRepresentation);
+		root = parser.parseFormula();
 	}
 
 	//	public Formula(String value, int formulaTextFieldId) {
@@ -74,7 +75,8 @@ public class Formula implements Serializable {
 		return root.interpretRecursive();
 	}
 
-	public String getEditTextRepresentation() {
+	@Override
+	public String toString() {
 		//return root.getEditTextRepresentation();
 		return textRepresentation;
 	}
