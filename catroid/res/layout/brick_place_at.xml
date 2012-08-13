@@ -79,7 +79,7 @@
             android:inputType="number|numberDecimal|numberSigned"
             android:maxLength="5"
             android:maxLines="1"
-            android:maxWidth="60dip"
+            android:minWidth="60dip"
             android:text="0"
             android:visibility="gone" >
         </EditText>
@@ -129,7 +129,7 @@
             android:inputType="number|numberDecimal|numberSigned"
             android:maxLength="5"
             android:maxLines="1"
-			android:maxWidth="60dip"
+			android:minWidth="60dip"
             android:text="0"
             android:visibility="gone" >
         </EditText>
