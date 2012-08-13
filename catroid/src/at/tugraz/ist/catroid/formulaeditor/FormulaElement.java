@@ -31,7 +31,7 @@ public class FormulaElement implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static enum ElementType {
-		OPERATOR, FUNCTION, VALUE, SENSOR, CONSTANT, VARIABLE
+		OPERATOR, FUNCTION, VALUE, SENSOR, CONSTANT, VARIABLE, BRACKET
 	}
 
 	//	public static final int ELEMENT_OPERATOR = 2;
@@ -92,6 +92,13 @@ public class FormulaElement implements Serializable {
 		String result = "";
 
 		switch (type) {
+			case BRACKET:
+				result += "( ";
+				if (rightChild != null) {
+					result += rightChild.getEditTextRepresentation();
+				}
+				result += ") ";
+				break;
 			case OPERATOR:
 				if (leftChild != null) {
 					result += leftChild.getEditTextRepresentation();
@@ -138,6 +145,9 @@ public class FormulaElement implements Serializable {
 
 	public Double interpretRecursive() {
 
+		if (type == ElementType.BRACKET) {
+			return rightChild.interpretRecursive();
+		}
 		if (type == ElementType.VALUE) {
 			return Double.parseDouble(value);
 		} else if (type == ElementType.OPERATOR) {

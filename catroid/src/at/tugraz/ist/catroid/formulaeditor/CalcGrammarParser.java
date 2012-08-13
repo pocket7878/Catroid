@@ -1,4 +1,4 @@
-// $ANTLR 3.4 src/CalcGrammar.g 2012-08-13 17:08:53
+// $ANTLR 3.4 src/CalcGrammar.g 2012-08-13 18:12:46
 
 package at.tugraz.ist.catroid.formulaeditor;
 
@@ -329,7 +329,7 @@ public class CalcGrammarParser extends Parser {
 			// src/CalcGrammar.g:210:5: ( MINUS )? ( NUMBER | '(' term_list ')' | variableOrFunction )
 			{
 
-				termTree = new FormulaElement(FormulaElement.ElementType.VALUE, null, null, null, null);
+				termTree = new FormulaElement(FormulaElement.ElementType.VALUE, null, null);
 				FormulaElement curElem = termTree;
 
 				// src/CalcGrammar.g:214:5: ( MINUS )?
@@ -380,9 +380,9 @@ public class CalcGrammarParser extends Parser {
 
 				switch (alt3) {
 					case 1:
-					// src/CalcGrammar.g:220:7: NUMBER
+					// src/CalcGrammar.g:220:6: NUMBER
 					{
-						NUMBER4 = (Token) match(input, NUMBER, FOLLOW_NUMBER_in_term182);
+						NUMBER4 = (Token) match(input, NUMBER, FOLLOW_NUMBER_in_term181);
 
 						String number = internalCommaSeperatedDouble(NUMBER4.getText());
 						curElem.replaceElement(FormulaElement.ElementType.VALUE, number);
@@ -392,23 +392,23 @@ public class CalcGrammarParser extends Parser {
 					case 2:
 					// src/CalcGrammar.g:225:7: '(' term_list ')'
 					{
-						match(input, 23, FOLLOW_23_in_term200);
+						match(input, 23, FOLLOW_23_in_term199);
 
-						pushFollow(FOLLOW_term_list_in_term202);
+						pushFollow(FOLLOW_term_list_in_term201);
 						term_list5 = term_list();
 
 						state._fsp--;
 
-						match(input, 24, FOLLOW_24_in_term204);
+						match(input, 24, FOLLOW_24_in_term203);
 
-						curElem.replaceElement(term_list5);
+						termTree = new FormulaElement(FormulaElement.ElementType.BRACKET, null, null, null, term_list5);
 
 					}
 						break;
 					case 3:
 					// src/CalcGrammar.g:229:7: variableOrFunction
 					{
-						pushFollow(FOLLOW_variableOrFunction_in_term222);
+						pushFollow(FOLLOW_variableOrFunction_in_term221);
 						variableOrFunction6 = variableOrFunction();
 
 						state._fsp--;
@@ -479,7 +479,7 @@ public class CalcGrammarParser extends Parser {
 				case 1:
 				// src/CalcGrammar.g:236:7: CONSTANT
 				{
-					CONSTANT7 = (Token) match(input, CONSTANT, FOLLOW_CONSTANT_in_variableOrFunction256);
+					CONSTANT7 = (Token) match(input, CONSTANT, FOLLOW_CONSTANT_in_variableOrFunction255);
 
 					variableOrFunctionTree = new FormulaElement(FormulaElement.ElementType.CONSTANT,
 							CONSTANT7.getText(), null, null, null);
@@ -489,17 +489,17 @@ public class CalcGrammarParser extends Parser {
 				case 2:
 				// src/CalcGrammar.g:241:9: ID '(' (leftChildTree= term_list ( ',' rightChildTree= term_list )? ) ')'
 				{
-					ID8 = (Token) match(input, ID, FOLLOW_ID_in_variableOrFunction287);
+					ID8 = (Token) match(input, ID, FOLLOW_ID_in_variableOrFunction286);
 
 					FormulaElement leftChild = null;
 					FormulaElement rightChild = null;
 
-					match(input, 23, FOLLOW_23_in_variableOrFunction317);
+					match(input, 23, FOLLOW_23_in_variableOrFunction316);
 
 					// src/CalcGrammar.g:246:17: (leftChildTree= term_list ( ',' rightChildTree= term_list )? )
 					// src/CalcGrammar.g:246:18: leftChildTree= term_list ( ',' rightChildTree= term_list )?
 					{
-						pushFollow(FOLLOW_term_list_in_variableOrFunction322);
+						pushFollow(FOLLOW_term_list_in_variableOrFunction321);
 						leftChildTree = term_list();
 
 						state._fsp--;
@@ -517,9 +517,9 @@ public class CalcGrammarParser extends Parser {
 							case 1:
 							// src/CalcGrammar.g:250:22: ',' rightChildTree= term_list
 							{
-								match(input, 25, FOLLOW_25_in_variableOrFunction368);
+								match(input, 25, FOLLOW_25_in_variableOrFunction367);
 
-								pushFollow(FOLLOW_term_list_in_variableOrFunction372);
+								pushFollow(FOLLOW_term_list_in_variableOrFunction371);
 								rightChildTree = term_list();
 
 								state._fsp--;
@@ -533,7 +533,7 @@ public class CalcGrammarParser extends Parser {
 
 					}
 
-					match(input, 24, FOLLOW_24_in_variableOrFunction441);
+					match(input, 24, FOLLOW_24_in_variableOrFunction440);
 
 					variableOrFunctionTree = new FormulaElement(FormulaElement.ElementType.FUNCTION, ID8.getText(),
 							null, leftChild, rightChild);
@@ -543,7 +543,7 @@ public class CalcGrammarParser extends Parser {
 				case 3:
 				// src/CalcGrammar.g:260:11: SENSOR
 				{
-					SENSOR9 = (Token) match(input, SENSOR, FOLLOW_SENSOR_in_variableOrFunction468);
+					SENSOR9 = (Token) match(input, SENSOR, FOLLOW_SENSOR_in_variableOrFunction467);
 
 					variableOrFunctionTree = new FormulaElement(FormulaElement.ElementType.SENSOR, SENSOR9.getText(),
 							null, null, null);
@@ -553,7 +553,7 @@ public class CalcGrammarParser extends Parser {
 				case 4:
 				// src/CalcGrammar.g:264:11: UPID
 				{
-					UPID10 = (Token) match(input, UPID, FOLLOW_UPID_in_variableOrFunction494);
+					UPID10 = (Token) match(input, UPID, FOLLOW_UPID_in_variableOrFunction493);
 
 					variableOrFunctionTree = new FormulaElement(FormulaElement.ElementType.VARIABLE, UPID10.getText(),
 							null, null, null);
@@ -611,7 +611,7 @@ public class CalcGrammarParser extends Parser {
 				case 1:
 				// src/CalcGrammar.g:271:5: MULOP
 				{
-					MULOP11 = (Token) match(input, MULOP, FOLLOW_MULOP_in_operator525);
+					MULOP11 = (Token) match(input, MULOP, FOLLOW_MULOP_in_operator524);
 
 					operatorString = MULOP11.getText();
 
@@ -620,7 +620,7 @@ public class CalcGrammarParser extends Parser {
 				case 2:
 				// src/CalcGrammar.g:275:7: PLUS
 				{
-					PLUS12 = (Token) match(input, PLUS, FOLLOW_PLUS_in_operator544);
+					PLUS12 = (Token) match(input, PLUS, FOLLOW_PLUS_in_operator543);
 
 					operatorString = PLUS12.getText();
 
@@ -629,7 +629,7 @@ public class CalcGrammarParser extends Parser {
 				case 3:
 				// src/CalcGrammar.g:279:7: MINUS
 				{
-					MINUS13 = (Token) match(input, MINUS, FOLLOW_MINUS_in_operator566);
+					MINUS13 = (Token) match(input, MINUS, FOLLOW_MINUS_in_operator565);
 
 					operatorString = MINUS13.getText();
 
@@ -658,24 +658,24 @@ public class CalcGrammarParser extends Parser {
 	public static final BitSet FOLLOW_operator_in_term_list121 = new BitSet(new long[] { 0x0000000000989110L });
 	public static final BitSet FOLLOW_term_in_term_list125 = new BitSet(new long[] { 0x0000000000023002L });
 	public static final BitSet FOLLOW_MINUS_in_term163 = new BitSet(new long[] { 0x0000000000988110L });
-	public static final BitSet FOLLOW_NUMBER_in_term182 = new BitSet(new long[] { 0x0000000000000002L });
-	public static final BitSet FOLLOW_23_in_term200 = new BitSet(new long[] { 0x0000000000989110L });
-	public static final BitSet FOLLOW_term_list_in_term202 = new BitSet(new long[] { 0x0000000001000000L });
-	public static final BitSet FOLLOW_24_in_term204 = new BitSet(new long[] { 0x0000000000000002L });
-	public static final BitSet FOLLOW_variableOrFunction_in_term222 = new BitSet(new long[] { 0x0000000000000002L });
-	public static final BitSet FOLLOW_CONSTANT_in_variableOrFunction256 = new BitSet(new long[] { 0x0000000000000002L });
-	public static final BitSet FOLLOW_ID_in_variableOrFunction287 = new BitSet(new long[] { 0x0000000000800000L });
-	public static final BitSet FOLLOW_23_in_variableOrFunction317 = new BitSet(new long[] { 0x0000000000989110L });
-	public static final BitSet FOLLOW_term_list_in_variableOrFunction322 = new BitSet(
+	public static final BitSet FOLLOW_NUMBER_in_term181 = new BitSet(new long[] { 0x0000000000000002L });
+	public static final BitSet FOLLOW_23_in_term199 = new BitSet(new long[] { 0x0000000000989110L });
+	public static final BitSet FOLLOW_term_list_in_term201 = new BitSet(new long[] { 0x0000000001000000L });
+	public static final BitSet FOLLOW_24_in_term203 = new BitSet(new long[] { 0x0000000000000002L });
+	public static final BitSet FOLLOW_variableOrFunction_in_term221 = new BitSet(new long[] { 0x0000000000000002L });
+	public static final BitSet FOLLOW_CONSTANT_in_variableOrFunction255 = new BitSet(new long[] { 0x0000000000000002L });
+	public static final BitSet FOLLOW_ID_in_variableOrFunction286 = new BitSet(new long[] { 0x0000000000800000L });
+	public static final BitSet FOLLOW_23_in_variableOrFunction316 = new BitSet(new long[] { 0x0000000000989110L });
+	public static final BitSet FOLLOW_term_list_in_variableOrFunction321 = new BitSet(
 			new long[] { 0x0000000003000000L });
-	public static final BitSet FOLLOW_25_in_variableOrFunction368 = new BitSet(new long[] { 0x0000000000989110L });
-	public static final BitSet FOLLOW_term_list_in_variableOrFunction372 = new BitSet(
+	public static final BitSet FOLLOW_25_in_variableOrFunction367 = new BitSet(new long[] { 0x0000000000989110L });
+	public static final BitSet FOLLOW_term_list_in_variableOrFunction371 = new BitSet(
 			new long[] { 0x0000000001000000L });
-	public static final BitSet FOLLOW_24_in_variableOrFunction441 = new BitSet(new long[] { 0x0000000000000002L });
-	public static final BitSet FOLLOW_SENSOR_in_variableOrFunction468 = new BitSet(new long[] { 0x0000000000000002L });
-	public static final BitSet FOLLOW_UPID_in_variableOrFunction494 = new BitSet(new long[] { 0x0000000000000002L });
-	public static final BitSet FOLLOW_MULOP_in_operator525 = new BitSet(new long[] { 0x0000000000000002L });
-	public static final BitSet FOLLOW_PLUS_in_operator544 = new BitSet(new long[] { 0x0000000000000002L });
-	public static final BitSet FOLLOW_MINUS_in_operator566 = new BitSet(new long[] { 0x0000000000000002L });
+	public static final BitSet FOLLOW_24_in_variableOrFunction440 = new BitSet(new long[] { 0x0000000000000002L });
+	public static final BitSet FOLLOW_SENSOR_in_variableOrFunction467 = new BitSet(new long[] { 0x0000000000000002L });
+	public static final BitSet FOLLOW_UPID_in_variableOrFunction493 = new BitSet(new long[] { 0x0000000000000002L });
+	public static final BitSet FOLLOW_MULOP_in_operator524 = new BitSet(new long[] { 0x0000000000000002L });
+	public static final BitSet FOLLOW_PLUS_in_operator543 = new BitSet(new long[] { 0x0000000000000002L });
+	public static final BitSet FOLLOW_MINUS_in_operator565 = new BitSet(new long[] { 0x0000000000000002L });
 
 }

@@ -1,4 +1,4 @@
-// $ANTLR 3.4 src/CalcGrammar.g 2012-08-13 17:08:53
+// $ANTLR 3.4 src/CalcGrammar.g 2012-08-13 18:12:46
 package at.tugraz.ist.catroid.formulaeditor;
 
 import org.antlr.runtime.CharStream;
