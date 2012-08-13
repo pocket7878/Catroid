@@ -60,7 +60,7 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 	}
 
 	public void execute() {
-		physicWorld.getPhysicObject(sprite).getBody().applyForceToCenter(velocity);
+		physicWorld.getPhysicObject(sprite).getBody().setLinearVelocity(velocity);
 	}
 
 	public Sprite getSprite() {
