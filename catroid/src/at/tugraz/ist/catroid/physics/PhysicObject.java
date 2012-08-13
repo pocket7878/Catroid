@@ -74,6 +74,7 @@ public class PhysicObject {
 		for (Fixture fixture : body.getFixtureList()) {
 			fixture.setDensity(density);
 		}
+		body.resetMassData();
 	}
 
 	public void setFriction(float friction) {
