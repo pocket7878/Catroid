@@ -41,17 +41,17 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 
 	private transient View view;
 
-	private Formula stepsFormula;
+	private Formula steps;
 
-	public MoveNStepsBrick(Sprite sprite, double steps) {
+	public MoveNStepsBrick(Sprite sprite, double stepsValue) {
 		this.sprite = sprite;
-		stepsFormula = new Formula(Double.toString(steps));
+		steps = new Formula(Double.toString(stepsValue));
 	}
 
 	public MoveNStepsBrick(Sprite sprite, Formula steps) {
 		this.sprite = sprite;
 
-		stepsFormula = steps;
+		this.steps = steps;
 	}
 
 	@Override
@@ -61,14 +61,14 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		double steps = stepsFormula.interpret().doubleValue();
+		float stepsValue = steps.interpretFloat();
 
 		sprite.costume.aquireXYWidthHeightLock();
 
 		double radians = Math.toRadians(sprite.costume.rotation);
 
-		int newXPosition = (int) Math.round(sprite.costume.getXPosition() + steps * Math.cos(radians));
-		int newYPosition = (int) Math.round(sprite.costume.getYPosition() + steps * Math.sin(radians));
+		int newXPosition = (int) Math.round(sprite.costume.getXPosition() + stepsValue * Math.cos(radians));
+		int newYPosition = (int) Math.round(sprite.costume.getYPosition() + stepsValue * Math.sin(radians));
 
 		sprite.costume.setXYPosition(newXPosition, newYPosition);
 		sprite.costume.releaseXYWidthHeightLock();
@@ -89,8 +89,8 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 		EditText edit = (EditText) view.findViewById(R.id.brick_move_n_steps_edit_text);
 
 		//		edit.setText(String.valueOf(steps));
-		stepsFormula.setTextFieldId(R.id.brick_move_n_steps_edit_text);
-		stepsFormula.refreshTextField(view);
+		steps.setTextFieldId(R.id.brick_move_n_steps_edit_text);
+		steps.refreshTextField(view);
 
 		text.setVisibility(View.GONE);
 		edit.setVisibility(View.VISIBLE);
@@ -108,11 +108,11 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new MoveNStepsBrick(getSprite(), stepsFormula);
+		return new MoveNStepsBrick(getSprite(), steps);
 	}
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, stepsFormula);
+		FormulaEditorDialog.showDialog(view, this, steps);
 	}
 }

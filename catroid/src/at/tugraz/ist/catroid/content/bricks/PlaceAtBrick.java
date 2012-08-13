@@ -39,24 +39,24 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private Sprite sprite;
 
-	private Formula xPositionFormula;
-	private Formula yPositionFormula;
+	private Formula xPosition;
+	private Formula yPosition;
 
 	@XStreamOmitField
 	private transient View view;
 
-	public PlaceAtBrick(Sprite sprite, int xPosition, int yPosition) {
+	public PlaceAtBrick(Sprite sprite, int xPositionValue, int yPositionValue) {
 		this.sprite = sprite;
 
-		xPositionFormula = new Formula(Integer.toString(xPosition));
-		yPositionFormula = new Formula(Integer.toString(yPosition));
+		xPosition = new Formula(Integer.toString(xPositionValue));
+		yPosition = new Formula(Integer.toString(yPositionValue));
 	}
 
 	public PlaceAtBrick(Sprite sprite, Formula xPosition, Formula yPosition) {
 		this.sprite = sprite;
 
-		xPositionFormula = xPosition;
-		yPositionFormula = yPosition;
+		this.xPosition = xPosition;
+		this.yPosition = yPosition;
 	}
 
 	@Override
@@ -66,11 +66,11 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		int xPosition = xPositionFormula.interpret().intValue();
-		int yPosition = yPositionFormula.interpret().intValue();
+		int xPositionValue = xPosition.interpretInteger();
+		int yPositionValue = yPosition.interpretInteger();
 
 		sprite.costume.aquireXYWidthHeightLock();
-		sprite.costume.setXYPosition(xPosition, yPosition);
+		sprite.costume.setXYPosition(xPositionValue, yPositionValue);
 		sprite.costume.releaseXYWidthHeightLock();
 	}
 
@@ -87,8 +87,8 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 		EditText editX = (EditText) view.findViewById(R.id.brick_place_at_x_edit_text);
 		//		editX.setText(String.valueOf(xPosition));
 		//		editX.setText(xPositionFormula.getEditTextRepresentation());
-		xPositionFormula.setTextFieldId(R.id.brick_place_at_x_edit_text);
-		xPositionFormula.refreshTextField(view);
+		xPosition.setTextFieldId(R.id.brick_place_at_x_edit_text);
+		xPosition.refreshTextField(view);
 
 		textX.setVisibility(View.GONE);
 		editX.setVisibility(View.VISIBLE);
@@ -98,8 +98,8 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 		EditText editY = (EditText) view.findViewById(R.id.brick_place_at_y_edit_text);
 		//		editY.setText(String.valueOf(yPosition));
 		//		yPositionFormula.refreshTextField(view);
-		yPositionFormula.setTextFieldId(R.id.brick_place_at_y_edit_text);
-		yPositionFormula.refreshTextField(view);
+		yPosition.setTextFieldId(R.id.brick_place_at_y_edit_text);
+		yPosition.refreshTextField(view);
 
 		textY.setVisibility(View.GONE);
 		editY.setVisibility(View.VISIBLE);
@@ -115,18 +115,18 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new PlaceAtBrick(getSprite(), xPositionFormula, yPositionFormula);
+		return new PlaceAtBrick(getSprite(), xPosition, yPosition);
 	}
 
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.brick_place_at_x_edit_text:
-				FormulaEditorDialog.showDialog(view, this, xPositionFormula);
+				FormulaEditorDialog.showDialog(view, this, xPosition);
 				break;
 
 			case R.id.brick_place_at_y_edit_text:
-				FormulaEditorDialog.showDialog(view, this, yPositionFormula);
+				FormulaEditorDialog.showDialog(view, this, yPosition);
 				break;
 		}
 	}

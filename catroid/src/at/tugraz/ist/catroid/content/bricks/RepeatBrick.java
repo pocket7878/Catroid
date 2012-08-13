@@ -37,16 +37,16 @@ import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 	private static final long serialVersionUID = 1L;
 
-	private Formula timesToRepeatFormula;
+	private Formula timesToRepeat;
 
-	public RepeatBrick(Sprite sprite, int timesToRepeat) {
+	public RepeatBrick(Sprite sprite, int timesToRepeatValue) {
 		this.sprite = sprite;
-		timesToRepeatFormula = new Formula(Integer.toString(timesToRepeat));
+		timesToRepeat = new Formula(Integer.toString(timesToRepeatValue));
 	}
 
 	public RepeatBrick(Sprite sprite, Formula timesToRepeat) {
 		this.sprite = sprite;
-		timesToRepeatFormula = timesToRepeat;
+		this.timesToRepeat = timesToRepeat;
 	}
 
 	@Override
@@ -56,20 +56,20 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 
 	@Override
 	public void execute() {
-		int timesToRepeat = timesToRepeatFormula.interpret().intValue();
+		int timesToRepeatValue = timesToRepeat.interpretInteger();
 
-		if (timesToRepeat <= 0) {
+		if (timesToRepeatValue <= 0) {
 			Script script = loopEndBrick.getScript();
 			script.setExecutingBrickIndex(script.getBrickList().indexOf(loopEndBrick));
 			return;
 		}
-		loopEndBrick.setTimesToRepeat(timesToRepeat);
+		loopEndBrick.setTimesToRepeat(timesToRepeatValue);
 		super.setFirstStartTime();
 	}
 
 	@Override
 	public Brick clone() {
-		return new RepeatBrick(getSprite(), timesToRepeatFormula);
+		return new RepeatBrick(getSprite(), timesToRepeat);
 	}
 
 	@Override
@@ -80,8 +80,8 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 		TextView text = (TextView) view.findViewById(R.id.brick_repeat_text_view);
 		EditText edit = (EditText) view.findViewById(R.id.brick_repeat_edit_text);
 
-		timesToRepeatFormula.setTextFieldId(R.id.brick_repeat_edit_text);
-		timesToRepeatFormula.refreshTextField(view);
+		timesToRepeat.setTextFieldId(R.id.brick_repeat_edit_text);
+		timesToRepeat.refreshTextField(view);
 
 		text.setVisibility(View.GONE);
 		edit.setVisibility(View.VISIBLE);
@@ -97,7 +97,7 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, timesToRepeatFormula);
+		FormulaEditorDialog.showDialog(view, this, timesToRepeat);
 	}
 
 }

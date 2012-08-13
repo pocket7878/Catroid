@@ -42,18 +42,18 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 	@XStreamOmitField
 	private transient View view;
 
-	private Formula xMovementFormula;
+	private Formula xMovement;
 
-	public ChangeXByBrick(Sprite sprite, int xMovement) {
+	public ChangeXByBrick(Sprite sprite, int xMovementValue) {
 		this.sprite = sprite;
 
-		xMovementFormula = new Formula(Integer.toString(xMovement));
+		xMovement = new Formula(Integer.toString(xMovementValue));
 	}
 
 	public ChangeXByBrick(Sprite sprite, Formula xMovement) {
 		this.sprite = sprite;
 
-		xMovementFormula = xMovement;
+		this.xMovement = xMovement;
 	}
 
 	@Override
@@ -63,17 +63,17 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		int xMovement = xMovementFormula.interpret().intValue();
+		int xMovementValue = xMovement.interpretInteger();
 
 		sprite.costume.aquireXYWidthHeightLock();
 		int xPosition = (int) sprite.costume.getXPosition();
 
-		if (xPosition > 0 && xMovement > 0 && xPosition + xMovement < 0) {
+		if (xPosition > 0 && xMovementValue > 0 && xPosition + xMovementValue < 0) {
 			xPosition = Integer.MAX_VALUE;
-		} else if (xPosition < 0 && xMovement < 0 && xPosition + xMovement > 0) {
+		} else if (xPosition < 0 && xMovementValue < 0 && xPosition + xMovementValue > 0) {
 			xPosition = Integer.MIN_VALUE;
 		} else {
-			xPosition += xMovement;
+			xPosition += xMovementValue;
 		}
 
 		sprite.costume.setXYPosition(xPosition, sprite.costume.getYPosition());
@@ -92,8 +92,8 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 
 		TextView textX = (TextView) view.findViewById(R.id.brick_change_x_text_view);
 		EditText editX = (EditText) view.findViewById(R.id.brick_change_x_edit_text);
-		xMovementFormula.setTextFieldId(R.id.brick_change_x_edit_text);
-		xMovementFormula.refreshTextField(view);
+		xMovement.setTextFieldId(R.id.brick_change_x_edit_text);
+		xMovement.refreshTextField(view);
 		textX.setVisibility(View.GONE);
 		editX.setVisibility(View.VISIBLE);
 		editX.setOnClickListener(this);
@@ -108,12 +108,12 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new ChangeXByBrick(getSprite(), xMovementFormula);
+		return new ChangeXByBrick(getSprite(), xMovement);
 	}
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, xMovementFormula);
+		FormulaEditorDialog.showDialog(view, this, xMovement);
 	}
 
 }

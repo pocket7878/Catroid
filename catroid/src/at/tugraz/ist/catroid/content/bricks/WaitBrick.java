@@ -38,16 +38,16 @@ public class WaitBrick implements Brick, OnClickListener {
 	private Sprite sprite;
 	private transient View view;
 
-	private Formula timeToWaitInSecondsFormula;
+	private Formula timeToWaitInSeconds;
 
-	public WaitBrick(Sprite sprite, int timeToWaitInMilliseconds) {
+	public WaitBrick(Sprite sprite, int timeToWaitInMillisecondsValue) {
 		this.sprite = sprite;
-		timeToWaitInSecondsFormula = new Formula(Double.toString(timeToWaitInMilliseconds / 1000.0));
+		timeToWaitInSeconds = new Formula(Double.toString(timeToWaitInMillisecondsValue / 1000.0));
 	}
 
 	public WaitBrick(Sprite sprite, Formula timeToWaitInSecondsFormula) {
 		this.sprite = sprite;
-		this.timeToWaitInSecondsFormula = timeToWaitInSecondsFormula;
+		this.timeToWaitInSeconds = timeToWaitInSecondsFormula;
 	}
 
 	@Override
@@ -57,8 +57,7 @@ public class WaitBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		Double t = timeToWaitInSecondsFormula.interpret() * 1000;
-		int timeToWaitInMilliSeconds = t.intValue();
+		int timeToWaitInMilliSeconds = (int) (timeToWaitInSeconds.interpretFloat() * 1000f);
 
 		long startTime = System.currentTimeMillis();
 		while (System.currentTimeMillis() <= (startTime + timeToWaitInMilliSeconds)) {
@@ -91,8 +90,8 @@ public class WaitBrick implements Brick, OnClickListener {
 
 		TextView text = (TextView) view.findViewById(R.id.brick_wait_text_view);
 		EditText edit = (EditText) view.findViewById(R.id.brick_wait_edit_text);
-		timeToWaitInSecondsFormula.setTextFieldId(R.id.brick_wait_edit_text);
-		timeToWaitInSecondsFormula.refreshTextField(view);
+		timeToWaitInSeconds.setTextFieldId(R.id.brick_wait_edit_text);
+		timeToWaitInSeconds.refreshTextField(view);
 
 		text.setVisibility(View.GONE);
 		edit.setVisibility(View.VISIBLE);
@@ -108,11 +107,11 @@ public class WaitBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new WaitBrick(getSprite(), timeToWaitInSecondsFormula);
+		return new WaitBrick(getSprite(), timeToWaitInSeconds);
 	}
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, timeToWaitInSecondsFormula);
+		FormulaEditorDialog.showDialog(view, this, timeToWaitInSeconds);
 	}
 }

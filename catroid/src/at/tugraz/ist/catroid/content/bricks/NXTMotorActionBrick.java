@@ -55,7 +55,7 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 
 	private transient EditText editSpeed;
 
-	private Formula speedFormula;
+	private Formula speed;
 
 	protected Object readResolve() {
 		if (motor != null) {
@@ -64,12 +64,12 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 		return this;
 	}
 
-	public NXTMotorActionBrick(Sprite sprite, Motor motor, int speed) {
+	public NXTMotorActionBrick(Sprite sprite, Motor motor, int speedValue) {
 		this.sprite = sprite;
 		this.motorEnum = motor;
 		this.motor = motorEnum.name();
 
-		this.speedFormula = new Formula(Integer.toString(speed));
+		this.speed = new Formula(Integer.toString(speedValue));
 	}
 
 	public NXTMotorActionBrick(Sprite sprite, Motor motor, Formula speedFormula) {
@@ -77,7 +77,7 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 		this.motorEnum = motor;
 		this.motor = motorEnum.name();
 
-		this.speedFormula = speedFormula;
+		this.speed = speedFormula;
 	}
 
 	@Override
@@ -87,14 +87,13 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		int speed = Math.min(MAX_SPEED, speedFormula.interpret().intValue());
-		speed = Math.max(MIN_SPEED, speed);
+		int speedValue = speed.interpretInteger(MIN_SPEED, MAX_SPEED);
 
 		if (motorEnum.equals(Motor.MOTOR_A_C)) {
-			LegoNXT.sendBTCMotorMessage(NO_DELAY, Motor.MOTOR_A.ordinal(), speed, 0);
-			LegoNXT.sendBTCMotorMessage(NO_DELAY, Motor.MOTOR_C.ordinal(), speed, 0);
+			LegoNXT.sendBTCMotorMessage(NO_DELAY, Motor.MOTOR_A.ordinal(), speedValue, 0);
+			LegoNXT.sendBTCMotorMessage(NO_DELAY, Motor.MOTOR_C.ordinal(), speedValue, 0);
 		} else {
-			LegoNXT.sendBTCMotorMessage(NO_DELAY, motorEnum.ordinal(), speed, 0);
+			LegoNXT.sendBTCMotorMessage(NO_DELAY, motorEnum.ordinal(), speedValue, 0);
 		}
 		//LegoNXT.sendBTCMotorMessage((int) (duration * 1000), motor, 0, 0);
 
@@ -113,7 +112,7 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new NXTMotorActionBrick(getSprite(), motorEnum, speedFormula);
+		return new NXTMotorActionBrick(getSprite(), motorEnum, speed);
 	}
 
 	@Override
@@ -123,8 +122,8 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 
 		TextView textSpeed = (TextView) brickView.findViewById(R.id.motor_action_speed_text_view);
 		editSpeed = (EditText) brickView.findViewById(R.id.motor_action_speed_edit_text);
-		speedFormula.setTextFieldId(R.id.motor_action_speed_edit_text);
-		speedFormula.refreshTextField(brickView);
+		speed.setTextFieldId(R.id.motor_action_speed_edit_text);
+		speed.refreshTextField(brickView);
 
 		textSpeed.setVisibility(View.GONE);
 		editSpeed.setVisibility(View.VISIBLE);
@@ -161,7 +160,7 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, speedFormula);
+		FormulaEditorDialog.showDialog(view, this, speed);
 	}
 
 }

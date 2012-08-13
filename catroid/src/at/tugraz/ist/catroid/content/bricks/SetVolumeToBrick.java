@@ -38,16 +38,16 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 
 	private Sprite sprite;
-	private Formula volumeFormula;
+	private Formula volume;
 
-	public SetVolumeToBrick(Sprite sprite, float volume) {
+	public SetVolumeToBrick(Sprite sprite, float volumeValue) {
 		this.sprite = sprite;
-		volumeFormula = new Formula(Float.toString(volume));
+		volume = new Formula(Float.toString(volumeValue));
 	}
 
 	public SetVolumeToBrick(Sprite sprite, Formula volume) {
 		this.sprite = sprite;
-		volumeFormula = volume;
+		this.volume = volume;
 	}
 
 	@Override
@@ -57,14 +57,7 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		float volume = volumeFormula.interpret().floatValue();
-
-		if (volume < 0.0f) {
-			volume = 0.0f;
-		} else if (volume > 100.0f) {
-			volume = 100.0f;
-		}
-		SoundManager.getInstance().setVolume(volume);
+		SoundManager.getInstance().setVolume(volume.interpretFloat(0.0f, 100.0f));
 	}
 
 	@Override
@@ -79,8 +72,8 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 
 		TextView text = (TextView) view.findViewById(R.id.brick_set_volume_to_text_view);
 		EditText edit = (EditText) view.findViewById(R.id.brick_set_volume_to_edit_text);
-		volumeFormula.setTextFieldId(R.id.brick_set_volume_to_edit_text);
-		volumeFormula.refreshTextField(view);
+		volume.setTextFieldId(R.id.brick_set_volume_to_edit_text);
+		volume.refreshTextField(view);
 
 		text.setVisibility(View.GONE);
 		edit.setVisibility(View.VISIBLE);
@@ -97,11 +90,11 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new SetVolumeToBrick(getSprite(), volumeFormula);
+		return new SetVolumeToBrick(getSprite(), volume);
 	}
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, volumeFormula);
+		FormulaEditorDialog.showDialog(view, this, volume);
 	}
 }

@@ -39,16 +39,16 @@ public class SetGhostEffectBrick implements Brick, OnClickListener {
 
 	private transient View view;
 
-	private Formula transparencyFormula;
+	private Formula transparency;
 
 	public SetGhostEffectBrick(Sprite sprite, double ghostEffectValue) {
 		this.sprite = sprite;
-		transparencyFormula = new Formula(Double.toString(ghostEffectValue));
+		transparency = new Formula(Double.toString(ghostEffectValue));
 	}
 
-	public SetGhostEffectBrick(Sprite sprite, Formula ghostEffectValue) {
+	public SetGhostEffectBrick(Sprite sprite, Formula transparency) {
 		this.sprite = sprite;
-		transparencyFormula = ghostEffectValue;
+		this.transparency = transparency;
 	}
 
 	@Override
@@ -58,8 +58,7 @@ public class SetGhostEffectBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		double transparency = transparencyFormula.interpret();
-		sprite.costume.setAlphaValue((100f - (float) transparency) / 100);
+		sprite.costume.setAlphaValue((100f - transparency.interpretFloat()) / 100f);
 	}
 
 	@Override
@@ -74,8 +73,8 @@ public class SetGhostEffectBrick implements Brick, OnClickListener {
 
 		TextView textX = (TextView) view.findViewById(R.id.brick_set_ghost_effect_to_text_view);
 		EditText editX = (EditText) view.findViewById(R.id.brick_set_ghost_effect_to_edit_text);
-		transparencyFormula.setTextFieldId(R.id.brick_set_ghost_effect_to_edit_text);
-		transparencyFormula.refreshTextField(view);
+		transparency.setTextFieldId(R.id.brick_set_ghost_effect_to_edit_text);
+		transparency.refreshTextField(view);
 
 		textX.setVisibility(View.GONE);
 		editX.setVisibility(View.VISIBLE);
@@ -92,11 +91,11 @@ public class SetGhostEffectBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new SetGhostEffectBrick(getSprite(), transparencyFormula);
+		return new SetGhostEffectBrick(getSprite(), transparency);
 	}
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, transparencyFormula);
+		FormulaEditorDialog.showDialog(view, this, transparency);
 	}
 }

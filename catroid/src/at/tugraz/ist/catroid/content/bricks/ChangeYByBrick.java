@@ -42,18 +42,18 @@ public class ChangeYByBrick implements Brick, OnClickListener {
 	@XStreamOmitField
 	private transient View view;
 
-	private Formula yMovementFormula;
+	private Formula yMovement;
 
-	public ChangeYByBrick(Sprite sprite, int yMovement) {
+	public ChangeYByBrick(Sprite sprite, int yMovementValue) {
 		this.sprite = sprite;
 
-		yMovementFormula = new Formula(Integer.toString(yMovement));
+		yMovement = new Formula(Integer.toString(yMovementValue));
 	}
 
 	public ChangeYByBrick(Sprite sprite, Formula yMovement) {
 		this.sprite = sprite;
 
-		yMovementFormula = yMovement;
+		this.yMovement = yMovement;
 	}
 
 	@Override
@@ -63,17 +63,17 @@ public class ChangeYByBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		int yMovement = yMovementFormula.interpret().intValue();
+		int yMovementValue = yMovement.interpretInteger();
 
 		sprite.costume.aquireXYWidthHeightLock();
 		int yPosition = (int) sprite.costume.getYPosition();
 
-		if (yPosition > 0 && yMovement > 0 && yPosition + yMovement < 0) {
+		if (yPosition > 0 && yMovementValue > 0 && yPosition + yMovementValue < 0) {
 			yPosition = Integer.MAX_VALUE;
-		} else if (yPosition < 0 && yMovement < 0 && yPosition + yMovement > 0) {
+		} else if (yPosition < 0 && yMovementValue < 0 && yPosition + yMovementValue > 0) {
 			yPosition = Integer.MIN_VALUE;
 		} else {
-			yPosition += yMovement;
+			yPosition += yMovementValue;
 		}
 
 		sprite.costume.setXYPosition(sprite.costume.getXPosition(), yPosition);
@@ -92,8 +92,8 @@ public class ChangeYByBrick implements Brick, OnClickListener {
 
 		TextView textY = (TextView) view.findViewById(R.id.brick_change_y_text_view);
 		EditText editY = (EditText) view.findViewById(R.id.brick_change_y_edit_text);
-		yMovementFormula.setTextFieldId(R.id.brick_change_y_edit_text);
-		yMovementFormula.refreshTextField(view);
+		yMovement.setTextFieldId(R.id.brick_change_y_edit_text);
+		yMovement.refreshTextField(view);
 		textY.setVisibility(View.GONE);
 		editY.setVisibility(View.VISIBLE);
 		editY.setOnClickListener(this);
@@ -108,12 +108,12 @@ public class ChangeYByBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new ChangeYByBrick(getSprite(), yMovementFormula);
+		return new ChangeYByBrick(getSprite(), yMovement);
 	}
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, yMovementFormula);
+		FormulaEditorDialog.showDialog(view, this, yMovement);
 	}
 
 }

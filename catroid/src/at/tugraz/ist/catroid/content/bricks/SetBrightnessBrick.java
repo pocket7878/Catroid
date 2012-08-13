@@ -39,16 +39,16 @@ public class SetBrightnessBrick implements Brick, OnClickListener {
 
 	private transient View view;
 
-	private Formula brightnessFormula;
+	private Formula brightness;
 
 	public SetBrightnessBrick(Sprite sprite, double brightnessValue) {
 		this.sprite = sprite;
-		brightnessFormula = new Formula(Double.toString(brightnessValue));
+		brightness = new Formula(Double.toString(brightnessValue));
 	}
 
-	public SetBrightnessBrick(Sprite sprite, Formula brightnessValue) {
+	public SetBrightnessBrick(Sprite sprite, Formula brightness) {
 		this.sprite = sprite;
-		brightnessFormula = brightnessValue;
+		this.brightness = brightness;
 	}
 
 	@Override
@@ -58,8 +58,7 @@ public class SetBrightnessBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		double brightness = brightnessFormula.interpret();
-		sprite.costume.setBrightnessValue((float) brightness / 100);
+		sprite.costume.setBrightnessValue(brightness.interpretFloat() / 100f);
 	}
 
 	@Override
@@ -77,8 +76,8 @@ public class SetBrightnessBrick implements Brick, OnClickListener {
 
 		TextView textX = (TextView) view.findViewById(R.id.brick_set_brightness_text_view);
 		EditText editX = (EditText) view.findViewById(R.id.brick_set_brightness_edit_text);
-		brightnessFormula.setTextFieldId(R.id.brick_set_brightness_edit_text);
-		brightnessFormula.refreshTextField(view);
+		brightness.setTextFieldId(R.id.brick_set_brightness_edit_text);
+		brightness.refreshTextField(view);
 
 		textX.setVisibility(View.GONE);
 		editX.setVisibility(View.VISIBLE);
@@ -95,11 +94,11 @@ public class SetBrightnessBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new SetBrightnessBrick(getSprite(), brightnessFormula);
+		return new SetBrightnessBrick(getSprite(), brightness);
 	}
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, brightnessFormula);
+		FormulaEditorDialog.showDialog(view, this, brightness);
 	}
 }

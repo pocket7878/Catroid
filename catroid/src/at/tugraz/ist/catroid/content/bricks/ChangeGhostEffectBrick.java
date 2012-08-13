@@ -62,9 +62,8 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		double changeGhostEffectValue = changeGhostEffect.interpret() / -100.0;
-		sprite.costume.changeAlphaValueBy((float) changeGhostEffectValue);
-
+		float changeGhostEffectValue = changeGhostEffect.interpretFloat() / -100.0F;
+		sprite.costume.changeAlphaValueBy(changeGhostEffectValue);
 	}
 
 	@Override

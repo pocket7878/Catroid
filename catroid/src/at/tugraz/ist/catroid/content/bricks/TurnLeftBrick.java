@@ -40,16 +40,16 @@ public class TurnLeftBrick implements Brick, OnClickListener {
 
 	private transient View view;
 
-	private Formula degreesFormula;
+	private Formula degrees;
 
-	public TurnLeftBrick(Sprite sprite, double degrees) {
+	public TurnLeftBrick(Sprite sprite, double degreesValue) {
 		this.sprite = sprite;
-		degreesFormula = new Formula(Double.toString(degrees));
+		degrees = new Formula(Double.toString(degreesValue));
 	}
 
 	public TurnLeftBrick(Sprite sprite, Formula degrees) {
 		this.sprite = sprite;
-		degreesFormula = degrees;
+		this.degrees = degrees;
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class TurnLeftBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		sprite.costume.rotation = (sprite.costume.rotation % 360) + degreesFormula.interpret().floatValue();
+		sprite.costume.rotation = (sprite.costume.rotation % 360f) + degrees.interpretFloat();
 	}
 
 	@Override
@@ -74,8 +74,8 @@ public class TurnLeftBrick implements Brick, OnClickListener {
 
 		TextView textDegrees = (TextView) view.findViewById(R.id.brick_turn_left_text_view);
 		EditText editDegrees = (EditText) view.findViewById(R.id.brick_turn_left_edit_text);
-		degreesFormula.setTextFieldId(R.id.brick_turn_left_edit_text);
-		degreesFormula.refreshTextField(view);
+		degrees.setTextFieldId(R.id.brick_turn_left_edit_text);
+		degrees.refreshTextField(view);
 
 		textDegrees.setVisibility(View.GONE);
 		editDegrees.setVisibility(View.VISIBLE);
@@ -91,11 +91,11 @@ public class TurnLeftBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new TurnLeftBrick(getSprite(), degreesFormula);
+		return new TurnLeftBrick(getSprite(), degrees);
 	}
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, degreesFormula);
+		FormulaEditorDialog.showDialog(view, this, degrees);
 	}
 }

@@ -42,16 +42,16 @@ public class SetYBrick implements Brick, OnClickListener {
 	@XStreamOmitField
 	private transient View view;
 
-	private Formula yPositionFormula;
+	private Formula yPosition;
 
-	public SetYBrick(Sprite sprite, int yPosition) {
+	public SetYBrick(Sprite sprite, int yPositionValue) {
 		this.sprite = sprite;
-		yPositionFormula = new Formula(Integer.toString(yPosition));
+		yPosition = new Formula(Integer.toString(yPositionValue));
 	}
 
 	public SetYBrick(Sprite sprite, Formula yPosition) {
 		this.sprite = sprite;
-		yPositionFormula = yPosition;
+		this.yPosition = yPosition;
 	}
 
 	@Override
@@ -61,10 +61,8 @@ public class SetYBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		int yPosition = yPositionFormula.interpret().intValue();
-
 		sprite.costume.aquireXYWidthHeightLock();
-		sprite.costume.setYPosition(yPosition);
+		sprite.costume.setYPosition(yPosition.interpretInteger());
 		sprite.costume.releaseXYWidthHeightLock();
 	}
 
@@ -82,8 +80,8 @@ public class SetYBrick implements Brick, OnClickListener {
 		EditText editY = (EditText) view.findViewById(R.id.brick_set_y_edit_text);
 		//		editY.setText(String.valueOf(yPosition));
 		//		editY.setText(yPositionFormula.getEditTextRepresentation());
-		yPositionFormula.setTextFieldId(R.id.brick_set_y_edit_text);
-		yPositionFormula.refreshTextField(view);
+		yPosition.setTextFieldId(R.id.brick_set_y_edit_text);
+		yPosition.refreshTextField(view);
 
 		textY.setVisibility(View.GONE);
 		editY.setVisibility(View.VISIBLE);
@@ -99,11 +97,11 @@ public class SetYBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new SetYBrick(getSprite(), yPositionFormula);
+		return new SetYBrick(getSprite(), yPosition);
 	}
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, yPositionFormula);
+		FormulaEditorDialog.showDialog(view, this, yPosition);
 	}
 }

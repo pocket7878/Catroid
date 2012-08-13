@@ -42,16 +42,16 @@ public class SetXBrick implements Brick, OnClickListener {
 	@XStreamOmitField
 	private transient View view;
 
-	private Formula xPositionFormula;
+	private Formula xPosition;
 
-	public SetXBrick(Sprite sprite, int xPosition) {
+	public SetXBrick(Sprite sprite, int xPositionValue) {
 		this.sprite = sprite;
-		xPositionFormula = new Formula(Integer.toString(xPosition));
+		xPosition = new Formula(Integer.toString(xPositionValue));
 	}
 
 	public SetXBrick(Sprite sprite, Formula xPosition) {
 		this.sprite = sprite;
-		xPositionFormula = xPosition;
+		this.xPosition = xPosition;
 	}
 
 	@Override
@@ -61,10 +61,8 @@ public class SetXBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		int xPosition = xPositionFormula.interpret().intValue();
-
 		sprite.costume.aquireXYWidthHeightLock();
-		sprite.costume.setXPosition(xPosition);
+		sprite.costume.setXPosition(xPosition.interpretInteger());
 		sprite.costume.releaseXYWidthHeightLock();
 	}
 
@@ -81,8 +79,8 @@ public class SetXBrick implements Brick, OnClickListener {
 		TextView textX = (TextView) view.findViewById(R.id.brick_set_x_text_view);
 		EditText editX = (EditText) view.findViewById(R.id.brick_set_x_edit_text);
 
-		xPositionFormula.setTextFieldId(R.id.brick_set_x_edit_text);
-		xPositionFormula.refreshTextField(view);
+		xPosition.setTextFieldId(R.id.brick_set_x_edit_text);
+		xPosition.refreshTextField(view);
 
 		textX.setVisibility(View.GONE);
 		editX.setVisibility(View.VISIBLE);
@@ -98,11 +96,11 @@ public class SetXBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new SetXBrick(getSprite(), xPositionFormula);
+		return new SetXBrick(getSprite(), xPosition);
 	}
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, xPositionFormula);
+		FormulaEditorDialog.showDialog(view, this, xPosition);
 	}
 }

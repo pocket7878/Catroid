@@ -37,16 +37,16 @@ public class GoNStepsBackBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private Sprite sprite;
 
-	public Formula stepsFormula;
+	public Formula steps;
 
-	public GoNStepsBackBrick(Sprite sprite, int steps) {
+	public GoNStepsBackBrick(Sprite sprite, int stepsValue) {
 		this.sprite = sprite;
-		stepsFormula = new Formula(Integer.toString(steps));
+		steps = new Formula(Integer.toString(stepsValue));
 	}
 
 	public GoNStepsBackBrick(Sprite sprite, Formula steps) {
 		this.sprite = sprite;
-		stepsFormula = steps;
+		this.steps = steps;
 	}
 
 	@Override
@@ -56,15 +56,15 @@ public class GoNStepsBackBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		int steps = stepsFormula.interpret().intValue();
+		int stepsValue = steps.interpretInteger();
 
 		int zPosition = sprite.costume.zPosition;
-		if (steps > 0 && (zPosition - steps) > zPosition) {
+		if (stepsValue > 0 && (zPosition - stepsValue) > zPosition) {
 			sprite.costume.zPosition = Integer.MIN_VALUE;
-		} else if (steps < 0 && (zPosition - steps) < zPosition) {
+		} else if (stepsValue < 0 && (zPosition - stepsValue) < zPosition) {
 			sprite.costume.zPosition = Integer.MAX_VALUE;
 		} else {
-			sprite.costume.zPosition -= steps;
+			sprite.costume.zPosition -= stepsValue;
 		}
 	}
 
@@ -81,8 +81,8 @@ public class GoNStepsBackBrick implements Brick, OnClickListener {
 		TextView text = (TextView) view.findViewById(R.id.brick_go_back_n_text_view);
 		EditText edit = (EditText) view.findViewById(R.id.brick_go_back_edit_text);
 
-		stepsFormula.setTextFieldId(R.id.brick_go_back_edit_text);
-		stepsFormula.refreshTextField(view);
+		steps.setTextFieldId(R.id.brick_go_back_edit_text);
+		steps.refreshTextField(view);
 
 		text.setVisibility(View.GONE);
 		edit.setVisibility(View.VISIBLE);
@@ -98,12 +98,12 @@ public class GoNStepsBackBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new GoNStepsBackBrick(getSprite(), stepsFormula);
+		return new GoNStepsBackBrick(getSprite(), steps);
 	}
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, stepsFormula);
+		FormulaEditorDialog.showDialog(view, this, steps);
 	}
 
 }

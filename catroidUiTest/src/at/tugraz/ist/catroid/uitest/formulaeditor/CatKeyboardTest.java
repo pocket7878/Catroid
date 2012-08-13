@@ -78,7 +78,7 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 	@Smoke
 	public void testKeysFromNumbersKeyboard() {
 
-		solo.clickOnEditText(0);
+		//		solo.clickOnEditText(0);
 		solo.clickOnEditText(0);
 		solo.clickOnEditText(1);// View.performclick()
 
@@ -155,7 +155,7 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 	public void testKeysFromFunctionKeyboard() {
 
 		solo.clickOnEditText(0);
-		solo.clickOnEditText(0);
+		//		solo.clickOnEditText(0);
 		solo.clickOnEditText(1);
 
 		catKeyboardClicker.clickOnKey("del");
@@ -169,32 +169,46 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 		catKeyboardClicker.clickOnKey("keyboardswitch");
 		catKeyboardClicker.clickOnKey("cos");
 		assertEquals("Wrong button clicked", "cos( 0 )", text.getText().toString().substring(0, "cos( 0 )".length()));
-		catKeyboardClicker.clearEditTextWithDeletes(1);
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("sin");
 		assertEquals("Wrong button clicked", "sin( 0 )", text.getText().toString().substring(0, "sin( 0 )".length()));
-		catKeyboardClicker.clearEditTextWithDeletes(1);
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("tan");
 		assertEquals("Wrong button clicked", "tan( 0 )", text.getText().toString().substring(0, "tan( 0 )".length()));
-		catKeyboardClicker.clearEditTextWithDeletes(1);
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("ln");
 		assertEquals("Wrong button clicked", "ln( 0 )", text.getText().toString().substring(0, "ln( 0 )".length()));
-		catKeyboardClicker.clearEditTextWithDeletes(1);
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("log");
 		assertEquals("Wrong button clicked", "log( 0 )", text.getText().toString().substring(0, "log( 0 )".length()));
-		catKeyboardClicker.clearEditTextWithDeletes(1);
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("sqrt");
 		assertEquals("Wrong button clicked", "sqrt( 0 )", text.getText().toString().substring(0, "sqrt( 0 )".length()));
-		catKeyboardClicker.clearEditTextWithDeletes(1);
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("rand");
 		assertEquals("Wrong button clicked", "rand( 0 , 1 )",
 				text.getText().toString().substring(0, "rand( 0 , 1 )".length()));
-		catKeyboardClicker.clearEditTextWithDeletes(1);
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("pi");
 		assertEquals("Wrong button clicked", "pi", text.getText().toString().substring(0, "pi".length()));
@@ -210,7 +224,7 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 
 	public void testKeysFromSensorKeyboard() {
 
-		solo.clickOnEditText(0);
+		//		solo.clickOnEditText(0);
 		solo.clickOnEditText(0);
 		solo.clickOnEditText(1);
 
@@ -240,18 +254,18 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("pitch");
-		assertEquals("Wrong button clicked", "PITCH_ORIENTATION",
-				text.getText().toString().substring(0, "PITCH_ORIENTATION".length()));
+		assertEquals("Wrong button clicked", "PITCH_ORIENTATION_",
+				text.getText().toString().substring(0, "PITCH_ORIENTATION_".length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("roll");
-		assertEquals("Wrong button clicked", "ROLL_ORIENTATION",
-				text.getText().toString().substring(0, "ROLL_ORIENTATION".length()));
+		assertEquals("Wrong button clicked", "ROLL_ORIENTATION_",
+				text.getText().toString().substring(0, "ROLL_ORIENTATION_".length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("azimuth");
-		assertEquals("Wrong button clicked", "AZIMUTH_ORIENTATION",
-				text.getText().toString().substring(0, "AZIMUTH_ORIENTATION".length()));
+		assertEquals("Wrong button clicked", "AZIMUTH_ORIENTATION_",
+				text.getText().toString().substring(0, "AZIMUTH_ORIENTATION_".length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		solo.clickOnButton(2);

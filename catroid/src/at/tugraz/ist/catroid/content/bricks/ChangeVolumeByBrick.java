@@ -60,7 +60,7 @@ public class ChangeVolumeByBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		double volumeValue = volume.interpret();
+		float volumeValue = volume.interpretFloat();
 
 		float currentVolume = SoundManager.getInstance().getVolume();
 		currentVolume += volumeValue;

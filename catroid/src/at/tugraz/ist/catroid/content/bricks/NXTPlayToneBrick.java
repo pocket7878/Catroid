@@ -46,21 +46,21 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 
 	private transient EditText editFreq;
 
-	private Formula frequencyFormula;
-	private Formula durationInMsFormula;
+	private Formula frequency;
+	private Formula durationInSeconds;
 
-	public NXTPlayToneBrick(Sprite sprite, int hertz, int duration) {
+	public NXTPlayToneBrick(Sprite sprite, int frequencyValue, int durationVaue) {
 		this.sprite = sprite;
 
-		this.frequencyFormula = new Formula(Integer.toString(hertz));
-		this.durationInMsFormula = new Formula(Integer.toString(duration));
+		this.frequency = new Formula(Integer.toString(frequencyValue));
+		this.durationInSeconds = new Formula(Integer.toString(durationVaue));
 	}
 
 	public NXTPlayToneBrick(Sprite sprite, Formula frequencyFormula, Formula durationFormula) {
 		this.sprite = sprite;
 
-		this.frequencyFormula = frequencyFormula;
-		this.durationInMsFormula = durationFormula;
+		this.frequency = frequencyFormula;
+		this.durationInSeconds = durationFormula;
 	}
 
 	@Override
@@ -70,12 +70,10 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		int interpretFrequency = Math.min(MAX_FREQ_IN_HERTZ, frequencyFormula.interpret().intValue());
-		interpretFrequency = Math.max(MIN_FREQ_IN_HERTZ, interpretFrequency);
-		int durationInMs = Math.min(MAX_DURATION, durationInMsFormula.interpret().intValue());
-		durationInMs = Math.max(MIN_DURATION, durationInMs);
+		int frequencyValue = frequency.interpretInteger(MIN_FREQ_IN_HERTZ, MAX_FREQ_IN_HERTZ);
+		int durationInMillisecondsValue = (int) durationInSeconds.interpretFloat(MIN_DURATION, MAX_DURATION) * 1000;
 
-		LegoNXT.sendBTCPlayToneMessage(interpretFrequency, durationInMs);
+		LegoNXT.sendBTCPlayToneMessage(frequencyValue, durationInMillisecondsValue);
 
 	}
 
@@ -92,7 +90,7 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new NXTPlayToneBrick(getSprite(), frequencyFormula, durationInMsFormula);
+		return new NXTPlayToneBrick(getSprite(), frequency, durationInSeconds);
 	}
 
 	@Override
@@ -103,8 +101,8 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 		TextView textDuration = (TextView) brickView.findViewById(R.id.nxt_tone_duration_text_view);
 		EditText editDuration = (EditText) brickView.findViewById(R.id.nxt_tone_duration_edit_text);
 		//		editDuration.setText(String.valueOf(durationInMs / 1000.0));
-		durationInMsFormula.setTextFieldId(R.id.nxt_tone_duration_edit_text);
-		durationInMsFormula.refreshTextField(brickView);
+		durationInSeconds.setTextFieldId(R.id.nxt_tone_duration_edit_text);
+		durationInSeconds.refreshTextField(brickView);
 		//		EditDoubleDialog dialogDuration = new EditDoubleDialog(context, editDuration, duration, MIN_DURATION,
 		//				MAX_DURATION);
 		//		dialogDuration.setOnDismissListener(this);
@@ -119,8 +117,8 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 		TextView textFreq = (TextView) brickView.findViewById(R.id.nxt_tone_freq_text_view);
 		editFreq = (EditText) brickView.findViewById(R.id.nxt_tone_freq_edit_text);
 		//		editFreq.setText(String.valueOf(hertz / 100));
-		frequencyFormula.setTextFieldId(R.id.nxt_tone_freq_edit_text);
-		frequencyFormula.refreshTextField(brickView);
+		frequency.setTextFieldId(R.id.nxt_tone_freq_edit_text);
+		frequency.refreshTextField(brickView);
 
 		textFreq.setVisibility(View.GONE);
 		editFreq.setVisibility(View.VISIBLE);
@@ -134,10 +132,10 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.nxt_tone_freq_edit_text:
-				FormulaEditorDialog.showDialog(view, this, frequencyFormula);
+				FormulaEditorDialog.showDialog(view, this, frequency);
 				break;
 			case R.id.nxt_tone_duration_edit_text:
-				FormulaEditorDialog.showDialog(view, this, durationInMsFormula);
+				FormulaEditorDialog.showDialog(view, this, durationInSeconds);
 				break;
 		}
 

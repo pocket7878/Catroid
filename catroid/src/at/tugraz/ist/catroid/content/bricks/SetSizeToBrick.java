@@ -36,18 +36,18 @@ import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 public class SetSizeToBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private Sprite sprite;
-	private Formula sizeFormula;
+	private Formula size;
 
 	private transient View view;
 
-	public SetSizeToBrick(Sprite sprite, double size) {
+	public SetSizeToBrick(Sprite sprite, double sizeValue) {
 		this.sprite = sprite;
-		sizeFormula = new Formula(Double.toString(size));
+		size = new Formula(Double.toString(sizeValue));
 	}
 
 	public SetSizeToBrick(Sprite sprite, Formula size) {
 		this.sprite = sprite;
-		sizeFormula = size;
+		this.size = size;
 	}
 
 	@Override
@@ -57,8 +57,7 @@ public class SetSizeToBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		double size = sizeFormula.interpret();
-		sprite.costume.setSize((float) size / 100);
+		sprite.costume.setSize(size.interpretFloat() / 100f);
 	}
 
 	@Override
@@ -72,8 +71,8 @@ public class SetSizeToBrick implements Brick, OnClickListener {
 		view = View.inflate(context, R.layout.brick_set_size_to, null);
 		TextView text = (TextView) view.findViewById(R.id.brick_set_size_to_text_view);
 		EditText edit = (EditText) view.findViewById(R.id.brick_set_size_to_edit_text);
-		sizeFormula.setTextFieldId(R.id.brick_set_size_to_edit_text);
-		sizeFormula.refreshTextField(view);
+		size.setTextFieldId(R.id.brick_set_size_to_edit_text);
+		size.refreshTextField(view);
 
 		text.setVisibility(View.GONE);
 		edit.setVisibility(View.VISIBLE);
@@ -89,11 +88,11 @@ public class SetSizeToBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new SetSizeToBrick(getSprite(), sizeFormula);
+		return new SetSizeToBrick(getSprite(), size);
 	}
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, sizeFormula);
+		FormulaEditorDialog.showDialog(view, this, size);
 	}
 }
