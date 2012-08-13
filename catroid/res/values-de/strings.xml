@@ -337,5 +337,6 @@
     <string name="formula_editor_parse_fail">Fehler in der Eingabe! Änderungen nicht gespeichert.</string>
     <string name="formula_nothing_selected">Bitte Wert eingeben!</string>
     <string name="formula_editor_confirm_discard">Änderungen verwerfen, zum Bestätigen erneut klicken.</string>
+    <string name="formula_editor_parse_fail_formula_too_long">Formel zu lang! Änderungen nicht gespeichert.</string>
      
 </resources>

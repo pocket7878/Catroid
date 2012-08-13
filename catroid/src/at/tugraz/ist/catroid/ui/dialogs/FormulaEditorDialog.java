@@ -27,6 +27,11 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class FormulaEditorDialog extends DialogFragment implements OnClickListener, OnKeyListener {
 
+	/**
+	 * 
+	 */
+	private static final int PARSER_OK = -1;
+	private static final int PARSER_STACK_OVERFLOW = -2;
 	private Context context;
 	private static Brick currentBrick = null;
 	private static Formula currentFormula = null;
@@ -180,14 +185,13 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 	private int parseFormula(String formulaToParse) {
 		CalcGrammarParser parser = CalcGrammarParser.getFormulaParser(formulaToParse);
 		FormulaElement parserFormulaElement = parser.parseFormula();
+		int parserResult = parser.getErrorCharacterPosition();
 
-		if (parserFormulaElement == null) {
-			showToast(R.string.formula_editor_parse_fail);
-			return parser.getErrorCharacterPosition();
-		} else {
+		if (parserResult == PARSER_OK) {
 			currentFormula.setRoot(parserFormulaElement);
 		}
-		return -1;
+
+		return parserResult;
 	}
 
 	@Override
@@ -200,16 +204,20 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 				} else {
 					String formulaToParse = formulaEditorEditText.getText().toString();
 					int err = parseFormula(formulaToParse);
-					if (err == -1) {
-						if (brickSpace != null) {
-							currentFormula.refreshTextField(brickView);
-						}
-						formulaEditorEditText.formulaSaved();
-						showToast(R.string.formula_editor_changes_saved);
-					} else if (err == -2) {
-						//Crashed it like a BOSS!
-					} else {
-						formulaEditorEditText.highlightParseError(err);
+					switch (err) {
+						case PARSER_OK:
+							if (brickSpace != null) {
+								currentFormula.refreshTextField(brickView);
+							}
+							formulaEditorEditText.formulaSaved();
+							showToast(R.string.formula_editor_changes_saved);
+							break;
+						case PARSER_STACK_OVERFLOW:
+							showToast(R.string.formula_editor_parse_fail_formula_too_long);
+							break;
+						default:
+							showToast(R.string.formula_editor_parse_fail);
+							formulaEditorEditText.highlightParseError(err);
 					}
 				}
 				break;
