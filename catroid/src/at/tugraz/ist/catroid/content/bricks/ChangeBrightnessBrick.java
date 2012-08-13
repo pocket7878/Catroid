@@ -23,7 +23,6 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -32,7 +31,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
-import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class ChangeBrightnessBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
@@ -77,10 +76,6 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 		return this.sprite;
 	}
 
-	//	public double getChangeBrightness() {
-	//		return changeBrightness;
-	//	}
-
 	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (instance == null) {
@@ -91,7 +86,6 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 
 		TextView textX = (TextView) view.findViewById(R.id.brick_change_brightness_text_view);
 		EditText editX = (EditText) view.findViewById(R.id.brick_change_brightness_edit_text);
-		//		editX.setText(String.valueOf(changeBrightness));
 		changeBrightnessFormula.setTextFieldId(R.id.brick_change_brightness_edit_text);
 		changeBrightnessFormula.refreshTextField(view);
 
@@ -115,14 +109,7 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		ScriptTabActivity activity = null;
-		if (view.getContext().getClass().equals(ScriptTabActivity.class)) {
-			activity = (ScriptTabActivity) view.getContext();
-		} else {
-			activity = (ScriptTabActivity) ((ContextWrapper) view.getContext()).getBaseContext();
-		}
-
-		activity.showFormulaEditorDialog(this, changeBrightnessFormula);
+		FormulaEditorDialog.showDialog(view, this, changeBrightnessFormula);
 	}
 
 }

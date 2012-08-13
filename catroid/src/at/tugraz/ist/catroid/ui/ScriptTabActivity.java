@@ -36,12 +36,9 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.adapter.TabsPagerAdapter;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 import at.tugraz.ist.catroid.ui.fragment.CostumeFragment;
 import at.tugraz.ist.catroid.ui.fragment.ScriptFragment;
 import at.tugraz.ist.catroid.ui.fragment.SoundFragment;
@@ -71,8 +68,6 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 	private ActionBar actionBar;
 	private ViewPager viewPager;
 	private TabsPagerAdapter tabsAdapter;
-
-	private FormulaEditorDialog formulaEditorDialog = null;
 
 	private TabHost tabHost;
 
@@ -206,22 +201,6 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 
 	public Fragment getCurrentTabFragment() {
 		return getTabFragment(tabHost.getCurrentTab());
-	}
-
-	public void showFormulaEditorDialog(Brick brick, Formula formula) {
-
-		Log.i("info", "FEDialog exists? " + getSupportFragmentManager().findFragmentByTag("formula_editor_dialog"));
-
-		if (getSupportFragmentManager().findFragmentByTag("formula_editor_dialog") == null) {
-			formulaEditorDialog = new FormulaEditorDialog(brick, formula);
-			formulaEditorDialog.show(getSupportFragmentManager(), "formula_editor_dialog");
-		} else {
-			if (formulaEditorDialog == null) {
-				formulaEditorDialog = (FormulaEditorDialog) getSupportFragmentManager().findFragmentByTag(
-						"formula_editor_dialog");
-			}
-			formulaEditorDialog.setInputFormula(formula);
-		}
 	}
 
 }

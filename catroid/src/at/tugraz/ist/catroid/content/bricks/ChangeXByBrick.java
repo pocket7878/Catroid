@@ -23,7 +23,6 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -32,7 +31,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
-import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -114,15 +113,7 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		ScriptTabActivity activity = null;
-		if (view.getContext().getClass().equals(ScriptTabActivity.class)) {
-			activity = (ScriptTabActivity) view.getContext();
-		} else {
-			activity = (ScriptTabActivity) ((ContextWrapper) view.getContext()).getBaseContext();
-		}
-
-		activity.showFormulaEditorDialog(this, xMovementFormula);
-
+		FormulaEditorDialog.showDialog(view, this, xMovementFormula);
 	}
 
 }

@@ -22,7 +22,8 @@ import at.tugraz.ist.catroid.formulaeditor.CatKeyboardView;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.formulaeditor.FormulaEditorEditText;
 import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
-import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class FormulaEditorDialog extends DialogFragment implements OnClickListener, OnKeyListener {
 
@@ -70,11 +71,11 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 	}
 
 	public static void showDialog(View view, Brick brick, Formula formula) {
-		ScriptTabActivity activity = null;
-		if (view.getContext().getClass().equals(ScriptTabActivity.class)) { //this view is from the script list in script tab activity
-			activity = (ScriptTabActivity) view.getContext();
+		SherlockFragmentActivity activity = null;
+		if (SherlockFragmentActivity.class.isAssignableFrom(view.getContext().getClass())) { //this view is from any SherlockFragmentActivity
+			activity = (SherlockFragmentActivity) view.getContext();
 		} else {
-			activity = (ScriptTabActivity) ((ContextWrapper) view.getContext()).getBaseContext(); //this view is from within this dialog
+			activity = (SherlockFragmentActivity) ((ContextWrapper) view.getContext()).getBaseContext(); //this view is from within this dialog, happens when you click an edittext within the editor
 		}
 
 		FormulaEditorDialog formulaEditorDialog = null;

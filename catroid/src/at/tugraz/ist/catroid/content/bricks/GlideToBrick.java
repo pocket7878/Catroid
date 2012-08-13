@@ -23,7 +23,6 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -32,13 +31,10 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
-import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class GlideToBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
-	//private int xDestination;
-	//private int yDestination;
-	//private int durationInMilliSeconds;
 	private Sprite sprite;
 
 	private Formula xDestinationFormula;
@@ -195,24 +191,17 @@ public class GlideToBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		ScriptTabActivity activity = null;
-		if (view.getContext().getClass().equals(ScriptTabActivity.class)) {
-			activity = (ScriptTabActivity) view.getContext();
-		} else {
-			activity = (ScriptTabActivity) ((ContextWrapper) view.getContext()).getBaseContext();
-		}
-
 		switch (view.getId()) {
 			case R.id.brick_glide_to_x_edit_text:
-				activity.showFormulaEditorDialog(this, xDestinationFormula);
+				FormulaEditorDialog.showDialog(view, this, xDestinationFormula);
 				break;
 
 			case R.id.brick_glide_to_y_edit_text:
-				activity.showFormulaEditorDialog(this, yDestinationFormula);
+				FormulaEditorDialog.showDialog(view, this, yDestinationFormula);
 				break;
 
 			case R.id.brick_glide_to_duration_edit_text:
-				activity.showFormulaEditorDialog(this, durationInSecondsFormula);
+				FormulaEditorDialog.showDialog(view, this, durationInSecondsFormula);
 				break;
 		}
 

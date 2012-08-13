@@ -120,26 +120,15 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		//		FormulaEditorDialog.showDialog(view);
-		//		ScriptTabActivity activity = null;
-		//		if (view.getContext().getClass().equals(ScriptTabActivity.class)) {
-		//			activity = (ScriptTabActivity) view.getContext();
-		//		} else {
-		//			activity = (ScriptTabActivity) ((ContextWrapper) view.getContext()).getBaseContext();
-		//		}
-
 		switch (view.getId()) {
 			case R.id.brick_place_at_x_edit_text:
-				//activity.showFormulaEditorDialog(this, xPositionFormula);
 				FormulaEditorDialog.showDialog(view, this, xPositionFormula);
 				break;
 
 			case R.id.brick_place_at_y_edit_text:
-				//activity.showFormulaEditorDialog(this, yPositionFormula);
 				FormulaEditorDialog.showDialog(view, this, yPositionFormula);
 				break;
 		}
-
 	}
 
 }
