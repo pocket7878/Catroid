@@ -81,8 +81,7 @@ public class PhysicWorld implements Serializable {
 	}
 
 	public void step(float deltaTime) {
-		world.step(PhysicSettings.World.TIMESTEP, PhysicSettings.World.VELOCITY_ITERATIONS,
-				PhysicSettings.World.POSITION_ITERATIONS);
+		world.step(deltaTime, PhysicSettings.World.VELOCITY_ITERATIONS, PhysicSettings.World.POSITION_ITERATIONS);
 		updateSprites();
 	}
 

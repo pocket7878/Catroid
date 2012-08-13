@@ -37,7 +37,6 @@ public class PhysicSettings {
 	public static class World {
 		// Ratio of pixels to meters
 		public final static float RATIO = 40.0f;
-		public final static float TIMESTEP = 1.0f / 30.0f;
 		public final static int VELOCITY_ITERATIONS = 10;
 		public final static int POSITION_ITERATIONS = 10;
 
