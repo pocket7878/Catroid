@@ -1,6 +1,7 @@
 package at.tugraz.ist.catroid.ui.dialogs;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import at.tugraz.ist.catroid.formulaeditor.CatKeyboardView;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.formulaeditor.FormulaEditorEditText;
 import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 
 public class FormulaEditorDialog extends DialogFragment implements OnClickListener, OnKeyListener {
 
@@ -65,6 +67,25 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 	public void onSaveInstanceState(Bundle saveInstanceState) {
 		saveInstanceState.putBoolean("restoreInstance", true);
 		super.onSaveInstanceState(saveInstanceState);
+	}
+
+	public static void showDialog(View view, Brick brick, Formula formula) {
+		ScriptTabActivity activity = null;
+		if (view.getContext().getClass().equals(ScriptTabActivity.class)) { //this view is from the script list in script tab activity
+			activity = (ScriptTabActivity) view.getContext();
+		} else {
+			activity = (ScriptTabActivity) ((ContextWrapper) view.getContext()).getBaseContext(); //this view is from within this dialog
+		}
+
+		FormulaEditorDialog formulaEditorDialog = null;
+		if (activity.getSupportFragmentManager().findFragmentByTag("formula_editor_dialog") == null) {
+			formulaEditorDialog = new FormulaEditorDialog(brick, formula);
+			formulaEditorDialog.show(activity.getSupportFragmentManager(), "formula_editor_dialog");
+		} else {
+			formulaEditorDialog = (FormulaEditorDialog) activity.getSupportFragmentManager().findFragmentByTag(
+					"formula_editor_dialog");
+			formulaEditorDialog.setInputFormula(formula);
+		}
 	}
 
 	@Override
