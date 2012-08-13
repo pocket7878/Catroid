@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
@@ -177,19 +176,14 @@ public class UtilFile {
 		return projectList;
 	}
 
-	public static void copyProject(String newProjectName, String oldProjectName) {
+	public static void copyProject(String newProjectName, String oldProjectName) throws IOException {
 		File oldProjectRootDirectory = new File(Utils.buildProjectPath(oldProjectName));
 		File newProjectRootDirectory = new File(Utils.buildProjectPath(newProjectName));
 
-		try {
-			copyDirectory(newProjectRootDirectory, oldProjectRootDirectory);
-			Project copiedProject = StorageHandler.getInstance().loadProject(newProjectName);
-			copiedProject.setName(newProjectName);
-			StorageHandler.getInstance().saveProject(copiedProject);
-		} catch (IOException e) {
-			UtilFile.deleteDirectory(newProjectRootDirectory);
-			Log.e("CATROID", "Error while copying project, destroy newly created directories.", e);
-		}
+		copyDirectory(newProjectRootDirectory, oldProjectRootDirectory);
+		Project copiedProject = StorageHandler.getInstance().loadProject(newProjectName);
+		copiedProject.setName(newProjectName);
+		StorageHandler.getInstance().saveProject(copiedProject);
 	}
 
 	private static void copyDirectory(File destinationFile, File sourceFile) throws IOException {

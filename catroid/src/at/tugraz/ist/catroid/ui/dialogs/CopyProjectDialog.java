@@ -22,8 +22,12 @@
  */
 package at.tugraz.ist.catroid.ui.dialogs;
 
+import java.io.File;
+import java.io.IOException;
+
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -54,7 +58,13 @@ public class CopyProjectDialog extends TextDialog {
 				Utils.displayErrorMessage(activity, activity.getString(R.string.error_project_exists));
 				return;
 			} else {
-				UtilFile.copyProject(newProjectName, oldProjectName);
+				try {
+					UtilFile.copyProject(newProjectName, oldProjectName);
+				} catch (IOException e) {
+					Utils.displayErrorMessage(activity, activity.getString(R.string.error_copy_project));
+					UtilFile.deleteDirectory(new File(Utils.buildProjectPath(newProjectName)));
+					Log.e("CATROID", "Error while copying project, destroy newly created directories.", e);
+				}
 			}
 			((MyProjectsActivity) activity).initAdapter();
 		} else {
