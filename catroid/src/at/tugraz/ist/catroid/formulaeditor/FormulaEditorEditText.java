@@ -26,6 +26,7 @@ package at.tugraz.ist.catroid.formulaeditor;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
+import android.os.Build;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.Spannable;
@@ -54,10 +55,12 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	public static final int BRACKET_CLOSE = 4;
 	public static final int BRACKET_OPEN = 5;
 	public static final int SENSOR_VALUE = 6;
+	private static final double ANDROID_3_4_EXTRA_LINESPACING = 2.0;
 
 	private int selectionStartIndex = 0;
 	private int selectionEndIndex = 0;
 	private int absoluteCursorPosition = 0;
+	private double extraLineSpacing = 0;
 
 	private boolean editMode = false;
 	private Spannable highlightSpan = null;
@@ -93,7 +96,11 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		this.setSelectAllOnFocus(false);
 		this.catKeyboardView = ckv;
 		this.setCursorVisible(false);
-
+		//setLineSpacing((float) 1.0, (float) 1.0);
+		Log.i("info", "Version: " + Build.VERSION.SDK_INT);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			extraLineSpacing = ANDROID_3_4_EXTRA_LINESPACING;
+		}
 		int orientation = dialog.getResources().getConfiguration().orientation;
 		if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			numberOfVisibleLines = 5;
@@ -173,7 +180,8 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			//				absoluteCursorPosition = getText().length() - 1;
 			//			}
 
-			lineHeight = layout.getSpacingMultiplier() * this.getTextSize() + 5;
+			//Log.i("info", "spacing mult: " + layout.getSpacingMultiplier() + " add " + layout.getSpacingAdd());
+			lineHeight = this.getTextSize() + 5;
 			horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
 			verticalOffset = layout.getLineForOffset(absoluteCursorPosition);
 			verticalOffset -= (int) (scrollOffset / lineHeight);
@@ -182,8 +190,8 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 		float startX = horizontalOffset;
 		float endX = horizontalOffset;
-		float startY = (5 + scrollOffset + lineHeight * verticalOffset) - betweenLineOffset;
-		float endY = (5 + scrollOffset + lineHeight * (verticalOffset + 1)) - betweenLineOffset;
+		float startY = (float) ((5 + scrollOffset + (lineHeight + extraLineSpacing) * verticalOffset) - betweenLineOffset);
+		float endY = (float) ((5 + scrollOffset + (lineHeight + extraLineSpacing) * (verticalOffset + 1)) - betweenLineOffset);
 		canvas.drawLine(startX, startY, endX, endY, getPaint());
 
 	}
