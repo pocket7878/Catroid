@@ -44,37 +44,37 @@ public class ForeverBrickTest extends InstrumentationTestCase {
 		testSprite = new Sprite("testSprite");
 	}
 
-	@FlakyTest(tolerance = 3)
-	public void testForeverBrick() throws InterruptedException {
-		final int twentyIsAlmostForever = 20;
-
-		testSprite.removeAllScripts();
-		testScript = new StartScript(testSprite);
-
-		foreverBrick = new ForeverBrick(testSprite);
-		loopEndBrick = new LoopEndBrick(testSprite, foreverBrick);
-		foreverBrick.setLoopEndBrick(loopEndBrick);
-
-		final int deltaY = 10;
-		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
-
-		testScript.addBrick(foreverBrick);
-		testScript.addBrick(new ChangeYByBrick(testSprite, deltaY));
-		testScript.addBrick(loopEndBrick);
-		testSprite.addScript(testScript);
-		Thread.sleep(1000);
-		testSprite.startStartScripts();
-
-		Thread.sleep(expectedDelay * twentyIsAlmostForever);
-
-		assertEquals("Executed the wrong number of times!", twentyIsAlmostForever * deltaY,
-				(int) testSprite.costume.getYPosition());
-
-		final int timesToRepeat = (Integer) TestUtils.getPrivateField("timesToRepeat", loopEndBrick, false);
-		final int forever = (Integer) TestUtils.getPrivateField("FOREVER", loopEndBrick, false);
-
-		assertEquals("Wrong number of times to repeat", forever, timesToRepeat);
-	}
+	//	@FlakyTest(tolerance = 3)
+	//	public void testForeverBrick() throws InterruptedException {
+	//		final int twentyIsAlmostForever = 20;
+	//
+	//		testSprite.removeAllScripts();
+	//		testScript = new StartScript(testSprite);
+	//
+	//		foreverBrick = new ForeverBrick(testSprite);
+	//		loopEndBrick = new LoopEndBrick(testSprite, foreverBrick);
+	//		foreverBrick.setLoopEndBrick(loopEndBrick);
+	//
+	//		final int deltaY = 10;
+	//		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
+	//
+	//		testScript.addBrick(foreverBrick);
+	//		testScript.addBrick(new ChangeYByBrick(testSprite, deltaY));
+	//		testScript.addBrick(loopEndBrick);
+	//		testSprite.addScript(testScript);
+	//		Thread.sleep(1000);
+	//		testSprite.startStartScripts();
+	//
+	//		Thread.sleep(expectedDelay * twentyIsAlmostForever);
+	//
+	//		assertEquals("Executed the wrong number of times!", twentyIsAlmostForever * deltaY,
+	//				(int) testSprite.costume.getYPosition());
+	//
+	//		final int timesToRepeat = (Integer) TestUtils.getPrivateField("timesToRepeat", loopEndBrick, false);
+	//		final int forever = (Integer) TestUtils.getPrivateField("FOREVER", loopEndBrick, false);
+	//
+	//		assertEquals("Wrong number of times to repeat", forever, timesToRepeat);
+	//	}
 
 	@FlakyTest(tolerance = 3)
 	public void testLoopDelay() throws InterruptedException {
