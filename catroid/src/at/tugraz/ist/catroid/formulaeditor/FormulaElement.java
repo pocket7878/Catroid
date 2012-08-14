@@ -187,19 +187,19 @@ public class FormulaElement implements Serializable {
 			}
 
 			if (value.equals("sin")) {
-				return java.lang.Math.sin(left);
+				return java.lang.Math.sin(Math.toRadians(left));
 			}
 			if (value.equals("cos")) {
-				return java.lang.Math.cos(left);
+				return java.lang.Math.cos(Math.toRadians(left));
 			}
 			if (value.equals("tan")) {
-				return java.lang.Math.tan(left);
+				return java.lang.Math.tan(Math.toRadians(left));
 			}
 			if (value.equals("ln")) {
-				return java.lang.Math.log1p(left);// TODO check this X_X
+				return java.lang.Math.log(left);
 			}
 			if (value.equals("log")) {
-				return java.lang.Math.log(left);
+				return java.lang.Math.log10(left);
 			}
 			if (value.equals("sqrt")) {
 				return java.lang.Math.sqrt(left);
