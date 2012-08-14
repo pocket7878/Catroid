@@ -83,16 +83,8 @@ public class WaitBrickTest extends ActivityInstrumentationTestCase2<ScriptTabAct
 
 		double waitTime = 2.25;
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, waitTime, "timeToWaitInSecondsFormula", waitBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, waitTime, "timeToWaitInSeconds", waitBrick);
 
-		//		solo.clickOnEditText(0);
-		//		solo.clearEditText(0);
-		//		solo.enterText(0, waitTime + "");
-		//		solo.clickOnButton(solo.getString(R.string.ok));
-		//
-		//		int actualWaitTime = (Integer) UiTestUtils.getPrivateField("timeToWaitInMilliSeconds", waitBrick);
-		//		assertEquals("Wrong text in field", (long) (waitTime * 1000), actualWaitTime);
-		//		assertEquals("Text not updated", waitTime, Double.parseDouble(solo.getEditText(0).getText().toString()));
 	}
 
 	public void testResizeInputField() {

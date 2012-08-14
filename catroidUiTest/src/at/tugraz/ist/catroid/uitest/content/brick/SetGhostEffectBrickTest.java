@@ -83,7 +83,7 @@ public class SetGhostEffectBrickTest extends ActivityInstrumentationTestCase2<Sc
 
 		double newEffect = 65.9;
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, newEffect, "transparencyFormula", setGhostEffectBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, newEffect, "transparency", setGhostEffectBrick);
 	}
 
 	public void testResizeInputField() {

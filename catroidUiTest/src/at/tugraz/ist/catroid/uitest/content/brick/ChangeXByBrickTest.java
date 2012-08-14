@@ -84,7 +84,7 @@ public class ChangeXByBrickTest extends ActivityInstrumentationTestCase2<ScriptT
 		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
 		assertNotNull("TextView does not exist.", solo.getText(getActivity().getString(R.string.brick_change_x_by)));
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, X_TO_CHANGE, "xMovementFormula", changeXByBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, X_TO_CHANGE, "xMovement", changeXByBrick);
 
 	}
 
