@@ -75,7 +75,7 @@
     <Row  android:rowEdgeFlags="bottom">
         <Key android:codes="7" android:keyLabel="0" />
         <Key android:codes="55" android:keyLabel="," />
-		<Key android:codes="26" android:keyLabel="^" />
+		<Key android:codes="1200" android:keyLabel="( )" />
         <Key android:codes="60" android:keyLabel="O°°" android:keyWidth="40%p" android:isModifier="true" android:keyEdgeFlags="right" />
     </Row>
 </Keyboard>

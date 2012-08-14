@@ -112,7 +112,7 @@ public class CatKeyboardClicker {
 		keyString.get(0).add("5");
 		keyString.get(0).add("2");
 
-		keyString.get(0).add("^");
+		keyString.get(0).add("bracket");
 		keyString.get(0).add("9");
 		keyString.get(0).add("6");
 		keyString.get(0).add("3");
