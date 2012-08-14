@@ -199,17 +199,20 @@ public class UtilFile {
 	}
 
 	public static File copyFile(File destinationFile, File sourceFile, File directory) throws IOException {
-		FileInputStream inputStream = new FileInputStream(sourceFile);
-		FileChannel inputChannel = inputStream.getChannel();
-		FileOutputStream outputStream = new FileOutputStream(destinationFile);
-		FileChannel outputChannel = outputStream.getChannel();
-
+		FileInputStream inputStream = null;
+		FileChannel inputChannel = null;
+		FileOutputStream outputStream = null;
+		FileChannel outputChannel = null;
 		try {
+			inputStream = new FileInputStream(sourceFile);
+			inputChannel = inputStream.getChannel();
+			outputStream = new FileOutputStream(destinationFile);
+			outputChannel = outputStream.getChannel();
 			inputChannel.transferTo(0, inputChannel.size(), outputChannel);
 			return destinationFile;
 		} catch (IOException e) {
 			e.printStackTrace();
-			return null;
+			throw e;
 		} finally {
 			if (inputChannel != null) {
 				inputChannel.close();
