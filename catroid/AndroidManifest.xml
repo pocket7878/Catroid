@@ -99,6 +99,9 @@
             android:name=".bluetooth.DeviceListActivity"
             android:theme="@android:style/Theme.Dialog" />
         <activity
+            android:name=".ui.FormulaEditorActivity"
+            android:theme="@style/Theme.Catroid" />
+        <activity
             android:name=".soundrecorder.SoundRecorderActivity"
             android:theme="@style/Theme.Catroid" 
             android:label="@string/soundrecorder_name"

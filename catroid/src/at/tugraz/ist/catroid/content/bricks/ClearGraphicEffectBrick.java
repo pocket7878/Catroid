@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.formulaeditor.Formula;
 
 public class ClearGraphicEffectBrick implements Brick {
 	private static final long serialVersionUID = 1L;
@@ -39,19 +40,23 @@ public class ClearGraphicEffectBrick implements Brick {
 		this.sprite = sprite;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		sprite.costume.setBrightnessValue(1f);
 		sprite.costume.setAlphaValue(1f);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
 			view = View.inflate(context, R.layout.brick_clear_graphic_effect, null);
@@ -60,6 +65,7 @@ public class ClearGraphicEffectBrick implements Brick {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		return inflater.inflate(R.layout.brick_clear_graphic_effect, null);
@@ -70,8 +76,20 @@ public class ClearGraphicEffectBrick implements Brick {
 		return new ClearGraphicEffectBrick(getSprite());
 	}
 
+	@Override
 	public void onClick(View view) {
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see at.tugraz.ist.catroid.content.bricks.Brick#getFormula()
+	 */
+	@Override
+	public Formula getFormula() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

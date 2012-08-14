@@ -35,6 +35,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
@@ -117,21 +118,21 @@ public class SpeakBrick implements Brick {
 			@Override
 			public void onClick(View v) {
 				ScriptTabActivity activity = (ScriptTabActivity) context;
-				
+
 				BrickTextDialog editDialog = new BrickTextDialog() {
 					@Override
 					protected void initialize() {
 						input.setText(text);
 						input.setSelectAllOnFocus(true);
 					}
-					
+
 					@Override
 					protected boolean handleOkButton() {
 						text = (input.getText().toString()).trim();
 						return true;
 					}
 				};
-				
+
 				editDialog.show(activity.getSupportFragmentManager(), "dialog_speak_brick");
 			}
 		});
@@ -147,8 +148,21 @@ public class SpeakBrick implements Brick {
 	public Brick clone() {
 		return new SpeakBrick(this.sprite, this.text);
 	}
+
+	@Override
 	public void onClick(View view) {
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see at.tugraz.ist.catroid.content.bricks.Brick#getFormula()
+	 */
+	@Override
+	public Formula getFormula() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

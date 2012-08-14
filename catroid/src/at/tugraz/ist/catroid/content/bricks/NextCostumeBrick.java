@@ -33,6 +33,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.formulaeditor.Formula;
 
 public class NextCostumeBrick implements Brick {
 
@@ -44,6 +45,7 @@ public class NextCostumeBrick implements Brick {
 		this.sprite = sprite;
 	}
 
+	@Override
 	public void execute() {
 
 		final ArrayList<CostumeData> costumeDataList = sprite.getCostumeDataList();
@@ -75,10 +77,12 @@ public class NextCostumeBrick implements Brick {
 		}
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return sprite;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.brick_next_costume, null);
@@ -94,11 +98,13 @@ public class NextCostumeBrick implements Brick {
 		return new NextCostumeBrick(sprite);
 	}
 
+	@Override
 	public int getRequiredResources() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
 			view = View.inflate(context, R.layout.brick_next_costume, null);
@@ -112,8 +118,20 @@ public class NextCostumeBrick implements Brick {
 		return view;
 	}
 
+	@Override
 	public void onClick(View view) {
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see at.tugraz.ist.catroid.content.bricks.Brick#getFormula()
+	 */
+	@Override
+	public Formula getFormula() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -32,7 +32,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.LegoNXT.LegoNXT;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
+import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
 
 public class NXTPlayToneBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
@@ -132,13 +132,24 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.nxt_tone_freq_edit_text:
-				FormulaEditorDialog.showDialog(view, this, frequency);
+				FormulaEditorFragment.showDialog(view, this, frequency);
 				break;
 			case R.id.nxt_tone_duration_edit_text:
-				FormulaEditorDialog.showDialog(view, this, durationInSeconds);
+				FormulaEditorFragment.showDialog(view, this, durationInSeconds);
 				break;
 		}
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see at.tugraz.ist.catroid.content.bricks.Brick#getFormula()
+	 */
+	@Override
+	public Formula getFormula() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

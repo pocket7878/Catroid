@@ -29,6 +29,7 @@ import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.formulaeditor.Formula;
 
 public class LoopEndBrick implements Brick {
 	static final int FOREVER = -1;
@@ -44,10 +45,12 @@ public class LoopEndBrick implements Brick {
 		this.loopBeginBrick = loopStartingBrick;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		loopBeginBrick.setBeginLoopTime(System.nanoTime());
 
@@ -81,6 +84,7 @@ public class LoopEndBrick implements Brick {
 		return null;
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return sprite;
 	}
@@ -93,6 +97,7 @@ public class LoopEndBrick implements Brick {
 		return loopBeginBrick;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		return inflater.inflate(R.layout.brick_loop_end, null);
@@ -103,12 +108,25 @@ public class LoopEndBrick implements Brick {
 		return new LoopEndBrick(getSprite(), getLoopBeginBrick());
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return null;
 	}
 
+	@Override
 	public void onClick(View view) {
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see at.tugraz.ist.catroid.content.bricks.Brick#getFormula()
+	 */
+	@Override
+	public Formula getFormula() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

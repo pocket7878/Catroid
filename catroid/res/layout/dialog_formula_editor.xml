@@ -32,8 +32,6 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content" />
 	
-
-	
     <at.tugraz.ist.catroid.formulaeditor.FormulaEditorEditText
         android:id="@+id/formula_editor_edit_field"
         android:layout_width="match_parent"
@@ -51,26 +49,6 @@
         android:textSize="@dimen/text_size_xxlarge" 
 		android:background="@color/white"
         />
-    
-   	<View 
-	    android:id="@+id/formula_editor_green_bar_top"
-	    android:layout_width = "wrap_content"
-	    android:layout_height = "5dp"
-	    android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-	    android:background="@drawable/green_bar"
-	    android:layout_above="@id/formula_editor_edit_field"
-    />
-    
-     <View 
-	    android:id="@+id/formula_editor_green_bar_bottom"
-	    android:layout_width = "wrap_content"
-	    android:layout_height = "5dp"
-	    android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-	    android:background="@drawable/green_bar"
-	    android:layout_below="@id/formula_editor_edit_field"
-	/>  
       
     <at.tugraz.ist.catroid.formulaeditor.CatKeyboardView
         android:id="@+id/keyboardcat"
@@ -81,37 +59,5 @@
 	    android:keyTextColor="#ffffff"
 		android:keyPreviewHeight="0sp"
 		/>
-    
-	<RelativeLayout
-	    xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:id="@+id/editor_button_bar"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content" 
-	    android:layout_above="@id/keyboardcat"
-	    style="@android:style/ButtonBar">
-	    
-        <Button
-            android:id="@+id/formula_editor_ok_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/formula_editor_button_save" />
-        
-        <Button
-            android:id="@+id/formula_editor_undo_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/formula_editor_button_undo"
-            android:layout_toRightOf="@id/formula_editor_ok_button"/>
-
-        <Button
-            android:id="@+id/formula_editor_redo_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/formula_editor_button_redo"
-            android:layout_toRightOf="@id/formula_editor_undo_button"/>
-        
-	</RelativeLayout>
-	
-	
 </RelativeLayout>
 

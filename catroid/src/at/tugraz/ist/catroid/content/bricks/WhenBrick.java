@@ -29,6 +29,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.WhenScript;
+import at.tugraz.ist.catroid.formulaeditor.Formula;
 
 public class WhenBrick implements Brick {
 	private WhenScript whenScript;
@@ -114,8 +115,20 @@ public class WhenBrick implements Brick {
 		return new WhenBrick(getSprite(), whenScript);
 	}
 
+	@Override
 	public void onClick(View view) {
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see at.tugraz.ist.catroid.content.bricks.Brick#getFormula()
+	 */
+	@Override
+	public Formula getFormula() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

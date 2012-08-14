@@ -40,7 +40,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.EditText;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
+import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
 
 public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
@@ -72,7 +72,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	private static FormulaEditorHistory history = null;
 	private Context context;
 
-	FormulaEditorDialog formulaEditorDialog = null;
+	FormulaEditorFragment formulaEditorDialog = null;
 
 	public FormulaEditorEditText(Context context) {
 		super(context);
@@ -89,7 +89,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		this.context = context;
 	}
 
-	public void init(FormulaEditorDialog dialog, int brickHeight, CatKeyboardView ckv) {
+	public void init(FormulaEditorFragment dialog, int brickHeight, CatKeyboardView ckv) {
 		this.formulaEditorDialog = dialog;
 		this.setOnTouchListener(this);
 		this.setLongClickable(false);

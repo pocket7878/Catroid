@@ -31,6 +31,7 @@ import android.widget.BaseAdapter;
 import android.widget.Spinner;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.formulaeditor.Formula;
 
 public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 
@@ -72,19 +73,23 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 		this.degrees = direction.getDegrees();
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		double degreeOffset = 90f;
 		sprite.costume.rotation = (float) (-degrees + degreeOffset);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		View view = View.inflate(context, R.layout.brick_point_in_direction, null);
@@ -105,6 +110,7 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_point_in_direction, null);
 	}
@@ -114,16 +120,30 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 		return new PointInDirectionBrick(getSprite(), direction);
 	}
 
+	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 		direction = Direction.values()[position];
 		degrees = direction.getDegrees();
 	}
 
+	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
-	
+
+	@Override
 	public void onClick(View view) {
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see at.tugraz.ist.catroid.content.bricks.Brick#getFormula()
+	 */
+	@Override
+	public Formula getFormula() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

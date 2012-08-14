@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.io.SoundManager;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -76,8 +77,20 @@ public class StopAllSoundsBrick implements Brick {
 		return View.inflate(context, R.layout.brick_stop_all_sounds, null);
 	}
 
+	@Override
 	public void onClick(View view) {
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see at.tugraz.ist.catroid.content.bricks.Brick#getFormula()
+	 */
+	@Override
+	public Formula getFormula() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

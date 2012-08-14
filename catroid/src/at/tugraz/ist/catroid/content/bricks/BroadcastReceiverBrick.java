@@ -34,6 +34,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.BroadcastScript;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 
@@ -115,12 +116,12 @@ public class BroadcastReceiverBrick implements Brick {
 			@Override
 			public void onClick(View v) {
 				ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
-				
+
 				BrickTextDialog editDialog = new BrickTextDialog() {
 					@Override
 					protected void initialize() {
 					}
-					
+
 					@Override
 					protected boolean handleOkButton() {
 						String newMessage = (input.getText().toString()).trim();
@@ -129,16 +130,16 @@ public class BroadcastReceiverBrick implements Brick {
 							dismiss();
 							return false;
 						}
-						
+
 						receiveScript.setBroadcastMessage(newMessage);
 						int position = projectManager.getMessageContainer().getPositionOfMessageInAdapter(newMessage);
 
 						broadcastSpinner.setSelection(position);
-						
+
 						return true;
 					}
 				};
-				
+
 				editDialog.show(activity.getSupportFragmentManager(), "dialog_broadcast_receiver_brick");
 			}
 		});
@@ -157,8 +158,21 @@ public class BroadcastReceiverBrick implements Brick {
 	public Brick clone() {
 		return new BroadcastReceiverBrick(sprite, receiveScript);
 	}
+
+	@Override
 	public void onClick(View view) {
 
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see at.tugraz.ist.catroid.content.bricks.Brick#getFormula()
+	 */
+	@Override
+	public Formula getFormula() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -34,6 +34,7 @@ import at.tugraz.ist.catroid.common.StandardProjectHandler;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -42,6 +43,7 @@ public class ProjectManager {
 	private Project project;
 	private Script currentScript;
 	private Sprite currentSprite;
+	private Brick currentBrick;
 	public static final ProjectManager INSTANCE = new ProjectManager();
 
 	private FileChecksumContainer fileChecksumContainer;
@@ -291,5 +293,13 @@ public class ProjectManager {
 
 	public MessageContainer getMessageContainer() {
 		return this.messageContainer;
+	}
+
+	public Brick getCurrentBrick() {
+		return currentBrick;
+	}
+
+	public void setCurrentBrick(Brick currentBrick) {
+		this.currentBrick = currentBrick;
 	}
 }
