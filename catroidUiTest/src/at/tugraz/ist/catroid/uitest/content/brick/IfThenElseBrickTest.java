@@ -84,23 +84,23 @@ public class IfThenElseBrickTest extends ActivityInstrumentationTestCase2<Script
 		UiTestUtils.testBrickWithFormulaEditor(solo, 1, 2, secondValue, "conditionToCheckFormula2", ifThenElseBrick);
 	}
 
-	public void testIfInputFields() {
-		ProjectManager.getInstance().deleteCurrentProject();
-		createTestProject();
-
-		for (int i = 0; i < 2; i++) {
-			UiTestUtils.testIntegerEditText(solo, i, 2, 1, 60, true);
-			UiTestUtils.testIntegerEditText(solo, i, 2, 12345, 60, true);
-			UiTestUtils.testIntegerEditText(solo, i, 2, -1, 60, true);
-			UiTestUtils.testIntegerEditText(solo, i, 2, 123456, 60, false);
-		}
-	}
+	//	public void testIfInputFields() {
+	//		ProjectManager.getInstance().deleteCurrentProject();
+	//		createTestProject();
+	//
+	//		for (int i = 0; i < 2; i++) {
+	//			UiTestUtils.testIntegerEditText(solo, i, 2, 1, 60, true);
+	//			UiTestUtils.testIntegerEditText(solo, i, 2, 12345, 60, true);
+	//			UiTestUtils.testIntegerEditText(solo, i, 2, -1, 60, true);
+	//			UiTestUtils.testIntegerEditText(solo, i, 2, 123456, 60, false);
+	//		}
+	//	}
 
 	private void createProject() {
 		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		ifThenElseBrick = new IfThenElseBrick(sprite, 60, LogicOperator.MORE_THAN, 30);
+		ifThenElseBrick = new IfThenElseBrick(sprite, 3, LogicOperator.MORE_THAN, 3);
 		script.addBrick(ifThenElseBrick);
 		sprite.addScript(script);
 		project.addSprite(sprite);
@@ -110,18 +110,18 @@ public class IfThenElseBrickTest extends ActivityInstrumentationTestCase2<Script
 		ProjectManager.getInstance().setCurrentScript(script);
 	}
 
-	private void createTestProject() {
-		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
-		Sprite sprite = new Sprite("cat");
-		Script script = new StartScript(sprite);
-		ifThenElseBrick = new IfThenElseBrick(sprite, 0, LogicOperator.MORE_THAN, 0);
-		script.addBrick(ifThenElseBrick);
-
-		sprite.addScript(script);
-		project.addSprite(sprite);
-
-		ProjectManager.getInstance().setProject(project);
-		ProjectManager.getInstance().setCurrentSprite(sprite);
-		ProjectManager.getInstance().setCurrentScript(script);
-	}
+	//	private void createTestProject() {
+	//		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+	//		Sprite sprite = new Sprite("cat");
+	//		Script script = new StartScript(sprite);
+	//		ifThenElseBrick = new IfThenElseBrick(sprite, 0, LogicOperator.MORE_THAN, 0);
+	//		script.addBrick(ifThenElseBrick);
+	//
+	//		sprite.addScript(script);
+	//		project.addSprite(sprite);
+	//
+	//		ProjectManager.getInstance().setProject(project);
+	//		ProjectManager.getInstance().setCurrentSprite(sprite);
+	//		ProjectManager.getInstance().setCurrentScript(script);
+	//	}
 }

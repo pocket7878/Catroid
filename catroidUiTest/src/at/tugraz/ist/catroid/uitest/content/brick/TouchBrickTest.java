@@ -79,6 +79,9 @@ public class TouchBrickTest extends ActivityInstrumentationTestCase2<ScriptActiv
 		solo.clickInList(0);
 		solo.waitForText(spinnerNothingSelectedText);
 		assertEquals("Wrong selection", spinnerNothingSelectedText, solo.getCurrentSpinners().get(0).getSelectedItem());
+
+		createProject();
+
 	}
 
 	private void createProject() {

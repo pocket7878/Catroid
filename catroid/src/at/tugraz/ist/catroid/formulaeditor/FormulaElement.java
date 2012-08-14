@@ -209,22 +209,28 @@ public class FormulaElement implements Serializable {
 
 			if (value.equals("XACC_")) {
 				//Log.i("info", "Acc-X: " + Gdx.input.getAccelerometerX());
-				return Double.valueOf(Gdx.input.getAccelerometerX());
+				return Double.valueOf(-Gdx.input.getAccelerometerX());
 			}
 			if (value.equals("YACC_")) {
-				return Double.valueOf(Gdx.input.getAccelerometerY());
+				return Double.valueOf(-Gdx.input.getAccelerometerY());
 			}
 			if (value.equals("ZACC_")) {
 				return Double.valueOf(Gdx.input.getAccelerometerZ());
 			}
 			if (value.equals("AZIM_")) {
-				return Double.valueOf(Gdx.input.getAzimuth());
+				int Azimuth;
+				if (Gdx.input.getAzimuth() >= 0) {
+					Azimuth = (int) Gdx.input.getAzimuth();
+				} else {
+					Azimuth = (int) (Gdx.input.getAzimuth() + 360);
+				}
+				return Double.valueOf(Azimuth);
 			}
 			if (value.equals("PITCH_")) {
 				return Double.valueOf(Gdx.input.getPitch());
 			}
 			if (value.equals("ROLL_")) {
-				return Double.valueOf(Gdx.input.getRoll());
+				return Double.valueOf(-Gdx.input.getRoll());
 			}
 			if (value.equals("SLIDER_")) {
 				return (sliderValue == null ? 0.0 : sliderValue);

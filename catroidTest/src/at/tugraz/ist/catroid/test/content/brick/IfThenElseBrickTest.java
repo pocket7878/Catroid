@@ -45,14 +45,12 @@ public class IfThenElseBrickTest extends AndroidTestCase {
 
 		testSprite.removeAllScripts();
 		testScript = new StartScript(testSprite);
-
 		ifThenElseBrick = new IfThenElseBrick(testSprite, secondValue, LogicOperator.MORE_THAN, firstValue);
 		elseBrick = new ElseBrick(testSprite, ifThenElseBrick);
 		ifThenElseBrick.setElseBrick(elseBrick);
 
 		testScript.addBrick(ifThenElseBrick);
 		testScript.addBrick(new SetYBrick(testSprite, deltaY));
-		//		testScript.addBrick(new WaitBrick(testSprite, 10));
 		testScript.addBrick(elseBrick);
 
 		testSprite.addScript(testScript);
@@ -60,12 +58,11 @@ public class IfThenElseBrickTest extends AndroidTestCase {
 
 		try {
 			Thread.sleep(100);
+			testSprite.finish();
+			assertEquals("Inner brick is not executed!", deltaY, (int) testSprite.costume.getYPosition());
 		} catch (InterruptedException e) {
 
 		}
-
-		assertEquals("Inner brick is not executed!", deltaY, (int) testSprite.costume.getYPosition());
-
 	}
 
 	public void testLessThan() {
@@ -80,7 +77,6 @@ public class IfThenElseBrickTest extends AndroidTestCase {
 
 		testScript.addBrick(ifThenElseBrick);
 		testScript.addBrick(new SetYBrick(testSprite, deltaY));
-		//		testScript.addBrick(new WaitBrick(testSprite, 10));
 		testScript.addBrick(elseBrick);
 
 		testSprite.addScript(testScript);
@@ -88,12 +84,11 @@ public class IfThenElseBrickTest extends AndroidTestCase {
 
 		try {
 			Thread.sleep(100);
+			testSprite.finish();
+			assertEquals("Inner brick is not executed!", deltaY, (int) testSprite.costume.getYPosition());
 		} catch (InterruptedException e) {
 
 		}
-
-		assertEquals("Inner brick is not executed!", deltaY, (int) testSprite.costume.getYPosition());
-
 	}
 
 	public void testEqualTo() {
@@ -108,7 +103,6 @@ public class IfThenElseBrickTest extends AndroidTestCase {
 
 		testScript.addBrick(ifThenElseBrick);
 		testScript.addBrick(new SetYBrick(testSprite, deltaY));
-		//		testScript.addBrick(new WaitBrick(testSprite, 10));
 		testScript.addBrick(elseBrick);
 
 		testSprite.addScript(testScript);
@@ -116,12 +110,11 @@ public class IfThenElseBrickTest extends AndroidTestCase {
 
 		try {
 			Thread.sleep(100);
+			testSprite.finish();
+			assertEquals("Inner brick is not executed!", deltaY, (int) testSprite.costume.getYPosition());
 		} catch (InterruptedException e) {
 
 		}
-
-		assertEquals("Inner brick is not executed!", deltaY, (int) testSprite.costume.getYPosition());
-
 	}
 
 	public void testIncorrectLogic() {
@@ -136,7 +129,6 @@ public class IfThenElseBrickTest extends AndroidTestCase {
 
 		testScript.addBrick(ifThenElseBrick);
 		testScript.addBrick(new SetYBrick(testSprite, deltaY));
-		//		testScript.addBrick(new WaitBrick(testSprite, 10));
 		testScript.addBrick(elseBrick);
 
 		testSprite.addScript(testScript);
@@ -144,11 +136,10 @@ public class IfThenElseBrickTest extends AndroidTestCase {
 
 		try {
 			Thread.sleep(100);
+			testSprite.finish();
+			assertNotSame("Wrong Execution!", deltaY, (int) testSprite.costume.getYPosition());
 		} catch (InterruptedException e) {
 
 		}
-
-		assertNotSame("Wrong Execution!", deltaY, (int) testSprite.costume.getYPosition());
 	}
-
 }
