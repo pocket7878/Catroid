@@ -307,6 +307,10 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			}
 			selectionEndIndex++;
 		}
+		if (selectionEndIndex > textLength) {
+			selectionEndIndex = textLength;
+			editMode = false;
+		}
 	}
 
 	private void extendSelectionBetweenBracketsFromCloseBracket() {
@@ -476,30 +480,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 		setSelection(firstError);
 		absoluteCursorPosition = firstError;
-		//		if (errorSpan.length() > firstError) {
-		//			char firstLetter = errorSpan.charAt(firstError);
-		//
-		//			//selection for characters always selects character before current cursor position!
-		//			if (charIsCapitalLetter(firstLetter) || charIsLowerCaseLetter(firstLetter)) {
-		//				absoluteCursorPosition++;
-		//			}
-		//			if (firstLetter == ')') {
-		//				absoluteCursorPosition++;
-		//			}
-		//
-		//		}
-		//
-		//		doSelectionAndHighlighting();
-		//
-		//		if (selectionEndIndex == selectionStartIndex) {
-		//			if (selectionEndIndex == errorSpan.length()) {
-		//				selectionStartIndex--;
-		//			} else {
-		//				selectionEndIndex++;
-		//			}
-		//
-		//		}
-		//errorSpan.setSpan(COLOR_ERROR, selectionStartIndex, selectionEndIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
 
 	public void checkAndModifyKeyInput(CatKeyEvent catKey) {
@@ -619,7 +599,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 		//move cursor to first function parameter
 		Log.i("info", "Function: " + Functions.isFunction(newElement));
-		if (newElement.length() > 1 && Functions.isFunction(newElement)) {
+		if (newElement.length() > 1 && (Functions.isFunction(newElement) || newElement.equals("( 0 )"))) {
 			absoluteCursorPosition = selectionStartIndex + newElement.indexOf("(") + 3;
 			selectionStartIndex = absoluteCursorPosition - 1;
 			selectionEndIndex = absoluteCursorPosition;
