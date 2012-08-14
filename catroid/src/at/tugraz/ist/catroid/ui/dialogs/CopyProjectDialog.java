@@ -68,7 +68,7 @@ public class CopyProjectDialog extends TextDialog {
 			}
 			((MyProjectsActivity) activity).initAdapter();
 		} else {
-			Utils.displayErrorMessage(activity, activity.getString(R.string.notification_invalid_text_entered));
+			Utils.displayErrorMessage(activity, activity.getString(R.string.error_no_name_entered));
 			return;
 		}
 		activity.dismissDialog(MyProjectsActivity.DIALOG_COPY_PROJECT);
