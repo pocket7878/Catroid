@@ -85,19 +85,31 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 		ProjectManager.getInstance().setCurrentScript(script);
 	}
 
-	public void testChangeFormulaWithoutSaving() {
+	public void testChangeFormula() {
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
 		catKeyboardClicker.clickOnKey("1");
 		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
 		solo.sleep(50);
-		assertTrue("Error message for switching from an unsaved formula not found",
-				solo.searchText(solo.getString(R.string.formula_editor_save_first)));
+		assertTrue("Saved changes message not found!",
+				solo.searchText(solo.getString(R.string.formula_editor_changes_saved)));
 
 		solo.goBack();
 		solo.sleep(100);
-		assertTrue("Confirmation message for discarding changes in formula not found",
-				solo.searchText(solo.getString(R.string.formula_editor_confirm_discard)));
+		assertEquals("Value not saved!", "1 ", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString());
+
+		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
+		catKeyboardClicker.clickOnKey("1");
+		catKeyboardClicker.clickOnKey("+");
+
+		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		assertTrue("Fix error message not found!", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
+		solo.sleep(500);
+		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		assertTrue("Changes saved message not found!",
+				solo.searchText(solo.getString(R.string.formula_editor_changes_discarded)));
+
 		solo.goBack();
 		solo.goBack();
 
@@ -110,15 +122,14 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 
 		assertEquals("Wrong text in FormulaEditor", "1", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
 				.toString());
-		assertEquals("Wrong text in FormulaEditor", "1", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString());
+		assertEquals("Wrong text in X EditText", "1", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString());
 
 		catKeyboardClicker.clickOnKey("2");
 
 		assertEquals("Wrong text in FormulaEditor", "12", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
 				.toString());
-		assertEquals("Wrong text in FormulaEditor", "12", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString());
+		assertEquals("Wrong text in X EditText", "12", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString());
 
-		solo.goBack();
 		solo.goBack();
 
 		assertEquals("Wrong text in FormulaEditor", INITIAL_X + " ", solo.getEditText(X_POS_EDIT_TEXT_ID).getText()
@@ -319,13 +330,11 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 
 		solo.setActivityOrientation(Solo.LANDSCAPE);
 
-		solo.sleep(500);
-		assertEquals("Wrong text after oprientation switch", "rand( 0 , 1 )",
-				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
+		solo.sleep(1500);
+		assertEquals("Wrong text after oprientation switch", "rand( 0 , 1 )", solo.getEditText(0).getText().toString());
 
 		solo.clickOnButton(0);
 
-		solo.goBack();
 		solo.sleep(50);
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
 		assertEquals("Wrong text after oprientation switch", "rand( 0 , 1 ) ", solo.getEditText(X_POS_EDIT_TEXT_ID)
@@ -348,7 +357,6 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 		solo.clickOnButton(1);
 		solo.clickOnButton(1);
 		solo.clickOnButton(0);
-		solo.goBack();
 		solo.sleep(50);
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
 		assertEquals("Wrong text after oprientation switch", "rand( 0 , 1 ) ",

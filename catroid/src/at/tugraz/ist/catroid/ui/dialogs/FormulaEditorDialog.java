@@ -55,6 +55,7 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 	public static final String FRAGMENT_TAG_FORMULA_EDITOR = "formula_editor_dialog";
 	private static final int PARSER_OK = -1;
 	private static final int PARSER_STACK_OVERFLOW = -2;
+	private static final int PARSER_INPUT_SYNTAX_ERROR = -3;
 	private Context context;
 	private static Brick currentBrick = null;
 	private static Formula currentFormula = null;
@@ -249,20 +250,26 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 				showToast(R.string.formula_editor_changes_saved);
 				return true;
 			case PARSER_STACK_OVERFLOW:
-				return checkReturnWithoutSaving();
+				return checkReturnWithoutSaving(PARSER_STACK_OVERFLOW);
 			default:
 				formulaEditorEditText.highlightParseError(err);
-				return checkReturnWithoutSaving();
+				return checkReturnWithoutSaving(PARSER_INPUT_SYNTAX_ERROR);
 		}
 	}
 
-	private boolean checkReturnWithoutSaving() {
+	private boolean checkReturnWithoutSaving(int errorType) {
 		if (System.currentTimeMillis() <= confirmBack + 2000) {
 			showToast(R.string.formula_editor_changes_discarded);
 			return true;
 		} else {
-			showToast(R.string.formula_editor_parse_fail_formula_too_long);
-			showToast(R.string.formula_editor_confirm_discard);
+			switch (errorType) {
+				case PARSER_INPUT_SYNTAX_ERROR:
+					showToast(R.string.formula_editor_parse_fail);
+					break;
+				case PARSER_STACK_OVERFLOW:
+					showToast(R.string.formula_editor_parse_fail_formula_too_long);
+					break;
+			}
 			confirmBack = System.currentTimeMillis();
 			return false;
 		}
@@ -300,16 +307,6 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 						if (saveFormulaIfPossible()) {
 							onUserDismiss();
 						}
-						//							else {
-						//							if (System.currentTimeMillis() <= confirmBack + 2000) {
-						//								showToast(R.string.formula_editor_changes_discarded);
-						//								onUserDismiss();
-						//							} else {
-						//								showToast(R.string.formula_editor_confirm_discard);
-						//								confirmBack = System.currentTimeMillis();
-						//							}
-						//						}
-
 					} else {
 						onUserDismiss();
 					}
