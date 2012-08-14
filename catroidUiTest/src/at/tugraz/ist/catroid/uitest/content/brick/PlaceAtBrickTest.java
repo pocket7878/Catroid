@@ -81,7 +81,7 @@ public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 
 		int childrenCount = adapter.getChildCountFromLastGroup();
 		int groupCount = adapter.getGroupCount();
-		
+
 		assertEquals("Incorrect number of bricks.", 5, solo.getCurrentListViews().get(0).getChildCount());
 		assertEquals("Incorrect number of bricks.", 4, childrenCount);
 
@@ -100,11 +100,11 @@ public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 		int xPosition = 987;
 		int yPosition = 654;
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 2, xPosition, "xPositionFormula", placeAtBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 2, xPosition, "xPosition", placeAtBrick);
 
 		solo.sleep(100);
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, 1, 2, yPosition, "yPositionFormula", placeAtBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, 1, 2, yPosition, "yPosition", placeAtBrick);
 
 	}
 

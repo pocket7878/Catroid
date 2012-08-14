@@ -30,15 +30,19 @@ import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
 
 public class DataStructureTest extends AndroidTestCase {
 
+	private static final double DELTA = 0.01;
+
 	public void testParserTreeGenerationFormulas() {
 		for (ParserFormulaTestData parserTest : EnumSet.allOf(ParserFormulaTestData.class)) {
 			CalcGrammarParser parser = CalcGrammarParser.getFormulaParser(parserTest.getInput());
 			FormulaElement parserFormulaElement = parser.parseFormula();
 
-			assertNotNull("Formula is not parsed correctly: " + parserTest.getInput() + "=", parserFormulaElement);
+			assertNotNull(
+					"Formula is not parsed correctly: Testname: " + parserTest.name() + ": " + parserTest.getInput()
+							+ "=", parserFormulaElement);
 
-			assertEquals("Formula interpretation is not as expected: " + parserTest.getInput() + "=",
-					parserTest.getOutput(), parserFormulaElement.interpretRecursive());
+			assertEquals("Formula interpretation is not as expected: Testname: " + parserTest.name() + ": "
+					+ parserTest.getInput() + "=", parserTest.getOutput(), parserFormulaElement.interpretRecursive());
 		}
 	}
 
@@ -47,10 +51,28 @@ public class DataStructureTest extends AndroidTestCase {
 			CalcGrammarParser parser = CalcGrammarParser.getFormulaParser(parserTest.getInput());
 			FormulaElement parserFormulaElement = parser.parseFormula();
 
-			assertNull("Invalid formula parsed: " + parserTest.getInput() + "=", parserFormulaElement);
-			assertEquals("First error character position is not as expected: " + parserTest.getInput() + "=",
-					parserTest.getFirstErrorPosition(), Integer.valueOf(parser.getErrorCharacterPosition()));
+			assertNull("Invalid formula parsed: Testname: " + parserTest.name() + ": " + parserTest.getInput() + "=",
+					parserFormulaElement);
+			assertEquals("First error character position is not as expected: Testname: " + parserTest.name() + ": "
+					+ parserTest.getInput() + "=", parserTest.getFirstErrorPosition(),
+					Integer.valueOf(parser.getErrorCharacterPosition()));
 
 		}
+	}
+
+	public void testParserFunctionInterpretation() {
+		for (ParserFormulaFunctionsTestData parserTest : EnumSet.allOf(ParserFormulaFunctionsTestData.class)) {
+			CalcGrammarParser parser = CalcGrammarParser.getFormulaParser(parserTest.getInput());
+			FormulaElement parserFormulaElement = parser.parseFormula();
+
+			assertNotNull(
+					"Formula is not parsed correctly: Testname: " + parserTest.name() + ": " + parserTest.getInput()
+							+ "=", parserFormulaElement);
+
+			assertEquals("Formula interpretation is not as expected: Testname: " + parserTest.name() + ": "
+					+ parserTest.getInput() + "=", parserTest.getOutput(), parserFormulaElement.interpretRecursive(),
+					DELTA);
+		}
+
 	}
 }

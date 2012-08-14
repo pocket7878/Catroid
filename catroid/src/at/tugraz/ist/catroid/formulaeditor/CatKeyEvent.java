@@ -22,8 +22,7 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
-import java.util.HashMap;
-
+import android.util.SparseArray;
 import android.view.KeyEvent;
 
 /**
@@ -32,7 +31,7 @@ import android.view.KeyEvent;
  */
 public class CatKeyEvent extends KeyEvent {
 
-	HashMap<Integer, String> keyMap;
+	private static SparseArray<String> keyMap;
 
 	/* FUNCTIONS */
 	public static final int KEYCODE_SIN = 1000;
@@ -56,6 +55,9 @@ public class CatKeyEvent extends KeyEvent {
 	public static final int KEYCODE_SENSOR6 = 1105;
 	public static final int KEYCODE_SENSOR7 = 1106;
 
+	/* BRACKET */
+	public static final int KEYCODE_BRACKET = 1200;
+
 	// Please update the functions of this class if you add new KEY_CODE constants ^_^
 
 	/**
@@ -64,35 +66,44 @@ public class CatKeyEvent extends KeyEvent {
 	public CatKeyEvent(KeyEvent origEvent) {
 		super(origEvent);
 
-		this.keyMap = new HashMap<Integer, String>();
+		if (CatKeyEvent.keyMap == null) {
+			initializeKeyMap();
+		}
 
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_SIN)), new String("sin( 0 )"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_COS)), new String("cos( 0 )"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_TAN)), new String("tan( 0 )"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_LN)), new String("ln( 0 )"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_LOG)), new String("log( 0 )"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_PI)), new String("pi"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_SQUAREROOT)), new String("sqrt( 0 )"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_EULER)), new String("e"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_RANDOM)), new String("rand( 0 , 1 )"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_ABS)), new String("abs( 0 )"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_ROUND)), new String("round( 0 )"));
+	}
 
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_SENSOR1)), new String("X_ACCELERATION_"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_SENSOR2)), new String("Y_ACCELERATION_"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_SENSOR3)), new String("Z_ACCELERATION_"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_SENSOR4)), new String("AZIMUTH_ORIENTATION_"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_SENSOR5)), new String("PITCH_ORIENTATION_"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_SENSOR6)), new String("ROLL_ORIENTATION_"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_SENSOR7)), new String("SLIDER_"));
+	private void initializeKeyMap() {
+		CatKeyEvent.keyMap = new SparseArray<String>();
 
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_PLUS)), new String("+"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_MINUS)), new String("-"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_STAR)), new String("*"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_SLASH)), new String("/"));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_COMMA)), new String(","));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_PERIOD)), new String("."));
-		this.keyMap.put(new Integer(Integer.valueOf(CatKeyEvent.KEYCODE_POWER)), new String("^"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SIN, new String("sin( 0 )"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COS, new String("cos( 0 )"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_TAN, new String("tan( 0 )"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_LN, new String("ln( 0 )"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_LOG, new String("log( 0 )"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_PI, new String("pi"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SQUAREROOT, new String("sqrt( 0 )"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_EULER, new String("e"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_RANDOM, new String("rand( 0 , 1 )"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_ABS, new String("abs( 0 )"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_ROUND, new String("round( 0 )"));
+
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SENSOR1, new String("X_ACCELERATION_"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SENSOR2, new String("Y_ACCELERATION_"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SENSOR3, new String("Z_ACCELERATION_"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SENSOR4, new String("AZIMUTH_ORIENTATION_"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SENSOR5, new String("PITCH_ORIENTATION_"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SENSOR6, new String("ROLL_ORIENTATION_"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SENSOR7, new String("SLIDER_"));
+
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_PLUS, new String("+"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_MINUS, new String("-"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_STAR, new String("*"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SLASH, new String("/"));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COMMA, new String(","));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_PERIOD, new String("."));
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_POWER, new String("^"));
+
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_BRACKET, new String("( 0 )"));
 	}
 
 	public boolean isOperator(KeyEvent event) {
@@ -133,7 +144,7 @@ public class CatKeyEvent extends KeyEvent {
 			return "" + super.getDisplayLabel();
 		} else {
 
-			return this.keyMap.get(this.getKeyCode());
+			return CatKeyEvent.keyMap.get(this.getKeyCode());
 		}
 	}
 }

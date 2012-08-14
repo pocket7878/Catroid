@@ -22,28 +22,26 @@
  */
 package at.tugraz.ist.catroid.test.formulaeditor;
 
-public enum InvalidParserFormulaTestData {
-	EMPTY_FORMULA("", 0), OPERATOR_MISSING_1("1 1", 2), OPERATOR_MISSING_2("1+2+3 4+5+6", 6), OPERATOR_MISSING_3(
-			"1*2--3 32/2*1+3", 7), OPERATOR_MISSING_4("1--1--1 1--1", 8), NUMBER_MISSING_1("-", 1), NUMBER_MISSING_2(
-			"--", 1), NUMBER_MISSING_3("-1--", 4), NUMBER_MISSING_4("+", 0), NUMBER_MISSING_5("*", 0), NUMBER_MISSING_6(
-			"/", 0), NUMBER_MISSING_7("+1", 0), NUMBER_MISSING_8("*1", 0), NUMBER_MISSING_9("/1", 0), NUMBER_MISSING_10(
-			"1+1+1+1+1+", 10), TOO_MANY_OPERATORS("1+++++++", 2), RIGHT_BRACKET_MISSING_1("-((2)+2+3", 9);
-	;
+public enum ParserFormulaFunctionsTestData {
+	SIN("sin(90)", 1.0), COS("cos(180)", -1.0), TAN("tan(45)", 1.0), LN("ln(e ^ 2)", 2.0), LOG("log(10^2)", 2.0), SQRT(
+			"sqrt(4^2)", 4.0), ABS("abs(-4)", 4.0), ROUND("round(3.2)", 3.0), PI("pi", Math.PI), RANDOM_1(
+			"rand(0.0001, 0.0002)", 0.00015), RANDOM_2("rand(0.0008, 0.0009)", 0.00085), RANDOM_3(
+			"rand(0.0005, 0.0006)", 0.00055), RANDOM_4("rand(0.0007, 0.0008)", 0.00075);
 
 	private String input;
-	private Integer firstErrorPosition;
+	private Double output;
 
-	InvalidParserFormulaTestData(String input, Integer firstErrorPosition) {
+	ParserFormulaFunctionsTestData(String input, Double output) {
 		this.input = input;
-		this.firstErrorPosition = firstErrorPosition;
+		this.output = output;
 	}
 
 	public String getInput() {
 		return input;
 	}
 
-	public Integer getFirstErrorPosition() {
-		return firstErrorPosition;
+	public Double getOutput() {
+		return output;
 	}
 
 }

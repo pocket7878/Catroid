@@ -336,10 +336,10 @@
     <string name="formula_editor_save_first">Save first!</string>
     <string name="formula_editor_changes_saved">Changes saved!</string>
     <string name="formula_editor_changes_discarded">Changes discarded!</string>
-    <string name="formula_editor_parse_fail">Error in the input! Changes not saved.</string>
+    <string name="formula_editor_parse_fail">Error in the input! Fix or press again to discard.</string>
     <string name="formula_nothing_selected">Define the brick´s input value</string>
-    <string name="formula_editor_confirm_discard">Discarding changes! Press again to confirm.</string>
-    <string name="formula_editor_parse_fail_formula_too_long">Formula too long! Changes not saved.</string>
+    <string name="formula_editor_confirm_discard">Fix error or press again to discard.</string>
+    <string name="formula_editor_parse_fail_formula_too_long">Formula too long! Fix or press again to discard.</string>
      
      <!-- Other Strings -->
      <string name="select_image">Select image</string>

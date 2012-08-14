@@ -55,7 +55,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	public static final int BRACKET_CLOSE = 4;
 	public static final int BRACKET_OPEN = 5;
 	public static final int SENSOR_VALUE = 6;
-	private static final double ANDROID_3_4_EXTRA_LINESPACING = 2.0;
+	private static final double ANDROID_3_4_EXTRA_LINESPACING = 1.15;
 
 	private int selectionStartIndex = 0;
 	private int selectionEndIndex = 0;
@@ -149,9 +149,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 				currentState.selectionEnd);
 		formulaEditorDialog.makeUndoButtonClickable(history.undoIsPossible());
 		formulaEditorDialog.makeRedoButtonClickable(history.redoIsPossible());
-		if (history.hasUnsavedChanges()) {
-			formulaEditorDialog.makeOkButtonSaveButton();
-		}
+
 		return true;
 	}
 
@@ -172,6 +170,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		float scrollOffset = this.getScrollY();
 		float horizontalOffset = 0;
 		int verticalOffset = 0;
+		int absoluteVerticalOffset = 0;
 		float betweenLineOffset = 0;
 
 		if (layout != null && getText().length() > 0) {
@@ -183,15 +182,19 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			//Log.i("info", "spacing mult: " + layout.getSpacingMultiplier() + " add " + layout.getSpacingAdd());
 			lineHeight = this.getTextSize() + 5;
 			horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
+			absoluteVerticalOffset = layout.getLineForOffset(absoluteCursorPosition);
 			verticalOffset = layout.getLineForOffset(absoluteCursorPosition);
 			verticalOffset -= (int) (scrollOffset / lineHeight);
 			betweenLineOffset = scrollOffset % lineHeight;
 		}
+		Log.i("info", "Vertical Offset: " + verticalOffset);
 
 		float startX = horizontalOffset;
 		float endX = horizontalOffset;
-		float startY = (float) ((5 + scrollOffset + (lineHeight + extraLineSpacing) * verticalOffset) - betweenLineOffset);
-		float endY = (float) ((5 + scrollOffset + (lineHeight + extraLineSpacing) * (verticalOffset + 1)) - betweenLineOffset);
+		float startY = (float) ((5 + scrollOffset + lineHeight * verticalOffset) - betweenLineOffset + extraLineSpacing
+				* absoluteVerticalOffset);
+		float endY = (float) ((5 + scrollOffset + lineHeight * (verticalOffset + 1)) - betweenLineOffset + extraLineSpacing
+				* absoluteVerticalOffset);
 		canvas.drawLine(startX, startY, endX, endY, getPaint());
 
 	}
@@ -301,6 +304,10 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 				bracketCount--;
 			}
 			selectionEndIndex++;
+		}
+		if (selectionEndIndex > textLength) {
+			selectionEndIndex = textLength;
+			editMode = false;
 		}
 	}
 
@@ -471,30 +478,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 		setSelection(firstError);
 		absoluteCursorPosition = firstError;
-		//		if (errorSpan.length() > firstError) {
-		//			char firstLetter = errorSpan.charAt(firstError);
-		//
-		//			//selection for characters always selects character before current cursor position!
-		//			if (charIsCapitalLetter(firstLetter) || charIsLowerCaseLetter(firstLetter)) {
-		//				absoluteCursorPosition++;
-		//			}
-		//			if (firstLetter == ')') {
-		//				absoluteCursorPosition++;
-		//			}
-		//
-		//		}
-		//
-		//		doSelectionAndHighlighting();
-		//
-		//		if (selectionEndIndex == selectionStartIndex) {
-		//			if (selectionEndIndex == errorSpan.length()) {
-		//				selectionStartIndex--;
-		//			} else {
-		//				selectionEndIndex++;
-		//			}
-		//
-		//		}
-		//errorSpan.setSpan(COLOR_ERROR, selectionStartIndex, selectionEndIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
 
 	public void checkAndModifyKeyInput(CatKeyEvent catKey) {
@@ -530,11 +513,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		} else {
 			appendToTextFieldAtCurrentPosition(newElement);
 		}
-
-		formulaEditorDialog.makeOkButtonSaveButton();
-
-		//absoluteCursorPosition = selectionEndIndex;
-		//updateSelectionIndices();
 
 		history.push(getText().toString(), absoluteCursorPosition, absoluteCursorPosition, absoluteCursorPosition);
 		formulaEditorDialog.makeUndoButtonClickable(true);
@@ -614,7 +592,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 		//move cursor to first function parameter
 		Log.i("info", "Function: " + Functions.isFunction(newElement));
-		if (newElement.length() > 1 && Functions.isFunction(newElement)) {
+		if (newElement.length() > 1 && (Functions.isFunction(newElement) || newElement.equals("( 0 )"))) {
 			absoluteCursorPosition = selectionStartIndex + newElement.indexOf("(") + 3;
 			selectionStartIndex = absoluteCursorPosition - 1;
 			selectionEndIndex = absoluteCursorPosition;
@@ -633,9 +611,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	public void formulaSaved() {
 		history.changesSaved();
-		formulaEditorDialog.makeOkButtonBackButton();
-		//		errorSpan = this.getText();
-		//		errorSpan.removeSpan(COLOR_ERROR);
 	}
 
 	public void endEdit() {
