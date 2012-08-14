@@ -150,7 +150,11 @@ public class Formula implements Serializable {
 			if (formulaTextField == null) {
 				return;
 			}
-			formulaTextField.setText(textRepresentation);
+			if (textRepresentation.length() > 5) {
+				formulaTextField.setText(textRepresentation.substring(0, 5) + "...");
+			} else {
+				formulaTextField.setText(textRepresentation);
+			}
 		}
 
 	}
@@ -161,7 +165,12 @@ public class Formula implements Serializable {
 			if (formulaTextField == null) {
 				return;
 			}
-			formulaTextField.setText(formulaString);
+			if (formulaString.length() > 5) {
+				formulaTextField.setText(formulaString.substring(0, 5) + "...");
+			} else {
+				formulaTextField.setText(formulaString);
+			}
+			//formulaTextField.setText(formulaString);
 		}
 	}
 

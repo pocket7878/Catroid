@@ -66,7 +66,6 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 	private Button undoButton = null;
 	private Button redoButton = null;
 	private long confirmBack = 0;
-	private boolean buttonIsBackButton = true;
 	public boolean restoreInstance = false;
 
 	public FormulaEditorDialog() {
@@ -143,7 +142,6 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 
 		makeRedoButtonClickable(false);
 		makeUndoButtonClickable(false);
-		makeOkButtonBackButton();
 
 		if (brickSpace != null) {
 			formulaEditorEditText.init(this, brickSpace.getMeasuredHeight(), catKeyboardView);
@@ -182,20 +180,20 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 			}
 			refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
 		} else {
-			if (!formulaEditorEditText.hasChanges()) {
-				if (currentFormula != null) {
-					currentFormula.refreshTextField(brickView);
+			if (formulaEditorEditText.hasChanges()) {
+				if (!saveFormulaIfPossible()) {
+					return;
 				}
-				formulaEditorEditText.endEdit();
-				currentFormula.removeTextFieldHighlighting(brickView, orientation);
-				currentFormula = newFormula;
-				currentFormula.highlightTextField(brickView,
-						getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
-				makeOkButtonBackButton();
-				formulaEditorEditText.enterNewFormula(newFormula.toString());
-			} else {
-				showToast(R.string.formula_editor_save_first);
 			}
+			if (currentFormula != null) {
+				currentFormula.refreshTextField(brickView);
+			}
+			formulaEditorEditText.endEdit();
+			currentFormula.removeTextFieldHighlighting(brickView, orientation);
+			currentFormula = newFormula;
+			currentFormula.highlightTextField(brickView,
+					getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
+			formulaEditorEditText.enterNewFormula(newFormula.toString());
 
 		}
 
@@ -218,49 +216,57 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 
 		switch (v.getId()) {
 			case R.id.formula_editor_ok_button:
-				if (buttonIsBackButton) {
+				if (saveFormulaIfPossible()) {
 					onUserDismiss();
-				} else {
-					String formulaToParse = formulaEditorEditText.getText().toString();
-					int err = parseFormula(formulaToParse);
-					switch (err) {
-						case PARSER_OK:
-							if (brickSpace != null) {
-								currentFormula.refreshTextField(brickView);
-							}
-							formulaEditorEditText.formulaSaved();
-							showToast(R.string.formula_editor_changes_saved);
-							break;
-						case PARSER_STACK_OVERFLOW:
-							showToast(R.string.formula_editor_parse_fail_formula_too_long);
-							break;
-						default:
-							showToast(R.string.formula_editor_parse_fail);
-							formulaEditorEditText.highlightParseError(err);
-					}
 				}
 				break;
 
 			case R.id.formula_editor_undo_button:
 				makeUndoButtonClickable(formulaEditorEditText.undo());
 				makeRedoButtonClickable(true);
-				if (buttonIsBackButton) {
-					makeOkButtonSaveButton();
-				}
 				break;
 
 			case R.id.formula_editor_redo_button:
 				makeRedoButtonClickable(formulaEditorEditText.redo());
 				makeUndoButtonClickable(true);
-				if (buttonIsBackButton) {
-					makeOkButtonSaveButton();
-				}
 				break;
 
 			default:
 				break;
 
 		}
+	}
+
+	public boolean saveFormulaIfPossible() {
+		String formulaToParse = formulaEditorEditText.getText().toString();
+		int err = parseFormula(formulaToParse);
+		switch (err) {
+			case PARSER_OK:
+				if (brickSpace != null) {
+					currentFormula.refreshTextField(brickView);
+				}
+				formulaEditorEditText.formulaSaved();
+				showToast(R.string.formula_editor_changes_saved);
+				return true;
+			case PARSER_STACK_OVERFLOW:
+				return checkReturnWithoutSaving();
+			default:
+				formulaEditorEditText.highlightParseError(err);
+				return checkReturnWithoutSaving();
+		}
+	}
+
+	private boolean checkReturnWithoutSaving() {
+		if (System.currentTimeMillis() <= confirmBack + 2000) {
+			showToast(R.string.formula_editor_changes_discarded);
+			return true;
+		} else {
+			showToast(R.string.formula_editor_parse_fail_formula_too_long);
+			showToast(R.string.formula_editor_confirm_discard);
+			confirmBack = System.currentTimeMillis();
+			return false;
+		}
+
 	}
 
 	public void showToast(int ressourceId) {
@@ -284,16 +290,6 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 		redoButton.setClickable(clickable);
 	}
 
-	public void makeOkButtonSaveButton() {
-		okButton.setText(R.string.formula_editor_button_save);
-		buttonIsBackButton = false;
-	}
-
-	public void makeOkButtonBackButton() {
-		okButton.setText(R.string.formula_editor_button_return);
-		buttonIsBackButton = true;
-	}
-
 	@Override
 	public boolean onKey(DialogInterface di, int keyCode, KeyEvent event) {
 
@@ -301,13 +297,19 @@ public class FormulaEditorDialog extends DialogFragment implements OnClickListen
 			switch (keyCode) {
 				case KeyEvent.KEYCODE_BACK:
 					if (formulaEditorEditText.hasChanges()) {
-						if (System.currentTimeMillis() <= confirmBack + 2000) {
-							showToast(R.string.formula_editor_changes_discarded);
+						if (saveFormulaIfPossible()) {
 							onUserDismiss();
-						} else {
-							showToast(R.string.formula_editor_confirm_discard);
-							confirmBack = System.currentTimeMillis();
 						}
+						//							else {
+						//							if (System.currentTimeMillis() <= confirmBack + 2000) {
+						//								showToast(R.string.formula_editor_changes_discarded);
+						//								onUserDismiss();
+						//							} else {
+						//								showToast(R.string.formula_editor_confirm_discard);
+						//								confirmBack = System.currentTimeMillis();
+						//							}
+						//						}
+
 					} else {
 						onUserDismiss();
 					}
