@@ -60,6 +60,9 @@ public class Formula implements Serializable {
 
 	public Formula(String value) {
 		textRepresentation = value;
+		if (!textRepresentation.endsWith(" ")) {
+			textRepresentation += " ";
+		}
 		CalcGrammarParser parser = CalcGrammarParser.getFormulaParser(textRepresentation);
 		root = parser.parseFormula();
 	}

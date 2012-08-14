@@ -85,7 +85,7 @@ public class ChangeVolumeByBrickTest extends ActivityInstrumentationTestCase2<Sc
 		assertNotNull("TextView does not exist.",
 				solo.getText(getActivity().getString(R.string.brick_change_volume_by)));
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, VOLUME_TO_CHANGE, "volumeFormula", changeVolumeByBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, VOLUME_TO_CHANGE, "volume", changeVolumeByBrick);
 
 		//		solo.clickOnEditText(0);
 		//		solo.clearEditText(0);
