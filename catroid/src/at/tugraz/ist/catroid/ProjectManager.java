@@ -163,7 +163,7 @@ public class ProjectManager {
 	}
 
 	public boolean renameProject(String newProjectName, Context context) {
-		if (StorageHandler.getInstance().projectExistsCheckCase(newProjectName)) {
+		if (StorageHandler.getInstance().projectExistsIgnoreCase(newProjectName)) {
 			Utils.displayErrorMessage(context, context.getString(R.string.error_project_exists));
 			return false;
 		}

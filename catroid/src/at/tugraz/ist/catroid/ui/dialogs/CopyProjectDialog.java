@@ -80,7 +80,7 @@ public class CopyProjectDialog extends TextDialog {
 			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
 					String newProjectName = (input.getText().toString()).trim();
-					if (StorageHandler.getInstance().projectExistsCheckCase(newProjectName)) {
+					if (StorageHandler.getInstance().projectExistsIgnoreCase(newProjectName)) {
 						Utils.displayErrorMessage(activity, activity.getString(R.string.error_project_exists));
 					} else if (newProjectName.equalsIgnoreCase("")) {
 						Utils.displayErrorMessage(activity,

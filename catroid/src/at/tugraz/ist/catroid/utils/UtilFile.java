@@ -177,6 +177,9 @@ public class UtilFile {
 	}
 
 	public static void copyProject(String newProjectName, String oldProjectName) throws IOException {
+		if (Utils.deleteSpecialCharactersInString(newProjectName) == "") {
+			return;
+		}
 		File oldProjectRootDirectory = new File(Utils.buildProjectPath(oldProjectName));
 		File newProjectRootDirectory = new File(Utils.buildProjectPath(newProjectName));
 
