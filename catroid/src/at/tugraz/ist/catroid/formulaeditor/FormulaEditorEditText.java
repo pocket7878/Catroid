@@ -55,7 +55,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	public static final int BRACKET_CLOSE = 4;
 	public static final int BRACKET_OPEN = 5;
 	public static final int SENSOR_VALUE = 6;
-	private static final double ANDROID_3_4_EXTRA_LINESPACING = 1.2;
+	private static final double ANDROID_3_4_EXTRA_LINESPACING = 1.15;
 
 	private int selectionStartIndex = 0;
 	private int selectionEndIndex = 0;
@@ -149,9 +149,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 				currentState.selectionEnd);
 		formulaEditorDialog.makeUndoButtonClickable(history.undoIsPossible());
 		formulaEditorDialog.makeRedoButtonClickable(history.redoIsPossible());
-		if (history.hasUnsavedChanges()) {
-			formulaEditorDialog.makeOkButtonSaveButton();
-		}
+
 		return true;
 	}
 
@@ -536,11 +534,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			appendToTextFieldAtCurrentPosition(newElement);
 		}
 
-		formulaEditorDialog.makeOkButtonSaveButton();
-
-		//absoluteCursorPosition = selectionEndIndex;
-		//updateSelectionIndices();
-
 		history.push(getText().toString(), absoluteCursorPosition, absoluteCursorPosition, absoluteCursorPosition);
 		formulaEditorDialog.makeUndoButtonClickable(true);
 
@@ -638,9 +631,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	public void formulaSaved() {
 		history.changesSaved();
-		formulaEditorDialog.makeOkButtonBackButton();
-		//		errorSpan = this.getText();
-		//		errorSpan.removeSpan(COLOR_ERROR);
 	}
 
 	public void endEdit() {
