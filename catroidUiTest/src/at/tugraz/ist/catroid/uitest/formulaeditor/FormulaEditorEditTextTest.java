@@ -455,8 +455,6 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		assertEquals("Text not deleted correctly", "98 + rand( 0 , 1 ) + 76", solo.getEditText(1).getText().toString());
 
 		solo.goBack();
-		solo.goBack();
-
 	}
 
 	private void createProject(String projectName) throws InterruptedException {

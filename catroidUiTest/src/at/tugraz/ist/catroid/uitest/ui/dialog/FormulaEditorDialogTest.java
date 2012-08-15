@@ -88,7 +88,7 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 	public void testChangeFormula() {
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		//catKeyboardClicker.clickOnKey("1");
+		catKeyboardClicker.clickOnKey("1");
 		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
 		solo.sleep(50);
 		assertTrue("Saved changes message not found!",
@@ -214,32 +214,26 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
 
 		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_undo);
-		//solo.clickOnButton(solo.getString(R.string.formula_editor_button_undo));
 		solo.sleep(50);
 		assertEquals("Undo did something wrong", "1 - 2 * cos( sin( 0 ) )",
 				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
 
 		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_undo);
-		//solo.clickOnButton(solo.getString(R.string.formula_editor_button_undo));
 		solo.sleep(50);
 		assertEquals("Undo did something wrong", "1 - 2 * cos( 0 )", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
 				.getText().toString());
 
 		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_undo);
-		//solo.clickOnButton(solo.getString(R.string.formula_editor_button_undo));
 		solo.sleep(50);
 		assertEquals("Undo did something wrong", "1 - 2 *", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
 				.toString());
 
 		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_undo);
-		//solo.clickOnButton(solo.getString(R.string.formula_editor_button_undo));
 		solo.sleep(50);
 		assertEquals("Undo did something wrong", "1 - 2", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
 				.toString());
 
 		solo.goBack();
-		//solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
-		//solo.clickOnButton(solo.getString(R.string.formula_editor_button_return));
 
 		assertEquals("Undo did something wrong", "1 - 2", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString());
 
@@ -266,7 +260,6 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 
 		for (int i = 0; i < 7; i++) {
 			UiTestUtils.clickOnLinearLayout(solo, R.id.menu_undo);
-			//solo.clickOnButton(solo.getString(R.string.formula_editor_button_undo));
 		}
 
 		solo.sleep(50);
@@ -274,14 +267,12 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 				.getText().toString());
 
 		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_undo);
-		//solo.clickOnButton(solo.getString(R.string.formula_editor_button_undo));
 
 		assertEquals("Undo did something wrong", INITIAL_X + " ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
 				.getText().toString());
 
 		for (int i = 0; i < 7; i++) {
 			UiTestUtils.clickOnLinearLayout(solo, R.id.menu_redo);
-			//solo.clickOnButton(solo.getString(R.string.formula_editor_button_redo));
 		}
 
 		solo.sleep(50);
@@ -314,14 +305,12 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 
 		for (int i = 0; i < maxHistoryElements + 2; i++) {
 			UiTestUtils.clickOnLinearLayout(solo, R.id.menu_undo);
-			//solo.clickOnButton(solo.getString(R.string.formula_editor_button_undo));
 		}
 
 		assertEquals("Wrong text in field", "1", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
 
 		for (int i = 0; i < maxHistoryElements + 2; i++) {
 			UiTestUtils.clickOnLinearLayout(solo, R.id.menu_redo);
-			//solo.clickOnButton(solo.getString(R.string.formula_editor_button_redo));
 		}
 
 		assertEquals("Wrong text in field", "1" + searchString, solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()

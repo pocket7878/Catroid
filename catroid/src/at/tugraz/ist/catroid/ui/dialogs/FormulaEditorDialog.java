@@ -23,7 +23,6 @@
 package at.tugraz.ist.catroid.ui.dialogs;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
@@ -52,6 +51,9 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 	private static final int PARSER_OK = -1;
 	private static final int PARSER_STACK_OVERFLOW = -2;
 	private static final int PARSER_INPUT_SYNTAX_ERROR = -3;
+
+	private static final int SET_FORMULA_ON_CREATE_VIEW = 0;
+	private static final int SET_FORMULA_ON_SWITCH_EDIT_TEXT = 1;
 
 	private Context context;
 
@@ -84,19 +86,14 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 		FormulaEditorDialog.currentFormula = formula;
 
 		SherlockFragmentActivity activity = null;
-		if (SherlockFragmentActivity.class.isAssignableFrom(view.getContext().getClass())) { //this view is from any SherlockFragmentActivity
-			activity = (SherlockFragmentActivity) view.getContext();
-		} else {
-			activity = (SherlockFragmentActivity) ((ContextWrapper) view.getContext()).getBaseContext(); //this view is from within this dialog, happens when you click an edittext within the editor
-		}
+		activity = (SherlockFragmentActivity) view.getContext();
 
-		FormulaEditorDialog formulaEditorDialog = null;
-		if (activity.getSupportFragmentManager().findFragmentById(R.id.fragment_formula_editor) == null) {
+		FormulaEditorDialog formulaEditorDialog = (FormulaEditorDialog) activity.getSupportFragmentManager()
+				.findFragmentById(R.id.fragment_formula_editor);
+		if (formulaEditorDialog == null) {
 			activity.startActivity(new Intent(activity, FormulaEditorActivity.class));
 		} else {
-			formulaEditorDialog = (FormulaEditorDialog) activity.getSupportFragmentManager().findFragmentById(
-					R.id.fragment_formula_editor);
-			formulaEditorDialog.setInputFormula(formula);
+			formulaEditorDialog.setInputFormula(formula, SET_FORMULA_ON_SWITCH_EDIT_TEXT);
 		}
 	}
 
@@ -117,10 +114,6 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 		}
 		catKeyboardView = (CatKeyboardView) dialogView.findViewById(R.id.keyboardcat);
 		catKeyboardView.setEditText(formulaEditorEditText);
-		//catKeyboardView.setCurrentBrick(currentBrick);
-
-		//		makeRedoButtonClickable(false);
-		//		makeUndoButtonClickable(false);
 
 		if (brickSpace != null) {
 			formulaEditorEditText.init(this, brickSpace.getMeasuredHeight(), catKeyboardView);
@@ -128,54 +121,94 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 			formulaEditorEditText.init(this, 0, catKeyboardView);
 		}
 
-		setInputFormula(currentFormula);
-		//getDialog().setOnKeyListener(this); TODO do something!
+		setInputFormula(currentFormula, SET_FORMULA_ON_CREATE_VIEW);
 		return dialogView;
 	}
 
-	public void setInputFormula(Formula newFormula) {
+	public void setInputFormula(Formula newFormula, int mode) {
 
 		int orientation = getResources().getConfiguration().orientation;
 
-		if (restoreInstance) { //after orientation switch
-			restoreInstance = false;
-			if (!formulaEditorEditText.restoreFieldFromPreviousHistory()) { //history is only deleted when editor is shut down by  user!
-				formulaEditorEditText.enterNewFormula(newFormula.toString()); // this happens when onSaveInstanceState() is being called but not by orientation change (e.g.user turns off screen)
-			}
-			refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
+		switch (mode) {
+			case SET_FORMULA_ON_CREATE_VIEW:
+				if (restoreInstance) { //after orientation switch
+					restoreInstance = false;
+					if (!formulaEditorEditText.restoreFieldFromPreviousHistory()) { //history is only deleted when editor is shut down by  user!
+						formulaEditorEditText.enterNewFormula(newFormula.toString()); // this happens when onSaveInstanceState() is being called but not by orientation change (e.g.user turns off screen)
+					}
+					refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
 
-			currentFormula.highlightTextField(brickView,
-					getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
-
-		} else if (newFormula == currentFormula) {
-
-			if (!formulaEditorEditText.hasChanges()) {
+					currentFormula.highlightTextField(brickView,
+							getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
+				} else { //on create
+					if (!formulaEditorEditText.hasChanges()) {
+						currentFormula.removeTextFieldHighlighting(brickView, orientation);
+						formulaEditorEditText.enterNewFormula(currentFormula.toString());
+						currentFormula.highlightTextField(brickView,
+								getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
+					} else {
+						formulaEditorEditText.quickSelect();
+					}
+					refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
+				}
+				break;
+			case SET_FORMULA_ON_SWITCH_EDIT_TEXT:
+				if (formulaEditorEditText.hasChanges()) {
+					if (!saveFormulaIfPossible()) {
+						return;
+					}
+				}
+				if (currentFormula != null) {
+					currentFormula.refreshTextField(brickView);
+				}
+				formulaEditorEditText.endEdit();
 				currentFormula.removeTextFieldHighlighting(brickView, orientation);
-				formulaEditorEditText.enterNewFormula(currentFormula.toString());
+				currentFormula = newFormula;
 				currentFormula.highlightTextField(brickView,
 						getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
-			} else {
-				formulaEditorEditText.quickSelect();
-			}
-			refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
-		} else {
-			if (formulaEditorEditText.hasChanges()) {
-				if (!saveFormulaIfPossible()) {
-					return;
-				}
-			}
-			if (currentFormula != null) {
-				currentFormula.refreshTextField(brickView);
-			}
-			formulaEditorEditText.endEdit();
-			currentFormula.removeTextFieldHighlighting(brickView, orientation);
-			currentFormula = newFormula;
-			currentFormula.highlightTextField(brickView,
-					getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
-			formulaEditorEditText.enterNewFormula(newFormula.toString());
-
+				formulaEditorEditText.enterNewFormula(newFormula.toString());
+				break;
+			default:
+				break;
 		}
 
+		//		if (restoreInstance) { //after orientation switch
+		//			restoreInstance = false;
+		//			if (!formulaEditorEditText.restoreFieldFromPreviousHistory()) { //history is only deleted when editor is shut down by  user!
+		//				formulaEditorEditText.enterNewFormula(newFormula.toString()); // this happens when onSaveInstanceState() is being called but not by orientation change (e.g.user turns off screen)
+		//			}
+		//			refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
+		//
+		//			currentFormula.highlightTextField(brickView,
+		//					getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
+		//
+		//		} else if (newFormula == currentFormula) { //on create
+		//
+		//			if (!formulaEditorEditText.hasChanges()) {
+		//				currentFormula.removeTextFieldHighlighting(brickView, orientation);
+		//				formulaEditorEditText.enterNewFormula(currentFormula.toString());
+		//				currentFormula.highlightTextField(brickView,
+		//						getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
+		//			} else {
+		//				formulaEditorEditText.quickSelect();
+		//			}
+		//			refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
+		//		} else { //on change
+		//			if (formulaEditorEditText.hasChanges()) {
+		//				if (!saveFormulaIfPossible()) {
+		//					return;
+		//				}
+		//			}
+		//			if (currentFormula != null) {
+		//				currentFormula.refreshTextField(brickView);
+		//			}
+		//			formulaEditorEditText.endEdit();
+		//			currentFormula.removeTextFieldHighlighting(brickView, orientation);
+		//			currentFormula = newFormula;
+		//			currentFormula.highlightTextField(brickView,
+		//					getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
+		//			formulaEditorEditText.enterNewFormula(newFormula.toString());
+		//		}
 	}
 
 	private int parseFormula(String formulaToParse) {
@@ -279,16 +312,7 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 		currentFormula = null;
 		currentBrick = null;
 		getActivity().finish();
-		//dismiss(); TODO do something!
 	}
-
-	//	public void makeUndoButtonClickable(boolean clickable) {
-	//		undoButton.setClickable(clickable);
-	//	}
-	//
-	//	public void makeRedoButtonClickable(boolean clickable) {
-	//		redoButton.setClickable(clickable);
-	//	}
 
 	@Override
 	public boolean onKey(DialogInterface di, int keyCode, KeyEvent event) {

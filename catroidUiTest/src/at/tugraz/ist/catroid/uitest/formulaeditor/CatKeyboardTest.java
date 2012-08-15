@@ -147,8 +147,8 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 		assertEquals("Wrong button clicked", "( 0 )", text.getText().toString().substring(0, 5));
 		catKeyboardClicker.clickOnKey("del");
 
-		solo.clickOnButton(2);
-		solo.clickOnButton(2);
+		solo.goBack();
+		solo.goBack();
 
 	}
 
@@ -218,8 +218,10 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 		assertEquals("Wrong button clicked", "e", text.getText().toString().substring(0, "e".length()));
 		catKeyboardClicker.clickOnKey("del");
 
-		solo.clickOnButton(2);
-		solo.clickOnButton(2);
+		solo.goBack();
+		solo.goBack();
+		//		solo.clickOnButton(2); //TODO what button2 
+		//		solo.clickOnButton(2);
 	}
 
 	public void testKeysFromSensorKeyboard() {
@@ -268,8 +270,8 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 				text.getText().toString().substring(0, "AZIMUTH_ORIENTATION_".length()));
 		catKeyboardClicker.clickOnKey("del");
 
-		solo.clickOnButton(2);
-		solo.clickOnButton(2);
+		solo.goBack();
+		solo.goBack();
 	}
 
 	//	public void testLanguageKeys() {
