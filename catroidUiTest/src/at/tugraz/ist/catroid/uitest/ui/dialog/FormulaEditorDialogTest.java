@@ -147,7 +147,7 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 		String newYFormula = "rand( cos( 90 ) , 10 * sin( 90 ) ) ";
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(FORMULA_EDITOR_EDIT_TEXT_ID);
+		catKeyboardClicker.clearEditTextWithCursorBehindLastCharacterOnlyQuickly(FORMULA_EDITOR_EDIT_TEXT_ID);
 		solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, "999 " + newXFormula);
 		catKeyboardClicker.clickOnKey("9");
 		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
@@ -199,7 +199,7 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 	public void testUndo() {
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(FORMULA_EDITOR_EDIT_TEXT_ID);
+		catKeyboardClicker.clearEditTextWithCursorBehindLastCharacterOnlyQuickly(FORMULA_EDITOR_EDIT_TEXT_ID);
 
 		catKeyboardClicker.clickOnKey("1");
 		catKeyboardClicker.clickOnKey("-");
