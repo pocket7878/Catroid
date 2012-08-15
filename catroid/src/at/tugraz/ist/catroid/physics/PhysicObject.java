@@ -63,6 +63,16 @@ public class PhysicObject {
 		body.setTransform(position, body.getAngle());
 	}
 
+	// TODO: Test it!
+	public void setXPosition(float x) {
+		body.setTransform(PhysicWorldConverter.lengthCatToBox2d(x), body.getPosition().y, body.getAngle());
+	}
+
+	// TODO: Test it!
+	public void setYPosition(float y) {
+		body.setTransform(body.getPosition().x, PhysicWorldConverter.lengthCatToBox2d(y), body.getAngle());
+	}
+
 	public void setMass(float mass) {
 		MassData massData = body.getMassData();
 		massData.mass = mass;

@@ -65,6 +65,10 @@ public class SetXBrick implements Brick, OnClickListener {
 		return this.sprite;
 	}
 
+	public int getXPosition() {
+		return xPosition;
+	}
+
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		view = View.inflate(context, R.layout.brick_set_x, null);
