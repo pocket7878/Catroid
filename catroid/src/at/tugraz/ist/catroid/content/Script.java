@@ -25,12 +25,7 @@ package at.tugraz.ist.catroid.content;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.SetXBrick;
-import at.tugraz.ist.catroid.physics.commands.PhysicCommand;
-import at.tugraz.ist.catroid.physics.commands.PhysicCommandBrickAdapter;
-import at.tugraz.ist.catroid.physics.commands.PhysicSetXCommand;
 
 public abstract class Script implements Serializable {
 
@@ -85,15 +80,6 @@ public abstract class Script implements Serializable {
 	}
 
 	public void addBrick(int position, Brick brick) {
-		// TODO
-		if (brick instanceof SetXBrick) {
-			PhysicCommand command = new PhysicSetXCommand(ProjectManager.getInstance().getCurrentProject()
-					.getPhysicWorld().getPhysicObject(brick.getSprite()), brick);
-			PhysicCommandBrickAdapter adapter = new PhysicCommandBrickAdapter(command);
-			brickList.add(position, adapter);
-			return;
-		}
-
 		if (brick != null) {
 			brickList.add(position, brick);
 		}
