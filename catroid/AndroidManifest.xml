@@ -109,6 +109,12 @@
             </intent-filter>
             </activity>
             
+        <activity android:name=".livewallpaper.AboutLicence">
+        <intent-filter>
+            <category android:name="android.intent.category.MAIN" />
+        </intent-filter>
+    	</activity>
+            
         <activity
             android:name=".bluetooth.DeviceListActivity"
             android:theme="@android:style/Theme.Dialog" />

@@ -28,8 +28,6 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Costume;
 import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.content.Project;
 
 public class WallpaperCostume {
 	private static WallpaperCostume wallpaperCostume;

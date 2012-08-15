@@ -25,13 +25,14 @@
     android:title="@string/settings"
 	android:key="livewallpaper_settings">
    	
-      	<ListPreference
+     <!--   	<ListPreference
                 android:title="@string/livewallpaper_settings_title"
                 android:key="FirstEditTextPref"
                 android:summary="@string/livewallpaper_licence_summary"
                 android:entries="@array/list"
                 android:entryValues="@array/list" />
                 
+                -->
         	
     <PreferenceCategory android:title="@string/pref_category_mindstorm" >
         <CheckBoxPreference
@@ -40,5 +41,13 @@
             android:summary="@string/pref_descr_ms_bricks"
             android:title="@string/pref_enable_ms_bricks" />
     </PreferenceCategory>
-
+    
+     <PreferenceScreen 
+         android:title ="@string/livewallpaper_settings_title"
+    	 android:key="licence"
+       	 android:summary="@string/livewallpaper_licence_summary">
+             
+        <intent android:action="at.tugraz.ist.catroid.livewallpaper.AboutLicence"/>
+                 
+               </PreferenceScreen>
 </PreferenceScreen>

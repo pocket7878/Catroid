@@ -63,6 +63,7 @@ public class LiveWallpaper extends WallpaperService {
 		private String licence = " licence ";
 
 		private WallpaperCostume wallpaperCostume = WallpaperCostume.getInstance();
+		private ScreenSize screensize = ScreenSize.getInstance();
 
 		public CatWallEngine() {
 			mPreferences = LiveWallpaper.this.getSharedPreferences(SHARED_PREFS_NAME, 0);
@@ -148,6 +149,12 @@ public class LiveWallpaper extends WallpaperService {
 
 					if (wallpaperCostume.getBackground() != null) {
 						c.drawBitmap(wallpaperCostume.getBackground(), 0, 0, paint);
+						//						Log.v("DEBUG", "genişlik : " + screensize.getWindowManager().getDefaultDisplay().getWidth());
+						//						c.scale(screensize.getWindowManager().getDefaultDisplay().getWidth(), screensize
+						//								.getWindowManager().getDefaultDisplay().getHeight());
+
+						c.drawBitmap(wallpaperCostume.getBackground(), 0, 0, paint);
+
 						if (wallpaperCostume.getCostume() != null && !wallpaperCostume.isCostumeHidden()) {
 
 							c.drawBitmap(wallpaperCostume.getCostume(), wallpaperCostume.getTop(),

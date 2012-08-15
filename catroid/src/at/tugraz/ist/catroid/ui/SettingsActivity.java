@@ -22,8 +22,11 @@
  */
 package at.tugraz.ist.catroid.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.view.View;
+import android.view.View.OnClickListener;
 import at.tugraz.ist.catroid.R;
 
 /**
@@ -36,5 +39,12 @@ public class SettingsActivity extends PreferenceActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
+
+		android.view.View.OnClickListener settingsClickListener = new OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent("at.tugraz.ist.catroid.livewallpaper.AboutLicence");
+				startActivity(intent);
+			}
+		};
 	}
 }
