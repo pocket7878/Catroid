@@ -48,7 +48,7 @@
         android:id="@+id/keyboardcat"
         android:visibility="visible"
         android:layout_alignParentBottom="true"
-        android:layout_width="216pt"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
 	    android:keyTextColor="#ffffff"
 		android:keyPreviewHeight="0sp"
