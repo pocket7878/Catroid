@@ -32,10 +32,6 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-/**
- * @author marki
- * 
- */
 public class FormulaEditorActivity extends SherlockFragmentActivity {
 
 	private ActionBar actionBar;
@@ -84,8 +80,7 @@ public class FormulaEditorActivity extends SherlockFragmentActivity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		formulaEditor.onKey(null, keyCode, event);
-		return super.onKeyDown(keyCode, event);
+		return formulaEditor.onKey(null, keyCode, event);
 	}
 
 }

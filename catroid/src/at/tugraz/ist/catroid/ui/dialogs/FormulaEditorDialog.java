@@ -52,16 +52,15 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 	private static final int PARSER_OK = -1;
 	private static final int PARSER_STACK_OVERFLOW = -2;
 	private static final int PARSER_INPUT_SYNTAX_ERROR = -3;
+
 	private Context context;
+
 	private static Brick currentBrick;
 	private static Formula currentFormula;
 	private FormulaEditorEditText formulaEditorEditText;
 	private CatKeyboardView catKeyboardView;
 	private LinearLayout brickSpace;
 	private View brickView;
-	//	private Button okButton = null;
-	//	private Button undoButton = null;
-	//	private Button redoButton = null;
 	private long confirmBack = 0;
 	public boolean restoreInstance = false;
 
@@ -111,15 +110,6 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 			brickView = currentBrick.getView(context, 0, null);
 			brickSpace.addView(brickView);
 		}
-
-		//		okButton = (Button) dialogView.findViewById(R.id.formula_editor_ok_button);
-		//		okButton.setOnClickListener(this);
-		//
-		//		undoButton = (Button) dialogView.findViewById(R.id.formula_editor_undo_button);
-		//		undoButton.setOnClickListener(this);
-		//
-		//		redoButton = (Button) dialogView.findViewById(R.id.formula_editor_redo_button);
-		//		redoButton.setOnClickListener(this);
 
 		formulaEditorEditText = (FormulaEditorEditText) dialogView.findViewById(R.id.formula_editor_edit_field);
 		if (brickSpace != null) {
@@ -234,14 +224,10 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 
 	public void handleUndoButton() {
 		formulaEditorEditText.undo();
-		//makeUndoButtonClickable(formulaEditorEditText.undo());
-		//makeRedoButtonClickable(true);
 	}
 
 	public void handleRedoButton() {
 		formulaEditorEditText.redo();
-		//makeRedoButtonClickable(formulaEditorEditText.redo());
-		//makeUndoButtonClickable(true);
 	}
 
 	public boolean saveFormulaIfPossible() {
