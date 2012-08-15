@@ -114,5 +114,4 @@ public class WaitBrick implements Brick, OnClickListener {
 	public void onClick(View view) {
 		FormulaEditorDialog.showDialog(view, this, timeToWaitInSeconds);
 	}
-
 }

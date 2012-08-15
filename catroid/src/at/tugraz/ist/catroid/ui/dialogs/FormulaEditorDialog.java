@@ -292,6 +292,7 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 		formulaEditorEditText.endEdit();
 		currentFormula = null;
 		currentBrick = null;
+		getActivity().finish();
 		//dismiss(); TODO do something!
 	}
 
@@ -309,13 +310,7 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
 			switch (keyCode) {
 				case KeyEvent.KEYCODE_BACK:
-					if (formulaEditorEditText.hasChanges()) {
-						if (saveFormulaIfPossible()) {
-							onUserDismiss();
-						}
-					} else {
-						onUserDismiss();
-					}
+					endFormulaEditor();
 					break;
 				default:
 					break;
@@ -325,6 +320,16 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 
 		}
 		return true;
+	}
+
+	public void endFormulaEditor() {
+		if (formulaEditorEditText.hasChanges()) {
+			if (saveFormulaIfPossible()) {
+				onUserDismiss();
+			}
+		} else {
+			onUserDismiss();
+		}
 	}
 
 	public void refreshFormulaPreviewString(String formulaString) {

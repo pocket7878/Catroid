@@ -68,7 +68,7 @@ public class FormulaEditorActivity extends SherlockFragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
-				finish();
+				formulaEditor.endFormulaEditor();
 				break;
 			case R.id.menu_undo:
 				formulaEditor.handleUndoButton();

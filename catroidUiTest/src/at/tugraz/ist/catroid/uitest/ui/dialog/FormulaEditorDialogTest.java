@@ -279,7 +279,7 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 		assertEquals("Undo did something wrong", INITIAL_X + " ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
 				.getText().toString());
 
-		for (int i = 0; i < 8; i++) { //TODO i changed it to 8 because he redid the undo above..
+		for (int i = 0; i < 7; i++) {
 			UiTestUtils.clickOnLinearLayout(solo, R.id.menu_redo);
 			//solo.clickOnButton(solo.getString(R.string.formula_editor_button_redo));
 		}

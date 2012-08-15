@@ -202,4 +202,5 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 	public Fragment getCurrentTabFragment() {
 		return getTabFragment(tabHost.getCurrentTab());
 	}
+
 }
