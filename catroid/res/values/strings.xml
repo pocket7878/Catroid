@@ -253,6 +253,7 @@
     <string name="brick_loop_end">End of loop</string>
     
     <!-- Physics -->
+    <string name="brick_set_physic_object_type">physic object</string>
     <string name="brick_set_mass">Set mass to</string>
     <string name="brick_set_mass_unit">kg</string>
     <string name="brick_set_gravity">Set gravity to</string>

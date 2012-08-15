@@ -38,7 +38,7 @@ import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.SetMassBrick;
+import at.tugraz.ist.catroid.content.bricks.SetPhysicObjectTypeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetXBrick;
 import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.physics.PhysicSettings;
@@ -186,7 +186,7 @@ public class StageListener implements ApplicationListener {
 					}
 				} else {
 					for (Brick brick : script.getBrickList()) {
-						if (brick instanceof SetMassBrick) {
+						if (brick instanceof SetPhysicObjectTypeBrick) {
 							containsPhysicObjectBrick = true;
 							scriptIndex = 0;
 							break;

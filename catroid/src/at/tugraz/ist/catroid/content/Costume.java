@@ -162,7 +162,7 @@ public class Costume extends Image {
 
 			this.setRegion(new TextureRegion(texture));
 
-			// TODO: Is this really the best position to recognize a costume change?
+			// TODO: Is this really the best place to recognize a costume change?
 			ProjectManager.getInstance().getCurrentProject().getPhysicWorld().costumeChanged(sprite);
 			imageChanged = false;
 		}

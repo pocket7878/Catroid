@@ -78,6 +78,7 @@ import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetGhostEffectBrick;
 import at.tugraz.ist.catroid.content.bricks.SetGravityBrick;
 import at.tugraz.ist.catroid.content.bricks.SetMassBrick;
+import at.tugraz.ist.catroid.content.bricks.SetPhysicObjectTypeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.SetVelocityBrick;
 import at.tugraz.ist.catroid.content.bricks.SetVolumeToBrick;
@@ -178,6 +179,7 @@ public class AddBrickDialog extends Dialog {
 
 		PhysicWorld physicWorld = ProjectManager.getInstance().getCurrentProject().getPhysicWorld();
 		List<Brick> physicBrickList = new ArrayList<Brick>();
+		physicBrickList.add(new SetPhysicObjectTypeBrick(physicWorld, sprite, 0));
 		physicBrickList.add(new SetMassBrick(physicWorld, sprite, 1.0f));
 		physicBrickList.add(new SetGravityBrick(physicWorld, sprite, 0.0f, 0.0f));
 		physicBrickList.add(new SetVelocityBrick(physicWorld, sprite, 0.0f, 0.0f));

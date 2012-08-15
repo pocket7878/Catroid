@@ -118,8 +118,8 @@ public class PhysicWorld implements Serializable {
 	}
 
 	public void costumeChanged(Sprite sprite) {
-		if (objects.contains(sprite)) {
-			objects.get(sprite).setShape((new PhysicShapeBuilder()).createShape(sprite.costume));
-		}
+		//		if (objects.contains(sprite)) {
+		objects.get(sprite).setShape((new PhysicShapeBuilder()).createShape(sprite.costume));
+		//		}
 	}
 }

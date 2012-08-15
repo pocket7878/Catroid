@@ -20,7 +20,7 @@ package at.tugraz.ist.catroid.physics;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.MassData;
@@ -31,8 +31,14 @@ import com.badlogic.gdx.physics.box2d.Shape;
  * 
  */
 public class PhysicObject {
+
+	public enum Type {
+		DYNAMIC, FIXED, NONE;
+	}
+
 	private final Body body;
 	private final FixtureDef fixtureDef = new FixtureDef();
+	private Type type;
 
 	public PhysicObject(Body body) {
 		this.body = body;
@@ -44,16 +50,45 @@ public class PhysicObject {
 
 	public void setShape(Shape shape) {
 		// TODO: This code is cursed, I tell you!
-		fixtureDef.shape = shape;
 		for (Fixture fixture : body.getFixtureList()) {
 			body.destroyFixture(fixture);
 		}
-		body.createFixture(fixtureDef);
+
+		if (shape != null) {
+			fixtureDef.shape = shape;
+			if (type != Type.NONE) {
+				body.createFixture(fixtureDef);
+			}
+		}
 	}
 
-	public void setType(BodyDef.BodyType type) {
-		body.setType(type);
+	public void setType(Type type) {
+		if (this.type == type) {
+			return;
+		}
+
+		Shape shape = null;
+		switch (type) {
+			case DYNAMIC:
+				body.setType(BodyType.DynamicBody);
+				shape = fixtureDef.shape;
+				break;
+			case FIXED:
+				body.setType(BodyType.KinematicBody);
+				shape = fixtureDef.shape;
+				break;
+			case NONE:
+				body.setType(BodyType.StaticBody);
+				break;
+		}
+
+		this.type = type;
+		setShape(shape);
 	}
+
+	//	public void setBodyType(BodyType type) {
+	//		body.setType(type);
+	//	}
 
 	public void setAngle(float angle) {
 		body.setTransform(body.getPosition(), angle);

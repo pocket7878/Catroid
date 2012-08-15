@@ -34,24 +34,26 @@ import android.widget.EditText;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.physics.PhysicObject;
+import at.tugraz.ist.catroid.physics.PhysicObject.Type;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.utils.Utils;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-public class SetMassBrick implements Brick, OnClickListener {
+public class SetPhysicObjectTypeBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private PhysicWorld physicWorld;
 	private Sprite sprite;
-	private float mass;
+	private int type;
 
 	@XStreamOmitField
 	private transient View view;
 
-	public SetMassBrick(PhysicWorld physicWorld, Sprite sprite, float mass) {
+	public SetPhysicObjectTypeBrick(PhysicWorld physicWorld, Sprite sprite, int type) {
 		this.physicWorld = physicWorld;
 		this.sprite = sprite;
-		this.mass = mass;
+		this.type = type;
 	}
 
 	public int getRequiredResources() {
@@ -59,7 +61,20 @@ public class SetMassBrick implements Brick, OnClickListener {
 	}
 
 	public void execute() {
-		physicWorld.getPhysicObject(sprite).setMass(mass);
+		PhysicObject.Type physicObjectType = null;
+		switch (type) {
+			case 0:
+				physicObjectType = Type.DYNAMIC;
+				break;
+			case 1:
+				physicObjectType = Type.FIXED;
+				break;
+			case 2:
+				physicObjectType = Type.NONE;
+				break;
+		}
+
+		physicWorld.getPhysicObject(sprite).setType(physicObjectType);
 	}
 
 	public Sprite getSprite() {
@@ -67,22 +82,22 @@ public class SetMassBrick implements Brick, OnClickListener {
 	}
 
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
-		view = View.inflate(context, R.layout.brick_set_mass, null);
+		view = View.inflate(context, R.layout.brick_set_physic_object_type, null);
 
-		EditText editMass = (EditText) view.findViewById(R.id.brick_set_mass_edit_text);
-		editMass.setText(String.valueOf(mass));
+		EditText editMass = (EditText) view.findViewById(R.id.brick_set_physic_object_type_text);
+		editMass.setText(String.valueOf(type));
 		editMass.setOnClickListener(this);
 
 		return view;
 	}
 
 	public View getPrototypeView(Context context) {
-		return View.inflate(context, R.layout.brick_set_mass, null);
+		return View.inflate(context, R.layout.brick_set_physic_object_type, null);
 	}
 
 	@Override
 	public Brick clone() {
-		return new SetMassBrick(physicWorld, getSprite(), mass);
+		return new SetPhysicObjectTypeBrick(physicWorld, getSprite(), type);
 	}
 
 	public void onClick(View view) {
@@ -90,18 +105,15 @@ public class SetMassBrick implements Brick, OnClickListener {
 
 		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
 		final EditText input = new EditText(context);
-		input.setText(String.valueOf(mass));
-		input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+		input.setText(String.valueOf(type));
+		input.setInputType(InputType.TYPE_CLASS_NUMBER);
 		input.setSelectAllOnFocus(true);
 		dialog.setView(input);
 		dialog.setOnCancelListener((OnCancelListener) context);
 		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				try {
-					mass = Float.parseFloat(input.getText().toString());
-					if (mass == 0.0f) {
-						mass = 0.0001f;
-					}
+					type = Integer.parseInt(input.getText().toString());
 				} catch (NumberFormatException exception) {
 					Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 				}
