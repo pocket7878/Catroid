@@ -187,7 +187,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			verticalOffset -= (int) (scrollOffset / lineHeight);
 			betweenLineOffset = scrollOffset % lineHeight;
 		}
-		Log.i("info", "Vertical Offset: " + verticalOffset);
 
 		float startX = horizontalOffset;
 		float endX = horizontalOffset;

@@ -27,6 +27,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -82,15 +83,14 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 
 	public static void showDialog(View view, Brick brick, Formula formula) {
 
-		FormulaEditorDialog.currentBrick = brick;
-		FormulaEditorDialog.currentFormula = formula;
-
 		SherlockFragmentActivity activity = null;
 		activity = (SherlockFragmentActivity) view.getContext();
 
 		FormulaEditorDialog formulaEditorDialog = (FormulaEditorDialog) activity.getSupportFragmentManager()
 				.findFragmentById(R.id.fragment_formula_editor);
 		if (formulaEditorDialog == null) {
+			FormulaEditorDialog.currentBrick = brick;
+			FormulaEditorDialog.currentFormula = formula;
 			activity.startActivity(new Intent(activity, FormulaEditorActivity.class));
 		} else {
 			formulaEditorDialog.setInputFormula(formula, SET_FORMULA_ON_SWITCH_EDIT_TEXT);
@@ -128,6 +128,7 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 	public void setInputFormula(Formula newFormula, int mode) {
 
 		int orientation = getResources().getConfiguration().orientation;
+		Log.i("info", "set input: " + mode + "old:" + currentFormula.toString() + " new:" + newFormula.toString());
 
 		switch (mode) {
 			case SET_FORMULA_ON_CREATE_VIEW:
@@ -308,6 +309,7 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 	}
 
 	private void onUserDismiss() { //dont override onDismiss, this must not be called on orientation change
+		Log.i("info", "User dismiss");
 		formulaEditorEditText.endEdit();
 		currentFormula = null;
 		currentBrick = null;
