@@ -74,7 +74,7 @@ public class CatKeyboardClicker {
 
 	}
 
-	public void clearEditTextWithDeletes(int index) {
+	public void clearEditTextVerySlowButAlwaysForReal(int index) {
 		int noChangesIndex = 0;
 		int lastEditTextLength = solo.getEditText(index).getText().length();
 		while (solo.getEditText(index).getText().length() > 0) {
@@ -87,7 +87,13 @@ public class CatKeyboardClicker {
 		}
 	}
 
-	public void clearEditTextWithOnlyNumbersQuickly(int index) {
+	public void clearEditTextPortraitModeOnlyQuickly(int editTextIndex) {
+		this.clickOnKey("del");
+		solo.clickOnEditText(editTextIndex);
+		this.clickOnKey("del");
+	}
+
+	public void clearEditTextWithCursorBehindLastCharacterOnlyQuickly(int index) {
 		int lastEditTextLength = solo.getEditText(index).getText().length();
 		while (lastEditTextLength > 0) {
 			this.clickOnKey("del");
