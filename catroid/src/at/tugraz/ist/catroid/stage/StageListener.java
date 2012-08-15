@@ -35,9 +35,14 @@ import android.graphics.Color;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.content.bricks.SetMassBrick;
+import at.tugraz.ist.catroid.content.bricks.SetXBrick;
 import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.physics.PhysicSettings;
+import at.tugraz.ist.catroid.physics.commands.PhysicSetXBrick;
 import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -160,6 +165,36 @@ public class StageListener implements ApplicationListener {
 
 		background = new Texture(Gdx.files.internal("stage/white_pixel.bmp"));
 		axes = new Texture(Gdx.files.internal("stage/red_pixel.bmp"));
+
+		// TODO: Find better place to replace motion bricks with corresponding physic bricks
+		// if necessary. Needs own class.
+		for (Sprite sprite : project.getSpriteList()) {
+			boolean containsPhysicObjectBrick = false;
+
+			for (int scriptIndex = 0; scriptIndex < sprite.getNumberOfScripts(); scriptIndex++) {
+				Script script = sprite.getScript(scriptIndex);
+
+				if (containsPhysicObjectBrick) {
+					List<Brick> brickList = script.getBrickList();
+
+					for (int brickIndex = 0; brickIndex < brickList.size(); brickIndex++) {
+						Brick brick = brickList.get(brickIndex);
+						if (brick instanceof SetXBrick) {
+							brick = new PhysicSetXBrick((SetXBrick) brick);
+							brickList.set(brickIndex, brick);
+						}
+					}
+				} else {
+					for (Brick brick : script.getBrickList()) {
+						if (brick instanceof SetMassBrick) {
+							containsPhysicObjectBrick = true;
+							scriptIndex = 0;
+							break;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public void menuResume() {

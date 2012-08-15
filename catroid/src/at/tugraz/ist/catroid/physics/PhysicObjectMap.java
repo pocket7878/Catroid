@@ -52,6 +52,10 @@ public class PhysicObjectMap implements Iterable<Entry<Sprite, PhysicObject>> {
 		return physicObject;
 	}
 
+	public boolean contains(Sprite sprite) {
+		return objects.containsKey(sprite);
+	}
+
 	public Iterator<Entry<Sprite, PhysicObject>> iterator() {
 		return objects.entrySet().iterator();
 	}
