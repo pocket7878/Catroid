@@ -25,7 +25,7 @@ package at.tugraz.ist.catroid.ui;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
+import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -39,7 +39,7 @@ import com.actionbarsherlock.view.MenuItem;
 public class FormulaEditorActivity extends SherlockFragmentActivity {
 
 	private ActionBar actionBar;
-	private FormulaEditorFragment formulaEditor;
+	private FormulaEditorDialog formulaEditor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +47,8 @@ public class FormulaEditorActivity extends SherlockFragmentActivity {
 
 		setContentView(R.layout.activity_formula_editor);
 		setUpActionBar();
-		formulaEditor = (FormulaEditorFragment) getSupportFragmentManager().findFragmentById(
-				R.id.fragment_formula_editor);
+		formulaEditor = (FormulaEditorDialog) getSupportFragmentManager()
+				.findFragmentById(R.id.fragment_formula_editor);
 	}
 
 	@Override
@@ -68,10 +68,7 @@ public class FormulaEditorActivity extends SherlockFragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
-
-				break;
-			case R.id.menu_save:
-				formulaEditor.handleSaveButton();
+				finish();
 				break;
 			case R.id.menu_undo:
 				formulaEditor.handleUndoButton();
@@ -87,7 +84,8 @@ public class FormulaEditorActivity extends SherlockFragmentActivity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		return formulaEditor.onKey(null, keyCode, event);
+		formulaEditor.onKey(null, keyCode, event);
+		return super.onKeyDown(keyCode, event);
 	}
 
 }

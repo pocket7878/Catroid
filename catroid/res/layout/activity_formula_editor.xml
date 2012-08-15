@@ -29,7 +29,7 @@
     android:orientation="vertical" >
 
     <fragment
-        class="at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment" 
+        class="at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog" 
         android:id="@+id/fragment_formula_editor"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

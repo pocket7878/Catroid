@@ -32,7 +32,6 @@ import android.widget.Spinner;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.LegoNXT.LegoNXT;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.formulaeditor.Formula;
 
 public class NXTMotorStopBrick implements Brick, OnItemSelectedListener {
 	private static final long serialVersionUID = 1L;
@@ -122,21 +121,9 @@ public class NXTMotorStopBrick implements Brick, OnItemSelectedListener {
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
-
-	@Override
+	
 	public void onClick(View view) {
 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.content.bricks.Brick#getFormula()
-	 */
-	@Override
-	public Formula getFormula() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

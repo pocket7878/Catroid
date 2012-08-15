@@ -31,7 +31,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
-import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
+import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class GlideToBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
@@ -193,29 +193,18 @@ public class GlideToBrick implements Brick, OnClickListener {
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.brick_glide_to_x_edit_text:
-				FormulaEditorFragment.showDialog(view, this, xDestination);
+				FormulaEditorDialog.showDialog(view, this, xDestination);
 				break;
 
 			case R.id.brick_glide_to_y_edit_text:
-				FormulaEditorFragment.showDialog(view, this, yDestination);
+				FormulaEditorDialog.showDialog(view, this, yDestination);
 				break;
 
 			case R.id.brick_glide_to_duration_edit_text:
-				FormulaEditorFragment.showDialog(view, this, durationInSeconds);
+				FormulaEditorDialog.showDialog(view, this, durationInSeconds);
 				break;
 		}
 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.content.bricks.Brick#getFormula()
-	 */
-	@Override
-	public Formula getFormula() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

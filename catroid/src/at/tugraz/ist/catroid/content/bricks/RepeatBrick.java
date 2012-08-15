@@ -32,7 +32,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
-import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
+import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 	private static final long serialVersionUID = 1L;
@@ -97,18 +97,7 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorFragment.showDialog(view, this, timesToRepeat);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.content.bricks.Brick#getFormula()
-	 */
-	@Override
-	public Formula getFormula() {
-		// TODO Auto-generated method stub
-		return null;
+		FormulaEditorDialog.showDialog(view, this, timesToRepeat);
 	}
 
 }

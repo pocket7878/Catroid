@@ -36,7 +36,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.LegoNXT.LegoNXT;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
-import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
+import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class NXTMotorActionBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
@@ -160,18 +160,7 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorFragment.showDialog(view, this, speed);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.content.bricks.Brick#getFormula()
-	 */
-	@Override
-	public Formula getFormula() {
-		// TODO Auto-generated method stub
-		return null;
+		FormulaEditorDialog.showDialog(view, this, speed);
 	}
 
 }

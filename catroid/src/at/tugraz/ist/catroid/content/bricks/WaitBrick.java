@@ -31,7 +31,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
-import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
+import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class WaitBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
@@ -112,14 +112,7 @@ public class WaitBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorFragment.showDialog(view, this, timeToWaitInSeconds);
-		//		ProjectManager.getInstance().setCurrentBrick(this);
-		//		Activity activity = (Activity) view.getContext();
-		//		activity.startActivity(new Intent(activity, FormulaEditorActivity.class));
+		FormulaEditorDialog.showDialog(view, this, timeToWaitInSeconds);
 	}
 
-	@Override
-	public Formula getFormula() {
-		return timeToWaitInSeconds;
-	}
 }

@@ -40,7 +40,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.EditText;
-import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
+import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 
 public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
@@ -72,7 +72,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	private static FormulaEditorHistory history = null;
 	private Context context;
 
-	FormulaEditorFragment formulaEditorDialog = null;
+	FormulaEditorDialog formulaEditorDialog = null;
 
 	public FormulaEditorEditText(Context context) {
 		super(context);
@@ -89,7 +89,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		this.context = context;
 	}
 
-	public void init(FormulaEditorFragment dialog, int brickHeight, CatKeyboardView ckv) {
+	public void init(FormulaEditorDialog dialog, int brickHeight, CatKeyboardView ckv) {
 		this.formulaEditorDialog = dialog;
 		this.setOnTouchListener(this);
 		this.setLongClickable(false);
@@ -147,8 +147,8 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		}
 		setInputTextAndPosition(currentState.text, currentState.cursorPosition, currentState.selectionStart,
 				currentState.selectionEnd);
-		formulaEditorDialog.makeUndoButtonClickable(history.undoIsPossible());
-		formulaEditorDialog.makeRedoButtonClickable(history.redoIsPossible());
+		//formulaEditorDialog.makeUndoButtonClickable(history.undoIsPossible()); TODO do something!
+		//formulaEditorDialog.makeRedoButtonClickable(history.redoIsPossible()); TODO do something!
 
 		return true;
 	}
@@ -515,7 +515,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		}
 
 		history.push(getText().toString(), absoluteCursorPosition, absoluteCursorPosition, absoluteCursorPosition);
-		formulaEditorDialog.makeUndoButtonClickable(true);
+		//formulaEditorDialog.makeUndoButtonClickable(true); TODO do something!
 
 		//Log.i("info", "Cursor Pos: " + absoluteCursorPosition);
 
@@ -615,8 +615,8 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	public void endEdit() {
 		history.clear();
-		formulaEditorDialog.makeRedoButtonClickable(false);
-		formulaEditorDialog.makeUndoButtonClickable(false);
+		//formulaEditorDialog.makeRedoButtonClickable(false); TODO do something!
+		//formulaEditorDialog.makeUndoButtonClickable(false); TODO do something!
 	}
 
 	public void quickSelect() {

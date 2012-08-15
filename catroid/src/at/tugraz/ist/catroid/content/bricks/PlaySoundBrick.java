@@ -32,7 +32,6 @@ import android.widget.Spinner;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.stage.NativeAppActivity;
 
@@ -46,12 +45,10 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 		this.sprite = sprite;
 	}
 
-	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
-	@Override
 	public void execute() {
 		if (soundInfo != null && sprite.getSoundList().contains(soundInfo)) {
 			if (!NativeAppActivity.isRunning() && soundInfo.getAbsolutePath() != null) {
@@ -62,12 +59,10 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 		}
 	}
 
-	@Override
 	public Sprite getSprite() {
 		return sprite;
 	}
 
-	@Override
 	public View getView(final Context context, int brickId, BaseAdapter adapter) {
 		View view = View.inflate(context, R.layout.brick_play_sound, null);
 
@@ -99,7 +94,6 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 		return arrayAdapter;
 	}
 
-	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_play_sound, null);
 	}
@@ -114,7 +108,6 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 		this.soundInfo = soundInfo;
 	}
 
-	@Override
 	public void onItemSelected(AdapterView<?> parent, View arg1, int position, long arg3) {
 		if (position == 0) {
 			soundInfo = null;
@@ -123,24 +116,11 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 		}
 	}
 
-	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
 
-	@Override
 	public void onClick(View view) {
 
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see at.tugraz.ist.catroid.content.bricks.Brick#getFormula()
-	 */
-	@Override
-	public Formula getFormula() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

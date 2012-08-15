@@ -28,7 +28,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.formulaeditor.Formula;
 
 public interface Brick extends Serializable {
 
@@ -53,7 +52,5 @@ public interface Brick extends Serializable {
 	public int getRequiredResources();
 
 	public void onClick(View view);
-
-	public Formula getFormula();
 
 }
