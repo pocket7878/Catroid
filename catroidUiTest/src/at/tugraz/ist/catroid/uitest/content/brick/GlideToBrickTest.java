@@ -78,7 +78,7 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 
 		solo.clickOnEditText(0);
 		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
-		catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(3);
+		catKeyboardClicker.clearEditTextWithCursorBehindLastCharacterOnlyQuickly(3);
 		for (char item : (String.valueOf(duration).toCharArray())) {
 			catKeyboardClicker.clickOnKey("" + item);
 		}
@@ -87,7 +87,7 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 		solo.sleep(200);
 
 		solo.clickOnEditText(1);
-		catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(3);
+		catKeyboardClicker.clearEditTextWithCursorBehindLastCharacterOnlyQuickly(3);
 		for (char item : (String.valueOf(xPosition).toCharArray())) {
 			catKeyboardClicker.clickOnKey("" + item);
 		}
@@ -95,7 +95,7 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 		solo.sleep(200);
 
 		solo.clickOnEditText(2);
-		catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(3);
+		catKeyboardClicker.clearEditTextWithCursorBehindLastCharacterOnlyQuickly(3);
 		for (char item : (String.valueOf(yPosition).toCharArray())) {
 			catKeyboardClicker.clickOnKey("" + item);
 		}
