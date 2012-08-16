@@ -35,6 +35,7 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
+import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 import at.tugraz.ist.catroid.utils.Utils;
 
 import com.badlogic.gdx.math.Vector2;
@@ -55,18 +56,23 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 		this.velocity = new Vector2(x, y);
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
-		physicWorld.getPhysicObject(sprite).getBody().setLinearVelocity(velocity);
+		Vector2 box2dVelocity = PhysicWorldConverter.vecCatToBox2d(velocity);
+		physicWorld.getPhysicObject(sprite).getBody().setLinearVelocity(box2dVelocity);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		view = View.inflate(context, R.layout.brick_set_velocity, null);
 
@@ -83,6 +89,7 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_set_velocity, null);
 	}
@@ -92,6 +99,7 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 		return new SetVelocityBrick(physicWorld, sprite, velocity.x, velocity.y);
 	}
 
+	@Override
 	public void onClick(final View view) {
 		final Context context = view.getContext();
 
@@ -108,6 +116,7 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 		dialog.setView(input);
 		dialog.setOnCancelListener((OnCancelListener) context);
 		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				try {
 					if (view.getId() == R.id.brick_set_velocity_x_edit_text) {
@@ -122,6 +131,7 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 			}
 		});
 		dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
 			}

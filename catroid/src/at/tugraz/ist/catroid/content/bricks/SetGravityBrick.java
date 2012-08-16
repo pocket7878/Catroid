@@ -35,6 +35,7 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
+import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 import at.tugraz.ist.catroid.utils.Utils;
 
 import com.badlogic.gdx.math.Vector2;
@@ -62,7 +63,8 @@ public class SetGravityBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		physicWorld.setGravity(sprite, gravity);
+		Vector2 box2dGravity = PhysicWorldConverter.vecCatToBox2d(gravity);
+		physicWorld.setGravity(sprite, box2dGravity);
 	}
 
 	@Override

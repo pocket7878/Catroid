@@ -21,24 +21,37 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/RelativeLayout01"
-    android:layout_width="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/brick_green" >
+    android:background="@drawable/brick_green"
+    android:orientation="vertical" >
 
-    <LinearLayout
-        android:id="@+id/brick_set_velocity_linear_layout"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_centerVertical="true" >
 
         <TextView
-            android:id="@+id/TextView01"
             style="@style/brick_text_style"
+            android:layout_centerVertical="true"
+            android:paddingRight="10dip"
+            android:text="@string/brick_set_velocity" >
+        </TextView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true" >
+
+        <TextView
+            android:id="@+id/brick_set_velocity_x_text_view"
+            style="@style/brick_text_style"
+            android:layout_centerVertical="true"
             android:paddingRight="10dip"
             android:text="@string/x_label" >
         </TextView>
@@ -47,21 +60,26 @@
             android:id="@+id/brick_set_velocity_x_edit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dip"
+            android:layout_toRightOf="@id/brick_set_velocity_x_text_view"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:gravity="right"
-            android:inputType="number|numberDecimal|numberSigned"
-            android:maxLength="5"
+            android:inputType="numberDecimal"
+            android:maxLength="6"
             android:maxLines="1"
-            android:minWidth="60dip"
-            android:text="0" >
+            android:minWidth="50dip"
+            android:text="0.0" >
         </EditText>
-
-        <TextView
-            android:id="@+id/TextView02"
+        
+       <TextView
+            android:id="@+id/brick_set_velocity_y_text_view"
             style="@style/brick_text_style"
-            android:paddingLeft="10dip"
+            android:layout_toRightOf="@id/brick_set_velocity_x_edit_text"
+            android:layout_centerVertical="true"
+            android:paddingLeft="4dip"
             android:paddingRight="10dip"
             android:text="@string/y_label" >
         </TextView>
@@ -70,34 +88,30 @@
             android:id="@+id/brick_set_velocity_y_edit_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dip"
+            android:layout_toRightOf="@id/brick_set_velocity_y_text_view"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:gravity="right"
-            android:inputType="number|numberDecimal|numberSigned"
-            android:maxLength="5"
+            android:inputType="numberDecimal"
+            android:maxLength="6"
             android:maxLines="1"
-            android:minWidth="60dip"
-            android:text="0" >
+            android:minWidth="50dip"
+            android:text="0.0" >
         </EditText>
-<!-- 
+        
         <TextView
-            android:id="@+id/TextView03"
+            android:id="@+id/brick_set_velocity_unit_text_view"
             style="@style/brick_text_style"
-            android:paddingLeft="10dip"
+            android:layout_toRightOf="@id/brick_set_velocity_y_edit_text"
+            android:layout_centerVertical="true"
+            android:paddingLeft="8dip"
             android:paddingRight="10dip"
-            android:text="@string/per_seconds" >
+            android:text="@string/brick_set_velocity_unit" >
         </TextView>
--->
-    </LinearLayout>
+        
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/ValueTextViewSetVelocity"
-        style="@style/brick_text_style"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/brick_set_velocity_linear_layout"
-        android:text="@string/brick_set_velocity" >
-    </TextView>
-
-</RelativeLayout>
+</LinearLayout>

@@ -110,7 +110,7 @@ public class PhysicWorld implements Serializable {
 	}
 
 	public void setGravity(Sprite sprite, Vector2 gravity) {
-		world.setGravity(PhysicWorldConverter.vecCatToBox2d(gravity));
+		world.setGravity(gravity);
 	}
 
 	public PhysicObject getPhysicObject(Sprite sprite) {
@@ -118,8 +118,6 @@ public class PhysicWorld implements Serializable {
 	}
 
 	public void costumeChanged(Sprite sprite) {
-		//		if (objects.contains(sprite)) {
 		objects.get(sprite).setShape((new PhysicShapeBuilder()).createShape(sprite.costume));
-		//		}
 	}
 }
