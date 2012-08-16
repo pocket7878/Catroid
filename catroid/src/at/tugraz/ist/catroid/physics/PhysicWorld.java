@@ -34,8 +34,13 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.GdxNativesLoader;
 
 public class PhysicWorld implements Serializable {
+	static {
+		GdxNativesLoader.load();
+	}
+
 	private static final long serialVersionUID = -9103964560286141267L;
 
 	private final transient World world = new World(PhysicSettings.World.DEFAULT_GRAVITY,
