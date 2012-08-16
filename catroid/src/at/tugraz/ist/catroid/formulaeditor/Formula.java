@@ -152,11 +152,12 @@ public class Formula implements Serializable {
 			if (formulaTextField == null) {
 				return;
 			}
-			if (textRepresentation.length() > 5) {
-				formulaTextField.setText(textRepresentation.substring(0, 5) + "...");
-			} else {
-				formulaTextField.setText(textRepresentation);
-			}
+			formulaTextField.setText(textRepresentation);
+			//			if (textRepresentation.length() > 5) {
+			//				formulaTextField.setText(textRepresentation.substring(0, 5) + "...");
+			//			} else {
+			//				formulaTextField.setText(textRepresentation);
+			//			}
 		}
 
 	}

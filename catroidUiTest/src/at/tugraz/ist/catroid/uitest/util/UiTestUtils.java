@@ -75,8 +75,8 @@ import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.io.StorageHandler;
-import at.tugraz.ist.catroid.uitest.formulaeditor.CatKeyboardClicker;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
+import at.tugraz.ist.catroid.uitest.formulaeditor.CatKeyboardClicker;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.UtilToken;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -146,6 +146,7 @@ public class UiTestUtils {
 
 	private static void insertValue(Solo solo, int editTextId, int editorEditTextId, String value) {
 		solo.clickOnEditText(editTextId);
+		solo.waitForActivity("FormulaEditorActivity");
 		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
 
 		//catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(editorEditTextId);
@@ -591,15 +592,16 @@ public class UiTestUtils {
 
 		}
 
-		String buttonOKText = solo.getCurrentActivity().getString(R.string.formula_editor_button_save);
-		solo.waitForText(buttonOKText);
-		solo.clickOnText(buttonOKText);
-		solo.sleep(100);
-
-		String buttonBackText = solo.getCurrentActivity().getString(R.string.formula_editor_button_return);
-		solo.waitForText(buttonBackText);
-		solo.clickOnText(buttonBackText);
-		solo.sleep(100);
+		//String buttonOKText = solo.getCurrentActivity().getString(R.string.formula_editor_button_save);
+		//solo.waitForText(buttonOKText);
+		//solo.clickOnText(buttonOKText);
+		//		solo.sleep(100);
+		//
+		//		String buttonBackText = solo.getCurrentActivity().getString(R.string.formula_editor_button_return);
+		//		solo.waitForText(buttonBackText);
+		//		solo.clickOnText(buttonBackText);
+		//		solo.sleep(100);
+		solo.goBack();
 
 		int width = 0;
 		if (assertMode) {
@@ -621,6 +623,7 @@ public class UiTestUtils {
 
 		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
 		solo.clickOnEditText(editTextNumber);
+		solo.waitForActivity("FormulaEditorActivity");
 		//solo.clearEditText(numberOfEditTextsInBrick); 
 		//solo.enterText(numberOfEditTextsInBrick, newValue + ""); //would only work if old text was shorter than newValue! 
 		//catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(numberOfEditTextsInBrick);
@@ -629,11 +632,12 @@ public class UiTestUtils {
 			catKeyboardClicker.clickOnKey("" + item);
 		}
 
-		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
-		solo.sleep(200);
+		//solo.goBack();
+		//solo.sleep(200);
 		assertEquals("Text not updated within FormulaEditor", newValue,
 				Double.parseDouble(solo.getEditText(editTextNumber).getText().toString()));
-		solo.clickOnButton(solo.getString(R.string.formula_editor_button_return));
+		//solo.clickOnButton(solo.getString(R.string.formula_editor_button_return));
+		solo.goBack();
 		solo.sleep(200);
 
 		Formula formula = (Formula) UiTestUtils.getPrivateField(fieldName, theBrick);

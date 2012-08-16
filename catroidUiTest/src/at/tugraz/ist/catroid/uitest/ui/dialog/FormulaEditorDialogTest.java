@@ -88,6 +88,7 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 	public void testChangeFormula() {
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		solo.waitForActivity("FormulaEditorActivity");
 		catKeyboardClicker.clickOnKey("1");
 		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
 		solo.sleep(50);
@@ -118,6 +119,7 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 	public void testOnTheFlyUpdateOfBrickEditText() {
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		solo.waitForActivity("FormulaEditorActivity");
 		catKeyboardClicker.clickOnKey("1");
 
 		assertEquals("Wrong text in FormulaEditor", "1", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
@@ -145,32 +147,37 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 		String newYFormula = "rand( cos( 90 ) , 10 * sin( 90 ) ) ";
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		solo.waitForActivity("FormulaEditorActivity");
 		catKeyboardClicker.clearEditTextWithCursorBehindLastCharacterOnlyQuickly(FORMULA_EDITOR_EDIT_TEXT_ID);
 		solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, "999 " + newXFormula);
 		catKeyboardClicker.clickOnKey("9");
-		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
+		solo.goBack();
 		solo.sleep(50);
 		assertTrue("Save failed toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
 
+		//solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		solo.waitForActivity("FormulaEditorActivity");
 		solo.clearEditText(FORMULA_EDITOR_EDIT_TEXT_ID);
 		solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, newXFormula);
-		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
-		solo.sleep(50);
+		//catKeyboardClicker.clickOnKey("1");
+		//catKeyboardClicker.clickOnKey("del");
+		solo.goBack();
+		solo.sleep(200);
 		assertTrue("Changes saved toast not found",
 				solo.searchText(solo.getString(R.string.formula_editor_changes_saved)));
 
 		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
+		solo.waitForActivity("FormulaEditorActivity");
 		catKeyboardClicker.clickOnKey("1");
 		solo.clearEditText(FORMULA_EDITOR_EDIT_TEXT_ID);
 		solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, newYFormula);
+		catKeyboardClicker.clickOnKey("1");
+		catKeyboardClicker.clickOnKey("del");
 
-		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
-		solo.sleep(50);
+		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
 		assertTrue("Changes saved toast not found",
 				solo.searchText(solo.getString(R.string.formula_editor_changes_saved)));
 
-		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		solo.sleep(50);
 		assertEquals("Wrong text in FormulaEditor", newXFormula, solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
 				.getText().toString());
 
@@ -360,10 +367,11 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 		solo.sleep(1500);
 		assertEquals("Wrong text after oprientation switch", "rand( 0 , 1 )", solo.getEditText(0).getText().toString());
 
-		solo.clickOnButton(0); //TODO what is button 0???
+		solo.goBack(); //TODO what is button 0???
 
-		solo.sleep(50);
+		solo.sleep(200);
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		solo.waitForActivity("FormulaEditorActivity");
 		assertEquals("Wrong text after oprientation switch", "rand( 0 , 1 ) ", solo.getEditText(X_POS_EDIT_TEXT_ID)
 				.getText().toString());
 		solo.setActivityOrientation(Solo.PORTRAIT);
@@ -381,11 +389,11 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 		assertEquals("Wrong text after oprientation switch", "sin( cos( 0 ) )",
 				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
 
-		solo.clickOnButton(1);
-		solo.clickOnButton(1);
-		solo.clickOnButton(0);
-		solo.sleep(50);
+		solo.goBack();
+		solo.goBack();
+		solo.sleep(2000);
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		solo.waitForActivity("FormulaEditorActivity");
 		assertEquals("Wrong text after oprientation switch", "rand( 0 , 1 ) ",
 				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
 

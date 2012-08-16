@@ -26,7 +26,7 @@ import java.util.EnumSet;
 
 public enum Functions {
 	//PLUS("+", 0), MINUS("-", 0), MULT("*", 1), DIVIDE("/", 1), MOD("%", 1), POW("^", 2);
-	SIN("sin"), COS("cos"), TAN("tan"), LN("ln"), LOG("log"), SQRT("sqrt"), RAND("rand");
+	SIN("sin"), COS("cos"), TAN("tan"), LN("ln"), LOG("log"), SQRT("sqrt"), RAND("rand"), ROUND("round");
 	private final String functionName;
 
 	Functions(String value) {
