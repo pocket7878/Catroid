@@ -47,8 +47,10 @@ public class PhysicObjectMap implements Iterable<Entry<Sprite, PhysicObject>> {
 		if (physicObject == null) {
 			BodyDef bodyDef = new BodyDef();
 			bodyDef.type = BodyType.StaticBody;
+
 			physicObject = new PhysicObject(world.createBody(bodyDef));
 			physicObject.setType(Type.NONE);
+
 			objects.put(sprite, physicObject);
 		}
 		return physicObject;
@@ -58,6 +60,7 @@ public class PhysicObjectMap implements Iterable<Entry<Sprite, PhysicObject>> {
 		return objects.containsKey(sprite);
 	}
 
+	@Override
 	public Iterator<Entry<Sprite, PhysicObject>> iterator() {
 		return objects.entrySet().iterator();
 	}

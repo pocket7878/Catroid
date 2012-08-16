@@ -42,6 +42,10 @@ public class PhysicObject {
 
 	public PhysicObject(Body body) {
 		this.body = body;
+
+		fixtureDef.density = 0.0f;
+		//		fixtureDef.friction = 0.5f;
+		//		fixtureDef.restitution = 1.0f;
 	}
 
 	public Body getBody() {

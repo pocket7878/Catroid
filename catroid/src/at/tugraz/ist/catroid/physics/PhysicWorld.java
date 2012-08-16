@@ -103,6 +103,10 @@ public class PhysicWorld implements Serializable {
 			costume.setXYPosition(position.x, position.y);
 			costume.rotation = angle;
 			costume.releaseXYWidthHeightLock();
+
+			if (entry.getKey().getName().equalsIgnoreCase("Catroid")) {
+				System.out.println("XXX: " + body.getMass() + "    / " + body.getMassData().mass);
+			}
 		}
 	}
 
