@@ -31,10 +31,11 @@
     <at.tugraz.ist.catroid.formulaeditor.FormulaEditorEditText
         android:id="@+id/formula_editor_edit_field"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="2dp"
         android:layout_marginRight="2dp"
         android:gravity="top"
+        android:layout_above="@+id/keyboardcat"
         android:inputType="textMultiLine"
         android:singleLine="false"
         android:minLines="3"

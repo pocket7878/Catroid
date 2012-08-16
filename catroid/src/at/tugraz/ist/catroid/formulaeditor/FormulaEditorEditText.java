@@ -24,7 +24,6 @@
 package at.tugraz.ist.catroid.formulaeditor;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.text.Editable;
@@ -65,7 +64,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	private boolean editMode = false;
 	private Spannable highlightSpan = null;
 	private Spannable errorSpan = null;
-	private int numberOfVisibleLines = 0;
 	private float lineHeight = 0;
 
 	public CatKeyboardView catKeyboardView;
@@ -101,19 +99,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			extraLineSpacing = ANDROID_3_4_EXTRA_LINESPACING;
 		}
-		int orientation = dialog.getResources().getConfiguration().orientation;
-		if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			numberOfVisibleLines = 5;
-		} else if (brickHeight < 100) { //this height seems buggy for some high bricks, still need it...
-			numberOfVisibleLines = 7;
-		} else if (brickHeight < 200) {
-			numberOfVisibleLines = 6;
-		} else {
-			numberOfVisibleLines = 4;
-
-		}
-		this.setLines(numberOfVisibleLines);
-
 	}
 
 	public void enterNewFormula(String formulaAsText) {
@@ -705,13 +690,13 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 					scrollBy(0, (int) (initialScrollY > lineHeight ? -1 * (firstLineSize + lineHeight / 2) : -1
 							* firstLineSize));
 					cursorY = 0;
-				} else if (yCoordinate >= numberOfVisibleLines * lineHeight - firstLineSize) {
+				} else if (yCoordinate >= getLineCount() * lineHeight - firstLineSize) {
 					if (!(yCoordinate > layout.getLineCount() * lineHeight - getScrollY())) {
 						scrollBy(0, (int) (lineHeight - firstLineSize + lineHeight / 2));
-						cursorY = numberOfVisibleLines;
+						cursorY = getLineCount();
 					}
 				} else {
-					for (int i = 1; i <= numberOfVisibleLines; i++) {
+					for (int i = 1; i <= getLineCount(); i++) {
 						if (yCoordinate <= ((lineHeight - firstLineSize) + i * lineHeight)) {
 							cursorY = i;
 							break;

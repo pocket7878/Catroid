@@ -36,8 +36,9 @@
     <at.tugraz.ist.catroid.formulaeditor.FormulaEditorEditText
         android:id="@+id/formula_editor_edit_field"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/formula_editor_brick_space"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/formula_editor_brick_space"
+        android:layout_above="@+id/keyboardcat"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
