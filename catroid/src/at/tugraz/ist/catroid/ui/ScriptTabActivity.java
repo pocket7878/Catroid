@@ -26,8 +26,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -39,6 +42,7 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.adapter.TabsPagerAdapter;
+import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 import at.tugraz.ist.catroid.ui.fragment.CostumeFragment;
 import at.tugraz.ist.catroid.ui.fragment.ScriptFragment;
 import at.tugraz.ist.catroid.ui.fragment.SoundFragment;
@@ -69,6 +73,8 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 	private ViewPager viewPager;
 	private TabsPagerAdapter tabsAdapter;
 
+	public FormulaEditorDialog formulaEditor;
+
 	private TabHost tabHost;
 
 	@Override
@@ -80,6 +86,11 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 		Utils.loadProjectIfNeeded(this);
 
 		setUpActionBar();
+
+		if (formulaEditor != null) {
+			return;
+		}
+		findViewById(R.id.fragment_formula_editor).setVisibility(View.GONE); //TODO
 
 		setupTabHost();
 		viewPager = (ViewPager) findViewById(R.id.pager);
@@ -97,14 +108,6 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 		}
 
 		setupTab(R.drawable.ic_tab_sounds_selector, getString(R.string.sounds), SoundFragment.class, null);
-
-		//		if (savedInstanceState != null) {
-		//			Log.i("info", "" + savedInstanceState);
-		//			formulaEditorDialog = (FormulaEditorDialog) getSupportFragmentManager().getFragment(savedInstanceState,
-		//					"formEd");
-		//			formulaEditorDialog.show(getSupportFragmentManager(), "formula_editor_dialog");
-		//		}
-
 	}
 
 	@Override
@@ -117,6 +120,10 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home: {
+				if (formulaEditor != null) {
+					formulaEditor.endFormulaEditor();
+					return true;
+				}
 				Intent intent = new Intent(this, MainMenuActivity.class);
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(intent);
@@ -127,9 +134,18 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 				startActivityForResult(intent, PreStageActivity.REQUEST_RESOURCES_INIT);
 				return true;
 			}
+			case R.id.menu_undo:
+				if (formulaEditor != null) {
+					formulaEditor.handleUndoButton();
+				}
+				return true;
+			case R.id.menu_redo:
+				if (formulaEditor != null) {
+					formulaEditor.handleRedoButton();
+				}
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
-
 	}
 
 	//	@Override
@@ -196,6 +212,32 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 
 	public Fragment getCurrentTabFragment() {
 		return getTabFragment(tabHost.getCurrentTab());
+	}
+
+	public void startFormulaEditor() {
+		findViewById(R.id.fragment_formula_editor).setVisibility(View.VISIBLE);
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentTransaction fragTransaction = fragmentManager.beginTransaction();
+		formulaEditor = new FormulaEditorDialog();
+		fragTransaction.add(R.id.fragment_formula_editor, formulaEditor);
+		fragTransaction.commit();
+	}
+
+	public void endFormulaEditor() {
+		findViewById(R.id.fragment_formula_editor).setVisibility(View.GONE);
+		FragmentManager fragmentManager = getSupportFragmentManager();
+		FragmentTransaction fragTransaction = fragmentManager.beginTransaction();
+		fragTransaction.remove(formulaEditor);
+		fragTransaction.commit();
+		formulaEditor = null;
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (formulaEditor != null) {
+			return formulaEditor.onKey(null, keyCode, event);
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 }

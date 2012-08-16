@@ -25,7 +25,6 @@ package at.tugraz.ist.catroid.ui.dialogs;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -42,10 +41,11 @@ import at.tugraz.ist.catroid.formulaeditor.CatKeyboardView;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.formulaeditor.FormulaEditorEditText;
 import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
-import at.tugraz.ist.catroid.ui.FormulaEditorActivity;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
 
 public class FormulaEditorDialog extends SherlockFragment implements OnKeyListener {
 
@@ -72,6 +72,7 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 		if (savedInstanceState != null) {
 			restoreInstance = savedInstanceState.getBoolean("restoreInstance");
 		}
+		setHasOptionsMenu(true);
 		super.onCreate(savedInstanceState);
 	}
 
@@ -86,12 +87,12 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 		SherlockFragmentActivity activity = null;
 		activity = (SherlockFragmentActivity) view.getContext();
 
-		FormulaEditorDialog formulaEditorDialog = (FormulaEditorDialog) activity.getSupportFragmentManager()
-				.findFragmentById(R.id.fragment_formula_editor);
+		FormulaEditorDialog formulaEditorDialog = ((ScriptTabActivity) activity).formulaEditor;
+
 		if (formulaEditorDialog == null) {
 			FormulaEditorDialog.currentBrick = brick;
 			FormulaEditorDialog.currentFormula = formula;
-			activity.startActivity(new Intent(activity, FormulaEditorActivity.class));
+			((ScriptTabActivity) activity).startFormulaEditor();
 		} else {
 			formulaEditorDialog.setInputFormula(formula, SET_FORMULA_ON_SWITCH_EDIT_TEXT);
 		}
@@ -125,6 +126,15 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 		return dialogView;
 	}
 
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+
+		menu.clear();
+		getSherlockActivity().getSupportMenuInflater().inflate(R.menu.menu_formula_editor, menu);
+
+	}
+
 	public void setInputFormula(Formula newFormula, int mode) {
 
 		int orientation = getResources().getConfiguration().orientation;
@@ -140,6 +150,8 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 					refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
 
 					currentFormula.highlightTextField(brickView, orientation);
+					getActivity().findViewById(R.id.fragment_formula_editor).setVisibility(View.VISIBLE);
+					((ScriptTabActivity) getActivity()).formulaEditor = this;
 				} else { //on create
 					if (!formulaEditorEditText.hasChanges()) {
 						currentFormula.removeTextFieldHighlighting(brickView, orientation);
@@ -276,7 +288,7 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 		formulaEditorEditText.endEdit();
 		currentFormula = null;
 		currentBrick = null;
-		getActivity().finish();
+		//getActivity().finish();
 	}
 
 	@Override
@@ -293,10 +305,11 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 		} else if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
 		}
-		return true;
+		return false;
 	}
 
 	public void endFormulaEditor() {
+		((ScriptTabActivity) getActivity()).endFormulaEditor();
 		if (formulaEditorEditText.hasChanges()) {
 			if (saveFormulaIfPossible()) {
 				onUserDismiss();

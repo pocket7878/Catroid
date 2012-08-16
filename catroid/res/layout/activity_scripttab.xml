@@ -26,6 +26,11 @@
     android:layout_height="match_parent"
     android:background="@color/website_blue"
     android:orientation="vertical" >
+    
+    <FrameLayout
+        android:id="@+id/fragment_formula_editor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <TabHost
         android:id="@android:id/tabhost"
