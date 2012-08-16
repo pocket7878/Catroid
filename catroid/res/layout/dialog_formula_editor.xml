@@ -26,7 +26,8 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
     android:windowFullscreen="true"
-	android:theme="@android:style/Theme.Light">
+	android:theme="@android:style/Theme.Light"
+	android:background="@color/white">
 	<LinearLayout
 	    android:id="@+id/formula_editor_brick_space"
 	    android:layout_width="wrap_content"
