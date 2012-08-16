@@ -26,8 +26,10 @@ import java.io.Serializable;
 
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.View;
 import android.widget.EditText;
+import at.tugraz.ist.catroid.R;
 
 public class Formula implements Serializable {
 
@@ -188,9 +190,15 @@ public class Formula implements Serializable {
 		formulaTextField.setWidth(width);
 	}
 
-	public void highlightTextField(View brickView, Drawable id, int orientation) {
+	public void highlightTextField(View brickView, int orientation) {
 		if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			return;
+		}
+		Drawable highlightBackground = null;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			highlightBackground = brickView.getResources().getDrawable(R.drawable.textfield_pressed_android4);
+		} else {
+			highlightBackground = brickView.getResources().getDrawable(R.drawable.textfield_pressed);
 		}
 
 		EditText formulaTextField = (EditText) brickView.findViewById(formulaTextFieldId);
@@ -200,7 +208,7 @@ public class Formula implements Serializable {
 		}
 		int width = formulaTextField.getWidth();
 		width = Math.max(width, 130);
-		formulaTextField.setBackgroundDrawable(id);
+		formulaTextField.setBackgroundDrawable(highlightBackground);
 		formulaTextField.setWidth(width);
 	}
 

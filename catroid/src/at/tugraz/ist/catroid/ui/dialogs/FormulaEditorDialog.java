@@ -139,14 +139,12 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 					}
 					refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
 
-					currentFormula.highlightTextField(brickView,
-							getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
+					currentFormula.highlightTextField(brickView, orientation);
 				} else { //on create
 					if (!formulaEditorEditText.hasChanges()) {
 						currentFormula.removeTextFieldHighlighting(brickView, orientation);
 						formulaEditorEditText.enterNewFormula(currentFormula.toString());
-						currentFormula.highlightTextField(brickView,
-								getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
+						currentFormula.highlightTextField(brickView, orientation);
 					} else {
 						formulaEditorEditText.quickSelect();
 					}
@@ -165,8 +163,7 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 				formulaEditorEditText.endEdit();
 				currentFormula.removeTextFieldHighlighting(brickView, orientation);
 				currentFormula = newFormula;
-				currentFormula.highlightTextField(brickView,
-						getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
+				currentFormula.highlightTextField(brickView, orientation);
 				formulaEditorEditText.enterNewFormula(newFormula.toString());
 				break;
 			default:
@@ -288,7 +285,6 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 					break;
 				default:
 					break;
-
 			}
 		} else if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
