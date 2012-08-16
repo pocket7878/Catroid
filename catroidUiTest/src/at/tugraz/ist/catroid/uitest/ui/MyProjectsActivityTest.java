@@ -562,6 +562,22 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		assertTrue("Rename with blacklisted characters was not successfull", renameDirectory.isDirectory());
 	}
 
+	public void testRenameProjectWithOnlyBlacklistedCharacters() {
+		createProjects();
+		solo.sleep(200);
+		final String renameString = "<>?*|";
+		solo.clickOnButton(getActivity().getString(R.string.my_projects));
+		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+		solo.clickLongOnText(UiTestUtils.PROJECTNAME1, 1, true);
+		solo.clickOnText(getActivity().getString(R.string.rename));
+		solo.sleep(200);
+		UiTestUtils.enterText(solo, 0, renameString);
+		solo.clickOnText(getActivity().getString(R.string.ok));
+		solo.waitForDialogToClose(500);
+		String errorMessageProjectExists = solo.getString(R.string.error_project_exists);
+		assertTrue("No or wrong error message shown", solo.searchText(errorMessageProjectExists));
+	}
+
 	public void testRenameToExistingProjectMixedCase() {
 		createProjects();
 		solo.sleep(200);
@@ -810,6 +826,22 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.sleep(200);
 		String notificationEmptyString = solo.getString(R.string.notification_invalid_text_entered);
 		assertTrue("No or wrong error message shown", solo.searchText(notificationEmptyString));
+	}
+
+	public void testCopyProjectWithOnlyBlacklistedCharacters() {
+		createProjects();
+		solo.sleep(200);
+		final String renameString = "<>?*|";
+		solo.clickOnButton(getActivity().getString(R.string.my_projects));
+		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+		solo.clickLongOnText(UiTestUtils.PROJECTNAME1, 1, true);
+		solo.clickOnText(getActivity().getString(R.string.copy));
+		solo.sleep(200);
+		UiTestUtils.enterText(solo, 0, renameString);
+		solo.clickOnText(getActivity().getString(R.string.ok));
+		solo.waitForDialogToClose(500);
+		String errorMessageProjectExists = solo.getString(R.string.error_project_exists);
+		assertTrue("No or wrong error message shown", solo.searchText(errorMessageProjectExists));
 	}
 
 	public void createProjects() {
