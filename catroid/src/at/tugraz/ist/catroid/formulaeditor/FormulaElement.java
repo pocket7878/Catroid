@@ -221,10 +221,10 @@ public class FormulaElement implements Serializable {
 				return Double.valueOf(Gdx.input.getAccelerometerX());
 			}
 			if (value.equals("Y_ACCELERATION_")) {
-				return Double.valueOf(Gdx.input.getAccelerometerY());
+				return Double.valueOf(-Gdx.input.getAccelerometerY());
 			}
 			if (value.equals("Z_ACCELERATION_")) {
-				return Double.valueOf(Gdx.input.getAccelerometerZ());
+				return Double.valueOf(-Gdx.input.getAccelerometerZ());
 			}
 			if (value.equals("AZIMUTH_ORIENTATION_")) {
 				return Double.valueOf(Gdx.input.getAzimuth());
@@ -233,7 +233,7 @@ public class FormulaElement implements Serializable {
 				return Double.valueOf(Gdx.input.getPitch());
 			}
 			if (value.equals("ROLL_ORIENTATION_")) {
-				return Double.valueOf(Gdx.input.getRoll());
+				return Double.valueOf(-Gdx.input.getRoll());
 			}
 		} else if (type == ElementType.CONSTANT) {
 			if (value.equals("pi")) {
