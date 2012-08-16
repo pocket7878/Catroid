@@ -73,8 +73,10 @@ import at.tugraz.ist.catroid.content.bricks.PointInDirectionBrick;
 import at.tugraz.ist.catroid.content.bricks.PointInDirectionBrick.Direction;
 import at.tugraz.ist.catroid.content.bricks.PointToBrick;
 import at.tugraz.ist.catroid.content.bricks.RepeatBrick;
+import at.tugraz.ist.catroid.content.bricks.SetBounceFactorBrick;
 import at.tugraz.ist.catroid.content.bricks.SetBrightnessBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
+import at.tugraz.ist.catroid.content.bricks.SetFrictionBrick;
 import at.tugraz.ist.catroid.content.bricks.SetGhostEffectBrick;
 import at.tugraz.ist.catroid.content.bricks.SetGravityBrick;
 import at.tugraz.ist.catroid.content.bricks.SetMassBrick;
@@ -183,6 +185,8 @@ public class AddBrickDialog extends Dialog {
 		physicBrickList.add(new SetMassBrick(physicWorld, sprite, 1.0f));
 		physicBrickList.add(new SetGravityBrick(physicWorld, sprite, 0.0f, 0.0f));
 		physicBrickList.add(new SetVelocityBrick(physicWorld, sprite, 0.0f, 0.0f));
+		physicBrickList.add(new SetFrictionBrick(physicWorld, sprite, 100.0f));
+		physicBrickList.add(new SetBounceFactorBrick(physicWorld, sprite, 100.0f));
 		brickMap.put(context.getString(R.string.category_physic), physicBrickList);
 
 		return brickMap;
@@ -199,6 +203,7 @@ public class AddBrickDialog extends Dialog {
 
 		ImageButton closeButton = (ImageButton) findViewById(R.id.btn_close_dialog);
 		closeButton.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				abort();
 				dismiss();
@@ -228,6 +233,7 @@ public class AddBrickDialog extends Dialog {
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new ListView.OnItemClickListener() {
 
+			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Brick addedBrick = adapter.getItem(position);
 				ProjectManager projectManager = ProjectManager.getInstance();

@@ -39,19 +39,19 @@ import at.tugraz.ist.catroid.utils.Utils;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-public class SetMassBrick implements Brick, OnClickListener {
+public class SetBounceFactorBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
-	private PhysicWorld physicWorld;
-	private Sprite sprite;
-	private float mass;
+	private final PhysicWorld physicWorld;
+	private final Sprite sprite;
+	private float bounceFactor;
 
 	@XStreamOmitField
 	private transient View view;
 
-	public SetMassBrick(PhysicWorld physicWorld, Sprite sprite, float mass) {
+	public SetBounceFactorBrick(PhysicWorld physicWorld, Sprite sprite, float bounceFactor) {
 		this.physicWorld = physicWorld;
 		this.sprite = sprite;
-		this.mass = mass;
+		this.bounceFactor = bounceFactor;
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class SetMassBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		physicWorld.getPhysicObject(sprite).setMass(mass);
+		physicWorld.getPhysicObject(sprite).setRestitution(bounceFactor / 100.0f);
 	}
 
 	@Override
@@ -71,33 +71,34 @@ public class SetMassBrick implements Brick, OnClickListener {
 
 	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
-		view = View.inflate(context, R.layout.brick_set_mass, null);
+		view = View.inflate(context, R.layout.brick_set_bounce_factor, null);
 
-		EditText editMass = (EditText) view.findViewById(R.id.brick_set_mass_edit_text);
-		editMass.setText(String.valueOf(mass));
-		editMass.setOnClickListener(this);
+		EditText editBounceFactor = (EditText) view.findViewById(R.id.brick_set_bounce_factor_edit_text);
+		editBounceFactor.setText(String.valueOf(bounceFactor));
+		editBounceFactor.setOnClickListener(this);
 
 		return view;
 	}
 
 	@Override
 	public View getPrototypeView(Context context) {
-		return View.inflate(context, R.layout.brick_set_mass, null);
+		return View.inflate(context, R.layout.brick_set_bounce_factor, null);
 	}
 
 	@Override
 	public Brick clone() {
-		return new SetMassBrick(physicWorld, getSprite(), mass);
+		return new SetBounceFactorBrick(physicWorld, sprite, bounceFactor);
 	}
 
 	@Override
-	public void onClick(View view) {
+	public void onClick(final View view) {
 		final Context context = view.getContext();
 
 		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
 		final EditText input = new EditText(context);
-		input.setText(String.valueOf(mass));
-		input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+		input.setText(String.valueOf(bounceFactor));
+		input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
+				| InputType.TYPE_NUMBER_FLAG_SIGNED);
 		input.setSelectAllOnFocus(true);
 		dialog.setView(input);
 		dialog.setOnCancelListener((OnCancelListener) context);
@@ -105,10 +106,7 @@ public class SetMassBrick implements Brick, OnClickListener {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				try {
-					mass = Float.parseFloat(input.getText().toString());
-					if (mass == 0.0f) {
-						mass = 0.0001f;
-					}
+					bounceFactor = Float.parseFloat(input.getText().toString());
 				} catch (NumberFormatException exception) {
 					Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 				}

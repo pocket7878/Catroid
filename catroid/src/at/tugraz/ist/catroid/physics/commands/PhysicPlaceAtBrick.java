@@ -25,49 +25,60 @@ import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.SetXBrick;
-import at.tugraz.ist.catroid.physics.PhysicWorld;
+import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
+import at.tugraz.ist.catroid.physics.PhysicObject;
+import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 
 /**
  * @author robert
  * 
  */
-public class PhysicSetXBrick implements Brick, OnClickListener {
+public class PhysicPlaceAtBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
-	private transient final PhysicWorld world = ProjectManager.getInstance().getCurrentProject().getPhysicWorld();
-	private final SetXBrick setXBrick;
+	private transient final PhysicObject physicObject;
+	private transient final PlaceAtBrick placeAtBrick;
 
-	public PhysicSetXBrick(SetXBrick setXBrick) {
-		this.setXBrick = setXBrick;
+	public PhysicPlaceAtBrick(PlaceAtBrick placeAtBrick) {
+		this.placeAtBrick = placeAtBrick;
+		physicObject = ProjectManager.getInstance().getCurrentProject().getPhysicWorld().getPhysicObject(getSprite());
 	}
 
+	@Override
+	public void execute() {
+		float box2dXPosition = PhysicWorldConverter.lengthCatToBox2d(placeAtBrick.getXPosition());
+		float box2dYPosition = PhysicWorldConverter.lengthCatToBox2d(placeAtBrick.getYPosition());
+
+		physicObject.setPosition(box2dXPosition, box2dYPosition);
+	}
+
+	@Override
 	public void onClick(View view) {
-		setXBrick.onClick(view);
+		placeAtBrick.onClick(view);
 	}
 
 	@Override
 	public Brick clone() {
-		return setXBrick.clone();
+		return placeAtBrick.clone();
 	}
 
-	public void execute() {
-		world.getPhysicObject(this.getSprite()).setXPosition(setXBrick.getXPosition());
-	}
-
+	@Override
 	public Sprite getSprite() {
-		return setXBrick.getSprite();
+		return placeAtBrick.getSprite();
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
-		return setXBrick.getView(context, brickId, adapter);
+		return placeAtBrick.getView(context, brickId, adapter);
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
-		return setXBrick.getPrototypeView(context);
+		return placeAtBrick.getPrototypeView(context);
 	}
 
+	@Override
 	public int getRequiredResources() {
-		return setXBrick.getRequiredResources();
+		return placeAtBrick.getRequiredResources();
 	}
 
 }

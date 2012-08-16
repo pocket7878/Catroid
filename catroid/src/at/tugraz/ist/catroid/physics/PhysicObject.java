@@ -66,6 +66,7 @@ public class PhysicObject {
 		if (this.type == type) {
 			return;
 		}
+		this.type = type;
 
 		Shape shape = null;
 		switch (type) {
@@ -82,13 +83,8 @@ public class PhysicObject {
 				break;
 		}
 
-		this.type = type;
 		setShape(shape);
 	}
-
-	//	public void setBodyType(BodyType type) {
-	//		body.setType(type);
-	//	}
 
 	public void setAngle(float angle) {
 		body.setTransform(body.getPosition(), angle);
@@ -99,13 +95,18 @@ public class PhysicObject {
 	}
 
 	// TODO: Test it!
+	public void setPosition(float x, float y) {
+		body.setTransform(x, y, body.getAngle());
+	}
+
+	// TODO: Test it!
 	public void setXPosition(float x) {
-		body.setTransform(PhysicWorldConverter.lengthCatToBox2d(x), body.getPosition().y, body.getAngle());
+		body.setTransform(x, body.getPosition().y, body.getAngle());
 	}
 
 	// TODO: Test it!
 	public void setYPosition(float y) {
-		body.setTransform(body.getPosition().x, PhysicWorldConverter.lengthCatToBox2d(y), body.getAngle());
+		body.setTransform(body.getPosition().x, y, body.getAngle());
 	}
 
 	public void setMass(float mass) {

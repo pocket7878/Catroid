@@ -42,9 +42,9 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 public class SetGravityBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
-	private PhysicWorld physicWorld;
-	private Sprite sprite;
-	private Vector2 gravity;
+	private final PhysicWorld physicWorld;
+	private final Sprite sprite;
+	private final Vector2 gravity;
 
 	@XStreamOmitField
 	private transient View view;
@@ -55,18 +55,22 @@ public class SetGravityBrick implements Brick, OnClickListener {
 		this.gravity = new Vector2(x, y);
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		physicWorld.setGravity(sprite, gravity);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		view = View.inflate(context, R.layout.brick_set_gravity, null);
 
@@ -83,6 +87,7 @@ public class SetGravityBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_set_gravity, null);
 	}
@@ -92,6 +97,7 @@ public class SetGravityBrick implements Brick, OnClickListener {
 		return new SetGravityBrick(physicWorld, sprite, gravity.x, gravity.y);
 	}
 
+	@Override
 	public void onClick(final View view) {
 		final Context context = view.getContext();
 
@@ -108,6 +114,7 @@ public class SetGravityBrick implements Brick, OnClickListener {
 		dialog.setView(input);
 		dialog.setOnCancelListener((OnCancelListener) context);
 		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				try {
 					if (view.getId() == R.id.brick_set_gravity_x_edit_text) {
@@ -122,6 +129,7 @@ public class SetGravityBrick implements Brick, OnClickListener {
 			}
 		});
 		dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
 			}

@@ -38,11 +38,11 @@ import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.SetPhysicObjectTypeBrick;
-import at.tugraz.ist.catroid.content.bricks.SetXBrick;
 import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.physics.PhysicSettings;
-import at.tugraz.ist.catroid.physics.commands.PhysicSetXBrick;
+import at.tugraz.ist.catroid.physics.commands.PhysicPlaceAtBrick;
 import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -122,6 +122,7 @@ public class StageListener implements ApplicationListener {
 	public StageListener() {
 	}
 
+	@Override
 	public void create() {
 
 		font = new BitmapFont();
@@ -179,8 +180,8 @@ public class StageListener implements ApplicationListener {
 
 					for (int brickIndex = 0; brickIndex < brickList.size(); brickIndex++) {
 						Brick brick = brickList.get(brickIndex);
-						if (brick instanceof SetXBrick) {
-							brick = new PhysicSetXBrick((SetXBrick) brick);
+						if (brick instanceof PlaceAtBrick) {
+							brick = new PhysicPlaceAtBrick((PlaceAtBrick) brick);
 							brickList.set(brickIndex, brick);
 						}
 					}
@@ -188,7 +189,7 @@ public class StageListener implements ApplicationListener {
 					for (Brick brick : script.getBrickList()) {
 						if (brick instanceof SetPhysicObjectTypeBrick) {
 							containsPhysicObjectBrick = true;
-							scriptIndex = 0;
+							scriptIndex = -1;
 							break;
 						}
 					}
@@ -233,6 +234,7 @@ public class StageListener implements ApplicationListener {
 		reloadProject = true;
 	}
 
+	@Override
 	public void resume() {
 		if (!paused) {
 			SoundManager.getInstance().resume();
@@ -245,6 +247,7 @@ public class StageListener implements ApplicationListener {
 		}
 	}
 
+	@Override
 	public void pause() {
 		if (finished || (sprites == null)) {
 			return;
@@ -267,6 +270,7 @@ public class StageListener implements ApplicationListener {
 		}
 	}
 
+	@Override
 	public void render() {
 
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -402,9 +406,11 @@ public class StageListener implements ApplicationListener {
 		batch.end();
 	}
 
+	@Override
 	public void resize(int width, int height) {
 	}
 
+	@Override
 	public void dispose() {
 		if (!finished) {
 			this.finish();

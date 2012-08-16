@@ -52,24 +52,24 @@ public class SetXBrick implements Brick, OnClickListener {
 		this.xPosition = xPosition;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		sprite.costume.aquireXYWidthHeightLock();
 		sprite.costume.setXPosition(xPosition);
 		sprite.costume.releaseXYWidthHeightLock();
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
-	public int getXPosition() {
-		return xPosition;
-	}
-
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		view = View.inflate(context, R.layout.brick_set_x, null);
@@ -84,6 +84,7 @@ public class SetXBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_set_x, null);
 	}
@@ -93,6 +94,7 @@ public class SetXBrick implements Brick, OnClickListener {
 		return new SetXBrick(getSprite(), xPosition);
 	}
 
+	@Override
 	public void onClick(View view) {
 		final Context context = view.getContext();
 
@@ -105,6 +107,7 @@ public class SetXBrick implements Brick, OnClickListener {
 		dialog.setView(input);
 		dialog.setOnCancelListener((OnCancelListener) context);
 		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				try {
 					xPosition = Integer.parseInt(input.getText().toString());
@@ -115,6 +118,7 @@ public class SetXBrick implements Brick, OnClickListener {
 			}
 		});
 		dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
 			}
