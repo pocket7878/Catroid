@@ -68,16 +68,26 @@ public class SetPhysicObjectTypeBrick implements Brick {
 
 	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
+
 		view = View.inflate(context, R.layout.brick_set_physic_object_type, null);
 
-		Spinner spinner = (Spinner) view.findViewById(R.id.brick_set_physic_object_type_spinner);
+		final Spinner spinner = (Spinner) view.findViewById(R.id.brick_set_physic_object_type_spinner);
+		spinner.setAdapter(createAdapter(context));
+		spinner.setSelection(type.ordinal());
+
 		spinner.setClickable(true);
 		spinner.setFocusable(true);
-		spinner.setAdapter(createAdapter(context));
-
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			private boolean start = true;
+
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				if (start) {
+					start = false;
+					return;
+				}
+
 				if (position < PhysicObject.Type.values().length) {
 					type = PhysicObject.Type.values()[position];
 				}
