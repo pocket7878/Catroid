@@ -319,6 +319,36 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 
 	}
 
+	//	public void testEditTextBackgroundDrawables() {
+	//
+	//		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+	//
+	//		//		Bitmap expectedTextBackground = null;
+	//		//		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+	//		//			expectedTextBackground = ((BitmapDrawable) (getActivity().getResources()
+	//		//					.getDrawable(R.drawable.textfield_pressed_android4))).getBitmap();
+	//		//		} else {
+	//		//			expectedTextBackground = ((BitmapDrawable) (getActivity().getResources()
+	//		//					.getDrawable(R.drawable.textfield_pressed))).getBitmap();
+	//		//		}
+	//
+	//		//catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(FORMULA_EDITOR_EDIT_TEXT_ID);
+	//
+	//		Bitmap highlightedBackgroundX = ((BitmapDrawable) (solo.getEditText(X_POS_EDIT_TEXT_ID).getBackground()))
+	//				.getBitmap();
+	//		Bitmap standardBackgroundY = ((BitmapDrawable) (solo.getEditText(Y_POS_EDIT_TEXT_ID).getBackground()))
+	//				.getBitmap();
+	//
+	//		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
+	//
+	//		Bitmap highlightedBackgroundY = ((BitmapDrawable) (solo.getEditText(Y_POS_EDIT_TEXT_ID).getBackground()))
+	//				.getBitmap();
+	//		Bitmap standardBackgroundX = ((BitmapDrawable) (solo.getEditText(X_POS_EDIT_TEXT_ID).getBackground()))
+	//				.getBitmap();
+	//
+	//		assertEquals("Background texture wrong!", highlightedBackgroundX, highlightedBackgroundY);
+	//	}
+
 	public void testOrientationChanges() {
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);

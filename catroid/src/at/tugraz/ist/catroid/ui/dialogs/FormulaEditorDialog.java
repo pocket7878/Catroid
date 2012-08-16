@@ -152,6 +152,10 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 				}
 				break;
 			case SET_FORMULA_ON_SWITCH_EDIT_TEXT:
+				if (currentFormula == newFormula && formulaEditorEditText.hasChanges()) {
+					formulaEditorEditText.quickSelect();
+					break;
+				}
 				if (formulaEditorEditText.hasChanges()) {
 					if (!saveFormulaIfPossible()) {
 						return;
