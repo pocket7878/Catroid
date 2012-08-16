@@ -172,44 +172,6 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 			default:
 				break;
 		}
-
-		//		if (restoreInstance) { //after orientation switch
-		//			restoreInstance = false;
-		//			if (!formulaEditorEditText.restoreFieldFromPreviousHistory()) { //history is only deleted when editor is shut down by  user!
-		//				formulaEditorEditText.enterNewFormula(newFormula.toString()); // this happens when onSaveInstanceState() is being called but not by orientation change (e.g.user turns off screen)
-		//			}
-		//			refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
-		//
-		//			currentFormula.highlightTextField(brickView,
-		//					getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
-		//
-		//		} else if (newFormula == currentFormula) { //on create
-		//
-		//			if (!formulaEditorEditText.hasChanges()) {
-		//				currentFormula.removeTextFieldHighlighting(brickView, orientation);
-		//				formulaEditorEditText.enterNewFormula(currentFormula.toString());
-		//				currentFormula.highlightTextField(brickView,
-		//						getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
-		//			} else {
-		//				formulaEditorEditText.quickSelect();
-		//			}
-		//			refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
-		//		} else { //on change
-		//			if (formulaEditorEditText.hasChanges()) {
-		//				if (!saveFormulaIfPossible()) {
-		//					return;
-		//				}
-		//			}
-		//			if (currentFormula != null) {
-		//				currentFormula.refreshTextField(brickView);
-		//			}
-		//			formulaEditorEditText.endEdit();
-		//			currentFormula.removeTextFieldHighlighting(brickView, orientation);
-		//			currentFormula = newFormula;
-		//			currentFormula.highlightTextField(brickView,
-		//					getResources().getDrawable(R.drawable.edit_text_formula_editor_selected), orientation);
-		//			formulaEditorEditText.enterNewFormula(newFormula.toString());
-		//		}
 	}
 
 	private int parseFormula(String formulaToParse) {

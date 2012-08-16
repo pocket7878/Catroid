@@ -639,22 +639,28 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	//	}
 
 	public boolean undo() {
+		if (!history.undoIsPossible()) {
+			return false;
+		}
 		FormulaEditorHistoryElement lastStep = history.backward();
 		if (lastStep != null) {
 			setInputTextAndPosition(lastStep.text, lastStep.cursorPosition, lastStep.selectionStart,
 					lastStep.selectionEnd);
 		}
 
-		return history.undoIsPossible();
+		return true;
 	}
 
 	public boolean redo() {
+		if (!history.redoIsPossible()) {
+			return false;
+		}
 		FormulaEditorHistoryElement nextStep = history.forward();
 		if (nextStep != null) {
 			setInputTextAndPosition(nextStep.text, nextStep.cursorPosition, nextStep.selectionStart,
 					nextStep.selectionEnd);
 		}
-		return history.redoIsPossible();
+		return true;
 	}
 
 	@Override
