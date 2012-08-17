@@ -31,7 +31,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
+import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -122,11 +122,11 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.brick_place_at_x_edit_text:
-				FormulaEditorDialog.showDialog(view, this, xPosition);
+				FormulaEditorFragment.showDialog(view, this, xPosition);
 				break;
 
 			case R.id.brick_place_at_y_edit_text:
-				FormulaEditorDialog.showDialog(view, this, yPosition);
+				FormulaEditorFragment.showDialog(view, this, yPosition);
 				break;
 		}
 	}

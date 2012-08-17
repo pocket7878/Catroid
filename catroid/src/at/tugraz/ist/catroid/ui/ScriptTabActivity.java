@@ -42,8 +42,8 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.adapter.TabsPagerAdapter;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
 import at.tugraz.ist.catroid.ui.fragment.CostumeFragment;
+import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
 import at.tugraz.ist.catroid.ui.fragment.ScriptFragment;
 import at.tugraz.ist.catroid.ui.fragment.SoundFragment;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -73,7 +73,7 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 	private ViewPager viewPager;
 	private TabsPagerAdapter tabsAdapter;
 
-	public FormulaEditorDialog formulaEditor;
+	public FormulaEditorFragment formulaEditor;
 
 	private TabHost tabHost;
 
@@ -218,7 +218,7 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 		findViewById(R.id.fragment_formula_editor).setVisibility(View.VISIBLE);
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		FragmentTransaction fragTransaction = fragmentManager.beginTransaction();
-		formulaEditor = new FormulaEditorDialog();
+		formulaEditor = new FormulaEditorFragment();
 		fragTransaction.add(R.id.fragment_formula_editor, formulaEditor);
 		fragTransaction.commit();
 	}

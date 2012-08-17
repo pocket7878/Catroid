@@ -31,7 +31,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
+import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
 
 public class SetBrightnessBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
@@ -99,6 +99,6 @@ public class SetBrightnessBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, brightness);
+		FormulaEditorFragment.showDialog(view, this, brightness);
 	}
 }

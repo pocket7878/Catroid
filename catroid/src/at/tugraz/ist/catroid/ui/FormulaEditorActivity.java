@@ -25,7 +25,7 @@ package at.tugraz.ist.catroid.ui;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import at.tugraz.ist.catroid.R;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
+import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -35,7 +35,7 @@ import com.actionbarsherlock.view.MenuItem;
 public class FormulaEditorActivity extends SherlockFragmentActivity {
 
 	private ActionBar actionBar;
-	private FormulaEditorDialog formulaEditor;
+	private FormulaEditorFragment formulaEditor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class FormulaEditorActivity extends SherlockFragmentActivity {
 
 		setContentView(R.layout.activity_formula_editor);
 		setUpActionBar();
-		formulaEditor = (FormulaEditorDialog) getSupportFragmentManager()
+		formulaEditor = (FormulaEditorFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.fragment_formula_editor);
 	}
 

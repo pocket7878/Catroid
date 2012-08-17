@@ -31,7 +31,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
+import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -101,6 +101,6 @@ public class SetXBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, xPosition);
+		FormulaEditorFragment.showDialog(view, this, xPosition);
 	}
 }

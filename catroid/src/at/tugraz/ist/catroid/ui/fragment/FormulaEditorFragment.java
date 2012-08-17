@@ -20,7 +20,7 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.tugraz.ist.catroid.ui.dialogs;
+package at.tugraz.ist.catroid.ui.fragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -47,7 +47,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 
-public class FormulaEditorDialog extends SherlockFragment implements OnKeyListener {
+public class FormulaEditorFragment extends SherlockFragment implements OnKeyListener {
 
 	private static final int PARSER_OK = -1;
 	private static final int PARSER_STACK_OVERFLOW = -2;
@@ -87,11 +87,11 @@ public class FormulaEditorDialog extends SherlockFragment implements OnKeyListen
 		SherlockFragmentActivity activity = null;
 		activity = (SherlockFragmentActivity) view.getContext();
 
-		FormulaEditorDialog formulaEditorDialog = ((ScriptTabActivity) activity).formulaEditor;
+		FormulaEditorFragment formulaEditorDialog = ((ScriptTabActivity) activity).formulaEditor;
 
 		if (formulaEditorDialog == null) {
-			FormulaEditorDialog.currentBrick = brick;
-			FormulaEditorDialog.currentFormula = formula;
+			FormulaEditorFragment.currentBrick = brick;
+			FormulaEditorFragment.currentFormula = formula;
 			((ScriptTabActivity) activity).startFormulaEditor();
 		} else {
 			formulaEditorDialog.setInputFormula(formula, SET_FORMULA_ON_SWITCH_EDIT_TEXT);

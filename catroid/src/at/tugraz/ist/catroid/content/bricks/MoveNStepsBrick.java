@@ -32,7 +32,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
-import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorDialog;
+import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
 
 public class MoveNStepsBrick implements Brick, OnClickListener {
 
@@ -113,6 +113,6 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorDialog.showDialog(view, this, steps);
+		FormulaEditorFragment.showDialog(view, this, steps);
 	}
 }
