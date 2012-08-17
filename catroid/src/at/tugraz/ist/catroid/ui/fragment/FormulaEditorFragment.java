@@ -26,6 +26,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -41,7 +43,6 @@ import at.tugraz.ist.catroid.formulaeditor.CatKeyboardView;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.formulaeditor.FormulaEditorEditText;
 import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
-import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -55,6 +56,7 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 
 	private static final int SET_FORMULA_ON_CREATE_VIEW = 0;
 	private static final int SET_FORMULA_ON_SWITCH_EDIT_TEXT = 1;
+	public static final String FORMULA_EDITOR_FRAGMENT_TAG = "formula_editor_fragment";
 
 	private Context context;
 
@@ -87,21 +89,49 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 		SherlockFragmentActivity activity = null;
 		activity = (SherlockFragmentActivity) view.getContext();
 
-		FormulaEditorFragment formulaEditorDialog = ((ScriptTabActivity) activity).formulaEditor;
+		FormulaEditorFragment formulaEditorDialog = (FormulaEditorFragment) activity.getSupportFragmentManager()
+				.findFragmentByTag(FORMULA_EDITOR_FRAGMENT_TAG);
+
+		//FormulaEditorFragment formulaEditorDialog = ((ScriptTabActivity) activity).formulaEditor;
 
 		if (formulaEditorDialog == null) {
 			FormulaEditorFragment.currentBrick = brick;
 			FormulaEditorFragment.currentFormula = formula;
-			((ScriptTabActivity) activity).startFormulaEditor();
+			formulaEditorDialog = new FormulaEditorFragment();
+			formulaEditorDialog.startFormulaEditor(activity);
 		} else {
 			formulaEditorDialog.setInputFormula(formula, SET_FORMULA_ON_SWITCH_EDIT_TEXT);
 		}
 	}
 
+	public void startFormulaEditor(SherlockFragmentActivity activity) {
+		activity.findViewById(R.id.fragment_formula_editor).setVisibility(View.VISIBLE);
+		FragmentManager fragmentManager = activity.getSupportFragmentManager();
+		FragmentTransaction fragTransaction = fragmentManager.beginTransaction();
+		//FormulaEditorFragment formulaEditorDialog = new FormulaEditorFragment();
+		fragTransaction.add(R.id.fragment_formula_editor, this, FORMULA_EDITOR_FRAGMENT_TAG);
+		fragTransaction.commit();
+	}
+
+	private void onUserDismiss() { //dont override onDismiss, this must not be called on orientation change
+		Log.i("info", "User dismiss");
+		formulaEditorEditText.endEdit();
+		currentFormula = null;
+		currentBrick = null;
+
+		SherlockFragmentActivity activity = null;
+		activity = (SherlockFragmentActivity) context;
+		activity.findViewById(R.id.fragment_formula_editor).setVisibility(View.GONE);
+		FragmentManager fragmentManager = activity.getSupportFragmentManager();
+		FragmentTransaction fragTransaction = fragmentManager.beginTransaction();
+		fragTransaction.remove(fragmentManager.findFragmentByTag(FORMULA_EDITOR_FRAGMENT_TAG));
+		fragTransaction.commit();
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-		View dialogView = inflater.inflate(R.layout.dialog_formula_editor, container, false);
+		View dialogView = inflater.inflate(R.layout.fragment_formula_editor, container, false);
 		context = getActivity();
 		brickSpace = (LinearLayout) dialogView.findViewById(R.id.formula_editor_brick_space);
 		if (brickSpace != null) {
@@ -151,7 +181,7 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 
 					currentFormula.highlightTextField(brickView, orientation);
 					getActivity().findViewById(R.id.fragment_formula_editor).setVisibility(View.VISIBLE);
-					((ScriptTabActivity) getActivity()).formulaEditor = this;
+					//((ScriptTabActivity) getActivity()).formulaEditor = this;
 				} else { //on create
 					if (!formulaEditorEditText.hasChanges()) {
 						currentFormula.removeTextFieldHighlighting(brickView, orientation);
@@ -283,14 +313,6 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 		userInfo.show();
 	}
 
-	private void onUserDismiss() { //dont override onDismiss, this must not be called on orientation change
-		Log.i("info", "User dismiss");
-		formulaEditorEditText.endEdit();
-		currentFormula = null;
-		currentBrick = null;
-		//getActivity().finish();
-	}
-
 	@Override
 	public boolean onKey(DialogInterface di, int keyCode, KeyEvent event) {
 
@@ -309,7 +331,7 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 	}
 
 	public void endFormulaEditor() {
-		((ScriptTabActivity) getActivity()).endFormulaEditor();
+
 		if (formulaEditorEditText.hasChanges()) {
 			if (saveFormulaIfPossible()) {
 				onUserDismiss();

@@ -26,8 +26,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -73,8 +71,6 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 	private ViewPager viewPager;
 	private TabsPagerAdapter tabsAdapter;
 
-	public FormulaEditorFragment formulaEditor;
-
 	private TabHost tabHost;
 
 	@Override
@@ -87,10 +83,11 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 
 		setUpActionBar();
 
-		if (formulaEditor != null) {
-			return;
-		}
-		findViewById(R.id.fragment_formula_editor).setVisibility(View.GONE); //TODO
+		//		if ((FormulaEditorFragment) getSupportFragmentManager().findFragmentByTag(
+		//				FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG) != null) {
+		//			return;
+		//		}
+		findViewById(R.id.fragment_formula_editor).setVisibility(View.GONE); //TODO why on earth is this fragment even visible here?
 
 		setupTabHost();
 		viewPager = (ViewPager) findViewById(R.id.pager);
@@ -118,6 +115,9 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		FormulaEditorFragment formulaEditor = (FormulaEditorFragment) getSupportFragmentManager().findFragmentByTag(
+				FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
+
 		switch (item.getItemId()) {
 			case android.R.id.home: {
 				if (formulaEditor != null) {
@@ -214,26 +214,11 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 		return getTabFragment(tabHost.getCurrentTab());
 	}
 
-	public void startFormulaEditor() {
-		findViewById(R.id.fragment_formula_editor).setVisibility(View.VISIBLE);
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		FragmentTransaction fragTransaction = fragmentManager.beginTransaction();
-		formulaEditor = new FormulaEditorFragment();
-		fragTransaction.add(R.id.fragment_formula_editor, formulaEditor);
-		fragTransaction.commit();
-	}
-
-	public void endFormulaEditor() {
-		findViewById(R.id.fragment_formula_editor).setVisibility(View.GONE);
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		FragmentTransaction fragTransaction = fragmentManager.beginTransaction();
-		fragTransaction.remove(formulaEditor);
-		fragTransaction.commit();
-		formulaEditor = null;
-	}
-
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		FormulaEditorFragment formulaEditor = (FormulaEditorFragment) getSupportFragmentManager().findFragmentByTag(
+				FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
+
 		if (formulaEditor != null) {
 			return formulaEditor.onKey(null, keyCode, event);
 		}
