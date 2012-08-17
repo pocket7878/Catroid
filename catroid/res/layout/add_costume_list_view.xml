@@ -21,40 +21,20 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  -->
-<manifest
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	package="at.tugraz.ist.catroid.uitest"
-	android:versionCode="2147483646"
-	android:versionName="0.6.0beta"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/website_blue"
 >
+	<!-- Application list -->
 
-	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
- 	<uses-permission android:name="android.permission.BLUETOOTH" />
- 	<uses-permission android:name="android.permission.INJECT_EVENTS"/>
-
-	<application>
-		<uses-library
-			android:name="android.test.runner" />
-		<activity
-			android:name="at.tugraz.ist.catroid.uitest.mockups.MockGalleryActivity"
-			android:exported="true"
-		>
-		</activity>
-		<activity
-			android:name="at.tugraz.ist.catroid.uitest.mockups.MockPaintroidActivity"
-			android:exported="true"
-		>
-		</activity>
-	</application>
-
-	<uses-sdk
-		android:minSdkVersion="8"
-		android:targetSdkVersion="10" />
-	<instrumentation
-		android:targetPackage="at.tugraz.ist.catroid"
-		android:name="android.test.InstrumentationTestRunner" />
-	<!-- this instrumentation is needed to run the tests from jenkins -->
-	<instrumentation
-		android:targetPackage="at.tugraz.ist.catroid"
-		android:name="pl.polidea.instrumentation.PolideaInstrumentationTestRunner" />
-</manifest> 
+	<ListView
+		android:id="@+id/listViewInstalledApps"
+		android:layout_width="match_parent"
+		android:layout_height="0dip"
+		android:layout_weight="1.0"
+		android:cacheColorHint="#00000000"
+	/>
+</LinearLayout>

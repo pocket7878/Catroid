@@ -47,6 +47,7 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.dialogs.AddBrickDialog;
+import at.tugraz.ist.catroid.ui.dialogs.AddCostumeDialog;
 import at.tugraz.ist.catroid.ui.dialogs.BrickCategoryDialog;
 import at.tugraz.ist.catroid.ui.dialogs.DeleteCostumeDialog;
 import at.tugraz.ist.catroid.ui.dialogs.DeleteSoundDialog;
@@ -68,6 +69,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	private RenameCostumeDialog renameCostumeDialog;
 	private DeleteCostumeDialog deleteCostumeDialog;
 	private DeleteSoundDialog deleteSoundDialog;
+	private AddCostumeDialog addCostumeDialog;
 	public String selectedCategory;
 	public static final int DIALOG_RENAME_COSTUME = 0;
 	public static final int DIALOG_RENAME_SOUND = 1;
@@ -75,6 +77,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 	public static final int DIALOG_ADD_BRICK = 3;
 	public static final int DIALOG_DELETE_COSTUME = 4;
 	public static final int DIALOG_DELETE_SOUND = 5;
+	public static final int DIALOG_ADD_COSTUME = 6;
 
 	private boolean dontcreateNewBrick;
 
@@ -144,6 +147,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 
 		activityHelper.addActionButton(R.id.btn_action_play, R.drawable.ic_play_black, R.string.start,
 				new View.OnClickListener() {
+					@Override
 					public void onClick(View v) {
 						Intent intent = new Intent(ScriptTabActivity.this, PreStageActivity.class);
 						startActivityForResult(intent, PreStageActivity.REQUEST_RESOURCES_INIT);
@@ -218,6 +222,10 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 					dialog = deleteSoundDialog.createDialog();
 				}
 				break;
+			case DIALOG_ADD_COSTUME:
+				addCostumeDialog = new AddCostumeDialog(this);
+				dialog = addCostumeDialog;
+				break;
 			default:
 				dialog = null;
 				break;
@@ -271,6 +279,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 		dismissDialog(DIALOG_DELETE_SOUND);
 	}
 
+	@Override
 	public void onDismiss(DialogInterface dialogInterface) {
 
 		if (!dontcreateNewBrick) {
@@ -289,6 +298,7 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 		dontcreateNewBrick = false;
 	}
 
+	@Override
 	public void onCancel(DialogInterface dialog) {
 		isCanceled = true;
 	}
@@ -299,5 +309,9 @@ public class ScriptTabActivity extends TabActivity implements OnDismissListener,
 
 	public void setDontcreateNewBrick() {
 		dontcreateNewBrick = true;
+	}
+
+	public AddCostumeDialog getAddCostumeDialog() {
+		return addCostumeDialog;
 	}
 }

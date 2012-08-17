@@ -78,6 +78,7 @@ public class ProjectActivity extends ListActivity {
 		getListView().setDividerHeight(0);
 
 		getListView().setOnItemClickListener(new ListView.OnItemClickListener() {
+			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				ProjectManager.getInstance().setCurrentSprite(spriteAdapter.getItem(position));
 				Intent intent = new Intent(ProjectActivity.this, ScriptTabActivity.class);
@@ -85,6 +86,7 @@ public class ProjectActivity extends ListActivity {
 			}
 		});
 		getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				spriteToEdit = spriteList.get(position);
 				spriteToEdit = spriteList.get(position);
@@ -111,6 +113,7 @@ public class ProjectActivity extends ListActivity {
 				.addItem(resources, getString(R.string.copy), R.drawable.ic_context_copy, CONTEXT_MENU_ITEM_COPY);
 
 		iconContextMenu.setOnClickListener(new CustomIconContextMenu.IconContextMenuOnClickListener() {
+			@Override
 			public void onClick(int menuId) {
 				switch (menuId) {
 					case CONTEXT_MENU_ITEM_RENAME:
@@ -156,6 +159,7 @@ public class ProjectActivity extends ListActivity {
 
 		activityHelper.addActionButton(R.id.btn_action_add_button, R.drawable.ic_plus_black, R.string.add,
 				new View.OnClickListener() {
+					@Override
 					public void onClick(View v) {
 						showDialog(DIALOG_NEW_SPRITE);
 					}
@@ -163,6 +167,7 @@ public class ProjectActivity extends ListActivity {
 
 		activityHelper.addActionButton(R.id.btn_action_play, R.drawable.ic_play_black, R.string.start,
 				new View.OnClickListener() {
+					@Override
 					public void onClick(View v) {
 						Intent intent = new Intent(ProjectActivity.this, PreStageActivity.class);
 						startActivityForResult(intent, PreStageActivity.REQUEST_RESOURCES_INIT);
@@ -285,6 +290,5 @@ public class ProjectActivity extends ListActivity {
 	}
 
 	public void handleProjectActivityItemLongClick(View view) {
-
 	}
 }

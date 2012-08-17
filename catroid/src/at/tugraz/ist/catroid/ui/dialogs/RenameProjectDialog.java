@@ -45,14 +45,11 @@ public class RenameProjectDialog extends TextDialog {
 		String newProjectName = (input.getText().toString()).trim();
 		String oldProjectName = (((MyProjectsActivity) activity).projectToEdit.projectName);
 
-		if (newProjectName.equalsIgnoreCase(oldProjectName)) {
+		if (newProjectName.equals(oldProjectName)) {
 			activity.dismissDialog(MyProjectsActivity.DIALOG_RENAME_PROJECT);
 			return;
 		}
-		if (StorageHandler.getInstance().projectExists(newProjectName)) {
-			Utils.displayErrorMessage(activity, activity.getString(R.string.error_project_exists));
-			return;
-		}
+
 		if (newProjectName != null && !newProjectName.equalsIgnoreCase("")) {
 
 			ProjectManager projectManager = ProjectManager.getInstance();
@@ -77,11 +74,12 @@ public class RenameProjectDialog extends TextDialog {
 
 	private void initKeyListenerAndClickListener() {
 		dialog.setOnKeyListener(new OnKeyListener() {
+			@Override
 			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
 					String newProjectName = (input.getText().toString()).trim();
 					String oldProjectName = (((MyProjectsActivity) activity).projectToEdit.projectName);
-					if (StorageHandler.getInstance().projectExists(newProjectName)
+					if (StorageHandler.getInstance().projectExistsCheckCase(newProjectName)
 							&& !newProjectName.equalsIgnoreCase(oldProjectName)) {
 						Utils.displayErrorMessage(activity, activity.getString(R.string.error_project_exists));
 					} else if (newProjectName.equalsIgnoreCase("")) {
@@ -97,12 +95,14 @@ public class RenameProjectDialog extends TextDialog {
 		});
 
 		buttonPositive.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				handleOkButton();
 			}
 		});
 
 		buttonNegative.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				activity.dismissDialog(MyProjectsActivity.DIALOG_RENAME_PROJECT);
 			}

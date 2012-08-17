@@ -22,48 +22,38 @@
  */
 package at.tugraz.ist.catroid.ui.dialogs;
 
+import java.util.ArrayList;
+
 import android.app.Dialog;
-import android.content.Context;
-import android.content.res.Resources;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.view.Window;
-import android.widget.TextView;
+import android.widget.ListView;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid.ui.adapter.InstalledAppAdapter;
+import at.tugraz.ist.catroid.utils.InstalledApplicationInfo;
 import at.tugraz.ist.catroid.utils.Utils;
 
-public class AboutDialog extends Dialog {
+public class AddCostumeDialog extends Dialog {
+	private ScriptTabActivity scriptTabActivity;
 
-	private Context context;
-
-	public AboutDialog(Context context) {
-		super(context);
-		this.context = context;
+	public AddCostumeDialog(ScriptTabActivity scriptTabActivity) {
+		super(scriptTabActivity);
+		this.scriptTabActivity = scriptTabActivity;
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_LEFT_ICON);
-		setContentView(R.layout.dialog_about);
-		setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, android.R.drawable.ic_dialog_info);
-
-		setTitle(R.string.about_title);
+		setContentView(R.layout.add_costume_list_view);
+		setTitle(R.string.add_costume_dialog_title);
 		setCanceledOnTouchOutside(true);
 
-		TextView aboutUrlTextView = (TextView) findViewById(R.id.dialog_about_url_text_view);
-		aboutUrlTextView.setMovementMethod(LinkMovementMethod.getInstance());
+		PackageManager packageManager = scriptTabActivity.getPackageManager();
+		ArrayList<InstalledApplicationInfo> installedAppInfo = Utils.createApplicationsInfoList(packageManager);
 
-		Resources resources = context.getResources();
-		String aboutUrl = String.format(resources.getString(R.string.about_link_template),
-				resources.getString(R.string.about_catroid_license_url),
-				resources.getString(R.string.about_catroid_license_link_text));
-
-		aboutUrlTextView.setText(Html.fromHtml(aboutUrl));
-
-		TextView aboutVersionNameTextView = (TextView) findViewById(R.id.dialog_about_version_name_text_view);
-		String versionName = Utils.getVersionName(context);
-		aboutVersionNameTextView.setText(versionName);
+		ListView listView = (ListView) findViewById(R.id.listViewInstalledApps);
+		listView.setAdapter(new InstalledAppAdapter(scriptTabActivity, R.layout.add_costume_applicationlist_item,
+				installedAppInfo));
 	}
 }

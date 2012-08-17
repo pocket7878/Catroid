@@ -75,10 +75,10 @@ public class SoundActivityTest extends ActivityInstrumentationTestCase2<ScriptTa
 
 		soundInfoList.add(soundInfo);
 		soundInfoList.add(soundInfo2);
-		ProjectManager.getInstance().fileChecksumContainer.addChecksum(soundInfo.getChecksum(),
-				soundInfo.getAbsolutePath());
-		ProjectManager.getInstance().fileChecksumContainer.addChecksum(soundInfo2.getChecksum(),
-				soundInfo2.getAbsolutePath());
+		ProjectManager.getInstance().getFileChecksumContainer()
+				.addChecksum(soundInfo.getChecksum(), soundInfo.getAbsolutePath());
+		ProjectManager.getInstance().getFileChecksumContainer()
+				.addChecksum(soundInfo2.getChecksum(), soundInfo2.getAbsolutePath());
 
 		solo = new Solo(getInstrumentation(), getActivity());
 	}
@@ -127,6 +127,21 @@ public class SoundActivityTest extends ActivityInstrumentationTestCase2<ScriptTa
 		if (!solo.searchText(newName)) {
 			fail("sound not renamed in actual view");
 		}
+	}
+
+	public void testRenameSoundMixedCase() {
+		String newNameMixedCase = "TeStSoUNd1";
+		solo.clickOnText(getActivity().getString(R.string.sounds));
+		solo.sleep(500);
+		solo.clickOnView(solo.getView(R.id.sound_name));
+		solo.sleep(300);
+		solo.clearEditText(0);
+		solo.enterText(0, newNameMixedCase);
+		solo.sleep(300);
+		solo.sendKey(Solo.ENTER);
+		soundInfoList = ProjectManager.getInstance().getCurrentSprite().getSoundList();
+		solo.sleep(500);
+		assertEquals("sound is not renamed to mixed case", newNameMixedCase, soundInfoList.get(0).getTitle());
 	}
 
 	public void testPlayAndStopStound() {

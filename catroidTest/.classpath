@@ -5,8 +5,5 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/catroid"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="libs/the-missing-android-xml-junit-test-runner-release-1.3_2.jar"/>
-	<classpathentry kind="lib" path="/catroid/libs/gdx-backend-android.jar"/>
-	<classpathentry kind="lib" path="/catroid/libs/gdx.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
