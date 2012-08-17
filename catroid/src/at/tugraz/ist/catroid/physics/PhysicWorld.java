@@ -91,12 +91,12 @@ public class PhysicWorld implements Serializable {
 	}
 
 	private void updateSprites() {
-		Body body;
+		PhysicObject physicObject;
 		Costume costume;
 		for (Entry<Sprite, PhysicObject> entry : objects) {
-			body = entry.getValue().getBody();
-			Vector2 position = PhysicWorldConverter.vecBox2dToCat(body.getPosition());
-			float angle = PhysicWorldConverter.angleBox2dToCat(body.getAngle());
+			physicObject = entry.getValue();
+			Vector2 position = PhysicWorldConverter.vecBox2dToCat(physicObject.getPosition());
+			float angle = PhysicWorldConverter.angleBox2dToCat(physicObject.getAngle());
 
 			costume = entry.getKey().costume;
 			costume.aquireXYWidthHeightLock();

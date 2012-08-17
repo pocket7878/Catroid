@@ -62,8 +62,8 @@ public class SetAngularVelocityBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		float box2dDegrees = PhysicWorldConverter.angleCatToBox2d(degrees);
-		physicWorld.getPhysicObject(sprite).getBody().setAngularVelocity(box2dDegrees);
+		float radian = PhysicWorldConverter.angleCatToBox2d(degrees);
+		physicWorld.getPhysicObject(sprite).setAngularVelocicty(radian);
 	}
 
 	@Override

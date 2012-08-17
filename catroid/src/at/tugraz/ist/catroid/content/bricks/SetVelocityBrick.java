@@ -64,7 +64,7 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 	@Override
 	public void execute() {
 		Vector2 box2dVelocity = PhysicWorldConverter.vecCatToBox2d(velocity);
-		physicWorld.getPhysicObject(sprite).getBody().setLinearVelocity(box2dVelocity);
+		physicWorld.getPhysicObject(sprite).setLinearVelocicty(box2dVelocity);
 	}
 
 	@Override

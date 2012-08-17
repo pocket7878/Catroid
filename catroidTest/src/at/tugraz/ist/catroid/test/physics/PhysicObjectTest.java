@@ -3,11 +3,14 @@ package at.tugraz.ist.catroid.test.physics;
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.physics.PhysicObject;
+import at.tugraz.ist.catroid.physics.PhysicObject.Type;
 import at.tugraz.ist.catroid.physics.PhysicObjectMap;
 import at.tugraz.ist.catroid.physics.PhysicSettings;
 import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
+import at.tugraz.ist.catroid.test.utils.TestUtils;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
@@ -30,11 +33,11 @@ public class PhysicObjectTest extends AndroidTestCase {
 
 		public void test() {
 			assertTrue(values.length > 0);
-			assertFalse(physicObject.getBody().getFixtureList().isEmpty());
+			assertFalse(getBody(physicObject).getFixtureList().isEmpty());
 
 			for (float value : values) {
 				setValue(value);
-				for (Fixture fixture : physicObject.getBody().getFixtureList()) {
+				for (Fixture fixture : getBody(physicObject).getFixtureList()) {
 					assertEquals(value, getValue(fixture));
 				}
 			}
@@ -64,108 +67,63 @@ public class PhysicObjectTest extends AndroidTestCase {
 		return physicObject;
 	}
 
+	private Body getBody(PhysicObject physicObject) {
+		return (Body) TestUtils.getPrivateField("body", physicObject, false);
+	}
+
 	public void testNullBody() {
-		PhysicObject objectWithNullBody = new PhysicObject(null);
-
-		assertNull(objectWithNullBody.getBody());
-
 		try {
-			objectWithNullBody.setAngle(0.0f);
+			@SuppressWarnings("unused")
+			PhysicObject objectWithNullBody = new PhysicObject(null);
 			assertTrue(false);
 		} catch (NullPointerException exception) {
 			assertTrue(true);
 		}
-
-		try {
-			objectWithNullBody.setDensity(0.0f);
-			assertTrue(false);
-		} catch (NullPointerException exception) {
-			assertTrue(true);
-		}
-
-		try {
-			objectWithNullBody.setFriction(0.0f);
-			assertTrue(false);
-		} catch (NullPointerException exception) {
-			assertTrue(true);
-		}
-
-		try {
-			objectWithNullBody.setMass(0.0f);
-			assertTrue(false);
-		} catch (NullPointerException exception) {
-			assertTrue(true);
-		}
-
-		try {
-			objectWithNullBody.setPosition(new Vector2());
-			assertTrue(false);
-		} catch (NullPointerException exception) {
-			assertTrue(true);
-		}
-
-		try {
-			objectWithNullBody.setRestitution(0.0f);
-			assertTrue(false);
-		} catch (NullPointerException exception) {
-			assertTrue(true);
-		}
-
-		try {
-			objectWithNullBody.setShape(new PolygonShape());
-			assertTrue(false);
-		} catch (NullPointerException exception) {
-			assertTrue(true);
-		}
-
-		//		try {
-		//			objectWithNullBody.setType(BodyType.StaticBody);
-		//			assertTrue(false);
-		//		} catch (NullPointerException exception) {
-		//			assertTrue(true);
-		//		}
 	}
 
 	public void testAngle() {
 		PhysicObject physicObject = createPhysicObject();
-		assertEquals(0.0f, physicObject.getBody().getAngle());
+		assertEquals(0.0f, getBody(physicObject).getAngle());
 
 		float[] degrees = { 45.0f, 66.66f, -90.0f, 500.0f };
 
 		for (float angle : degrees) {
 			float radian = PhysicWorldConverter.angleCatToBox2d(angle);
 			physicObject.setAngle(radian);
-			assertEquals(radian, physicObject.getBody().getAngle());
+			assertEquals(radian, getBody(physicObject).getAngle());
 		}
 	}
 
 	public void testPosition() {
 		PhysicObject physicObject = createPhysicObject();
-		assertEquals(new Vector2(), physicObject.getBody().getPosition());
+		assertEquals(new Vector2(), getBody(physicObject).getPosition());
 
 		Vector2[] positions = { new Vector2(12.34f, 56.78f), new Vector2(-87.65f, -43.21f) };
 		for (Vector2 position : positions) {
-			physicObject.setPosition(position);
-			assertEquals(position, physicObject.getBody().getPosition());
+			physicObject.setPosition(position.x, position.y);
+			assertEquals(position, getBody(physicObject).getPosition());
 		}
 	}
 
 	public void testAngleAndPosition() {
 		PhysicObject physicObject = createPhysicObject();
-		assertEquals(0.0f, physicObject.getBody().getAngle());
-		assertEquals(new Vector2(), physicObject.getBody().getPosition());
+		assertEquals(0.0f, getBody(physicObject).getAngle());
+		assertEquals(new Vector2(), getBody(physicObject).getPosition());
 
 		float angle = PhysicWorldConverter.angleCatToBox2d(13.56f);
 		Vector2 position = new Vector2(12.34f, 56.78f);
 		physicObject.setAngle(angle);
-		physicObject.setPosition(position);
+		physicObject.setPosition(position.x, position.y);
 
-		assertEquals(angle, physicObject.getBody().getAngle());
-		assertEquals(position, physicObject.getBody().getPosition());
+		assertEquals(angle, getBody(physicObject).getAngle());
+		assertEquals(position, getBody(physicObject).getPosition());
 	}
 
 	public void testDensity() {
 		PhysicObject physicObject = createPhysicObject();
+		physicObject.setType(Type.DYNAMIC);
+		PolygonShape shape = new PolygonShape();
+		physicObject.setShape(shape);
 		float[] densities = { 0.123f, -0.765f, 24.32f };
 
 		FixtureTemplate densityTemplate = new FixtureTemplate(physicObject, densities) {
@@ -220,18 +178,18 @@ public class PhysicObjectTest extends AndroidTestCase {
 
 	public void testMass() {
 		PhysicObject physicObject = createPhysicObject();
-		assertEquals(1.0f, physicObject.getBody().getMass());
+		assertEquals(1.0f, getBody(physicObject).getMass());
 
 		float[] masses = { 0.01f, 1.0f, 123456.0f };
 		for (float mass : masses) {
 			physicObject.setMass(mass);
-			assertEquals(mass, physicObject.getBody().getMass());
+			assertEquals(mass, getBody(physicObject).getMass());
 		}
 
 		float[] massesResetedToZero = { 0.0f, -0.123f, -123.456f };
 		for (float mass : massesResetedToZero) {
 			physicObject.setMass(mass);
-			assertEquals(1.0f, physicObject.getBody().getMass());
+			assertEquals(1.0f, getBody(physicObject).getMass());
 		}
 	}
 
@@ -248,9 +206,9 @@ public class PhysicObjectTest extends AndroidTestCase {
 
 	public void testShape() {
 		PhysicObject physicObject = createPhysicObject();
-		assertTrue(physicObject.getBody().getFixtureList().size() == 1);
+		assertTrue(getBody(physicObject).getFixtureList().size() == 1);
 
-		Shape shape = physicObject.getBody().getFixtureList().get(0).getShape();
+		Shape shape = getBody(physicObject).getFixtureList().get(0).getShape();
 		assertEquals(Shape.Type.Polygon, shape.getType());
 		assertEquals(1, shape.getChildCount());
 		assertEquals(0.01f, shape.getRadius());

@@ -48,10 +48,6 @@ public class PhysicObject {
 		setType(Type.NONE);
 	}
 
-	public Body getBody() {
-		return body;
-	}
-
 	public void setShape(Shape shape) {
 		// TODO: This code is cursed, I tell you!
 		for (Fixture fixture : body.getFixtureList()) {
@@ -91,12 +87,16 @@ public class PhysicObject {
 		setShape(shape);
 	}
 
+	public float getAngle() {
+		return body.getAngle();
+	}
+
 	public void setAngle(float angle) {
 		body.setTransform(body.getPosition(), angle);
 	}
 
-	public void setPosition(Vector2 position) {
-		body.setTransform(position, body.getAngle());
+	public Vector2 getPosition() {
+		return body.getPosition();
 	}
 
 	// TODO: Test it!
@@ -140,5 +140,13 @@ public class PhysicObject {
 		for (Fixture fixture : body.getFixtureList()) {
 			fixture.setRestitution(restitution);
 		}
+	}
+
+	public void setAngularVelocicty(float radian) {
+		body.setAngularVelocity(radian);
+	}
+
+	public void setLinearVelocicty(Vector2 velocity) {
+		body.setLinearVelocity(velocity);
 	}
 }
