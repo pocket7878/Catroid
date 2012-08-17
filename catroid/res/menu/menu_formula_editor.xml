@@ -25,13 +25,13 @@
     
     <item
         android:id="@+id/menu_undo"
-        android:icon="@drawable/ic_action_undo"
+        android:icon="@drawable/undo_32_32"
         android:showAsAction="ifRoom|withText"
         android:title="@string/formula_editor_button_undo"/>
     
     <item
         android:id="@+id/menu_redo"
-        android:icon="@drawable/ic_action_redo"
+        android:icon="@drawable/redo_32_32"
         android:showAsAction="ifRoom|withText"
         android:title="@string/formula_editor_button_redo"/>
 

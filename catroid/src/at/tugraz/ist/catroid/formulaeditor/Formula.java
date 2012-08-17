@@ -168,12 +168,13 @@ public class Formula implements Serializable {
 			if (formulaTextField == null) {
 				return;
 			}
-			if (formulaString.length() > 5) {
-				formulaTextField.setText(formulaString.substring(0, 5) + "...");
-			} else {
-				formulaTextField.setText(formulaString);
-			}
-			//formulaTextField.setText(formulaString);
+			formulaTextField.setText(formulaString);
+			//			if (formulaString.length() > 5) {
+			//				formulaTextField.setText(formulaString.substring(0, 5) + "...");
+			//			} else {
+			//				formulaTextField.setText(formulaString);
+			//			}
+
 		}
 	}
 

@@ -628,6 +628,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 					lastStep.selectionEnd);
 		}
 
+		formulaEditorDialog.refreshFormulaPreviewString(this.getText().toString());
 		return true;
 	}
 
@@ -640,6 +641,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			setInputTextAndPosition(nextStep.text, nextStep.cursorPosition, nextStep.selectionStart,
 					nextStep.selectionEnd);
 		}
+		formulaEditorDialog.refreshFormulaPreviewString(this.getText().toString());
 		return true;
 	}
 
