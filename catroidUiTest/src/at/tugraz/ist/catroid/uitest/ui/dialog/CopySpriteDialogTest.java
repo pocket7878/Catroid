@@ -304,7 +304,6 @@ public class CopySpriteDialogTest extends ActivityInstrumentationTestCase2<MainM
 		for (Brick brick : brickList) {
 			firstSpriteScript.addBrick(brick);
 		}
-
 		firstSprite.addScript(firstSpriteScript);
 
 		BroadcastScript broadcastScript = new BroadcastScript(firstSprite);
