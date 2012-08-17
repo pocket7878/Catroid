@@ -262,6 +262,7 @@
     <string name="brick_set_angular_velocity_unit">degrees/s</string>
     <string name="brick_set_friction">Set friction to</string>
     <string name="brick_set_bounce_factor">Set bounce factor to</string>
+    <string name="brick_set_density">Set density to</string>
     
     <!-- Actions -->
     <string name="action_tapped">tapped</string>

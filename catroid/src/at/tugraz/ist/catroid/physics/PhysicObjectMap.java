@@ -24,10 +24,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.physics.PhysicObject.Type;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
@@ -45,14 +43,10 @@ public class PhysicObjectMap implements Iterable<Entry<Sprite, PhysicObject>> {
 	public PhysicObject get(Sprite sprite) {
 		PhysicObject physicObject = objects.get(sprite);
 		if (physicObject == null) {
-			BodyDef bodyDef = new BodyDef();
-			bodyDef.type = BodyType.StaticBody;
-
-			physicObject = new PhysicObject(world.createBody(bodyDef));
-			physicObject.setType(Type.NONE);
-
+			physicObject = new PhysicObject(world.createBody(new BodyDef()));
 			objects.put(sprite, physicObject);
 		}
+
 		return physicObject;
 	}
 

@@ -42,10 +42,10 @@ public class PhysicObject {
 
 	public PhysicObject(Body body) {
 		this.body = body;
-
 		fixtureDef.density = 1.0f;
-		//		fixtureDef.friction = 0.5f;
-		//		fixtureDef.restitution = 1.0f;
+		fixtureDef.friction = 0.2f;
+		fixtureDef.restitution = 0.0f;
+		setType(Type.NONE);
 	}
 
 	public Body getBody() {
@@ -66,6 +66,7 @@ public class PhysicObject {
 		}
 	}
 
+	// TODO: Performance boost possible.
 	public void setType(Type type) {
 		if (this.type == type) {
 			return;
