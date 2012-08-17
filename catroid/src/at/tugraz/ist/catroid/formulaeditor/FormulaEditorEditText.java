@@ -54,17 +54,18 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	public static final int BRACKET_CLOSE = 4;
 	public static final int BRACKET_OPEN = 5;
 	public static final int SENSOR_VALUE = 6;
-	private static final double ANDROID_3_4_EXTRA_LINESPACING = 1.15;
+	//private static final double ANDROID_3_4_EXTRA_LINESPACING = 1.15;
 
 	private int selectionStartIndex = 0;
 	private int selectionEndIndex = 0;
 	private int absoluteCursorPosition = 0;
-	private double extraLineSpacing = 0;
+	private double extraLineSpacing = 1.15;
 
 	private boolean editMode = false;
 	private Spannable highlightSpan = null;
 	private Spannable errorSpan = null;
 	private float lineHeight = 0;
+	private boolean useCustomTextCursorCursor = false;
 
 	public CatKeyboardView catKeyboardView;
 	private static FormulaEditorHistory history = null;
@@ -93,11 +94,14 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		this.setLongClickable(false);
 		this.setSelectAllOnFocus(false);
 		this.catKeyboardView = ckv;
-		this.setCursorVisible(false);
-		//setLineSpacing((float) 1.0, (float) 1.0);
-		Log.i("info", "Version: " + Build.VERSION.SDK_INT);
+
+		Log.i("info", "SDK Version: " + Build.VERSION.SDK_INT);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			extraLineSpacing = ANDROID_3_4_EXTRA_LINESPACING;
+			useCustomTextCursorCursor = true;
+			this.setCursorVisible(false);
+		} else {
+			useCustomTextCursorCursor = false;
+			this.setCursorVisible(true);
 		}
 	}
 
@@ -164,6 +168,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 			//Log.i("info", "spacing mult: " + layout.getSpacingMultiplier() + " add " + layout.getSpacingAdd());
 			lineHeight = this.getTextSize() + 5;
+
 			horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
 			absoluteVerticalOffset = layout.getLineForOffset(absoluteCursorPosition);
 			verticalOffset = layout.getLineForOffset(absoluteCursorPosition);
@@ -171,14 +176,17 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			betweenLineOffset = scrollOffset % lineHeight;
 		}
 
-		float startX = horizontalOffset;
-		float endX = horizontalOffset;
-		float startY = (float) ((5 + scrollOffset + lineHeight * verticalOffset) - betweenLineOffset + extraLineSpacing
-				* absoluteVerticalOffset);
-		float endY = (float) ((5 + scrollOffset + lineHeight * (verticalOffset + 1)) - betweenLineOffset + extraLineSpacing
-				* absoluteVerticalOffset);
-		canvas.drawLine(startX, startY, endX, endY, getPaint());
+		if (useCustomTextCursorCursor) {
 
+			float startX = horizontalOffset;
+			float endX = horizontalOffset;
+			float startY = (float) ((5 + scrollOffset + lineHeight * verticalOffset) - betweenLineOffset + extraLineSpacing
+					* absoluteVerticalOffset);
+			float endY = (float) ((5 + scrollOffset + lineHeight * (verticalOffset + 1)) - betweenLineOffset + extraLineSpacing
+					* absoluteVerticalOffset);
+
+			canvas.drawLine(startX, startY, endX, endY, getPaint());
+		}
 	}
 
 	public synchronized void doSelectionAndHighlighting() {
@@ -517,6 +525,14 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			editMode = false;
 		} else {
 			char currentChar = text.charAt(selectionEndIndex - 1);
+			Log.i("info", "current char: " + (int) currentChar);
+			if (charIsWhitespace(currentChar) && selectionEndIndex >= 2) { //remove 1 whitespace char if there is one
+				text.replace(selectionEndIndex - 1, selectionEndIndex, "");
+				selectionEndIndex--;
+				absoluteCursorPosition--;
+				selectionStartIndex = selectionEndIndex;
+				currentChar = text.charAt(selectionEndIndex - 1);
+			}
 			if (currentChar == ',' || currentChar == ')' || currentChar == '(' || currentChar == '_'
 					|| charIsLowerCaseLetter(currentChar)) { //isLowerCaseLetter possible for parameterless functions, the others get treated in checkAndModifyKeyInput!
 				doSelectionAndHighlighting();
@@ -653,11 +669,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	}
 
 	@Override
-	public void setSelection(int start, int end) {
-		//Do not use!
-	}
-
-	@Override
 	protected void onCreateContextMenu(ContextMenu menu) {
 		// dont want it!
 	}
@@ -729,6 +740,10 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 				//						+ " cursor: " + tempCursorPosition);
 				updateSelectionIndices();
 				history.updateCurrentSelection(absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
+			}
+			if (!useCustomTextCursorCursor) {
+				setSelection(absoluteCursorPosition);
+				return false;
 			}
 			return true;
 

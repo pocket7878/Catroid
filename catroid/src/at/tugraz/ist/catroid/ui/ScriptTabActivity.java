@@ -87,7 +87,7 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 		//				FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG) != null) {
 		//			return;
 		//		}
-		findViewById(R.id.fragment_formula_editor).setVisibility(View.GONE); //TODO why on earth is this fragment even visible here?
+		//findViewById(R.id.fragment_formula_editor).setVisibility(View.GONE); //TODO why on earth is this fragment even visible here?
 
 		setupTabHost();
 		viewPager = (ViewPager) findViewById(R.id.pager);

@@ -30,7 +30,8 @@
     <FrameLayout
         android:id="@+id/fragment_formula_editor"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
     <TabHost
         android:id="@android:id/tabhost"
