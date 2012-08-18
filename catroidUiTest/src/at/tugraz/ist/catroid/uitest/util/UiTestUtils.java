@@ -146,7 +146,6 @@ public class UiTestUtils {
 
 	private static void insertValue(Solo solo, int editTextId, int editorEditTextId, String value) {
 		solo.clickOnEditText(editTextId);
-		solo.waitForActivity("FormulaEditorActivity");
 		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
 
 		//catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(editorEditTextId);
@@ -623,7 +622,6 @@ public class UiTestUtils {
 
 		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
 		solo.clickOnEditText(editTextNumber);
-		solo.waitForActivity("FormulaEditorActivity");
 		//solo.clearEditText(numberOfEditTextsInBrick); 
 		//solo.enterText(numberOfEditTextsInBrick, newValue + ""); //would only work if old text was shorter than newValue! 
 		//catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(numberOfEditTextsInBrick);
@@ -642,9 +640,9 @@ public class UiTestUtils {
 
 		Formula formula = (Formula) UiTestUtils.getPrivateField(fieldName, theBrick);
 
-		assertEquals("Wrong text in field", newValue, (double) formula.interpretFloat());
+		assertEquals("Wrong text in field", newValue, formula.interpretFloat(), 0.01f);
 		assertEquals("Text not updated in the brick list", newValue,
-				Double.parseDouble(solo.getEditText(editTextNumber).getText().toString()));
+				Double.parseDouble(solo.getEditText(editTextNumber).getText().toString()), 0.01f);
 
 	}
 

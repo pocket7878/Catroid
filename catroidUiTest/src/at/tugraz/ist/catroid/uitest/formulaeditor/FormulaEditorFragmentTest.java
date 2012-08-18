@@ -20,7 +20,7 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.tugraz.ist.catroid.uitest.ui.dialog;
+package at.tugraz.ist.catroid.uitest.formulaeditor;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
@@ -34,12 +34,11 @@ import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.formulaeditor.FormulaEditorHistory;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
-import at.tugraz.ist.catroid.uitest.formulaeditor.CatKeyboardClicker;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
 
-public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<ScriptTabActivity> {
+public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<ScriptTabActivity> {
 	private Solo solo;
 	private Project project;
 	private PlaceAtBrick placeAtBrick;
@@ -51,7 +50,7 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 	private static final int Y_POS_EDIT_TEXT_ID = 1;
 	private static final int FORMULA_EDITOR_EDIT_TEXT_ID = 2;
 
-	public FormulaEditorDialogTest() {
+	public FormulaEditorFragmentTest() {
 		super(ScriptTabActivity.class);
 	}
 
@@ -88,7 +87,6 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 	public void testChangeFormula() {
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		solo.waitForActivity("FormulaEditorActivity");
 		catKeyboardClicker.clickOnKey("1");
 		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
 		solo.sleep(50);
@@ -119,22 +117,21 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 	public void testOnTheFlyUpdateOfBrickEditText() {
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		solo.waitForActivity("FormulaEditorActivity");
 		catKeyboardClicker.clickOnKey("1");
 
-		assertEquals("Wrong text in FormulaEditor", "1", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
+		assertEquals("Wrong text in FormulaEditor", "1 ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
 				.toString());
-		assertEquals("Wrong text in X EditText", "1", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString());
+		assertEquals("Wrong text in X EditText", "1 ", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString());
 
 		catKeyboardClicker.clickOnKey("2");
 
-		assertEquals("Wrong text in FormulaEditor", "12", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
+		assertEquals("Wrong text in FormulaEditor", "12 ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
 				.toString());
-		assertEquals("Wrong text in X EditText", "12", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString());
+		assertEquals("Wrong text in X EditText", "12 ", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString());
 
 		solo.goBack();
 		solo.sleep(50);
-		assertEquals("Wrong text in X EditText", "12", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString()); //TODO changed it to 12 because we expect that or?
+		assertEquals("Wrong text in X EditText", "12 ", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString()); //TODO changed it to 12 because we expect that or?
 	}
 
 	public void testDialogAndSimpleInterpretation() {
@@ -147,7 +144,6 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 		String newYFormula = "rand( cos( 90 ) , 10 * sin( 90 ) ) ";
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		solo.waitForActivity("FormulaEditorActivity");
 		catKeyboardClicker.clearEditTextWithCursorBehindLastCharacterOnlyQuickly(FORMULA_EDITOR_EDIT_TEXT_ID);
 		solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, "999 " + newXFormula);
 		catKeyboardClicker.clickOnKey("9");
@@ -156,7 +152,6 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 		assertTrue("Save failed toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
 
 		//solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		solo.waitForActivity("FormulaEditorActivity");
 		solo.clearEditText(FORMULA_EDITOR_EDIT_TEXT_ID);
 		solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, newXFormula);
 		//catKeyboardClicker.clickOnKey("1");
@@ -167,12 +162,9 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 				solo.searchText(solo.getString(R.string.formula_editor_changes_saved)));
 
 		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
-		solo.waitForActivity("FormulaEditorActivity");
 		catKeyboardClicker.clickOnKey("1");
 		solo.clearEditText(FORMULA_EDITOR_EDIT_TEXT_ID);
 		solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, newYFormula);
-		catKeyboardClicker.clickOnKey("1");
-		catKeyboardClicker.clickOnKey("del");
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
 		assertTrue("Changes saved toast not found",
@@ -326,36 +318,6 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 
 	}
 
-	//	public void testEditTextBackgroundDrawables() {
-	//
-	//		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-	//
-	//		//		Bitmap expectedTextBackground = null;
-	//		//		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-	//		//			expectedTextBackground = ((BitmapDrawable) (getActivity().getResources()
-	//		//					.getDrawable(R.drawable.textfield_pressed_android4))).getBitmap();
-	//		//		} else {
-	//		//			expectedTextBackground = ((BitmapDrawable) (getActivity().getResources()
-	//		//					.getDrawable(R.drawable.textfield_pressed))).getBitmap();
-	//		//		}
-	//
-	//		//catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(FORMULA_EDITOR_EDIT_TEXT_ID);
-	//
-	//		Bitmap highlightedBackgroundX = ((BitmapDrawable) (solo.getEditText(X_POS_EDIT_TEXT_ID).getBackground()))
-	//				.getBitmap();
-	//		Bitmap standardBackgroundY = ((BitmapDrawable) (solo.getEditText(Y_POS_EDIT_TEXT_ID).getBackground()))
-	//				.getBitmap();
-	//
-	//		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
-	//
-	//		Bitmap highlightedBackgroundY = ((BitmapDrawable) (solo.getEditText(Y_POS_EDIT_TEXT_ID).getBackground()))
-	//				.getBitmap();
-	//		Bitmap standardBackgroundX = ((BitmapDrawable) (solo.getEditText(X_POS_EDIT_TEXT_ID).getBackground()))
-	//				.getBitmap();
-	//
-	//		assertEquals("Background texture wrong!", highlightedBackgroundX, highlightedBackgroundY);
-	//	}
-
 	public void testOrientationChanges() {
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
@@ -364,14 +326,13 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 
 		solo.setActivityOrientation(Solo.LANDSCAPE);
 
-		solo.sleep(1500);
-		assertEquals("Wrong text after oprientation switch", "rand( 0 , 1 )", solo.getEditText(0).getText().toString());
+		solo.sleep(2500); //orientation change takes forever...
+		assertEquals("Wrong text after oprientation switch", "rand( 0 , 1 ) ", solo.getEditText(0).getText().toString());
 
-		solo.goBack(); //TODO what is button 0???
+		solo.goBack();
 
 		solo.sleep(200);
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		solo.waitForActivity("FormulaEditorActivity");
 		assertEquals("Wrong text after oprientation switch", "rand( 0 , 1 ) ", solo.getEditText(X_POS_EDIT_TEXT_ID)
 				.getText().toString());
 		solo.setActivityOrientation(Solo.PORTRAIT);
@@ -383,18 +344,16 @@ public class FormulaEditorDialogTest extends ActivityInstrumentationTestCase2<Sc
 
 		solo.sleep(500);
 		solo.setActivityOrientation(Solo.LANDSCAPE);
-		solo.sleep(500);
+		solo.sleep(1500);
 		solo.setActivityOrientation(Solo.PORTRAIT);
 
-		assertEquals("Wrong text after oprientation switch", "sin( cos( 0 ) )",
+		assertEquals("Wrong text after oprientation switch", "sin( cos( 0 ) ) ",
 				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
 
 		solo.goBack();
-		solo.goBack();
 		solo.sleep(2000);
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		solo.waitForActivity("FormulaEditorActivity");
-		assertEquals("Wrong text after oprientation switch", "rand( 0 , 1 ) ",
+		assertEquals("Wrong text after oprientation switch", "sin( cos( 0 ) ) ",
 				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
 
 		solo.goBack();

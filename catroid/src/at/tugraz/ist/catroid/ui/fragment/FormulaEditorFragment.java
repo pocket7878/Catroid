@@ -283,7 +283,7 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 			case PARSER_STACK_OVERFLOW:
 				return checkReturnWithoutSaving(PARSER_STACK_OVERFLOW);
 			default:
-				formulaEditorEditText.highlightParseError(err);
+				formulaEditorEditText.setParseErrorCursor(err);
 				return checkReturnWithoutSaving(PARSER_INPUT_SYNTAX_ERROR);
 		}
 	}

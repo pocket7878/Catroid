@@ -24,7 +24,6 @@
 package at.tugraz.ist.catroid.formulaeditor;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.os.Build;
 import android.text.Editable;
 import android.text.Layout;
@@ -43,10 +42,10 @@ import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
 
 public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
-	private static final BackgroundColorSpan COLOR_EDITING = new BackgroundColorSpan(0xFF00FFFF);
+	//private static final BackgroundColorSpan COLOR_EDITING = new BackgroundColorSpan(0xFF00FFFF);
 	private static final BackgroundColorSpan COLOR_ERROR = new BackgroundColorSpan(0xFFF00000);
 	private static final BackgroundColorSpan COLOR_HIGHLIGHT = new BackgroundColorSpan(0xFFFFFF00);
-	private static final BackgroundColorSpan COLOR_CURSOR = new BackgroundColorSpan(0xFFBBBB00);
+	private static final BackgroundColorSpan COLOR_CURSOR = new BackgroundColorSpan(0xFFDDDD00);
 
 	public static final int NUMBER = 0;
 	public static final int OPERATOR = 1;
@@ -60,11 +59,10 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	private int selectionStartIndex = 0;
 	private int selectionEndIndex = 0;
 	private int absoluteCursorPosition = 0;
-	private double extraLineSpacing = 1.15;
+	//private double extraLineSpacing = 1.15;
 
 	private boolean editMode = false;
 	private Spannable highlightSpan = null;
-	private Spannable errorSpan = null;
 	private float lineHeight = 0;
 	private boolean useCustomTextCursor = false;
 
@@ -147,53 +145,55 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 		selectionStartIndex = absoluteCursorPosition;
 		selectionEndIndex = absoluteCursorPosition;
+		moveTextCursor();
 		//setSelection(selectionStartIndex);
 	}
 
-	@Override
-	protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
-
-		Layout layout = this.getLayout();
-		float scrollOffset = this.getScrollY();
-		float horizontalOffset = 0;
-		int verticalOffset = 0;
-		int absoluteVerticalOffset = 0;
-		float betweenLineOffset = 0;
-
-		if (layout != null && getText().length() > 0) {
-
-			//			if (absoluteCursorPosition > getText().length()) { // fix for landscape switches
-			//				absoluteCursorPosition = getText().length() - 1;
-			//			}
-			float scale = getResources().getDisplayMetrics().densityDpi;
-			Log.i("info",
-					"test size: " + getTextSize() + " scale: " + scale + "spacing mult: "
-							+ layout.getSpacingMultiplier() + " add " + layout.getSpacingAdd());
-			lineHeight = this.getTextSize() + 5;
-
-			horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
-			absoluteVerticalOffset = layout.getLineForOffset(absoluteCursorPosition);
-			verticalOffset = layout.getLineForOffset(absoluteCursorPosition);
-			verticalOffset -= (int) (scrollOffset / lineHeight);
-			betweenLineOffset = scrollOffset % lineHeight;
-		}
-
-		if (useCustomTextCursor) {
-
-			float startX = horizontalOffset;
-			float endX = horizontalOffset;
-			float startY = (float) ((5 + scrollOffset + lineHeight * verticalOffset) - betweenLineOffset + extraLineSpacing
-					* absoluteVerticalOffset);
-			float endY = (float) ((5 + scrollOffset + lineHeight * (verticalOffset + 1)) - betweenLineOffset + extraLineSpacing
-					* absoluteVerticalOffset);
-
-			canvas.drawLine(startX, startY, endX, endY, getPaint());
-		}
-	}
+	//	@Override
+	//	protected void onDraw(Canvas canvas) {
+	//		super.onDraw(canvas);
+	//
+	//		Layout layout = this.getLayout();
+	//		float scrollOffset = this.getScrollY();
+	//		float horizontalOffset = 0;
+	//		int verticalOffset = 0;
+	//		int absoluteVerticalOffset = 0;
+	//		float betweenLineOffset = 0;
+	//
+	//		if (layout != null && getText().length() > 0) {
+	//
+	//			//			if (absoluteCursorPosition > getText().length()) { // fix for landscape switches
+	//			//				absoluteCursorPosition = getText().length() - 1;
+	//			//			}
+	//			float scale = getResources().getDisplayMetrics().densityDpi;
+	//			Log.i("info",
+	//					"test size: " + getTextSize() + " scale: " + scale + "spacing mult: "
+	//							+ layout.getSpacingMultiplier() + " add " + layout.getSpacingAdd());
+	//			lineHeight = this.getTextSize() + 5;
+	//
+	//			horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
+	//			absoluteVerticalOffset = layout.getLineForOffset(absoluteCursorPosition);
+	//			verticalOffset = layout.getLineForOffset(absoluteCursorPosition);
+	//			verticalOffset -= (int) (scrollOffset / lineHeight);
+	//			betweenLineOffset = scrollOffset % lineHeight;
+	//		}
+	//
+	//		if (useCustomTextCursor) {
+	//
+	//			float startX = horizontalOffset;
+	//			float endX = horizontalOffset;
+	//			float startY = (float) ((5 + scrollOffset + lineHeight * verticalOffset) - betweenLineOffset + extraLineSpacing
+	//					* absoluteVerticalOffset);
+	//			float endY = (float) ((5 + scrollOffset + lineHeight * (verticalOffset + 1)) - betweenLineOffset + extraLineSpacing
+	//					* absoluteVerticalOffset);
+	//
+	//			canvas.drawLine(startX, startY, endX, endY, getPaint());
+	//		}
+	//	}
 
 	public synchronized void doSelectionAndHighlighting() {
 		//Log.i("info", "do Selection and highlighting, cursor position: " + cursor pos);
+		clearSelectionHighlighting();
 		Editable currentInput = this.getText();
 
 		if (currentInput.length() < 1) {
@@ -435,17 +435,18 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		highlightSpan = this.getText();
 		highlightSpan.removeSpan(COLOR_HIGHLIGHT);
 		highlightSpan.removeSpan(COLOR_ERROR);
+		highlightSpan.removeSpan(COLOR_CURSOR);
 	}
 
-	public void highlightParseError(int firstError) {
+	public void setParseErrorCursor(int firstError) {
 		clearSelectionHighlighting();
-		errorSpan = this.getText();
+		highlightSpan = this.getText();
 		//Log.i("info", "First error: " + firstError);
-		if (errorSpan.length() <= 1 || firstError == 0) {
-			if (errorSpan.length() == 0) {
+		if (highlightSpan.length() <= 1 || firstError == 0) {
+			if (highlightSpan.length() == 0) {
 				append(" ");
 			}
-			errorSpan.setSpan(COLOR_ERROR, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			highlightSpan.setSpan(COLOR_ERROR, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			absoluteCursorPosition = 0;
 			selectionStartIndex = 0;
 			selectionEndIndex = 1;
@@ -453,18 +454,18 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			return;
 		}
 
-		if (firstError < errorSpan.length()) {
-			editMode = (charIsLowerCaseLetter(errorSpan.charAt(firstError))
-					|| charIsCapitalLetter(errorSpan.charAt(firstError)) || errorSpan.charAt(firstError) == ')' || errorSpan
+		if (firstError < highlightSpan.length()) {
+			editMode = (charIsLowerCaseLetter(highlightSpan.charAt(firstError))
+					|| charIsCapitalLetter(highlightSpan.charAt(firstError)) || highlightSpan.charAt(firstError) == ')' || highlightSpan
 					.charAt(firstError) == ',') ? false : true;
 			selectionStartIndex = firstError;
-			errorSpan.setSpan(COLOR_ERROR, firstError, ++firstError, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			highlightSpan.setSpan(COLOR_ERROR, firstError, ++firstError, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			selectionEndIndex = firstError;
 		} else {
-			editMode = (charIsLowerCaseLetter(errorSpan.charAt(firstError - 1))
-					|| charIsCapitalLetter(errorSpan.charAt(firstError - 1)) || errorSpan.charAt(firstError - 1) == ')') ? false
-					: true;
-			errorSpan.setSpan(COLOR_ERROR, firstError - 1, firstError, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			editMode = (charIsLowerCaseLetter(highlightSpan.charAt(firstError - 1))
+					|| charIsCapitalLetter(highlightSpan.charAt(firstError - 1)) || highlightSpan
+					.charAt(firstError - 1) == ')') ? false : true;
+			highlightSpan.setSpan(COLOR_ERROR, firstError - 1, firstError, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			selectionStartIndex = firstError - 1;
 			selectionEndIndex = firstError;
 		}
@@ -512,7 +513,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		//Log.i("info", "Cursor Pos: " + absoluteCursorPosition);
 
 		formulaEditorDialog.refreshFormulaPreviewString(this.getText().toString());
-		moveCursorHighlight();
+		moveTextCursor();
 
 	}
 
@@ -529,14 +530,14 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			editMode = false;
 		} else {
 			char currentChar = text.charAt(selectionEndIndex - 1);
-			Log.i("info", "current char: " + (int) currentChar);
-			if (charIsWhitespace(currentChar) && selectionEndIndex >= 2) { //remove 1 whitespace char if there is one
-				text.replace(selectionEndIndex - 1, selectionEndIndex, "");
-				selectionEndIndex--;
-				absoluteCursorPosition--;
-				selectionStartIndex = selectionEndIndex;
-				currentChar = text.charAt(selectionEndIndex - 1);
-			}
+			//remove 1 whitespace char if there is one
+			//			if (charIsWhitespace(currentChar) && selectionEndIndex >= 2) { 
+			//				text.replace(selectionEndIndex - 1, selectionEndIndex, "");
+			//				selectionEndIndex--;
+			//				absoluteCursorPosition--;
+			//				selectionStartIndex = selectionEndIndex;
+			//				currentChar = text.charAt(selectionEndIndex - 1);
+			//			}
 			if (currentChar == ',' || currentChar == ')' || currentChar == '(' || currentChar == '_'
 					|| charIsLowerCaseLetter(currentChar)) { //isLowerCaseLetter possible for parameterless functions, the others get treated in checkAndModifyKeyInput!
 				doSelectionAndHighlighting();
@@ -547,6 +548,10 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 				selectionEndIndex--;
 				selectionStartIndex = selectionEndIndex;
 			}
+		}
+
+		if (text.length() > 0 && !charIsWhitespace(text.charAt(text.length() - 1))) {
+			text.append(" ");
 		}
 
 		setText(text);
@@ -588,11 +593,12 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			selectionEndIndex++;
 			absoluteCursorPosition++;
 		}
-
+		if (text.length() > 0 && !charIsWhitespace(text.charAt(text.length() - 1))) {
+			text.append(" ");
+		}
 		setText(text);
 
 		//move cursor to first function parameter
-		Log.i("info", "Function: " + Functions.isFunction(newElement));
 		if (newElement.length() > 1 && (Functions.isFunction(newElement) || newElement.equals("( 0 )"))) {
 			absoluteCursorPosition = selectionStartIndex + newElement.indexOf("(") + 3;
 			selectionStartIndex = absoluteCursorPosition - 1;
@@ -649,7 +655,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		}
 
 		formulaEditorDialog.refreshFormulaPreviewString(this.getText().toString());
-		moveCursorHighlight();
+		moveTextCursor();
 		return true;
 	}
 
@@ -663,7 +669,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 					nextStep.selectionEnd);
 		}
 		formulaEditorDialog.refreshFormulaPreviewString(this.getText().toString());
-		moveCursorHighlight();
+		moveTextCursor();
 		return true;
 	}
 
@@ -684,12 +690,13 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		return gestureDetector.onTouchEvent(motion);
 	}
 
-	public void moveCursorHighlight() {
+	public void moveTextCursor() {
 
 		highlightSpan = getText();
 		highlightSpan.removeSpan(COLOR_CURSOR);
 
-		if (highlightSpan.length() == 0) {
+		if (highlightSpan.length() == 0 || highlightSpan.getSpanStart(COLOR_HIGHLIGHT) != -1
+				|| highlightSpan.getSpanStart(COLOR_ERROR) != -1) {
 			return;
 		}
 
@@ -697,8 +704,12 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		int end = absoluteCursorPosition + 1;
 
 		if (absoluteCursorPosition == highlightSpan.length()) {
-			end--;
-			start--;
+			if (!charIsWhitespace(highlightSpan.charAt(absoluteCursorPosition - 1))) {
+				//append(" ");
+			} else {
+				start--;
+				end--;
+			}
 		}
 
 		highlightSpan.setSpan(COLOR_CURSOR, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -718,6 +729,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			Layout layout = getLayout();
 			if (layout != null) {
 
+				lineHeight = getTextSize() + 5;
 				int yCoordinate = (int) motion.getY();
 				int cursorY = 0;
 				int cursorXOffset = (int) motion.getX();
@@ -766,12 +778,12 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 				//						+ " cursor: " + tempCursorPosition);
 				updateSelectionIndices();
 				history.updateCurrentSelection(absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
-				moveCursorHighlight();
+				//moveTextCursor();
 			}
-			if (!useCustomTextCursor) {
-				setSelection(absoluteCursorPosition);
-				return false;
-			}
+			//			if (!useCustomTextCursor) {
+			//				setSelection(absoluteCursorPosition);
+			//				return false;
+			//			}
 			return true;
 
 		}

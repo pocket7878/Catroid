@@ -83,7 +83,7 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 			catKeyboardClicker.clickOnKey("" + item);
 		}
 
-		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
+		solo.goBack();
 		solo.sleep(200);
 
 		solo.clickOnEditText(1);
@@ -91,7 +91,7 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 		for (char item : (String.valueOf(xPosition).toCharArray())) {
 			catKeyboardClicker.clickOnKey("" + item);
 		}
-		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
+		solo.goBack();
 		solo.sleep(200);
 
 		solo.clickOnEditText(2);
@@ -99,7 +99,6 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 		for (char item : (String.valueOf(yPosition).toCharArray())) {
 			catKeyboardClicker.clickOnKey("" + item);
 		}
-		solo.clickOnButton(solo.getString(R.string.formula_editor_button_save));
 		solo.sleep(200);
 
 		assertEquals("Text not updated within FormulaEditor", duration,
