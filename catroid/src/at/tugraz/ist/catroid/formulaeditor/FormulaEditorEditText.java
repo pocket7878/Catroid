@@ -43,9 +43,10 @@ import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
 
 public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
-	//	private static final BackgroundColorSpan COLOR_EDITING = new BackgroundColorSpan(0xFF00FFFF);
+	private static final BackgroundColorSpan COLOR_EDITING = new BackgroundColorSpan(0xFF00FFFF);
 	private static final BackgroundColorSpan COLOR_ERROR = new BackgroundColorSpan(0xFFF00000);
 	private static final BackgroundColorSpan COLOR_HIGHLIGHT = new BackgroundColorSpan(0xFFFFFF00);
+	private static final BackgroundColorSpan COLOR_CURSOR = new BackgroundColorSpan(0xFFBBBB00);
 
 	public static final int NUMBER = 0;
 	public static final int OPERATOR = 1;
@@ -65,7 +66,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	private Spannable highlightSpan = null;
 	private Spannable errorSpan = null;
 	private float lineHeight = 0;
-	private boolean useCustomTextCursorCursor = false;
+	private boolean useCustomTextCursor = false;
 
 	public CatKeyboardView catKeyboardView;
 	private static FormulaEditorHistory history = null;
@@ -96,13 +97,13 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		this.catKeyboardView = ckv;
 
 		Log.i("info", "SDK Version: " + Build.VERSION.SDK_INT);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			useCustomTextCursorCursor = true;
-			this.setCursorVisible(false);
-		} else {
-			useCustomTextCursorCursor = false;
-			this.setCursorVisible(true);
-		}
+		//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+		//useCustomTextCursorCursor = true;
+		this.setCursorVisible(false);
+		//} else {
+		useCustomTextCursor = false;
+		//	this.setCursorVisible(true);
+		//}
 	}
 
 	public void enterNewFormula(String formulaAsText) {
@@ -165,8 +166,10 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			//			if (absoluteCursorPosition > getText().length()) { // fix for landscape switches
 			//				absoluteCursorPosition = getText().length() - 1;
 			//			}
-
-			//Log.i("info", "spacing mult: " + layout.getSpacingMultiplier() + " add " + layout.getSpacingAdd());
+			float scale = getResources().getDisplayMetrics().densityDpi;
+			Log.i("info",
+					"test size: " + getTextSize() + " scale: " + scale + "spacing mult: "
+							+ layout.getSpacingMultiplier() + " add " + layout.getSpacingAdd());
 			lineHeight = this.getTextSize() + 5;
 
 			horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
@@ -176,7 +179,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			betweenLineOffset = scrollOffset % lineHeight;
 		}
 
-		if (useCustomTextCursorCursor) {
+		if (useCustomTextCursor) {
 
 			float startX = horizontalOffset;
 			float endX = horizontalOffset;
@@ -416,9 +419,9 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		highlightSpan = this.getText();
 		highlightSpan.removeSpan(COLOR_HIGHLIGHT);
 
-		if (selectionStartIndex < 0) {
-			selectionStartIndex = 0;
-		}
+		//		if (selectionStartIndex < 0) {
+		//			selectionStartIndex = 0;
+		//		}
 
 		if (selectionEndIndex == selectionStartIndex || selectionEndIndex > highlightSpan.length()) {
 			return;
@@ -509,6 +512,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		//Log.i("info", "Cursor Pos: " + absoluteCursorPosition);
 
 		formulaEditorDialog.refreshFormulaPreviewString(this.getText().toString());
+		moveCursorHighlight();
 
 	}
 
@@ -645,6 +649,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		}
 
 		formulaEditorDialog.refreshFormulaPreviewString(this.getText().toString());
+		moveCursorHighlight();
 		return true;
 	}
 
@@ -658,6 +663,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 					nextStep.selectionEnd);
 		}
 		formulaEditorDialog.refreshFormulaPreviewString(this.getText().toString());
+		moveCursorHighlight();
 		return true;
 	}
 
@@ -676,6 +682,26 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	@Override
 	public boolean onTouch(View v, MotionEvent motion) {
 		return gestureDetector.onTouchEvent(motion);
+	}
+
+	public void moveCursorHighlight() {
+
+		highlightSpan = getText();
+		highlightSpan.removeSpan(COLOR_CURSOR);
+
+		if (highlightSpan.length() == 0) {
+			return;
+		}
+
+		int start = absoluteCursorPosition;
+		int end = absoluteCursorPosition + 1;
+
+		if (absoluteCursorPosition == highlightSpan.length()) {
+			end--;
+			start--;
+		}
+
+		highlightSpan.setSpan(COLOR_CURSOR, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
 
 	final GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
@@ -740,8 +766,9 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 				//						+ " cursor: " + tempCursorPosition);
 				updateSelectionIndices();
 				history.updateCurrentSelection(absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
+				moveCursorHighlight();
 			}
-			if (!useCustomTextCursorCursor) {
+			if (!useCustomTextCursor) {
 				setSelection(absoluteCursorPosition);
 				return false;
 			}
