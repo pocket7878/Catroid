@@ -39,6 +39,7 @@ public class StageActivity extends AndroidApplication {
 	private boolean stagePlaying = true;
 	public static StageListener stageListener;
 	private boolean resizePossible;
+	private boolean preStageMode = false;
 	private StageDialog stageDialog;
 
 	//final static public String PRESTAGE_SPRITE_TO_EDIT = "at.tugraz.ist.catroid.prestage.sprite_to_edit";
@@ -65,6 +66,7 @@ public class StageActivity extends AndroidApplication {
 			//	String spriteToEditInPrestageMode = bundle.getString(PRESTAGE_SPRITE_TO_EDIT);
 			//	String brickIdToEditInPrestageMode = bundle.getString(PRESTAGE_BRICK_TO_EDIT);
 			//}
+			preStageMode = true;
 			stageListener.setPrestageObject(ProjectManager.getInstance().getCurrentSprite(), ProjectManager
 					.getInstance().getPrestageBrick());
 			config.useWakelock = false;
@@ -76,8 +78,13 @@ public class StageActivity extends AndroidApplication {
 
 	@Override
 	public void onBackPressed() {
-		pauseOrContinue();
-		stageDialog.show();
+		if (!preStageMode) {
+			pauseOrContinue();
+			stageDialog.show();
+		} else {
+			manageLoadAndFinish();
+			super.onBackPressed();
+		}
 	}
 
 	@Override

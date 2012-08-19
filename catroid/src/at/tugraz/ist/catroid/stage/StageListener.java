@@ -38,6 +38,7 @@ import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
+import at.tugraz.ist.catroid.content.bricks.RotateToBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.TurnLeftBrick;
 import at.tugraz.ist.catroid.content.bricks.TurnRightBrick;
@@ -128,6 +129,7 @@ public class StageListener implements ApplicationListener {
 	public StageListener() {
 	}
 
+	@Override
 	public void create() {
 
 		font = new BitmapFont();
@@ -226,6 +228,7 @@ public class StageListener implements ApplicationListener {
 		reloadProject = true;
 	}
 
+	@Override
 	public void resume() {
 		if (!paused) {
 			SoundManager.getInstance().resume();
@@ -238,6 +241,7 @@ public class StageListener implements ApplicationListener {
 		}
 	}
 
+	@Override
 	public void pause() {
 		if (finished || (sprites == null)) {
 			return;
@@ -260,6 +264,7 @@ public class StageListener implements ApplicationListener {
 		}
 	}
 
+	@Override
 	public void render() {
 
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -398,9 +403,11 @@ public class StageListener implements ApplicationListener {
 		batch.end();
 	}
 
+	@Override
 	public void resize(int width, int height) {
 	}
 
+	@Override
 	public void dispose() {
 		if (!finished) {
 			this.finish();
@@ -491,7 +498,8 @@ public class StageListener implements ApplicationListener {
 			//spriteToChange.pause();
 			//spriteToChange.costume.act(0);
 			//spriteToChange.costume.draw(batch, 0);
-		} else if (brickToChange instanceof TurnLeftBrick || brickToChange instanceof TurnRightBrick) {
+		} else if (brickToChange instanceof RotateToBrick || brickToChange instanceof TurnLeftBrick
+				|| brickToChange instanceof TurnRightBrick) {
 			gestureListener.setMode(PreStageGestureListener.Mode.ROTATION);
 		} else if (brickToChange instanceof SetSizeToBrick) {
 			gestureListener.setMode(PreStageGestureListener.Mode.SCALE);

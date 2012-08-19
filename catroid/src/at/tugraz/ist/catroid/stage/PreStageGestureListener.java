@@ -38,21 +38,24 @@ public class PreStageGestureListener implements GestureListener {
 	private Vector2 startInitialFirstPointer;
 
 	public enum Mode {
-		TRANSLATION, ROTATION, SCALE
+		NONE, TRANSLATION, ROTATION, SCALE
 	};
 
-	private Mode mode;
+	private Mode mode = Mode.NONE;
 
 	public void setActorToChange(Actor actorToChange) {
 		this.actorToChange = actorToChange;
 	}
 
 	public void setMode(Mode mode) {
-		this.mode = mode;
+		if (mode != null) {
+			this.mode = mode;
+		}
 	}
 
+	@Override
 	public boolean touchDown(int x, int y, int pointer) {
-		if (actorToChange != null) {
+		if (actorToChange != null && mode != null) {
 			switch (mode) {
 				case ROTATION:
 					Vector2 vec = new Vector2();
@@ -65,20 +68,24 @@ public class PreStageGestureListener implements GestureListener {
 		return false;
 	}
 
+	@Override
 	public boolean tap(int x, int y, int count) {
 		return false;
 	}
 
+	@Override
 	public boolean longPress(int x, int y) {
 		return false;
 	}
 
+	@Override
 	public boolean fling(float velocityX, float velocityY) {
 		return false;
 	}
 
+	@Override
 	public boolean pan(int x, int y, int deltaX, int deltaY) {
-		if (actorToChange != null) {
+		if (actorToChange != null && mode != null) {
 			switch (mode) {
 				case ROTATION:
 					Vector2 vec = new Vector2();
@@ -94,8 +101,9 @@ public class PreStageGestureListener implements GestureListener {
 		return false;
 	}
 
+	@Override
 	public boolean zoom(float originalDistance, float currentDistance) {
-		if (actorToChange != null) {
+		if (actorToChange != null && mode != null) {
 			switch (mode) {
 				case SCALE:
 					//Gdx.app.log("PreStage", actorToChange.scaleX + "% " + originalDistance + " " + currentDistance);
@@ -122,9 +130,10 @@ public class PreStageGestureListener implements GestureListener {
 		return false;
 	}
 
+	@Override
 	public boolean pinch(Vector2 initialFirstPointer, Vector2 initialSecondPointer, Vector2 firstPointer,
 			Vector2 secondPointer) {
-		if (actorToChange != null) {
+		if (actorToChange != null && mode != null) {
 			switch (mode) {
 				case ROTATION:
 					Vector2 vec1 = initialSecondPointer.sub(initialFirstPointer);
