@@ -36,9 +36,9 @@ public class PhysicObject {
 		DYNAMIC, FIXED, NONE;
 	}
 
-	private final Body body;
-	private final FixtureDef fixtureDef = new FixtureDef();
-	private Type type;
+	public final Body body;
+	public final FixtureDef fixtureDef = new FixtureDef();
+	public Type type;
 
 	public PhysicObject(Body body) {
 		this.body = body;

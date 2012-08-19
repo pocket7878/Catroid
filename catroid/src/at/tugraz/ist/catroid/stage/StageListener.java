@@ -35,14 +35,10 @@ import android.graphics.Color;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
-import at.tugraz.ist.catroid.content.bricks.SetPhysicObjectTypeBrick;
 import at.tugraz.ist.catroid.io.SoundManager;
+import at.tugraz.ist.catroid.physics.PhysicBrickConverter;
 import at.tugraz.ist.catroid.physics.PhysicSettings;
-import at.tugraz.ist.catroid.physics.commands.PhysicPlaceAtBrick;
 import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -169,33 +165,8 @@ public class StageListener implements ApplicationListener {
 
 		// TODO: Find better place to replace motion bricks with corresponding physic bricks
 		// if necessary. Needs own class.
-		for (Sprite sprite : project.getSpriteList()) {
-			boolean containsPhysicObjectBrick = false;
-
-			for (int scriptIndex = 0; scriptIndex < sprite.getNumberOfScripts(); scriptIndex++) {
-				Script script = sprite.getScript(scriptIndex);
-
-				if (containsPhysicObjectBrick) {
-					List<Brick> brickList = script.getBrickList();
-
-					for (int brickIndex = 0; brickIndex < brickList.size(); brickIndex++) {
-						Brick brick = brickList.get(brickIndex);
-						if (brick instanceof PlaceAtBrick) {
-							brick = new PhysicPlaceAtBrick((PlaceAtBrick) brick);
-							brickList.set(brickIndex, brick);
-						}
-					}
-				} else {
-					for (Brick brick : script.getBrickList()) {
-						if (brick instanceof SetPhysicObjectTypeBrick) {
-							containsPhysicObjectBrick = true;
-							scriptIndex = -1;
-							break;
-						}
-					}
-				}
-			}
-		}
+		PhysicBrickConverter physicBrickConverter = new PhysicBrickConverter();
+		physicBrickConverter.convert(project);
 	}
 
 	public void menuResume() {
@@ -290,6 +261,11 @@ public class StageListener implements ApplicationListener {
 				stage.addActor(sprite.costume);
 				sprite.pause();
 			}
+
+			// TODO: Find better place to replace motion bricks with corresponding physic bricks
+			// if necessary. Needs own class.
+			PhysicBrickConverter physicBrickConverter = new PhysicBrickConverter();
+			physicBrickConverter.convert(project);
 
 			paused = true;
 			firstStart = true;

@@ -26,7 +26,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
-import at.tugraz.ist.catroid.physics.PhysicObject;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 
 /**
@@ -35,12 +35,12 @@ import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
  */
 public class PhysicPlaceAtBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
-	private transient final PhysicObject physicObject;
+	private transient final PhysicWorld physicWorld;
 	private transient final PlaceAtBrick placeAtBrick;
 
 	public PhysicPlaceAtBrick(PlaceAtBrick placeAtBrick) {
 		this.placeAtBrick = placeAtBrick;
-		physicObject = ProjectManager.getInstance().getCurrentProject().getPhysicWorld().getPhysicObject(getSprite());
+		physicWorld = ProjectManager.getInstance().getCurrentProject().getPhysicWorld();
 	}
 
 	@Override
@@ -48,7 +48,8 @@ public class PhysicPlaceAtBrick implements Brick, OnClickListener {
 		float box2dXPosition = PhysicWorldConverter.lengthCatToBox2d(placeAtBrick.getXPosition());
 		float box2dYPosition = PhysicWorldConverter.lengthCatToBox2d(placeAtBrick.getYPosition());
 
-		physicObject.setPosition(box2dXPosition, box2dYPosition);
+		placeAtBrick.execute();
+		physicWorld.getPhysicObject(getSprite()).setPosition(box2dXPosition, box2dYPosition);
 	}
 
 	@Override

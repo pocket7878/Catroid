@@ -91,7 +91,7 @@ public class PhysicWorld implements Serializable {
 		}
 		world.step(deltaTime, PhysicSettings.World.VELOCITY_ITERATIONS, PhysicSettings.World.POSITION_ITERATIONS);
 		for (Entry<Sprite, PhysicObject> entry : objects) {
-			//			System.out.println("LOG|" + entry.getKey().getName() + ": " + entry.getValue().getPosition());
+			System.out.println("LOG|" + entry.getKey().getName() + ": " + entry.getValue().getPosition());
 		}
 		updateSprites();
 	}
