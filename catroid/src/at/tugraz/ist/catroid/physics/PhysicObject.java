@@ -50,6 +50,12 @@ public class PhysicObject {
 
 	public void setShape(Shape shape) {
 		// TODO: This code is cursed, I tell you!
+		// Switch code, so body always has a shape.
+
+		if (shape == fixtureDef.shape) {
+			return;
+		}
+
 		for (Fixture fixture : body.getFixtureList()) {
 			body.destroyFixture(fixture);
 		}
@@ -62,7 +68,6 @@ public class PhysicObject {
 		}
 	}
 
-	// TODO: Performance boost possible.
 	public void setType(Type type) {
 		if (this.type == type) {
 			return;
