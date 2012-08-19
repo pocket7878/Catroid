@@ -127,9 +127,9 @@ public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptAct
 		//solo.getCurrentActivity().
 		assertTrue(activityLoaded);
 		solo.sleep(2000);
+		solo.drag(0, 100, 0, -100, 20);
+		solo.sleep(1000);
 		solo.goBack();
-		solo.clickOnView(solo.getView(R.id.exit_stage_button));
-		solo.sleep(2000);
 		assertTrue(solo.waitForView(solo.getView(R.id.imageButtonEditValuesXY)));
 	}
 
@@ -173,7 +173,7 @@ public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptAct
 		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		placeAtBrick = new PlaceAtBrick(sprite, 0, 0);
+		placeAtBrick = new PlaceAtBrick(sprite, 20, 50);
 		script.addBrick(placeAtBrick);
 
 		sprite.addScript(script);
