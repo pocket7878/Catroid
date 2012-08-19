@@ -45,8 +45,6 @@ public class ProjectManager {
 	private Sprite currentSprite;
 
 	private Brick prestageBrick;
-	private int prestageBrickType;
-	public int PRESTAGE_BRICKTYPE_PLACEAT = 0;
 
 	private static ProjectManager instance;
 
@@ -215,14 +213,9 @@ public class ProjectManager {
 		}
 	}
 
-	public int getPrestageBrickType() {
-		return prestageBrickType;
-	}
-
-	public void setPrestageBrick(Brick brick, int type) {
+	public void setPrestageBrick(Brick brick) {
 		if (brick != null && currentSprite.containsBrick(brick)) {
 			prestageBrick = brick;
-			prestageBrickType = type;
 		} else {
 			prestageBrick = null;
 		}

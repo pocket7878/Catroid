@@ -189,6 +189,7 @@
     <string name="category_lego_nxt">Lego NXT</string>
 
     <!-- Motion bricks -->
+    <string name="edit_in_prestage">bearbeiten</string>
     <string name="brick_place_at">Setze Position</string>
     <string name="x_label">X:</string>
     <string name="y_label">Y:</string>

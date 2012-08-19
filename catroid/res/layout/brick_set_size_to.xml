@@ -69,13 +69,27 @@
         android:minWidth="60dip"
         android:text="100" >
     </EditText>
+    
+    
+    <ImageButton
+        android:id="@+id/imageButtonEditSize"
+        android:contentDescription="@string/edit_in_prestage"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_toLeftOf="@id/brick_set_size_to_edit_text"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/content_edit"
+        android:visibility="gone" />
+    
 
     <TextView
         android:id="@+id/ValueTextView"
         style="@style/brick_text_style"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/SetSizeToEditText"
+        android:layout_toLeftOf="@id/brick_set_size_to_edit_text"
         android:text="@string/brick_set_size_to" >
     </TextView>
 

@@ -115,12 +115,9 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 		final Context context = view.getContext();
 
 		if (view.getId() == R.id.imageButtonEditValuesXY) {
+			ProjectManager.getInstance().setPrestageBrick(this);
 			Intent intent = new Intent(context, StageActivity.class);
 			intent.setAction(Intent.ACTION_EDIT);
-			ProjectManager.getInstance()
-					.setPrestageBrick(this, ProjectManager.getInstance().PRESTAGE_BRICKTYPE_PLACEAT);
-			//intent.putExtra(StageActivity.PRESTAGE_SPRITE_TO_EDIT, getSprite().getName());
-			//intent.putExtra(StageActivity.PRESTAGE_BRICK_TO_EDIT, this);
 			context.startActivity(intent);
 		} else {
 			AlertDialog.Builder dialog = new AlertDialog.Builder(context);

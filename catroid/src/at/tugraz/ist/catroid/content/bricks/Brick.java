@@ -31,7 +31,7 @@ import at.tugraz.ist.catroid.content.Sprite;
 
 public interface Brick extends Serializable {
 
-	//use bitwise | for using multiple ressources in a brick
+	//use bitwise | for using multiple resources in a brick
 	public static final int NO_RESOURCES = 0x0;
 	//public static final int SOUND_MANAGER = 0x1;
 	public static final int TEXT_TO_SPEECH = 0x2;

@@ -66,7 +66,7 @@ public class StageActivity extends AndroidApplication {
 			//	String brickIdToEditInPrestageMode = bundle.getString(PRESTAGE_BRICK_TO_EDIT);
 			//}
 			stageListener.setPrestageObject(ProjectManager.getInstance().getCurrentSprite(), ProjectManager
-					.getInstance().getPrestageBrick(), ProjectManager.getInstance().getPrestageBrickType());
+					.getInstance().getPrestageBrick());
 			config.useWakelock = false;
 		}
 

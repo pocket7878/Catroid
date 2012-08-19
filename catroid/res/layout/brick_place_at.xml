@@ -112,11 +112,12 @@
             android:visibility="gone" >
         </EditText>
     </LinearLayout>
-
+
     <ImageButton
         android:id="@+id/imageButtonEditValuesXY"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:contentDescription="@string/edit_in_prestage"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_toLeftOf="@id/brick_place_at_linear_layout"
         android:clickable="false"
         android:focusable="false"

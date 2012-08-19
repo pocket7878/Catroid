@@ -37,6 +37,10 @@ import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
+import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
+import at.tugraz.ist.catroid.content.bricks.TurnLeftBrick;
+import at.tugraz.ist.catroid.content.bricks.TurnRightBrick;
 import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -61,6 +65,7 @@ public class StageListener implements ApplicationListener {
 	private static final boolean DEBUG = false;
 	public static final String SCREENSHOT_FILE_NAME = "screenshot.png";
 	private FPSLogger fpsLogger;
+	private Context context;
 
 	private Stage stage;
 	private boolean paused = false;
@@ -72,7 +77,6 @@ public class StageListener implements ApplicationListener {
 	private boolean prestageMode = false;
 	private Sprite spriteToChange;
 	private Brick brickToChange;
-	private int brickToChangeType;
 
 	private boolean makeFirstScreenshot = true;
 	private String pathForScreenshot;
@@ -151,20 +155,32 @@ public class StageListener implements ApplicationListener {
 		camera.position.set(0, 0, 0);
 
 		sprites = project.getSpriteList();
+		//spriteToChange.removeAllScripts();
+		boolean backgroundSprite = true; //first sprite
 		for (Sprite sprite : sprites) {
 			stage.addActor(sprite.costume);
+			if (prestageMode) {
+				if (!sprite.containsBrick(brickToChange)) {
+					//sprite.pause();
+					if (!backgroundSprite) {
+						sprite.costume.setAlphaValue(0.1F);
+					} else {
+						//sprite.costume.
+					}
+					backgroundSprite = false;
+				}
+			}
 		}
-		if (DEBUG) {
+		if (prestageMode) {
+			arrangeSprites();
+			Gdx.input.setInputProcessor(new GestureDetector(createPreStageGestureListener()));
+		} else if (DEBUG) {
 			OrthoCamController camController = new OrthoCamController(camera);
 			InputMultiplexer multiplexer = new InputMultiplexer();
 			multiplexer.addProcessor(camController);
 			multiplexer.addProcessor(stage);
 			Gdx.input.setInputProcessor(multiplexer);
 			fpsLogger = new FPSLogger();
-		} else if (prestageMode) {
-			PreStageGestureListener gestureListener = new PreStageGestureListener();
-			gestureListener.setActorToChange(spriteToChange.costume);
-			Gdx.input.setInputProcessor(new GestureDetector(gestureListener));
 		} else {
 			Gdx.input.setInputProcessor(stage);
 		}
@@ -199,6 +215,7 @@ public class StageListener implements ApplicationListener {
 		if (reloadProject) {
 			return;
 		}
+		this.context = context;
 		this.stageDialog = stageDialog;
 		ProjectManager projectManager = ProjectManager.getInstance();
 		int currentSpritePos = projectManager.getCurrentSpritePosition();
@@ -457,11 +474,32 @@ public class StageListener implements ApplicationListener {
 		}
 	}
 
-	public void setPrestageObject(Sprite spriteToChange, Brick brickToChange, int type) {
+	public void setPrestageObject(Sprite spriteToChange, Brick brickToChange) {
 		this.prestageMode = true;
 		this.axesOn = true;
 		this.spriteToChange = spriteToChange;
 		this.brickToChange = brickToChange;
-		this.brickToChangeType = type;
+	}
+
+	private PreStageGestureListener createPreStageGestureListener() {
+		PreStageGestureListener gestureListener = new PreStageGestureListener();
+		gestureListener.setActorToChange(spriteToChange.costume);
+		if (brickToChange instanceof PlaceAtBrick) {
+			gestureListener.setMode(PreStageGestureListener.Mode.TRANSLATION);
+			//spriteToChange.costume.clearActions();
+			//brickToChange.execute();
+			//spriteToChange.pause();
+			//spriteToChange.costume.act(0);
+			//spriteToChange.costume.draw(batch, 0);
+		} else if (brickToChange instanceof TurnLeftBrick || brickToChange instanceof TurnRightBrick) {
+			gestureListener.setMode(PreStageGestureListener.Mode.ROTATION);
+		} else if (brickToChange instanceof SetSizeToBrick) {
+			gestureListener.setMode(PreStageGestureListener.Mode.SCALE);
+		}
+		return gestureListener;
+	}
+
+	private void arrangeSprites() {
+		// TODO Auto-generated method stub
 	}
 }
