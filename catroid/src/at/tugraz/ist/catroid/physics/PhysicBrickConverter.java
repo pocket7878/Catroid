@@ -40,6 +40,7 @@ public class PhysicBrickConverter {
 	public PhysicBrickConverter() {
 	}
 
+	// TODO: Here we are missing OOP!
 	public void convert(Project project) {
 		for (Sprite sprite : project.getSpriteList()) {
 			boolean containsPhysicObjectBrick = false;
