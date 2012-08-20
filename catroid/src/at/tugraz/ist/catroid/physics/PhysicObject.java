@@ -71,7 +71,6 @@ public class PhysicObject {
 			if (fixture != createdFixture) {
 				fixture.setDensity(0.0f);
 				body.destroyFixture(fixture);
-				fixture.setDensity(1.0f);
 			}
 		}
 	}
@@ -127,13 +126,6 @@ public class PhysicObject {
 	public void setMass(float mass) {
 		massData.mass = mass;
 		body.setMassData(massData);
-	}
-
-	private void setDensity(float density) {
-		fixtureDef.density = density;
-		for (Fixture fixture : body.getFixtureList()) {
-			fixture.setDensity(density);
-		}
 	}
 
 	public void setFriction(float friction) {
