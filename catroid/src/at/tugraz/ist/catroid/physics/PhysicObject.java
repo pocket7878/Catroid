@@ -49,21 +49,21 @@ public class PhysicObject {
 	}
 
 	public void setShape(Shape shape) {
-		// TODO: This code is cursed, I tell you!
-		// Switch code, so body always has a shape.
-
-		if (shape == fixtureDef.shape) {
+		if (shape == fixtureDef.shape && !body.getFixtureList().isEmpty()) {
 			return;
 		}
 
-		for (Fixture fixture : body.getFixtureList()) {
-			body.destroyFixture(fixture);
-		}
-
+		Fixture createdFixture = null;
 		if (shape != null) {
 			fixtureDef.shape = shape;
 			if (type != Type.NONE) {
-				body.createFixture(fixtureDef);
+				createdFixture = body.createFixture(fixtureDef);
+			}
+		}
+
+		for (Fixture fixture : body.getFixtureList()) {
+			if (fixture != createdFixture) {
+				body.destroyFixture(fixture);
 			}
 		}
 	}
