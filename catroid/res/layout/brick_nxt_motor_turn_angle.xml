@@ -95,16 +95,15 @@
 
                 <EditText
                     android:id="@+id/motor_turn_angle_edit_text"
-                    android:layout_width="60dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
-                    android:enabled="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:visibility="gone"
                     android:gravity="right"
                     android:inputType="number|numberDecimal|numberSigned"
-                    android:maxLength="4"
+                    android:minWidth="60dip"
                     android:maxLines="1"
                     android:text="0" >
                 </EditText>
@@ -114,13 +113,13 @@
                     android:text="@string/degree" >
                 </TextView>
 
-                <Button
+                <!-- <Button
                     android:id="@+id/directions_btn"
                     android:layout_width="50dip"
                     android:layout_height="wrap_content"
                     android:background="@android:drawable/btn_dropdown"
                     android:clickable="false"
-                    android:focusable="false" />
+                    android:focusable="false" /> -->
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
