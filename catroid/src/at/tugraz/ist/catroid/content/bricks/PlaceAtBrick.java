@@ -157,4 +157,9 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 			finishedDialog.show();
 		}
 	}
+
+	public void updateValuesFromCostume() {
+		this.xPosition = (int) (sprite.costume.x + sprite.costume.width / 2);
+		this.yPosition = (int) (sprite.costume.y + sprite.costume.height / 2);
+	}
 }

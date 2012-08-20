@@ -28,6 +28,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.text.InputType;
+import android.util.FloatMath;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -47,6 +48,7 @@ public class RotateToBrick implements Brick, OnClickListener {
 
 	private Sprite sprite;
 	private float degrees;
+	private float degreeOffset = 90f;
 
 	public RotateToBrick(Sprite sprite, float degrees) {
 		this.sprite = sprite;
@@ -58,7 +60,6 @@ public class RotateToBrick implements Brick, OnClickListener {
 	}
 
 	public void execute() {
-		float degreeOffset = 90f;
 		sprite.costume.rotation = -degrees + degreeOffset;
 	}
 
@@ -131,6 +132,13 @@ public class RotateToBrick implements Brick, OnClickListener {
 			finishedDialog.show();
 		}
 
+	}
+
+	public void updateValuesFromCostume() {
+		this.degrees = FloatMath.floor(-sprite.costume.rotation + degreeOffset) % 360;
+		if (this.degrees <= -180F) {
+			this.degrees += 360F;
+		}
 	}
 
 }

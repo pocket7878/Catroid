@@ -130,4 +130,8 @@ public class SetSizeToBrick implements Brick, OnClickListener {
 			finishedDialog.show();
 		}
 	}
+
+	public void updateValuesFromCostume() {
+		this.size = Math.floor(sprite.costume.scaleX * 100);
+	}
 }

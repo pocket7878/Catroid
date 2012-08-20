@@ -29,6 +29,12 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Values;
+import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
+import at.tugraz.ist.catroid.content.bricks.RotateToBrick;
+import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
+import at.tugraz.ist.catroid.content.bricks.TurnLeftBrick;
+import at.tugraz.ist.catroid.content.bricks.TurnRightBrick;
 import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -82,6 +88,16 @@ public class StageActivity extends AndroidApplication {
 			pauseOrContinue();
 			stageDialog.show();
 		} else {
+			Brick brickToChange = ProjectManager.getInstance().getPrestageBrick();
+			if (brickToChange instanceof PlaceAtBrick) {
+				((PlaceAtBrick) brickToChange).updateValuesFromCostume();
+			} else if (brickToChange instanceof RotateToBrick || brickToChange instanceof TurnLeftBrick
+					|| brickToChange instanceof TurnRightBrick) {
+				((RotateToBrick) brickToChange).updateValuesFromCostume();
+			} else if (brickToChange instanceof SetSizeToBrick) {
+				((SetSizeToBrick) brickToChange).updateValuesFromCostume();
+			}
+			ProjectManager.getInstance().saveProject();
 			manageLoadAndFinish();
 			super.onBackPressed();
 		}
