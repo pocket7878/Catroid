@@ -226,11 +226,11 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		catKeyboardClicker.clickOnKey("1");
 		catKeyboardClicker.clickOnKey("keyboardswitch");
 		catKeyboardClicker.clickOnKey("sin");
-		solo.clickOnScreen(2 * oneCharacterWidth, firstLineYCoordinate);
+		solo.clickOnScreen(2.5f * oneCharacterWidth, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("del");
-		solo.clickOnScreen(2 * oneCharacterWidth, firstLineYCoordinate);
+		solo.clickOnScreen(4 * oneCharacterWidth, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("del");
-		assertEquals("Text deletion was wrong!", "1", solo.getEditText(1).getText().toString());
+		assertEquals("Text deletion was wrong!", "1 ", solo.getEditText(1).getText().toString());
 
 		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(0);
 		catKeyboardClicker.clickOnKey("keyboardswitch");
@@ -239,11 +239,11 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		catKeyboardClicker.clickOnKey("keyboardswitch");
 		catKeyboardClicker.clickOnKey("keyboardswitch");
 		catKeyboardClicker.clickOnKey("y-accel");
-		solo.clickOnScreen(2 * oneCharacterWidth, firstLineYCoordinate);
+		solo.clickOnScreen(2.5f * oneCharacterWidth, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("del");
-		solo.clickOnScreen(2 * oneCharacterWidth, firstLineYCoordinate);
+		solo.clickOnScreen(5 * oneCharacterWidth, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("del");
-		assertEquals("Text deletion was wrong!", "1", solo.getEditText(1).getText().toString());
+		assertEquals("Text deletion was wrong!", "1 ", solo.getEditText(1).getText().toString());
 
 		solo.goBack();
 		solo.goBack();
@@ -368,28 +368,28 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		for (int i = 0; i <= totalLinesForTheInput - visibleLines; i++) {
 			solo.clickOnScreen(threeCharactersWidth, firstLineYCoordinate); //scroll edittext to top, solo 2 stupid q.q
 		}
-		assertTrue("Text could not be found!", solo.searchText("999999999999999999")); //note always ALL the text can be found by solo, not just the part currently visible due to scroll position 
+		assertTrue("Text could not be found!", solo.searchText("999999999999999999 ")); //note always ALL the text can be found by solo, not just the part currently visible due to scroll position 
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
-		assertFalse("Wrong line deleted!", solo.searchText("999999999999999999"));
-		assertTrue("Wrong number of characters deleted!", solo.searchText("9999999999999999"));
+		assertFalse("Wrong line deleted!", solo.searchText("999999999999999999 "));
+		assertTrue("Wrong number of characters deleted!", solo.searchText("9999999999999999 "));
 
-		assertTrue("Text could not be found!", solo.searchText("666666666666666666"));
+		assertTrue("Text could not be found!", solo.searchText("666666666666666666 "));
 		solo.clickOnScreen(threeCharactersWidth, firstLineYCoordinate + 3 * lineHeight);
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
-		assertFalse("Wrong line deleted!", solo.searchText("666666666666666666"));
-		assertTrue("Wrong number of characters deleted!", solo.searchText("6666666666666666"));
+		assertFalse("Wrong line deleted!", solo.searchText("666666666666666666 "));
+		assertTrue("Wrong number of characters deleted!", solo.searchText("6666666666666666 "));
 
 		solo.sleep(500);
 		for (int i = 1; i < totalLinesForTheInput - visibleLines; i++) {
 			solo.clickOnScreen(threeCharactersWidth, firstLineYCoordinate + 7.5f * lineHeight); //scroll edittext to bottom, solo 2 stupid q.q
 		}
-		assertTrue("Text could not be found!", solo.searchText("222222222222222222"));
+		assertTrue("Text could not be found!", solo.searchText("222222222222222222 "));
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
-		assertFalse("Wrong line deleted!", solo.searchText("222222222222222222"));
-		assertTrue("Wrong number of characters deleted!", solo.searchText("2222222222222222"));
+		assertFalse("Wrong line deleted!", solo.searchText("222222222222222222 "));
+		assertTrue("Wrong number of characters deleted!", solo.searchText("2222222222222222 "));
 
 		solo.goBack();
 		solo.goBack();
@@ -414,7 +414,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		solo.clickOnEditText(0);
 		catKeyboardClicker.clickOnKey("del");
 
-		solo.enterText(1, "8 + X_ACCELERATION_+5Y_ACCELERATION_ + 76");
+		solo.enterText(1, "8 + X_ACCELERATION_+5Y_ACCELERATION_ + 76 ");
 		catKeyboardClicker.clickOnKey("9");
 		//solo.goBack();
 		solo.goBack();
@@ -424,11 +424,11 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		catKeyboardClicker.clickOnKey("del");
 		//solo.goBack();
 
-		assertEquals("Text not deleted correctly", "98 + X_ACCELERATION_ + 76", solo.getEditText(1).getText()
+		assertEquals("Text not deleted correctly", "98 + X_ACCELERATION_ + 76 ", solo.getEditText(1).getText()
 				.toString());
 
 		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(0);
-		solo.enterText(1, "8 +cos( 0 + 1 - 2)++ 76");
+		solo.enterText(1, "8 +cos( 0 + 1 - 2)++ 76 ");
 		catKeyboardClicker.clickOnKey("9");
 		solo.goBack();
 		solo.sleep(500);
@@ -436,36 +436,36 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 
-		assertEquals("Text not deleted correctly", "98 + 76", solo.getEditText(1).getText().toString());
+		assertEquals("Text not deleted correctly", "98 + 76 ", solo.getEditText(1).getText().toString());
 		//
 		//				solo.clearEditText(1);
 		//
 		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(0);
-		solo.enterText(1, "8 +cos(+ 0 + 1 - 2) 76");
+		solo.enterText(1, "8 +cos(+ 0 + 1 - 2) 76 ");
 		catKeyboardClicker.clickOnKey("9");
 		solo.goBack();
 		solo.sleep(500);
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 
-		assertEquals("Text not deleted correctly", "98 + 76", solo.getEditText(1).getText().toString());
+		assertEquals("Text not deleted correctly", "98 + 76 ", solo.getEditText(1).getText().toString());
 
 		//				solo.clearEditText(1);
 
 		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(0);
-		solo.enterText(1, "8 +rand( 0 ,+ 0 ) 76");
+		solo.enterText(1, "8 +rand( 0 ,+ 0 ) 76 ");
 		catKeyboardClicker.clickOnKey("9");
 		solo.goBack();
 		solo.sleep(500);
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 
-		assertEquals("Text not deleted correctly", "98 + 76", solo.getEditText(1).getText().toString());
+		assertEquals("Text not deleted correctly", "98 + 76 ", solo.getEditText(1).getText().toString());
 
 		//		solo.clearEditText(1);
 
 		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(0);
-		solo.enterText(1, "8 + rand( 0 +sin(+ 0 ) , 1 ) + 76");
+		solo.enterText(1, "8 + rand( 0 +sin(+ 0 ) , 1 ) + 76 ");
 		catKeyboardClicker.clickOnKey("9");
 		solo.goBack();
 		solo.sleep(500);
@@ -475,7 +475,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 
-		assertEquals("Text not deleted correctly", "98 + rand( 0 , 1 ) + 76", solo.getEditText(1).getText().toString());
+		assertEquals("Text not deleted correctly", "98 + rand( 0 , 1 ) + 76 ", solo.getEditText(1).getText().toString());
 
 		solo.goBack();
 	}
