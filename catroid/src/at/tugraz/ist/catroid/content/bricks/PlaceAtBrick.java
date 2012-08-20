@@ -60,24 +60,20 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 		this.yPosition = yPosition;
 	}
 
-	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
-	@Override
 	public void execute() {
 		sprite.costume.aquireXYWidthHeightLock();
 		sprite.costume.setXYPosition(xPosition, yPosition);
 		sprite.costume.releaseXYWidthHeightLock();
 	}
 
-	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
-	@Override
 	public View getView(Context context, int listPosition, BaseAdapter adapter) {
 		this.listPosition = listPosition;
 		Log.d("currentbrick id set", String.valueOf(listPosition));//DEBUG
@@ -106,7 +102,6 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 		return view;
 	}
 
-	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_place_at, null);
 	}
@@ -116,7 +111,6 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 		return new PlaceAtBrick(getSprite(), xPosition, yPosition);
 	}
 
-	@Override
 	public void onClick(final View view) {
 		final Context context = view.getContext();
 
@@ -138,7 +132,6 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 			dialog.setView(input);
 			dialog.setOnCancelListener((OnCancelListener) context);
 			dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
-				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					try {
 						if (view.getId() == R.id.brick_place_at_x_edit_text) {
@@ -153,7 +146,6 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 				}
 			});
 			dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
-				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.cancel();
 				}

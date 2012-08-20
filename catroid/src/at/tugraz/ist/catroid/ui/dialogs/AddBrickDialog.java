@@ -187,7 +187,6 @@ public class AddBrickDialog extends Dialog {
 
 		ImageButton closeButton = (ImageButton) findViewById(R.id.btn_close_dialog);
 		closeButton.setOnClickListener(new View.OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				abort();
 				dismiss();
@@ -217,7 +216,6 @@ public class AddBrickDialog extends Dialog {
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new ListView.OnItemClickListener() {
 
-			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Brick addedBrick = adapter.getItem(position);
 				ProjectManager projectManager = ProjectManager.getInstance();
