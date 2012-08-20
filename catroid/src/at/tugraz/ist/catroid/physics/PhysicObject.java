@@ -18,6 +18,8 @@
  */
 package at.tugraz.ist.catroid.physics;
 
+import java.util.Vector;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -52,6 +54,7 @@ public class PhysicObject {
 		setType(Type.NONE);
 	}
 
+	// TODO: "Ueberarbeiten, dalli dalli!
 	public void setShape(Shape shape) {
 		if (shape == fixtureDef.shape && !body.getFixtureList().isEmpty()) {
 			return;
@@ -67,7 +70,9 @@ public class PhysicObject {
 			}
 		}
 
-		for (Fixture fixture : body.getFixtureList()) {
+		// TODO find a better way to get rid of ConcurrentModificationException.
+		Vector<Fixture> bodyFixtures = new Vector<Fixture>(body.getFixtureList());
+		for (Fixture fixture : bodyFixtures) {
 			if (fixture != createdFixture) {
 				fixture.setDensity(0.0f);
 				body.destroyFixture(fixture);
