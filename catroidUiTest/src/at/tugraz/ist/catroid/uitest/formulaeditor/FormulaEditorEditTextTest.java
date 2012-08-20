@@ -119,8 +119,6 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		//		float yCoordinate = brickOffset + greenBarOffset + 5;
 		BackgroundColorSpan COLOR_HIGHLIGHT = (BackgroundColorSpan) UiTestUtils.getPrivateField("COLOR_HIGHLIGHT",
 				new FormulaEditorEditText(getActivity()));
-		BackgroundColorSpan COLOR_CURSOR = (BackgroundColorSpan) UiTestUtils.getPrivateField("COLOR_CURSOR",
-				new FormulaEditorEditText(getActivity()));
 		solo.clickOnEditText(0);
 
 		catKeyboardClicker.clickOnKey("del");
@@ -129,8 +127,6 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 			catKeyboardClicker.clickOnKey("1");
 		}
 		assertTrue("Text not found", solo.searchText("11111"));
-		assertEquals("Cursor not found in text, but should be", 6,
-				solo.getEditText(1).getText().getSpanStart(COLOR_CURSOR));
 
 		assertTrue("Selection cursor found in text, but should not be",
 				solo.getEditText(1).getText().getSpanStart(COLOR_HIGHLIGHT) == -1);
@@ -141,8 +137,6 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 				.getSpanStart(COLOR_HIGHLIGHT));
 		assertEquals("Selection cursor not found in text, but should be", 6,
 				solo.getEditText(1).getText().getSpanEnd(COLOR_HIGHLIGHT));
-		assertTrue("Cursor found in text, but should not be",
-				solo.getEditText(1).getText().getSpanStart(COLOR_CURSOR) == -1);
 		catKeyboardClicker.clickOnKey("del");
 
 		assertFalse("Text found but shouldnt", solo.searchText("1"));

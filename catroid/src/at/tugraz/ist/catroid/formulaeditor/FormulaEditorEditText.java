@@ -46,7 +46,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	//private static final BackgroundColorSpan COLOR_EDITING = new BackgroundColorSpan(0xFF00FFFF);
 	private static final BackgroundColorSpan COLOR_ERROR = new BackgroundColorSpan(0xFFF00000);
 	private static final BackgroundColorSpan COLOR_HIGHLIGHT = new BackgroundColorSpan(0xFFFFFF00);
-	private static final BackgroundColorSpan COLOR_CURSOR = new BackgroundColorSpan(0xFFDDDD00);
+	//private static final BackgroundColorSpan COLOR_CURSOR = new BackgroundColorSpan(0xFFDDDD00);
 
 	public static final int NUMBER = 0;
 	public static final int OPERATOR = 1;
@@ -419,7 +419,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		highlightSpan = this.getText();
 		highlightSpan.removeSpan(COLOR_HIGHLIGHT);
 		highlightSpan.removeSpan(COLOR_ERROR);
-		highlightSpan.removeSpan(COLOR_CURSOR);
+		//highlightSpan.removeSpan(COLOR_CURSOR);
 	}
 
 	public void setParseErrorCursor(int firstError) {
