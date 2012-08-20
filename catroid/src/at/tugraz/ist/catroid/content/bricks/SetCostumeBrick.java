@@ -139,4 +139,8 @@ public class SetCostumeBrick implements Brick {
 		return clonedBrick;
 
 	}
+
+	public void updateValuesFromCostume() {
+
+	}
 }

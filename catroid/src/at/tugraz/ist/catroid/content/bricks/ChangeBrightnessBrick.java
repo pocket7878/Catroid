@@ -122,4 +122,8 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 
 		finishedDialog.show();
 	}
+
+	public void updateValuesFromCostume() {
+
+	}
 }

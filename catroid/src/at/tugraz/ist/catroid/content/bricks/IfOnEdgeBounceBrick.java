@@ -126,4 +126,8 @@ public class IfOnEdgeBounceBrick implements Brick {
 		return new IfOnEdgeBounceBrick(sprite);
 	}
 
+	public void updateValuesFromCostume() {
+
+	}
+
 }

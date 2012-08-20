@@ -122,4 +122,8 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 
 		finishedDialog.show();
 	}
+
+	public void updateValuesFromCostume() {
+
+	}
 }

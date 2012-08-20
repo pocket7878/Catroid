@@ -121,4 +121,8 @@ public class GoNStepsBackBrick implements Brick, OnClickListener {
 		finishedDialog.show();
 
 	}
+
+	public void updateValuesFromCostume() {
+
+	}
 }

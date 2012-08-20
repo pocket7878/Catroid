@@ -217,4 +217,8 @@ public class GlideToBrick implements Brick, OnClickListener {
 
 		finishedDialog.show();
 	}
+
+	public void updateValuesFromCostume() {
+
+	}
 }

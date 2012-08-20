@@ -132,4 +132,8 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 		finishedDialog.show();
 
 	}
+
+	public void updateValuesFromCostume() {
+
+	}
 }

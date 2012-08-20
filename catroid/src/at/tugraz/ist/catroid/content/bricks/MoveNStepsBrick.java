@@ -132,4 +132,8 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 
 	}
 
+	public void updateValuesFromCostume() {
+
+	}
+
 }

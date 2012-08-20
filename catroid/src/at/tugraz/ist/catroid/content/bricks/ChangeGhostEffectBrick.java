@@ -121,4 +121,8 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 
 		finishedDialog.show();
 	}
+
+	public void updateValuesFromCostume() {
+
+	}
 }

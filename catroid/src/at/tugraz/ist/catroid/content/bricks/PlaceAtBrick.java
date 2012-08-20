@@ -49,7 +49,6 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 	private int xPosition;
 	private int yPosition;
 	private Sprite sprite;
-	private int listPosition;
 
 	@XStreamOmitField
 	private transient View view;
@@ -75,7 +74,6 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 	}
 
 	public View getView(Context context, int listPosition, BaseAdapter adapter) {
-		this.listPosition = listPosition;
 		Log.d("currentbrick id set", String.valueOf(listPosition));//DEBUG
 
 		view = View.inflate(context, R.layout.brick_place_at, null);

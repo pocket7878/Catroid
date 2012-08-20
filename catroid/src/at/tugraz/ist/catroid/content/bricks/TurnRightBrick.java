@@ -121,4 +121,8 @@ public class TurnRightBrick implements Brick, OnClickListener {
 
 	}
 
+	public void updateValuesFromCostume() {
+
+	}
+
 }

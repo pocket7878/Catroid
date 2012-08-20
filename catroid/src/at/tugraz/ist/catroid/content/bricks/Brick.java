@@ -50,6 +50,9 @@ public interface Brick extends Serializable {
 
 	public int getRequiredResources();
 
-	//public void updateValuesFromCostume();
+	/*
+	 * Updates Brick when changed by PreStage
+	 */
+	public void updateValuesFromCostume();
 
 }

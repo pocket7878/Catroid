@@ -111,4 +111,8 @@ public class NextCostumeBrick implements Brick {
 
 		return view;
 	}
+
+	public void updateValuesFromCostume() {
+
+	}
 }

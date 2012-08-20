@@ -119,4 +119,8 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 		finishedDialog.show();
 
 	}
+
+	public void updateValuesFromCostume() {
+
+	}
 }

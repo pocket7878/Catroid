@@ -123,4 +123,8 @@ public class SetYBrick implements Brick, OnClickListener {
 		finishedDialog.show();
 
 	}
+
+	public void updateValuesFromCostume() {
+
+	}
 }

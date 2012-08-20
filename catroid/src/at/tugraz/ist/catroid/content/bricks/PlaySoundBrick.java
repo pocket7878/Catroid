@@ -118,4 +118,8 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
+
+	public void updateValuesFromCostume() {
+
+	}
 }

@@ -265,4 +265,8 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 
 	}
 
+	public void updateValuesFromCostume() {
+
+	}
+
 }

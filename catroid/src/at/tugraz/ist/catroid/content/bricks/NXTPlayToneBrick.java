@@ -257,4 +257,8 @@ public class NXTPlayToneBrick implements Brick, OnClickListener, OnSeekBarChange
 
 		finishedDialog.show();
 	}
+
+	public void updateValuesFromCostume() {
+
+	}
 }

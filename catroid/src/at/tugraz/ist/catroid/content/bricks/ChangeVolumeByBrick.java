@@ -132,4 +132,8 @@ public class ChangeVolumeByBrick implements Brick, OnClickListener {
 
 		finishedDialog.show();
 	}
+
+	public void updateValuesFromCostume() {
+
+	}
 }
