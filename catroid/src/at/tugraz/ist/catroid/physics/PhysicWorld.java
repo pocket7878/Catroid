@@ -86,15 +86,15 @@ public class PhysicWorld implements Serializable {
 	}
 
 	public void step(float deltaTime) {
-		for (Entry<Sprite, PhysicObject> entry : objects) {
-			System.out.println("LOG|" + entry.getKey().getName() + ": "
-					+ PhysicWorldConverter.vecBox2dToCat(entry.getValue().getPosition()));
-		}
+		//		for (Entry<Sprite, PhysicObject> entry : objects) {
+		//			System.out.println("LOG|" + entry.getKey().getName() + ": "
+		//					+ PhysicWorldConverter.vecBox2dToCat(entry.getValue().getPosition()));
+		//		}
 		world.step(deltaTime, PhysicSettings.World.VELOCITY_ITERATIONS, PhysicSettings.World.POSITION_ITERATIONS);
-		for (Entry<Sprite, PhysicObject> entry : objects) {
-			System.out.println("LOG|" + entry.getKey().getName() + ": "
-					+ PhysicWorldConverter.vecBox2dToCat(entry.getValue().getPosition()));
-		}
+		//		for (Entry<Sprite, PhysicObject> entry : objects) {
+		//			System.out.println("LOG|" + entry.getKey().getName() + ": "
+		//					+ PhysicWorldConverter.vecBox2dToCat(entry.getValue().getPosition()));
+		//		}
 		updateSprites();
 	}
 

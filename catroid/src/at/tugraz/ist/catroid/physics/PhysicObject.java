@@ -38,13 +38,17 @@ public class PhysicObject {
 
 	public final Body body;
 	public final FixtureDef fixtureDef = new FixtureDef();
+	public final MassData massData;
 	public Type type;
 
 	public PhysicObject(Body body) {
 		this.body = body;
-		fixtureDef.density = 1.0f;
+		this.massData = body.getMassData();
+
+		fixtureDef.density = 0.0f;
 		fixtureDef.friction = 0.2f;
 		fixtureDef.restitution = 0.0f;
+
 		setType(Type.NONE);
 	}
 
@@ -58,12 +62,16 @@ public class PhysicObject {
 			fixtureDef.shape = shape;
 			if (type != Type.NONE) {
 				createdFixture = body.createFixture(fixtureDef);
+				createdFixture.setDensity(1.0f);
+				setMass(massData.mass);
 			}
 		}
 
 		for (Fixture fixture : body.getFixtureList()) {
 			if (fixture != createdFixture) {
+				fixture.setDensity(0.0f);
 				body.destroyFixture(fixture);
+				fixture.setDensity(1.0f);
 			}
 		}
 	}
@@ -104,33 +112,28 @@ public class PhysicObject {
 		return body.getPosition();
 	}
 
-	// TODO: Test it!
 	public void setPosition(float x, float y) {
 		body.setTransform(x, y, body.getAngle());
 	}
 
-	// TODO: Test it!
 	public void setXPosition(float x) {
 		body.setTransform(x, body.getPosition().y, body.getAngle());
 	}
 
-	// TODO: Test it!
 	public void setYPosition(float y) {
 		body.setTransform(body.getPosition().x, y, body.getAngle());
 	}
 
 	public void setMass(float mass) {
-		MassData massData = body.getMassData();
 		massData.mass = mass;
 		body.setMassData(massData);
 	}
 
-	public void setDensity(float density) {
+	private void setDensity(float density) {
 		fixtureDef.density = density;
 		for (Fixture fixture : body.getFixtureList()) {
 			fixture.setDensity(density);
 		}
-		body.resetMassData();
 	}
 
 	public void setFriction(float friction) {

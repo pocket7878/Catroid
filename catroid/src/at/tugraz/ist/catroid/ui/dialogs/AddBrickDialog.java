@@ -77,7 +77,6 @@ import at.tugraz.ist.catroid.content.bricks.SetAngularVelocityBrick;
 import at.tugraz.ist.catroid.content.bricks.SetBounceFactorBrick;
 import at.tugraz.ist.catroid.content.bricks.SetBrightnessBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
-import at.tugraz.ist.catroid.content.bricks.SetDensityBrick;
 import at.tugraz.ist.catroid.content.bricks.SetFrictionBrick;
 import at.tugraz.ist.catroid.content.bricks.SetGhostEffectBrick;
 import at.tugraz.ist.catroid.content.bricks.SetGravityBrick;
@@ -191,7 +190,6 @@ public class AddBrickDialog extends Dialog {
 		physicBrickList.add(new SetAngularVelocityBrick(physicWorld, sprite, 15.0f));
 		physicBrickList.add(new SetBounceFactorBrick(physicWorld, sprite, 100.0f));
 		physicBrickList.add(new SetFrictionBrick(physicWorld, sprite, 100.0f));
-		physicBrickList.add(new SetDensityBrick(physicWorld, sprite, 100.0f));
 		brickMap.put(context.getString(R.string.category_physic), physicBrickList);
 
 		return brickMap;

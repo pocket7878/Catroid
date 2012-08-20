@@ -3,7 +3,6 @@ package at.tugraz.ist.catroid.test.physics;
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.physics.PhysicObject;
-import at.tugraz.ist.catroid.physics.PhysicObject.Type;
 import at.tugraz.ist.catroid.physics.PhysicObjectMap;
 import at.tugraz.ist.catroid.physics.PhysicSettings;
 import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
@@ -117,27 +116,6 @@ public class PhysicObjectTest extends AndroidTestCase {
 
 		assertEquals(angle, getBody(physicObject).getAngle());
 		assertEquals(position, getBody(physicObject).getPosition());
-	}
-
-	public void testDensity() {
-		PhysicObject physicObject = createPhysicObject();
-		physicObject.setType(Type.DYNAMIC);
-		PolygonShape shape = new PolygonShape();
-		physicObject.setShape(shape);
-		float[] densities = { 0.123f, -0.765f, 24.32f };
-
-		FixtureTemplate densityTemplate = new FixtureTemplate(physicObject, densities) {
-			@Override
-			protected void setValue(float value) {
-				physicObject.setDensity(value);
-			}
-
-			@Override
-			protected float getValue(Fixture fixture) {
-				return fixture.getDensity();
-			}
-		};
-		densityTemplate.test();
 	}
 
 	public void testFriction() {
