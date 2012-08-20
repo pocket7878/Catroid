@@ -24,6 +24,7 @@
 package at.tugraz.ist.catroid.formulaeditor;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.os.Build;
 import android.text.Editable;
 import android.text.Layout;
@@ -59,7 +60,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	private int selectionStartIndex = 0;
 	private int selectionEndIndex = 0;
 	private int absoluteCursorPosition = 0;
-	//private double extraLineSpacing = 1.15;
+	private double extraLineSpacing = 1.15;
 
 	private boolean editMode = false;
 	private Spannable highlightSpan = null;
@@ -99,7 +100,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		//useCustomTextCursorCursor = true;
 		this.setCursorVisible(false);
 		//} else {
-		useCustomTextCursor = false;
+		useCustomTextCursor = true;
 		//	this.setCursorVisible(true);
 		//}
 	}
@@ -149,47 +150,30 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		//setSelection(selectionStartIndex);
 	}
 
-	//	@Override
-	//	protected void onDraw(Canvas canvas) {
-	//		super.onDraw(canvas);
-	//
-	//		Layout layout = this.getLayout();
-	//		float scrollOffset = this.getScrollY();
-	//		float horizontalOffset = 0;
-	//		int verticalOffset = 0;
-	//		int absoluteVerticalOffset = 0;
-	//		float betweenLineOffset = 0;
-	//
-	//		if (layout != null && getText().length() > 0) {
-	//
-	//			//			if (absoluteCursorPosition > getText().length()) { // fix for landscape switches
-	//			//				absoluteCursorPosition = getText().length() - 1;
-	//			//			}
-	//			float scale = getResources().getDisplayMetrics().densityDpi;
-	//			Log.i("info",
-	//					"test size: " + getTextSize() + " scale: " + scale + "spacing mult: "
-	//							+ layout.getSpacingMultiplier() + " add " + layout.getSpacingAdd());
-	//			lineHeight = this.getTextSize() + 5;
-	//
-	//			horizontalOffset = layout.getPrimaryHorizontal(absoluteCursorPosition);
-	//			absoluteVerticalOffset = layout.getLineForOffset(absoluteCursorPosition);
-	//			verticalOffset = layout.getLineForOffset(absoluteCursorPosition);
-	//			verticalOffset -= (int) (scrollOffset / lineHeight);
-	//			betweenLineOffset = scrollOffset % lineHeight;
-	//		}
-	//
-	//		if (useCustomTextCursor) {
-	//
-	//			float startX = horizontalOffset;
-	//			float endX = horizontalOffset;
-	//			float startY = (float) ((5 + scrollOffset + lineHeight * verticalOffset) - betweenLineOffset + extraLineSpacing
-	//					* absoluteVerticalOffset);
-	//			float endY = (float) ((5 + scrollOffset + lineHeight * (verticalOffset + 1)) - betweenLineOffset + extraLineSpacing
-	//					* absoluteVerticalOffset);
-	//
-	//			canvas.drawLine(startX, startY, endX, endY, getPaint());
-	//		}
-	//	}
+	@Override
+	protected void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
+
+		int pos = absoluteCursorPosition;
+		Layout layout = getLayout();
+		if (layout != null) {
+			lineHeight = getTextSize() + 5;
+			int line = layout.getLineForOffset(pos);
+			int baseline = layout.getLineBaseline(line);
+			int ascent = layout.getLineAscent(line);
+			float x = layout.getPrimaryHorizontal(pos);
+			float y = baseline + ascent;
+			//			Log.i("info", "line y coord: " + y + " x: " + x + "ascent " + ascent + " line " + line + " baseline: "
+			//					+ baseline + " line start: " );
+
+			float startX = x;
+			float endX = x;
+			float startY = y;
+			float endY = y + lineHeight;
+
+			canvas.drawLine(startX, startY, endX, endY, getPaint());
+		}
+	}
 
 	public synchronized void doSelectionAndHighlighting() {
 		//Log.i("info", "do Selection and highlighting, cursor position: " + cursor pos);
@@ -692,27 +676,27 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	public void moveTextCursor() {
 
-		highlightSpan = getText();
-		highlightSpan.removeSpan(COLOR_CURSOR);
-
-		if (highlightSpan.length() == 0 || highlightSpan.getSpanStart(COLOR_HIGHLIGHT) != -1
-				|| highlightSpan.getSpanStart(COLOR_ERROR) != -1) {
-			return;
-		}
-
-		int start = absoluteCursorPosition;
-		int end = absoluteCursorPosition + 1;
-
-		if (absoluteCursorPosition == highlightSpan.length()) {
-			if (!charIsWhitespace(highlightSpan.charAt(absoluteCursorPosition - 1))) {
-				//append(" ");
-			} else {
-				start--;
-				end--;
-			}
-		}
-
-		highlightSpan.setSpan(COLOR_CURSOR, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		//		highlightSpan = getText();
+		//		highlightSpan.removeSpan(COLOR_CURSOR);
+		//
+		//		if (highlightSpan.length() == 0 || highlightSpan.getSpanStart(COLOR_HIGHLIGHT) != -1
+		//				|| highlightSpan.getSpanStart(COLOR_ERROR) != -1) {
+		//			return;
+		//		}
+		//
+		//		int start = absoluteCursorPosition;
+		//		int end = absoluteCursorPosition + 1;
+		//
+		//		if (absoluteCursorPosition == highlightSpan.length()) {
+		//			if (!charIsWhitespace(highlightSpan.charAt(absoluteCursorPosition - 1))) {
+		//				//append(" ");
+		//			} else {
+		//				start--;
+		//				end--;
+		//			}
+		//		}
+		//
+		//		highlightSpan.setSpan(COLOR_CURSOR, start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 	}
 
 	final GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
