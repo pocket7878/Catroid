@@ -64,7 +64,7 @@
     </Row>
     
     <Row>
-        <Key android:codes="1008" android:keyLabel="random" android:keyWidth="20%p"/>
+    	<Key android:codes="1200" android:keyLabel="( )" />
 		<Key android:codes="1009" android:keyLabel="abs" android:keyWidth="20%p"/>
 		<Key android:codes="1010" android:keyLabel="round" android:keyWidth="20%p"/>
 		<Key android:codes="17" android:keyLabel="*"/>
