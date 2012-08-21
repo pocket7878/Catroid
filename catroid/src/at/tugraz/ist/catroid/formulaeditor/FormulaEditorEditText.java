@@ -127,7 +127,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		return true;
 	}
 
-	public synchronized void updateSelectionIndices() {
+	public void updateSelectionIndices() {
 		clearSelectionHighlighting();
 		editMode = false;
 
@@ -160,7 +160,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		}
 	}
 
-	public synchronized void doSelectionAndHighlighting() {
+	public void doSelectionAndHighlighting() {
 		clearSelectionHighlighting();
 		Editable currentInput = this.getText();
 
