@@ -145,15 +145,18 @@ public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
 		catKeyboardClicker.clearEditTextWithCursorBehindLastCharacterOnlyQuickly(FORMULA_EDITOR_EDIT_TEXT_ID);
-		solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, "999 " + newXFormula);
-		catKeyboardClicker.clickOnKey("9");
+		//solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, "999 " + newXFormula);
+		catKeyboardClicker.enterText("999 " + newXFormula);
+		//catKeyboardClicker.clickOnKey("9");
 		solo.goBack();
 		solo.sleep(50);
 		assertTrue("Save failed toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
 
 		//solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		solo.clearEditText(FORMULA_EDITOR_EDIT_TEXT_ID);
-		solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, newXFormula);
+		//solo.clearEditText(FORMULA_EDITOR_EDIT_TEXT_ID);
+		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
+		//solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, newXFormula);
+		catKeyboardClicker.enterText(newYFormula);
 		//catKeyboardClicker.clickOnKey("1");
 		//catKeyboardClicker.clickOnKey("del");
 		solo.goBack();

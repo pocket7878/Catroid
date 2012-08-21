@@ -47,6 +47,8 @@ public class CatKeyboardClicker {
 	private static int buttonWidth;
 	private static float buttonHeight;
 
+	private int totalKeyboardSwitches = 0;
+
 	public CatKeyboardClicker(Solo solo) {
 		this.solo = solo;
 
@@ -71,6 +73,10 @@ public class CatKeyboardClicker {
 		Point keyOnScreen = keyMap.get(key);
 		//Log.i("info", "clickOnKey(" + key + ")" + "x:" + keyOnScreen.x + "y:" + keyOnScreen.y);
 		solo.clickOnScreen(keyOnScreen.x, keyOnScreen.y);
+
+		if (key.equals("keyboardswitch")) {
+			totalKeyboardSwitches++;
+		}
 
 	}
 
@@ -98,6 +104,84 @@ public class CatKeyboardClicker {
 		while (lastEditTextLength > 0) {
 			this.clickOnKey("del");
 			lastEditTextLength--;
+		}
+	}
+
+	//when using this method, ALWAYS use spaces between sensors and functions and make sure the string is valid! 
+	//Be VERY careful when using this for strings that should be detected as invalid by the parser
+	//Doesnt work for more than one function
+	public void enterText(String text) {
+		for (int i = 0; i < text.length(); i++) {
+			char current = text.charAt(i);
+
+			if (charIsWhitespace(current)) {
+
+			} else if (charIsNumber(current) || current == '.') {
+				clickOnKey(current + "");
+			} else if (charIsLowerCaseLetter(current)) {
+				String clickOn = "" + current;
+				while (!charIsWhitespace(current) && !(current == '(')) {
+					i++;
+					current = text.charAt(i);
+					clickOn += current;
+				}
+				clickOnKey(clickOn);
+			} else if (charIsCapitalLetter(current)) {
+				String clickOn = "" + current;
+				while (!charIsWhitespace(current)) {
+					i++;
+					current = text.charAt(i);
+					clickOn += current;
+				}
+				clickOnKey(clickOn);
+			}
+		}
+	}
+
+	public void switchToNumberKeyboard() {
+		//numbers at: 0,3,6,9... switches
+		//functions at: 1,4,7,10... switches
+		//sensors at: 2,5,8,11... switches
+		if (totalKeyboardSwitches % 3 == 0) {
+		} else if (totalKeyboardSwitches % 3 == 1) {
+			clickOnKey("keyboardswitch");
+			clickOnKey("keyboardswitch");
+			totalKeyboardSwitches += 2;
+		} else if (totalKeyboardSwitches % 3 == 2) {
+			clickOnKey("keyboardswitch");
+			totalKeyboardSwitches++;
+		}
+	}
+
+	public void switchToFunctionKeyboard() {
+		//numbers at: 0,3,6,9... switches
+		//functions at: 1,4,7,10... switches
+		//sensors at: 2,5,8,11... switches
+		if (totalKeyboardSwitches % 3 == 0) {
+			clickOnKey("keyboardswitch");
+			totalKeyboardSwitches++;
+		} else if (totalKeyboardSwitches % 3 == 1) {
+
+		} else if (totalKeyboardSwitches % 3 == 2) {
+			clickOnKey("keyboardswitch");
+			clickOnKey("keyboardswitch");
+			totalKeyboardSwitches += 2;
+		}
+	}
+
+	public void switchToSensorKeyboard() {
+		//numbers at: 0,3,6,9... switches
+		//functions at: 1,4,7,10... switches
+		//sensors at: 2,5,8,11... switches
+		if (totalKeyboardSwitches % 3 == 0) {
+			clickOnKey("keyboardswitch");
+			clickOnKey("keyboardswitch");
+			totalKeyboardSwitches += 2;
+		} else if (totalKeyboardSwitches % 3 == 1) {
+			clickOnKey("keyboardswitch");
+			totalKeyboardSwitches++;
+		} else if (totalKeyboardSwitches % 3 == 2) {
+
 		}
 	}
 
@@ -230,5 +314,33 @@ public class CatKeyboardClicker {
 		buttonHeight = displayHeight / divisor;
 		//Log.i("info", "buttonHeight: " + buttonHeight);
 
+	}
+
+	public boolean charIsLowerCaseLetter(char letter) {
+		if (letter >= 97 && letter <= 123) { //ASCII a...z
+			return true;
+		}
+		return false;
+	}
+
+	public boolean charIsCapitalLetter(char letter) {
+		if (letter >= 65 && letter <= 91) { //ASCII A...Z
+			return true;
+		}
+		return false;
+	}
+
+	public boolean charIsNumber(char letter) {
+		if (letter >= 48 && letter <= 58) { //ASCII 0...9
+			return true;
+		}
+		return false;
+	}
+
+	public boolean charIsWhitespace(char letter) {
+		if (letter == 32) { //ASCII 0x00...0x20
+			return true;
+		}
+		return false;
 	}
 }
