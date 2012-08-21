@@ -28,6 +28,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.text.InputType;
+import android.util.FloatMath;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
@@ -39,6 +40,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.stage.StageActivity;
+import at.tugraz.ist.catroid.stage.StageListener.PreStageMode;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class SetSizeToBrick implements Brick, OnClickListener {
@@ -58,7 +60,7 @@ public class SetSizeToBrick implements Brick, OnClickListener {
 	}
 
 	public void execute() {
-		sprite.costume.setSize((float) size / 100);
+		sprite.costume.setSize((float) size / 100F);
 	}
 
 	public Sprite getSprite() {
@@ -96,7 +98,7 @@ public class SetSizeToBrick implements Brick, OnClickListener {
 		final Context context = view.getContext();
 
 		if (view.getId() == R.id.imageButtonEditSize) {
-			ProjectManager.getInstance().setPrestageBrick(this);
+			ProjectManager.getInstance().setPreStageBrick(this, PreStageMode.SCALE);
 			Intent intent = new Intent(context, StageActivity.class);
 			intent.setAction(Intent.ACTION_EDIT);
 			context.startActivity(intent);
@@ -132,6 +134,6 @@ public class SetSizeToBrick implements Brick, OnClickListener {
 	}
 
 	public void updateValuesFromCostume() {
-		this.size = Math.floor(sprite.costume.scaleX * 100);
+		this.size = FloatMath.floor(sprite.costume.scaleX * 100F);
 	}
 }

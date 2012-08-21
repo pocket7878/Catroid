@@ -34,20 +34,15 @@ public class PreStageGestureListener implements GestureListener {
 	private float startOriginalDistance = -1;
 
 	private float startRotation;
-	private float startRotationAngle;
 	private Vector2 startInitialFirstPointer;
 
-	public enum Mode {
-		NONE, TRANSLATION, ROTATION, SCALE
-	};
-
-	private Mode mode = Mode.NONE;
+	private StageListener.PreStageMode mode = StageListener.PreStageMode.OFF;
 
 	public void setActorToChange(Actor actorToChange) {
 		this.actorToChange = actorToChange;
 	}
 
-	public void setMode(Mode mode) {
+	public void setMode(StageListener.PreStageMode mode) {
 		if (mode != null) {
 			this.mode = mode;
 		}
@@ -87,7 +82,7 @@ public class PreStageGestureListener implements GestureListener {
 					actorToChange.getStage().toStageCoordinates(x + deltaX, y + deltaY, vec);
 					actorToChange.rotation = vec.angle();
 					return true;
-				case TRANSLATION:
+				case TRANSLATION_XY:
 					actorToChange.x += deltaX;
 					actorToChange.y -= deltaY;
 					return true;
@@ -129,20 +124,24 @@ public class PreStageGestureListener implements GestureListener {
 		if (actorToChange != null && mode != null) {
 			switch (mode) {
 				case ROTATION:
-					Vector2 vec1 = initialSecondPointer.sub(initialFirstPointer);
-					Vector2 vec2 = secondPointer.sub(firstPointer);
-					float angle = vec1.angle() - vec2.angle();
-
-					//Gdx.app.log("PreStage", initialFirstPointer + " " + initialSecondPointer + " " + firstPointer + " "
-					//		+ secondPointer);
-					if (startInitialFirstPointer == initialFirstPointer) {
-						startRotation = actorToChange.rotation;
-						//startRotationAngle = angle;
-						startInitialFirstPointer = initialFirstPointer;
-					}
-					actorToChange.rotation = startRotation + angle;
-					actorToChange.rotation = actorToChange.rotation % 360F;
-					return true;
+					/*
+					 * Vector2 vec1 = initialSecondPointer.sub(initialFirstPointer);
+					 * Vector2 vec2 = secondPointer.sub(firstPointer);
+					 * float angle = vec1.angle() - vec2.angle();
+					 * 
+					 * //Gdx.app.log("PreStage", initialFirstPointer + " " + initialSecondPointer + " " + firstPointer +
+					 * " "
+					 * // + secondPointer);
+					 * if (startInitialFirstPointer == initialFirstPointer) {
+					 * startRotation = actorToChange.rotation;
+					 * //startRotationAngle = angle;
+					 * startInitialFirstPointer = initialFirstPointer;
+					 * }
+					 * actorToChange.rotation = startRotation + angle;
+					 * actorToChange.rotation = actorToChange.rotation % 360F;
+					 * 
+					 * return true;
+					 */
 			}
 		}
 		return false;

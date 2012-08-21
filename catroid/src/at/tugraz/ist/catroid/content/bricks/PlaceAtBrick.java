@@ -40,6 +40,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.stage.StageActivity;
+import at.tugraz.ist.catroid.stage.StageListener;
 import at.tugraz.ist.catroid.utils.Utils;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -113,7 +114,7 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 		final Context context = view.getContext();
 
 		if (view.getId() == R.id.imageButtonEditValuesXY) {
-			ProjectManager.getInstance().setPrestageBrick(this);
+			ProjectManager.getInstance().setPreStageBrick(this, StageListener.PreStageMode.TRANSLATION_XY);
 			Intent intent = new Intent(context, StageActivity.class);
 			intent.setAction(Intent.ACTION_EDIT);
 			context.startActivity(intent);

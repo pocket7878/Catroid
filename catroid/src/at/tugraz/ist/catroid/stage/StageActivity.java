@@ -67,14 +67,14 @@ public class StageActivity extends AndroidApplication {
 		config.useWakelock = true;
 
 		if (getIntent().getAction() == Intent.ACTION_EDIT) {
-			//Bundle bundle = getIntent().getExtras();
+			Bundle bundle = getIntent().getExtras();
 			//if (bundle.containsKey(PRESTAGE_SPRITE_TO_EDIT) && bundle.containsKey(PRESTAGE_BRICK_TO_EDIT)) {
 			//	String spriteToEditInPrestageMode = bundle.getString(PRESTAGE_SPRITE_TO_EDIT);
 			//	String brickIdToEditInPrestageMode = bundle.getString(PRESTAGE_BRICK_TO_EDIT);
 			//}
 			preStageMode = true;
-			stageListener.setPrestageObject(ProjectManager.getInstance().getCurrentSprite(), ProjectManager
-					.getInstance().getPrestageBrick());
+			stageListener.setPreStageData(ProjectManager.getInstance().getCurrentSprite(), ProjectManager.getInstance()
+					.getPreStageBrick(), ProjectManager.getInstance().getPreStageMode());
 			config.useWakelock = false;
 		}
 
@@ -88,7 +88,7 @@ public class StageActivity extends AndroidApplication {
 			pauseOrContinue();
 			stageDialog.show();
 		} else {
-			Brick brickToChange = ProjectManager.getInstance().getPrestageBrick();
+			Brick brickToChange = ProjectManager.getInstance().getPreStageBrick();
 			if (brickToChange instanceof PlaceAtBrick) {
 				((PlaceAtBrick) brickToChange).updateValuesFromCostume();
 			} else if (brickToChange instanceof RotateToBrick || brickToChange instanceof TurnLeftBrick

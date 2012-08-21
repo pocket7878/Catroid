@@ -36,6 +36,7 @@ import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.stage.StageListener.PreStageMode;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class ProjectManager {
@@ -44,7 +45,8 @@ public class ProjectManager {
 	private Script currentScript;
 	private Sprite currentSprite;
 
-	private Brick prestageBrick;
+	private Brick preStageBrick;
+	private PreStageMode preStageMode = PreStageMode.OFF;
 
 	private static ProjectManager instance;
 
@@ -87,7 +89,8 @@ public class ProjectManager {
 
 			currentSprite = null;
 			currentScript = null;
-			prestageBrick = null;
+			preStageBrick = null;
+			preStageMode = PreStageMode.OFF;
 
 			Utils.saveToPreferences(context, Constants.PREF_PROJECTNAME_KEY, project.getName());
 
@@ -121,7 +124,8 @@ public class ProjectManager {
 			project = StandardProjectHandler.createAndSaveStandardProject(context);
 			currentSprite = null;
 			currentScript = null;
-			prestageBrick = null;
+			preStageBrick = null;
+			preStageMode = PreStageMode.OFF;
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -137,7 +141,8 @@ public class ProjectManager {
 
 		currentSprite = null;
 		currentScript = null;
-		prestageBrick = null;
+		preStageBrick = null;
+		preStageMode = PreStageMode.OFF;
 		saveProject();
 	}
 
@@ -148,7 +153,8 @@ public class ProjectManager {
 	public void setProject(Project project) {
 		currentScript = null;
 		currentSprite = null;
-		prestageBrick = null;
+		preStageBrick = null;
+		preStageMode = PreStageMode.OFF;
 
 		this.project = project;
 	}
@@ -205,19 +211,29 @@ public class ProjectManager {
 		}
 	}
 
-	public Brick getPrestageBrick() {
-		if (currentSprite.containsBrick(prestageBrick)) {
-			return prestageBrick;
+	public Brick getPreStageBrick() {
+		if (currentSprite.containsBrick(preStageBrick)) {
+			return preStageBrick;
 		} else {
 			return null;
 		}
 	}
 
-	public void setPrestageBrick(Brick brick) {
-		if (brick != null && currentSprite.containsBrick(brick)) {
-			prestageBrick = brick;
+	public PreStageMode getPreStageMode() {
+		if (currentSprite.containsBrick(preStageBrick)) {
+			return preStageMode;
 		} else {
-			prestageBrick = null;
+			return PreStageMode.OFF;
+		}
+	}
+
+	public void setPreStageBrick(Brick brick, PreStageMode preStageMode) {
+		if (brick != null && currentSprite.containsBrick(brick)) {
+			preStageBrick = brick;
+			this.preStageMode = preStageMode;
+		} else {
+			preStageBrick = null;
+			preStageMode = PreStageMode.OFF;
 		}
 	}
 

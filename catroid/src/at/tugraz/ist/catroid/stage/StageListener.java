@@ -37,11 +37,6 @@ import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
-import at.tugraz.ist.catroid.content.bricks.RotateToBrick;
-import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
-import at.tugraz.ist.catroid.content.bricks.TurnLeftBrick;
-import at.tugraz.ist.catroid.content.bricks.TurnRightBrick;
 import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -75,9 +70,13 @@ public class StageListener implements ApplicationListener {
 	private boolean reloadProject = false;
 
 	//prestage
-	private boolean prestageMode = false;
+	private PreStageMode preStageMode = PreStageMode.OFF;
 	private Sprite spriteToChange;
 	private Brick brickToChange;
+
+	public enum PreStageMode {
+		OFF, TRANSLATION_XY, TRANSLATION_X, TRANSLATION_Y, ROTATION, SCALE
+	};
 
 	private boolean makeFirstScreenshot = true;
 	private String pathForScreenshot;
@@ -160,8 +159,8 @@ public class StageListener implements ApplicationListener {
 		boolean backgroundSprite = true; //first sprite
 		for (Sprite sprite : sprites) {
 			stage.addActor(sprite.costume);
-			if (prestageMode) {
-				if (!sprite.containsBrick(brickToChange)) {
+			if (preStageMode != PreStageMode.OFF) {
+				if (sprite != spriteToChange) {
 					//sprite.pause();
 					if (!backgroundSprite) {
 						sprite.costume.setAlphaValue(0.1F);
@@ -172,7 +171,7 @@ public class StageListener implements ApplicationListener {
 				}
 			}
 		}
-		if (prestageMode) {
+		if (preStageMode != PreStageMode.OFF) {
 			arrangeSprites();
 			Gdx.input.setInputProcessor(new GestureDetector(createPreStageGestureListener()));
 		} else if (DEBUG) {
@@ -326,7 +325,7 @@ public class StageListener implements ApplicationListener {
 			stage.draw();
 		}
 
-		if (makeFirstScreenshot && !prestageMode && !NativeAppActivity.isRunning()) {
+		if (makeFirstScreenshot && preStageMode != PreStageMode.OFF && !NativeAppActivity.isRunning()) {
 			File file = new File(pathForScreenshot + SCREENSHOT_FILE_NAME);
 			if (!file.exists()) {
 				File noMediaFile = new File(pathForScreenshot + ".nomedia");
@@ -373,7 +372,7 @@ public class StageListener implements ApplicationListener {
 		batch.begin();
 		batch.draw(background, -virtualWidthHalf, -virtualHeightHalf, virtualWidth, virtualHeight);
 
-		if (prestageMode) {
+		if (preStageMode != PreStageMode.OFF) {
 			spriteToChange.costume.act(Gdx.graphics.getDeltaTime());
 			if (!finished) {
 				spriteToChange.costume.draw(batch, Gdx.graphics.getDeltaTime());
@@ -475,29 +474,18 @@ public class StageListener implements ApplicationListener {
 		}
 	}
 
-	public void setPrestageObject(Sprite spriteToChange, Brick brickToChange) {
-		this.prestageMode = true;
+	public void setPreStageData(Sprite spriteToChange, Brick brickToChange, PreStageMode preStageMode) {
+		this.preStageMode = preStageMode;
 		this.axesOn = true;
 		this.spriteToChange = spriteToChange;
 		this.brickToChange = brickToChange;
+		brickToChange.execute();
 	}
 
 	private PreStageGestureListener createPreStageGestureListener() {
 		PreStageGestureListener gestureListener = new PreStageGestureListener();
 		gestureListener.setActorToChange(spriteToChange.costume);
-		if (brickToChange instanceof PlaceAtBrick) {
-			gestureListener.setMode(PreStageGestureListener.Mode.TRANSLATION);
-			//spriteToChange.costume.clearActions();
-			//brickToChange.execute();
-			//spriteToChange.pause();
-			//spriteToChange.costume.act(0);
-			//spriteToChange.costume.draw(batch, 0);
-		} else if (brickToChange instanceof RotateToBrick || brickToChange instanceof TurnLeftBrick
-				|| brickToChange instanceof TurnRightBrick) {
-			gestureListener.setMode(PreStageGestureListener.Mode.ROTATION);
-		} else if (brickToChange instanceof SetSizeToBrick) {
-			gestureListener.setMode(PreStageGestureListener.Mode.SCALE);
-		}
+		gestureListener.setMode(preStageMode);
 		return gestureListener;
 	}
 

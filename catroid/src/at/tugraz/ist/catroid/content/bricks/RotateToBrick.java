@@ -40,6 +40,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.stage.StageActivity;
+import at.tugraz.ist.catroid.stage.StageListener.PreStageMode;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class RotateToBrick implements Brick, OnClickListener {
@@ -98,7 +99,7 @@ public class RotateToBrick implements Brick, OnClickListener {
 		final Context context = view.getContext();
 
 		if (view.getId() == R.id.imageButtonEditRotation) {
-			ProjectManager.getInstance().setPrestageBrick(this);
+			ProjectManager.getInstance().setPreStageBrick(this, PreStageMode.ROTATION);
 			Intent intent = new Intent(context, StageActivity.class);
 			intent.setAction(Intent.ACTION_EDIT);
 			context.startActivity(intent);
