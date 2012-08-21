@@ -316,7 +316,7 @@ public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<
 	public void testOrientationChanges() {
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		catKeyboardClicker.switchToFunctionKeyboard();
+		catKeyboardClicker.switchToNumberKeyboard();
 		catKeyboardClicker.clickOnKey("rand");
 
 		solo.setActivityOrientation(Solo.LANDSCAPE);

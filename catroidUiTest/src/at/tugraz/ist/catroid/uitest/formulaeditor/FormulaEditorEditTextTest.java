@@ -143,7 +143,6 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		assertTrue("Error cursor found in text, but should not be",
 				solo.getEditText(1).getText().getSpanStart(COLOR_HIGHLIGHT) == -1);
 
-		catKeyboardClicker.switchToFunctionKeyboard();
 		catKeyboardClicker.clickOnKey("rand");
 		assertTrue("Text not found", solo.searchText("rand("));
 		//There is no doubleclick in robotium q.q, this is a workaround!
@@ -155,6 +154,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		assertFalse("Text found but shouldnt", solo.searchText("rand("));
 
 		catKeyboardClicker.switchToSensorKeyboard();
+		//catKeyboardClicker.clickOnKey("keyboardswitch");
 		catKeyboardClicker.clickOnKey("y-accel");
 		assertTrue("Text not found", solo.searchText("Y_ACCELERATION_"));
 		//There is no doubleclick in robotium q.q, this is a workaround!
@@ -214,6 +214,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 	@Smoke
 	public void testTextSelectionLogicForNumbers() {
+		FormulaEditorEditText.autoWhitespaceDeletion = false;
 
 		solo.clickOnEditText(0);
 		catKeyboardClicker.clickOnKey("del");
@@ -243,6 +244,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 	@Smoke
 	public void testTextSelectionLogicForFunctions() {
+		FormulaEditorEditText.autoWhitespaceDeletion = false;
 
 		solo.clickOnEditText(0);
 		catKeyboardClicker.clickOnKey("del");
@@ -252,7 +254,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		catKeyboardClicker.switchToSensorKeyboard();
 		catKeyboardClicker.clickOnKey("x-accel");
 		catKeyboardClicker.clickOnKey("del");
-		solo.clickOnScreen(20 * oneCharacterWidth, firstLineYCoordinate);
+		solo.clickOnScreen(23 * oneCharacterWidth, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("del");
 		assertEquals("Text deletion was wrong!", "X_ACCELERATION_ ", solo.getEditText(1).getText().toString());
 
@@ -260,7 +262,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.switchToFunctionKeyboard();
 		catKeyboardClicker.clickOnKey("sin");
-		solo.clickOnScreen(7 * oneCharacterWidth, firstLineYCoordinate);
+		solo.clickOnScreen(14 * oneCharacterWidth, firstLineYCoordinate);
 		catKeyboardClicker.switchToSensorKeyboard();
 		catKeyboardClicker.clickOnKey("x-accel");
 		solo.clickOnScreen(8 * oneCharacterWidth, firstLineYCoordinate);
@@ -285,6 +287,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 	@Smoke
 	public void testTextSelectionLogicForSensors() {
+		FormulaEditorEditText.autoWhitespaceDeletion = false;
 
 		solo.clickOnEditText(0);
 		catKeyboardClicker.clickOnKey("del");
@@ -293,7 +296,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		solo.clickOnScreen(10, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("y-accel");
 		catKeyboardClicker.clickOnKey("del");
-		solo.clickOnScreen(20 * oneCharacterWidth, firstLineYCoordinate);
+		solo.clickOnScreen(25 * oneCharacterWidth, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("del");
 		assertEquals("Text deletion was wrong!", "Y_ACCELERATION_ ", solo.getEditText(1).getText().toString());
 
@@ -328,6 +331,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		catKeyboardClicker.switchToFunctionKeyboard();
 		catKeyboardClicker.clickOnKey("bracket");
 		catKeyboardClicker.clickOnKey("bracket");
+		catKeyboardClicker.switchToNumberKeyboard();
 		catKeyboardClicker.clickOnKey("1");
 		catKeyboardClicker.clickOnKey(".");
 		catKeyboardClicker.clickOnKey("1");

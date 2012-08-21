@@ -51,6 +51,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	public static final int BRACKET_CLOSE = 4;
 	public static final int BRACKET_OPEN = 5;
 	public static final int SENSOR_VALUE = 6;
+	public static boolean autoWhitespaceDeletion = true;
 
 	private int selectionStartIndex = 0;
 	private int selectionEndIndex = 0;
@@ -490,7 +491,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		} else {
 			char currentChar = text.charAt(selectionEndIndex - 1);
 			//remove 1 whitespace char if there is one
-			if (charIsWhitespace(currentChar) && selectionEndIndex >= 2) {
+			if (autoWhitespaceDeletion && charIsWhitespace(currentChar) && selectionEndIndex >= 2) {
 				text.replace(selectionEndIndex - 1, selectionEndIndex, "");
 				selectionEndIndex--;
 				absoluteCursorPosition--;

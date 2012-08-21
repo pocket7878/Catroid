@@ -25,7 +25,6 @@ package at.tugraz.ist.catroid.formulaeditor;
 import java.util.EnumSet;
 
 public enum Sensors {
-	//PLUS("+", 0), MINUS("-", 0), MULT("*", 1), DIVIDE("/", 1), MOD("%", 1), POW("^", 2);
 	X_ACCELERATION_("X_ACCELERATION_"), Y_ACCELERATION_("Y_ACCELERATION_"), Z_ACCELERATION_("Z_ACCELERATION_"), AZIMUTH_ORIENTATION_(
 			"AZIMUTH_ORIENTATION_"), PITCH_ORIENTATION_("PITCH_ORIENTATION_"), ROLL_ORIENTATION_("ROLL_ORIENTATION_");
 	private final String sensorName;
@@ -33,15 +32,6 @@ public enum Sensors {
 	Sensors(String value) {
 		this.sensorName = value;
 	}
-
-	//	public static Functions geFunctionByValue(String value) {
-	//		for (Functions fct : EnumSet.allOf(Functions.class)) {
-	//			if (fct.value.equals(value)) {
-	//				return fct;
-	//			}
-	//		}
-	//		return null;
-	//	}
 
 	public static boolean isStartOfSensorName(String value) {
 		for (Sensors fct : EnumSet.allOf(Sensors.class)) {

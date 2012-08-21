@@ -72,7 +72,7 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 		UiTestUtils.clearAllUtilTestProjects();
 		this.project = null;
 		super.tearDown();
-		Thread.sleep(1000); //This has to be sleep as solo is destroyed. Not sleeping might cause the next test to fail
+		//Thread.sleep(1000); //This has to be sleep as solo is destroyed. Not sleeping might cause the next test to fail
 	}
 
 	@Smoke
@@ -143,8 +143,11 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 		assertEquals("Wrong button clicked", "/", text.getText().toString().substring(0, 1));
 		catKeyboardClicker.clickOnKey("del");
 
-		catKeyboardClicker.clickOnKey("bracket");
-		assertEquals("Wrong button clicked", "( 0 )", text.getText().toString().substring(0, 5));
+		catKeyboardClicker.clickOnKey("rand");
+		assertEquals("Wrong button clicked", "rand( 0 , 1 )",
+				text.getText().toString().substring(0, "rand( 0 , 1 )".length()));
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 
 		solo.goBack();
@@ -203,9 +206,21 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 
-		catKeyboardClicker.clickOnKey("rand");
-		assertEquals("Wrong button clicked", "rand( 0 , 1 )",
-				text.getText().toString().substring(0, "rand( 0 , 1 )".length()));
+		catKeyboardClicker.clickOnKey("bracket");
+		assertEquals("Wrong button clicked", "( 0 )", text.getText().toString().substring(0, 5));
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+
+		catKeyboardClicker.clickOnKey("abs");
+		assertEquals("Wrong button clicked", "abs( 0 )", text.getText().toString().substring(0, "abs( 0 )".length()));
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+
+		catKeyboardClicker.clickOnKey("round");
+		assertEquals("Wrong button clicked", "round( 0 )", text.getText().toString()
+				.substring(0, "round( 0 )".length()));
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");

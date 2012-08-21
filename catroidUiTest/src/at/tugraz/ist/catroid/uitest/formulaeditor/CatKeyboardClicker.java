@@ -206,7 +206,7 @@ public class CatKeyboardClicker {
 		keyString.get(0).add("5");
 		keyString.get(0).add("2");
 
-		keyString.get(0).add("bracket");
+		keyString.get(0).add("rand");
 		keyString.get(0).add("9");
 		keyString.get(0).add("6");
 		keyString.get(0).add("3");
@@ -222,7 +222,7 @@ public class CatKeyboardClicker {
 		keyString.get(0).add("del2");
 
 		keyString.get(1).add("pi");
-		keyString.get(1).add("rand");
+		keyString.get(1).add("bracket");
 		keyString.get(1).add("ln");
 		keyString.get(1).add("sin");
 

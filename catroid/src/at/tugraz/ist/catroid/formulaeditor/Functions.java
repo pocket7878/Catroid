@@ -25,22 +25,12 @@ package at.tugraz.ist.catroid.formulaeditor;
 import java.util.EnumSet;
 
 public enum Functions {
-	//PLUS("+", 0), MINUS("-", 0), MULT("*", 1), DIVIDE("/", 1), MOD("%", 1), POW("^", 2);
-	SIN("sin"), COS("cos"), TAN("tan"), LN("ln"), LOG("log"), SQRT("sqrt"), RAND("rand"), ROUND("round");
+	SIN("sin"), COS("cos"), TAN("tan"), LN("ln"), LOG("log"), SQRT("sqrt"), RAND("rand"), ROUND("round"), ABS("abs");
 	private final String functionName;
 
 	Functions(String value) {
 		this.functionName = value;
 	}
-
-	//	public static Functions geFunctionByValue(String value) {
-	//		for (Functions fct : EnumSet.allOf(Functions.class)) {
-	//			if (fct.value.equals(value)) {
-	//				return fct;
-	//			}
-	//		}
-	//		return null;
-	//	}
 
 	public static boolean isFunction(String value) {
 		for (Functions fct : EnumSet.allOf(Functions.class)) {
