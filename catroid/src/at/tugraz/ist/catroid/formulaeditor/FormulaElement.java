@@ -24,8 +24,6 @@ package at.tugraz.ist.catroid.formulaeditor;
 
 import java.io.Serializable;
 
-import com.badlogic.gdx.Gdx;
-
 public class FormulaElement implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -216,25 +214,7 @@ public class FormulaElement implements Serializable {
 				return (double) java.lang.Math.round(left);
 			}
 		} else if (type == ElementType.SENSOR) {
-			if (value.equals("X_ACCELERATION_")) {
-				//Log.i("info", "Acc-X: " + Gdx.input.getAccelerometerX());
-				return Double.valueOf(Gdx.input.getAccelerometerX());
-			}
-			if (value.equals("Y_ACCELERATION_")) {
-				return Double.valueOf(-Gdx.input.getAccelerometerY());
-			}
-			if (value.equals("Z_ACCELERATION_")) {
-				return Double.valueOf(-Gdx.input.getAccelerometerZ());
-			}
-			if (value.equals("AZIMUTH_ORIENTATION_")) {
-				return Double.valueOf(Gdx.input.getAzimuth());
-			}
-			if (value.equals("PITCH_ORIENTATION_")) {
-				return Double.valueOf(Gdx.input.getPitch());
-			}
-			if (value.equals("ROLL_ORIENTATION_")) {
-				return Double.valueOf(-Gdx.input.getRoll());
-			}
+			return SensorManager.getSensorValue(value);
 		} else if (type == ElementType.CONSTANT) {
 			if (value.equals("pi")) {
 				return java.lang.Math.PI;

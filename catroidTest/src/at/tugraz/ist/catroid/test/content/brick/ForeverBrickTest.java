@@ -39,63 +39,41 @@ public class ForeverBrickTest extends InstrumentationTestCase {
 	private LoopEndBrick loopEndBrick;
 	private LoopBeginBrick foreverBrick;
 
-	@Override
-	protected void setUp() throws Exception {
-		testSprite = new Sprite("testSprite");
-	}
-
-	//	@FlakyTest(tolerance = 3)
-	//	public void testForeverBrick() throws InterruptedException {
-	//		final int twentyIsAlmostForever = 20;
-	//
-	//		testSprite.removeAllScripts();
-	//		testScript = new StartScript(testSprite);
-	//
-	//		foreverBrick = new ForeverBrick(testSprite);
-	//		loopEndBrick = new LoopEndBrick(testSprite, foreverBrick);
-	//		foreverBrick.setLoopEndBrick(loopEndBrick);
-	//
-	//		final int deltaY = 10;
-	//		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
-	//
-	//		testScript.addBrick(foreverBrick);
-	//		testScript.addBrick(new ChangeYByBrick(testSprite, deltaY));
-	//		testScript.addBrick(loopEndBrick);
-	//		testSprite.addScript(testScript);
-	//		Thread.sleep(1000);
-	//		testSprite.startStartScripts();
-	//
-	//		Thread.sleep(expectedDelay * twentyIsAlmostForever);
-	//
-	//		assertEquals("Executed the wrong number of times!", twentyIsAlmostForever * deltaY,
-	//				(int) testSprite.costume.getYPosition());
-	//
-	//		final int timesToRepeat = (Integer) TestUtils.getPrivateField("timesToRepeat", loopEndBrick, false);
-	//		final int forever = (Integer) TestUtils.getPrivateField("FOREVER", loopEndBrick, false);
-	//
-	//		assertEquals("Wrong number of times to repeat", forever, timesToRepeat);
+	//	@Override
+	//	protected void setUp() throws Exception {
+	//		testSprite = new Sprite("testSprite");
 	//	}
+
+	@FlakyTest(tolerance = 3)
+	public void testForeverBrick() throws InterruptedException {
+		final int twentyIsAlmostForever = 20;
+		final int deltaY = 10;
+
+		createProject(deltaY);
+		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
+
+		testSprite.startStartScripts();
+
+		Thread.sleep(expectedDelay * twentyIsAlmostForever);
+
+		assertEquals("Executed the wrong number of times!", twentyIsAlmostForever * deltaY,
+				(int) testSprite.costume.getYPosition());
+
+		final int timesToRepeat = (Integer) TestUtils.getPrivateField("timesToRepeat", loopEndBrick, false);
+		final int forever = (Integer) TestUtils.getPrivateField("FOREVER", loopEndBrick, false);
+
+		assertEquals("Wrong number of times to repeat", forever, timesToRepeat);
+	}
 
 	@FlakyTest(tolerance = 3)
 	public void testLoopDelay() throws InterruptedException {
 		final int deltaY = -10;
 		final int repeatTimes = 15;
 
-		testSprite.removeAllScripts();
-		testScript = new StartScript(testSprite);
-
-		foreverBrick = new ForeverBrick(testSprite);
-		loopEndBrick = new LoopEndBrick(testSprite, foreverBrick);
-		foreverBrick.setLoopEndBrick(loopEndBrick);
-
+		createProject(deltaY);
 		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
-
-		testScript.addBrick(foreverBrick);
-		testScript.addBrick(new ChangeYByBrick(testSprite, deltaY));
-		testScript.addBrick(loopEndBrick);
-
-		testSprite.addScript(testScript);
 		final long startTime = System.currentTimeMillis();
+
 		testSprite.startStartScripts();
 
 		Thread.sleep(expectedDelay * repeatTimes);
@@ -110,5 +88,22 @@ public class ForeverBrickTest extends InstrumentationTestCase {
 		 */
 		final long delayByContract = 20;
 		assertEquals("Loop delay was not 20ms!", delayByContract * repeatTimes, endTime - startTime, 15);
+	}
+
+	public void createProject(int deltaY) {
+		testSprite = new Sprite("testSprite");
+		testSprite.removeAllScripts();
+		testScript = new StartScript(testSprite);
+
+		foreverBrick = new ForeverBrick(testSprite);
+		loopEndBrick = new LoopEndBrick(testSprite, foreverBrick);
+		ChangeYByBrick changeYByBrick = new ChangeYByBrick(testSprite, deltaY);
+		foreverBrick.setLoopEndBrick(loopEndBrick);
+
+		testScript.addBrick(foreverBrick);
+		testScript.addBrick(changeYByBrick);
+		testScript.addBrick(loopEndBrick);
+		testSprite.addScript(testScript);
+
 	}
 }
