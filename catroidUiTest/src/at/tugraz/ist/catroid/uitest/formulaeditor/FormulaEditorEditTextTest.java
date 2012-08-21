@@ -143,7 +143,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		assertTrue("Error cursor found in text, but should not be",
 				solo.getEditText(1).getText().getSpanStart(COLOR_HIGHLIGHT) == -1);
 
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToFunctionKeyboard();
 		catKeyboardClicker.clickOnKey("rand");
 		assertTrue("Text not found", solo.searchText("rand("));
 		//There is no doubleclick in robotium q.q, this is a workaround!
@@ -154,7 +154,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 		assertFalse("Text found but shouldnt", solo.searchText("rand("));
 
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToSensorKeyboard();
 		catKeyboardClicker.clickOnKey("y-accel");
 		assertTrue("Text not found", solo.searchText("Y_ACCELERATION_"));
 		//There is no doubleclick in robotium q.q, this is a workaround!
@@ -218,7 +218,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		solo.clickOnEditText(0);
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("1");
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToFunctionKeyboard();
 		catKeyboardClicker.clickOnKey("sin");
 		solo.clickOnScreen(2.5f * oneCharacterWidth, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("del");
@@ -227,11 +227,9 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		assertEquals("Text deletion was wrong!", "1 ", solo.getEditText(1).getText().toString());
 
 		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(0);
-		catKeyboardClicker.clickOnKey("keyboardswitch");
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToNumberKeyboard();
 		catKeyboardClicker.clickOnKey("1");
-		catKeyboardClicker.clickOnKey("keyboardswitch");
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToSensorKeyboard();
 		catKeyboardClicker.clickOnKey("y-accel");
 		solo.clickOnScreen(2.5f * oneCharacterWidth, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("del");
@@ -248,10 +246,10 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 		solo.clickOnEditText(0);
 		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToFunctionKeyboard();
 		catKeyboardClicker.clickOnKey("sin");
 		solo.clickOnScreen(10, firstLineYCoordinate);
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToSensorKeyboard();
 		catKeyboardClicker.clickOnKey("x-accel");
 		catKeyboardClicker.clickOnKey("del");
 		solo.clickOnScreen(20 * oneCharacterWidth, firstLineYCoordinate);
@@ -260,11 +258,10 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.clickOnKey("keyboardswitch");
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToFunctionKeyboard();
 		catKeyboardClicker.clickOnKey("sin");
 		solo.clickOnScreen(7 * oneCharacterWidth, firstLineYCoordinate);
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToSensorKeyboard();
 		catKeyboardClicker.clickOnKey("x-accel");
 		solo.clickOnScreen(8 * oneCharacterWidth, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("del");
@@ -274,8 +271,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		solo.clickOnScreen(2 * oneCharacterWidth, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("del");
 
-		catKeyboardClicker.clickOnKey("keyboardswitch");
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToFunctionKeyboard();
 		catKeyboardClicker.clickOnKey("sin");
 		solo.clickOnScreen(10, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("cos");
@@ -292,8 +288,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 		solo.clickOnEditText(0);
 		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.clickOnKey("keyboardswitch");
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToSensorKeyboard();
 		catKeyboardClicker.clickOnKey("x-accel");
 		solo.clickOnScreen(10, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("y-accel");
@@ -322,15 +317,15 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		solo.clickOnEditText(0);
 		//catKeyboardClicker.clearEditTextWithDeletes(1);
 		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToFunctionKeyboard();
 		catKeyboardClicker.clickOnKey("sin");
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToSensorKeyboard();
 		catKeyboardClicker.clickOnKey("x-accel");
 		solo.sleep(50);
 		assertEquals("Text not correct", "sin( X_ACCELERATION_ ) ", solo.getEditText(1).getText().toString());
 
 		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(0);
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToFunctionKeyboard();
 		catKeyboardClicker.clickOnKey("bracket");
 		catKeyboardClicker.clickOnKey("bracket");
 		catKeyboardClicker.clickOnKey("1");
@@ -459,11 +454,10 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		//		solo.clearEditText(1);
 
 		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(0);
-		solo.enterText(1, "8 + rand( 0 +sin(+ 0 ) , 1 ) + 76 ");
+		solo.enterText(1, "8 + rand( 0+sin(+ 0 ) , 1 ) + 76 ");
 		catKeyboardClicker.clickOnKey("9");
 		solo.goBack();
 		solo.sleep(500);
-		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");

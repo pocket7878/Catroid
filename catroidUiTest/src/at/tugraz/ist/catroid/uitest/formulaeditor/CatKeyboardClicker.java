@@ -28,7 +28,9 @@ import java.util.Vector;
 
 import android.graphics.Point;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
+import at.tugraz.ist.catroid.formulaeditor.Operators;
 
 import com.jayway.android.robotium.solo.Solo;
 
@@ -108,23 +110,27 @@ public class CatKeyboardClicker {
 	}
 
 	//when using this method, ALWAYS use spaces between sensors and functions and make sure the string is valid! 
-	//Be VERY careful when using this for strings that should be detected as invalid by the parser
-	//Doesnt work for more than one function
+	//Can only enter numbers, operators and 1 function at the end of text (cannot move cursor).
 	public void enterText(String text) {
 		for (int i = 0; i < text.length(); i++) {
 			char current = text.charAt(i);
 
 			if (charIsWhitespace(current)) {
 
+			} else if (Operators.isOperator("" + current)) {
+				clickOnKey(current + "");
 			} else if (charIsNumber(current) || current == '.') {
 				clickOnKey(current + "");
+				switchToNumberKeyboard();
 			} else if (charIsLowerCaseLetter(current)) {
-				String clickOn = "" + current;
+				String clickOn = "";
 				while (!charIsWhitespace(current) && !(current == '(')) {
+					clickOn += current;
 					i++;
 					current = text.charAt(i);
-					clickOn += current;
 				}
+				switchToFunctionKeyboard();
+				Log.i("info", "click on: " + clickOn);
 				clickOnKey(clickOn);
 			} else if (charIsCapitalLetter(current)) {
 				String clickOn = "" + current;
@@ -133,6 +139,7 @@ public class CatKeyboardClicker {
 					current = text.charAt(i);
 					clickOn += current;
 				}
+				switchToSensorKeyboard();
 				clickOnKey(clickOn);
 			}
 		}
@@ -142,14 +149,13 @@ public class CatKeyboardClicker {
 		//numbers at: 0,3,6,9... switches
 		//functions at: 1,4,7,10... switches
 		//sensors at: 2,5,8,11... switches
+		Log.i("info", "current switches: " + totalKeyboardSwitches);
 		if (totalKeyboardSwitches % 3 == 0) {
 		} else if (totalKeyboardSwitches % 3 == 1) {
 			clickOnKey("keyboardswitch");
 			clickOnKey("keyboardswitch");
-			totalKeyboardSwitches += 2;
 		} else if (totalKeyboardSwitches % 3 == 2) {
 			clickOnKey("keyboardswitch");
-			totalKeyboardSwitches++;
 		}
 	}
 
@@ -157,15 +163,14 @@ public class CatKeyboardClicker {
 		//numbers at: 0,3,6,9... switches
 		//functions at: 1,4,7,10... switches
 		//sensors at: 2,5,8,11... switches
+		Log.i("info", "current switches: " + totalKeyboardSwitches);
 		if (totalKeyboardSwitches % 3 == 0) {
 			clickOnKey("keyboardswitch");
-			totalKeyboardSwitches++;
 		} else if (totalKeyboardSwitches % 3 == 1) {
 
 		} else if (totalKeyboardSwitches % 3 == 2) {
 			clickOnKey("keyboardswitch");
 			clickOnKey("keyboardswitch");
-			totalKeyboardSwitches += 2;
 		}
 	}
 
@@ -173,13 +178,12 @@ public class CatKeyboardClicker {
 		//numbers at: 0,3,6,9... switches
 		//functions at: 1,4,7,10... switches
 		//sensors at: 2,5,8,11... switches
+		Log.i("info", "current switches: " + totalKeyboardSwitches);
 		if (totalKeyboardSwitches % 3 == 0) {
 			clickOnKey("keyboardswitch");
 			clickOnKey("keyboardswitch");
-			totalKeyboardSwitches += 2;
 		} else if (totalKeyboardSwitches % 3 == 1) {
 			clickOnKey("keyboardswitch");
-			totalKeyboardSwitches++;
 		} else if (totalKeyboardSwitches % 3 == 2) {
 
 		}

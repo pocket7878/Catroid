@@ -145,28 +145,21 @@ public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
 		catKeyboardClicker.clearEditTextWithCursorBehindLastCharacterOnlyQuickly(FORMULA_EDITOR_EDIT_TEXT_ID);
-		//solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, "999 " + newXFormula);
-		catKeyboardClicker.enterText("999 " + newXFormula);
-		//catKeyboardClicker.clickOnKey("9");
-		solo.goBack();
+
 		solo.sleep(50);
+		catKeyboardClicker.enterText("999++" + newXFormula);
+		solo.goBack();
 		assertTrue("Save failed toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
 
-		//solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		//solo.clearEditText(FORMULA_EDITOR_EDIT_TEXT_ID);
 		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
-		//solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, newXFormula);
-		catKeyboardClicker.enterText(newYFormula);
-		//catKeyboardClicker.clickOnKey("1");
-		//catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.enterText(newXFormula);
 		solo.goBack();
 		solo.sleep(200);
 		assertTrue("Changes saved toast not found",
 				solo.searchText(solo.getString(R.string.formula_editor_changes_saved)));
 
 		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
-		catKeyboardClicker.clickOnKey("1");
-		solo.clearEditText(FORMULA_EDITOR_EDIT_TEXT_ID);
+		catKeyboardClicker.clickOnKey("del");
 		solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, newYFormula);
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
@@ -205,7 +198,7 @@ public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<
 		catKeyboardClicker.clickOnKey("-");
 		catKeyboardClicker.clickOnKey("2");
 		catKeyboardClicker.clickOnKey("*");
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToFunctionKeyboard();
 		catKeyboardClicker.clickOnKey("cos");
 		catKeyboardClicker.clickOnKey("sin");
 		catKeyboardClicker.clickOnKey("tan");
@@ -287,7 +280,6 @@ public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<
 	public void testUndoLimit() {
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		//catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(FORMULA_EDITOR_EDIT_TEXT_ID);
 		int maxHistoryElements = (Integer) UiTestUtils.getPrivateField("MAXIMUM_HISTORY_LENGTH",
 				new FormulaEditorHistory(null, 0, 0, 0));
 		catKeyboardClicker.clickOnKey("del");
@@ -324,7 +316,7 @@ public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<
 	public void testOrientationChanges() {
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToFunctionKeyboard();
 		catKeyboardClicker.clickOnKey("rand");
 
 		solo.setActivityOrientation(Solo.LANDSCAPE);
@@ -341,7 +333,7 @@ public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<
 		solo.setActivityOrientation(Solo.PORTRAIT);
 		solo.sleep(500);
 
-		catKeyboardClicker.clickOnKey("keyboardswitch");
+		catKeyboardClicker.switchToFunctionKeyboard();
 		catKeyboardClicker.clickOnKey("sin");
 		catKeyboardClicker.clickOnKey("cos");
 
