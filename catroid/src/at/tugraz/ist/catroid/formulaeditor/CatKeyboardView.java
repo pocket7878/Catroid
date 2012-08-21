@@ -44,7 +44,6 @@ import android.content.Context;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import at.tugraz.ist.catroid.R;
 
@@ -76,22 +75,16 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 			this.symbolsSensors = new CatKeyboard(this.getContext(), R.xml.symbols_de_sensors);
 
 			//Log.i("info", "FormulaEditorDialog.onCreate() - DisplayLanguage is DE");
-			Log.i("info", "CatKeyboardView.onCreate() - DisplayLanguage is DE");
 
 		} else {//if (Locale.getDefault().getDisplayLanguage().contentEquals(Locale.ENGLISH.getDisplayLanguage())) {
 			this.symbolsNumbers = new CatKeyboard(this.getContext(), R.xml.symbols_eng_numbers);
 			//			this.symbols_shifted = new CatKeyboard(this.getContext(), R.xml.symbols_eng_shift);
 			this.symbolsFunctions = new CatKeyboard(this.getContext(), R.xml.symbols_eng_functions);
 			this.symbolsSensors = new CatKeyboard(this.getContext(), R.xml.symbols_eng_sensors);
-			//Log.i("info", "FormulaEditorDialog.onCreate() - DisplayLanguage is ENG");
-			Log.i("info", "CatKeyboardView.onCreate() - DisplayLanguage is ENG");
 
 		}
-		//Log.i("info", "CatKeyBoardView() - DisplayLanguage:" + Locale.getDefault().getDisplayLanguage());
 
 		this.setKeyboard(symbolsNumbers);
-
-		//		Log.i("info", "CatKeyboardView() layoutparams width: " + this.getLayoutParams().width);
 
 		//		LayoutParams relative = new LayoutParams(source);
 		//		this.symbols.setShifted(false);
@@ -117,7 +110,6 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 
 	//	public void setCurrentBrick(Brick currentBrick) {
 	//		this.currentBrick = currentBrick;
-	//		Log.i("info", "currentBrick:" + this.currentBrick);
 	//
 	//		if (this.currentBrick.toString().startsWith("at.tugraz.ist.catroid.content.bricks.NXTMotorActionBri")
 	//				|| this.currentBrick.toString().startsWith("at.tugraz.catroid.content.bricks.NXTPlayToneBri")) {
@@ -136,7 +128,6 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 		//				getOnKeyboardActionListener().onKey(KEYCODE_OPTIONS, null);
 		//				return true;
 		//			} else {
-		//Log.i("info", "CatKeyboard.onLongPress() called");
 		return super.onLongPress(key);
 
 	}
@@ -148,7 +139,6 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 	 */
 	@Override
 	public void onKey(int primaryCode, int[] keyCodes) {
-		//Log.i("info", "CatKeyboarView.onKey(), primaryCode:" + String.valueOf(primaryCode));
 
 		CatKeyEvent cKE = null;
 
@@ -355,31 +345,21 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 	private void handleKeyboardChange() {
 
 		if (this.getKeyboard() == this.symbolsNumbers) {
-			Log.i("info", "Keyboard change from Numbers -> Fuctions");
 			this.setKeyboard(this.symbolsFunctions);
-			Log.i("info", "CatKeyboardView() layoutparams width: " + this.getLayoutParams().width);
-			Log.i("info", "CatKeyboardView() layoutparams height: " + this.getLayoutParams().height);
 			return;
 		}
 		if (this.getKeyboard() == this.symbolsFunctions) {
-			Log.i("info", "Keyboard change from Functions -> Sensors");
 			this.setKeyboard(this.symbolsSensors);
-			Log.i("info", "CatKeyboardView() layoutparams width: " + this.getLayoutParams().width);
-			Log.i("info", "CatKeyboardView() layoutparams height: " + this.getLayoutParams().height);
 			return;
 		}
 		if (this.getKeyboard() == this.symbolsSensors) {
-			Log.i("info", "Keyboard change from Sensors -> Numbers");
 			this.setKeyboard(this.symbolsNumbers);
-			Log.i("info", "CatKeyboardView() layoutparams width: " + this.getLayoutParams().width + " ");
-			Log.i("info", "CatKeyboardView() layoutparams height: " + this.getLayoutParams().height);
 			return;
 		}
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		//Log.i("info", "CatKeyboarView.onKeyDown(), keyCode:" + String.valueOf(keyCode));
 		switch (keyCode) {
 			default:
 				return super.onKeyDown(keyCode, event);

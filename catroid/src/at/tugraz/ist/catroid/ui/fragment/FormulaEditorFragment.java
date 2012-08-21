@@ -28,7 +28,6 @@ import android.content.DialogInterface.OnKeyListener;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -114,7 +113,6 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 	}
 
 	private void onUserDismiss() { //dont override onDismiss, this must not be called on orientation change
-		Log.i("info", "User dismiss");
 		formulaEditorEditText.endEdit();
 		currentFormula = null;
 		currentBrick = null;
@@ -168,7 +166,6 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 	public void setInputFormula(Formula newFormula, int mode) {
 
 		int orientation = getResources().getConfiguration().orientation;
-		Log.i("info", "set input: " + mode + "old:" + currentFormula.toString() + " new:" + newFormula.toString());
 
 		switch (mode) {
 			case SET_FORMULA_ON_CREATE_VIEW:
