@@ -48,7 +48,6 @@ public class ProjectManager {
 
 	private FileChecksumContainer fileChecksumContainer;
 	private MessageContainer messageContainer;
-	private boolean asyncLoadingFinished = true;
 
 	private ProjectManager() {
 		fileChecksumContainer = new FileChecksumContainer();
@@ -300,10 +299,6 @@ public class ProjectManager {
 		new LoadProjectAsnycTask(projectName, context, errorMessage).execute(new Void[1]);
 	}
 
-	public boolean asnycLoadingFinished() {
-		return asyncLoadingFinished;
-	}
-
 	private class LoadProjectAsnycTask extends AsyncTask<Void, Void, Boolean> {
 
 		private String projectName;
@@ -322,7 +317,6 @@ public class ProjectManager {
 			super.onPreExecute();
 			dialog = ProgressDialog.show(context, "", "Loading...", true);
 			dialog.show();
-			asyncLoadingFinished = false;
 		}
 
 		@Override
@@ -333,7 +327,6 @@ public class ProjectManager {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
-			asyncLoadingFinished = true;
 			dialog.dismiss();
 
 		}
