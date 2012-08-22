@@ -9,10 +9,9 @@
 		
 	<path id="classpath">
 	    <pathelement location="${lib.dir}/antlr-3.4-complete.jar" />
-        <pathelement location="${bin.dir}"/>
 	</path>
 	
-    <target name="compile-calc">
+    <target name="compile-calc" description="compiles the ANTLR-Grammar File to CalcGrammarLexer.java and CalcGrammarParser.java">
        <java classname="org.antlr.Tool">
 			<arg value="-fo" />
 			<arg value="${src.dir}/${package}" />
@@ -21,7 +20,7 @@
 	   </java>
     </target>
 		
-	<target name="clean" description="deletes the automatically created tokens, parser and lexer and the bin and out folder">
+	<target name="clean" description="deletes the automatically created tokens, parser and lexer">
 		<delete file="${lexer.file}" />
 		<delete file="${parser.file}" />
 		<delete file="${tokens.file}" />
