@@ -26,28 +26,37 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 public class SensorManager {
-	public static Input sensors = Gdx.input;
+	private static Input sensors = null;
+
+	public static void setSensorSourceForNextCall(Input source) {
+		sensors = source;
+	}
 
 	public static Double getSensorValue(String sensorName) {
+		if (sensors == null) {
+			sensors = Gdx.input;
+		}
+		Double sensorValue = 0.0;
 		if (sensorName.equals("X_ACCELERATION_")) {
-			return Double.valueOf(sensors.getAccelerometerX());
+			sensorValue = Double.valueOf(sensors.getAccelerometerX());
 		}
 		if (sensorName.equals("Y_ACCELERATION_")) {
-			return Double.valueOf(-sensors.getAccelerometerY());
+			sensorValue = Double.valueOf(-sensors.getAccelerometerY());
 		}
 		if (sensorName.equals("Z_ACCELERATION_")) {
-			return Double.valueOf(-sensors.getAccelerometerZ());
+			sensorValue = Double.valueOf(-sensors.getAccelerometerZ());
 		}
 		if (sensorName.equals("AZIMUTH_ORIENTATION_")) {
-			return Double.valueOf(sensors.getAzimuth());
+			sensorValue = Double.valueOf(sensors.getAzimuth());
 		}
 		if (sensorName.equals("PITCH_ORIENTATION_")) {
-			return Double.valueOf(sensors.getPitch());
+			sensorValue = Double.valueOf(sensors.getPitch());
 		}
 		if (sensorName.equals("ROLL_ORIENTATION_")) {
-			return Double.valueOf(-sensors.getRoll());
+			sensorValue = Double.valueOf(-sensors.getRoll());
 		}
-		return 0.0;
+		sensors = null;
+		return sensorValue;
 	}
 
 }
