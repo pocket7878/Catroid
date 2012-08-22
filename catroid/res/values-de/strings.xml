@@ -286,16 +286,12 @@
     <string name="add_costume_from_gallery">von Galerie</string>
     <string name="add_costume_from_camera">von Kamera</string>
     <!-- Formula Editor Strings -->
-    <string name="dialog_formula_editor_title">Formel Editor</string>
-    <string name="formula_editor_button_save">Speichern</string>
-    <string name="formula_editor_button_return">Zurück</string>
+    <string name="formula_editor_title">Formel Editor</string>
     <string name="formula_editor_button_undo">Rückgängig</string>
     <string name="formula_editor_button_redo">Wiederholen</string>
-    <string name="formula_editor_save_first">Änderungen zuerst speichern!</string>
     <string name="formula_editor_changes_saved">Änderungen gespeichert!</string>
     <string name="formula_editor_changes_discarded">Änderungen verworfen!</string>
     <string name="formula_editor_parse_fail">Fehler in der Eingabe! Zum Verwerfen erneut klicken.</string>
     <string name="formula_nothing_selected">Bitte Wert eingeben!</string>
-    <string name="formula_editor_confirm_discard">Änderungen verwerfen, zum Bestätigen erneut klicken.</string>
     <string name="formula_editor_parse_fail_formula_too_long">Formel zu lang! Zum Verwerfen erneut klicken.</string>
 </resources>

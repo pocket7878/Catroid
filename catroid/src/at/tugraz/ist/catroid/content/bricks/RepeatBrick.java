@@ -97,7 +97,7 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorFragment.showDialog(view, this, timesToRepeat);
+		FormulaEditorFragment.showFragment(view, this, timesToRepeat);
 	}
 
 }

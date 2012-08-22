@@ -105,6 +105,6 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorFragment.showDialog(view, this, changeGhostEffect);
+		FormulaEditorFragment.showFragment(view, this, changeGhostEffect);
 	}
 }

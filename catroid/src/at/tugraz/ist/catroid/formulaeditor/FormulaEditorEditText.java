@@ -88,7 +88,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		this.setLongClickable(false);
 		this.setSelectAllOnFocus(false);
 		this.catKeyboardView = ckv;
-
 		this.setCursorVisible(false);
 	}
 
@@ -139,24 +138,19 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		int pos = absoluteCursorPosition;
 		Layout layout = getLayout();
 		if (layout != null) {
 			lineHeight = getTextSize() + 5;
-			int line = layout.getLineForOffset(pos);
+
+			int line = layout.getLineForOffset(absoluteCursorPosition);
 			int baseline = layout.getLineBaseline(line);
 			int ascent = layout.getLineAscent(line);
-			float x = layout.getPrimaryHorizontal(pos);
-			float y = baseline + ascent;
-			//			Log.i("info", "line y coord: " + y + " x: " + x + "ascent " + ascent + " line " + line + " baseline: "
-			//					+ baseline + " line start: " );
 
-			float startX = x;
-			float endX = x;
-			float startY = y;
-			float endY = y + lineHeight;
+			float xCoordinate = layout.getPrimaryHorizontal(absoluteCursorPosition);
+			float startYCoordinate = baseline + ascent;
+			float endYCoordinate = baseline + ascent + lineHeight;
 
-			canvas.drawLine(startX, startY, endX, endY, getPaint());
+			canvas.drawLine(xCoordinate, startYCoordinate, xCoordinate, endYCoordinate, getPaint());
 		}
 	}
 
@@ -701,7 +695,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 				}
 
 				absoluteCursorPosition = tempCursorPosition;
-
 				postInvalidate();
 
 				updateSelectionIndices();

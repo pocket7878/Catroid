@@ -193,15 +193,15 @@ public class GlideToBrick implements Brick, OnClickListener {
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.brick_glide_to_x_edit_text:
-				FormulaEditorFragment.showDialog(view, this, xDestination);
+				FormulaEditorFragment.showFragment(view, this, xDestination);
 				break;
 
 			case R.id.brick_glide_to_y_edit_text:
-				FormulaEditorFragment.showDialog(view, this, yDestination);
+				FormulaEditorFragment.showFragment(view, this, yDestination);
 				break;
 
 			case R.id.brick_glide_to_duration_edit_text:
-				FormulaEditorFragment.showDialog(view, this, durationInSeconds);
+				FormulaEditorFragment.showFragment(view, this, durationInSeconds);
 				break;
 		}
 
