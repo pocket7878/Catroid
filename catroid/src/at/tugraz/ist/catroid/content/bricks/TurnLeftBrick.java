@@ -96,6 +96,6 @@ public class TurnLeftBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorFragment.showDialog(view, this, degrees);
+		FormulaEditorFragment.showFragment(view, this, degrees);
 	}
 }

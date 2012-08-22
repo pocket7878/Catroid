@@ -108,16 +108,8 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 		assertEquals("Text not updated within FormulaEditor", yPosition,
 				Integer.parseInt(solo.getEditText(2).getText().toString().substring(0, 3)));
 
-		solo.clickOnButton(solo.getString(R.string.formula_editor_button_return));
+		solo.goBack();
 		solo.sleep(200);
-
-		//		assertEquals("Wrong text in field", newValue, formula.interpret());
-		//		assertEquals("Text not updated in the brick list", newValue,
-		//				Double.parseDouble(solo.getEditText(0).getText().toString()));
-
-		//		UiTestUtils.clickEnterClose(solo, 0, String.valueOf(duration));
-		//		UiTestUtils.clickEnterClose(solo, 1, String.valueOf(xPosition));
-		//		UiTestUtils.clickEnterClose(solo, 2, String.valueOf(yPosition));
 
 		ProjectManager manager = ProjectManager.getInstance();
 		List<Brick> brickList = manager.getCurrentScript().getBrickList();
@@ -128,11 +120,11 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 
 		assertEquals("Wrong duration input in Glide to brick", Math.round(duration * 1000), Math.round(temp * 1000));
 		formula = (Formula) UiTestUtils.getPrivateField("xDestination", glideToBrick);
-		float temp2 = formula.interpretFloat();
+		int temp2 = formula.interpretInteger();
 		assertEquals("Wrong x input in Glide to brick", xPosition, temp2);
 
 		formula = (Formula) UiTestUtils.getPrivateField("yDestination", glideToBrick);
-		temp2 = formula.interpretFloat();
+		temp2 = formula.interpretInteger();
 		assertEquals("Wrong y input in Glide to brick", yPosition, temp2);
 	}
 

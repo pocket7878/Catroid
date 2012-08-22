@@ -83,7 +83,7 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 		super.onSaveInstanceState(saveInstanceState);
 	}
 
-	public static void showDialog(View view, Brick brick, Formula formula) {
+	public static void showFragment(View view, Brick brick, Formula formula) {
 
 		SherlockFragmentActivity activity = null;
 		activity = (SherlockFragmentActivity) view.getContext();
@@ -98,9 +98,13 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 			FormulaEditorFragment.currentFormula = formula;
 			formulaEditorDialog = new FormulaEditorFragment();
 			formulaEditorDialog.startFormulaEditor(activity);
+			//			String title = activity.getResources().getString(R.string.formula_editor_title) + " "
+			//					+ ProjectManager.getInstance().getCurrentProject().getName();
+			//			activity.getSupportActionBar().setTitle(title);
 		} else {
 			formulaEditorDialog.setInputFormula(formula, SET_FORMULA_ON_SWITCH_EDIT_TEXT);
 		}
+
 	}
 
 	public void startFormulaEditor(SherlockFragmentActivity activity) {

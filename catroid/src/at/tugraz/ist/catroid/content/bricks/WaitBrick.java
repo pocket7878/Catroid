@@ -112,6 +112,6 @@ public class WaitBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorFragment.showDialog(view, this, timeToWaitInSeconds);
+		FormulaEditorFragment.showFragment(view, this, timeToWaitInSeconds);
 	}
 }

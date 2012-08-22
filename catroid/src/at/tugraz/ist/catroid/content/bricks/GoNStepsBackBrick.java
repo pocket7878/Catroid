@@ -103,7 +103,7 @@ public class GoNStepsBackBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorFragment.showDialog(view, this, steps);
+		FormulaEditorFragment.showFragment(view, this, steps);
 	}
 
 }

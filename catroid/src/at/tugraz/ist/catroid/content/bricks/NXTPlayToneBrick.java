@@ -132,10 +132,10 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.nxt_tone_freq_edit_text:
-				FormulaEditorFragment.showDialog(view, this, frequency);
+				FormulaEditorFragment.showFragment(view, this, frequency);
 				break;
 			case R.id.nxt_tone_duration_edit_text:
-				FormulaEditorFragment.showDialog(view, this, durationInSeconds);
+				FormulaEditorFragment.showFragment(view, this, durationInSeconds);
 				break;
 		}
 

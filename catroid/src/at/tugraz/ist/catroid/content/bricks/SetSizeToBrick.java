@@ -93,6 +93,6 @@ public class SetSizeToBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorFragment.showDialog(view, this, size);
+		FormulaEditorFragment.showFragment(view, this, size);
 	}
 }

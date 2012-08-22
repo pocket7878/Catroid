@@ -108,7 +108,7 @@ public class ChangeVolumeByBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorFragment.showDialog(view, this, volume);
+		FormulaEditorFragment.showFragment(view, this, volume);
 	}
 
 }

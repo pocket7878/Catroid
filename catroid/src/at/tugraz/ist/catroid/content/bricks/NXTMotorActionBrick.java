@@ -160,7 +160,7 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorFragment.showDialog(view, this, speed);
+		FormulaEditorFragment.showFragment(view, this, speed);
 	}
 
 }
