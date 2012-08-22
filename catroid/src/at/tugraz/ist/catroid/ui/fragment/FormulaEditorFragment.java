@@ -35,6 +35,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.formulaeditor.CalcGrammarParser;
@@ -104,7 +105,6 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 		} else {
 			formulaEditorDialog.setInputFormula(formula, SET_FORMULA_ON_SWITCH_EDIT_TEXT);
 		}
-
 	}
 
 	public void startFormulaEditor(SherlockFragmentActivity activity) {
@@ -114,6 +114,7 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 		//FormulaEditorFragment formulaEditorDialog = new FormulaEditorFragment();
 		fragTransaction.add(R.id.fragment_formula_editor, this, FORMULA_EDITOR_FRAGMENT_TAG);
 		fragTransaction.commit();
+
 	}
 
 	private void onUserDismiss() { //dont override onDismiss, this must not be called on orientation change
@@ -128,6 +129,10 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 		FragmentTransaction fragTransaction = fragmentManager.beginTransaction();
 		fragTransaction.remove(fragmentManager.findFragmentByTag(FORMULA_EDITOR_FRAGMENT_TAG));
 		fragTransaction.commit();
+		activity.getSupportActionBar().setTitle(
+				getResources().getString(R.string.sprite_name) + " "
+						+ ProjectManager.getInstance().getCurrentSprite().getName());
+
 	}
 
 	@Override
@@ -155,6 +160,9 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 		}
 
 		setInputFormula(currentFormula, SET_FORMULA_ON_CREATE_VIEW);
+
+		((SherlockFragmentActivity) context).getSupportActionBar().setTitle(
+				((SherlockFragmentActivity) context).getResources().getString(R.string.formula_editor_title));
 		return dialogView;
 	}
 

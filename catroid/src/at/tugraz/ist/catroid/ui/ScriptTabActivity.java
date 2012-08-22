@@ -252,15 +252,4 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 		return getTabFragment(tabHost.getCurrentTab());
 	}
 
-	//	@Override
-	//	public boolean onKeyDown(int keyCode, KeyEvent event) {
-	//		FormulaEditorFragment formulaEditor = (FormulaEditorFragment) getSupportFragmentManager().findFragmentByTag(
-	//				FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
-	//
-	//		if (formulaEditor != null) {
-	//			return formulaEditor.onKey(null, keyCode, event);
-	//		}
-	//		return super.onKeyDown(keyCode, event);
-	//	}
-
 }
