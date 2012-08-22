@@ -28,7 +28,7 @@ import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 
 public class Formula implements Serializable {
@@ -148,7 +148,7 @@ public class Formula implements Serializable {
 
 	public void refreshTextField(View view) {
 		if (formulaTextFieldId != null && root != null && view != null) {
-			EditText formulaTextField = (EditText) view.findViewById(formulaTextFieldId);
+			TextView formulaTextField = (TextView) view.findViewById(formulaTextFieldId);
 			if (formulaTextField == null) {
 				return;
 			}
@@ -164,7 +164,7 @@ public class Formula implements Serializable {
 
 	public void refreshTextField(View view, String formulaString) {
 		if (formulaTextFieldId != null && root != null && view != null) {
-			EditText formulaTextField = (EditText) view.findViewById(formulaTextFieldId);
+			TextView formulaTextField = (TextView) view.findViewById(formulaTextFieldId);
 			if (formulaTextField == null) {
 				return;
 			}
@@ -183,7 +183,7 @@ public class Formula implements Serializable {
 			return;
 		}
 
-		EditText formulaTextField = (EditText) brickView.findViewById(formulaTextFieldId);
+		TextView formulaTextField = (TextView) brickView.findViewById(formulaTextFieldId);
 		if (originalEditTextDrawable == null) {
 			originalEditTextDrawable = formulaTextField.getBackground();
 		}
@@ -203,7 +203,7 @@ public class Formula implements Serializable {
 			highlightBackground = brickView.getResources().getDrawable(R.drawable.textfield_pressed);
 		}
 
-		EditText formulaTextField = (EditText) brickView.findViewById(formulaTextFieldId);
+		TextView formulaTextField = (TextView) brickView.findViewById(formulaTextFieldId);
 
 		if (originalEditTextDrawable == null) {
 			originalEditTextDrawable = formulaTextField.getBackground();

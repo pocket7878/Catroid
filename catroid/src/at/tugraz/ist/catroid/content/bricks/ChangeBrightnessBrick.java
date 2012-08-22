@@ -26,7 +26,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -83,14 +82,10 @@ public class ChangeBrightnessBrick implements Brick, OnClickListener {
 		view = View.inflate(context, R.layout.brick_change_brightness, null);
 
 		TextView textX = (TextView) view.findViewById(R.id.brick_change_brightness_text_view);
-		EditText editX = (EditText) view.findViewById(R.id.brick_change_brightness_edit_text);
-		changeBrightness.setTextFieldId(R.id.brick_change_brightness_edit_text);
+		changeBrightness.setTextFieldId(R.id.brick_change_brightness_text_view);
 		changeBrightness.refreshTextField(view);
 
-		textX.setVisibility(View.GONE);
-		editX.setVisibility(View.VISIBLE);
-
-		editX.setOnClickListener(this);
+		textX.setOnClickListener(this);
 
 		return view;
 	}
