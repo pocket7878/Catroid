@@ -25,7 +25,9 @@ package at.tugraz.ist.catroid;
 import java.io.File;
 import java.io.IOException;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.FileChecksumContainer;
@@ -46,6 +48,7 @@ public class ProjectManager {
 
 	private FileChecksumContainer fileChecksumContainer;
 	private MessageContainer messageContainer;
+	private boolean asyncLoadingFinished = true;
 
 	private ProjectManager() {
 		fileChecksumContainer = new FileChecksumContainer();
@@ -291,5 +294,49 @@ public class ProjectManager {
 
 	public MessageContainer getMessageContainer() {
 		return this.messageContainer;
+	}
+
+	public void loadProjectAsync(String projectName, Context context, boolean errorMessage) {
+		new LoadProjectAsnycTask(projectName, context, errorMessage).execute(new Void[1]);
+	}
+
+	public boolean asnycLoadingFinished() {
+		return asyncLoadingFinished;
+	}
+
+	private class LoadProjectAsnycTask extends AsyncTask<Void, Void, Boolean> {
+
+		private String projectName;
+		private Context context;
+		private boolean errorMessage;
+		private ProgressDialog dialog;
+
+		public LoadProjectAsnycTask(String projectName, Context context, boolean errorMessage) {
+			this.projectName = projectName;
+			this.context = context;
+			this.errorMessage = errorMessage;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			dialog = ProgressDialog.show(context, "", "Loading...", true);
+			dialog.show();
+			asyncLoadingFinished = false;
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			return loadProject(this.projectName, this.context, this.errorMessage);
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			asyncLoadingFinished = true;
+			dialog.dismiss();
+
+		}
+
 	}
 }

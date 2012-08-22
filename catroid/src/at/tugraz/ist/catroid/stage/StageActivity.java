@@ -72,7 +72,6 @@ public class StageActivity extends AndroidApplication {
 
 		PreStageActivity.shutdownResources();
 		stagePlaying = false;
-
 	}
 
 	public void toggleAxes() {

@@ -131,11 +131,7 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 		}
 		if (requestCode == StageActivity.STAGE_ACTIVITY_FINISH) {
 			ProjectManager projectManager = ProjectManager.getInstance();
-			int currentSpritePos = projectManager.getCurrentSpritePosition();
-			int currentScriptPos = projectManager.getCurrentScriptPosition();
-			projectManager.loadProject(projectManager.getCurrentProject().getName(), this, false);
-			projectManager.setCurrentSpriteWithPosition(currentSpritePos);
-			projectManager.setCurrentScriptWithPosition(currentScriptPos);
+			projectManager.loadProjectAsync(projectManager.getCurrentProject().getName(), this, false);
 		}
 	}
 
