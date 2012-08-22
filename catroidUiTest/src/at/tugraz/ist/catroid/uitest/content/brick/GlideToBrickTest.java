@@ -112,7 +112,7 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 		solo.sleep(200);
 
 		ProjectManager manager = ProjectManager.getInstance();
-		List<Brick> brickList = manager.getCurrentScript().getBrickList();
+		List<Brick> brickList = manager.getCurrentSprite().getScript(0).getBrickList();
 		GlideToBrick glideToBrick = (GlideToBrick) brickList.get(0);
 
 		Formula formula = (Formula) UiTestUtils.getPrivateField("durationInSeconds", glideToBrick);

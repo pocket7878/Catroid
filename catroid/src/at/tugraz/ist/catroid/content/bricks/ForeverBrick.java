@@ -70,5 +70,9 @@ public class ForeverBrick extends LoopBeginBrick {
 	public void onClick(View view) {
 
 	}
-
+	
+	@Override
+	public void initialize() {
+		loopEndBrick = new LoopEndlessBrick(sprite, this);
+	}
 }

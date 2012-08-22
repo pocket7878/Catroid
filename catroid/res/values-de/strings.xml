@@ -112,6 +112,10 @@
     <string name="description">Beschreibung:</string>
     <string name="set_description">Beschreibung</string>
     <string name="rename_project">Projekt umbenennen</string>
+	<!-- Brick context dialog -->
+    <string name="brick_context_dialog_move_brick">Verschiebe Baustein</string>
+    <string name="brick_context_dialog_delete_brick">Lösche Baustein</string>
+    <string name="brick_context_dialog_animate_bricks">Animiere Baustein-Teile</string>
     <!-- Script context menu -->
     <string name="script_context_menu_title">Skript Menü</string>
     <!-- New project dialog -->
@@ -241,7 +245,6 @@
     <string name="error_project_download">Beim Download des Projektes ist ein Fehler aufgetreten.</string>
     <string name="error_new_project">Beim Erstellen des neuen Projektes ist ein Fehler aufgetreten.</string>
     <string name="error_load_project">Beim Laden des Projektes ist ein Fehler aufgetreten.</string>
-    <string name="error_no_number_entered">Bitte eine Zahl eingeben.</string>
     <string name="error_screenshot_failed">Beim Speichern des Screenshots ist ein Fehler aufgetreten.</string>
     <string name="error_load_image">Beim Laden des Bildes ist ein Fehler aufgetreten.</string>
     <string name="error_load_sound">Beim Laden des Audiofiles ist ein Fehler aufgetreten.</string>
@@ -280,8 +283,6 @@
     <string name="nxt_tone_frequency">Frequenz</string>
     <string name="tone_duration">Dauer</string>
     <string name="nxt_tone_hundred_hz">x100Hz</string>
-    <string name="number_to_small">Wert ist zu klein!</string>
-    <string name="number_to_big">Wert ist zu groß!</string>
     <string name="select_image">Bild auswählen</string>
     <string name="add_costume_from_gallery">von Galerie</string>
     <string name="add_costume_from_camera">von Kamera</string>
