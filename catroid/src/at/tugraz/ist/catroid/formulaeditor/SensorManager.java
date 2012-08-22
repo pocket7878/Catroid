@@ -22,6 +22,8 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
+import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.content.Costume;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
@@ -55,8 +57,35 @@ public class SensorManager {
 		if (sensorName.equals("ROLL_ORIENTATION_")) {
 			sensorValue = Double.valueOf(-sensors.getRoll());
 		}
+		//SPRITE VALUES
+		if (sensorName.equals("COSTUME_X_")) {
+			sensorValue = Double.valueOf(getCurrentSpriteCostume().getXPosition());
+		}
+		if (sensorName.equals("COSTUME_Y_")) {
+			sensorValue = Double.valueOf(getCurrentSpriteCostume().getYPosition());
+		}
+		if (sensorName.equals("COSTUME_GHOSTEFFECT_")) {
+			sensorValue = Double.valueOf(getCurrentSpriteCostume().getAlphaValue());
+		}
+		if (sensorName.equals("COSTUME_BRIGHTNESS_")) {
+			sensorValue = Double.valueOf(getCurrentSpriteCostume().getBrightnessValue());
+		}
+		if (sensorName.equals("COSTUME_SIZE_")) {
+			sensorValue = Double.valueOf(getCurrentSpriteCostume().scaleX);
+		}
+		if (sensorName.equals("COSTUME_ROTATION_")) {
+			sensorValue = Double.valueOf(getCurrentSpriteCostume().rotation);
+		}
+		if (sensorName.equals("COSTUME_LAYER_")) {
+			sensorValue = Double.valueOf(getCurrentSpriteCostume().zPosition);
+		}
+
 		sensors = null;
 		return sensorValue;
+	}
+
+	private static Costume getCurrentSpriteCostume() {
+		return ProjectManager.getInstance().getCurrentSprite().costume;
 	}
 
 }

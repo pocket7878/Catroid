@@ -30,6 +30,7 @@ import android.os.Build;
 import android.view.View;
 import android.widget.EditText;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.formulaeditor.FormulaElement.ElementType;
 
 public class Formula implements Serializable {
 
@@ -52,6 +53,11 @@ public class Formula implements Serializable {
 		CalcGrammarParser parser = CalcGrammarParser.getFormulaParser(textRepresentation);
 		root = parser.parseFormula();
 
+		if (root == null) {
+			root = new FormulaElement(ElementType.VALUE, "0 ", null);
+			textRepresentation = "0 ";
+		}
+
 		return this;
 	}
 
@@ -67,6 +73,11 @@ public class Formula implements Serializable {
 		}
 		CalcGrammarParser parser = CalcGrammarParser.getFormulaParser(textRepresentation);
 		root = parser.parseFormula();
+
+		if (root == null) {
+			root = new FormulaElement(ElementType.VALUE, "0 ", null);
+			textRepresentation = "0 ";
+		}
 	}
 
 	//	public Formula(String value, int formulaTextFieldId) {
