@@ -1,27 +1,4 @@
-/**
- *  Catroid: An on-device graphical programming language for Android devices
- *  Copyright (C) 2010-2011 The Catroid Team
- *  (<http://code.google.com/p/catroid/wiki/Credits>)
- *  
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Affero General Public License as
- *  published by the Free Software Foundation, either version 3 of the
- *  License, or (at your option) any later version.
- *  
- *  An additional term exception under section 7 of the GNU Affero
- *  General Public License, version 3, is available at
- *  http://www.catroid.org/catroid_license_additional_term
- *  
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Affero General Public License for more details.
- *   
- *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-// $ANTLR 3.4 src/CalcGrammar.g 2012-08-21 14:18:49
+// $ANTLR 3.4 src/CalcGrammar.g 2012-08-22 15:05:15
 package at.tugraz.ist.catroid.formulaeditor;
 
 import org.antlr.runtime.CharStream;
@@ -712,8 +689,8 @@ public class CalcGrammarLexer extends Lexer {
 		try {
 			int _type = SENSOR;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// src/CalcGrammar.g:317:11: ( 'X_ACCELERATION_' | 'Y_ACCELERATION_' | 'Z_ACCELERATION_' | 'AZIMUTH_ORIENTATION_' | 'PITCH_ORIENTATION_' | 'ROLL_ORIENTATION_' )
-			int alt7 = 6;
+			// src/CalcGrammar.g:317:11: ( 'X_ACCELERATION_' | 'Y_ACCELERATION_' | 'Z_ACCELERATION_' | 'AZIMUTH_ORIENTATION_' | 'PITCH_ORIENTATION_' | 'ROLL_ORIENTATION_' | 'COSTUME_X_' | 'COSTUME_Y_' | 'COSTUME_GHOSTEFFECT_' | 'SPRITE_BRITHNESS_' | 'SPRITE_SIZE_' | 'SPRITE_ROTATION_' | 'SPRITE_LAYER_' )
+			int alt7 = 13;
 			switch (input.LA(1)) {
 				case 'X': {
 					alt7 = 1;
@@ -737,6 +714,175 @@ public class CalcGrammarLexer extends Lexer {
 					break;
 				case 'R': {
 					alt7 = 6;
+				}
+					break;
+				case 'C': {
+					int LA7_7 = input.LA(2);
+
+					if ((LA7_7 == 'O')) {
+						int LA7_9 = input.LA(3);
+
+						if ((LA7_9 == 'S')) {
+							int LA7_11 = input.LA(4);
+
+							if ((LA7_11 == 'T')) {
+								int LA7_13 = input.LA(5);
+
+								if ((LA7_13 == 'U')) {
+									int LA7_15 = input.LA(6);
+
+									if ((LA7_15 == 'M')) {
+										int LA7_17 = input.LA(7);
+
+										if ((LA7_17 == 'E')) {
+											int LA7_19 = input.LA(8);
+
+											if ((LA7_19 == '_')) {
+												switch (input.LA(9)) {
+													case 'X': {
+														alt7 = 7;
+													}
+														break;
+													case 'Y': {
+														alt7 = 8;
+													}
+														break;
+													case 'G': {
+														alt7 = 9;
+													}
+														break;
+													default:
+														NoViableAltException nvae = new NoViableAltException("", 7, 21,
+																input);
+
+														throw nvae;
+
+												}
+
+											} else {
+												NoViableAltException nvae = new NoViableAltException("", 7, 19, input);
+
+												throw nvae;
+
+											}
+										} else {
+											NoViableAltException nvae = new NoViableAltException("", 7, 17, input);
+
+											throw nvae;
+
+										}
+									} else {
+										NoViableAltException nvae = new NoViableAltException("", 7, 15, input);
+
+										throw nvae;
+
+									}
+								} else {
+									NoViableAltException nvae = new NoViableAltException("", 7, 13, input);
+
+									throw nvae;
+
+								}
+							} else {
+								NoViableAltException nvae = new NoViableAltException("", 7, 11, input);
+
+								throw nvae;
+
+							}
+						} else {
+							NoViableAltException nvae = new NoViableAltException("", 7, 9, input);
+
+							throw nvae;
+
+						}
+					} else {
+						NoViableAltException nvae = new NoViableAltException("", 7, 7, input);
+
+						throw nvae;
+
+					}
+				}
+					break;
+				case 'S': {
+					int LA7_8 = input.LA(2);
+
+					if ((LA7_8 == 'P')) {
+						int LA7_10 = input.LA(3);
+
+						if ((LA7_10 == 'R')) {
+							int LA7_12 = input.LA(4);
+
+							if ((LA7_12 == 'I')) {
+								int LA7_14 = input.LA(5);
+
+								if ((LA7_14 == 'T')) {
+									int LA7_16 = input.LA(6);
+
+									if ((LA7_16 == 'E')) {
+										int LA7_18 = input.LA(7);
+
+										if ((LA7_18 == '_')) {
+											switch (input.LA(8)) {
+												case 'B': {
+													alt7 = 10;
+												}
+													break;
+												case 'S': {
+													alt7 = 11;
+												}
+													break;
+												case 'R': {
+													alt7 = 12;
+												}
+													break;
+												case 'L': {
+													alt7 = 13;
+												}
+													break;
+												default:
+													NoViableAltException nvae = new NoViableAltException("", 7, 20,
+															input);
+
+													throw nvae;
+
+											}
+
+										} else {
+											NoViableAltException nvae = new NoViableAltException("", 7, 18, input);
+
+											throw nvae;
+
+										}
+									} else {
+										NoViableAltException nvae = new NoViableAltException("", 7, 16, input);
+
+										throw nvae;
+
+									}
+								} else {
+									NoViableAltException nvae = new NoViableAltException("", 7, 14, input);
+
+									throw nvae;
+
+								}
+							} else {
+								NoViableAltException nvae = new NoViableAltException("", 7, 12, input);
+
+								throw nvae;
+
+							}
+						} else {
+							NoViableAltException nvae = new NoViableAltException("", 7, 10, input);
+
+							throw nvae;
+
+						}
+					} else {
+						NoViableAltException nvae = new NoViableAltException("", 7, 8, input);
+
+						throw nvae;
+
+					}
 				}
 					break;
 				default:
@@ -789,6 +935,55 @@ public class CalcGrammarLexer extends Lexer {
 
 				}
 					break;
+				case 7:
+				// src/CalcGrammar.g:317:133: 'COSTUME_X_'
+				{
+					match("COSTUME_X_");
+
+				}
+					break;
+				case 8:
+				// src/CalcGrammar.g:317:146: 'COSTUME_Y_'
+				{
+					match("COSTUME_Y_");
+
+				}
+					break;
+				case 9:
+				// src/CalcGrammar.g:317:159: 'COSTUME_GHOSTEFFECT_'
+				{
+					match("COSTUME_GHOSTEFFECT_");
+
+				}
+					break;
+				case 10:
+				// src/CalcGrammar.g:317:182: 'SPRITE_BRITHNESS_'
+				{
+					match("SPRITE_BRITHNESS_");
+
+				}
+					break;
+				case 11:
+				// src/CalcGrammar.g:317:202: 'SPRITE_SIZE_'
+				{
+					match("SPRITE_SIZE_");
+
+				}
+					break;
+				case 12:
+				// src/CalcGrammar.g:317:217: 'SPRITE_ROTATION_'
+				{
+					match("SPRITE_ROTATION_");
+
+				}
+					break;
+				case 13:
+				// src/CalcGrammar.g:318:5: 'SPRITE_LAYER_'
+				{
+					match("SPRITE_LAYER_");
+
+				}
+					break;
 
 			}
 			state.type = _type;
@@ -805,12 +1000,12 @@ public class CalcGrammarLexer extends Lexer {
 		try {
 			int _type = UPID;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// src/CalcGrammar.g:318:11: ( UPPERCASE ( LETTER )* )
-			// src/CalcGrammar.g:318:15: UPPERCASE ( LETTER )*
+			// src/CalcGrammar.g:319:11: ( UPPERCASE ( LETTER )* )
+			// src/CalcGrammar.g:319:15: UPPERCASE ( LETTER )*
 			{
 				mUPPERCASE();
 
-				// src/CalcGrammar.g:318:24: ( LETTER )*
+				// src/CalcGrammar.g:319:24: ( LETTER )*
 				loop8: do {
 					int alt8 = 2;
 					int LA8_0 = input.LA(1);
@@ -853,7 +1048,7 @@ public class CalcGrammarLexer extends Lexer {
 	// $ANTLR start "LETTER"
 	public final void mLETTER() throws RecognitionException {
 		try {
-			// src/CalcGrammar.g:319:20: ( ( 'a' .. 'z' ) )
+			// src/CalcGrammar.g:320:20: ( ( 'a' .. 'z' ) )
 			// src/CalcGrammar.g:
 			{
 				if ((input.LA(1) >= 'a' && input.LA(1) <= 'z')) {
@@ -876,7 +1071,7 @@ public class CalcGrammarLexer extends Lexer {
 	// $ANTLR start "UPPERCASE"
 	public final void mUPPERCASE() throws RecognitionException {
 		try {
-			// src/CalcGrammar.g:320:20: ( ( 'A' .. 'Z' ) )
+			// src/CalcGrammar.g:321:20: ( ( 'A' .. 'Z' ) )
 			// src/CalcGrammar.g:
 			{
 				if ((input.LA(1) >= 'A' && input.LA(1) <= 'Z')) {
@@ -924,9 +1119,9 @@ public class CalcGrammarLexer extends Lexer {
 				int LA9_5 = input.LA(2);
 
 				if ((LA9_5 == 'i')) {
-					int LA9_23 = input.LA(3);
+					int LA9_25 = input.LA(3);
 
-					if (((LA9_23 >= 'a' && LA9_23 <= 'z'))) {
+					if (((LA9_25 >= 'a' && LA9_25 <= 'z'))) {
 						alt9 = 14;
 					} else {
 						alt9 = 5;
@@ -1079,8 +1274,27 @@ public class CalcGrammarLexer extends Lexer {
 				}
 			}
 				break;
+			case 'C': {
+				int LA9_22 = input.LA(2);
+
+				if ((LA9_22 == 'O')) {
+					alt9 = 15;
+				} else {
+					alt9 = 16;
+				}
+			}
+				break;
+			case 'S': {
+				int LA9_23 = input.LA(2);
+
+				if ((LA9_23 == 'P')) {
+					alt9 = 15;
+				} else {
+					alt9 = 16;
+				}
+			}
+				break;
 			case 'B':
-			case 'C':
 			case 'D':
 			case 'E':
 			case 'F':
@@ -1094,7 +1308,6 @@ public class CalcGrammarLexer extends Lexer {
 			case 'N':
 			case 'O':
 			case 'Q':
-			case 'S':
 			case 'T':
 			case 'U':
 			case 'V':
