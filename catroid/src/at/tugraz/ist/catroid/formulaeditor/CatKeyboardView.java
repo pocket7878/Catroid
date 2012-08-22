@@ -46,6 +46,9 @@ import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.ui.dialogs.ChooseCostumeVariableFragment;
+
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyboardActionListener {
 
@@ -56,12 +59,14 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 	//	CatKeyboard symbols_shifted;
 	private CatKeyboard symbolsFunctions;
 	private CatKeyboard symbolsSensors;
+	private Context context;
+	private ChooseCostumeVariableFragment chooseSpriteVariablesFragment;
 
 	//private Brick currentBrick;
 
 	public CatKeyboardView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-
+		this.context = context;
 		setOnKeyboardActionListener(this);
 		this.editText = null;
 		//		this.isShifted = false;
@@ -85,6 +90,10 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 		}
 
 		this.setKeyboard(symbolsNumbers);
+
+		this.chooseSpriteVariablesFragment = ChooseCostumeVariableFragment
+				.newInstance(android.R.string.dialog_alert_title);
+		this.chooseSpriteVariablesFragment.setCatKeyboardView(this);
 
 		//		LayoutParams relative = new LayoutParams(source);
 		//		this.symbols.setShifted(false);
@@ -333,6 +342,39 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 				break;
 			case CatKeyEvent.KEYCODE_BRACKET:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_BRACKET));
+				editText.checkAndModifyKeyInput(cKE);
+				break;
+			case CatKeyEvent.KEYCODE_COSTUME_BUTTON:
+				this.chooseSpriteVariablesFragment
+						.show(((SherlockFragmentActivity) context).getSupportFragmentManager(),
+								"chooseSpriteVariablesDialog");
+				break;
+			case CatKeyEvent.KEYCODE_COSTUME_X:
+				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_X));
+				editText.checkAndModifyKeyInput(cKE);
+				break;
+			case CatKeyEvent.KEYCODE_COSTUME_Y:
+				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_Y));
+				editText.checkAndModifyKeyInput(cKE);
+				break;
+			case CatKeyEvent.KEYCODE_COSTUME_GHOSTEFFECT:
+				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_GHOSTEFFECT));
+				editText.checkAndModifyKeyInput(cKE);
+				break;
+			case CatKeyEvent.KEYCODE_COSTUME_BRIGTHNESS:
+				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_BRIGTHNESS));
+				editText.checkAndModifyKeyInput(cKE);
+				break;
+			case CatKeyEvent.KEYCODE_COSTUME_SIZE:
+				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_SIZE));
+				editText.checkAndModifyKeyInput(cKE);
+				break;
+			case CatKeyEvent.KEYCODE_COSTUME_ROTATION:
+				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_ROTATION));
+				editText.checkAndModifyKeyInput(cKE);
+				break;
+			case CatKeyEvent.KEYCODE_COSTUME_LAYER:
+				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_LAYER));
 				editText.checkAndModifyKeyInput(cKE);
 				break;
 		}
