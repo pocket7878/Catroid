@@ -60,16 +60,16 @@ public class SensorManager {
 		if (sensorName.equals("COSTUME_GHOSTEFFECT_")) {
 			return Double.valueOf(getCurrentSpriteCostume().getAlphaValue());
 		}
-		if (sensorName.equals("SPRITE_BRITHNESS_")) {
+		if (sensorName.equals("COSTUME_BRIGHTNESS_")) {
 			return Double.valueOf(getCurrentSpriteCostume().getBrightnessValue());
 		}
-		if (sensorName.equals("SPRITE_SIZE_")) {
+		if (sensorName.equals("COSTUME_SIZE_")) {
 			return Double.valueOf(getCurrentSpriteCostume().scaleX);
 		}
-		if (sensorName.equals("SPRITE_ROTATION_")) {
+		if (sensorName.equals("COSTUME_ROTATION_")) {
 			return Double.valueOf(getCurrentSpriteCostume().rotation);
 		}
-		if (sensorName.equals("SPRITE_LAYER_")) {
+		if (sensorName.equals("COSTUME_LAYER_")) {
 			return Double.valueOf(getCurrentSpriteCostume().zPosition);
 		}
 
