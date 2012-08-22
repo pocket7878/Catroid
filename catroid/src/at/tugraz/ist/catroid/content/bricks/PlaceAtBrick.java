@@ -122,11 +122,11 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 	public void onClick(View view) {
 		switch (view.getId()) {
 			case R.id.brick_place_at_x_edit_text:
-				FormulaEditorFragment.showDialog(view, this, xPosition);
+				FormulaEditorFragment.showFragment(view, this, xPosition);
 				break;
 
 			case R.id.brick_place_at_y_edit_text:
-				FormulaEditorFragment.showDialog(view, this, yPosition);
+				FormulaEditorFragment.showFragment(view, this, yPosition);
 				break;
 		}
 	}

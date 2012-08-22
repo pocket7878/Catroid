@@ -38,7 +38,7 @@ public class CheckForAssertionsTest extends TestCase {
 	private static final String[] DIRECTORIES = { "../catroidUiTest", "../catroidTest" };
 	private static final String[] IGNORED_FILES = { "MockGalleryActivity.java", "UiTestUtils.java", "TestUtils.java",
 			"MockPaintroidActivity.java", "TestMainMenuActivity.java", "CatKeyboardClicker.java",
-			"InvalidParserFormulaTestData.java", "ParserFormulaTestData.java" };
+			"InvalidParserFormulaTestData.java", "ParserFormulaTestData.java", "ParserFormulaFunctionsTestData.java" };
 
 	private void checkFileForAssertions(File file) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(file));

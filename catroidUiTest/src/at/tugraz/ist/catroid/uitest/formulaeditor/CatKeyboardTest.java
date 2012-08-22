@@ -63,6 +63,7 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 	@Override
 	public void tearDown() throws Exception {
 		try {
+			solo.sleep(1000);
 			solo.finalize();
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -72,7 +73,6 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 		UiTestUtils.clearAllUtilTestProjects();
 		this.project = null;
 		super.tearDown();
-		//Thread.sleep(1000); //This has to be sleep as solo is destroyed. Not sleeping might cause the next test to fail
 	}
 
 	@Smoke

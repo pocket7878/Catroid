@@ -102,6 +102,6 @@ public class SetYBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorFragment.showDialog(view, this, yPosition);
+		FormulaEditorFragment.showFragment(view, this, yPosition);
 	}
 }

@@ -99,6 +99,6 @@ public class SetBrightnessBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorFragment.showDialog(view, this, brightness);
+		FormulaEditorFragment.showFragment(view, this, brightness);
 	}
 }

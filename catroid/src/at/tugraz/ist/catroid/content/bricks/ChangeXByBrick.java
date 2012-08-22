@@ -113,7 +113,7 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorFragment.showDialog(view, this, xMovement);
+		FormulaEditorFragment.showFragment(view, this, xMovement);
 	}
 
 }
