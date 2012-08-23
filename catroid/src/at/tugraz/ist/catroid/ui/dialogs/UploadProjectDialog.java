@@ -68,6 +68,7 @@ public class UploadProjectDialog extends DialogFragment implements OnDismissList
 
 	private String currentProjectName;
 	private String newProjectName;
+	private boolean isUploadButton = false;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -112,12 +113,14 @@ public class UploadProjectDialog extends DialogFragment implements OnDismissList
 		uploadButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				isUploadButton = true;
 				handleUploadButtonClick();
 			}
 		});
 		cancelButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				isUploadButton = false;
 				handleCancelButtonClick();
 			}
 		});
@@ -221,7 +224,7 @@ public class UploadProjectDialog extends DialogFragment implements OnDismissList
 	@Override
 	public void onDismiss(DialogInterface dialog) {
 		super.onDismiss(dialog);
-		if (!ProjectManager.getInstance().getCurrentProject().getProjectHasThumbnail()) {
+		if (!ProjectManager.getInstance().getCurrentProject().getProjectHasThumbnail() && isUploadButton) {
 
 			addProjectScreenshot = new AddProjectScreenshot(getActivity());
 			Dialog addProjectScreenshotDialog = addProjectScreenshot.createDialog();
