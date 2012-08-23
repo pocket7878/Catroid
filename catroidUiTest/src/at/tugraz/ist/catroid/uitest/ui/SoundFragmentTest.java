@@ -99,7 +99,7 @@ public class SoundFragmentTest extends ActivityInstrumentationTestCase2<ScriptTa
 		int oldCount = adapter.getCount();
 		solo.clickOnCheckBox(0);
 		solo.sleep(500);
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_sound_delete);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_sound_delete);
 		solo.sleep(200);
 		solo.clickOnButton(solo.getString(R.string.ok));
 		solo.sleep(500);
@@ -120,7 +120,7 @@ public class SoundFragmentTest extends ActivityInstrumentationTestCase2<ScriptTa
 		solo.sleep(500);
 		solo.clickOnCheckBox(1);
 		solo.sleep(500);
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_sound_delete);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_sound_delete);
 		solo.sleep(200);
 		solo.sleep(200);
 		solo.clickOnButton(solo.getString(R.string.ok));
@@ -186,7 +186,7 @@ public class SoundFragmentTest extends ActivityInstrumentationTestCase2<ScriptTa
 	public void testToStageButton() {
 		solo.clickOnText(getActivity().getString(R.string.sounds));
 		solo.sleep(500);
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_start);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_start);
 		solo.waitForActivity(StageActivity.class.getSimpleName());
 		solo.assertCurrentActivity("not in stage", StageActivity.class);
 

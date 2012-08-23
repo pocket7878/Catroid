@@ -96,7 +96,7 @@ public class ScriptFragmentTest extends ActivityInstrumentationTestCase2<ScriptT
 			solo.clickOnText(getActivity().getString(R.string.background));
 		}
 
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_add);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_add);
 		String categorySoundLabel = solo.getString(R.string.category_sound);
 		String categoryLegoNXTLabel = solo.getString(R.string.category_lego_nxt);
 		String categoryControlLabel = solo.getString(R.string.category_control);
@@ -196,20 +196,20 @@ public class ScriptFragmentTest extends ActivityInstrumentationTestCase2<ScriptT
 		solo.clickOnText(currentProject);
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
 		solo.clickOnText(background);
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_add);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_add);
 		solo.clickOnText(categoryLooks);
 		assertTrue("SetCostumeBrick was not renamed for background sprite", solo.searchText(setBackground));
 		solo.clickOnText(setBackground);
 		solo.clickOnText(getActivity().getString(R.string.brick_when_started));
 		assertTrue("SetCostumeBrick was not renamed for background sprite", solo.searchText(setBackground));
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_add);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_add);
 		solo.clickOnText(categoryLooks);
 		assertTrue("NextCostumeBrick was not renamed for background sprite", solo.searchText(nextBackground));
 		solo.clickOnText(nextBackground);
 		solo.clickOnText(getActivity().getString(R.string.brick_when_started));
 		assertTrue("NextCostumeBrick was not renamed for background sprite", solo.searchText(nextBackground));
 
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_add);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_add);
 		solo.clickOnText(categoryMotion);
 		assertFalse("ComeToFrontBrick is in the brick list!", solo.searchText(comeToFront));
 		assertFalse("GoNStepsBackBrick is in the brick list!", solo.searchText(goNStepsBack));
@@ -219,7 +219,7 @@ public class ScriptFragmentTest extends ActivityInstrumentationTestCase2<ScriptT
 	}
 
 	public void testSelectCategoryDialogOnOrientationChange() {
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_add);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_add);
 		String categoryMotionLabel = solo.getString(R.string.category_motion);
 		String categoryLooksLabel = solo.getString(R.string.category_looks);
 		String categorySoundLabel = solo.getString(R.string.category_sound);
@@ -245,7 +245,7 @@ public class ScriptFragmentTest extends ActivityInstrumentationTestCase2<ScriptT
 	}
 
 	public void testAddBrickDialogOnOrientationChange() {
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_add);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_add);
 
 		String brickPlaceAtText = solo.getString(R.string.brick_place_at);
 		String brickSetCostume = solo.getString(R.string.brick_set_costume);

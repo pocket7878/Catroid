@@ -139,7 +139,7 @@ public class CostumeFragmentTest extends ActivityInstrumentationTestCase2<Script
 		solo.sleep(500);
 		solo.clickOnCheckBox(1);
 		solo.sleep(500);
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_costume_copy);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_costume_copy);
 		solo.sleep(500);
 		if (solo.searchText(costumeName + "_" + getActivity().getString(R.string.copy_costume_addition), 1, true)
 				&& solo.searchText(costumeName2 + "_" + getActivity().getString(R.string.copy_costume_addition), 1,
@@ -181,7 +181,7 @@ public class CostumeFragmentTest extends ActivityInstrumentationTestCase2<Script
 		solo.sleep(500);
 		solo.clickOnCheckBox(1);
 		solo.sleep(500);
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_costume_delete);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_costume_delete);
 		solo.sleep(200);
 		solo.clickOnButton(solo.getString(R.string.ok));
 		solo.sleep(300);
