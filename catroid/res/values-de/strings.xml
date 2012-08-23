@@ -289,5 +289,6 @@
     <string name="select_image">Bild auswählen</string>
     <string name="add_costume_from_gallery">von Galerie</string>
     <string name="add_costume_from_camera">von Kamera</string>
+    <string name="progress_dialog_load_async">Es wird geladen ...</string>
 
 </resources>

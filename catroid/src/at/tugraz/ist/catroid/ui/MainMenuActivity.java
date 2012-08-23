@@ -62,6 +62,7 @@ public class MainMenuActivity extends SherlockFragmentActivity implements OnChec
 	private ActionBar actionBar;
 
 	private boolean ignoreResume = false;
+	private boolean loadProjectAsync = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +153,12 @@ public class MainMenuActivity extends SherlockFragmentActivity implements OnChec
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == PreStageActivity.REQUEST_RESOURCES_INIT && resultCode == RESULT_OK) {
 			Intent intent = new Intent(MainMenuActivity.this, StageActivity.class);
-			startActivity(intent);
+			startActivityForResult(intent, StageActivity.STAGE_ACTIVITY_FINISH);
+		}
+		if (requestCode == StageActivity.STAGE_ACTIVITY_FINISH) {
+			loadProjectAsync = true;
+			ProjectManager projectManager = ProjectManager.getInstance();
+			projectManager.loadProjectAsync(projectManager.getCurrentProject().getName(), this, false);
 		}
 	}
 
@@ -170,8 +176,11 @@ public class MainMenuActivity extends SherlockFragmentActivity implements OnChec
 		}
 		ignoreResume = false;
 
-		ProjectManager.INSTANCE.loadProject(ProjectManager.INSTANCE.getCurrentProject().getName(), this, false);
+		if (!loadProjectAsync) {
+			ProjectManager.INSTANCE.loadProject(ProjectManager.INSTANCE.getCurrentProject().getName(), this, false);
+		}
 		writeProjectTitleInTextfield();
+		loadProjectAsync = false;
 	}
 
 	public void writeProjectTitleInTextfield() {

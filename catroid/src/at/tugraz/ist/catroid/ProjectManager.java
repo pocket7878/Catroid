@@ -315,8 +315,7 @@ public class ProjectManager {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			dialog = ProgressDialog.show(context, "", "Loading...", true);
-			dialog.show();
+			dialog = ProgressDialog.show(context, "", context.getString(R.string.progress_dialog_load_async), true);
 		}
 
 		@Override
