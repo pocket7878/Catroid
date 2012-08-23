@@ -25,15 +25,20 @@ package at.tugraz.ist.catroid.ui.dialogs;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.stage.StageActivity;
 
-public class AddProjectScreenshot {
+public class AddProjectScreenshot extends Dialog {
 	private Context context;
 	Dialog addProjectScreenshot;
 
 	public AddProjectScreenshot(Context context) {
+		super(context);
 		this.context = context;
 	}
 
@@ -44,6 +49,27 @@ public class AddProjectScreenshot {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.dialog_add_project_screenshot, null);
 
+		Button fromStageButton = (Button) view.findViewById(R.id.btn_ok_add_project_screenshot);
+		fromStageButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (ProjectManager.getInstance().getCurrentProject() != null) {
+					Intent takeScreenshotIntent = new Intent(context, StageActivity.class);
+					takeScreenshotIntent.putExtra("takeScreenshotForUpload", true);
+					context.startActivity(takeScreenshotIntent);
+				}
+				addProjectScreenshot.dismiss();
+			}
+		});
+
+		Button cancelButton = (Button) view.findViewById(R.id.btn_cancel_add_project_screenshot);
+		cancelButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				addProjectScreenshot.dismiss();
+			}
+		});
+
 		builder.setView(view);
 
 		addProjectScreenshot = builder.create();
@@ -51,9 +77,4 @@ public class AddProjectScreenshot {
 
 		return addProjectScreenshot;
 	}
-
-	public void handleCancelButton() {
-		addProjectScreenshot.dismiss();
-	}
-
 }

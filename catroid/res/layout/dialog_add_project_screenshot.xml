@@ -31,7 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight=".5"
-        android:onClick="handlePositiveButtonAddProjectScreenshot"
         android:text="@string/project_screenshot_from_stage" />
 
     <Button
@@ -39,7 +38,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight=".5"
-        android:onClick="handleNegativeButtonAddProjectScreenshot"
         android:text="@string/cancel_button" />
 
 </LinearLayout>

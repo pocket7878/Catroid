@@ -22,18 +22,21 @@
  */
 package at.tugraz.ist.catroid.stage;
 
+import android.app.Dialog;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
+import at.tugraz.ist.catroid.ui.dialogs.TakeScreenshotInformationDialog;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 
 public class StageActivity extends AndroidApplication {
 
 	private boolean stagePlaying = true;
+	private boolean takeScreenshotForUpload = false;
 	public static StageListener stageListener;
 	private boolean resizePossible;
 	private StageDialog stageDialog;
@@ -49,6 +52,8 @@ public class StageActivity extends AndroidApplication {
 		stageDialog = new StageDialog(this, stageListener, R.style.stage_dialog);
 		this.calculateScreenSizes();
 		initialize(stageListener, true);
+
+		checkIfComingFromUploadError();
 	}
 
 	@Override
@@ -122,6 +127,17 @@ public class StageActivity extends AndroidApplication {
 
 	public boolean getResizePossible() {
 		return resizePossible;
+	}
+
+	private void checkIfComingFromUploadError() {
+		Bundle bundleFromMainMenu = getIntent().getExtras();
+		if (bundleFromMainMenu != null) {
+			takeScreenshotForUpload = bundleFromMainMenu.getBoolean("takeScreenshotForUpload");
+			if (takeScreenshotForUpload) {
+				Dialog dialog = new TakeScreenshotInformationDialog(this);
+				dialog.show();
+			}
+		}
 	}
 
 }

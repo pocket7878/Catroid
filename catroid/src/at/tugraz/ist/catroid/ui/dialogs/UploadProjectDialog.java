@@ -24,8 +24,10 @@ package at.tugraz.ist.catroid.ui.dialogs;
 
 import java.io.File;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.DialogInterface.OnShowListener;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -47,13 +49,15 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
+import at.tugraz.ist.catroid.stage.StageListener;
 import at.tugraz.ist.catroid.transfers.ProjectUploadTask;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
 
-public class UploadProjectDialog extends DialogFragment {
+public class UploadProjectDialog extends DialogFragment implements OnDismissListener {
 
 	public static final String DIALOG_FRAGMENT_TAG = "dialog_upload_project";
+	private AddProjectScreenshot addProjectScreenshot;
 
 	private EditText projectUploadName;
 	private EditText projectDescriptionField;
@@ -190,12 +194,19 @@ public class UploadProjectDialog extends DialogFragment {
 
 		dismiss();
 		String projectPath = Constants.DEFAULT_ROOT + "/" + projectManager.getCurrentProject().getName();
-		String projectDescription;
+		String projectDescription = "";
+
+		String screenshotPath = Utils.buildPath(projectPath, StageListener.SCREENSHOT_FILE_NAME);
+		if (new File(screenshotPath).exists() && !projectManager.getCurrentProject().getProjectHasThumbnail()) {
+			projectManager.getCurrentProject().setProjectHasThumbnail(true);
+		}
+
+		if (!projectManager.getCurrentProject().getProjectHasThumbnail()) {
+			return;
+		}
 
 		if (projectDescriptionField.length() != 0) {
 			projectDescription = projectDescriptionField.getText().toString();
-		} else {
-			projectDescription = "";
 		}
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -205,5 +216,18 @@ public class UploadProjectDialog extends DialogFragment {
 
 	private void handleCancelButtonClick() {
 		dismiss();
+	}
+
+	@Override
+	public void onDismiss(DialogInterface dialog) {
+		super.onDismiss(dialog);
+		if (!ProjectManager.getInstance().getCurrentProject().getProjectHasThumbnail()) {
+
+			addProjectScreenshot = new AddProjectScreenshot(getActivity());
+			Dialog addProjectScreenshotDialog = addProjectScreenshot.createDialog();
+			addProjectScreenshotDialog.show();
+
+			Utils.displayErrorMessage(getActivity(), "No thumbnail found");
+		}
 	}
 }
