@@ -140,6 +140,15 @@
     <string name="overwrite_text">Project with same name already exists!</string>
     <string name="overwrite_replace">replace existing Project</string>
     <string name="overwrite_rename">rename downloaded Project</string>
+     <!-- TakeScreenshotInformation -->
+    <string name="take_screenshot_title">Take a screenshot</string>
+    <string name="take_screenshot_help">Click the back button to open the menu bar and take a screenshot. \n You can start the project and stop it at any time to take a screenshot.</string>
+    <string name="take_screenshot_information">The screenshot will be used as a thumbnail if you upload your project and for your local projectlist.</string>
+	
+    <!-- Add Screenshot dialog -->
+    <string name="add_project_screensht_titel">Add Screenshot:</string>
+    <string name="project_screenshot_from_stage">From stage</string>
+    <string name="project_screenshot_auto_generate">Generate automatically</string>    
     <!-- Stage menu dialog -->
     <string name="back">Back</string>
     <string name="resume_current_project">Resume</string>
