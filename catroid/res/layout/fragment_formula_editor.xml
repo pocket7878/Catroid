@@ -62,14 +62,12 @@
 	    android:keyTextColor="#ffffff"
 		android:keyPreviewHeight="0sp"
 		/>
+    
         <RelativeLayout
 	        android:id="@+id/swipe_bar"
 	        android:layout_width = "match_parent"
 	        android:layout_height = "12dp"
 	        android:layout_above="@id/keyboardcat">
-	        <!-- android:background="@drawable/formula_editor_keyboard_tab_bar"-->
-	        
-	        
 
              <TextView
                android:id="@+id/formula_editor_caption_left"
