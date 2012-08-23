@@ -151,7 +151,10 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 			brickSpace.measure(0, 0);
 		}
 		catKeyboardView = (CatKeyboardView) dialogView.findViewById(R.id.keyboardcat);
-		catKeyboardView.setEditText(formulaEditorEditText);
+		catKeyboardView.init(formulaEditorEditText, dialogView.findViewById(R.id.swipe_bar));
+		dialogView.findViewById(R.id.formula_editor_caption_left).setOnClickListener(catKeyboardView);
+		dialogView.findViewById(R.id.formula_editor_caption_center).setOnClickListener(catKeyboardView);
+		dialogView.findViewById(R.id.formula_editor_caption_right).setOnClickListener(catKeyboardView);
 
 		if (brickSpace != null) {
 			formulaEditorEditText.init(this, brickSpace.getMeasuredHeight(), catKeyboardView);

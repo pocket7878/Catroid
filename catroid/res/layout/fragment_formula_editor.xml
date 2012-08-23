@@ -51,6 +51,7 @@
         android:textSize="@dimen/text_size_xxlarge" 
 		android:background="@color/white"
         />
+
       
     <at.tugraz.ist.catroid.formulaeditor.CatKeyboardView
         android:id="@+id/keyboardcat"
@@ -61,5 +62,52 @@
 	    android:keyTextColor="#ffffff"
 		android:keyPreviewHeight="0sp"
 		/>
+        <RelativeLayout
+	        android:id="@+id/swipe_bar"
+	        android:layout_width = "match_parent"
+	        android:layout_height = "12dp"
+	        android:layout_above="@id/keyboardcat">
+	        <!-- android:background="@drawable/formula_editor_keyboard_tab_bar"-->
+	        
+	        
+
+             <TextView
+               android:id="@+id/formula_editor_caption_left"
+               android:text="@string/sensors"
+               android:layout_width = "wrap_content"
+               android:layout_height = "wrap_content"
+               android:layout_weight="0.33"
+               android:layout_centerHorizontal="true"
+               android:textSize="@dimen/text_size_xxsmall"
+               android:textColor="@color/solid_white"
+               android:textStyle="bold"
+              />
+             
+             <TextView
+                android:id="@+id/formula_editor_caption_center"
+                android:text="@string/numbers"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_weight="0.33"
+                android:layout_alignParentLeft="true"
+                android:textSize="@dimen/text_size_xxsmall"
+                android:textColor="@color/solid_white"
+                android:textStyle="bold"
+                />
+             
+             <TextView
+               android:id="@+id/formula_editor_caption_right"
+               android:text="@string/functions"
+               android:layout_width = "wrap_content"
+               android:layout_height = "wrap_content"
+               android:layout_weight="0.33"
+               android:layout_alignParentRight="true"
+               android:textSize="@dimen/text_size_xxsmall"
+               android:textColor="@color/solid_white"
+               android:textStyle="bold"
+               />
+        </RelativeLayout>
+     
+    
 </RelativeLayout>
 

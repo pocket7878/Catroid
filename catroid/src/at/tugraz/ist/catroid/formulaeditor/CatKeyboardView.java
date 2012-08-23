@@ -41,18 +41,24 @@ package at.tugraz.ist.catroid.formulaeditor;
 import java.util.Locale;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.ui.dialogs.ChooseCostumeVariableFragment;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
-public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyboardActionListener {
+public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyboardActionListener, OnClickListener {
 
-	//	static final int KEYCODE_OPTIONS = -100;
+	static final int NUMBER_KEYBOARD = 1;
+	static final int FUNCTION_KEYBOARD = 0;
+	static final int SENSOR_KEYBOARD = 2;
 	private FormulaEditorEditText editText;
 	//	boolean isShifted;
 	private CatKeyboard symbolsNumbers;
@@ -61,6 +67,7 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 	private CatKeyboard symbolsSensors;
 	private Context context;
 	private ChooseCostumeVariableFragment chooseSpriteVariablesFragment;
+	private RelativeLayout swipeBar;
 
 	//private Brick currentBrick;
 
@@ -113,8 +120,56 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 		//        super(context, attrs, defStyle);
 	}
 
-	public void setEditText(FormulaEditorEditText editText) {
+	private void setSwipeBarBackground(int position) {
+		//int color = context.getResources().getColor(R.color.formula_editor_background);
+		//int colors[] = { color, 0x0066CC };
+		Drawable background = null;
+		int width = swipeBar.getWidth();
+		switch (position) {
+			case FUNCTION_KEYBOARD:
+				//		int colors[] = { color, 0x0066CC };
+				background = context.getResources().getDrawable(R.drawable.formula_editor_keyboard_tab_bar_right);
+				break;
+			case SENSOR_KEYBOARD:
+				//		int colors2[] = { color, 0x00FFFF };
+				background = context.getResources().getDrawable(R.drawable.formula_editor_keyboard_tab_bar_center);
+				break;
+			case NUMBER_KEYBOARD:
+				//		int colors3[] = { color, 0xF0C6E2 };
+				background = context.getResources().getDrawable(R.drawable.formula_editor_keyboard_tab_bar_left);
+				break;
+			default:
+
+		}
+		swipeBar.setBackgroundDrawable(null);
+		swipeBar.setBackgroundDrawable(background);
+
+		//swipeBar.invalidate();
+		//test_view.invalidate();
+	}
+
+	@Override
+	public void onClick(View view) {
+		switch (view.getId()) {
+			case R.id.formula_editor_caption_center:
+				setSwipeBarBackground(NUMBER_KEYBOARD);
+				this.setKeyboard(this.symbolsNumbers);
+				break;
+			case R.id.formula_editor_caption_left:
+				setSwipeBarBackground(SENSOR_KEYBOARD);
+				this.setKeyboard(this.symbolsSensors);
+				break;
+			case R.id.formula_editor_caption_right:
+				setSwipeBarBackground(FUNCTION_KEYBOARD);
+				this.setKeyboard(this.symbolsFunctions);
+				break;
+		}
+	}
+
+	public void init(FormulaEditorEditText editText, View swipeBar) {
 		this.editText = editText;
+		this.swipeBar = (RelativeLayout) swipeBar;
+		setSwipeBarBackground(1);
 	}
 
 	//	public void setCurrentBrick(Brick currentBrick) {
@@ -225,7 +280,7 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 				editText.checkAndModifyKeyInput(cKE);
 				break;
 			case KeyEvent.KEYCODE_SHIFT_RIGHT:
-				this.handleKeyboardChange();
+				this.swipeRight();
 				//				String displayLanguage = Locale.getDefault().getDisplayLanguage();
 				//				if (displayLanguage.contentEquals(Locale.ENGLISH.getDisplayLanguage())) {
 				//				if (!this.isShifted) {
@@ -384,21 +439,20 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 	/**
 	 * 
 	 */
-	private void handleKeyboardChange() {
-
-		if (this.getKeyboard() == this.symbolsNumbers) {
-			this.setKeyboard(this.symbolsFunctions);
-			return;
-		}
-		if (this.getKeyboard() == this.symbolsFunctions) {
-			this.setKeyboard(this.symbolsSensors);
-			return;
-		}
-		if (this.getKeyboard() == this.symbolsSensors) {
-			this.setKeyboard(this.symbolsNumbers);
-			return;
-		}
-	}
+	//	private void handleKeyboardChange() {
+	//		if (this.getKeyboard() == this.symbolsNumbers) {
+	//			this.setKeyboard(this.symbolsFunctions);
+	//			return;
+	//		}
+	//		if (this.getKeyboard() == this.symbolsFunctions) {
+	//			this.setKeyboard(this.symbolsSensors);
+	//			return;
+	//		}
+	//		if (this.getKeyboard() == this.symbolsSensors) {
+	//			this.setKeyboard(this.symbolsNumbers);
+	//			return;
+	//		}
+	//	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -429,14 +483,17 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 
 		if (this.getKeyboard() == this.symbolsNumbers) {
 			this.setKeyboard(this.symbolsSensors);
+			setSwipeBarBackground(SENSOR_KEYBOARD);
 			return;
 		}
 		if (this.getKeyboard() == this.symbolsFunctions) {
 			this.setKeyboard(this.symbolsNumbers);
+			setSwipeBarBackground(NUMBER_KEYBOARD);
 			return;
 		}
 		if (this.getKeyboard() == this.symbolsSensors) {
 			this.setKeyboard(this.symbolsFunctions);
+			setSwipeBarBackground(FUNCTION_KEYBOARD);
 			return;
 		}
 
@@ -445,9 +502,21 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 	@Override
 	public void swipeRight() {
 
-		//Log.i("info", "swipeRight()");
-		this.onKey(KeyEvent.KEYCODE_SHIFT_RIGHT, null);
-		//		super.swipeRight();
+		if (this.getKeyboard() == this.symbolsNumbers) {
+			this.setKeyboard(this.symbolsFunctions);
+			setSwipeBarBackground(FUNCTION_KEYBOARD);
+			return;
+		}
+		if (this.getKeyboard() == this.symbolsFunctions) {
+			this.setKeyboard(this.symbolsSensors);
+			setSwipeBarBackground(SENSOR_KEYBOARD);
+			return;
+		}
+		if (this.getKeyboard() == this.symbolsSensors) {
+			this.setKeyboard(this.symbolsNumbers);
+			setSwipeBarBackground(NUMBER_KEYBOARD);
+			return;
+		}
 	}
 
 	@Override

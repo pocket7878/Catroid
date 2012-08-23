@@ -33,6 +33,7 @@
     
     <dimen name="tab_widget_height">40dip</dimen>
     
+    <dimen name="text_size_xxsmall">10sp</dimen>
     <dimen name="text_size_small">13sp</dimen>
     <dimen name="text_size_medium">16sp</dimen>
 	<dimen name="text_size_large">18sp</dimen>
