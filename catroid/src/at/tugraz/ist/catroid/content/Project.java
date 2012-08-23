@@ -38,6 +38,7 @@ public class Project implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<Sprite> spriteList = new ArrayList<Sprite>();
 	private String projectName;
+	private boolean projectHasThumbnail = false;
 
 	// Only used for Catroid website
 	@SuppressWarnings("unused")
@@ -118,5 +119,13 @@ public class Project implements Serializable {
 			catroidVersionName = Utils.getVersionName(context);
 			catroidVersionCode = Utils.getVersionCode(context);
 		}
+	}
+
+	public boolean getProjectHasThumbnail() {
+		return projectHasThumbnail;
+	}
+
+	public void setProjectHasThumbnail(boolean hasThubmnail) {
+		projectHasThumbnail = hasThubmnail;
 	}
 }
