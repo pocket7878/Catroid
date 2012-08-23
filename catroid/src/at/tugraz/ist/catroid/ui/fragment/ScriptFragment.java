@@ -76,6 +76,7 @@ public class ScriptFragment extends SherlockFragment implements OnCategorySelect
 
 	private NewBrickAddedReceiver brickAddedReceiver;
 	private BrickListChangedReceiver brickListChangedReceiver;
+	private TabChangedReceiver tabChangedReceiver;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -128,18 +129,10 @@ public class ScriptFragment extends SherlockFragment implements OnCategorySelect
 		if (brickListChangedReceiver != null) {
 			getActivity().unregisterReceiver(brickListChangedReceiver);
 		}
-	}
 
-	@Override
-	public void onStart() {
-		super.onStart();
-
-		sprite = ProjectManager.getInstance().getCurrentSprite();
-		if (sprite == null) {
-			return;
+		if (tabChangedReceiver != null) {
+			getActivity().unregisterReceiver(tabChangedReceiver);
 		}
-
-		initListeners();
 	}
 
 	@Override
@@ -158,11 +151,18 @@ public class ScriptFragment extends SherlockFragment implements OnCategorySelect
 			brickListChangedReceiver = new BrickListChangedReceiver();
 		}
 
+		if (tabChangedReceiver == null) {
+			tabChangedReceiver = new TabChangedReceiver();
+		}
+
 		IntentFilter filterBrickAdded = new IntentFilter(ScriptTabActivity.ACTION_NEW_BRICK_ADDED);
 		getActivity().registerReceiver(brickAddedReceiver, filterBrickAdded);
 
 		IntentFilter filterBrickListChanged = new IntentFilter(ScriptTabActivity.ACTION_BRICK_LIST_CHANGED);
 		getActivity().registerReceiver(brickListChangedReceiver, filterBrickListChanged);
+
+		IntentFilter intentFilterTabChanged = new IntentFilter(ScriptTabActivity.ACTION_TAB_CHANGED);
+		getActivity().registerReceiver(tabChangedReceiver, intentFilterTabChanged);
 
 		initListeners();
 	}
@@ -341,6 +341,16 @@ public class ScriptFragment extends SherlockFragment implements OnCategorySelect
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getAction().equals(ScriptTabActivity.ACTION_BRICK_LIST_CHANGED)) {
 				adapter.updateProjectBrickList();
+			}
+		}
+	}
+
+	private class TabChangedReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (intent.getAction().equals(ScriptTabActivity.ACTION_TAB_CHANGED)) {
+				listView.resetDraggingScreen();
+				adapter.removeDraggedBrick();
 			}
 		}
 	}
