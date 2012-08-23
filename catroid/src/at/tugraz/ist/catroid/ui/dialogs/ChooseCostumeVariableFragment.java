@@ -22,16 +22,12 @@
  */
 package at.tugraz.ist.catroid.ui.dialogs;
 
-import android.R;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import at.tugraz.ist.catroid.formulaeditor.CatKeyEvent;
 import at.tugraz.ist.catroid.formulaeditor.CatKeyboardView;
@@ -73,9 +69,9 @@ public class ChooseCostumeVariableFragment extends DialogFragment implements Dia
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setCancelable(true);
-		int style = DialogFragment.STYLE_NORMAL;
-		int theme = 0;
-		setStyle(style, theme);
+		//		int style = DialogFragment.STYLE_NORMAL;
+		//		int theme = 0;
+		//		setStyle(style, theme);
 	}
 
 	@Override
@@ -83,10 +79,6 @@ public class ChooseCostumeVariableFragment extends DialogFragment implements Dia
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(new String("Choose your Costume Variable:"));
 		builder.setNegativeButton("Cancel", this);
-		LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-		View dialogLayout = inflater.inflate(R.layout.select_dialog_item, null);
-		builder.setView(dialogLayout);
 
 		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_list_item_1, items);
