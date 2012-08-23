@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.uitest.formulaeditor;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
@@ -349,6 +350,71 @@ public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<
 		solo.sleep(2000);
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
 		assertEquals("Wrong text after oprientation switch", "sin( cos( 0 ) ) ",
+				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
+
+		solo.goBack();
+
+	}
+
+	public void testKeyboardSwipeAndSwipeBar() {
+		DisplayMetrics currentDisplayMetrics = new DisplayMetrics();
+		solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getMetrics(currentDisplayMetrics);
+
+		int displayWidth = currentDisplayMetrics.widthPixels;
+		int displayHeight = currentDisplayMetrics.heightPixels;
+
+		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		solo.clickOnText(solo.getString(R.string.functions));
+		catKeyboardClicker.clickOnKey("sin");
+		assertEquals("Wrong keyboard after keyboard switch", "sin( 0 ) ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+				.getText().toString());
+		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
+
+		solo.clickOnText(solo.getString(R.string.numbers));
+		catKeyboardClicker.clickOnKey("1");
+		assertEquals("Wrong keyboard after keyboard switch", "1 ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+				.getText().toString());
+		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
+
+		solo.clickOnText(solo.getString(R.string.sensors));
+		catKeyboardClicker.clickOnKey("x-accel");
+		assertEquals("Wrong keyboard after keyboard switch", "X_ACCELERATION_ ",
+				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
+		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
+
+		solo.drag(10, displayWidth - 10, displayHeight - 50, displayHeight - 50, 100);
+		catKeyboardClicker.clickOnKey("1");
+		assertEquals("Wrong keyboard after keyboard switch", "1 ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+				.getText().toString());
+		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
+
+		solo.drag(10, displayWidth - 10, displayHeight - 50, displayHeight - 50, 100);
+		catKeyboardClicker.clickOnKey("sin");
+		assertEquals("Wrong keyboard after keyboard switch", "sin( 0 ) ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+				.getText().toString());
+		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
+
+		solo.drag(10, displayWidth - 10, displayHeight - 50, displayHeight - 50, 100);
+		catKeyboardClicker.clickOnKey("x-accel");
+		assertEquals("Wrong keyboard after keyboard switch", "X_ACCELERATION_ ",
+				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
+		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
+
+		solo.drag(displayWidth - 10, 10, displayHeight - 50, displayHeight - 50, 100);
+		catKeyboardClicker.clickOnKey("sin");
+		assertEquals("Wrong keyboard after keyboard switch", "sin( 0 ) ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+				.getText().toString());
+		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
+
+		solo.drag(displayWidth - 10, 10, displayHeight - 50, displayHeight - 50, 100);
+		catKeyboardClicker.clickOnKey("1");
+		assertEquals("Wrong keyboard after keyboard switch", "1 ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+				.getText().toString());
+		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
+
+		solo.drag(displayWidth - 10, 10, displayHeight - 50, displayHeight - 50, 100);
+		catKeyboardClicker.clickOnKey("x-accel");
+		assertEquals("Wrong keyboard after keyboard switch", "X_ACCELERATION_ ",
 				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
 
 		solo.goBack();
