@@ -99,11 +99,11 @@ public class CostumeAdapter extends ArrayAdapter<CostumeData> {
 		CostumeData costumeData = costumeDataItems.get(position);
 
 		if (costumeData != null) {
-			ImageView costumeImage = (ImageView) convertView.findViewById(R.id.costume_image);
-			TextView costumeNameTextField = (TextView) convertView.findViewById(R.id.costume_name);
-			TextView costumeResolution = (TextView) convertView.findViewById(R.id.costume_res);
-			TextView costumeSize = (TextView) convertView.findViewById(R.id.costume_size);
-			CheckBox costumeCheckBox = (CheckBox) convertView.findViewById(R.id.cb_costume_select);
+			final ImageView costumeImage = (ImageView) convertView.findViewById(R.id.costume_image);
+			final TextView costumeNameTextField = (TextView) convertView.findViewById(R.id.costume_name);
+			final TextView costumeResolution = (TextView) convertView.findViewById(R.id.costume_res);
+			final TextView costumeSize = (TextView) convertView.findViewById(R.id.costume_size);
+			final CheckBox costumeCheckBox = (CheckBox) convertView.findViewById(R.id.cb_costume_select);
 
 			costumeImage.setImageBitmap(costumeData.getThumbnailBitmap());
 			costumeNameTextField.setText(costumeData.getCostumeName());
@@ -131,9 +131,7 @@ public class CostumeAdapter extends ArrayAdapter<CostumeData> {
 			costumeImage.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (onCostumeEditListener != null) {
-						onCostumeEditListener.onCostumeEditPaintroid(position);
-					}
+					costumeCheckBox.setChecked(!costumeCheckBox.isChecked());
 				}
 			});
 
@@ -166,8 +164,6 @@ public class CostumeAdapter extends ArrayAdapter<CostumeData> {
 	public interface OnCostumeEditListener {
 
 		public void onCostumeRename(int position);
-
-		public void onCostumeEditPaintroid(int position);
 
 	}
 }

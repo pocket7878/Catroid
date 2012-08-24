@@ -79,6 +79,10 @@ public class CostumeFragment extends SherlockListFragment implements LoaderManag
 	private static final String LOADER_ARGUMENTS_IMAGE_URI = "image_uri";
 	private static final int ID_LOADER_MEDIA_IMAGE = 1;
 
+	public static final int REQUEST_SELECT_IMAGE = 0;
+	public static final int REQUEST_PAINTROID_EDIT_IMAGE = 1;
+	public static final int REQUEST_TAKE_PICTURE = 2;
+
 	private CostumeAdapter adapter;
 	private ArrayList<CostumeData> costumeDataList;
 	private CostumeData selectedCostumeData;
@@ -89,10 +93,6 @@ public class CostumeFragment extends SherlockListFragment implements LoaderManag
 	private CostumeDeletedReceiver costumeDeletedReceiver;
 	private CostumeRenamedReceiver costumeRenamedReceiver;
 	private TabChangedReceiver tabChangedReceiver;
-
-	public static final int REQUEST_SELECT_IMAGE = 0;
-	public static final int REQUEST_PAINTROID_EDIT_IMAGE = 1;
-	public static final int REQUEST_TAKE_PICTURE = 2;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -261,11 +261,6 @@ public class CostumeFragment extends SherlockListFragment implements LoaderManag
 	public void onCostumeRename(int position) {
 		destroyActionMode();
 		handleRenameCostumeButton(position);
-	}
-
-	@Override
-	public void onCostumeEditPaintroid(int position) {
-		handleEditCostumeButton(position);
 	}
 
 	@Override
