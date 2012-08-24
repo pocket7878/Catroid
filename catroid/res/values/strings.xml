@@ -116,6 +116,10 @@
     <string name="text_to_speech_engine_not_installed">Text-to-Speech engine not installed!\nDo you want to install it?</string>
     <!-- Script context menu -->
     <string name="script_context_menu_title">Script Menu</string>
+    <!-- Brick context dialog -->
+    <string name="brick_context_dialog_move_brick">Move Brick</string>
+    <string name="brick_context_dialog_delete_brick">Delete Brick</string>
+    <string name="brick_context_dialog_animate_bricks">Animate Brick-Parts</string>
     <!-- New project dialog -->
     <string name="new_project_dialog_title">Name of new project</string>
     <string name="new_project_dialog_hint">My Project</string>
@@ -244,7 +248,6 @@
     <string name="error_project_download">An error occurred while downloading the project.</string>
     <string name="error_new_project">An error occurred while creating a new project.</string>
     <string name="error_load_project">An error occurred while loading the project.</string>
-    <string name="error_no_number_entered">Please enter a number.</string>
     <string name="error_screenshot_failed">An error occurred while saving the screenshot.</string>
     <string name="error_load_image">An error occurred while loading the image.</string>
     <string name="error_load_sound">An error occurred while loading the sound.</string>
@@ -284,8 +287,6 @@
     <string name="tone_duration">Duration</string>
     <string name="nxt_tone_frequency">Frequency</string>
     <string name="nxt_tone_hundred_hz">x100Hz</string>
-    <string name="number_to_small">Value is too small!</string>
-    <string name="number_to_big">Value is too big!</string>
     <string name="select_image">Select image</string>
     <!-- Formula Editor Strings -->
     <string name="formula_editor_title">Formula Editor</string>
@@ -296,4 +297,7 @@
     <string name="formula_editor_parse_fail">Error in the input! Fix or press again to discard.</string>
     <string name="formula_nothing_selected">Define the brick´s input value</string>
     <string name="formula_editor_parse_fail_formula_too_long">Formula too long! Fix or press again to discard.</string>
+    <string name="numbers">Numbers</string>
+    <string name="functions">Functions</string>
+    <string name="sensors">Sensors</string>
 </resources>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Compilerbau" basedir="." default="compile">
+<project name="catroidFormulaEditorGrammar" basedir="." default="compile">
     <property name="lib.dir" value="libs" />
     <property name="src.dir" value="src" />
     <property name="grammar.fileCalc" value="${src.dir}/CalcGrammar.g" />
@@ -9,16 +9,9 @@
 		
 	<path id="classpath">
 	    <pathelement location="${lib.dir}/antlr-3.4-complete.jar" />
-        <pathelement location="${bin.dir}"/>
 	</path>
-
-    <target name="init">
-        <mkdir dir="${bin.dir}" />
-		<mkdir dir="${out.dir}" />
-    </target>
 	
-
-    	<target name="compile-calc">
+    <target name="compile-calc" description="compiles the ANTLR-Grammar File to CalcGrammarLexer.java and CalcGrammarParser.java">
        <java classname="org.antlr.Tool">
 			<arg value="-fo" />
 			<arg value="${src.dir}/${package}" />
@@ -27,15 +20,7 @@
 	   </java>
     </target>
 		
-	<target name="compile" description="compiles the grammar file to Java files and compiles all Java files from src" depends="init, compile-calc">
-		<javac debug="false" srcdir="${src.dir}" destdir="${bin.dir}" includeantruntime="false" classpathref="classpath"/>
-	</target>
-	
-	
-	
-	<target name="clean" description="deletes the automatically created tokens, parser and lexer and the bin and out folder">
-		<delete dir="${bin.dir}" />
-		<delete dir="${out.dir}" />
+	<target name="clean" description="deletes the automatically created tokens, parser and lexer">
 		<delete file="${lexer.file}" />
 		<delete file="${parser.file}" />
 		<delete file="${tokens.file}" />

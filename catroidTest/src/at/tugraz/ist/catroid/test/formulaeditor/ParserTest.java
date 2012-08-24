@@ -28,7 +28,7 @@ import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.formulaeditor.CalcGrammarParser;
 import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
 
-public class DataStructureTest extends AndroidTestCase {
+public class ParserTest extends AndroidTestCase {
 
 	private static final double DELTA = 0.01;
 

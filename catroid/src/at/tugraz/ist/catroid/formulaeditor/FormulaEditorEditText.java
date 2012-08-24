@@ -320,13 +320,35 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	private void extendSelectionForSensorValue() {
 		String temp = getText().toString().substring(selectionStartIndex, selectionEndIndex);
+		if (Sensors.isAmbiguousName(temp)) {
+			String forwardDisambiguation = disambiguateNameForSensors();
 
-		if (Sensors.isStartOfSensorName(temp)) {
+			if (Sensors.isStartOfSensorName(temp, forwardDisambiguation)) {
+				extendSelectionForSensorValueFromFront();
+			} else if (Sensors.isEndOfSensorName(temp)) {
+				extendSelectionForSensorValueFromEnd();
+			}
+		} else if (Sensors.isStartOfSensorName(temp)) {
 			extendSelectionForSensorValueFromFront();
 		} else if (Sensors.isEndOfSensorName(temp)) {
 			extendSelectionForSensorValueFromEnd();
 		}
 
+	}
+
+	private String disambiguateNameForSensors() {
+		String searchForward = "";
+		Editable text = getText();
+		int searchPos = selectionEndIndex;
+		while (searchPos < text.length()) {
+			searchForward += text.charAt(searchPos);
+			searchPos++;
+			if (searchForward.endsWith("_")) {
+				break;
+			}
+		}
+
+		return searchForward;
 	}
 
 	private void extendSelectionForSensorValueFromEnd() {

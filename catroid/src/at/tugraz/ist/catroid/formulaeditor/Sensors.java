@@ -26,11 +26,30 @@ import java.util.EnumSet;
 
 public enum Sensors {
 	X_ACCELERATION_("X_ACCELERATION_"), Y_ACCELERATION_("Y_ACCELERATION_"), Z_ACCELERATION_("Z_ACCELERATION_"), AZIMUTH_ORIENTATION_(
-			"AZIMUTH_ORIENTATION_"), PITCH_ORIENTATION_("PITCH_ORIENTATION_"), ROLL_ORIENTATION_("ROLL_ORIENTATION_");
-	private final String sensorName;
+			"AZIMUTH_ORIENTATION_"), PITCH_ORIENTATION_("PITCH_ORIENTATION_"), ROLL_ORIENTATION_("ROLL_ORIENTATION_"), COSTUME_X_(
+			"COSTUME_X_"), COSTUME_Y_("COSTUME_Y_"), COSTUME_GHOSTEFFECT_("COSTUME_GHOSTEFFECT_"), COSTUME_BRIGHTNESS_(
+			"COSTUME_BRIGHTNESS_"), COSTUME_SIZE_("COSTUME_SIZE_"), COSTUME_ROTATION_("COSTUME_ROTATION_"), COSTUME_LAYER_(
+			"COSTUME_LAYER_");
+	public final String sensorName;
 
 	Sensors(String value) {
 		this.sensorName = value;
+	}
+
+	public static boolean isAmbiguousName(String value) {
+		int occurrence = 0;
+		for (Sensors fct : EnumSet.allOf(Sensors.class)) {
+			if (fct.sensorName.startsWith(value)) {
+				occurrence++;
+			}
+			if (fct.sensorName.endsWith(value)) {
+				occurrence++;
+			}
+			if (occurrence > 1) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static boolean isStartOfSensorName(String value) {
@@ -45,6 +64,20 @@ public enum Sensors {
 	public static boolean isEndOfSensorName(String value) {
 		for (Sensors fct : EnumSet.allOf(Sensors.class)) {
 			if (fct.sensorName.endsWith(value)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isStartOfSensorName(String value, String forwardDisambiguation) {
+
+		if (forwardDisambiguation.equals("")) {
+			return false;
+		}
+
+		for (Sensors fct : EnumSet.allOf(Sensors.class)) {
+			if (fct.sensorName.startsWith(value) && fct.sensorName.endsWith(forwardDisambiguation)) {
 				return true;
 			}
 		}

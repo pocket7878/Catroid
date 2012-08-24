@@ -39,7 +39,9 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
+import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
 import at.tugraz.ist.catroid.ui.adapter.TabsPagerAdapter;
+import at.tugraz.ist.catroid.ui.dragndrop.DragAndDropListView;
 import at.tugraz.ist.catroid.ui.fragment.CostumeFragment;
 import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
 import at.tugraz.ist.catroid.ui.fragment.ScriptFragment;
@@ -167,8 +169,44 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 
 		if (requestCode == PreStageActivity.REQUEST_RESOURCES_INIT && resultCode == RESULT_OK) {
 			Intent intent = new Intent(ScriptTabActivity.this, StageActivity.class);
-			startActivity(intent);
+			startActivityForResult(intent, StageActivity.STAGE_ACTIVITY_FINISH);
 		}
+		if (requestCode == StageActivity.STAGE_ACTIVITY_FINISH) {
+			ProjectManager projectManager = ProjectManager.getInstance();
+			int currentSpritePos = projectManager.getCurrentSpritePosition();
+			int currentScriptPos = projectManager.getCurrentScriptPosition();
+			projectManager.loadProject(projectManager.getCurrentProject().getName(), this, false);
+			projectManager.setCurrentSpriteWithPosition(currentSpritePos);
+			projectManager.setCurrentScriptWithPosition(currentScriptPos);
+		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+		FormulaEditorFragment formulaEditor = (FormulaEditorFragment) getSupportFragmentManager().findFragmentByTag(
+				FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
+
+		if (formulaEditor != null) {
+			return formulaEditor.onKey(null, keyCode, event);
+		}
+
+		if (getCurrentTabFragment() instanceof ScriptFragment) {
+			if (keyCode == KeyEvent.KEYCODE_BACK) {
+				ScriptFragment scriptFragment = (ScriptFragment) getCurrentTabFragment();
+				DragAndDropListView listView = scriptFragment.getListView();
+				if (listView.isCurrentlyDragging()) {
+					listView.resetDraggingScreen();
+
+					BrickAdapter adapter = scriptFragment.getAdapter();
+					adapter.removeDraggedBrick();
+
+					return true;
+				}
+			}
+		}
+
+		return super.onKeyDown(keyCode, event);
 	}
 
 	private void setupTabHost() {
@@ -212,17 +250,6 @@ public class ScriptTabActivity extends SherlockFragmentActivity {
 
 	public Fragment getCurrentTabFragment() {
 		return getTabFragment(tabHost.getCurrentTab());
-	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		FormulaEditorFragment formulaEditor = (FormulaEditorFragment) getSupportFragmentManager().findFragmentByTag(
-				FormulaEditorFragment.FORMULA_EDITOR_FRAGMENT_TAG);
-
-		if (formulaEditor != null) {
-			return formulaEditor.onKey(null, keyCode, event);
-		}
-		return super.onKeyDown(keyCode, event);
 	}
 
 }

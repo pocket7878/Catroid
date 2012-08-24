@@ -126,7 +126,7 @@ public class SensorTest extends ActivityInstrumentationTestCase2<MainMenuActivit
 
 	private int tryMock(String method, Formula formula, int expectedResult) {
 		Input mock = PowerMock.createPartialMock(Input.class, method);
-		SensorManager.sensors = mock;
+		SensorManager.setSensorSourceForNextCall(mock);
 
 		try {
 			PowerMock.expectPrivate(mock, method).andReturn(expectedResult);
