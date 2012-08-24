@@ -211,12 +211,12 @@ public class CatKeyboardClicker {
 		keyString.get(0).add("6");
 		keyString.get(0).add("3");
 
-		keyString.get(0).add("keyboardswitch");
+		keyString.get(0).add("costume");
 		keyString.get(0).add("*");
 		keyString.get(0).add("+");
 		keyString.get(0).add("del");
 
-		keyString.get(0).add("keyboardswitch2");
+		keyString.get(0).add("keyboardswitch");
 		keyString.get(0).add("/");
 		keyString.get(0).add("-");
 		keyString.get(0).add("del2");
@@ -236,12 +236,12 @@ public class CatKeyboardClicker {
 		keyString.get(1).add("sqrt");
 		keyString.get(1).add("tan");
 
-		keyString.get(1).add("keyboardswitch");
+		keyString.get(1).add("keyboardswitch2");
 		keyString.get(1).add("*");
 		keyString.get(1).add("+");
 		keyString.get(1).add("del");
 
-		keyString.get(1).add("keyboardswitch2");
+		keyString.get(1).add("keyboardswitch");
 		keyString.get(1).add("/");
 		keyString.get(1).add("-");
 		keyString.get(1).add("del2");
@@ -261,12 +261,12 @@ public class CatKeyboardClicker {
 		keyString.get(2).add(null);
 		keyString.get(2).add(null);
 
-		keyString.get(2).add("keyboardswitch");
+		keyString.get(2).add("keyboardswitch2");
 		keyString.get(2).add("roll");
 		keyString.get(2).add("azimuth");
 		keyString.get(2).add("del");
 
-		keyString.get(2).add(null);
+		keyString.get(2).add("keyboardswitch");
 		keyString.get(2).add(null);
 		keyString.get(2).add(null);
 		keyString.get(2).add(null);
