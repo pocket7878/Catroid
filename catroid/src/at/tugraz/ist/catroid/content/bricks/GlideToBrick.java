@@ -150,12 +150,12 @@ public class GlideToBrick implements Brick, OnClickListener {
 		view = View.inflate(context, R.layout.brick_glide_to, null);
 
 		TextView textX = (TextView) view.findViewById(R.id.brick_glide_to_x_text_view);
-		xDestination.setTextFieldId(R.id.brick_glide_to_x_edit_text);
+		xDestination.setTextFieldId(R.id.brick_glide_to_x_text_view);
 		xDestination.refreshTextField(view);
 		textX.setOnClickListener(this);
 
 		TextView textY = (TextView) view.findViewById(R.id.brick_glide_to_y_text_view);
-		yDestination.setTextFieldId(R.id.brick_glide_to_y_edit_text);
+		yDestination.setTextFieldId(R.id.brick_glide_to_y_text_view);
 		yDestination.refreshTextField(view);
 		textY.setOnClickListener(this);
 

@@ -100,7 +100,7 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 
 		TextView textDuration = (TextView) brickView.findViewById(R.id.nxt_tone_duration_text_view);
 		//		editDuration.setText(String.valueOf(durationInMs / 1000.0));
-		durationInSeconds.setTextFieldId(R.id.nxt_tone_duration_edit_text);
+		durationInSeconds.setTextFieldId(R.id.nxt_tone_duration_text_view);
 		durationInSeconds.refreshTextField(brickView);
 		//		EditDoubleDialog dialogDuration = new EditDoubleDialog(context, editDuration, duration, MIN_DURATION,
 		//				MAX_DURATION);
