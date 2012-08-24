@@ -91,22 +91,10 @@
                     android:minWidth="50dip"
                     android:paddingRight="5dip"
                     android:text="0"
-                    android:textSize="20dip" />
+                    android:textSize="20dip"   
+        			android:singleLine="true"
+        			android:ellipsize="marquee"/>
 
-                <EditText
-                    android:id="@+id/motor_turn_angle_edit_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:visibility="gone"
-                    android:gravity="right"
-                    android:inputType="number|numberDecimal|numberSigned"
-                    android:minWidth="60dip"
-                    android:maxLines="1"
-                    android:text="0" >
-                </EditText>
 
                 <TextView
                     style="@style/brick_text_style"

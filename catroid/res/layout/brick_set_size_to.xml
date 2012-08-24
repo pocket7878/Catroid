@@ -50,25 +50,11 @@
         android:minWidth="50dip"
         android:paddingRight="5dip"
         android:text="100"
-        android:textSize="20dip" >
+        android:textSize="20dip"    
+      	android:singleLine="true"
+     	android:ellipsize="marquee">
     </TextView>
 
-    <EditText
-        android:id="@+id/brick_set_size_to_edit_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/SetSizeToTextView"
-        android:clickable="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:visibility="gone"
-        android:gravity="right"
-        android:inputType="number|numberDecimal"
-        android:maxLength="6"
-        android:maxLines="1"
-        android:minWidth="60dip"
-        android:text="100" >
-    </EditText>
 
     <TextView
         android:id="@+id/ValueTextView"

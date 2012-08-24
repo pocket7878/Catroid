@@ -70,23 +70,11 @@
                     android:minWidth="50dip"
                     android:paddingRight="5dip"
                     android:text="0.0"
-                    android:textSize="20dip" >
+                    android:textSize="20dip" 
+                    android:singleLine="true"
+        			android:ellipsize="marquee">
                 </TextView>
 
-                <EditText
-                    android:id="@+id/nxt_tone_duration_edit_text"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:gravity="right"
-                    android:inputType="number|numberDecimal|numberSigned"
-                    android:maxLength="3"
-                    android:maxLines="1"
-                    android:text="0.0"
-                    android:visibility="gone" >
-                </EditText>
 
                 <TextView
                     style="@style/brick_text_style"
@@ -128,23 +116,11 @@
                     android:minWidth="50dip"
                     android:paddingRight="5dip"
                     android:text="0.0"
-                    android:textSize="20dip" >
+                    android:textSize="20dip"    
+        			android:singleLine="true"
+        			android:ellipsize="marquee">
                 </TextView>
 
-                <EditText
-                    android:id="@+id/nxt_tone_freq_edit_text"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:visibility="gone"
-                    android:gravity="right"
-                    android:inputType="number|numberDecimal|numberSigned"
-                    android:maxLength="3"
-                    android:maxLines="1"
-                    android:text="0.0" >
-                </EditText>
 
                 <TextView
                     style="@style/brick_text_style"

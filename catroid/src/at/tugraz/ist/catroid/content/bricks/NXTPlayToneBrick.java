@@ -99,7 +99,6 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 		View brickView = View.inflate(context, R.layout.brick_nxt_play_tone, null);
 
 		TextView textDuration = (TextView) brickView.findViewById(R.id.nxt_tone_duration_text_view);
-		EditText editDuration = (EditText) brickView.findViewById(R.id.nxt_tone_duration_edit_text);
 		//		editDuration.setText(String.valueOf(durationInMs / 1000.0));
 		durationInSeconds.setTextFieldId(R.id.nxt_tone_duration_edit_text);
 		durationInSeconds.refreshTextField(brickView);
@@ -109,19 +108,12 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 		//		dialogDuration.setOnCancelListener((OnCancelListener) context);
 		//		editDuration.setOnClickListener(dialogDuration);
 
-		textDuration.setVisibility(View.GONE);
-		editDuration.setVisibility(View.VISIBLE);
-
-		editDuration.setOnClickListener(this);
+		textDuration.setOnClickListener(this);
 
 		TextView textFreq = (TextView) brickView.findViewById(R.id.nxt_tone_freq_text_view);
-		editFreq = (EditText) brickView.findViewById(R.id.nxt_tone_freq_edit_text);
 		//		editFreq.setText(String.valueOf(hertz / 100));
-		frequency.setTextFieldId(R.id.nxt_tone_freq_edit_text);
+		frequency.setTextFieldId(R.id.nxt_tone_freq_text_view);
 		frequency.refreshTextField(brickView);
-
-		textFreq.setVisibility(View.GONE);
-		editFreq.setVisibility(View.VISIBLE);
 
 		editFreq.setOnClickListener(this);
 
@@ -131,10 +123,10 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
-			case R.id.nxt_tone_freq_edit_text:
+			case R.id.nxt_tone_freq_text_view:
 				FormulaEditorFragment.showFragment(view, this, frequency);
 				break;
-			case R.id.nxt_tone_duration_edit_text:
+			case R.id.nxt_tone_duration_text_view:
 				FormulaEditorFragment.showFragment(view, this, durationInSeconds);
 				break;
 		}

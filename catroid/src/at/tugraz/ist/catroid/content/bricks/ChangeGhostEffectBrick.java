@@ -26,7 +26,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -81,14 +80,11 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 		view = View.inflate(context, R.layout.brick_change_ghost_effect, null);
 
 		TextView textX = (TextView) view.findViewById(R.id.brick_change_ghost_effect_text_view);
-		EditText editX = (EditText) view.findViewById(R.id.brick_change_ghost_effect_edit_text);
 
-		changeGhostEffect.setTextFieldId(R.id.brick_change_ghost_effect_edit_text);
+		changeGhostEffect.setTextFieldId(R.id.brick_change_ghost_effect_text_view);
 		changeGhostEffect.refreshTextField(view);
 
-		textX.setVisibility(View.GONE);
-		editX.setVisibility(View.VISIBLE);
-		editX.setOnClickListener(this);
+		textX.setOnClickListener(this);
 
 		return view;
 	}

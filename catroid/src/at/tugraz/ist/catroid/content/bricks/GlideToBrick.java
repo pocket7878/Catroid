@@ -26,7 +26,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -151,30 +150,19 @@ public class GlideToBrick implements Brick, OnClickListener {
 		view = View.inflate(context, R.layout.brick_glide_to, null);
 
 		TextView textX = (TextView) view.findViewById(R.id.brick_glide_to_x_text_view);
-		EditText editX = (EditText) view.findViewById(R.id.brick_glide_to_x_edit_text);
 		xDestination.setTextFieldId(R.id.brick_glide_to_x_edit_text);
 		xDestination.refreshTextField(view);
-		editX.setOnClickListener(this);
+		textX.setOnClickListener(this);
 
 		TextView textY = (TextView) view.findViewById(R.id.brick_glide_to_y_text_view);
-		EditText editY = (EditText) view.findViewById(R.id.brick_glide_to_y_edit_text);
 		yDestination.setTextFieldId(R.id.brick_glide_to_y_edit_text);
 		yDestination.refreshTextField(view);
-		editY.setOnClickListener(this);
+		textY.setOnClickListener(this);
 
 		TextView textDuration = (TextView) view.findViewById(R.id.brick_glide_to_duration_text_view);
-		EditText editDuration = (EditText) view.findViewById(R.id.brick_glide_to_duration_edit_text);
-		durationInSeconds.setTextFieldId(R.id.brick_glide_to_duration_edit_text);
 		durationInSeconds.refreshTextField(view);
 
-		textX.setVisibility(View.GONE);
-		editX.setVisibility(View.VISIBLE);
-		textY.setVisibility(View.GONE);
-		editY.setVisibility(View.VISIBLE);
-		textDuration.setVisibility(View.GONE);
-		editDuration.setVisibility(View.VISIBLE);
-
-		editDuration.setOnClickListener(this);
+		textDuration.setOnClickListener(this);
 
 		return view;
 	}
@@ -192,15 +180,15 @@ public class GlideToBrick implements Brick, OnClickListener {
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
-			case R.id.brick_glide_to_x_edit_text:
+			case R.id.brick_glide_to_x_text_view:
 				FormulaEditorFragment.showFragment(view, this, xDestination);
 				break;
 
-			case R.id.brick_glide_to_y_edit_text:
+			case R.id.brick_glide_to_y_text_view:
 				FormulaEditorFragment.showFragment(view, this, yDestination);
 				break;
 
-			case R.id.brick_glide_to_duration_edit_text:
+			case R.id.brick_glide_to_duration_text_view:
 				FormulaEditorFragment.showFragment(view, this, durationInSeconds);
 				break;
 		}

@@ -29,7 +29,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
@@ -50,8 +49,6 @@ public class NXTMotorTurnAngleBrick implements Brick, OnClickListener {
 	private transient Motor motorEnum;
 	private Formula degrees;
 	private static final int NO_DELAY = 0;
-
-	private transient EditText editSpeed;
 
 	protected Object readResolve() {
 		if (motor != null) {
@@ -119,14 +116,10 @@ public class NXTMotorTurnAngleBrick implements Brick, OnClickListener {
 		View brickView = View.inflate(context, R.layout.brick_nxt_motor_turn_angle, null);
 
 		TextView textSpeed = (TextView) brickView.findViewById(R.id.motor_turn_angle_text_view);
-		editSpeed = (EditText) brickView.findViewById(R.id.motor_turn_angle_edit_text);
-		degrees.setTextFieldId(R.id.motor_turn_angle_edit_text);
+		degrees.setTextFieldId(R.id.motor_turn_angle_text_view);
 		degrees.refreshTextField(brickView);
 
-		textSpeed.setVisibility(View.GONE);
-		editSpeed.setVisibility(View.VISIBLE);
-
-		editSpeed.setOnClickListener(this);
+		textSpeed.setOnClickListener(this);
 
 		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context, R.array.nxt_motor_chooser,
 				android.R.layout.simple_spinner_item);

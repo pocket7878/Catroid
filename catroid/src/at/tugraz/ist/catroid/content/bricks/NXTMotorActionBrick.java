@@ -121,14 +121,10 @@ public class NXTMotorActionBrick implements Brick, OnClickListener {
 		View brickView = View.inflate(context, R.layout.brick_nxt_motor_action, null);
 
 		TextView textSpeed = (TextView) brickView.findViewById(R.id.motor_action_speed_text_view);
-		editSpeed = (EditText) brickView.findViewById(R.id.motor_action_speed_edit_text);
-		speed.setTextFieldId(R.id.motor_action_speed_edit_text);
+		speed.setTextFieldId(R.id.motor_action_speed_text_view);
 		speed.refreshTextField(brickView);
 
-		textSpeed.setVisibility(View.GONE);
-		editSpeed.setVisibility(View.VISIBLE);
-
-		editSpeed.setOnClickListener(this);
+		textSpeed.setOnClickListener(this);
 
 		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context, R.array.nxt_motor_chooser,
 				android.R.layout.simple_spinner_item);

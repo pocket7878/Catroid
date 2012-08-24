@@ -26,7 +26,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -89,13 +88,10 @@ public class WaitBrick implements Brick, OnClickListener {
 		view = View.inflate(context, R.layout.brick_wait, null);
 
 		TextView text = (TextView) view.findViewById(R.id.brick_wait_text_view);
-		EditText edit = (EditText) view.findViewById(R.id.brick_wait_edit_text);
-		timeToWaitInSeconds.setTextFieldId(R.id.brick_wait_edit_text);
+		timeToWaitInSeconds.setTextFieldId(R.id.brick_wait_text_view);
 		timeToWaitInSeconds.refreshTextField(view);
 
-		text.setVisibility(View.GONE);
-		edit.setVisibility(View.VISIBLE);
-		edit.setOnClickListener(this);
+		text.setOnClickListener(this);
 
 		return view;
 	}

@@ -27,7 +27,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -86,15 +85,12 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 		view = View.inflate(context, R.layout.brick_move_n_steps, null);
 
 		TextView text = (TextView) view.findViewById(R.id.brick_move_n_steps_text_view);
-		EditText edit = (EditText) view.findViewById(R.id.brick_move_n_steps_edit_text);
 
 		//		edit.setText(String.valueOf(steps));
-		steps.setTextFieldId(R.id.brick_move_n_steps_edit_text);
+		steps.setTextFieldId(R.id.brick_move_n_steps_text_view);
 		steps.refreshTextField(view);
 
-		text.setVisibility(View.GONE);
-		edit.setVisibility(View.VISIBLE);
-		edit.setOnClickListener(this);
+		text.setOnClickListener(this);
 
 		return view;
 	}

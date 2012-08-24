@@ -26,7 +26,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -91,12 +90,9 @@ public class ChangeYByBrick implements Brick, OnClickListener {
 		view = View.inflate(context, R.layout.brick_change_y, null);
 
 		TextView textY = (TextView) view.findViewById(R.id.brick_change_y_text_view);
-		EditText editY = (EditText) view.findViewById(R.id.brick_change_y_edit_text);
-		yMovement.setTextFieldId(R.id.brick_change_y_edit_text);
+		yMovement.setTextFieldId(R.id.brick_change_y_text_view);
 		yMovement.refreshTextField(view);
-		textY.setVisibility(View.GONE);
-		editY.setVisibility(View.VISIBLE);
-		editY.setOnClickListener(this);
+		textY.setOnClickListener(this);
 
 		return view;
 	}

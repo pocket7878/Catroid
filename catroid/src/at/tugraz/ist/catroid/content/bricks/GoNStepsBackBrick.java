@@ -26,7 +26,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -79,14 +78,11 @@ public class GoNStepsBackBrick implements Brick, OnClickListener {
 		View view = View.inflate(context, R.layout.brick_go_back, null);
 
 		TextView text = (TextView) view.findViewById(R.id.brick_go_back_n_text_view);
-		EditText edit = (EditText) view.findViewById(R.id.brick_go_back_edit_text);
 
-		steps.setTextFieldId(R.id.brick_go_back_edit_text);
+		steps.setTextFieldId(R.id.brick_go_back_n_text_view);
 		steps.refreshTextField(view);
 
-		text.setVisibility(View.GONE);
-		edit.setVisibility(View.VISIBLE);
-		edit.setOnClickListener(this);
+		text.setOnClickListener(this);
 
 		return view;
 	}
