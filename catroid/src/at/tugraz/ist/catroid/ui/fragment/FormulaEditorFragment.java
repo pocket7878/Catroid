@@ -268,12 +268,6 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 	//		}
 	//	}
 
-	public void handleSaveButton() {
-		if (saveFormulaIfPossible()) {
-			onUserDismiss();
-		}
-	}
-
 	public void handleUndoButton() {
 		formulaEditorEditText.undo();
 	}

@@ -189,17 +189,16 @@ public class Formula implements Serializable {
 	}
 
 	public void removeTextFieldHighlighting(View brickView, int orientation) {
-		if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+		if (orientation == Configuration.ORIENTATION_LANDSCAPE || originalEditTextDrawable == null) {
 			return;
 		}
 
 		EditText formulaTextField = (EditText) brickView.findViewById(formulaTextFieldId);
-		if (originalEditTextDrawable == null) {
-			originalEditTextDrawable = formulaTextField.getBackground();
-		}
+
 		int width = formulaTextField.getWidth();
 		formulaTextField.setBackgroundDrawable(originalEditTextDrawable);
 		formulaTextField.setWidth(width);
+		originalEditTextDrawable = null;
 	}
 
 	public void highlightTextField(View brickView, int orientation) {
