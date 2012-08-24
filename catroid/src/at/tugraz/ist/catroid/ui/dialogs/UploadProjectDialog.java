@@ -27,7 +27,6 @@ import java.io.File;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.DialogInterface.OnShowListener;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -54,7 +53,7 @@ import at.tugraz.ist.catroid.transfers.ProjectUploadTask;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
 
-public class UploadProjectDialog extends DialogFragment implements OnDismissListener {
+public class UploadProjectDialog extends DialogFragment {
 
 	public static final String DIALOG_FRAGMENT_TAG = "dialog_upload_project";
 	private AddProjectScreenshot addProjectScreenshot;
@@ -192,10 +191,11 @@ public class UploadProjectDialog extends DialogFragment implements OnDismissList
 			}
 		}
 
+		dismiss();
+
 		projectManager.getCurrentProject().setDeviceData(getActivity());
 		projectManager.saveProject();
 
-		dismiss();
 		String projectPath = Constants.DEFAULT_ROOT + "/" + projectManager.getCurrentProject().getName();
 		String projectDescription = "";
 
@@ -225,7 +225,6 @@ public class UploadProjectDialog extends DialogFragment implements OnDismissList
 	public void onDismiss(DialogInterface dialog) {
 		super.onDismiss(dialog);
 		if (!ProjectManager.getInstance().getCurrentProject().getProjectHasThumbnail() && isUploadButton) {
-
 			addProjectScreenshot = new AddProjectScreenshot(getActivity());
 			Dialog addProjectScreenshotDialog = addProjectScreenshot.createDialog();
 			addProjectScreenshotDialog.show();
