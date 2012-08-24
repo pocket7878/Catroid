@@ -144,21 +144,9 @@ public class MainMenuActivity extends SherlockFragmentActivity implements OnChec
 				}
 				return true;
 			}
-			case R.id.menu_web_resources: {
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getText(R.string.catroid_website)
-						.toString()));
-				startActivity(browserIntent);
-				return true;
-			}
 			case R.id.menu_settings: {
 				Intent intent = new Intent(MainMenuActivity.this, SettingsActivity.class);
 				startActivity(intent);
-				return true;
-			}
-			case R.id.menu_forum: {
-				Intent browerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getText(R.string.catrobat_forum)
-						.toString()));
-				startActivity(browerIntent);
 				return true;
 			}
 			case R.id.menu_about: {
@@ -252,6 +240,16 @@ public class MainMenuActivity extends SherlockFragmentActivity implements OnChec
 			checkTokenTask.setOnCheckTokenCompleteListener(this);
 			checkTokenTask.execute();
 		}
+	}
+
+	public void handleWebResourcesButton(View v) {
+		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getText(R.string.catroid_website).toString()));
+		startActivity(browserIntent);
+	}
+
+	public void handleForumButton(View v) {
+		Intent browerIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getText(R.string.catrobat_forum).toString()));
+		startActivity(browerIntent);
 	}
 
 	@Override

@@ -60,6 +60,20 @@
             android:onClick="handleUploadProjectButton"
             android:text="@string/upload_project" />
 
+         <Button
+            android:id="@+id/web_button"
+            style="@style/DashboardButton"
+            android:drawableTop="@drawable/web_selector"
+            android:onClick="handleWebResourcesButton"
+            android:text="@string/web_resources" />
+
+        <Button
+            android:id="@+id/forum_button"
+            style="@style/DashboardButton"
+            android:drawableTop="@drawable/forum_selector"
+            android:onClick="handleForumButton"
+            android:text="@string/forum" />
+        
     </at.tugraz.ist.catroid.ui.widget.DashboardLayout>
 
 </LinearLayout>
