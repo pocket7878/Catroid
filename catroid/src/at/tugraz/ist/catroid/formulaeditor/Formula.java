@@ -35,7 +35,6 @@ import at.tugraz.ist.catroid.formulaeditor.FormulaElement.ElementType;
 public class Formula implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	public static final int ROOT_ELEMENT = 0;
 	private transient FormulaElement root;
 	private String textRepresentation = "0";
 	private transient Integer formulaTextFieldId = null;
@@ -223,6 +222,10 @@ public class Formula implements Serializable {
 		width = Math.max(width, 130);
 		formulaTextField.setBackgroundDrawable(highlightBackground);
 		formulaTextField.setWidth(width);
+	}
+
+	public void prepareToRemove() {
+		originalEditTextDrawable = null;
 	}
 
 }
