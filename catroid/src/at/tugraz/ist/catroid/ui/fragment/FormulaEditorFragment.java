@@ -119,6 +119,7 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 
 	private void onUserDismiss() { //dont override onDismiss, this must not be called on orientation change
 		formulaEditorEditText.endEdit();
+		currentFormula.prepareToRemove();
 		currentFormula = null;
 		currentBrick = null;
 
@@ -266,12 +267,6 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 	//
 	//		}
 	//	}
-
-	public void handleSaveButton() {
-		if (saveFormulaIfPossible()) {
-			onUserDismiss();
-		}
-	}
 
 	public void handleUndoButton() {
 		formulaEditorEditText.undo();
