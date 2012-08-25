@@ -48,14 +48,12 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.RelativeLayout;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.ui.dialogs.ChooseCostumeVariableFragment;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
-public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyboardActionListener, OnClickListener {
+public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyboardActionListener {
 
 	static final int NUMBER_KEYBOARD = 1;
 	static final int FUNCTION_KEYBOARD = 0;
@@ -68,7 +66,7 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 	private CatKeyboard symbolsSensors;
 	private Context context;
 	private ChooseCostumeVariableFragment chooseSpriteVariablesFragment;
-	private RelativeLayout swipeBar;
+	private View swipeBar;
 
 	public CatKeyboardView(Context context, AttributeSet attrs) {
 
@@ -76,16 +74,12 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 		this.context = context;
 		setOnKeyboardActionListener(this);
 		this.editText = null;
-
 		this.symbolsNumbers = null;
 
 		if (Locale.getDefault().getDisplayLanguage().contentEquals(Locale.GERMAN.getDisplayLanguage())) {
 			this.symbolsNumbers = new CatKeyboard(this.getContext(), R.xml.symbols_de_numbers);
 			this.symbolsFunctions = new CatKeyboard(this.getContext(), R.xml.symbols_de_functions);
 			this.symbolsSensors = new CatKeyboard(this.getContext(), R.xml.symbols_de_sensors);
-
-			//Log.i("info", "FormulaEditorDialog.onCreate() - DisplayLanguage is DE");
-
 		} else {//if (Locale.getDefault().getDisplayLanguage().contentEquals(Locale.ENGLISH.getDisplayLanguage())) {
 			this.symbolsNumbers = new CatKeyboard(this.getContext(), R.xml.symbols_eng_numbers);
 			this.symbolsFunctions = new CatKeyboard(this.getContext(), R.xml.symbols_eng_functions);
@@ -139,7 +133,7 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 		//int color = context.getResources().getColor(R.color.formula_editor_background);
 		//int colors[] = { color, 0x0066CC };
 		Drawable background = null;
-		int width = swipeBar.getWidth();
+
 		switch (position) {
 			case FUNCTION_KEYBOARD:
 				//		int colors[] = { color, 0x0066CC };
@@ -163,28 +157,10 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 		//test_view.invalidate();
 	}
 
-	@Override
-	public void onClick(View view) {
-		switch (view.getId()) {
-			case R.id.formula_editor_caption_center:
-				setSwipeBarBackground(NUMBER_KEYBOARD);
-				this.setKeyboard(this.symbolsNumbers);
-				break;
-			case R.id.formula_editor_caption_left:
-				setSwipeBarBackground(SENSOR_KEYBOARD);
-				this.setKeyboard(this.symbolsSensors);
-				break;
-			case R.id.formula_editor_caption_right:
-				setSwipeBarBackground(FUNCTION_KEYBOARD);
-				this.setKeyboard(this.symbolsFunctions);
-				break;
-		}
-	}
-
 	public void init(FormulaEditorEditText editText, View swipeBar) {
 		this.editText = editText;
-		this.swipeBar = (RelativeLayout) swipeBar;
-		setSwipeBarBackground(1);
+		this.swipeBar = swipeBar;
+		setSwipeBarBackground(NUMBER_KEYBOARD);
 	}
 
 	//	public void setCurrentBrick(Brick currentBrick) {

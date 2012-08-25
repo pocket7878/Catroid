@@ -24,12 +24,9 @@ package at.tugraz.ist.catroid.formulaeditor;
 
 import java.io.Serializable;
 
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.view.View;
 import android.widget.EditText;
-import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.formulaeditor.FormulaElement.ElementType;
 
 public class Formula implements Serializable {
@@ -189,38 +186,38 @@ public class Formula implements Serializable {
 	}
 
 	public void removeTextFieldHighlighting(View brickView, int orientation) {
-		if (orientation == Configuration.ORIENTATION_LANDSCAPE || originalEditTextDrawable == null) {
-			return;
-		}
-
-		EditText formulaTextField = (EditText) brickView.findViewById(formulaTextFieldId);
-
-		int width = formulaTextField.getWidth();
-		formulaTextField.setBackgroundDrawable(originalEditTextDrawable);
-		formulaTextField.setWidth(width);
-		originalEditTextDrawable = null;
+		//		if (orientation == Configuration.ORIENTATION_LANDSCAPE || originalEditTextDrawable == null) {
+		//			return;
+		//		}
+		//
+		//		EditText formulaTextField = (EditText) brickView.findViewById(formulaTextFieldId);
+		//
+		//		int width = formulaTextField.getWidth();
+		//		formulaTextField.setBackgroundDrawable(originalEditTextDrawable);
+		//		formulaTextField.setWidth(width);
+		//		originalEditTextDrawable = null;
 	}
 
 	public void highlightTextField(View brickView, int orientation) {
-		if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			return;
-		}
-		Drawable highlightBackground = null;
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			highlightBackground = brickView.getResources().getDrawable(R.drawable.textfield_pressed_android4);
-		} else {
-			highlightBackground = brickView.getResources().getDrawable(R.drawable.textfield_pressed);
-		}
-
-		EditText formulaTextField = (EditText) brickView.findViewById(formulaTextFieldId);
-
-		if (originalEditTextDrawable == null) {
-			originalEditTextDrawable = formulaTextField.getBackground();
-		}
-		int width = formulaTextField.getWidth();
-		width = Math.max(width, 130);
-		formulaTextField.setBackgroundDrawable(highlightBackground);
-		formulaTextField.setWidth(width);
+		//		if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+		//			return;
+		//		}
+		//		Drawable highlightBackground = null;
+		//		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+		//			highlightBackground = brickView.getResources().getDrawable(R.drawable.textfield_pressed_android4);
+		//		} else {
+		//			highlightBackground = brickView.getResources().getDrawable(R.drawable.textfield_pressed);
+		//		}
+		//
+		//		EditText formulaTextField = (EditText) brickView.findViewById(formulaTextFieldId);
+		//
+		//		if (originalEditTextDrawable == null) {
+		//			originalEditTextDrawable = formulaTextField.getBackground();
+		//		}
+		//		int width = formulaTextField.getWidth();
+		//		width = Math.max(width, 130);
+		//		formulaTextField.setBackgroundDrawable(highlightBackground);
+		//		formulaTextField.setWidth(width);
 	}
 
 	public void prepareToRemove() {
