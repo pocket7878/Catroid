@@ -196,57 +196,57 @@ public class CatKeyboardClicker {
 		//space,9,6,3,
 		//space2,del,*,+,
 		//shift,enter,/,-
-		keyString.get(0).add("0");
+		keyString.get(0).add("back-keyboardswitch");
 		keyString.get(0).add("7");
 		keyString.get(0).add("4");
 		keyString.get(0).add("1");
 
-		keyString.get(0).add(".");
+		keyString.get(0).add("0");
 		keyString.get(0).add("8");
 		keyString.get(0).add("5");
 		keyString.get(0).add("2");
 
-		keyString.get(0).add("rand");
+		keyString.get(0).add(".");
 		keyString.get(0).add("9");
 		keyString.get(0).add("6");
 		keyString.get(0).add("3");
 
-		keyString.get(0).add("costume");
+		keyString.get(0).add("rand");
 		keyString.get(0).add("*");
 		keyString.get(0).add("+");
-		keyString.get(0).add("del");
+		keyString.get(0).add("costume");
 
 		keyString.get(0).add("keyboardswitch");
 		keyString.get(0).add("/");
 		keyString.get(0).add("-");
-		keyString.get(0).add("del2");
+		keyString.get(0).add("del");
 
-		keyString.get(1).add("pi");
+		keyString.get(1).add("back-keyboardswitch");
 		keyString.get(1).add("bracket");
 		keyString.get(1).add("ln");
 		keyString.get(1).add("sin");
 
-		keyString.get(1).add("e");
+		keyString.get(1).add("pi");
 		keyString.get(1).add("abs");
 		keyString.get(1).add("log");
 		keyString.get(1).add("cos");
 
-		keyString.get(1).add("^");
+		keyString.get(1).add(null);
 		keyString.get(1).add("round");
 		keyString.get(1).add("sqrt");
 		keyString.get(1).add("tan");
 
-		keyString.get(1).add("keyboardswitch2");
+		keyString.get(1).add("e");
 		keyString.get(1).add("*");
 		keyString.get(1).add("+");
-		keyString.get(1).add("del");
+		keyString.get(1).add("^");
 
 		keyString.get(1).add("keyboardswitch");
 		keyString.get(1).add("/");
 		keyString.get(1).add("-");
-		keyString.get(1).add("del2");
+		keyString.get(1).add("del");
 
-		keyString.get(2).add("pitch");
+		keyString.get(2).add("back-keyboardswitch");
 		keyString.get(2).add("z-accel");
 		keyString.get(2).add("y-accel");
 		keyString.get(2).add("x-accel");
@@ -256,20 +256,20 @@ public class CatKeyboardClicker {
 		keyString.get(2).add(null);
 		keyString.get(2).add(null);
 
-		keyString.get(2).add(null);
+		keyString.get(2).add("pitch");
 		keyString.get(2).add(null);
 		keyString.get(2).add(null);
 		keyString.get(2).add(null);
 
-		keyString.get(2).add("keyboardswitch2");
+		keyString.get(2).add(null);
 		keyString.get(2).add("roll");
 		keyString.get(2).add("azimuth");
-		keyString.get(2).add("del");
+		keyString.get(2).add(null);
 
 		keyString.get(2).add("keyboardswitch");
 		keyString.get(2).add(null);
 		keyString.get(2).add(null);
-		keyString.get(2).add(null);
+		keyString.get(2).add("del");
 
 	}
 
