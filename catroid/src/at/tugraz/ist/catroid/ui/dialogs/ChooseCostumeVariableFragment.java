@@ -39,7 +39,7 @@ import at.tugraz.ist.catroid.formulaeditor.CatKeyboardView;
 public class ChooseCostumeVariableFragment extends DialogFragment implements DialogInterface.OnClickListener {
 
 	private CatKeyboardView catKeyboardView;
-	private final String[] items = { "COSTUME_X_", "COSTUME_Y_", "COSTUME_GHOSTEFFECT_", "COSTUME_BRIGTHNESS_",
+	private final String[] items = { "COSTUME_X_", "COSTUME_Y_", "COSTUME_GHOSTEFFECT_", "COSTUME_BRIGHTNESS_",
 			"COSTUME_SIZE_", "COSTUME_ROTATION_", "COSTUME_LAYER_" };
 	private static final int CANCEL_INDEX = -2;
 

@@ -61,7 +61,7 @@ public class CatKeyEvent extends KeyEvent {
 	public static final int KEYCODE_COSTUME_X = 1202;
 	public static final int KEYCODE_COSTUME_Y = 1203;
 	public static final int KEYCODE_COSTUME_GHOSTEFFECT = 1204;
-	public static final int KEYCODE_COSTUME_BRIGTHNESS = 1205;
+	public static final int KEYCODE_COSTUME_BRIGHTNESS = 1205;
 	public static final int KEYCODE_COSTUME_SIZE = 1206;
 	public static final int KEYCODE_COSTUME_ROTATION = 1207;
 	public static final int KEYCODE_COSTUME_LAYER = 1208;
@@ -116,7 +116,7 @@ public class CatKeyEvent extends KeyEvent {
 		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COSTUME_X, "COSTUME_X_");
 		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COSTUME_Y, "COSTUME_Y_");
 		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COSTUME_GHOSTEFFECT, "COSTUME_GHOSTEFFECT_");
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COSTUME_BRIGTHNESS, "COSTUME_BRIGTHNESS_");
+		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COSTUME_BRIGHTNESS, "COSTUME_BRIGHTNESS_");
 		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COSTUME_SIZE, "COSTUME_SIZE_");
 		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COSTUME_ROTATION, "COSTUME_ROTATION_");
 		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COSTUME_LAYER, "COSTUME_LAYER_");

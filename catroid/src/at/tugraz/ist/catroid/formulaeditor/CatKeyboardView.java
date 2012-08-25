@@ -387,8 +387,8 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_GHOSTEFFECT));
 				editText.checkAndModifyKeyInput(cKE);
 				break;
-			case CatKeyEvent.KEYCODE_COSTUME_BRIGTHNESS:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_BRIGTHNESS));
+			case CatKeyEvent.KEYCODE_COSTUME_BRIGHTNESS:
+				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_BRIGHTNESS));
 				editText.checkAndModifyKeyInput(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_COSTUME_SIZE:
