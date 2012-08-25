@@ -44,6 +44,9 @@ public class LoopEndBrick extends NestingBrick implements AllowedAfterDeadEndBri
 	private LoopBeginBrick loopBeginBrick;
 	private transient int timesToRepeat;
 
+	public LoopEndBrick() {
+	}
+
 	public LoopEndBrick(Sprite sprite, LoopBeginBrick loopStartingBrick) {
 		this.sprite = sprite;
 		this.loopBeginBrick = loopStartingBrick;

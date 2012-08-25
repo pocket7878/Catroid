@@ -42,8 +42,10 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 	private Formula xPosition;
 	private Formula yPosition;
 
-	@XStreamOmitField
 	private transient View view;
+
+	public PlaceAtBrick() {
+	}
 
 	public PlaceAtBrick(Sprite sprite, int xPositionValue, int yPositionValue) {
 		this.sprite = sprite;

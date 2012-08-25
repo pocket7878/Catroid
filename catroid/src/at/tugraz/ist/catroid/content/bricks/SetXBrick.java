@@ -39,11 +39,13 @@ public class SetXBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private Sprite sprite;
 
-	@XStreamOmitField
 	private transient View view;
 
 	private Formula xPosition;
-
+	
+	public SetXBrick() {
+	}
+	
 	public SetXBrick(Sprite sprite, int xPositionValue) {
 		this.sprite = sprite;
 		xPosition = new Formula(Integer.toString(xPositionValue));

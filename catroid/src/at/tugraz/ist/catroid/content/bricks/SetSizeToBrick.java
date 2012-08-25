@@ -39,7 +39,10 @@ public class SetSizeToBrick implements Brick, OnClickListener {
 	private Formula size;
 
 	private transient View view;
-
+	
+	public SetSizeToBrick() {
+	}
+	
 	public SetSizeToBrick(Sprite sprite, double sizeValue) {
 		this.sprite = sprite;
 		size = new Formula(Double.toString(sizeValue));

@@ -44,6 +44,10 @@ public abstract class Script implements Serializable {
 	private transient int executingBrickIndex;
 	protected Sprite sprite;
 
+	public Script() {
+
+	}
+
 	protected Object readResolve() {
 		init();
 		return this;

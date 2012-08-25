@@ -41,6 +41,9 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 
 	private transient View view;
 
+	public MoveNStepsBrick() {
+	}
+
 	private Formula steps;
 
 	public MoveNStepsBrick(Sprite sprite, double stepsValue) {

@@ -41,7 +41,8 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 
 	private Formula changeGhostEffect;
 
-	private transient Brick instance = null;
+	public ChangeGhostEffectBrick() {
+	}
 
 	public ChangeGhostEffectBrick(Sprite sprite, double changeGhostEffectValue) {
 		this.sprite = sprite;

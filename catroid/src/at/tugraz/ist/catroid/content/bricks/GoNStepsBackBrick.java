@@ -39,6 +39,9 @@ public class GoNStepsBackBrick implements Brick, OnClickListener {
 
 	public Formula steps;
 
+	public GoNStepsBackBrick() {
+	}
+
 	public GoNStepsBackBrick(Sprite sprite, int stepsValue) {
 		this.sprite = sprite;
 		steps = new Formula(Integer.toString(stepsValue));

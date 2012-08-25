@@ -33,8 +33,6 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
 
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
-
 public class SetYBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private Sprite sprite;
@@ -43,6 +41,9 @@ public class SetYBrick implements Brick, OnClickListener {
 	private transient View view;
 
 	private Formula yPosition;
+	
+	public SetYBrick() {
+	}
 
 	public SetYBrick(Sprite sprite, int yPositionValue) {
 		this.sprite = sprite;

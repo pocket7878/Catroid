@@ -42,6 +42,10 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 	private static final int MIN_DURATION = 0;
 	private static final int MAX_DURATION = Integer.MAX_VALUE;
 
+	public NXTPlayToneBrick() {
+
+	}
+
 	private Sprite sprite;
 
 	private transient EditText editFreq;

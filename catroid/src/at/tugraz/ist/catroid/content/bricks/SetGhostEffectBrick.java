@@ -40,7 +40,10 @@ public class SetGhostEffectBrick implements Brick, OnClickListener {
 	private transient View view;
 
 	private Formula transparency;
-
+	
+	public SetGhostEffectBrick() {
+	}
+	
 	public SetGhostEffectBrick(Sprite sprite, double ghostEffectValue) {
 		this.sprite = sprite;
 		transparency = new Formula(Double.toString(ghostEffectValue));

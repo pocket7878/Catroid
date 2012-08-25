@@ -111,6 +111,10 @@ public class Sprite implements Serializable {
 		}
 	}
 
+	public Sprite() {
+
+	}
+
 	private synchronized void startScript(Script s) {
 		final Script script = s;
 		Thread t = new Thread(new Runnable() {

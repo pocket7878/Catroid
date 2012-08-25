@@ -43,6 +43,9 @@ public class GlideToBrick implements Brick, OnClickListener {
 
 	private transient View view;
 
+	public GlideToBrick() {
+	}
+
 	public GlideToBrick(Sprite sprite, int xDestinationValue, int yDestinationValue, int durationInMilliSecondsValue) {
 		this.sprite = sprite;
 

@@ -38,9 +38,11 @@ public class WhenStartedBrick extends ScriptBrick {
 	private Script script;
 	private Sprite sprite;
 
-	@XStreamOmitField
 	private transient View view;
-
+	
+	public WhenStartedBrick() {
+	}
+	
 	public WhenStartedBrick(Sprite sprite, Script script) {
 		this.script = script;
 		this.sprite = sprite;

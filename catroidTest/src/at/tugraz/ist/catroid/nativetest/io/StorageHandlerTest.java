@@ -64,8 +64,8 @@ public class StorageHandlerTest extends InstrumentationTestCase {
 		String firstSpriteName = "Stage";
 		String secondSpriteName = "first";
 		String thirdSpriteName = "second";
-
 		NativeAppActivity.setContext(getInstrumentation().getContext());
+
 		Project loadedProject = storageHandler.loadProject("test_project.xml");
 
 		assertEquals("Project title missmatch.", projectName, loadedProject.getName());

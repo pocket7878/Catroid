@@ -31,33 +31,42 @@ import android.os.Build;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.utils.Utils;
+import at.tugraz.ist.catroid.xml.parser.XMLAlias;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
+//import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 public class Project implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<Sprite> spriteList = new ArrayList<Sprite>();
 	private String projectName;
-
+	private double applicationXmlVersion = 0.10;
+	private String platform = "Android";
 	// Only used for Catroid website
 	@SuppressWarnings("unused")
 	private String deviceName;
 	@SuppressWarnings("unused")
-	private int androidVersion;
+	private int platformVersion;
 	@SuppressWarnings("unused")
-	private String catroidVersionName;
-	private int catroidVersionCode;
+	private String applicationVersionName;
+	@SuppressWarnings("unused")
+	private int applicationVersionCode;
 
-	@XStreamAlias("screenWidth")
+	//@XStreamAlias("screenWidth")
+	@XMLAlias("screenWidth")
 	public int virtualScreenWidth = 0;
-	@XStreamAlias("screenHeight")
+
+	//@XStreamAlias("screenHeight")
+	@XMLAlias("screenHeight")
 	public int virtualScreenHeight = 0;
 
 	public String description;
 
 	public Project(Context context, String name) {
 		this.projectName = name;
-
+		ifLandscapeSwitchWidthAndHeight();
+		virtualScreenWidth = Values.SCREEN_WIDTH;
+		virtualScreenHeight = Values.SCREEN_HEIGHT;
+		setDeviceData(context);
 		ifLandscapeSwitchWidthAndHeight();
 		virtualScreenWidth = Values.SCREEN_WIDTH;
 		virtualScreenHeight = Values.SCREEN_HEIGHT;
@@ -78,6 +87,7 @@ public class Project implements Serializable {
 			Values.SCREEN_HEIGHT = Values.SCREEN_WIDTH;
 			Values.SCREEN_WIDTH = tmp;
 		}
+
 	}
 
 	public synchronized void addSprite(Sprite sprite) {
@@ -85,10 +95,12 @@ public class Project implements Serializable {
 			return;
 		}
 		spriteList.add(sprite);
+
 	}
 
 	public synchronized boolean removeSprite(Sprite sprite) {
 		return spriteList.remove(sprite);
+
 	}
 
 	public List<Sprite> getSpriteList() {
@@ -104,19 +116,24 @@ public class Project implements Serializable {
 	}
 
 	public int getCatroidVersionCode() {
-		return catroidVersionCode;
+		return applicationVersionCode;
 	}
 
 	public void setDeviceData(Context context) {
 		deviceName = Build.MODEL;
-		androidVersion = Build.VERSION.SDK_INT;
+		platformVersion = Build.VERSION.SDK_INT;
 
 		if (context == null) {
-			catroidVersionName = "unknown";
-			catroidVersionCode = 0;
+			applicationVersionName = "unknown";
+			applicationVersionCode = 0;
 		} else {
-			catroidVersionName = Utils.getVersionName(context);
-			catroidVersionCode = Utils.getVersionCode(context);
+			applicationVersionName = Utils.getVersionName(context);
+			applicationVersionCode = Utils.getVersionCode(context);
 		}
 	}
+
+	public Project() {
+
+	}
+
 }

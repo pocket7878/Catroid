@@ -33,8 +33,6 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
 
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
-
 public class ChangeYByBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private Sprite sprite;
@@ -43,7 +41,10 @@ public class ChangeYByBrick implements Brick, OnClickListener {
 	private transient View view;
 
 	private Formula yMovement;
-
+	
+	public ChangeYByBrick() {
+	}
+	
 	public ChangeYByBrick(Sprite sprite, int yMovementValue) {
 		this.sprite = sprite;
 

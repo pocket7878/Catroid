@@ -41,6 +41,9 @@ public class SetCostumeBrick implements Brick {
 	private CostumeData costumeData;
 	private transient View view;
 
+	public SetCostumeBrick() {
+	}
+
 	public SetCostumeBrick(Sprite sprite) {
 		this.sprite = sprite;
 	}

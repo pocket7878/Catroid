@@ -40,7 +40,10 @@ public class SetBrightnessBrick implements Brick, OnClickListener {
 	private transient View view;
 
 	private Formula brightness;
-
+	
+	public SetBrightnessBrick() {
+	}
+	
 	public SetBrightnessBrick(Sprite sprite, double brightnessValue) {
 		this.sprite = sprite;
 		brightness = new Formula(Double.toString(brightnessValue));

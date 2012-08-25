@@ -41,6 +41,9 @@ public class ChangeVolumeByBrick implements Brick, OnClickListener {
 	private transient View view;
 	private Formula volume;
 
+	public ChangeVolumeByBrick() {
+	}
+
 	public ChangeVolumeByBrick(Sprite sprite, double changeVolumeValue) {
 		this.sprite = sprite;
 

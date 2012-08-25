@@ -39,7 +39,10 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 
 	private Sprite sprite;
 	private Formula volume;
-
+	
+	public SetVolumeToBrick() {
+	}
+	
 	public SetVolumeToBrick(Sprite sprite, float volumeValue) {
 		this.sprite = sprite;
 		volume = new Formula(Float.toString(volumeValue));

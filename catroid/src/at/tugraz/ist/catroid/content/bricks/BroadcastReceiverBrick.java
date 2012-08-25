@@ -38,7 +38,6 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 public class BroadcastReceiverBrick extends ScriptBrick {
 
@@ -47,8 +46,11 @@ public class BroadcastReceiverBrick extends ScriptBrick {
 	private BroadcastScript receiveScript;
 	private Sprite sprite;
 
-	@XStreamOmitField
 	private transient View view;
+
+	public BroadcastReceiverBrick() {
+		this.projectManager = ProjectManager.getInstance();
+	}
 
 	public BroadcastReceiverBrick(Sprite sprite, BroadcastScript receiveScript) {
 		this.sprite = sprite;

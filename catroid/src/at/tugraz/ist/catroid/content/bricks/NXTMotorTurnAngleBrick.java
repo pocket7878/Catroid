@@ -59,6 +59,9 @@ public class NXTMotorTurnAngleBrick implements Brick, OnClickListener {
 		}
 		return this;
 	}
+	
+	public NXTMotorTurnAngleBrick() {
+	}
 
 	public NXTMotorTurnAngleBrick(Sprite sprite, Motor motor, int degrees) {
 		this.sprite = sprite;
