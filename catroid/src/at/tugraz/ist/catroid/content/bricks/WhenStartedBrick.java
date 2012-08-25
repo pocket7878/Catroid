@@ -30,8 +30,6 @@ import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 
-import com.thoughtworks.xstream.annotations.XStreamOmitField;
-
 public class WhenStartedBrick extends ScriptBrick {
 	private static final long serialVersionUID = 1L;
 
@@ -39,10 +37,10 @@ public class WhenStartedBrick extends ScriptBrick {
 	private Sprite sprite;
 
 	private transient View view;
-	
+
 	public WhenStartedBrick() {
 	}
-	
+
 	public WhenStartedBrick(Sprite sprite, Script script) {
 		this.script = script;
 		this.sprite = sprite;
@@ -90,6 +88,7 @@ public class WhenStartedBrick extends ScriptBrick {
 		return script;
 	}
 
+	@Override
 	public void onClick(View view) {
 
 	}

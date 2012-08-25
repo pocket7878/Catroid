@@ -37,14 +37,13 @@ public class ChangeYByBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private Sprite sprite;
 
-	@XStreamOmitField
 	private transient View view;
 
 	private Formula yMovement;
-	
+
 	public ChangeYByBrick() {
 	}
-	
+
 	public ChangeYByBrick(Sprite sprite, int yMovementValue) {
 		this.sprite = sprite;
 

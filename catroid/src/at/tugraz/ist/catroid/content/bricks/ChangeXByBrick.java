@@ -33,12 +33,10 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
 
-
 public class ChangeXByBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private Sprite sprite;
 
-	@XStreamOmitField
 	private transient View view;
 
 	private Formula xMovement;

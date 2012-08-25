@@ -37,11 +37,10 @@ public class SetYBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private Sprite sprite;
 
-	@XStreamOmitField
 	private transient View view;
 
 	private Formula yPosition;
-	
+
 	public SetYBrick() {
 	}
 
