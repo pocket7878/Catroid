@@ -45,6 +45,7 @@ import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -70,6 +71,7 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 	private RelativeLayout swipeBar;
 
 	public CatKeyboardView(Context context, AttributeSet attrs) {
+
 		super(context, attrs);
 		this.context = context;
 		setOnKeyboardActionListener(this);
@@ -93,9 +95,16 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 
 		this.setKeyboard(symbolsNumbers);
 
-		this.chooseSpriteVariablesFragment = ChooseCostumeVariableFragment
-				.newInstance(android.R.string.dialog_alert_title);
-		this.chooseSpriteVariablesFragment.setCatKeyboardView(this);
+		if (((SherlockFragmentActivity) context).getSupportFragmentManager().findFragmentByTag(
+				"chooseSpriteVariablesDialogFragment") == null) {
+			this.chooseSpriteVariablesFragment = ChooseCostumeVariableFragment
+					.newInstance(android.R.string.dialog_alert_title);
+			this.chooseSpriteVariablesFragment.setCatKeyboardView(this);
+		} else {
+			this.chooseSpriteVariablesFragment = (ChooseCostumeVariableFragment) ((SherlockFragmentActivity) context)
+					.getSupportFragmentManager().findFragmentByTag("chooseSpriteVariablesDialogFragment");
+			this.chooseSpriteVariablesFragment.setCatKeyboardView(this);
+		}
 
 		//		LayoutParams relative = new LayoutParams(source);
 		//		this.symbols.setShifted(false);
@@ -113,7 +122,18 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 
 		//    public CatKeyboardView(Context context, AttributeSet attrs, int defStyle) {
 		//        super(context, attrs, defStyle);
+
+		Log.i("info", "CatKeyboardView()-Constructor");
 	}
+
+	//	@Override
+	//	protected void onRestoreInstanceState(Parcelable state) {
+	//		Log.i("info", "CatKeyboardView.onRestoreInstanceState()");
+	//
+	//		this.chooseSpriteVariablesFragment.setCatKeyboardView(this);
+	//
+	//		super.onRestoreInstanceState(state);
+	//	}
 
 	private void setSwipeBarBackground(int position) {
 		//int color = context.getResources().getColor(R.color.formula_editor_background);
@@ -351,9 +371,9 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 				editText.checkAndModifyKeyInput(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_COSTUME_BUTTON:
-				this.chooseSpriteVariablesFragment
-						.show(((SherlockFragmentActivity) context).getSupportFragmentManager(),
-								"chooseSpriteVariablesDialog");
+				this.chooseSpriteVariablesFragment.show(
+						((SherlockFragmentActivity) context).getSupportFragmentManager(),
+						"chooseSpriteVariablesDialogFragment");
 				break;
 			case CatKeyEvent.KEYCODE_COSTUME_X:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_X));
