@@ -62,7 +62,6 @@
         style="@style/brick_text_style"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/brick_set_volume_to_text_view"
         android:text="@string/brick_set_volume_to" >
     </TextView>
 
