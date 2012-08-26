@@ -101,6 +101,7 @@ public class PhysicObject {
 		}
 
 		setShape(shape);
+		setMass(mass); // Every time there is something to do. Check if needed.
 	}
 
 	public float getAngle() {
