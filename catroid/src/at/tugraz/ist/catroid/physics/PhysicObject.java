@@ -40,14 +40,14 @@ public class PhysicObject {
 
 	public final Body body;
 	public final FixtureDef fixtureDef = new FixtureDef();
-	public final MassData massData;
 	public Type type;
+	public float mass;
 
 	public PhysicObject(Body body) {
 		this.body = body;
-		this.massData = body.getMassData();
+		mass = body.getMass();
 
-		fixtureDef.density = 0.0f;
+		fixtureDef.density = 1.0f;
 		fixtureDef.friction = 0.2f;
 		fixtureDef.restitution = 0.0f;
 
@@ -65,8 +65,7 @@ public class PhysicObject {
 			fixtureDef.shape = shape;
 			if (type != Type.NONE) {
 				createdFixture = body.createFixture(fixtureDef);
-				createdFixture.setDensity(1.0f);
-				setMass(massData.mass);
+				setMass(mass);
 			}
 		}
 
@@ -102,6 +101,7 @@ public class PhysicObject {
 		}
 
 		setShape(shape);
+		setMass(mass); // TODO: Every time there is something to do. Check if needed.
 	}
 
 	public float getAngle() {
@@ -129,6 +129,9 @@ public class PhysicObject {
 	}
 
 	public void setMass(float mass) {
+		this.mass = mass;
+
+		MassData massData = body.getMassData();
 		massData.mass = mass;
 		body.setMassData(massData);
 	}
