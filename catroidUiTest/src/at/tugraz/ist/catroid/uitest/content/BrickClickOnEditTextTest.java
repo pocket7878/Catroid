@@ -44,6 +44,9 @@ import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import com.jayway.android.robotium.solo.Solo;
 
 public class BrickClickOnEditTextTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
+
+	private static final String KEY_SETTINGS_MINDSTORM_BRICKS = "setting_mindstorm_bricks";
+
 	private Solo solo;
 
 	public BrickClickOnEditTextTest() {
@@ -62,12 +65,12 @@ public class BrickClickOnEditTextTest extends ActivityInstrumentationTestCase2<M
 	protected void tearDown() throws Exception {
 		// workaround to disable mindstorm settings
 		// should be disabled no matter if test failed or succeeded
-		String settingsText = solo.getString(R.string.settings);
-		String prefMsBricks = solo.getString(R.string.pref_enable_ms_bricks);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-		UiTestUtils.goToHomeActivity(getActivity());
-		solo.clickOnMenuItem(settingsText);
-		solo.clickOnText(prefMsBricks);
+		// disable mindstorm bricks, if enabled at start
+		if (prefs.getBoolean(KEY_SETTINGS_MINDSTORM_BRICKS, false)) {
+			prefs.edit().putBoolean(KEY_SETTINGS_MINDSTORM_BRICKS, false).commit();
+		}
 
 		UiTestUtils.goBackToHome(getInstrumentation());
 		solo.finishOpenedActivities();
@@ -92,6 +95,9 @@ public class BrickClickOnEditTextTest extends ActivityInstrumentationTestCase2<M
 		getTextViewXPosition = (float) ((screenWidth / 2.0) * 0.75);
 		solo.clickOnScreen(getTextViewXPosition, listOfYPosition.get(1));
 		solo.clickOnScreen(200, 200);
+		solo.sleep(1000);
+		solo.clickOnScreen(10, listOfYPosition.get(1));
+		solo.sleep(1000);
 
 		List<Brick> brickListToCheck = ProjectManager.getInstance().getCurrentScript().getBrickList();
 		assertEquals("One Brick should be in bricklist", 1, brickListToCheck.size());
@@ -225,17 +231,11 @@ public class BrickClickOnEditTextTest extends ActivityInstrumentationTestCase2<M
 	}
 
 	private void getIntoActivity() {
-		String settingsText = solo.getString(R.string.settings);
-		String prefMsBricks = solo.getString(R.string.pref_enable_ms_bricks);
-
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
 		// enable mindstorm bricks, if disabled at start
-		if (!prefs.getBoolean("setting_mindstorm_bricks", false)) {
-			solo.clickOnText(settingsText);
-			solo.clickOnText(prefMsBricks);
-			solo.goBack();
-			solo.waitForActivity(MainMenuActivity.class.getSimpleName());
+		if (!prefs.getBoolean(KEY_SETTINGS_MINDSTORM_BRICKS, false)) {
+			prefs.edit().putBoolean(KEY_SETTINGS_MINDSTORM_BRICKS, true).commit();
 		}
 
 		UiTestUtils.clearAllUtilTestProjects();
