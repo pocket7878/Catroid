@@ -222,6 +222,7 @@ public class Formula implements Serializable {
 
 	public void prepareToRemove() {
 		originalEditTextDrawable = null;
+		formulaTextFieldId = null;
 	}
 
 }
