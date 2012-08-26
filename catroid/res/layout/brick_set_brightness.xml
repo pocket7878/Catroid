@@ -79,7 +79,7 @@
                 android:id="@+id/SetBrightnessTextView"
                 style="@style/brick_text_style"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/brick_set_brightness_edit_text"
+                android:layout_toRightOf="@id/brick_set_brightness_text_view"
                 android:paddingLeft="5dip"
                 android:paddingRight="10dip"
                 android:text="@string/percent" >

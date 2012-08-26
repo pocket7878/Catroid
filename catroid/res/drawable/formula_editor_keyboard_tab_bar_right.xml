@@ -35,7 +35,7 @@
         android:endColor="#99CCFF" /> -->
          <gradient
             android:startColor="@color/solid_black"
-            android:endColor="#999999"
+            android:endColor="#dddddd"
             android:centerColor="@color/solid_black" />
     
 </shape>

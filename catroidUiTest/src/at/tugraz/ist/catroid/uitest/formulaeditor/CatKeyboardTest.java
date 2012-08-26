@@ -312,6 +312,117 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 	//		assertEquals(solo.searchText(","), true);
 	//	}
 
+	public void testChooseCostumeDialog() {
+
+		//		solo.clickOnEditText(0);
+		solo.clickOnEditText(0);
+		solo.clickOnEditText(1);
+
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+
+		ArrayList<EditText> textList = solo.getCurrentEditTexts();
+		EditText text = textList.get(textList.size() - 1);
+
+		catKeyboardClicker.clickOnKey("costume");
+		solo.clickOnText("COSTUME_X_");
+		solo.sleep(100);// without sleep it crashes x.x
+		assertEquals("Wrong button clicked", "COSTUME_X_", text.getText().toString()
+				.substring(0, "COSTUME_X_".length()));
+		catKeyboardClicker.clickOnKey("del");
+
+		catKeyboardClicker.clickOnKey("costume");
+		solo.clickOnText("COSTUME_Y_");
+		solo.sleep(100);
+		assertEquals("Wrong button clicked", "COSTUME_Y_", text.getText().toString()
+				.substring(0, "COSTUME_Y_".length()));
+		catKeyboardClicker.clickOnKey("del");
+
+		catKeyboardClicker.clickOnKey("costume");
+		solo.clickOnText("COSTUME_GHOSTEFFECT_");
+		solo.sleep(100);
+		assertEquals("Wrong button clicked", "COSTUME_GHOSTEFFECT_",
+				text.getText().toString().substring(0, "COSTUME_GHOSTEFFECT_".length()));
+		catKeyboardClicker.clickOnKey("del");
+
+		catKeyboardClicker.clickOnKey("costume");
+		solo.clickOnText("COSTUME_BRIGHTNESS_");
+		solo.sleep(100);
+		assertEquals("Wrong button clicked", "COSTUME_BRIGHTNESS_",
+				text.getText().toString().substring(0, "COSTUME_BRIGHTNESS_".length()));
+		catKeyboardClicker.clickOnKey("del");
+
+		catKeyboardClicker.clickOnKey("costume");
+		solo.clickOnText("COSTUME_SIZE_");
+		solo.sleep(100);
+		assertEquals("Wrong button clicked", "COSTUME_SIZE_",
+				text.getText().toString().substring(0, "COSTUME_SIZE_".length()));
+		catKeyboardClicker.clickOnKey("del");
+
+		catKeyboardClicker.clickOnKey("costume");
+		solo.clickOnText("COSTUME_ROTATION_");
+		solo.sleep(100);
+		assertEquals("Wrong button clicked", "COSTUME_ROTATION_",
+				text.getText().toString().substring(0, "COSTUME_ROTATION_".length()));
+		catKeyboardClicker.clickOnKey("del");
+
+		catKeyboardClicker.clickOnKey("costume");
+		solo.clickOnText("COSTUME_LAYER_");
+		solo.sleep(100);
+		assertEquals("Wrong button clicked", "COSTUME_LAYER_",
+				text.getText().toString().substring(0, "COSTUME_LAYER_".length()));
+		catKeyboardClicker.clickOnKey("del");
+
+		catKeyboardClicker.clickOnKey("costume");
+		solo.clickOnText("Cancel");
+		solo.sleep(100);
+		assertEquals("Wrong button clicked", "", "");
+
+		solo.goBack();
+		solo.goBack();
+	}
+
+	//	public void testOrientationChanges() {
+	//
+	//		solo.clickOnEditText(0);
+	//		solo.clickOnEditText(1);
+	//		solo.setActivityOrientation(Solo.LANDSCAPE);
+	//		solo.sleep(2500); //orientation change takes forever...		
+	//		catKeyboardClicker.clickOnKey("del");
+	//		catKeyboardClicker.clickOnKey("del");
+	//		catKeyboardClicker.clickOnKey("del");
+	//		catKeyboardClicker.clickOnKey("del");
+	//
+	//		//		catKeyboardClicker.clickOnKey("costume");
+	//		//		solo.setActivityOrientation(Solo.LANDSCAPE);
+	//		//		solo.sleep(2500); //orientation change takes forever...		
+	//		//		solo.clickOnText("COSTUME_X_");
+	//		//		solo.sleep(100);// without sleep it crashes x.x
+	//		//
+	//		//		EditText text = solo.getEditText(0);
+	//		//		assertEquals("Wrong button clicked", "COSTUME_X_", text.getText().toString()
+	//		//				.substring(0, "COSTUME_X_".length()));
+	//		//		catKeyboardClicker.clickOnKey("del");
+	//		//		solo.sleep(100);
+	//		//
+	//		//		catKeyboardClicker.clickOnKey("costume");
+	//		//		solo.setActivityOrientation(Solo.PORTRAIT);
+	//		//		solo.sleep(2500);
+	//		//		solo.clickOnText("COSTUME_LAYER_");
+	//		//		solo.sleep(100);
+	//		//		text = solo.getEditText(0);
+	//		//		assertEquals("Wrong button clicked", "COSTUME_LAYER_",
+	//		//				text.getText().toString().substring(0, "COSTUME_LAYER_".length()));
+	//		//		catKeyboardClicker.clickOnKey("del");
+	//		//		solo.sleep(100);
+	//
+	//		solo.goBack();
+	//		solo.goBack();
+	//
+	//	}
+
 	private void createProject(String projectName) throws InterruptedException {
 
 		this.project = new Project(null, projectName);

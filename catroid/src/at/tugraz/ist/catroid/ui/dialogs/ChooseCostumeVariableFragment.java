@@ -39,7 +39,7 @@ import at.tugraz.ist.catroid.formulaeditor.CatKeyboardView;
 public class ChooseCostumeVariableFragment extends DialogFragment implements DialogInterface.OnClickListener {
 
 	private CatKeyboardView catKeyboardView;
-	private final String[] items = { "COSTUME_X_", "COSTUME_Y_", "COSTUME_GHOSTEFFECT_", "COSTUME_BRIGTHNESS_",
+	private final String[] items = { "COSTUME_X_", "COSTUME_Y_", "COSTUME_GHOSTEFFECT_", "COSTUME_BRIGHTNESS_",
 			"COSTUME_SIZE_", "COSTUME_ROTATION_", "COSTUME_LAYER_" };
 	private static final int CANCEL_INDEX = -2;
 
@@ -52,16 +52,26 @@ public class ChooseCostumeVariableFragment extends DialogFragment implements Dia
 		Log.v("touched: ", "" + index);
 		Log.v("touched: ", items[index].toString());
 
-		this.catKeyboardView.onKey(CatKeyEvent.KEYCODE_COSTUME_X + index, null);
+		int[] keyCode = new int[1];
+		keyCode[0] = 0;
+
+		//		if (catKeyboardView == null) {
+		//			Log.i("info", "catKeyboardView == null");
+		//		}
+		//
+		//		Log.i("info", "fuuuuuuuuuuuuuuuuuuuuuuuuu catKeyboardView: " + catKeyboardView
+		//				+ "\n ChooseCostumeDialogFragment: " + this);
+
+		catKeyboardView.onKey(CatKeyEvent.KEYCODE_COSTUME_X + index, keyCode);
 
 	}
 
 	public static ChooseCostumeVariableFragment newInstance(int title) {
 		ChooseCostumeVariableFragment fragment = new ChooseCostumeVariableFragment();
 
-		Bundle arguments = new Bundle();
-		arguments.putInt("title", title);
-		fragment.setArguments(arguments);
+		//		Bundle arguments = new Bundle();
+		//		arguments.putInt("title", title);
+		//		fragment.setArguments(arguments);
 		return fragment;
 	}
 
@@ -90,6 +100,8 @@ public class ChooseCostumeVariableFragment extends DialogFragment implements Dia
 	}
 
 	public void setCatKeyboardView(CatKeyboardView catKeyboardView) {
+		Log.i("info", "ChooseCostumeVariableFragment.setCatKeyboardView() catKeyboardView= " + catKeyboardView
+				+ "\n ChooseCostumeDialogFragment: " + this);
 		this.catKeyboardView = catKeyboardView;
 
 	}

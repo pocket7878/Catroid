@@ -649,7 +649,10 @@ public class UiTestUtils {
 			double newValue, String fieldName, Object theBrick) {
 
 		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
+
+		solo.sleep(5000);
 		solo.clickOnEditText(editTextNumber);
+
 		//solo.clearEditText(numberOfEditTextsInBrick); 
 		//solo.enterText(numberOfEditTextsInBrick, newValue + ""); //would only work if old text was shorter than newValue! 
 		//catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(numberOfEditTextsInBrick);

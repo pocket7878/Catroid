@@ -49,8 +49,8 @@
     >
 
     <Row>
-        <Key android:codes="1100" android:keyLabel="X-Beschleunigung" android:keyWidth="50%p" android:keyEdgeFlags="left"/>
-		<Key android:codes="67" android:keyIcon="@drawable/sym_keyboard_delete" android:keyWidth="50%p" android:isRepeatable="true" android:keyEdgeFlags="right" />
+        <Key android:codes="1100" android:keyLabel="X-Beschleunigung" android:keyWidth="80%p" android:keyEdgeFlags="left"/>
+		<Key android:codes="67" android:keyIcon="@drawable/sym_keyboard_delete" android:keyWidth="20%p" android:isRepeatable="true" android:keyEdgeFlags="right" />
     </Row>
     
     <Row>
@@ -64,8 +64,9 @@
     </Row> 
     
     <Row  android:rowEdgeFlags="bottom">
-        <Key android:codes="1104" android:keyLabel="Pitch Ausrichtung" android:keyWidth="50%p" android:keyEdgeFlags="left"/>
-        <Key android:codes="60" android:keyLabel="°°O" android:keyWidth="50%p" android:isModifier="true" android:keyEdgeFlags="right" />
-    </Row>
+	<Key android:codes="59" android:keyLabel="ZURÜCK" android:keyWidth="20%p" android:isModifier="true" android:keyEdgeFlags="left" />
+        <Key android:codes="1104" android:keyLabel="Pitch Ausrichtung" android:keyWidth="60%p" android:keyEdgeFlags="left"/>
+        <Key android:codes="60" android:keyLabel="NÄCHSTE" android:keyWidth="20%p" android:isModifier="true" android:keyEdgeFlags="right" />    
+	</Row>
     
 </Keyboard>

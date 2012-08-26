@@ -353,11 +353,16 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		//		int totalLinesForTheInput = 12;
 		//		float yCoordinate = waitBrickOffset + greenBarOffset + 5;
 
-		Formula longFormula = createVeryLongFormula();
-		WaitBrick waitBrick = new WaitBrick(firstSprite, longFormula);
-		startScript1.addBrick(waitBrick);
-
+		//		Formula longFormula = createVeryLongFormula();
+		//		WaitBrick waitBrick = new WaitBrick(firstSprite, longFormula);
+		//		startScript1.addBrick(waitBrick);
+		//		solo.clickOnEditText(0);
+		//		solo.goBack();
+		//		solo.goBack();
+		//		solo.clickOnText(solo.getString(R.string.current_project));
+		//		solo.clickOnText("nom nom nom");
 		solo.clickOnEditText(1);
+
 		for (int i = 0; i <= totalLinesForTheInput - visibleLines; i++) {
 			solo.clickOnScreen(threeCharactersWidth, firstLineYCoordinate); //scroll edittext to top, solo 2 stupid q.q
 		}
@@ -478,8 +483,11 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		firstSprite = new Sprite("nom nom nom");
 		startScript1 = new StartScript(firstSprite);
 		changeBrick = new ChangeSizeByNBrick(firstSprite, 0);
+		Formula longFormula = createVeryLongFormula();
+		WaitBrick waitBrick = new WaitBrick(firstSprite, longFormula);
 		firstSprite.addScript(startScript1);
 		startScript1.addBrick(changeBrick);
+		startScript1.addBrick(waitBrick);
 		project.addSprite(firstSprite);
 
 		ProjectManager.getInstance().setProject(project);

@@ -364,25 +364,27 @@ public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<
 		int displayHeight = currentDisplayMetrics.heightPixels;
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		solo.clickOnText(solo.getString(R.string.functions));
-		catKeyboardClicker.clickOnKey("sin");
-		assertEquals("Wrong keyboard after keyboard switch", "sin( 0 ) ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
-				.getText().toString());
-		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
 
-		solo.clickOnText(solo.getString(R.string.numbers));
-		catKeyboardClicker.clickOnKey("1");
-		assertEquals("Wrong keyboard after keyboard switch", "1 ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
-				.getText().toString());
-		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
+		//Tab bar not clickable anymore...
+		//		solo.clickOnText(solo.getString(R.string.functions));
+		//		catKeyboardClicker.clickOnKey("sin");
+		//		assertEquals("Wrong keyboard after keyboard switch", "sin( 0 ) ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+		//				.getText().toString());
+		//		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
+		//
+		//		solo.clickOnText(solo.getString(R.string.numbers));
+		//		catKeyboardClicker.clickOnKey("1");
+		//		assertEquals("Wrong keyboard after keyboard switch", "1 ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+		//				.getText().toString());
+		//		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
+		//
+		//		solo.clickOnText(solo.getString(R.string.sensors));
+		//		catKeyboardClicker.clickOnKey("x-accel");
+		//		assertEquals("Wrong keyboard after keyboard switch", "X_ACCELERATION_ ",
+		//				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
+		//		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
+		//solo.drag(10, displayWidth - 10, displayHeight - 50, displayHeight - 50, 100);
 
-		solo.clickOnText(solo.getString(R.string.sensors));
-		catKeyboardClicker.clickOnKey("x-accel");
-		assertEquals("Wrong keyboard after keyboard switch", "X_ACCELERATION_ ",
-				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
-		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
-
-		solo.drag(10, displayWidth - 10, displayHeight - 50, displayHeight - 50, 100);
 		catKeyboardClicker.clickOnKey("1");
 		assertEquals("Wrong keyboard after keyboard switch", "1 ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
 				.getText().toString());

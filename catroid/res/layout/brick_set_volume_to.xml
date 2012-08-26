@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dip"
-        android:layout_toLeftOf="@+id/SetVolumeToTextView"
+        android:layout_toLeftOf="@id/SetVolumeToTextView"
         android:background="@color/white"
         android:gravity="right"
         android:minHeight="30dip"
@@ -62,7 +62,7 @@
         style="@style/brick_text_style"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/SetVolumeToEditText"
+        android:layout_toLeftOf="@id/brick_set_volume_to_text_view"
         android:text="@string/brick_set_volume_to" >
     </TextView>
 

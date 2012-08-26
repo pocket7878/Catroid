@@ -45,52 +45,43 @@ import android.graphics.drawable.Drawable;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.RelativeLayout;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.ui.dialogs.ChooseCostumeVariableFragment;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
-public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyboardActionListener, OnClickListener {
+public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyboardActionListener {
 
 	static final int NUMBER_KEYBOARD = 1;
 	static final int FUNCTION_KEYBOARD = 0;
 	static final int SENSOR_KEYBOARD = 2;
+
 	private FormulaEditorEditText editText;
-	//	boolean isShifted;
+
 	private CatKeyboard symbolsNumbers;
-	//	CatKeyboard symbols_shifted;
 	private CatKeyboard symbolsFunctions;
 	private CatKeyboard symbolsSensors;
 	private Context context;
 	private ChooseCostumeVariableFragment chooseSpriteVariablesFragment;
-	private RelativeLayout swipeBar;
-
-	//private Brick currentBrick;
+	private View swipeBar;
 
 	public CatKeyboardView(Context context, AttributeSet attrs) {
+
 		super(context, attrs);
 		this.context = context;
 		setOnKeyboardActionListener(this);
 		this.editText = null;
-		//		this.isShifted = false;
 		this.symbolsNumbers = null;
-		//		this.symbols_shifted = null;
 
 		if (Locale.getDefault().getDisplayLanguage().contentEquals(Locale.GERMAN.getDisplayLanguage())) {
 			this.symbolsNumbers = new CatKeyboard(this.getContext(), R.xml.symbols_de_numbers);
-			//			this.symbols_shifted = new CatKeyboard(this.getContext(), R.xml.symbols_de_shift);
 			this.symbolsFunctions = new CatKeyboard(this.getContext(), R.xml.symbols_de_functions);
 			this.symbolsSensors = new CatKeyboard(this.getContext(), R.xml.symbols_de_sensors);
-
-			//Log.i("info", "FormulaEditorDialog.onCreate() - DisplayLanguage is DE");
-
 		} else {//if (Locale.getDefault().getDisplayLanguage().contentEquals(Locale.ENGLISH.getDisplayLanguage())) {
 			this.symbolsNumbers = new CatKeyboard(this.getContext(), R.xml.symbols_eng_numbers);
-			//			this.symbols_shifted = new CatKeyboard(this.getContext(), R.xml.symbols_eng_shift);
 			this.symbolsFunctions = new CatKeyboard(this.getContext(), R.xml.symbols_eng_functions);
 			this.symbolsSensors = new CatKeyboard(this.getContext(), R.xml.symbols_eng_sensors);
 
@@ -98,9 +89,16 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 
 		this.setKeyboard(symbolsNumbers);
 
-		this.chooseSpriteVariablesFragment = ChooseCostumeVariableFragment
-				.newInstance(android.R.string.dialog_alert_title);
-		this.chooseSpriteVariablesFragment.setCatKeyboardView(this);
+		if (((SherlockFragmentActivity) context).getSupportFragmentManager().findFragmentByTag(
+				"chooseSpriteVariablesDialogFragment") == null) {
+			this.chooseSpriteVariablesFragment = ChooseCostumeVariableFragment
+					.newInstance(android.R.string.dialog_alert_title);
+			this.chooseSpriteVariablesFragment.setCatKeyboardView(this);
+		} else {
+			this.chooseSpriteVariablesFragment = (ChooseCostumeVariableFragment) ((SherlockFragmentActivity) context)
+					.getSupportFragmentManager().findFragmentByTag("chooseSpriteVariablesDialogFragment");
+			this.chooseSpriteVariablesFragment.setCatKeyboardView(this);
+		}
 
 		//		LayoutParams relative = new LayoutParams(source);
 		//		this.symbols.setShifted(false);
@@ -118,13 +116,24 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 
 		//    public CatKeyboardView(Context context, AttributeSet attrs, int defStyle) {
 		//        super(context, attrs, defStyle);
+
+		Log.i("info", "CatKeyboardView()-Constructor");
 	}
+
+	//	@Override
+	//	protected void onRestoreInstanceState(Parcelable state) {
+	//		Log.i("info", "CatKeyboardView.onRestoreInstanceState()");
+	//
+	//		this.chooseSpriteVariablesFragment.setCatKeyboardView(this);
+	//
+	//		super.onRestoreInstanceState(state);
+	//	}
 
 	private void setSwipeBarBackground(int position) {
 		//int color = context.getResources().getColor(R.color.formula_editor_background);
 		//int colors[] = { color, 0x0066CC };
 		Drawable background = null;
-		int width = swipeBar.getWidth();
+
 		switch (position) {
 			case FUNCTION_KEYBOARD:
 				//		int colors[] = { color, 0x0066CC };
@@ -148,28 +157,10 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 		//test_view.invalidate();
 	}
 
-	@Override
-	public void onClick(View view) {
-		switch (view.getId()) {
-			case R.id.formula_editor_caption_center:
-				setSwipeBarBackground(NUMBER_KEYBOARD);
-				this.setKeyboard(this.symbolsNumbers);
-				break;
-			case R.id.formula_editor_caption_left:
-				setSwipeBarBackground(SENSOR_KEYBOARD);
-				this.setKeyboard(this.symbolsSensors);
-				break;
-			case R.id.formula_editor_caption_right:
-				setSwipeBarBackground(FUNCTION_KEYBOARD);
-				this.setKeyboard(this.symbolsFunctions);
-				break;
-		}
-	}
-
 	public void init(FormulaEditorEditText editText, View swipeBar) {
 		this.editText = editText;
-		this.swipeBar = (RelativeLayout) swipeBar;
-		setSwipeBarBackground(1);
+		this.swipeBar = swipeBar;
+		setSwipeBarBackground(NUMBER_KEYBOARD);
 	}
 
 	//	public void setCurrentBrick(Brick currentBrick) {
@@ -188,19 +179,9 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 
 	@Override
 	protected boolean onLongPress(Key key) {
-		//			if (key.codes[0] == Keyboard.KEYCODE_CANCEL) {
-		//				getOnKeyboardActionListener().onKey(KEYCODE_OPTIONS, null);
-		//				return true;
-		//			} else {
 		return super.onLongPress(key);
-
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.inputmethodservice.KeyboardView.OnKeyboardActionListener#onKey(int, int[])
-	 */
 	@Override
 	public void onKey(int primaryCode, int[] keyCodes) {
 
@@ -281,43 +262,9 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 				break;
 			case KeyEvent.KEYCODE_SHIFT_RIGHT:
 				this.swipeRight();
-				//				String displayLanguage = Locale.getDefault().getDisplayLanguage();
-				//				if (displayLanguage.contentEquals(Locale.ENGLISH.getDisplayLanguage())) {
-				//				if (!this.isShifted) {
-				//					CatKeyboard shiftedCatKeyboard = new CatKeyboard(this.getContext(), R.xml.symbols_eng_shift);
-				//					this.setKeyboard(shiftedCatKeyboard);
-				//					this.isShifted = true;
-				//					//						this.setShifted(true);
-				//					//						this.symbols.setShifted(true);
-				//					//						this.symbols_shifted.setShifted(true);
-				//
-				//				} else {
-				//					CatKeyboard shiftedCatKeyboard = new CatKeyboard(this.getContext(), R.xml.symbols_eng_numbers);
-				//					this.setKeyboard(shiftedCatKeyboard);
-				//					this.isShifted = false;
-				//					//						this.setShifted(false);
-				//					//						this.symbols.setShifted(false);
-				//					//						this.symbols_shifted.setShifted(false);
-				//				}
-				//			} else if (displayLanguage.contentEquals(Locale.GERMAN.getDisplayLanguage())) {
-				//				if (!this.isShifted) {
-				//					CatKeyboard shiftedCatKeyboard = new CatKeyboard(this.getContext(), R.xml.symbols_de_shift);
-				//					this.setKeyboard(shiftedCatKeyboard);
-				//					this.isShifted = true;
-				//					//						this.setShifted(true);
-				//					//						this.symbols.setShifted(true);
-				//					//						this.symbols_shifted.setShifted(true);
-				//				} else {
-				//					CatKeyboard shiftedCatKeyboard = new CatKeyboard(this.getContext(), R.xml.symbols_de);
-				//					this.setKeyboard(shiftedCatKeyboard);
-				//					this.isShifted = false;
-				//					//						this.setShifted(false);
-				//					//						this.symbols.setShifted(false);
-				//					//						this.symbols_shifted.setShifted(false);
-				//
-				//				}
-				//			}
-
+				break;
+			case KeyEvent.KEYCODE_SHIFT_LEFT:
+				this.swipeLeft();
 				break;
 			case CatKeyEvent.KEYCODE_SPACE:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SPACE));
@@ -400,9 +347,9 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 				editText.checkAndModifyKeyInput(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_COSTUME_BUTTON:
-				this.chooseSpriteVariablesFragment
-						.show(((SherlockFragmentActivity) context).getSupportFragmentManager(),
-								"chooseSpriteVariablesDialog");
+				this.chooseSpriteVariablesFragment.show(
+						((SherlockFragmentActivity) context).getSupportFragmentManager(),
+						"chooseSpriteVariablesDialogFragment");
 				break;
 			case CatKeyEvent.KEYCODE_COSTUME_X:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_X));
@@ -416,8 +363,8 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_GHOSTEFFECT));
 				editText.checkAndModifyKeyInput(cKE);
 				break;
-			case CatKeyEvent.KEYCODE_COSTUME_BRIGTHNESS:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_BRIGTHNESS));
+			case CatKeyEvent.KEYCODE_COSTUME_BRIGHTNESS:
+				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_BRIGHTNESS));
 				editText.checkAndModifyKeyInput(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_COSTUME_SIZE:
@@ -436,9 +383,6 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 
 	}
 
-	/**
-	 * 
-	 */
 	//	private void handleKeyboardChange() {
 	//		if (this.getKeyboard() == this.symbolsNumbers) {
 	//			this.setKeyboard(this.symbolsFunctions);
