@@ -29,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.ui.dialogs.AboutDialog;
 
@@ -46,7 +47,7 @@ public class NativeAppActivity extends StageActivity {
 
 		context = this;
 
-		manager.loadProject("project.xml", this, false);
+		manager.loadProject(Constants.PROJECTCODE_NAME, this, false);
 		manager = ProjectManager.getInstance();
 		super.onCreate(savedInstanceState);
 	}

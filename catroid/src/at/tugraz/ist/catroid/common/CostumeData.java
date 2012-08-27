@@ -27,8 +27,10 @@ import java.io.Serializable;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.stage.NativeAppActivity;
 import at.tugraz.ist.catroid.utils.ImageEditing;
 import at.tugraz.ist.catroid.utils.Utils;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -122,6 +124,9 @@ public class CostumeData implements Serializable {
 	}
 
 	private String getPathToImageDirectory() {
+		if (NativeAppActivity.isRunning()) {
+			return getInternalPath();
+		}
 		return Utils.buildPath(Utils.buildProjectPath(ProjectManager.getInstance().getCurrentProject().getName()),
 				Constants.IMAGE_DIRECTORY);
 	}
