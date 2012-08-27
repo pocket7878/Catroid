@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<Content.Project>
+  <androidVersion>16</androidVersion>
+  <catroidVersionCode>2147483646</catroidVersionCode>
+  <catroidVersionName>0.6.0beta</catroidVersionName>
+  <deviceName>Nexus S</deviceName>
+  <projectName>Test Project Name</projectName>
+  <screenHeight>800</screenHeight>
+  <screenWidth>480</screenWidth>
+  <spriteList>
+    <Content.Sprite>
+      <costumeDataList>
+        <Common.CostumeData>
+          <fileName>old_image_name_1</fileName>
+          <name>fishy_bg</name>
+        </Common.CostumeData>
+      </costumeDataList>
+      <name>Hintergrund</name>
+      <scriptList>
+        <Content.StartScript>
+          <brickList>
+            <Bricks.SetCostumeBrick>
+              <costumeData reference="../../../../../costumeDataList/Common.CostumeData"/>
+              <sprite reference="../../../../.."/>
+            </Bricks.SetCostumeBrick>
+          </brickList>
+          <sprite reference="../../.."/>
+        </Content.StartScript>
+      </scriptList>
+      <soundList/>
+    </Content.Sprite>
+    <Content.Sprite>
+      <costumeDataList>
+        <Common.CostumeData>
+          <fileName>old_image_name_2</fileName>
+          <name>ParrotFish</name>
+        </Common.CostumeData>
+      </costumeDataList>
+      <name>Fish</name>
+      <scriptList>
+        <Content.StartScript>
+          <brickList>
+            <Bricks.ComeToFrontBrick>
+              <sprite reference="../../../../.."/>
+            </Bricks.ComeToFrontBrick>
+            <Bricks.SetCostumeBrick>
+              <costumeData reference="../../../../../costumeDataList/Common.CostumeData"/>
+              <sprite reference="../../../../.."/>
+            </Bricks.SetCostumeBrick>
+            <Bricks.ForeverBrick>
+              <loopEndBrick>
+                <loopBeginBrick class="Bricks.ForeverBrick" reference="../.."/>
+                <sprite reference="../../../../../.."/>
+              </loopEndBrick>
+              <sprite reference="../../../../.."/>
+            </Bricks.ForeverBrick>
+            <Bricks.PlaceAtBrick>
+              <sprite reference="../../../../.."/>
+              <xPosition>470</xPosition>
+              <yPosition>-100</yPosition>
+            </Bricks.PlaceAtBrick>
+            <Bricks.GlideToBrick>
+              <durationInMilliSeconds>6000</durationInMilliSeconds>
+              <sprite reference="../../../../.."/>
+              <xDestination>-470</xDestination>
+              <yDestination>0</yDestination>
+            </Bricks.GlideToBrick>
+            <Bricks.PlaceAtBrick>
+              <sprite reference="../../../../.."/>
+              <xPosition>470</xPosition>
+              <yPosition>100</yPosition>
+            </Bricks.PlaceAtBrick>
+            <Bricks.GlideToBrick>
+              <durationInMilliSeconds>6000</durationInMilliSeconds>
+              <sprite reference="../../../../.."/>
+              <xDestination>-470</xDestination>
+              <yDestination>0</yDestination>
+            </Bricks.GlideToBrick>
+            <Bricks.LoopEndBrick reference="../Bricks.ForeverBrick/loopEndBrick"/>
+          </brickList>
+          <sprite reference="../../.."/>
+        </Content.StartScript>
+        <Content.WhenScript>
+          <brickList>
+            <Bricks.RepeatBrick>
+              <loopEndBrick>
+                <loopBeginBrick class="Bricks.RepeatBrick" reference="../.."/>
+                <sprite reference="../../../../../.."/>
+              </loopEndBrick>
+              <sprite reference="../../../../.."/>
+              <timesToRepeat>36</timesToRepeat>
+            </Bricks.RepeatBrick>
+            <Bricks.TurnLeftBrick>
+              <degrees>10.0</degrees>
+              <sprite reference="../../../../.."/>
+            </Bricks.TurnLeftBrick>
+            <Bricks.ChangeSizeByNBrick>
+              <size>2.0</size>
+              <sprite reference="../../../../.."/>
+            </Bricks.ChangeSizeByNBrick>
+            <Bricks.LoopEndBrick reference="../Bricks.RepeatBrick/loopEndBrick"/>
+            <Bricks.RepeatBrick>
+              <loopEndBrick>
+                <loopBeginBrick class="Bricks.RepeatBrick" reference="../.."/>
+                <sprite reference="../../../../../.."/>
+              </loopEndBrick>
+              <sprite reference="../../../../.."/>
+              <timesToRepeat>36</timesToRepeat>
+            </Bricks.RepeatBrick>
+            <Bricks.TurnLeftBrick>
+              <degrees>10.0</degrees>
+              <sprite reference="../../../../.."/>
+            </Bricks.TurnLeftBrick>
+            <Bricks.ChangeSizeByNBrick>
+              <size>-2.0</size>
+              <sprite reference="../../../../.."/>
+            </Bricks.ChangeSizeByNBrick>
+            <Bricks.LoopEndBrick reference="../Bricks.RepeatBrick[2]/loopEndBrick"/>
+            <Bricks.BroadcastBrick>
+              <broadcastMessage>onFishAnimDone</broadcastMessage>
+              <sprite reference="../../../../.."/>
+            </Bricks.BroadcastBrick>
+          </brickList>
+          <sprite reference="../../.."/>
+          <action>Tapped</action>
+        </Content.WhenScript>
+        <Content.WhenScript>
+          <brickList>
+            <Bricks.PlaySoundBrick>
+              <soundInfo>
+                <fileName>old_sound_name</fileName>
+                <name>batman</name>
+              </soundInfo>
+              <sprite reference="../../../../.."/>
+            </Bricks.PlaySoundBrick>
+            <Bricks.GlideToBrick>
+              <durationInMilliSeconds>300</durationInMilliSeconds>
+              <sprite reference="../../../../.."/>
+              <xDestination>0</xDestination>
+              <yDestination>250</yDestination>
+            </Bricks.GlideToBrick>
+            <Bricks.GlideToBrick>
+              <durationInMilliSeconds>600</durationInMilliSeconds>
+              <sprite reference="../../../../.."/>
+              <xDestination>0</xDestination>
+              <yDestination>-250</yDestination>
+            </Bricks.GlideToBrick>
+            <Bricks.GlideToBrick>
+              <durationInMilliSeconds>300</durationInMilliSeconds>
+              <sprite reference="../../../../.."/>
+              <xDestination>0</xDestination>
+              <yDestination>0</yDestination>
+            </Bricks.GlideToBrick>
+            <Bricks.PointInDirectionBrick>
+              <degrees>180.0</degrees>
+              <sprite reference="../../../../.."/>
+            </Bricks.PointInDirectionBrick>
+            <Bricks.SetSizeToBrick>
+              <size>100.0</size>
+              <sprite reference="../../../../.."/>
+            </Bricks.SetSizeToBrick>
+            <Bricks.StopAllSoundsBrick>
+              <sprite reference="../../../../.."/>
+            </Bricks.StopAllSoundsBrick>
+          </brickList>
+          <sprite reference="../../.."/>
+          <action>Tapped</action>
+        </Content.WhenScript>
+        <Content.WhenScript>
+          <brickList>
+            <Bricks.BroadcastBrick>
+              <broadcastMessage>onFishTouched</broadcastMessage>
+              <sprite reference="../../../../.."/>
+            </Bricks.BroadcastBrick>
+          </brickList>
+          <sprite reference="../../.."/>
+          <action>Tapped</action>
+        </Content.WhenScript>
+      </scriptList>
+      <soundList>
+        <Common.SoundInfo reference="../../scriptList/Content.WhenScript[2]/brickList/Bricks.PlaySoundBrick/soundInfo"/>
+      </soundList>
+    </Content.Sprite>
+    <Content.Sprite>
+      <costumeDataList>
+        <Common.CostumeData>
+          <fileName>B28293E07412005C0C246875603BCFDF_fishy_star.png</fileName>
+          <name>fishy_star</name>
+        </Common.CostumeData>
+      </costumeDataList>
+      <name>Star</name>
+      <scriptList>
+        <Content.StartScript>
+          <brickList>
+            <Bricks.HideBrick>
+              <sprite reference="../../../../.."/>
+            </Bricks.HideBrick>
+            <Bricks.SetCostumeBrick>
+              <costumeData reference="../../../../../costumeDataList/Common.CostumeData"/>
+              <sprite reference="../../../../.."/>
+            </Bricks.SetCostumeBrick>
+          </brickList>
+          <sprite reference="../../.."/>
+        </Content.StartScript>
+        <Content.BroadcastScript>
+          <brickList>
+            <Bricks.ShowBrick>
+              <sprite reference="../../../../.."/>
+            </Bricks.ShowBrick>
+            <Bricks.RepeatBrick>
+              <loopEndBrick>
+                <loopBeginBrick class="Bricks.RepeatBrick" reference="../.."/>
+                <sprite reference="../../../../../.."/>
+              </loopEndBrick>
+              <sprite reference="../../../../.."/>
+              <timesToRepeat>80</timesToRepeat>
+            </Bricks.RepeatBrick>
+            <Bricks.ChangeSizeByNBrick>
+              <size>1.0</size>
+              <sprite reference="../../../../.."/>
+            </Bricks.ChangeSizeByNBrick>
+            <Bricks.LoopEndBrick reference="../Bricks.RepeatBrick/loopEndBrick"/>
+          </brickList>
+          <sprite reference="../../.."/>
+          <receivedMessage>onFishTouched</receivedMessage>
+        </Content.BroadcastScript>
+        <Content.BroadcastScript>
+          <brickList>
+            <Bricks.HideBrick>
+              <sprite reference="../../../../.."/>
+            </Bricks.HideBrick>
+            <Bricks.SetSizeToBrick>
+              <size>100.0</size>
+              <sprite reference="../../../../.."/>
+            </Bricks.SetSizeToBrick>
+          </brickList>
+          <sprite reference="../../.."/>
+          <receivedMessage>onFishAnimDone</receivedMessage>
+        </Content.BroadcastScript>
+      </scriptList>
+      <soundList/>
+    </Content.Sprite>
+  </spriteList>
+</Content.Project>

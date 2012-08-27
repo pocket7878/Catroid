@@ -18,4 +18,5 @@ python handle_project.py <path_to_project> <path_to_catroid> <project_id> <outpu
 	<output_folder>     Path to the folder in which the resulting apk will be placed
 
 
-The key store, alias and passwords for signing the apps are stored in the catroid/build.properties file
+The key store, alias and passwords for signing the apps are stored in the
+catroid/build.properties file.

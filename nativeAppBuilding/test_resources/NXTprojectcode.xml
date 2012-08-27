@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<Content.Project>
+  <androidVersion>16</androidVersion>
+  <catroidVersionCode>2147483646</catroidVersionCode>
+  <catroidVersionName>0.6.0beta</catroidVersionName>
+  <deviceName>Galaxy Nexus</deviceName>
+  <projectName>NXTTedt</projectName>
+  <screenHeight>1184</screenHeight>
+  <screenWidth>720</screenWidth>
+  <spriteList>
+    <Content.Sprite>
+      <costumeDataList>
+        <Common.CostumeData>
+          <fileName>C7781E3CB311DE7578C6EE03E88929A6_Hintergrund</fileName>
+          <name>Hintergrund</name>
+        </Common.CostumeData>
+      </costumeDataList>
+      <name>Hintergrund</name>
+      <scriptList>
+        <Content.StartScript>
+          <brickList>
+            <Bricks.SetCostumeBrick>
+              <costumeData reference="../../../../../costumeDataList/Common.CostumeData"/>
+              <sprite reference="../../../../.."/>
+            </Bricks.SetCostumeBrick>
+          </brickList>
+          <sprite reference="../../.."/>
+        </Content.StartScript>
+      </scriptList>
+      <soundList/>
+    </Content.Sprite>
+    <Content.Sprite>
+      <costumeDataList/>
+      <name>nxtest</name>
+      <scriptList>
+        <Content.StartScript>
+          <brickList>
+            <Bricks.NXTMotorActionBrick>
+              <motor>MOTOR_A</motor>
+              <speed>100</speed>
+              <sprite reference="../../../../.."/>
+            </Bricks.NXTMotorActionBrick>
+          </brickList>
+          <sprite reference="../../.."/>
+        </Content.StartScript>
+      </scriptList>
+      <soundList/>
+    </Content.Sprite>
+  </spriteList>
+</Content.Project>
