@@ -207,7 +207,9 @@ def main():
 
     language_dirs = glob.glob(os.path.join(path_to_project, 'catroid', 'res', 'values*'))
     for curr_lang_dir in language_dirs:
-        set_project_name(project_name, os.path.join(curr_lang_dir, 'strings.xml'))
+        editing_file = os.path.join(curr_lang_dir, 'strings.xml')
+        if os.path.exists(editing_file):
+            set_project_name(project_name, editing_file)
 
     with open(os.devnull, 'wb') as devnull:
         subprocess.check_call(['ant', ANT_BUILD_TARGET ,'-f',
