@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 
 public class PhysicWorldTest extends AndroidTestCase {
+	// TODO: Test it!
 	static {
 		GdxNativesLoader.load();
 	}

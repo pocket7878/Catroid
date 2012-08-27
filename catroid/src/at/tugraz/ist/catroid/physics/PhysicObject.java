@@ -65,18 +65,17 @@ public class PhysicObject {
 			fixtureDef.shape = shape;
 			if (type != Type.NONE) {
 				createdFixture = body.createFixture(fixtureDef);
-				setMass(mass);
 			}
 		}
 
-		// TODO find a better way to get rid of ConcurrentModificationException.
-		Vector<Fixture> bodyFixtures = new Vector<Fixture>(body.getFixtureList());
-		for (Fixture fixture : bodyFixtures) {
+		// TODO: Get rid of workaround and ConcurrentModificationException!
+		Vector<Fixture> fixtures = new Vector<Fixture>(body.getFixtureList());
+		for (Fixture fixture : fixtures) {
 			if (fixture != createdFixture) {
-				fixture.setDensity(0.0f);
 				body.destroyFixture(fixture);
 			}
 		}
+		setMass(mass);
 	}
 
 	public void setType(Type type) {
@@ -101,7 +100,6 @@ public class PhysicObject {
 		}
 
 		setShape(shape);
-		setMass(mass); // TODO: Every time there is something to do. Check if needed.
 	}
 
 	public float getAngle() {
