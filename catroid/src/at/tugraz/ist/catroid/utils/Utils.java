@@ -53,6 +53,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -70,6 +72,7 @@ import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.ui.dialogs.ErrorDialogFragment;
 
 public class Utils {
 
@@ -184,6 +187,11 @@ public class Utils {
 			}
 		});
 		builder.show();
+	}
+
+	public static void displayErrorMessageFragment(String errorMessage, FragmentManager fragmentManager) {
+		DialogFragment errorDialog = ErrorDialogFragment.newInstance(errorMessage);
+		errorDialog.show(fragmentManager, ErrorDialogFragment.DIALOG_FRAGMENT_TAG);
 	}
 
 	public static void displayToast(Activity activity, String message/* , int duration */) {

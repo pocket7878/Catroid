@@ -24,7 +24,6 @@ package at.tugraz.ist.catroid.ui.dialogs;
 
 import java.io.File;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnShowListener;
@@ -56,7 +55,6 @@ import at.tugraz.ist.catroid.utils.Utils;
 public class UploadProjectDialog extends DialogFragment {
 
 	public static final String DIALOG_FRAGMENT_TAG = "dialog_upload_project";
-	private AddProjectScreenshot addProjectScreenshot;
 
 	private EditText projectUploadName;
 	private EditText projectDescriptionField;
@@ -67,7 +65,6 @@ public class UploadProjectDialog extends DialogFragment {
 
 	private String currentProjectName;
 	private String newProjectName;
-	private boolean isUploadButton = false;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -112,14 +109,12 @@ public class UploadProjectDialog extends DialogFragment {
 		uploadButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				isUploadButton = true;
 				handleUploadButtonClick();
 			}
 		});
 		cancelButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				isUploadButton = false;
 				handleCancelButtonClick();
 			}
 		});
@@ -205,6 +200,11 @@ public class UploadProjectDialog extends DialogFragment {
 		}
 
 		if (!projectManager.getCurrentProject().getProjectHasThumbnail()) {
+			AddProjectScreenshot addProjectScreenshot = new AddProjectScreenshot();
+			addProjectScreenshot.show(getFragmentManager(), AddProjectScreenshot.DIALOG_FRAGMENT_TAG);
+
+			Utils.displayErrorMessageFragment(getString(R.string.upload_project_no_thumbnail_error),
+					getFragmentManager());
 			return;
 		}
 
@@ -219,17 +219,5 @@ public class UploadProjectDialog extends DialogFragment {
 
 	private void handleCancelButtonClick() {
 		dismiss();
-	}
-
-	@Override
-	public void onDismiss(DialogInterface dialog) {
-		super.onDismiss(dialog);
-		if (!ProjectManager.getInstance().getCurrentProject().getProjectHasThumbnail() && isUploadButton) {
-			addProjectScreenshot = new AddProjectScreenshot(getActivity());
-			Dialog addProjectScreenshotDialog = addProjectScreenshot.createDialog();
-			addProjectScreenshotDialog.show();
-
-			Utils.displayErrorMessage(getActivity(), "No thumbnail found");
-		}
 	}
 }

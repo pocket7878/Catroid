@@ -146,8 +146,9 @@
     <string name="take_screenshot_information">The screenshot will be used as a thumbnail if you upload your project and for your local projectlist.</string>
 	
     <!-- Add Screenshot dialog -->
-    <string name="add_project_screensht_titel">Add Screenshot:</string>
+    <string name="add_project_screenshot_titel">Add Screenshot:</string>
     <string name="project_screenshot_from_stage">From stage</string>
+    <string name="upload_project_no_thumbnail_error">No thumbnail available!</string>
     <string name="project_screenshot_auto_generate">Generate automatically</string>    
     <!-- Stage menu dialog -->
     <string name="back">Back</string>

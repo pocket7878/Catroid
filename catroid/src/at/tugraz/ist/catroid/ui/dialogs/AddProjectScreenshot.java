@@ -22,59 +22,57 @@
  */
 package at.tugraz.ist.catroid.ui.dialogs;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.stage.StageActivity;
 
-public class AddProjectScreenshot extends Dialog {
-	private Context context;
-	Dialog addProjectScreenshot;
+public class AddProjectScreenshot extends DialogFragment {
+	public static final String DIALOG_FRAGMENT_TAG = "dialog_add_project_screenshot";
+	private Button screenshotFromStageButton;
+	private Button cancelButton;
 
-	public AddProjectScreenshot(Context context) {
-		super(context);
-		this.context = context;
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.dialog_add_project_screenshot, container);
+
+		cancelButton = (Button) rootView.findViewById(R.id.btn_cancel_add_project_screenshot);
+		screenshotFromStageButton = (Button) rootView.findViewById(R.id.btn_ok_add_project_screenshot);
+
+		initControls();
+
+		getDialog().setTitle(R.string.add_project_screenshot_titel);
+		getDialog().setCanceledOnTouchOutside(true);
+		getDialog().getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+
+		return rootView;
 	}
 
-	public Dialog createDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-		builder.setTitle(context.getString(R.string.add_project_screensht_titel));
-
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View view = inflater.inflate(R.layout.dialog_add_project_screenshot, null);
-
-		Button fromStageButton = (Button) view.findViewById(R.id.btn_ok_add_project_screenshot);
-		fromStageButton.setOnClickListener(new View.OnClickListener() {
+	private void initControls() {
+		screenshotFromStageButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (ProjectManager.getInstance().getCurrentProject() != null) {
-					Intent takeScreenshotIntent = new Intent(context, StageActivity.class);
+					Intent takeScreenshotIntent = new Intent(getActivity(), StageActivity.class);
 					takeScreenshotIntent.putExtra("takeScreenshotForUpload", true);
-					context.startActivity(takeScreenshotIntent);
+					getActivity().startActivity(takeScreenshotIntent);
 				}
-				addProjectScreenshot.dismiss();
+				dismiss();
 			}
 		});
-
-		Button cancelButton = (Button) view.findViewById(R.id.btn_cancel_add_project_screenshot);
-		cancelButton.setOnClickListener(new View.OnClickListener() {
+		cancelButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				addProjectScreenshot.dismiss();
+				dismiss();
 			}
 		});
-
-		builder.setView(view);
-
-		addProjectScreenshot = builder.create();
-		addProjectScreenshot.setCanceledOnTouchOutside(true);
-
-		return addProjectScreenshot;
 	}
 }
