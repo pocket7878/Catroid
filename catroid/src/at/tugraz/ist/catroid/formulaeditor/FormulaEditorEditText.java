@@ -46,7 +46,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	public static final int NUMBER = 0;
 	public static final int OPERATOR = 1;
-	public static final int FUNCTION_SEPERATOR = 2;
+	public static final int FUNCTION_SEPARATOR = 2;
 	public static final int FUNCTION = 3;
 	public static final int BRACKET_CLOSE = 4;
 	public static final int BRACKET_OPEN = 5;
@@ -212,7 +212,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		} else if (currentlySelectedElementType == BRACKET_OPEN) {
 			extendSelectionForFunctionName();
 			extendSelectionBetweenBracketsFromOpenBracket();
-		} else if (currentlySelectedElementType == FUNCTION_SEPERATOR) {
+		} else if (currentlySelectedElementType == FUNCTION_SEPARATOR) {
 			extendSelectionForFunctionOnSeperator();
 		} else if (currentlySelectedElementType == SENSOR_VALUE) {
 			extendSelectionForSensorValue();
@@ -226,7 +226,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		//Log.i("info", currentlySelectedElement + " start: " + selectionStartIndex + " end: " + selectionEndIndex);
 
 		if (currentlySelectedElement.contains(",")) {
-			return FUNCTION_SEPERATOR;
+			return FUNCTION_SEPARATOR;
 		} else if (currentlySelectedElement.contains(")")) {
 			return BRACKET_CLOSE;
 		} else if (currentlySelectedElement.contains("(")) {

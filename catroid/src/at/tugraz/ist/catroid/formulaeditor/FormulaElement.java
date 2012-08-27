@@ -168,7 +168,7 @@ public class FormulaElement implements Serializable {
 				if (value.equals("^")) {
 					return java.lang.Math.pow(left, right);
 				}
-			} else {//unär operators
+			} else {//unary operators
 				Double right = rightChild.interpretRecursive();
 				//				if (value.equals("+")) {
 				//					return right;
