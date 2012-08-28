@@ -143,7 +143,6 @@ def edit_manifest(path_to_project, permissions):
     path_to_manifest = os.path.join(path_to_project, 'catroid', 'AndroidManifest.xml')
     doc = xml.dom.minidom.parse(path_to_manifest)
 
-    # TODO: Check what happens if RECORD_AUDIO, BLUETOOTH, ACCESS_NETWORK_STATE will be removed
     for node in doc.getElementsByTagName('uses-permission'):
         if not node.attributes.item(0).value in permissions:
             node.parentNode.removeChild(node)
@@ -212,7 +211,7 @@ def main():
 
     with open(os.devnull, 'wb') as devnull:
         subprocess.check_call(['android', 'update', 'lib-project', '-p',
-            os.path.join('..', 'libraryProjects/actionbarsherlock')],
+            os.path.join(path_to_project, 'libraryProjects/actionbarsherlock')],
             stdout=devnull)
 
         subprocess.check_call(['ant', ANT_BUILD_TARGET ,'-f',
@@ -223,7 +222,7 @@ def main():
             shutil.move(os.path.join(path_to_project, 'catroid', 'bin', filename),\
                         os.path.join(output_folder, project_filename + '.apk'))
 
-    #shutil.rmtree(path_to_project)
+    shutil.rmtree(path_to_project)
     return 0
 
 if __name__ == '__main__':
