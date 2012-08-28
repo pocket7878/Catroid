@@ -194,12 +194,13 @@ public class UploadProjectDialog extends DialogFragment {
 		String projectPath = Constants.DEFAULT_ROOT + "/" + projectManager.getCurrentProject().getName();
 		String projectDescription = "";
 
+		boolean hasThumbnail = false;
 		String screenshotPath = Utils.buildPath(projectPath, StageListener.SCREENSHOT_FILE_NAME);
-		if (new File(screenshotPath).exists() && !projectManager.getCurrentProject().getProjectHasThumbnail()) {
-			projectManager.getCurrentProject().setProjectHasThumbnail(true);
+		if (new File(screenshotPath).exists()) {
+			hasThumbnail = true;
 		}
 
-		if (!projectManager.getCurrentProject().getProjectHasThumbnail()) {
+		if (!hasThumbnail) {
 			AddProjectScreenshot addProjectScreenshot = new AddProjectScreenshot();
 			addProjectScreenshot.show(getFragmentManager(), AddProjectScreenshot.DIALOG_FRAGMENT_TAG);
 
