@@ -251,19 +251,23 @@ public class Costume extends Image {
 		imageLock.release();
 	}
 
-	public String getImagePath() {
-		imageLock.acquireUninterruptibly();
-		String path;
-		if (this.costumeData == null) {
-			path = "";
-		} else if (internalPath) {
-			path = this.costumeData.getInternalPath();
-		} else {
-			path = this.costumeData.getAbsolutePath();
-		}
-		imageLock.release();
-		return path;
-	}
+	//TODO Remove that
+	/*
+	 * public String getImagePath() {
+	 * imageLock.acquireUninterruptibly();
+	 * String path;
+	 * if (this.costumeData == null) {
+	 * path = "";
+	 * } else if (internalPath) {
+	 * path = this.costumeData.getInternalPath();
+	 * } else {
+	 * path = this.costumeData.getAbsolutePath();
+	 * }
+	 * Log.i("getImagePath", path);
+	 * imageLock.release();
+	 * return path;
+	 * }
+	 */
 
 	public void setSize(float size) {
 		scaleLock.acquireUninterruptibly();

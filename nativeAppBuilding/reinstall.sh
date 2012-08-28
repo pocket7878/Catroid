@@ -4,6 +4,7 @@ PACKAGE=at.tugraz.ist.catroid
 ACTIVITY=app_1
 
 CATROID_SRC=../catroid/
+LIB_SRC=../libraryProjects/
 TMP_DIR=./tmp
 
 REMOVE_TMP=false
@@ -33,7 +34,7 @@ adb shell rm -r /sdcard/catroid > /dev/null
 
 if [ $# -eq 1 ]; then
   echo "Converting"
-  python2 $NA_CONVERTER $1 $CATROID_SRC 1 $TMP_DIR
+  python2 $NA_CONVERTER $1 $CATROID_SRC $LIB_SRC 1 $TMP_DIR
   
   if $INSTALL_APK ; then
     echo "Installing specified app"

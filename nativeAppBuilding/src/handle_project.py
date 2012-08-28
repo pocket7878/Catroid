@@ -167,17 +167,19 @@ def getNecessaryPermissions(path_to_projectcode):
    return permissions
 
 def main():
-    if len(sys.argv) != 5:
+    if len(sys.argv) != 6:
         print 'Invalid arguments. Correct usage:'
-        print 'python handle_project.py <path_to_project> <path_to_catroid> <project_id> <output_folder>'
+        print 'python handle_project.py <path_to_project> <path_to_catroid>\
+                <path_to_libs> <project_id> <output_folder>'
         return 1
 
     path_to_project, archive_name = os.path.split(sys.argv[1])
     project_filename = os.path.splitext(archive_name)[0]
 
     path_to_catroid = sys.argv[2]
-    project_id = sys.argv[3]
-    output_folder = sys.argv[4]
+    path_to_lib = sys.argv[3]
+    project_id = sys.argv[4]
+    output_folder = sys.argv[5]
 
     if os.path.exists(os.path.join(path_to_project, project_filename)):
         shutil.rmtree(os.path.join(path_to_project, project_filename))
@@ -192,6 +194,8 @@ def main():
 
     project_name = get_project_name(os.path.join(path_to_project, PROJECTCODE_NAME))
     copy_project(path_to_catroid, path_to_project)
+    
+    shutil.copytree(path_to_lib, os.path.join(path_to_project, 'libraryProjects'))
 
     if os.path.exists(os.path.join(path_to_project, 'catroid', 'gen')):
         shutil.rmtree(os.path.join(path_to_project, 'catroid', 'gen'))
@@ -207,20 +211,19 @@ def main():
             set_project_name(project_name, editing_file)
 
     with open(os.devnull, 'wb') as devnull:
-        subprocess.check_call(['ant', ANT_BUILD_TARGET ,'-f',
-            os.path.join(path_to_project, 'catroid', 'build.xml')],
-            stdout=devnull)
-
         subprocess.check_call(['android', 'update', 'lib-project', '-p',
             os.path.join('..', 'libraryProjects/actionbarsherlock')],
             stdout=devnull)
 
+        subprocess.check_call(['ant', ANT_BUILD_TARGET ,'-f',
+            os.path.join(path_to_project, 'catroid', 'build.xml')],
+            stdout=devnull)
     for filename in os.listdir(os.path.join(path_to_project, 'catroid', 'bin')):
         if filename.endswith('.apk'):
             shutil.move(os.path.join(path_to_project, 'catroid', 'bin', filename),\
                         os.path.join(output_folder, project_filename + '.apk'))
 
-    shutil.rmtree(path_to_project)
+    #shutil.rmtree(path_to_project)
     return 0
 
 if __name__ == '__main__':
