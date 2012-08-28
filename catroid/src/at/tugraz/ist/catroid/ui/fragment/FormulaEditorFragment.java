@@ -331,7 +331,7 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 		} else if (event.getAction() == KeyEvent.ACTION_DOWN) {
 
 		}
-		return false;
+		return true;
 	}
 
 	public void endFormulaEditor() {
