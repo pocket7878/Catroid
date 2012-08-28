@@ -74,10 +74,6 @@ def rename_file_in_project(old_name, new_name, project_file_path, resource_type)
     f.close()
 
 def rename_resources(path_to_project, project_name):
-#TODO Remove the following two lines
-#    os.rename(os.path.join(path_to_project, 'projectcode.xml'),\
-#        os.path.join(path_to_project, PROJECTCODE_NAME))
-
     res_token = 'resource'
     res_count = 0
     for resource_type in ['images', 'sounds']:
@@ -123,7 +119,6 @@ def set_project_name(new_name, path_to_file):
     f.close()
     
 def get_project_name(project_filename):
-    #OLD: for node in xml.dom.minidom.parse(project_filename).getElementsByTagName('name'):
     for node in xml.dom.minidom.parse(project_filename).getElementsByTagName('projectName'):
         if node.parentNode.nodeName == 'Content.Project': 
             return node.childNodes[0].nodeValue
@@ -214,7 +209,11 @@ def main():
     with open(os.devnull, 'wb') as devnull:
         subprocess.check_call(['ant', ANT_BUILD_TARGET ,'-f',
             os.path.join(path_to_project, 'catroid', 'build.xml')],
-            stdout=devnull, stderr=subprocess.STDOUT)
+            stdout=devnull)
+
+        subprocess.check_call(['android', 'update', 'lib-project', '-p',
+            os.path.join('..', 'libraryProjects/actionbarsherlock')],
+            stdout=devnull)
 
     for filename in os.listdir(os.path.join(path_to_project, 'catroid', 'bin')):
         if filename.endswith('.apk'):
