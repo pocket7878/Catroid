@@ -185,8 +185,9 @@ def main():
 
     unzip_project(os.path.join(path_to_project, archive_name))
     path_to_project = os.path.join(path_to_project, project_filename)
+    
 
-    print 'Projectpath is: ',path_to_project
+
     permissions = getNecessaryPermissions(os.path.join(path_to_project, PROJECTCODE_NAME))
 
     rename_resources(path_to_project, project_filename)
@@ -195,6 +196,15 @@ def main():
     copy_project(path_to_catroid, path_to_project)
     
     shutil.copytree(path_to_lib, os.path.join(path_to_project, 'libraryProjects'))
+
+#Update build.xml files / Generate if not available.
+    with open(os.devnull, 'wb') as devnull:
+        subprocess.check_call(['android', 'update', 'project', '-p',
+            os.path.join(path_to_project, 'catroid')],
+            stdout=devnull)
+        subprocess.check_call(['android', 'update', 'lib-project', '-p',
+            os.path.join(path_to_project, 'libraryProjects/actionbarsherlock')],
+            stdout=devnull)
 
     if os.path.exists(os.path.join(path_to_project, 'catroid', 'gen')):
         shutil.rmtree(os.path.join(path_to_project, 'catroid', 'gen'))
@@ -210,17 +220,10 @@ def main():
             set_project_name(project_name, editing_file)
 
     with open(os.devnull, 'wb') as devnull:
-        subprocess.check_call(['android', 'update', 'project', '-p',
-            os.path.join(path_to_project, 'catroid')],
-            stdout=devnull)
-
-        subprocess.check_call(['android', 'update', 'lib-project', '-p',
-            os.path.join(path_to_project, 'libraryProjects/actionbarsherlock')],
-            stdout=devnull)
-
         subprocess.check_call(['ant', ANT_BUILD_TARGET ,'-f',
             os.path.join(path_to_project, 'catroid', 'build.xml')],
             stdout=devnull)
+
     for filename in os.listdir(os.path.join(path_to_project, 'catroid', 'bin')):
         if filename.endswith('.apk'):
             shutil.move(os.path.join(path_to_project, 'catroid', 'bin', filename),\
