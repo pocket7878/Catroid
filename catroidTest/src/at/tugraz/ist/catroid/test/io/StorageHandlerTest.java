@@ -71,7 +71,8 @@ public class StorageHandlerTest extends AndroidTestCase {
 
 	@Override
 	public void setUp() {
-		File projectFile = new File(Constants.DEFAULT_ROOT + "/" + getContext().getString(R.string.default_project_name));
+		File projectFile = new File(Constants.DEFAULT_ROOT + "/"
+				+ getContext().getString(R.string.default_project_name));
 
 		if (projectFile.exists()) {
 			UtilFile.deleteDirectory(projectFile);
@@ -183,19 +184,19 @@ public class StorageHandlerTest extends AndroidTestCase {
 		assertEquals("no background picture or too many pictures in background sprite", 1, backgroundCostumeList.size());
 		assertEquals("wrong number of pictures in catroid sprite", 3, catroidCostumeList.size());
 
-		String imagePath = backgroundCostumeList.get(0).getAbsolutePath();
+		String imagePath = backgroundCostumeList.get(0).getPath();
 		File testFile = new File(imagePath);
 		assertTrue("Image " + backgroundCostumeList.get(0).getCostumeFileName() + " does not exist", testFile.exists());
 
-		imagePath = catroidCostumeList.get(0).getAbsolutePath();
+		imagePath = catroidCostumeList.get(0).getPath();
 		testFile = new File(imagePath);
 		assertTrue("Image " + catroidCostumeList.get(0).getCostumeFileName() + " does not exist", testFile.exists());
 
-		imagePath = catroidCostumeList.get(1).getAbsolutePath();
+		imagePath = catroidCostumeList.get(1).getPath();
 		testFile = new File(imagePath);
 		assertTrue("Image " + catroidCostumeList.get(1).getCostumeFileName() + " does not exist", testFile.exists());
 
-		imagePath = catroidCostumeList.get(2).getAbsolutePath();
+		imagePath = catroidCostumeList.get(2).getPath();
 		testFile = new File(imagePath);
 		assertTrue("Image " + catroidCostumeList.get(2).getCostumeFileName() + " does not exist", testFile.exists());
 	}

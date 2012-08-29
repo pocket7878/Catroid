@@ -999,7 +999,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		costumeData.setCostumeFilename(imageFile.getName());
 		costumeData.setCostumeName("testname");
 		costumeDataList.add(costumeData);
-		projectManager.getFileChecksumContainer().addChecksum(costumeData.getChecksum(), costumeData.getAbsolutePath());
+		projectManager.getFileChecksumContainer().addChecksum(costumeData.getChecksum(), costumeData.getPath());
 
 		StorageHandler.getInstance().saveProject(project1);
 

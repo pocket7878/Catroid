@@ -243,6 +243,18 @@ public class Costume extends Image {
 		imageLock.release();
 	}
 
+	public String getImagePath() {
+		imageLock.acquireUninterruptibly();
+		String path;
+		if (this.costumeData == null) {
+			path = "";
+		} else {
+			path = this.costumeData.getPath();
+		}
+		imageLock.release();
+		return path;
+	}
+
 	public void setCostumeDataInternal(CostumeData costumeData) {
 		imageLock.acquireUninterruptibly();
 		internalPath = true;
