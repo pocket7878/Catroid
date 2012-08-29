@@ -29,7 +29,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -45,6 +44,7 @@ public class NoteBrick implements Brick {
 
 	@XStreamOmitField
 	private transient View view;
+	private TextView textHolder;
 
 	public NoteBrick(Sprite sprite) {
 		this.sprite = sprite;
@@ -78,14 +78,10 @@ public class NoteBrick implements Brick {
 
 		view = View.inflate(context, R.layout.brick_note, null);
 
-		TextView textHolder = (TextView) view.findViewById(R.id.brick_note_text_view);
-		EditText editText = (EditText) view.findViewById(R.id.brick_note_edit_text);
-		editText.setText(note);
+		textHolder = (TextView) view.findViewById(R.id.brick_note_text_view);
+		textHolder.setText(note);
 
-		textHolder.setVisibility(View.GONE);
-		editText.setVisibility(View.VISIBLE);
-
-		editText.setOnClickListener(new OnClickListener() {
+		textHolder.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -123,6 +119,7 @@ public class NoteBrick implements Brick {
 					@Override
 					protected boolean handleOkButton() {
 						note = (input.getText().toString()).trim();
+						textHolder.setText(note);
 						return true;
 					}
 				};
@@ -144,6 +141,7 @@ public class NoteBrick implements Brick {
 		return new NoteBrick(this.sprite, this.note);
 	}
 
+	@Override
 	public void onClick(View view) {
 
 	}
