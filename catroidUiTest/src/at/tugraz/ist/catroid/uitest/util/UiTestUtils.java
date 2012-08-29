@@ -645,17 +645,18 @@ public class UiTestUtils {
 	 * For bricks using the FormulaEditor. Tests starting the FE, entering a new number/formula and
 	 * ensures its set correctly to the brick´s edit text field
 	 */
-	public static void testBrickWithFormulaEditor(Solo solo, int editTextNumber, int numberOfEditTextsInBrick,
+	public static void testBrickWithFormulaEditor(Solo solo, int textViewId, int numberOfTextViewsInBrick,
 			double newValue, String fieldName, Object theBrick) {
 
 		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
 
-		solo.sleep(5000);
-		solo.clickOnEditText(editTextNumber);
+		View formulaTextViewView = solo.getView(textViewId);
+		solo.clickOnView(formulaTextViewView);
 
 		//solo.clearEditText(numberOfEditTextsInBrick); 
 		//solo.enterText(numberOfEditTextsInBrick, newValue + ""); //would only work if old text was shorter than newValue! 
 		//catKeyboardClicker.clearEditTextWithOnlyNumbersQuickly(numberOfEditTextsInBrick);
+
 		catKeyboardClicker.clickOnKey("del");
 		for (char item : (Double.toString(newValue).toCharArray())) {
 			catKeyboardClicker.clickOnKey("" + item);
@@ -663,17 +664,22 @@ public class UiTestUtils {
 
 		//solo.goBack();
 		//solo.sleep(200);
+
 		assertEquals("Text not updated within FormulaEditor", newValue,
-				Double.parseDouble(solo.getEditText(editTextNumber).getText().toString()));
+				Double.parseDouble(solo.getEditText(0).getText().toString()));
 		//solo.clickOnButton(solo.getString(R.string.formula_editor_button_return));
 		solo.goBack();
 		solo.sleep(200);
+
+		//		for (int i = 0; i < 10; i++) {
+		//			Log.i("info", "i:" + i + ": " + solo.getText(i).getText().toString());
+		//		}
 
 		Formula formula = (Formula) UiTestUtils.getPrivateField(fieldName, theBrick);
 
 		assertEquals("Wrong text in field", newValue, formula.interpretFloat(), 0.01f);
 		assertEquals("Text not updated in the brick list", newValue,
-				Double.parseDouble(solo.getEditText(editTextNumber).getText().toString()), 0.01f);
+				Double.parseDouble(solo.getText(numberOfTextViewsInBrick).getText().toString()), 0.01f);
 
 	}
 

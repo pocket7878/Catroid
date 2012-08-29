@@ -85,8 +85,8 @@ public class ChangeGhostEffectTest extends ActivityInstrumentationTestCase2<Scri
 		assertNotNull("TextView does not exist",
 				solo.getText(getActivity().getString(R.string.brick_change_ghost_effect)));
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, EFFECT_TO_CHANGE, "changeGhostEffect",
-				changeGhostEffectBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_change_ghost_effect_text_view, 9, EFFECT_TO_CHANGE,
+				"changeGhostEffect", changeGhostEffectBrick);
 
 	}
 

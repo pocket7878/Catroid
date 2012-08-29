@@ -85,8 +85,8 @@ public class ChangeBrightnessTest extends ActivityInstrumentationTestCase2<Scrip
 		assertNotNull("TextView does not exist",
 				solo.getText(getActivity().getString(R.string.brick_change_brightness)));
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, BRIGHTNESS_TO_CHANGE, "changeBrightness",
-				changeBrightnessBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_change_brightness_text_view, 9, BRIGHTNESS_TO_CHANGE,
+				"changeBrightness", changeBrightnessBrick);
 
 	}
 

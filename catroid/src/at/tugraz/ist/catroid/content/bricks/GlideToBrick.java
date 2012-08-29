@@ -160,6 +160,7 @@ public class GlideToBrick implements Brick, OnClickListener {
 		textY.setOnClickListener(this);
 
 		TextView textDuration = (TextView) view.findViewById(R.id.brick_glide_to_duration_text_view);
+		durationInSeconds.setTextFieldId(R.id.brick_glide_to_duration_text_view);
 		durationInSeconds.refreshTextField(view);
 
 		textDuration.setOnClickListener(this);
