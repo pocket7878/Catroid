@@ -101,11 +101,13 @@ public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 		int xPosition = 987;
 		int yPosition = 654;
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 2, xPosition, "xPosition", placeAtBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_place_at_x_text_view, 10, xPosition, "xPosition",
+				placeAtBrick);
 
 		solo.sleep(100);
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, 1, 2, yPosition, "yPosition", placeAtBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_place_at_y_text_view, 12, yPosition, "yPosition",
+				placeAtBrick);
 
 	}
 

@@ -84,7 +84,8 @@ public class SetBrightnessBrickTest extends ActivityInstrumentationTestCase2<Scr
 
 		double newBrightness = 65.5;
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, newBrightness, "brightness", setBrightnessBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_set_brightness_text_view, 9, newBrightness,
+				"brightness", setBrightnessBrick);
 
 	}
 

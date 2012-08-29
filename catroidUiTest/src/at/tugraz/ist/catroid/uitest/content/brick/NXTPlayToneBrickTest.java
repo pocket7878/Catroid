@@ -86,9 +86,11 @@ public class NXTPlayToneBrickTest extends ActivityInstrumentationTestCase2<Scrip
 		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
 		assertNotNull("TextView does not exist.", solo.getText(getActivity().getString(R.string.nxt_play_tone)));
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 2, SET_DURATION, "durationInSeconds", playToneBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.nxt_tone_duration_text_view, 9, SET_DURATION,
+				"durationInSeconds", playToneBrick);
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, 1, 2, SET_FREQUENCY, "frequency", playToneBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.nxt_tone_freq_text_view, 12, SET_FREQUENCY, "frequency",
+				playToneBrick);
 
 	}
 

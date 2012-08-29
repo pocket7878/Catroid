@@ -89,7 +89,8 @@ public class GoNStepsBackTest extends ActivityInstrumentationTestCase2<ScriptTab
 		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
 		assertNotNull("TextView does not exist.", solo.getText(getActivity().getString(R.string.brick_go_back)));
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, STEPS_TO_GO_BACK, "steps", goNStepsBackBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_go_back_n_text_view, 8, STEPS_TO_GO_BACK, "steps",
+				goNStepsBackBrick);
 
 		//		solo.clickOnEditText(0);
 		//		solo.clearEditText(0);

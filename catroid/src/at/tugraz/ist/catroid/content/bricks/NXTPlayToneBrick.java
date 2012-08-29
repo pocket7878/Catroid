@@ -115,7 +115,7 @@ public class NXTPlayToneBrick implements Brick, OnClickListener {
 		frequency.setTextFieldId(R.id.nxt_tone_freq_text_view);
 		frequency.refreshTextField(brickView);
 
-		editFreq.setOnClickListener(this);
+		textFreq.setOnClickListener(this);
 
 		return brickView;
 	}

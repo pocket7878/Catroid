@@ -87,7 +87,8 @@ public class NXTMotorActionBrickTest extends ActivityInstrumentationTestCase2<Sc
 		assertNotNull("TextView does not exist.", solo.getText(getActivity().getString(R.string.brick_motor_action)));
 		assertNotNull("TextView does not exist.", solo.getText(getActivity().getString(R.string.motor_speed)));
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, SET_SPEED, "speed", motorBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.motor_action_speed_text_view, 10, SET_SPEED, "speed",
+				motorBrick);
 
 		String[] motors = getActivity().getResources().getStringArray(R.array.nxt_motor_chooser);
 		assertTrue("Spinner items list too short!", motors.length == 4);

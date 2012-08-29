@@ -111,7 +111,8 @@ public class SetSizeToBrickTest extends ActivityInstrumentationTestCase2<ScriptT
 
 		double newSize = 200;
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, 0, 1, newSize, "size", setSizeToBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_set_size_to_text_view, 10, newSize, "size",
+				setSizeToBrick);
 
 		//		UiTestUtils.clickEnterClose(solo, 0, newSize + "");
 		//
