@@ -13,7 +13,6 @@ import at.tugraz.ist.catroid.test.utils.TestUtils;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -336,10 +335,14 @@ public class PhysicObjectTest extends AndroidTestCase {
 	public void testMass() {
 		for (PhysicObject.Type type : PhysicObject.Type.values()) {
 			PhysicObject physicObject = createPhysicObject(type);
+			PolygonShape shape = new PolygonShape();
+			shape.setAsBox(5, 5);
+			physicObject.setShape(shape);
+
 			Body body = getBody(physicObject);
 			assertEquals((physicObject.type == Type.DYNAMIC) ? 1.0f : 0.0f, body.getMass());
 
-			float[] masses = { 0.01f, 1.0f, 123456.0f };
+			float[] masses = { 0.01f, 1.0f, 12345.0f };
 			for (float mass : masses) {
 				physicObject.setMass(mass);
 				assertEquals((physicObject.type == Type.DYNAMIC) ? mass : 0.0f, body.getMass());
@@ -355,15 +358,17 @@ public class PhysicObjectTest extends AndroidTestCase {
 
 	public void testMassWithShapeChange() {
 		PhysicObject physicObject = createPhysicObject(Type.DYNAMIC);
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(5, 5);
+		physicObject.setShape(shape);
 		float mass = 5.0f;
 
 		physicObject.setMass(mass);
 		checkMass(physicObject, mass);
 
-		physicObject.setShape(new PolygonShape());
-		checkMass(physicObject, mass);
-
-		physicObject.setShape(new EdgeShape());
+		shape = new PolygonShape();
+		shape.setAsBox(7, 7);
+		physicObject.setShape(shape);
 		checkMass(physicObject, mass);
 
 		float newMass = 3.0f;

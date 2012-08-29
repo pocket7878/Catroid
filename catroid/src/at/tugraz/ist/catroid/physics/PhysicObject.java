@@ -28,10 +28,6 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 
-/**
- * @author robert
- * 
- */
 public class PhysicObject {
 
 	public enum Type {
@@ -59,17 +55,20 @@ public class PhysicObject {
 			return;
 		}
 
-		List<Fixture> fixtures = new ArrayList<Fixture>(body.getFixtureList());
+		fixtureDef.shape = shape;
+
+		List<Fixture> fixturesOld = new ArrayList<Fixture>(body.getFixtureList());
 
 		if (shape != null) {
-			fixtureDef.shape = shape;
 			body.createFixture(fixtureDef);
 		}
 
-		for (Fixture fixture : fixtures) {
+		for (Fixture fixture : fixturesOld) {
 			body.destroyFixture(fixture);
 		}
+
 		setMass(mass);
+
 	}
 
 	public void setType(Type type) {
@@ -118,22 +117,14 @@ public class PhysicObject {
 	}
 
 	public void setMass(float mass) {
-
-		body.resetMassData();
-		float massold = body.getMass();
-		float densityold = fixtureDef.density;
 		float area = body.getMass() / fixtureDef.density;
-
 		float density = mass / area;
 
 		for (Fixture fixture : body.getFixtureList()) {
 			fixture.setDensity(density);
 		}
-
+		fixtureDef.density = density;
 		body.resetMassData();
-
-		float temp = body.getMass();
-
 		this.mass = mass;
 	}
 
