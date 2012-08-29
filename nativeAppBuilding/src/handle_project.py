@@ -210,6 +210,10 @@ def main():
             set_project_name(project_name, editing_file)
 
     with open(os.devnull, 'wb') as devnull:
+        subprocess.check_call(['android', 'update', 'project', '-p',
+            os.path.join(path_to_project, 'catroid')],
+            stdout=devnull)
+
         subprocess.check_call(['android', 'update', 'lib-project', '-p',
             os.path.join(path_to_project, 'libraryProjects/actionbarsherlock')],
             stdout=devnull)
