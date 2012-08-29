@@ -27,6 +27,7 @@ import xml.dom.minidom
 import codecs
 import glob
 import subprocess
+from tempfile import mkdtemp
 
 '''
 Automatically build and sign Catroid application.
@@ -41,9 +42,9 @@ python handle_project.py test.zip ~/hg/catroid 42 .
 PROJECTCODE_NAME = 'projectcode.xml'
 ANT_BUILD_TARGET = 'debug'
 
-def unzip_project(archive_name):
+def unzip_project(archive_name, working_dir):
     project_name = os.path.splitext(archive_name)[0]
-    zipfile.ZipFile(archive_name).extractall(project_name)
+    zipfile.ZipFile(archive_name).extractall(working_dir)
 
 def verify_checksum(path_to_file):
     filename = os.path.basename(path_to_file)
@@ -165,14 +166,21 @@ def getNecessaryPermissions(path_to_projectcode):
        permissions.append('android.permission.BLUETOOTH')
    return permissions
 
+def copyApkToOutputFolder(working_dir, project_filename, output_dir):
+    for filename in os.listdir(os.path.join(working_dir, 'catroid', 'bin')):
+        if filename.endswith('.apk'):
+            shutil.move(os.path.join(working_dir, 'catroid', 'bin', filename),\
+                    os.path.join(output_dir, project_filename + '.apk'))
+
+
 def main():
     if len(sys.argv) != 6:
         print 'Invalid arguments. Correct usage:'
-        print 'python handle_project.py <path_to_project> <path_to_catroid>\
+        print 'python handle_project.py <path_to_project_archive> <path_to_catroid>\
                 <path_to_libs> <project_id> <output_folder>'
         return 1
 
-    path_to_project, archive_name = os.path.split(sys.argv[1])
+    path_to_project_archive, archive_name = os.path.split(sys.argv[1])
     project_filename = os.path.splitext(archive_name)[0]
 
     path_to_catroid = sys.argv[2]
@@ -180,40 +188,32 @@ def main():
     project_id = sys.argv[4]
     output_folder = sys.argv[5]
 
-    if os.path.exists(os.path.join(path_to_project, project_filename)):
-        shutil.rmtree(os.path.join(path_to_project, project_filename))
+    working_dir = mkdtemp()
 
-    unzip_project(os.path.join(path_to_project, archive_name))
-    path_to_project = os.path.join(path_to_project, project_filename)
-    
-
-
-    permissions = getNecessaryPermissions(os.path.join(path_to_project, PROJECTCODE_NAME))
-
-    rename_resources(path_to_project, project_filename)
-
-    project_name = get_project_name(os.path.join(path_to_project, PROJECTCODE_NAME))
-    copy_project(path_to_catroid, path_to_project)
-    
-    shutil.copytree(path_to_lib, os.path.join(path_to_project, 'libraryProjects'))
+    unzip_project(os.path.join(path_to_project_archive, archive_name), working_dir)
+    project_name = get_project_name(os.path.join(working_dir, PROJECTCODE_NAME))
+    permissions = getNecessaryPermissions(os.path.join(working_dir, PROJECTCODE_NAME))
+    rename_resources(working_dir, project_filename)
+    copy_project(path_to_catroid, working_dir)
+    shutil.copytree(path_to_lib, os.path.join(working_dir, 'libraryProjects'))
 
 #Update build.xml files / Generate if not available.
     with open(os.devnull, 'wb') as devnull:
         subprocess.check_call(['android', 'update', 'project', '-p',
-            os.path.join(path_to_project, 'catroid')],
+            os.path.join(working_dir, 'catroid')],
             stdout=devnull)
         subprocess.check_call(['android', 'update', 'lib-project', '-p',
-            os.path.join(path_to_project, 'libraryProjects/actionbarsherlock')],
+            os.path.join(working_dir, 'libraryProjects/actionbarsherlock')],
             stdout=devnull)
 
-    if os.path.exists(os.path.join(path_to_project, 'catroid', 'gen')):
-        shutil.rmtree(os.path.join(path_to_project, 'catroid', 'gen'))
+    if os.path.exists(os.path.join(working_dir, 'catroid', 'gen')):
+        shutil.rmtree(os.path.join(working_dir, 'catroid', 'gen'))
 
-    edit_manifest(path_to_project, permissions)
+    edit_manifest(working_dir, permissions)
 
-    rename_package(path_to_project, 'app_' + str(project_id))
+    rename_package(working_dir, 'app_' + str(project_id))
 
-    language_dirs = glob.glob(os.path.join(path_to_project, 'catroid', 'res', 'values*'))
+    language_dirs = glob.glob(os.path.join(working_dir, 'catroid', 'res', 'values*'))
     for curr_lang_dir in language_dirs:
         editing_file = os.path.join(curr_lang_dir, 'strings.xml')
         if os.path.exists(editing_file):
@@ -221,15 +221,12 @@ def main():
 
     with open(os.devnull, 'wb') as devnull:
         subprocess.check_call(['ant', ANT_BUILD_TARGET ,'-f',
-            os.path.join(path_to_project, 'catroid', 'build.xml')],
+            os.path.join(working_dir, 'catroid', 'build.xml')],
             stdout=devnull)
 
-    for filename in os.listdir(os.path.join(path_to_project, 'catroid', 'bin')):
-        if filename.endswith('.apk'):
-            shutil.move(os.path.join(path_to_project, 'catroid', 'bin', filename),\
-                        os.path.join(output_folder, project_filename + '.apk'))
+    copyApkToOutputFolder(working_dir, project_filename, output_folder)
 
-    shutil.rmtree(path_to_project)
+    shutil.rmtree(working_dir)
     return 0
 
 if __name__ == '__main__':
