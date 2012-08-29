@@ -53,6 +53,7 @@ public class PhysicBrickConverter {
 
 					for (int brickIndex = 0; brickIndex < brickList.size(); brickIndex++) {
 						Brick brick = brickList.get(brickIndex);
+						// TODO: all bricks which require the PhysicWorld - separate method !
 						if (brick instanceof PlaceAtBrick) {
 							brick = new PhysicPlaceAtBrick((PlaceAtBrick) brick);
 							brickList.set(brickIndex, brick);
@@ -62,6 +63,7 @@ public class PhysicBrickConverter {
 					for (Brick brick : script.getBrickList()) {
 						if (brick instanceof SetPhysicObjectTypeBrick) {
 							containsPhysicObjectBrick = true;
+							// TODO: ??? is this necessary ? is there a better way to create PhysicObjects ?
 							project.getPhysicWorld().getPhysicObject(sprite);
 							scriptIndex = -1;
 							break;

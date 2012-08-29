@@ -37,8 +37,8 @@ public class PhysicSettings {
 	public static class World {
 		// Ratio of pixels to meters
 		public final static float RATIO = 40.0f;
-		public final static int VELOCITY_ITERATIONS = 10;
-		public final static int POSITION_ITERATIONS = 10;
+		public final static int VELOCITY_ITERATIONS = 40;
+		public final static int POSITION_ITERATIONS = 40;
 
 		public final static int DEAULT_MASS = 1;
 		public final static Vector2 DEFAULT_GRAVITY = new Vector2(0, -10);

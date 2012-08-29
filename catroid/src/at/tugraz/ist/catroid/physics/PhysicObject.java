@@ -18,14 +18,14 @@
  */
 package at.tugraz.ist.catroid.physics;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.Shape;
 
 /**
@@ -45,7 +45,7 @@ public class PhysicObject {
 
 	public PhysicObject(Body body) {
 		this.body = body;
-		mass = body.getMass();
+		mass = PhysicSettings.World.DEAULT_MASS;
 
 		fixtureDef.density = 1.0f;
 		fixtureDef.friction = 0.2f;
@@ -54,26 +54,20 @@ public class PhysicObject {
 		setType(Type.NONE);
 	}
 
-	// TODO: "Ueberarbeiten, dalli dalli!
 	public void setShape(Shape shape) {
-		if (shape == fixtureDef.shape && !body.getFixtureList().isEmpty()) {
+		if (shape == fixtureDef.shape) {
 			return;
 		}
 
-		Fixture createdFixture = null;
+		List<Fixture> fixtures = new ArrayList<Fixture>(body.getFixtureList());
+
 		if (shape != null) {
 			fixtureDef.shape = shape;
-			if (type != Type.NONE) {
-				createdFixture = body.createFixture(fixtureDef);
-			}
+			body.createFixture(fixtureDef);
 		}
 
-		// TODO: Get rid of workaround and ConcurrentModificationException!
-		Vector<Fixture> fixtures = new Vector<Fixture>(body.getFixtureList());
 		for (Fixture fixture : fixtures) {
-			if (fixture != createdFixture) {
-				body.destroyFixture(fixture);
-			}
+			body.destroyFixture(fixture);
 		}
 		setMass(mass);
 	}
@@ -84,22 +78,19 @@ public class PhysicObject {
 		}
 		this.type = type;
 
-		Shape shape = null;
 		switch (type) {
 			case DYNAMIC:
 				body.setType(BodyType.DynamicBody);
-				shape = fixtureDef.shape;
+				body.setActive(true);
 				break;
 			case FIXED:
 				body.setType(BodyType.KinematicBody);
-				shape = fixtureDef.shape;
+				body.setActive(true);
 				break;
 			case NONE:
-				body.setType(BodyType.StaticBody);
+				body.setActive(false);
 				break;
 		}
-
-		setShape(shape);
 	}
 
 	public float getAngle() {
@@ -127,11 +118,23 @@ public class PhysicObject {
 	}
 
 	public void setMass(float mass) {
-		this.mass = mass;
 
-		MassData massData = body.getMassData();
-		massData.mass = mass;
-		body.setMassData(massData);
+		body.resetMassData();
+		float massold = body.getMass();
+		float densityold = fixtureDef.density;
+		float area = body.getMass() / fixtureDef.density;
+
+		float density = mass / area;
+
+		for (Fixture fixture : body.getFixtureList()) {
+			fixture.setDensity(density);
+		}
+
+		body.resetMassData();
+
+		float temp = body.getMass();
+
+		this.mass = mass;
 	}
 
 	public void setFriction(float friction) {
