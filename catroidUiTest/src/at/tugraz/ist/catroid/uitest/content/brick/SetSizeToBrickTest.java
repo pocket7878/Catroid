@@ -46,8 +46,6 @@ import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.stage.StageListener;
-import at.tugraz.ist.catroid.ui.MainMenuActivity;
-import at.tugraz.ist.catroid.ui.ProjectActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
 import at.tugraz.ist.catroid.ui.fragment.ScriptFragment;
@@ -164,21 +162,21 @@ public class SetSizeToBrickTest extends ActivityInstrumentationTestCase2<ScriptT
 		assertEquals("Wrong stage background color!", Color.WHITE, colorOutsideSizedQuad);
 	}
 
-	public void testResizeInputField() {
-		UiTestUtils.goToHomeActivity(getActivity());
-		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
-		createTestProject();
-		solo.sleep(500);
-		solo.clickOnText(getActivity().getString(R.string.current_project_button));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		solo.clickOnText(solo.getCurrentListViews().get(0).getItemAtPosition(0).toString());
-		solo.waitForActivity(ScriptTabActivity.class.getSimpleName());
-
-		UiTestUtils.testDoubleEditText(solo, 0, 1, 1.0, 60, true);
-		UiTestUtils.testDoubleEditText(solo, 0, 1, 100.55, 60, true);
-		UiTestUtils.testDoubleEditText(solo, 0, 1, -0.1, 60, true);
-		UiTestUtils.testDoubleEditText(solo, 0, 1, 1000.55, 60, false);
-	}
+	//	public void testResizeInputField() {
+	//		UiTestUtils.goToHomeActivity(getActivity());
+	//		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
+	//		createTestProject();
+	//		solo.sleep(500);
+	//		solo.clickOnText(getActivity().getString(R.string.current_project_button));
+	//		solo.waitForActivity(ProjectActivity.class.getSimpleName());
+	//		solo.clickOnText(solo.getCurrentListViews().get(0).getItemAtPosition(0).toString());
+	//		solo.waitForActivity(ScriptTabActivity.class.getSimpleName());
+	//
+	//		UiTestUtils.testDoubleEditText(solo, 0, 1, 1.0, 60, true);
+	//		UiTestUtils.testDoubleEditText(solo, 0, 1, 100.55, 60, true);
+	//		UiTestUtils.testDoubleEditText(solo, 0, 1, -0.1, 60, true);
+	//		UiTestUtils.testDoubleEditText(solo, 0, 1, 1000.55, 60, false);
+	//	}
 
 	private void createProject() {
 		Values.SCREEN_HEIGHT = SCREEN_HEIGHT;

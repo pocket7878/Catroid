@@ -104,10 +104,10 @@ public class MoveNStepsBrickTest extends ActivityInstrumentationTestCase2<Script
 
 	}
 
-	public void testResizeInputField() {
-		UiTestUtils.testDoubleEditText(solo, 0, 1, 1.1, 50, true);
-		UiTestUtils.testDoubleEditText(solo, 0, 1, 12345.6789, 50, true);
-		UiTestUtils.testDoubleEditText(solo, 0, 1, -0.1, 50, true);
-		UiTestUtils.testDoubleEditText(solo, 0, 1, -12345.6789, 50, false);
-	}
+	//	public void testResizeInputField() {
+	//		UiTestUtils.testDoubleEditText(solo, 0, 1, 1.1, 50, true);
+	//		UiTestUtils.testDoubleEditText(solo, 0, 1, 12345.6789, 50, true);
+	//		UiTestUtils.testDoubleEditText(solo, 0, 1, -0.1, 50, true);
+	//		UiTestUtils.testDoubleEditText(solo, 0, 1, -12345.6789, 50, false);
+	//	}
 }

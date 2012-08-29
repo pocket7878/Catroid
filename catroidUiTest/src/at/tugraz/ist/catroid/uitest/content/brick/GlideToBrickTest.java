@@ -33,8 +33,6 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.GlideToBrick;
-import at.tugraz.ist.catroid.ui.MainMenuActivity;
-import at.tugraz.ist.catroid.ui.ProjectActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.formulaeditor.CatKeyboardClicker;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
@@ -137,28 +135,28 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 		//		assertEquals("Wrong y input in Glide to brick", Y_POSITION, temp2);
 	}
 
-	public void testResizeInputFields() {
-		UiTestUtils.goToHomeActivity(getActivity());
-		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
-		createProject();
-		solo.sleep(200);
-		solo.clickOnText(getActivity().getString(R.string.current_project_button));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		solo.clickOnText(solo.getCurrentListViews().get(0).getItemAtPosition(0).toString());
-		solo.waitForActivity(ScriptTabActivity.class.getSimpleName());
-
-		UiTestUtils.testDoubleEditText(solo, 0, 3, 1.1, 60, true);
-		UiTestUtils.testDoubleEditText(solo, 0, 3, 12345.67, 60, true);
-		UiTestUtils.testDoubleEditText(solo, 0, 3, -1, 60, true);
-		UiTestUtils.testDoubleEditText(solo, 0, 3, 12345.678, 60, false);
-
-		for (int i = 1; i < 3; i++) {
-			UiTestUtils.testIntegerEditText(solo, i, 3, 1, 60, true);
-			UiTestUtils.testIntegerEditText(solo, i, 3, 123456, 60, true);
-			UiTestUtils.testIntegerEditText(solo, i, 3, -1, 60, true);
-			UiTestUtils.testIntegerEditText(solo, i, 3, 1234567, 60, false);
-		}
-	}
+	//	public void testResizeInputFields() {
+	//		UiTestUtils.goToHomeActivity(getActivity());
+	//		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
+	//		createProject();
+	//		solo.sleep(200);
+	//		solo.clickOnText(getActivity().getString(R.string.current_project_button));
+	//		solo.waitForActivity(ProjectActivity.class.getSimpleName());
+	//		solo.clickOnText(solo.getCurrentListViews().get(0).getItemAtPosition(0).toString());
+	//		solo.waitForActivity(ScriptTabActivity.class.getSimpleName());
+	//
+	//		UiTestUtils.testDoubleEditText(solo, 0, 3, 1.1, 60, true);
+	//		UiTestUtils.testDoubleEditText(solo, 0, 3, 12345.67, 60, true);
+	//		UiTestUtils.testDoubleEditText(solo, 0, 3, -1, 60, true);
+	//		UiTestUtils.testDoubleEditText(solo, 0, 3, 12345.678, 60, false);
+	//
+	//		for (int i = 1; i < 3; i++) {
+	//			UiTestUtils.testIntegerEditText(solo, i, 3, 1, 60, true);
+	//			UiTestUtils.testIntegerEditText(solo, i, 3, 123456, 60, true);
+	//			UiTestUtils.testIntegerEditText(solo, i, 3, -1, 60, true);
+	//			UiTestUtils.testIntegerEditText(solo, i, 3, 1234567, 60, false);
+	//		}
+	//	}
 
 	private void createProject() {
 

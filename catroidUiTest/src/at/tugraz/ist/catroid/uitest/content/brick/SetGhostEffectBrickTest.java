@@ -88,12 +88,12 @@ public class SetGhostEffectBrickTest extends ActivityInstrumentationTestCase2<Sc
 				"transparency", setGhostEffectBrick);
 	}
 
-	public void testResizeInputField() {
-		UiTestUtils.testDoubleEditText(solo, 0, 1, 1.0, 60, true);
-		UiTestUtils.testDoubleEditText(solo, 0, 1, 100.55, 60, true);
-		UiTestUtils.testDoubleEditText(solo, 0, 1, -0.1, 60, true);
-		UiTestUtils.testDoubleEditText(solo, 0, 1, 1000.55, 60, false);
-	}
+	//	public void testResizeInputField() {
+	//		UiTestUtils.testDoubleEditText(solo, 0, 1, 1.0, 60, true);
+	//		UiTestUtils.testDoubleEditText(solo, 0, 1, 100.55, 60, true);
+	//		UiTestUtils.testDoubleEditText(solo, 0, 1, -0.1, 60, true);
+	//		UiTestUtils.testDoubleEditText(solo, 0, 1, 1000.55, 60, false);
+	//	}
 
 	private void createProject() {
 		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);

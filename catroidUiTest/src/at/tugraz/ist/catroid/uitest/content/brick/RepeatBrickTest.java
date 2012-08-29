@@ -81,12 +81,12 @@ public class RepeatBrickTest extends ActivityInstrumentationTestCase2<ScriptTabA
 		assertNotNull("TextView does not exist", solo.getText(getActivity().getString(R.string.brick_repeat)));
 	}
 
-	public void testResizeInputField() {
-		UiTestUtils.testIntegerEditText(solo, 0, 1, 1, 75, true);
-		UiTestUtils.testIntegerEditText(solo, 0, 1, 1234567891, 75, true);
-		UiTestUtils.testIntegerEditText(solo, 0, 1, 123, 75, true);
-		UiTestUtils.testIntegerEditText(solo, 0, 1, -1234567891, 75, false);
-	}
+	//	public void testResizeInputField() {
+	//		UiTestUtils.testIntegerEditText(solo, 0, 1, 1, 75, true);
+	//		UiTestUtils.testIntegerEditText(solo, 0, 1, 1234567891, 75, true);
+	//		UiTestUtils.testIntegerEditText(solo, 0, 1, 123, 75, true);
+	//		UiTestUtils.testIntegerEditText(solo, 0, 1, -1234567891, 75, false);
+	//	}
 
 	private void createProject() {
 		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);

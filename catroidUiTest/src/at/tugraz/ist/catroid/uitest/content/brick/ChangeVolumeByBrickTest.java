@@ -96,12 +96,12 @@ public class ChangeVolumeByBrickTest extends ActivityInstrumentationTestCase2<Sc
 		//		assertEquals("Text not updated", VOLUME_TO_CHANGE, Float.parseFloat(solo.getEditText(0).getText().toString()));
 	}
 
-	public void testResizeInputField() {
-		UiTestUtils.testDoubleEditText(solo, 0, 1, 1.0, 60, true);
-		UiTestUtils.testDoubleEditText(solo, 0, 1, 100.0, 60, true);
-		UiTestUtils.testDoubleEditText(solo, 0, 1, 12.5, 60, true);
-		UiTestUtils.testDoubleEditText(solo, 0, 1, 100.12, 60, false);
-	}
+	//	public void testResizeInputField() {
+	//		UiTestUtils.testDoubleEditText(solo, 0, 1, 1.0, 60, true);
+	//		UiTestUtils.testDoubleEditText(solo, 0, 1, 100.0, 60, true);
+	//		UiTestUtils.testDoubleEditText(solo, 0, 1, 12.5, 60, true);
+	//		UiTestUtils.testDoubleEditText(solo, 0, 1, 100.12, 60, false);
+	//	}
 
 	private void createProject() {
 		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);

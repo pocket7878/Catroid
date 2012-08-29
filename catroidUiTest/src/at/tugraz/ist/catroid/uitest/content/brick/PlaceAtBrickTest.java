@@ -24,7 +24,6 @@ package at.tugraz.ist.catroid.uitest.content.brick;
 
 import java.util.ArrayList;
 
-import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.Smoke;
 import at.tugraz.ist.catroid.ProjectManager;
@@ -111,20 +110,20 @@ public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 
 	}
 
-	public void testResizeInputFields() {
-		ProjectManager.getInstance().deleteCurrentProject();
-		createTestProject();
-		Intent intent = new Intent(ScriptTabActivity.ACTION_NEW_BRICK_ADDED);
-		intent.setAction(ScriptTabActivity.ACTION_BRICK_LIST_CHANGED);
-		solo.getCurrentActivity().sendBroadcast(intent);
-
-		for (int i = 0; i < 2; i++) {
-			UiTestUtils.testIntegerEditText(solo, i, 2, 1, 60, true);
-			UiTestUtils.testIntegerEditText(solo, i, 2, 12345, 60, true);
-			UiTestUtils.testIntegerEditText(solo, i, 2, -1, 60, true);
-			UiTestUtils.testIntegerEditText(solo, i, 2, 123456, 60, false);
-		}
-	}
+	//	public void testResizeInputFields() {
+	//		ProjectManager.getInstance().deleteCurrentProject();
+	//		createTestProject();
+	//		Intent intent = new Intent(ScriptTabActivity.ACTION_NEW_BRICK_ADDED);
+	//		intent.setAction(ScriptTabActivity.ACTION_BRICK_LIST_CHANGED);
+	//		solo.getCurrentActivity().sendBroadcast(intent);
+	//
+	//		for (int i = 0; i < 2; i++) {
+	//			UiTestUtils.testIntegerEditText(solo, i, 2, 1, 60, true);
+	//			UiTestUtils.testIntegerEditText(solo, i, 2, 12345, 60, true);
+	//			UiTestUtils.testIntegerEditText(solo, i, 2, -1, 60, true);
+	//			UiTestUtils.testIntegerEditText(solo, i, 2, 123456, 60, false);
+	//		}
+	//	}
 
 	private void createProject() {
 		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);

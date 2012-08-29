@@ -97,12 +97,12 @@ public class ChangeYByBrickTest extends ActivityInstrumentationTestCase2<ScriptT
 		//		assertEquals("Value in Brick is not updated.", Y_TO_CHANGE + "", solo.getEditText(0).getText().toString());
 	}
 
-	public void testResizeInputField() {
-		UiTestUtils.testIntegerEditText(solo, 0, 1, 1, 50, true);
-		UiTestUtils.testIntegerEditText(solo, 0, 1, 123456, 50, true);
-		UiTestUtils.testIntegerEditText(solo, 0, 1, -1, 50, true);
-		UiTestUtils.testIntegerEditText(solo, 0, 1, 1234567, 50, false);
-	}
+	//	public void testResizeInputField() {
+	//		UiTestUtils.testIntegerEditText(solo, 0, 1, 1, 50, true);
+	//		UiTestUtils.testIntegerEditText(solo, 0, 1, 123456, 50, true);
+	//		UiTestUtils.testIntegerEditText(solo, 0, 1, -1, 50, true);
+	//		UiTestUtils.testIntegerEditText(solo, 0, 1, 1234567, 50, false);
+	//	}
 
 	private void createProject() {
 		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);

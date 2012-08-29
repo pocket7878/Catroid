@@ -31,7 +31,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -48,6 +47,7 @@ public class SpeakBrick implements Brick {
 	private String text = "";
 
 	private transient View view;
+	private TextView textHolder;
 
 	public SpeakBrick(Sprite sprite, String text) {
 		this.sprite = sprite;
@@ -105,33 +105,30 @@ public class SpeakBrick implements Brick {
 	public View getView(final Context context, int brickId, final BaseAdapter adapter) {
 		view = View.inflate(context, R.layout.brick_speak, null);
 
-		TextView textHolder = (TextView) view.findViewById(R.id.brick_speak_text_view);
-		EditText editText = (EditText) view.findViewById(R.id.brick_speak_edit_text);
-		editText.setText(text);
+		textHolder = (TextView) view.findViewById(R.id.brick_speak_text_view);
+		textHolder.setText(text);
 
-		textHolder.setVisibility(View.GONE);
-		editText.setVisibility(View.VISIBLE);
-
-		editText.setOnClickListener(new OnClickListener() {
+		textHolder.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				ScriptTabActivity activity = (ScriptTabActivity) context;
-				
+
 				BrickTextDialog editDialog = new BrickTextDialog() {
 					@Override
 					protected void initialize() {
 						input.setText(text);
 						input.setSelectAllOnFocus(true);
 					}
-					
+
 					@Override
 					protected boolean handleOkButton() {
 						text = (input.getText().toString()).trim();
+						textHolder.setText(text);
 						return true;
 					}
 				};
-				
+
 				editDialog.show(activity.getSupportFragmentManager(), "dialog_speak_brick");
 			}
 		});
@@ -147,6 +144,8 @@ public class SpeakBrick implements Brick {
 	public Brick clone() {
 		return new SpeakBrick(this.sprite, this.text);
 	}
+
+	@Override
 	public void onClick(View view) {
 
 	}
