@@ -650,8 +650,8 @@ public class UiTestUtils {
 
 		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
 
-		View formulaTextViewView = solo.getView(textViewId);
-		solo.clickOnView(formulaTextViewView);
+		TextView formulaView = (TextView) solo.getView(textViewId);
+		solo.clickOnView(formulaView);
 
 		//solo.clearEditText(numberOfEditTextsInBrick); 
 		//solo.enterText(numberOfEditTextsInBrick, newValue + ""); //would only work if old text was shorter than newValue! 
@@ -671,15 +671,17 @@ public class UiTestUtils {
 		solo.goBack();
 		solo.sleep(200);
 
-		//		for (int i = 0; i < 15; i++) {
+		//		for (int i = 0; i < 9; i++) {
 		//			Log.i("info", "i:" + i + ": " + solo.getText(i).getText().toString());
 		//		}
 
 		Formula formula = (Formula) UiTestUtils.getPrivateField(fieldName, theBrick);
 
+		formulaView = (TextView) solo.getView(textViewId);
+
 		assertEquals("Wrong text in field", newValue, formula.interpretFloat(), 0.01f);
 		assertEquals("Text not updated in the brick list", newValue,
-				Double.parseDouble(solo.getText(numberOfTextViewsInBrick).getText().toString()), 0.01f);
+				Double.parseDouble(formulaView.getText().toString()), 0.01f);
 
 	}
 
