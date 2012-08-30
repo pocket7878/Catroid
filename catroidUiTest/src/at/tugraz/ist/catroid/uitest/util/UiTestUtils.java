@@ -671,7 +671,7 @@ public class UiTestUtils {
 		solo.goBack();
 		solo.sleep(200);
 
-		//		for (int i = 0; i < 10; i++) {
+		//		for (int i = 0; i < 15; i++) {
 		//			Log.i("info", "i:" + i + ": " + solo.getText(i).getText().toString());
 		//		}
 

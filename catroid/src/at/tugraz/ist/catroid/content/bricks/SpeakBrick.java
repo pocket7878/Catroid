@@ -47,7 +47,7 @@ public class SpeakBrick implements Brick {
 	private String text = "";
 
 	private transient View view;
-	private TextView textHolder;
+	private transient TextView textHolder;
 
 	public SpeakBrick(Sprite sprite, String text) {
 		this.sprite = sprite;

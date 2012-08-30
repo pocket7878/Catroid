@@ -22,9 +22,9 @@
  */
 package at.tugraz.ist.catroid.uitest.content.brick;
 
+import java.util.ArrayList;
+
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
-import android.view.View;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Project;
@@ -34,7 +34,8 @@ import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.GlideToBrick;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
-import at.tugraz.ist.catroid.uitest.formulaeditor.CatKeyboardClicker;
+import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
+import at.tugraz.ist.catroid.ui.fragment.ScriptFragment;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -45,6 +46,8 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 	private static final int X_POSITION = 800;
 	private static final int Y_POSITION = 0;
 	private static final int DURATION = 1000;
+	private Project project;
+	private Brick glideToBrick;
 
 	public GlideToBrickTest() {
 		super(ScriptTabActivity.class);
@@ -65,38 +68,62 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 	}
 
 	public void testNumberInput() {
-		View formulaTextViewView = solo.getView(R.id.brick_glide_to_duration_text_view);
-		solo.clickOnView(formulaTextViewView);
 
-		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
-		catKeyboardClicker.clickOnKey("del");
-		for (char item : (String.valueOf(DURATION).toCharArray())) {
-			catKeyboardClicker.clickOnKey("" + item);
-		}
+		ScriptTabActivity activity = (ScriptTabActivity) solo.getCurrentActivity();
+		ScriptFragment fragment = (ScriptFragment) activity.getTabFragment(ScriptTabActivity.INDEX_TAB_SCRIPTS);
+		BrickAdapter adapter = fragment.getAdapter();
 
-		solo.goBack();
-		solo.sleep(200);
+		int childrenCount = adapter.getChildCountFromLastGroup();
+		int groupCount = adapter.getScriptCount();
 
-		formulaTextViewView = solo.getView(R.id.brick_glide_to_x_text_view);
-		solo.clickOnView(formulaTextViewView);
+		assertEquals("Incorrect number of bricks.", 2 + 1, solo.getCurrentListViews().get(0).getChildCount()); // don't forget the footer
+		assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
-		catKeyboardClicker.clickOnKey("del");
-		for (char item : (String.valueOf(X_POSITION).toCharArray())) {
-			catKeyboardClicker.clickOnKey("" + item);
-		}
-		solo.goBack();
-		solo.sleep(200);
+		ArrayList<Brick> projectBrickList = project.getSpriteList().get(0).getScript(0).getBrickList();
+		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		formulaTextViewView = solo.getView(R.id.brick_glide_to_y_text_view);
-		solo.clickOnView(formulaTextViewView);
+		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+		assertNotNull("TextView does not exist.", solo.getText(getActivity().getString(R.string.brick_glide_to)));
 
-		catKeyboardClicker.clickOnKey("del");
-		for (char item : (String.valueOf(Y_POSITION).toCharArray())) {
-			catKeyboardClicker.clickOnKey("" + item);
-		}
-		solo.sleep(200);
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_glide_to_duration_text_view, 8, DURATION,
+				"durationInSeconds", glideToBrick);
 
-		Log.i("info", "Before TextView Check" + solo.getText(4).getText().toString());
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_glide_to_x_text_view, 12, X_POSITION, "xDestination",
+				glideToBrick);
+
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_glide_to_y_text_view, 14, Y_POSITION, "yDestination",
+				glideToBrick);
+
+		//		View formulaTextViewView = solo.getView(R.id.brick_glide_to_duration_text_view);
+		//		solo.clickOnView(formulaTextViewView);
+		//
+		//		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
+		//		catKeyboardClicker.clickOnKey("del");
+		//		for (char item : (String.valueOf(DURATION).toCharArray())) {
+		//			catKeyboardClicker.clickOnKey("" + item);
+		//		}
+		//
+		//		solo.goBack();
+		//		solo.sleep(200);
+		//
+		//		formulaTextViewView = solo.getView(R.id.brick_glide_to_x_text_view);
+		//		solo.clickOnView(formulaTextViewView);
+		//
+		//		catKeyboardClicker.clickOnKey("del");
+		//		for (char item : (String.valueOf(X_POSITION).toCharArray())) {
+		//			catKeyboardClicker.clickOnKey("" + item);
+		//		}
+		//		solo.goBack();
+		//		solo.sleep(200);
+		//
+		//		formulaTextViewView = solo.getView(R.id.brick_glide_to_y_text_view);
+		//		solo.clickOnView(formulaTextViewView);
+		//
+		//		catKeyboardClicker.clickOnKey("del");
+		//		for (char item : (String.valueOf(Y_POSITION).toCharArray())) {
+		//			catKeyboardClicker.clickOnKey("" + item);
+		//		}
+		//		solo.sleep(200);
 
 		//		for (int i = 0; i < 15; i++) {
 		//			Log.i("info", "i:" + i + ": " + solo.getText(i).getText().toString());
@@ -110,8 +137,6 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 		//		Log.i("info", "After X_POSITION check");
 		//		assertEquals("Text not updated within FormulaEditor", Y_POSITION,
 		//				Integer.parseInt(solo.getText(10).getText().toString().replace(' ', '\0')));
-
-		Log.i("info", "After TextView Check 1");
 
 		//		solo.goBack();
 		//		solo.sleep(200);
@@ -160,10 +185,10 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 
 	private void createProject() {
 
-		Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
+		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		Brick glideToBrick = new GlideToBrick(sprite, X_POSITION, Y_POSITION, DURATION);
+		glideToBrick = new GlideToBrick(sprite, X_POSITION, Y_POSITION, DURATION);
 		script.addBrick(glideToBrick);
 
 		sprite.addScript(script);

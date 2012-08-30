@@ -41,7 +41,7 @@ public class NoteBrick implements Brick {
 
 	@XStreamOmitField
 	private transient View view;
-	private TextView textHolder;
+	private transient TextView textHolder;
 
 	public NoteBrick(Sprite sprite) {
 		this.sprite = sprite;

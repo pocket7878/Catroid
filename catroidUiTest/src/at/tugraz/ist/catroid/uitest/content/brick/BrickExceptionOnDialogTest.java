@@ -307,7 +307,6 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 		clickTextViewGoBackAndClickAgain(FORMULA_EDITOR_BRICK, R.id.brick_wait_text_view);
 	}
 
-	//TODO Stack Overflow
 	public void testSpeakBrick() {
 		SpeakBrick speakBrick = new SpeakBrick(sprite, "I say lol");
 		script.addBrick(speakBrick);
@@ -315,7 +314,6 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 		clickTextViewGoBackAndClickAgain(NO_FORMULA_EDITOR_BRICK, R.id.brick_speak_text_view);
 	}
 
-	//TODO Stack Overflow
 	public void testNoteBrick() {
 		NoteBrick noteBrick = new NoteBrick(sprite);
 		script.addBrick(noteBrick);
