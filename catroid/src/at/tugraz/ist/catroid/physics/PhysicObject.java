@@ -78,6 +78,7 @@ public class PhysicObject {
 		switch (type) {
 			case DYNAMIC:
 				body.setType(BodyType.DynamicBody);
+				setMass(mass);
 				body.setActive(true);
 				break;
 			case FIXED:
@@ -121,7 +122,12 @@ public class PhysicObject {
 		}
 		this.mass = mass;
 
-		float area = body.getMass() / fixtureDef.density;
+		float bodyMass = body.getMass();
+		if (bodyMass == 0.0f) {
+			bodyMass = 1.0f;
+		}
+
+		float area = bodyMass / fixtureDef.density;
 		float density = mass / area;
 
 		for (Fixture fixture : body.getFixtureList()) {

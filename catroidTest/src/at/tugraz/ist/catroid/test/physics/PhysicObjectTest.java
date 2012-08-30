@@ -354,4 +354,13 @@ public class PhysicObjectTest extends AndroidTestCase {
 		physicObject.setMass(newMass);
 		checkMassDependingOnType(physicObject, newMass);
 	}
+
+	public void testMassWithZeroShapeArea() {
+		PhysicObject physicObject = createPhysicObject(Type.DYNAMIC, 0.0f, 0.0f);
+		physicObject.setMass(1.0f);
+		Body body = getBody(physicObject);
+
+		assertEquals(1.0f, body.getMass());
+		assertEquals(1.0f, physicObject.fixtureDef.density);
+	}
 }
