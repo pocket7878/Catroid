@@ -1,7 +1,5 @@
 package at.tugraz.ist.catroid.test.physics;
 
-import java.util.List;
-
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.physics.PhysicObject;
@@ -13,6 +11,7 @@ import at.tugraz.ist.catroid.test.utils.TestUtils;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -27,19 +26,19 @@ public class PhysicObjectTest extends AndroidTestCase {
 
 	private PhysicObjectMap objects;
 
-	private abstract class FixtureTemplate {
+	private abstract class FixtureProptertyTestTemplate {
 		protected final PhysicObject physicObject;
 		protected final float[] values;
 
-		public FixtureTemplate(PhysicObject physicObject, float[] values) {
+		public FixtureProptertyTestTemplate(PhysicObject physicObject, float[] values) {
 			this.physicObject = physicObject;
 			this.values = values;
 		}
 
 		public void test() {
-			assertTrue(values.length > 0);
-			System.out.println("LOG: " + getBody(physicObject).getFixtureList());
-			assertFalse(getBody(physicObject).getFixtureList().isEmpty());
+			assertTrue("Without any values the correctness won't be tested.", values.length > 0);
+			assertFalse("Without any fixtures the correctness won't be tested.", getBody(physicObject).getFixtureList()
+					.isEmpty());
 
 			for (float value : values) {
 				setValue(value);
@@ -54,28 +53,6 @@ public class PhysicObjectTest extends AndroidTestCase {
 		protected abstract void setValue(float value);
 	}
 
-	//	private class PhysicObjectAdapter {
-	//		private final PhysicObject physicObject;
-	//
-	//		public PhysicObjectAdapter(PhysicObject physicObject) {
-	//			this.physicObject = physicObject;
-	//		}
-	//
-	//		public Shape getFixtureDefShape() {
-	//			return getFixtureDef(physicObject).shape;
-	//		}
-	//		
-	//		public Shape get
-	//		
-	//		public void setShape(Shape shape) {
-	//			physicObject.setShape(shape);
-	//		}
-	//		
-	//		public void setType(Type type) {
-	//			physicObject.setType(type);
-	//		}
-	//	}
-
 	@Override
 	protected void setUp() throws Exception {
 		objects = new PhysicObjectMap(new World(PhysicSettings.World.DEFAULT_GRAVITY,
@@ -86,10 +63,22 @@ public class PhysicObjectTest extends AndroidTestCase {
 	protected void tearDown() throws Exception {
 	}
 
+	protected PhysicObject createPhysicObject(PhysicObject.Type type, float width, float height) {
+		return createPhysicObject(type, createRectangleShape(width, height));
+	}
+
+	protected Shape createRectangleShape(float width, float height) {
+		PolygonShape rectangle = new PolygonShape();
+		rectangle.setAsBox(width / 2.0f, height / 2.0f);
+		return rectangle;
+	}
+
 	protected PhysicObject createPhysicObject(PhysicObject.Type type, Shape shape) {
 		PhysicObject physicObject = objects.get(new Sprite("TestSprite"));
 
-		if (type != null) {
+		if (type == null) {
+			physicObject.setType(Type.DYNAMIC);
+		} else {
 			physicObject.setType(type);
 		}
 
@@ -116,13 +105,17 @@ public class PhysicObjectTest extends AndroidTestCase {
 		return (FixtureDef) TestUtils.getPrivateField("fixtureDef", physicObject, false);
 	}
 
-	private Fixture getFixture(PhysicObject physicObject) {
-		List<Fixture> fixtures = getBody(physicObject).getFixtureList();
-		assertEquals(1, fixtures.size());
-		return fixtures.get(0);
+	public void testNullBody() {
+		try {
+			@SuppressWarnings("unused")
+			PhysicObject objectWithNullBody = new PhysicObject(null);
+			assertTrue(false);
+		} catch (NullPointerException exception) {
+			assertTrue(true);
+		}
 	}
 
-	public void testPhysicObjectProperties() {
+	public void testInitialPhysicObjectProperties() {
 		PhysicObject physicObject = createPhysicObject();
 		Body body = getBody(physicObject);
 
@@ -135,18 +128,8 @@ public class PhysicObjectTest extends AndroidTestCase {
 		assertEquals(0.0f, fixtureDef.restitution);
 	}
 
-	public void testNullBody() {
-		try {
-			@SuppressWarnings("unused")
-			PhysicObject objectWithNullBody = new PhysicObject(null);
-			assertTrue(false);
-		} catch (NullPointerException exception) {
-			assertTrue(true);
-		}
-	}
-
-	public void testPhysicObjectEqualsNone() {
-		PhysicObject physicObject = createPhysicObject();
+	public void testInitialPhysicObjectEqualsNone() {
+		PhysicObject physicObject = objects.get(new Sprite("TestSprite"));
 		PhysicObject nonePhysicObject = createPhysicObject(Type.NONE);
 
 		assertEquals(physicObject.type, nonePhysicObject.type);
@@ -157,100 +140,84 @@ public class PhysicObjectTest extends AndroidTestCase {
 		assertEquals(getBody(physicObject).getFixtureList().size(), getBody(nonePhysicObject).getFixtureList().size());
 	}
 
-	//	public void testShapeAndTypeChange() {
-	//		for (Type from : Type.values()) {
-	//			for (Type to : Type.values()) {
-	//				PhysicObject physicObject = createPhysicObject();
-	//				physicObject.setType(from);
-	//				physicObject.setType(to);
-	//
-	//				PhysicObject physicObject2 = createPhysicObject();
-	//				physicObject2.setType(from);
-	//				Shape shape = new PolygonShape();
-	//				physicObject2.setShape(shape);
-	//				physicObject2.setType(to);
-	//			}
-	//		}
-	//	}
-	//
-	//	public void testTypeChangeWithoutShape() {
-	//		PhysicObject physicObject = createPhysicObject();
-	//		Body body = getBody(physicObject);
-	//
-	//		assertEquals(Type.NONE, physicObject.type);
-	//		assertEquals(BodyType.StaticBody, body.getType());
-	//
-	//		applyAndCheckTypeChangeWithoutShape(physicObject, Type.DYNAMIC, BodyType.DynamicBody);
-	//		applyAndCheckTypeChangeWithoutShape(physicObject, Type.FIXED, BodyType.KinematicBody);
-	//		applyAndCheckTypeChangeWithoutShape(physicObject, Type.NONE, BodyType.StaticBody);
-	//	}
-	//
-	//	private void applyAndCheckTypeChangeWithoutShape(PhysicObject physicObject, Type toType, BodyType expectedBodyType) {
-	//		physicObject.setType(toType);
-	//		assertEquals(toType, physicObject.type);
-	//		assertEquals(expectedBodyType, getBody(physicObject).getType());
-	//	}
-	//
-	//	public void testTypeChangeWithShape() {
-	//		applyTypeTransitionCheck(Type.DYNAMIC, Type.DYNAMIC, new PolygonShape());
-	//		applyTypeTransitionCheck(Type.DYNAMIC, Type.FIXED, new PolygonShape());
-	//		applyTypeTransitionCheck(Type.DYNAMIC, Type.NONE, new PolygonShape());
-	//
-	//		applyTypeTransitionCheck(Type.FIXED, Type.DYNAMIC, new PolygonShape());
-	//		applyTypeTransitionCheck(Type.FIXED, Type.FIXED, new PolygonShape());
-	//		applyTypeTransitionCheck(Type.FIXED, Type.NONE, new PolygonShape());
-	//
-	//		applyTypeTransitionCheck(Type.NONE, Type.DYNAMIC, new PolygonShape());
-	//		applyTypeTransitionCheck(Type.NONE, Type.FIXED, new PolygonShape());
-	//		applyTypeTransitionCheck(Type.NONE, Type.NONE, new PolygonShape());
-	//	}
-	//
-	//	public void applyTypeTransitionCheck(Type from, Type to, Shape shape) {
-	//		// TODO: Test!
-	//
-	//		if (from == to) {
-	//
-	//		}
-	//
-	//		PhysicObject physicObject = createPhysicObject();
-	//		FixtureDef fixtureDef = getFixtureDef(physicObject);
-	//		Body body = getBody(physicObject);
-	//	}
-	//
-	//	public void testPhysicObjectShape() {
-	//		// TODO: Test!
-	//		PhysicObject physicObject = createPhysicObject();
-	//		FixtureDef fixtureDef = getFixtureDef(physicObject);
-	//
-	//		assertNull(fixtureDef.shape);
-	//	}
-	//
-	//	public void testDynamicPhysicObjectWithShapeChange() {
-	//		PhysicObject physicObject = createPhysicObject();
-	//		FixtureDef fixtureDef = getFixtureDef(physicObject);
-	//		Body body = getBody(physicObject);
-	//
-	//		physicObject.setType(Type.DYNAMIC);
-	//		Shape shape = new PolygonShape();
-	//		physicObject.setShape(shape);
-	//
-	//		assertEquals(shape, fixtureDef.shape);
-	//		assertTrue(body.getFixtureList().size() == 1);
-	//
-	//		Fixture fixture = getFixture(physicObject);
-	//		physicObject.setShape(shape);
-	//
-	//		assertEquals(shape, fixtureDef.shape);
-	//		assertTrue(body.getFixtureList().size() == 1);
-	//		assertEquals(fixture, getFixture(physicObject));
-	//
-	//		Shape anotherShape = new PolygonShape();
-	//		physicObject.setShape(anotherShape);
-	//
-	//		assertNotSame(shape, fixtureDef.shape);
-	//		assertTrue(body.getFixtureList().size() == 1);
-	//		assertNotSame(fixture, getFixture(physicObject));
-	//	}
+	public void testSetShape() {
+		PhysicObject physicObject = createPhysicObject();
+		Body body = getBody(physicObject);
+
+		PolygonShape rectangle = (PolygonShape) createRectangleShape(5.0f, 5.0f);
+		physicObject.setShape(rectangle);
+
+		assertFalse(body.getFixtureList().isEmpty());
+		assertEquals(rectangle, physicObject.fixtureDef.shape);
+		assertNotSame(rectangle, body.getFixtureList().get(0).getShape());
+		assertEquals(4, rectangle.getVertexCount());
+	}
+
+	public void testSetNewShape() {
+		PhysicObject physicObject = createPhysicObject();
+		Body body = getBody(physicObject);
+
+		Shape Shape = new PolygonShape();
+		physicObject.setShape(Shape);
+		Shape fixtureShape = body.getFixtureList().get(0).getShape();
+
+		Shape newShape = new PolygonShape();
+		physicObject.setShape(newShape);
+
+		assertTrue(!body.getFixtureList().isEmpty());
+		assertEquals(newShape, physicObject.fixtureDef.shape);
+		assertNotSame(fixtureShape, body.getFixtureList().get(0).getShape());
+	}
+
+	public void testSetSameShape() {
+		PhysicObject physicObject = createPhysicObject();
+		Body body = getBody(physicObject);
+
+		PolygonShape rectangle = (PolygonShape) createRectangleShape(5.0f, 5.0f);
+		physicObject.setShape(rectangle);
+		Shape fixtureShape = body.getFixtureList().get(0).getShape();
+		physicObject.setShape(rectangle);
+
+		assertTrue(!body.getFixtureList().isEmpty());
+		assertEquals(rectangle, physicObject.fixtureDef.shape);
+		assertEquals(fixtureShape, body.getFixtureList().get(0).getShape());
+		assertEquals(4, rectangle.getVertexCount());
+	}
+
+	public void testSetNullShapeRemovesAllFixtures() {
+		PhysicObject physicObject = createPhysicObject();
+		Body body = getBody(physicObject);
+
+		PolygonShape rectangle = (PolygonShape) createRectangleShape(5.0f, 5.0f);
+		physicObject.setShape(rectangle);
+
+		assertTrue(!body.getFixtureList().isEmpty());
+		assertEquals(4, rectangle.getVertexCount());
+
+		physicObject.setShape(null);
+		assertEquals(null, physicObject.fixtureDef.shape);
+		assertTrue(body.getFixtureList().isEmpty());
+	}
+
+	public void testType() {
+		PhysicObject physicObject = createPhysicObject();
+		Body body = getBody(physicObject);
+
+		physicObject.setType(Type.DYNAMIC);
+		assertEquals(Type.DYNAMIC, physicObject.type);
+		assertEquals(BodyType.DynamicBody, body.getType());
+		assertTrue(body.isActive());
+
+		physicObject.setType(Type.FIXED);
+		assertEquals(Type.FIXED, physicObject.type);
+		assertEquals(BodyType.KinematicBody, body.getType());
+		assertTrue(body.isActive());
+
+		physicObject.setType(Type.NONE);
+		assertEquals(Type.NONE, physicObject.type);
+		assertEquals(BodyType.StaticBody, body.getType());
+		assertFalse(body.isActive());
+	}
 
 	public void testAngle() {
 		for (PhysicObject.Type type : PhysicObject.Type.values()) {
@@ -300,7 +267,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 		PhysicObject physicObject = createPhysicObject(Type.DYNAMIC, new PolygonShape());
 		float[] friction = { 0.123f, -0.765f, 24.32f };
 
-		FixtureTemplate frictionTemplate = new FixtureTemplate(physicObject, friction) {
+		FixtureProptertyTestTemplate frictionTemplate = new FixtureProptertyTestTemplate(physicObject, friction) {
 			@Override
 			protected void setValue(float value) {
 				physicObject.setFriction(value);
@@ -318,7 +285,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 		PhysicObject physicObject = createPhysicObject(Type.DYNAMIC, new PolygonShape());
 		float[] restitution = { 0.123f, -0.765f, 24.32f };
 
-		FixtureTemplate restitutionTemplate = new FixtureTemplate(physicObject, restitution) {
+		FixtureProptertyTestTemplate restitutionTemplate = new FixtureProptertyTestTemplate(physicObject, restitution) {
 			@Override
 			protected void setValue(float value) {
 				physicObject.setRestitution(value);
@@ -334,50 +301,57 @@ public class PhysicObjectTest extends AndroidTestCase {
 
 	public void testMass() {
 		for (PhysicObject.Type type : PhysicObject.Type.values()) {
-			PhysicObject physicObject = createPhysicObject(type);
-			PolygonShape shape = new PolygonShape();
-			shape.setAsBox(5, 5);
-			physicObject.setShape(shape);
+			PhysicObject physicObject = createPhysicObject(type, 5.0f, 5.0f);
 
-			Body body = getBody(physicObject);
-			assertEquals((physicObject.type == Type.DYNAMIC) ? 1.0f : 0.0f, body.getMass());
+			checkMassDependingOnType(physicObject, PhysicSettings.World.DEAULT_MASS);
 
 			float[] masses = { 0.01f, 1.0f, 12345.0f };
 			for (float mass : masses) {
 				physicObject.setMass(mass);
-				assertEquals((physicObject.type == Type.DYNAMIC) ? mass : 0.0f, body.getMass());
+				checkMassDependingOnType(physicObject, mass);
 			}
 
-			float[] massesResetedToZero = { 0.0f, -0.123f, -123.456f };
-			for (float mass : massesResetedToZero) {
+			float[] massesResetedToOne = { 0.0f, -0.123f, -123.456f };
+			for (float mass : massesResetedToOne) {
 				physicObject.setMass(mass);
-				assertEquals((physicObject.type == Type.DYNAMIC) ? 1.0f : 0.0f, body.getMass());
+				checkMassDependingOnType(physicObject, 1.0f);
 			}
 		}
 	}
 
+	private void checkMassDependingOnType(PhysicObject physicObject, float expectedMass) {
+		Body body = getBody(physicObject);
+		float expectedBodyMass = expectedMass;
+		float expectedPhysicObjectMass = expectedMass;
+
+		if (body.getType() != BodyType.DynamicBody) {
+			expectedBodyMass = 0.0f;
+		}
+
+		if (expectedMass <= 0.0f) {
+			expectedPhysicObjectMass = 1.0f;
+
+			if (body.getType() == BodyType.DynamicBody) {
+				expectedBodyMass = 1.0f;
+			}
+		}
+
+		assertEquals(expectedBodyMass, body.getMass());
+		assertEquals(expectedPhysicObjectMass, physicObject.mass);
+	}
+
 	public void testMassWithShapeChange() {
-		PhysicObject physicObject = createPhysicObject(Type.DYNAMIC);
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(5, 5);
-		physicObject.setShape(shape);
+		PhysicObject physicObject = createPhysicObject(Type.DYNAMIC, 5.0f, 5.0f);
 		float mass = 5.0f;
 
 		physicObject.setMass(mass);
-		checkMass(physicObject, mass);
+		checkMassDependingOnType(physicObject, mass);
 
-		shape = new PolygonShape();
-		shape.setAsBox(7, 7);
-		physicObject.setShape(shape);
-		checkMass(physicObject, mass);
+		physicObject.setShape(createRectangleShape(7.0f, 7.0f));
+		checkMassDependingOnType(physicObject, mass);
 
 		float newMass = 3.0f;
 		physicObject.setMass(newMass);
-		checkMass(physicObject, newMass);
-	}
-
-	private void checkMass(PhysicObject physicObject, float expectedMass) {
-		assertEquals(expectedMass, physicObject.mass);
-		assertEquals(expectedMass, getBody(physicObject).getMass());
+		checkMassDependingOnType(physicObject, newMass);
 	}
 }
