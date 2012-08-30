@@ -54,6 +54,7 @@ public class PhysicObject {
 		if (shape == fixtureDef.shape) {
 			return;
 		}
+
 		fixtureDef.shape = shape;
 
 		List<Fixture> fixturesOld = new ArrayList<Fixture>(body.getFixtureList());
@@ -67,6 +68,7 @@ public class PhysicObject {
 		}
 
 		setMass(mass);
+
 	}
 
 	public void setType(Type type) {
@@ -85,7 +87,6 @@ public class PhysicObject {
 				body.setActive(true);
 				break;
 			case NONE:
-				body.setType(BodyType.StaticBody);
 				body.setActive(false);
 				break;
 		}
@@ -116,11 +117,6 @@ public class PhysicObject {
 	}
 
 	public void setMass(float mass) {
-		if (mass <= 0.0f) {
-			mass = 1.0f;
-		}
-		this.mass = mass;
-
 		float area = body.getMass() / fixtureDef.density;
 		float density = mass / area;
 
@@ -129,6 +125,7 @@ public class PhysicObject {
 		}
 		fixtureDef.density = density;
 		body.resetMassData();
+		this.mass = mass;
 	}
 
 	public void setFriction(float friction) {

@@ -24,6 +24,7 @@ package at.tugraz.ist.catroid.content;
 
 import java.util.concurrent.Semaphore;
 
+import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.CostumeData;
 
 import com.badlogic.gdx.Gdx;
@@ -131,8 +132,6 @@ public class Costume extends Image {
 				imageLock.release();
 				return;
 			}
-			//			ProjectManager.getInstance().getCurrentProject().getPhysicWorld().changeCostume(sprite);
-			System.out.println("LOG: " + costumeData.getAbsolutePath());
 
 			Pixmap pixmap;
 			if (internalPath) {
@@ -167,7 +166,7 @@ public class Costume extends Image {
 			this.setRegion(new TextureRegion(texture));
 
 			// TODO: Is this really the best place to recognize a costume change?
-			//			ProjectManager.getInstance().getCurrentProject().getPhysicWorld().changeCostume(sprite);
+			ProjectManager.getInstance().getCurrentProject().getPhysicWorld().changeCostume(sprite);
 			imageChanged = false;
 		}
 		imageLock.release();
