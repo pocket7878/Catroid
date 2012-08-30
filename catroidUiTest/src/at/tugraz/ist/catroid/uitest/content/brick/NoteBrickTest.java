@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.Smoke;
+import android.view.View;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Project;
@@ -43,6 +44,7 @@ import com.jayway.android.robotium.solo.Solo;
 
 public class NoteBrickTest extends ActivityInstrumentationTestCase2<ScriptTabActivity> {
 	private static final String TEST_STRING = "test";
+	private static final String TEST_STRING1 = "new_test";
 
 	private Solo solo;
 	private Project project;
@@ -85,28 +87,23 @@ public class NoteBrickTest extends ActivityInstrumentationTestCase2<ScriptTabAct
 		assertNotNull("TextView does not exist.", solo.getText(getActivity().getString(R.string.brick_note)));
 
 		String buttonPositiveText = solo.getString(R.string.ok);
-		solo.clickOnEditText(0);
+		View noteTextViewView = solo.getView(R.id.brick_note_text_view);
+		solo.clickOnView(noteTextViewView);
 		solo.enterText(0, TEST_STRING);
 		solo.clickOnButton(buttonPositiveText);
 
 		String note = UiTestUtils.getPrivateField("note", noteBrick).toString();
 		assertEquals("Wrong text in field.", TEST_STRING, note);
 
-		solo.clickOnEditText(0);
-		solo.sleep(500);
-		solo.enterText(0, "");
+		noteTextViewView = solo.getView(R.id.brick_note_text_view);
+		solo.clickOnView(noteTextViewView);
+		solo.clearEditText(0);
+		solo.enterText(0, TEST_STRING1);
 		solo.clickOnButton(buttonPositiveText);
 
 		note = UiTestUtils.getPrivateField("note", noteBrick).toString();
-		assertEquals("Wrong text in field.", "", note);
+		assertEquals("Wrong text in field.", TEST_STRING1, note);
 
-		//used testString again, cause robotium can't find button otherwise....
-		solo.clickOnEditText(0);
-		solo.enterText(0, TEST_STRING);
-		solo.clickOnButton(buttonPositiveText);
-
-		note = UiTestUtils.getPrivateField("note", noteBrick).toString();
-		assertEquals("Wrong text in field.", TEST_STRING, note);
 	}
 
 	private void createProject() {
