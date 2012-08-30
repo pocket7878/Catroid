@@ -43,6 +43,7 @@ import at.tugraz.ist.catroid.content.bricks.ChangeXByBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeYByBrick;
 import at.tugraz.ist.catroid.content.bricks.GoNStepsBackBrick;
 import at.tugraz.ist.catroid.content.bricks.MoveNStepsBrick;
+import at.tugraz.ist.catroid.content.bricks.NoteBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaySoundBrick;
 import at.tugraz.ist.catroid.content.bricks.PointInDirectionBrick;
@@ -299,13 +300,6 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 		clickTextViewGoBackAndClickAgain(FORMULA_EDITOR_BRICK, R.id.brick_set_y_text_view);
 	}
 
-	public void testSpeakBrick() {
-		SpeakBrick speakBrick = new SpeakBrick(sprite, "I say lol");
-		script.addBrick(speakBrick);
-
-		clickTextViewGoBackAndClickAgain(NO_FORMULA_EDITOR_BRICK, R.id.brick_speak_text_view);
-	}
-
 	public void testWaitBrick() {
 		WaitBrick waitBrick = new WaitBrick(sprite, 500);
 		script.addBrick(waitBrick);
@@ -313,13 +307,21 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 		clickTextViewGoBackAndClickAgain(FORMULA_EDITOR_BRICK, R.id.brick_wait_text_view);
 	}
 
-	//TODO fix testNoteBrick
-	//	public void testNoteBrick() {
-	//		NoteBrick noteBrick = new NoteBrick(sprite);
-	//		script.addBrick(noteBrick);
-	//
-	//		clickTextViewGoBackAndClickAgain(NO_FORMULA_EDITOR_BRICK, R.id.brick_note_text_view);
-	//	}
+	//TODO Stack Overflow
+	public void testSpeakBrick() {
+		SpeakBrick speakBrick = new SpeakBrick(sprite, "I say lol");
+		script.addBrick(speakBrick);
+
+		clickTextViewGoBackAndClickAgain(NO_FORMULA_EDITOR_BRICK, R.id.brick_speak_text_view);
+	}
+
+	//TODO Stack Overflow
+	public void testNoteBrick() {
+		NoteBrick noteBrick = new NoteBrick(sprite);
+		script.addBrick(noteBrick);
+
+		clickTextViewGoBackAndClickAgain(NO_FORMULA_EDITOR_BRICK, R.id.brick_note_text_view);
+	}
 
 	public void clickTextViewGoBackAndClickAgain(int timesToGoBack, int textViewId) {
 		solo.clickOnText(getActivity().getString(R.string.current_project_button));
