@@ -37,24 +37,6 @@
         android:text="@string/percent" >
     </TextView>
 
-    <TextView
-        android:id="@+id/brick_set_volume_to_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="5dip"
-        android:layout_toLeftOf="@id/SetVolumeToTextView"
-        android:background="@color/white"
-        android:gravity="right"
-        android:minHeight="30dip"
-        android:minWidth="50dip"
-        android:paddingRight="5dip"
-        android:text="100"
-        android:textSize="20dip"    
-       	android:singleLine="true"
-        android:ellipsize="marquee">
-    </TextView>
-
 
 
     <TextView
@@ -64,5 +46,21 @@
         android:layout_centerVertical="true"
         android:text="@string/brick_set_volume_to" >
     </TextView>
+
+    <TextView
+        android:id="@+id/brick_set_volume_to_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/SetVolumeToTextView"
+        android:background="@color/white"
+        android:ellipsize="marquee"
+        android:gravity="right"
+        android:minHeight="30dip"
+        android:minWidth="50dip"
+        android:paddingRight="5dip"
+        android:singleLine="true"
+        android:text="100"
+        android:textSize="20dip" />
 
 </RelativeLayout>
