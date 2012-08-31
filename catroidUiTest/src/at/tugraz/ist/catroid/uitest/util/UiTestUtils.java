@@ -645,8 +645,8 @@ public class UiTestUtils {
 	 * For bricks using the FormulaEditor. Tests starting the FE, entering a new number/formula and
 	 * ensures its set correctly to the brick´s edit text field
 	 */
-	public static void testBrickWithFormulaEditor(Solo solo, int textViewId, int numberOfTextViewsInBrick,
-			double newValue, String fieldName, Object theBrick) {
+	public static void testBrickWithFormulaEditor(Solo solo, int textViewId, double newValue, String fieldName,
+			Object theBrick) {
 
 		CatKeyboardClicker catKeyboardClicker = new CatKeyboardClicker(solo);
 

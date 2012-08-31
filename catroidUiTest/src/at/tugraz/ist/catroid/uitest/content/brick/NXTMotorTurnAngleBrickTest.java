@@ -88,8 +88,7 @@ public class NXTMotorTurnAngleBrickTest extends ActivityInstrumentationTestCase2
 		assertNotNull("TextView does not exist.", solo.getText(getActivity().getString(R.string.motor_angle)));
 		assertTrue("Unit missing for angle!", solo.searchText("°"));
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.motor_turn_angle_text_view, 1, SET_ANGLE, "degrees",
-				motorBrick);
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.motor_turn_angle_text_view, SET_ANGLE, "degrees", motorBrick);
 
 		String[] motors = getActivity().getResources().getStringArray(R.array.nxt_motor_chooser);
 		assertTrue("Spinner items list too short!", motors.length == 4);

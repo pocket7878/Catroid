@@ -85,13 +85,13 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
 		assertNotNull("TextView does not exist.", solo.getText(getActivity().getString(R.string.brick_glide_to)));
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_glide_to_duration_text_view, 8, DURATION,
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_glide_to_duration_text_view, DURATION,
 				"durationInSeconds", glideToBrick);
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_glide_to_x_text_view, 12, X_POSITION, "xDestination",
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_glide_to_x_text_view, X_POSITION, "xDestination",
 				glideToBrick);
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_glide_to_y_text_view, 14, Y_POSITION, "yDestination",
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_glide_to_y_text_view, Y_POSITION, "yDestination",
 				glideToBrick);
 
 		//		View formulaTextViewView = solo.getView(R.id.brick_glide_to_duration_text_view);

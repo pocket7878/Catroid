@@ -84,7 +84,7 @@ public class TurnRightBrickTest extends ActivityInstrumentationTestCase2<ScriptT
 		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
 		assertNotNull("TextView does not exist", solo.getText(getActivity().getString(R.string.brick_turn_right)));
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_turn_right_text_view, 9, TURN_DEGREES, "degrees",
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_turn_right_text_view, TURN_DEGREES, "degrees",
 				turnRightBrick);
 
 		//		solo.clickOnEditText(0);

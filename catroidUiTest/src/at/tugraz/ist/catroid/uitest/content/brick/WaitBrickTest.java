@@ -82,7 +82,7 @@ public class WaitBrickTest extends ActivityInstrumentationTestCase2<ScriptTabAct
 
 		double waitTime = 2.25;
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_wait_text_view, 1, waitTime, "timeToWaitInSeconds",
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_wait_text_view, waitTime, "timeToWaitInSeconds",
 				waitBrick);
 
 	}

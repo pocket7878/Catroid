@@ -84,7 +84,7 @@ public class ChangeSizeByNBrickTest extends ActivityInstrumentationTestCase2<Scr
 		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
 		assertNotNull("TextView does not exist", solo.getText(getActivity().getString(R.string.brick_change_size_by)));
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_change_size_by_text_view, 8, SIZE_TO_CHANGE, "size",
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_change_size_by_text_view, SIZE_TO_CHANGE, "size",
 				changeSizeByNBrick);
 
 	}

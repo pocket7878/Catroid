@@ -84,7 +84,7 @@ public class SetGhostEffectBrickTest extends ActivityInstrumentationTestCase2<Sc
 
 		double newEffect = 65.9;
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_set_ghost_effect_to_text_view, 9, newEffect,
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_set_ghost_effect_to_text_view, newEffect,
 				"transparency", setGhostEffectBrick);
 	}
 

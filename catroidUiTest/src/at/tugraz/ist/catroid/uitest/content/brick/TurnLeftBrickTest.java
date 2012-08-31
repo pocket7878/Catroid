@@ -84,7 +84,7 @@ public class TurnLeftBrickTest extends ActivityInstrumentationTestCase2<ScriptTa
 
 		double turnDegrees = 25;
 
-		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_turn_left_text_view, 9, turnDegrees, "degrees",
+		UiTestUtils.testBrickWithFormulaEditor(solo, R.id.brick_turn_left_text_view, turnDegrees, "degrees",
 				turnLeftBrick);
 
 		//		solo.clickOnEditText(0);
