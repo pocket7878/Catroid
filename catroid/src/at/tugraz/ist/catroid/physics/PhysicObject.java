@@ -124,16 +124,19 @@ public class PhysicObject {
 
 		float bodyMass = body.getMass();
 		if (bodyMass == 0.0f) {
-			bodyMass = 1.0f;
+			return;
 		}
 
 		float area = bodyMass / fixtureDef.density;
 		float density = mass / area;
+		setDensity(density);
+	}
 
+	public void setDensity(float density) {
+		fixtureDef.density = density;
 		for (Fixture fixture : body.getFixtureList()) {
 			fixture.setDensity(density);
 		}
-		fixtureDef.density = density;
 		body.resetMassData();
 	}
 

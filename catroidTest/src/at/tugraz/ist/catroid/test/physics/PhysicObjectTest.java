@@ -299,6 +299,26 @@ public class PhysicObjectTest extends AndroidTestCase {
 		restitutionTemplate.test();
 	}
 
+	public void testDensity() {
+		PhysicObject physicObject = createPhysicObject(Type.DYNAMIC, new PolygonShape());
+		float[] density = { 0.123f, -0.765f, 24.32f };
+
+		FixtureProptertyTestTemplate densityTemplate = new FixtureProptertyTestTemplate(physicObject, density) {
+			@Override
+			protected void setValue(float value) {
+				Class<?>[] parameterTypeList = { float.class };
+				Object[] values = { value };
+				TestUtils.invokeMethod(physicObject, "setDensity", parameterTypeList, values);
+			}
+
+			@Override
+			protected float getValue(Fixture fixture) {
+				return fixture.getDensity();
+			}
+		};
+		densityTemplate.test();
+	}
+
 	public void testMass() {
 		for (PhysicObject.Type type : PhysicObject.Type.values()) {
 			PhysicObject physicObject = createPhysicObject(type, 5.0f, 5.0f);
@@ -356,11 +376,16 @@ public class PhysicObjectTest extends AndroidTestCase {
 	}
 
 	public void testMassWithZeroShapeArea() {
-		PhysicObject physicObject = createPhysicObject(Type.DYNAMIC, 0.0f, 0.0f);
-		physicObject.setMass(1.0f);
+		PhysicObject physicObject = createPhysicObject(Type.NONE, 0.0f, 0.0f);
+		float mass = 1.2f;
+		physicObject.setMass(mass);
 		Body body = getBody(physicObject);
 
-		assertEquals(1.0f, body.getMass());
+		assertEquals(0.0f, body.getMass());
 		assertEquals(1.0f, physicObject.fixtureDef.density);
+
+		physicObject.setType(Type.DYNAMIC);
+		assertEquals(1.0f, body.getMass());
+		assertEquals(mass, physicObject.fixtureDef.density);
 	}
 }
