@@ -8,7 +8,7 @@ import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
 
 public class SetAngularVelocityBrickTest extends TestCase {
-	private float degrees = 3.50f;
+	private float degreesPerSec = 3.50f;
 	private PhysicWorld physicWorld;
 	private Sprite sprite;
 	private SetAngularVelocityBrick angularVelocityBrick;
@@ -18,7 +18,7 @@ public class SetAngularVelocityBrickTest extends TestCase {
 		super.setUp();
 		sprite = new Sprite("testSprite");
 		physicWorld = new PhysicWorldMock();
-		angularVelocityBrick = new SetAngularVelocityBrick(physicWorld, sprite, degrees);
+		angularVelocityBrick = new SetAngularVelocityBrick(physicWorld, sprite, degreesPerSec);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class SetAngularVelocityBrickTest extends TestCase {
 	}
 
 	public void testNullSprite() {
-		angularVelocityBrick = new SetAngularVelocityBrick(null, sprite, degrees);
+		angularVelocityBrick = new SetAngularVelocityBrick(null, sprite, degreesPerSec);
 		try {
 			angularVelocityBrick.execute();
 			fail("Execution of SetAngularVelocityBrick with null Sprite did not cause a "
@@ -79,7 +79,6 @@ public class SetAngularVelocityBrickTest extends TestCase {
 		}
 	}
 
-	@SuppressWarnings("serial")
 	class PhysicObjectMock extends PhysicObject {
 
 		public boolean executed;

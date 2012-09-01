@@ -84,7 +84,7 @@ public class SetMassTest extends ActivityInstrumentationTestCase2<ScriptActivity
 	}
 
 	private void createProject() {
-		project = new Project(null, "testProjectojoi");
+		project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
 		setMassBrick = new SetMassBrick(null, sprite, 0.0f);

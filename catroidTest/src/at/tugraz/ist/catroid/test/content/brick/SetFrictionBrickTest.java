@@ -79,7 +79,6 @@ public class SetFrictionBrickTest extends TestCase {
 		}
 	}
 
-	@SuppressWarnings("serial")
 	class PhysicObjectMock extends PhysicObject {
 
 		public boolean executed;

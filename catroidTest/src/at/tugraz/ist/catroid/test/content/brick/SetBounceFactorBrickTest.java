@@ -79,7 +79,6 @@ public class SetBounceFactorBrickTest extends TestCase {
 		}
 	}
 
-	@SuppressWarnings("serial")
 	class PhysicObjectMock extends PhysicObject {
 
 		public boolean executed;

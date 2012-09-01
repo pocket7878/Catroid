@@ -84,7 +84,6 @@ public class SetVelocityBrickTest extends AndroidTestCase {
 		}
 	}
 
-	@SuppressWarnings("serial")
 	class PhysicObjectMock extends PhysicObject {
 
 		public boolean executed;
