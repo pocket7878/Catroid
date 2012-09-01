@@ -154,7 +154,7 @@ public class PhysicObject {
 		}
 	}
 
-	public void setAngularVelocicty(float radian) {
+	public void setAngularVelocity(float radian) {
 		body.setAngularVelocity(radian);
 	}
 

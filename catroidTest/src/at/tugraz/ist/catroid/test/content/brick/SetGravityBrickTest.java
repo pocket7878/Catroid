@@ -56,7 +56,7 @@ public class SetGravityBrickTest extends AndroidTestCase {
 		setGtravityBrick = new SetGravityBrick(null, sprite, xValue, yValue);
 		try {
 			setGtravityBrick.execute();
-			fail("Execution of ChangeXByBrick with null Sprite did not cause a " + "NullPointerException to be thrown");
+			fail("Execution of SetGravityBrick with null Sprite did not cause a " + "NullPointerException to be thrown");
 		} catch (NullPointerException expected) {
 			// expected behavior
 		}

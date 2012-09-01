@@ -4,6 +4,7 @@ import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.SetMassBrick;
+import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
 
 public class SetMassBrickTest extends AndroidTestCase {
@@ -53,7 +54,7 @@ public class SetMassBrickTest extends AndroidTestCase {
 		setMassBrick = new SetMassBrick(null, sprite, mass);
 		try {
 			setMassBrick.execute();
-			fail("Execution of ChangeXByBrick with null Sprite did not cause a " + "NullPointerException to be thrown");
+			fail("Execution of SetMassBrick with null Sprite did not cause a " + "NullPointerException to be thrown");
 		} catch (NullPointerException expected) {
 			// expected behavior
 		}
@@ -62,18 +63,43 @@ public class SetMassBrickTest extends AndroidTestCase {
 	@SuppressWarnings("serial")
 	class PhysicWorldMock extends PhysicWorld {
 
-		public boolean executed;
+		private PhysicObjectMock phyMockObj;
 
 		public PhysicWorldMock() {
+			phyMockObj = new PhysicObjectMock();
+		}
+
+		public boolean wasExecuted() {
+			return phyMockObj.wasExecuted();
+		}
+
+		@Override
+		public PhysicObject getPhysicObject(Sprite sprite) {
+			return phyMockObj;
+		}
+	}
+
+	@SuppressWarnings("serial")
+	class PhysicObjectMock extends PhysicObject {
+
+		public boolean executed;
+
+		public PhysicObjectMock() {
+			super(null);
 			executed = false;
+		}
+
+		@Override
+		public void setMass(float mass) {
+			executed = true;
 		}
 
 		public boolean wasExecuted() {
 			return executed;
 		}
 
-		public void setMass(Sprite sprite, float mass) {
-			executed = true;
+		@Override
+		public void setType(Type type) {
 		}
 
 	}

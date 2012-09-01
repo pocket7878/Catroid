@@ -1,29 +1,24 @@
 package at.tugraz.ist.catroid.test.content.brick;
 
-import android.test.AndroidTestCase;
+import junit.framework.TestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.SetVelocityBrick;
+import at.tugraz.ist.catroid.content.bricks.SetFrictionBrick;
 import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
 
-import com.badlogic.gdx.math.Vector2;
-
-public class SetVelocityBrickTest extends AndroidTestCase {
-	private float xValue = 3.50f;
-	private float yValue = 5.50f;
-	//private Vector2 velocity;
+public class SetFrictionBrickTest extends TestCase {
+	private float friction = 1.0f;
 	private PhysicWorld physicWorld;
 	private Sprite sprite;
-	private SetVelocityBrick setVelocityBrick;
+	private SetFrictionBrick frictionBrick;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		sprite = new Sprite("testSprite");
 		physicWorld = new PhysicWorldMock();
-		setVelocityBrick = new SetVelocityBrick(physicWorld, sprite, xValue, yValue);
-		//velocity = new Vector2(xValue, yValue);
+		frictionBrick = new SetFrictionBrick(physicWorld, sprite, friction);
 	}
 
 	@Override
@@ -31,34 +26,34 @@ public class SetVelocityBrickTest extends AndroidTestCase {
 		super.tearDown();
 		sprite = null;
 		physicWorld = null;
-		setVelocityBrick = null;
+		frictionBrick = null;
 	}
 
 	public void testRequiredResources() {
-		assertEquals(setVelocityBrick.getRequiredResources(), Brick.NO_RESOURCES);
+		assertEquals(frictionBrick.getRequiredResources(), Brick.NO_RESOURCES);
 	}
 
 	public void testGetSprite() {
-		assertEquals(setVelocityBrick.getSprite(), sprite);
+		assertEquals(frictionBrick.getSprite(), sprite);
 	}
 
 	public void testClone() {
-		Brick clone = setVelocityBrick.clone();
-		assertEquals(setVelocityBrick.getSprite(), clone.getSprite());
-		assertEquals(setVelocityBrick.getRequiredResources(), clone.getRequiredResources());
+		Brick clone = frictionBrick.clone();
+		assertEquals(frictionBrick.getSprite(), clone.getSprite());
+		assertEquals(frictionBrick.getRequiredResources(), clone.getRequiredResources());
 	}
 
 	public void testExecution() {
 		assertFalse(((PhysicWorldMock) physicWorld).wasExecuted());
-		setVelocityBrick.execute();
+		frictionBrick.execute();
 		assertTrue(((PhysicWorldMock) physicWorld).wasExecuted());
 	}
 
 	public void testNullSprite() {
-		setVelocityBrick = new SetVelocityBrick(null, sprite, xValue, yValue);
+		frictionBrick = new SetFrictionBrick(null, sprite, friction);
 		try {
-			setVelocityBrick.execute();
-			fail("Execution of SetVelocityBrick with null Sprite did not cause a "
+			frictionBrick.execute();
+			fail("Execution of SetFrictionBrick with null Sprite did not cause a "
 					+ "NullPointerException to be thrown");
 		} catch (NullPointerException expected) {
 			// expected behavior
@@ -95,7 +90,7 @@ public class SetVelocityBrickTest extends AndroidTestCase {
 		}
 
 		@Override
-		public void setLinearVelocicty(Vector2 velocity) {
+		public void setFriction(float friction) {
 			executed = true;
 		}
 

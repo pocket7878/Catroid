@@ -28,10 +28,6 @@ import at.tugraz.ist.catroid.content.Sprite;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 
-/**
- * @author robert
- * 
- */
 public class PhysicObjectMap implements Iterable<Entry<Sprite, PhysicObject>> {
 	private final transient World world;
 	private final transient Map<Sprite, PhysicObject> objects = new HashMap<Sprite, PhysicObject>();
