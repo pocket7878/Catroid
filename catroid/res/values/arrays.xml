@@ -30,11 +30,19 @@
     <item>180</item>
   </string-array>
   
+  
   <string-array name="point_in_direction_strings">
     <item>(90) right</item>
     <item>(-90) left</item>
     <item>(0) up</item>
     <item>(180) down</item>
+  </string-array>
+  
+   <!-- Physicobjecttype -->
+  <string-array name="physical_object_type">
+    <item>Dynamic</item>
+    <item>Fixed</item>
+    <item>None</item>
   </string-array>
   
   <!-- Mindroid motors spinner -->
