@@ -34,6 +34,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.physics.PhysicSettings;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -106,8 +107,8 @@ public class SetMassBrick implements Brick, OnClickListener {
 			public void onClick(DialogInterface dialog, int which) {
 				try {
 					mass = Float.parseFloat(input.getText().toString());
-					if (mass == 0.0f) {
-						mass = 0.001f;
+					if (mass < PhysicSettings.Object.MIN_MASS) {
+						mass = 0.0f;
 					}
 				} catch (NumberFormatException exception) {
 					Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();

@@ -294,7 +294,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 		FixtureProptertyTestTemplate restitutionTemplate = new FixtureProptertyTestTemplate(physicObject, restitution) {
 			@Override
 			protected void setValue(float value) {
-				physicObject.setRestitution(value);
+				physicObject.setBounceFactor(value);
 			}
 
 			@Override

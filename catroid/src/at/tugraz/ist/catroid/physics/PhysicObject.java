@@ -153,18 +153,18 @@ public class PhysicObject {
 		}
 	}
 
-	public void setRestitution(float restitution) {
-		fixtureDef.restitution = restitution;
+	public void setBounceFactor(float bounceFactor) {
+		fixtureDef.restitution = bounceFactor;
 		for (Fixture fixture : body.getFixtureList()) {
-			fixture.setRestitution(restitution);
+			fixture.setRestitution(bounceFactor);
 		}
 	}
 
-	public void setAngularVelocity(float radian) {
+	public void setRotationSpeed(float radian) {
 		body.setAngularVelocity(radian);
 	}
 
-	public void setLinearVelocicty(Vector2 velocity) {
+	public void setVelocity(Vector2 velocity) {
 		body.setLinearVelocity(velocity);
 	}
 }

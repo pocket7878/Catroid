@@ -6,6 +6,7 @@ import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.SetMassBrick;
 import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
+import at.tugraz.ist.catroid.test.utils.TestUtils;
 
 public class SetMassBrickTest extends AndroidTestCase {
 
@@ -58,6 +59,11 @@ public class SetMassBrickTest extends AndroidTestCase {
 		} catch (NullPointerException expected) {
 			// expected behavior
 		}
+	}
+
+	public void testMass() {
+		float physicObjectMass = (Float) TestUtils.getPrivateField("mass", setMassBrick, false);
+		assertEquals(mass, physicObjectMass);
 	}
 
 	@SuppressWarnings("serial")

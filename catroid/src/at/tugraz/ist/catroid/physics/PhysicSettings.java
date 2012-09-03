@@ -47,6 +47,7 @@ public class PhysicSettings {
 		public final static float DEFAULT_FRICTION = 0.2f;
 		public final static float DEFAULT_RESTITUTION = 0.8f;
 		public final static float DEFAULT_MASS = 1.0f;
+		public final static float MIN_MASS = 0.000001f;
 		public final static float DEFAULT_ANGULAR_VELOCITY = 15.0f;
 		public final static Vector2 DEFAULT_VELOCITY = new Vector2(0, 0);
 	}

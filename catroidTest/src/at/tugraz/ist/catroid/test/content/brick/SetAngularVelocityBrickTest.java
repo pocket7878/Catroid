@@ -89,7 +89,7 @@ public class SetAngularVelocityBrickTest extends TestCase {
 		}
 
 		@Override
-		public void setAngularVelocity(float radian) {
+		public void setRotationSpeed(float radian) {
 			executed = true;
 		}
 

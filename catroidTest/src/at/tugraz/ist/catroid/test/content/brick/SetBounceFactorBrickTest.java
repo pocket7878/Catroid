@@ -97,7 +97,7 @@ public class SetBounceFactorBrickTest extends TestCase {
 		}
 
 		@Override
-		public void setRestitution(float restitution) {
+		public void setBounceFactor(float restitution) {
 			executed = true;
 		}
 

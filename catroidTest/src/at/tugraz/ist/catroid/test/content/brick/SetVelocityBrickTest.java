@@ -6,6 +6,7 @@ import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.SetVelocityBrick;
 import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
+import at.tugraz.ist.catroid.test.utils.TestUtils;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -23,7 +24,6 @@ public class SetVelocityBrickTest extends AndroidTestCase {
 		sprite = new Sprite("testSprite");
 		physicWorld = new PhysicWorldMock();
 		setVelocityBrick = new SetVelocityBrick(physicWorld, sprite, velocity);
-		//velocity = new Vector2(xValue, yValue);
 	}
 
 	@Override
@@ -46,6 +46,8 @@ public class SetVelocityBrickTest extends AndroidTestCase {
 		Brick clone = setVelocityBrick.clone();
 		assertEquals(setVelocityBrick.getSprite(), clone.getSprite());
 		assertEquals(setVelocityBrick.getRequiredResources(), clone.getRequiredResources());
+		assertEquals(TestUtils.getPrivateField("velocity", setVelocityBrick, false),
+				TestUtils.getPrivateField("velocity", clone, false));
 	}
 
 	public void testExecution() {
@@ -63,6 +65,11 @@ public class SetVelocityBrickTest extends AndroidTestCase {
 		} catch (NullPointerException expected) {
 			// expected behavior
 		}
+	}
+
+	public void testValue() {
+		Vector2 physicObjectVelocity = (Vector2) TestUtils.getPrivateField("velocity", setVelocityBrick, false);
+		assertEquals(velocity, physicObjectVelocity);
 	}
 
 	@SuppressWarnings("serial")
@@ -94,7 +101,7 @@ public class SetVelocityBrickTest extends AndroidTestCase {
 		}
 
 		@Override
-		public void setLinearVelocicty(Vector2 velocity) {
+		public void setVelocity(Vector2 velocity) {
 			executed = true;
 		}
 
