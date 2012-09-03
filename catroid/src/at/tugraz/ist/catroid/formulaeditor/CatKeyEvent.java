@@ -22,6 +22,8 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
+import java.util.List;
+
 import android.util.SparseArray;
 import android.view.KeyEvent;
 
@@ -80,6 +82,19 @@ public class CatKeyEvent extends KeyEvent {
 
 	}
 
+	private List<InternToken> buildSingleParameterFunction(String functionName, String paramValue) {
+		InternToken functionNameToken = new InternToken("function:" + functionName,
+				InternToken.InternTokenType.FUNCTION_NAME);
+
+		InternToken functionParametersBracketOpen = new InternToken("(",
+				InternToken.InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN);
+
+		InternToken functionParametersBracketClose = new InternToken("(",
+				InternToken.InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN);
+		return null;
+
+	}
+
 	private void initializeKeyMap() {
 		CatKeyEvent.keyMap = new SparseArray<String>();
 
@@ -132,24 +147,24 @@ public class CatKeyEvent extends KeyEvent {
 		return false;
 	}
 
-	public boolean isNumber(KeyEvent event) {
-		if (event.getKeyCode() >= KeyEvent.KEYCODE_0 && event.getKeyCode() <= KeyEvent.KEYCODE_9) {
+	public boolean isNumber() {
+		if (this.getKeyCode() >= KeyEvent.KEYCODE_0 && this.getKeyCode() <= KeyEvent.KEYCODE_9) {
 			return true;
 		}
 
 		return false;
 	}
 
-	public boolean isFunction(KeyEvent event) {
-		if (event.getKeyCode() >= CatKeyEvent.KEYCODE_SIN && event.getKeyCode() <= CatKeyEvent.KEYCODE_RANDOM) {
+	public boolean isFunction() {
+		if (this.getKeyCode() >= CatKeyEvent.KEYCODE_SIN && this.getKeyCode() <= CatKeyEvent.KEYCODE_RANDOM) {
 			return true;
 		}
 		return false;
 
 	}
 
-	public boolean isSensor(KeyEvent event) {
-		if (event.getKeyCode() >= CatKeyEvent.KEYCODE_SENSOR1 && event.getKeyCode() <= CatKeyEvent.KEYCODE_SENSOR5) {
+	public boolean isSensor() {
+		if (this.getKeyCode() >= CatKeyEvent.KEYCODE_SENSOR1 && this.getKeyCode() <= CatKeyEvent.KEYCODE_SENSOR5) {
 			return true;
 		}
 		return false;
@@ -157,7 +172,7 @@ public class CatKeyEvent extends KeyEvent {
 	}
 
 	public String getDisplayLabelString() {
-		if (this.isNumber(this)) {
+		if (this.isNumber()) {
 			return "" + super.getDisplayLabel();
 		} else {
 

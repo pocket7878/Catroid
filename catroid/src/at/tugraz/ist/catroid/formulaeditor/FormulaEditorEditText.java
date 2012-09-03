@@ -32,7 +32,6 @@ import android.text.style.BackgroundColorSpan;
 import android.util.AttributeSet;
 import android.view.ContextMenu;
 import android.view.GestureDetector;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -454,43 +453,47 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		absoluteCursorPosition = firstError;
 	}
 
+	public void createExternStringRepresentation() {
+
+	}
+
 	public void checkAndModifyKeyInput(CatKeyEvent catKey) {
 
-		String newElement = null;
-		if (catKey.getKeyCode() == CatKeyEvent.KEYCODE_COMMA) {
-			newElement = ".";
-		} else {
-			newElement = "" + catKey.getDisplayLabelString();
-		}
-
-		clearSelectionHighlighting();
-
-		String text = getText().toString();
-		if (absoluteCursorPosition > 0 && absoluteCursorPosition < text.length() && !editMode) {
-
-			char currentChar = text.charAt(absoluteCursorPosition);
-			char charBefore = text.charAt(absoluteCursorPosition - 1);
-
-			//when the user tries to write into a function/variable/sensor, we delete it!
-			if ((((charIsCapitalLetter(currentChar) || charIsLowerCaseLetter(currentChar) || (currentChar == '_') || (currentChar == '('))) && ((charIsCapitalLetter(charBefore) || charIsLowerCaseLetter(charBefore)
-					&& charBefore != '_')))) {
-				doSelectionAndHighlighting();
-				editMode = true;
-				if (!(catKey.getKeyCode() == KeyEvent.KEYCODE_DEL)) {
-					return;
-				}
-			}
-		}
-
-		if (catKey.getKeyCode() == KeyEvent.KEYCODE_DEL) {
-			deleteOneCharAtCurrentPosition();
-		} else {
-			appendToTextFieldAtCurrentPosition(newElement);
-		}
-
-		history.push(getText().toString(), absoluteCursorPosition, absoluteCursorPosition, absoluteCursorPosition);
-
-		formulaEditorDialog.refreshFormulaPreviewString(this.getText().toString());
+		//		String newElement = null;
+		//		if (catKey.getKeyCode() == CatKeyEvent.KEYCODE_COMMA) {
+		//			newElement = ".";
+		//		} else {
+		//			newElement = "" + catKey.getDisplayLabelString();
+		//		}
+		//
+		//		clearSelectionHighlighting();
+		//
+		//		String text = getText().toString();
+		//		if (absoluteCursorPosition > 0 && absoluteCursorPosition < text.length() && !editMode) {
+		//
+		//			char currentChar = text.charAt(absoluteCursorPosition);
+		//			char charBefore = text.charAt(absoluteCursorPosition - 1);
+		//
+		//			//when the user tries to write into a function/variable/sensor, we delete it!
+		//			if ((((charIsCapitalLetter(currentChar) || charIsLowerCaseLetter(currentChar) || (currentChar == '_') || (currentChar == '('))) && ((charIsCapitalLetter(charBefore) || charIsLowerCaseLetter(charBefore)
+		//					&& charBefore != '_')))) {
+		//				doSelectionAndHighlighting();
+		//				editMode = true;
+		//				if (!(catKey.getKeyCode() == KeyEvent.KEYCODE_DEL)) {
+		//					return;
+		//				}
+		//			}
+		//		}
+		//
+		//		if (catKey.getKeyCode() == KeyEvent.KEYCODE_DEL) {
+		//			deleteOneCharAtCurrentPosition();
+		//		} else {
+		//			appendToTextFieldAtCurrentPosition(newElement);
+		//		}
+		//
+		//		history.push(getText().toString(), absoluteCursorPosition, absoluteCursorPosition, absoluteCursorPosition);
+		//
+		//		formulaEditorDialog.refreshFormulaPreviewString(this.getText().toString());
 	}
 
 	public void deleteOneCharAtCurrentPosition() {
@@ -537,10 +540,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	private void appendToTextFieldAtCurrentPosition(String newElement) {
 		Editable text = getText();
-
-		//		if (newElement.equals("null")) { //Spacebar, removed!
-		//			newElement = " ";
-		//		}
 
 		if (editMode) {
 			text.replace(selectionStartIndex, selectionEndIndex, newElement);
