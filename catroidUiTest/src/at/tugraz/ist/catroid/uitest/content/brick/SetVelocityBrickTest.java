@@ -18,9 +18,6 @@ import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.jayway.android.robotium.solo.Solo;
 
-/*
- * TODO: Test doesn't work correctly.
- */
 public class SetVelocityBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
 	private Solo solo;
 	private Project project;
@@ -89,7 +86,7 @@ public class SetVelocityBrickTest extends ActivityInstrumentationTestCase2<Scrip
 		project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		setVelocityBrick = new SetVelocityBrick(null, sprite, 0.0f, 0.0f);
+		setVelocityBrick = new SetVelocityBrick(null, sprite, new Vector2());
 		script.addBrick(setVelocityBrick);
 
 		sprite.addScript(script);

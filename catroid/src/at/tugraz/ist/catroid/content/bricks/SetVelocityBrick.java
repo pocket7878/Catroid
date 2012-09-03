@@ -50,10 +50,10 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 	@XStreamOmitField
 	private transient View view;
 
-	public SetVelocityBrick(PhysicWorld physicWorld, Sprite sprite, float x, float y) {
+	public SetVelocityBrick(PhysicWorld physicWorld, Sprite sprite, Vector2 velocity) {
 		this.physicWorld = physicWorld;
 		this.sprite = sprite;
-		this.velocity = new Vector2(x, y);
+		this.velocity = velocity.cpy();
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new SetVelocityBrick(physicWorld, sprite, velocity.x, velocity.y);
+		return new SetVelocityBrick(physicWorld, sprite, velocity);
 	}
 
 	@Override

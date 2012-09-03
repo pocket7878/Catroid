@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 public class SetVelocityBrickTest extends AndroidTestCase {
 	private float xValue = 3.50f;
 	private float yValue = 5.50f;
-	//private Vector2 velocity;
+	private Vector2 velocity = new Vector2(xValue, yValue);
 	private PhysicWorld physicWorld;
 	private Sprite sprite;
 	private SetVelocityBrick setVelocityBrick;
@@ -22,7 +22,7 @@ public class SetVelocityBrickTest extends AndroidTestCase {
 		super.setUp();
 		sprite = new Sprite("testSprite");
 		physicWorld = new PhysicWorldMock();
-		setVelocityBrick = new SetVelocityBrick(physicWorld, sprite, xValue, yValue);
+		setVelocityBrick = new SetVelocityBrick(physicWorld, sprite, velocity);
 		//velocity = new Vector2(xValue, yValue);
 	}
 
@@ -55,7 +55,7 @@ public class SetVelocityBrickTest extends AndroidTestCase {
 	}
 
 	public void testNullSprite() {
-		setVelocityBrick = new SetVelocityBrick(null, sprite, xValue, yValue);
+		setVelocityBrick = new SetVelocityBrick(null, sprite, velocity);
 		try {
 			setVelocityBrick.execute();
 			fail("Execution of SetVelocityBrick with null Sprite did not cause a "

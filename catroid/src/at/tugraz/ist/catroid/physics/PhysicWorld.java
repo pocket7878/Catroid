@@ -46,10 +46,12 @@ public class PhysicWorld implements Serializable {
 	private final transient World world = new World(PhysicSettings.World.DEFAULT_GRAVITY,
 			PhysicSettings.World.IGNORE_SLEEPING_OBJECTS);
 	private final transient PhysicObjectMap objects;
+	private final transient PhysicShapeBuilder shapeBuilder;
 	private transient Box2DDebugRenderer renderer;
 
 	public PhysicWorld() {
 		objects = new PhysicObjectMap(world);
+		shapeBuilder = new PhysicShapeBuilder();
 		if (PhysicSettings.World.SURROUNDING_BOX) {
 			createSurroundingBox();
 		}
@@ -123,6 +125,6 @@ public class PhysicWorld implements Serializable {
 	}
 
 	public void changeCostume(Sprite sprite) {
-		objects.get(sprite).setShape((new PhysicShapeBuilder()).createShape(sprite.costume));
+		objects.get(sprite).setShape(shapeBuilder.createShape(sprite.costume));
 	}
 }

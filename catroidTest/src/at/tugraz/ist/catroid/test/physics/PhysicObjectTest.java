@@ -83,7 +83,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 		}
 
 		if (shape != null) {
-			physicObject.setShape(shape);
+			physicObject.setShape(new Shape[] { shape });
 		}
 
 		return physicObject;
@@ -99,6 +99,10 @@ public class PhysicObjectTest extends AndroidTestCase {
 
 	private Body getBody(PhysicObject physicObject) {
 		return (Body) TestUtils.getPrivateField("body", physicObject, false);
+	}
+
+	private Shape[] getShapes(PhysicObject physicObject) {
+		return (Shape[]) TestUtils.getPrivateField("shapes", physicObject, false);
 	}
 
 	private FixtureDef getFixtureDef(PhysicObject physicObject) {
@@ -123,9 +127,9 @@ public class PhysicObjectTest extends AndroidTestCase {
 
 		FixtureDef fixtureDef = getFixtureDef(physicObject);
 
-		assertEquals(1.0f, fixtureDef.density);
-		assertEquals(0.2f, fixtureDef.friction);
-		assertEquals(0.0f, fixtureDef.restitution);
+		assertEquals(PhysicSettings.Object.DEFAULT_DENSITY, fixtureDef.density);
+		assertEquals(PhysicSettings.Object.DEFAULT_FRICTION, fixtureDef.friction);
+		assertEquals(PhysicSettings.Object.DEFAULT_RESTITUTION, fixtureDef.restitution);
 	}
 
 	public void testInitialPhysicObjectEqualsNone() {
@@ -145,7 +149,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 		Body body = getBody(physicObject);
 
 		PolygonShape rectangle = (PolygonShape) createRectangleShape(5.0f, 5.0f);
-		physicObject.setShape(rectangle);
+		physicObject.setShape(new Shape[] { rectangle });
 
 		assertFalse(body.getFixtureList().isEmpty());
 		assertEquals(rectangle, physicObject.fixtureDef.shape);
@@ -157,12 +161,12 @@ public class PhysicObjectTest extends AndroidTestCase {
 		PhysicObject physicObject = createPhysicObject();
 		Body body = getBody(physicObject);
 
-		Shape Shape = new PolygonShape();
-		physicObject.setShape(Shape);
+		Shape shape = new PolygonShape();
+		physicObject.setShape(new Shape[] { shape });
 		Shape fixtureShape = body.getFixtureList().get(0).getShape();
 
 		Shape newShape = new PolygonShape();
-		physicObject.setShape(newShape);
+		physicObject.setShape(new Shape[] { newShape });
 
 		assertTrue(!body.getFixtureList().isEmpty());
 		assertEquals(newShape, physicObject.fixtureDef.shape);
@@ -170,17 +174,19 @@ public class PhysicObjectTest extends AndroidTestCase {
 	}
 
 	public void testSetSameShape() {
+		// TODO: Test setShape return;
 		PhysicObject physicObject = createPhysicObject();
 		Body body = getBody(physicObject);
 
 		PolygonShape rectangle = (PolygonShape) createRectangleShape(5.0f, 5.0f);
-		physicObject.setShape(rectangle);
-		Shape fixtureShape = body.getFixtureList().get(0).getShape();
-		physicObject.setShape(rectangle);
+		Shape[] shapes = new Shape[] { rectangle };
+		physicObject.setShape(shapes);
+		Shape[] physicObjectShapes = getShapes(physicObject);
+		physicObject.setShape(shapes);
 
 		assertTrue(!body.getFixtureList().isEmpty());
 		assertEquals(rectangle, physicObject.fixtureDef.shape);
-		assertEquals(fixtureShape, body.getFixtureList().get(0).getShape());
+		assertEquals(physicObjectShapes, getShapes(physicObject));
 		assertEquals(4, rectangle.getVertexCount());
 	}
 
@@ -189,13 +195,13 @@ public class PhysicObjectTest extends AndroidTestCase {
 		Body body = getBody(physicObject);
 
 		PolygonShape rectangle = (PolygonShape) createRectangleShape(5.0f, 5.0f);
-		physicObject.setShape(rectangle);
+		physicObject.setShape(new Shape[] { rectangle });
 
 		assertTrue(!body.getFixtureList().isEmpty());
 		assertEquals(4, rectangle.getVertexCount());
 
 		physicObject.setShape(null);
-		assertEquals(null, physicObject.fixtureDef.shape);
+		assertEquals(null, getShapes(physicObject));
 		assertTrue(body.getFixtureList().isEmpty());
 	}
 
@@ -323,7 +329,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 		for (PhysicObject.Type type : PhysicObject.Type.values()) {
 			PhysicObject physicObject = createPhysicObject(type, 5.0f, 5.0f);
 
-			checkMassDependingOnType(physicObject, PhysicSettings.World.DEAULT_MASS);
+			checkMassDependingOnType(physicObject, PhysicSettings.Object.DEFAULT_MASS);
 
 			float[] masses = { 0.01f, 1.0f, 12345.0f };
 			for (float mass : masses) {
@@ -367,7 +373,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 		physicObject.setMass(mass);
 		checkMassDependingOnType(physicObject, mass);
 
-		physicObject.setShape(createRectangleShape(7.0f, 7.0f));
+		physicObject.setShape(new Shape[] { createRectangleShape(7.0f, 7.0f) });
 		checkMassDependingOnType(physicObject, mass);
 
 		float newMass = 3.0f;

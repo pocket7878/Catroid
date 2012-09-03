@@ -6,9 +6,10 @@ import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.SetBounceFactorBrick;
 import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
+import at.tugraz.ist.catroid.test.utils.TestUtils;
 
 public class SetBounceFactorBrickTest extends TestCase {
-	private float bounceFactor = 3.50f;
+	private float bounceFactor = 35f;
 	private PhysicWorld physicWorld;
 	private Sprite sprite;
 	private SetBounceFactorBrick bounceFactorBrick;
@@ -41,6 +42,8 @@ public class SetBounceFactorBrickTest extends TestCase {
 		Brick clone = bounceFactorBrick.clone();
 		assertEquals(bounceFactorBrick.getSprite(), clone.getSprite());
 		assertEquals(bounceFactorBrick.getRequiredResources(), clone.getRequiredResources());
+		assertEquals(TestUtils.getPrivateField("bounceFactor", bounceFactorBrick, false),
+				TestUtils.getPrivateField("bounceFactor", clone, false));
 	}
 
 	public void testExecution() {
@@ -58,6 +61,11 @@ public class SetBounceFactorBrickTest extends TestCase {
 		} catch (NullPointerException expected) {
 			// expected behavior
 		}
+	}
+
+	public void testValue() {
+		float physicObjectBounceFactor = (Float) TestUtils.getPrivateField("bounceFactor", bounceFactorBrick, false);
+		assertEquals(bounceFactor, physicObjectBounceFactor);
 	}
 
 	@SuppressWarnings("serial")

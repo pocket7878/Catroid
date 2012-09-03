@@ -36,30 +36,36 @@ public class PhysicObject {
 
 	public final Body body;
 	public final FixtureDef fixtureDef = new FixtureDef();
+	private Shape[] shapes;
 	public Type type;
 	public float mass;
 
 	public PhysicObject(Body body) {
 		this.body = body;
-		mass = PhysicSettings.World.DEAULT_MASS;
+		mass = PhysicSettings.Object.DEFAULT_MASS;
 
-		fixtureDef.density = 1.0f;
-		fixtureDef.friction = 0.2f;
-		fixtureDef.restitution = 0.0f;
+		fixtureDef.density = PhysicSettings.Object.DEFAULT_DENSITY;
+		fixtureDef.friction = PhysicSettings.Object.DEFAULT_FRICTION;
+		fixtureDef.restitution = PhysicSettings.Object.DEFAULT_RESTITUTION;
 
 		setType(Type.NONE);
 	}
 
-	public void setShape(Shape shape) {
-		if (shape == fixtureDef.shape) {
+	public void setShape(Shape[] shapes) {
+
+		if (this.shapes == shapes) {
 			return;
 		}
-		fixtureDef.shape = shape;
+
+		this.shapes = shapes;
 
 		List<Fixture> fixturesOld = new ArrayList<Fixture>(body.getFixtureList());
 
-		if (shape != null) {
-			body.createFixture(fixtureDef);
+		if (shapes != null) {
+			for (Shape tempShape : shapes) {
+				fixtureDef.shape = tempShape;
+				body.createFixture(fixtureDef);
+			}
 		}
 
 		for (Fixture fixture : fixturesOld) {

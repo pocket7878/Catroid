@@ -46,7 +46,7 @@ public class SetBounceFactorBrickTest extends ActivityInstrumentationTestCase2<S
 	}
 
 	@Smoke
-	public void testSetMassByBrick() {
+	public void testSetBounceFactorBrick() {
 		int childrenCount = getActivity().getAdapter().getChildCountFromLastGroup();
 		int groupCount = getActivity().getAdapter().getGroupCount();
 
@@ -73,7 +73,6 @@ public class SetBounceFactorBrickTest extends ActivityInstrumentationTestCase2<S
 
 	@Smoke
 	public void testResizeInputField() {
-		//assertTrue("", false);
 		UiTestUtils.testDoubleEditText(solo, 0, 12345.0, 50, false);
 		UiTestUtils.testDoubleEditText(solo, 0, 1.0, 50, true);
 		UiTestUtils.testDoubleEditText(solo, 0, 1234.0, 50, true);
