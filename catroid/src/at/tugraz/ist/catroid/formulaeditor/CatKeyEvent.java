@@ -22,10 +22,12 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import android.util.SparseArray;
 import android.view.KeyEvent;
+import at.tugraz.ist.catroid.formulaeditor.InternToken.InternTokenType;
 
 /**
  * @author obusher
@@ -82,59 +84,174 @@ public class CatKeyEvent extends KeyEvent {
 
 	}
 
-	private List<InternToken> buildSingleParameterFunction(String functionName, String paramValue) {
-		InternToken functionNameToken = new InternToken("function:" + functionName,
-				InternToken.InternTokenType.FUNCTION_NAME);
+	public List<InternToken> createInternTokensByCatKeyEvent() {
 
-		InternToken functionParametersBracketOpen = new InternToken("(",
-				InternToken.InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN);
+		if (this.getKeyCode() >= KeyEvent.KEYCODE_0 && this.getKeyCode() <= KeyEvent.KEYCODE_9) {
+			return buildNumber("" + super.getDisplayLabel());
+		}
 
-		InternToken functionParametersBracketClose = new InternToken("(",
-				InternToken.InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN);
+		switch (getKeyCode()) {
+		//FUNCTIONS:
+			case CatKeyEvent.KEYCODE_SIN:
+				return buildSingleParameterFunction("sin", "0");
+			case CatKeyEvent.KEYCODE_COS:
+				return buildSingleParameterFunction("cos", "0");
+			case CatKeyEvent.KEYCODE_TAN:
+				return buildSingleParameterFunction("tan", "0");
+			case CatKeyEvent.KEYCODE_LN:
+				return buildSingleParameterFunction("ln", "0");
+			case CatKeyEvent.KEYCODE_LOG:
+				return buildSingleParameterFunction("log", "0");
+			case CatKeyEvent.KEYCODE_PI:
+				return buildFunctionWithoutParametersAndBrackets("pi");
+			case CatKeyEvent.KEYCODE_SQUAREROOT:
+				return buildSingleParameterFunction("sqrt", "0");
+			case CatKeyEvent.KEYCODE_EULER:
+				return buildFunctionWithoutParametersAndBrackets("e");
+			case CatKeyEvent.KEYCODE_RANDOM:
+				return buildDoubleParameterFunction("rand", "0", "1");
+			case CatKeyEvent.KEYCODE_ABS:
+				return buildSingleParameterFunction("abs", "0");
+			case CatKeyEvent.KEYCODE_ROUND:
+				return buildSingleParameterFunction("round", "0");
+
+				//SENSOR
+
+			case CatKeyEvent.KEYCODE_SENSOR1:
+				return buildSensor("X_ACCELERATION_");
+			case CatKeyEvent.KEYCODE_SENSOR2:
+				return buildSensor("Y_ACCELERATION_");
+			case CatKeyEvent.KEYCODE_SENSOR3:
+				return buildSensor("Z_ACCELERATION_");
+			case CatKeyEvent.KEYCODE_SENSOR4:
+				return buildSensor("AZIMUTH_ORIENTATION_");
+			case CatKeyEvent.KEYCODE_SENSOR5:
+				return buildSensor("PITCH_ORIENTATION_");
+			case CatKeyEvent.KEYCODE_SENSOR6:
+				return buildSensor("ROLL_ORIENTATION_");
+			case CatKeyEvent.KEYCODE_SENSOR7:
+				return buildSensor("SLIDER_");
+
+				//OPERATOR
+
+			case CatKeyEvent.KEYCODE_PLUS:
+				return buildOperator("+");
+			case CatKeyEvent.KEYCODE_MINUS:
+				return buildOperator("-");
+			case CatKeyEvent.KEYCODE_STAR:
+				return buildOperator("*");
+			case CatKeyEvent.KEYCODE_SLASH:
+				return buildOperator("/");
+			case CatKeyEvent.KEYCODE_COMMA:
+				return buildOperator(",");
+			case CatKeyEvent.KEYCODE_PERIOD:
+				return buildOperator(".");
+			case CatKeyEvent.KEYCODE_POWER:
+				return buildOperator("^");
+
+				//BRACKET
+
+			case CatKeyEvent.KEYCODE_BRACKET:
+				return buildBracket("0");
+
+				//COSTUME
+
+			case CatKeyEvent.KEYCODE_COSTUME_X:
+				return buildCostume("COSTUME_X_");
+			case CatKeyEvent.KEYCODE_COSTUME_Y:
+				return buildCostume("COSTUME_Y_");
+			case CatKeyEvent.KEYCODE_COSTUME_GHOSTEFFECT:
+				return buildCostume("COSTUME_GHOSTEFFECT_");
+			case CatKeyEvent.KEYCODE_COSTUME_BRIGHTNESS:
+				return buildCostume("COSTUME_BRIGHTNESS_");
+			case CatKeyEvent.KEYCODE_COSTUME_SIZE:
+				return buildCostume("COSTUME_SIZE_");
+			case CatKeyEvent.KEYCODE_COSTUME_ROTATION:
+				return buildCostume("COSTUME_ROTATION_");
+			case CatKeyEvent.KEYCODE_COSTUME_LAYER:
+				return buildCostume("COSTUME_LAYER_");
+
+		}
+
 		return null;
 
 	}
 
+	private List<InternToken> buildNumber(String numberValue) {
+		List<InternToken> returnList = new LinkedList<InternToken>();
+		returnList.add(new InternToken("number:" + numberValue, InternTokenType.NUMBER));
+		return returnList;
+	}
+
+	private List<InternToken> buildCostume(String costumeName) {
+		List<InternToken> returnList = new LinkedList<InternToken>();
+		returnList.add(new InternToken("costume:" + costumeName, InternTokenType.COSTUME));
+		return returnList;
+	}
+
+	private List<InternToken> buildBracket(String bracketValue) {
+		List<InternToken> returnList = new LinkedList<InternToken>();
+		returnList.add(new InternToken("(", InternTokenType.BRACKET_OPEN));
+		returnList.add(new InternToken(bracketValue, InternTokenType.NUMBER));
+		returnList.add(new InternToken("(", InternTokenType.BRACKET_CLOSE));
+		return returnList;
+	}
+
+	private List<InternToken> buildOperator(String operatorName) {
+		List<InternToken> returnList = new LinkedList<InternToken>();
+		returnList.add(new InternToken("operator:" + operatorName, InternTokenType.OPERATOR));
+		return returnList;
+	}
+
+	private List<InternToken> buildSensor(String sensorName) {
+		List<InternToken> returnList = new LinkedList<InternToken>();
+		returnList.add(new InternToken("sensor:" + sensorName, InternTokenType.SENSOR));
+		return returnList;
+	}
+
+	private List<InternToken> buildDoubleParameterFunction(String functionName, String firstParameterValue,
+			String secondParameterValue) {
+
+		List<InternToken> returnList = new LinkedList<InternToken>();
+		returnList.add(new InternToken("function:" + functionName, InternToken.InternTokenType.FUNCTION_NAME));
+
+		returnList.add(new InternToken("(", InternToken.InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
+
+		returnList.add(new InternToken(firstParameterValue, InternToken.InternTokenType.NUMBER));
+
+		returnList.add(new InternToken(secondParameterValue, InternToken.InternTokenType.NUMBER));
+
+		returnList.add(new InternToken(")", InternToken.InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
+
+		return returnList;
+
+	}
+
+	private List<InternToken> buildSingleParameterFunction(String functionName, String parameterValue) {
+
+		List<InternToken> returnList = new LinkedList<InternToken>();
+		returnList.add(new InternToken("function:" + functionName, InternToken.InternTokenType.FUNCTION_NAME));
+
+		returnList.add(new InternToken("(", InternToken.InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
+
+		returnList.add(new InternToken(parameterValue, InternToken.InternTokenType.NUMBER));
+
+		returnList.add(new InternToken(")", InternToken.InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
+
+		return returnList;
+
+	}
+
+	private List<InternToken> buildFunctionWithoutParametersAndBrackets(String functionName) {
+
+		List<InternToken> returnList = new LinkedList<InternToken>();
+		returnList.add(new InternToken("function:" + functionName, InternToken.InternTokenType.FUNCTION_NAME));
+
+		return returnList;
+
+	}
+
 	private void initializeKeyMap() {
-		CatKeyEvent.keyMap = new SparseArray<String>();
-
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SIN, new String("sin( 0 )"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COS, new String("cos( 0 )"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_TAN, new String("tan( 0 )"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_LN, new String("ln( 0 )"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_LOG, new String("log( 0 )"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_PI, new String("pi"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SQUAREROOT, new String("sqrt( 0 )"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_EULER, new String("e"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_RANDOM, new String("rand( 0 , 1 )"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_ABS, new String("abs( 0 )"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_ROUND, new String("round( 0 )"));
-
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SENSOR1, new String("X_ACCELERATION_"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SENSOR2, new String("Y_ACCELERATION_"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SENSOR3, new String("Z_ACCELERATION_"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SENSOR4, new String("AZIMUTH_ORIENTATION_"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SENSOR5, new String("PITCH_ORIENTATION_"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SENSOR6, new String("ROLL_ORIENTATION_"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SENSOR7, new String("SLIDER_"));
-
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_PLUS, new String("+"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_MINUS, new String("-"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_STAR, new String("*"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_SLASH, new String("/"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COMMA, new String(","));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_PERIOD, new String("."));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_POWER, new String("^"));
-
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_BRACKET, new String("( 0 )"));
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COSTUME_BUTTON, null);
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COSTUME_X, "COSTUME_X_");
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COSTUME_Y, "COSTUME_Y_");
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COSTUME_GHOSTEFFECT, "COSTUME_GHOSTEFFECT_");
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COSTUME_BRIGHTNESS, "COSTUME_BRIGHTNESS_");
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COSTUME_SIZE, "COSTUME_SIZE_");
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COSTUME_ROTATION, "COSTUME_ROTATION_");
-		CatKeyEvent.keyMap.put(CatKeyEvent.KEYCODE_COSTUME_LAYER, "COSTUME_LAYER_");
 
 	}
 

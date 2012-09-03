@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.formulaeditor;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class InternalFormula {
 
@@ -63,7 +64,9 @@ public class InternalFormula {
 	}
 
 	private void insertInternTokenByCatKeyEvent(int internTokenListIndex, CatKeyEvent catKeyEvent) {
-		InternToken internTokenToInsert = new InternToken(catKeyEvent.getDisplayLabelString(), internTokenType);
+		List<InternToken> internTokensToInsert = catKeyEvent.createInternTokensByCatKeyEvent();
+
+		internTokenList.addAll(internTokenListIndex, internTokensToInsert);
 
 	}
 
