@@ -13,14 +13,12 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.SetMassBrick;
+import at.tugraz.ist.catroid.physics.PhysicSettings;
 import at.tugraz.ist.catroid.ui.ScriptActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
 
-/*
- * TODO: Test doesn' work correctly.
- */
 public class SetMassTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
 	private Solo solo;
 	private Project project;
@@ -49,7 +47,7 @@ public class SetMassTest extends ActivityInstrumentationTestCase2<ScriptActivity
 	}
 
 	@Smoke
-	public void testSetMassByBrick() {
+	public void testSetup() {
 		int childrenCount = getActivity().getAdapter().getChildCountFromLastGroup();
 		int groupCount = getActivity().getAdapter().getGroupCount();
 
@@ -64,7 +62,10 @@ public class SetMassTest extends ActivityInstrumentationTestCase2<ScriptActivity
 		String massByString = solo.getString(R.string.brick_set_mass);
 		solo.waitForText(massByString);
 		assertNotNull("TextView does not exist", solo.getText(massByString));
+	}
 
+	@Smoke
+	public void testSetMassByBrick() {
 		float mass = 1.234f;
 
 		solo.waitForView(EditText.class);
@@ -75,16 +76,27 @@ public class SetMassTest extends ActivityInstrumentationTestCase2<ScriptActivity
 	}
 
 	@Smoke
+	public void testSetInvalidMassValues() {
+		float mass[] = { -1.0f, 0.0f, PhysicSettings.Object.MIN_MASS / 10.0f };
+
+		for (float currentMass : mass) {
+			solo.waitForView(EditText.class);
+			UiTestUtils.clickEnterClose(solo, 0, Float.toString(currentMass));
+			float actualMass = (Float) UiTestUtils.getPrivateField("mass", setMassBrick);
+			assertEquals("Text not updated", Float.toString(0.0f), solo.getEditText(0).getText().toString());
+			assertEquals("Value in Brick is not updated", 0.0f, actualMass);
+		}
+	}
+
+	@Smoke
 	public void testResizeInputField() {
-		//assertTrue("", false);
 		UiTestUtils.testDoubleEditText(solo, 0, 12345.0, 50, false);
-		//		UiTestUtils.testDoubleEditText(solo, 0, 1.0, 50, true);
-		//		UiTestUtils.testDoubleEditText(solo, 0, 1234.0, 50, true);
-		//		UiTestUtils.testDoubleEditText(solo, 0, -1, 50, true);
+		UiTestUtils.testDoubleEditText(solo, 0, 1.0, 50, true);
+		UiTestUtils.testDoubleEditText(solo, 0, 1234.0, 50, true);
 	}
 
 	private void createProject() {
-		project = new Project(null, "testProjectojoi");
+		project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
 		setMassBrick = new SetMassBrick(null, sprite, 0.0f);

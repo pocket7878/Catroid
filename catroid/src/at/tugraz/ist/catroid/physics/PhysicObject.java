@@ -36,31 +36,36 @@ public class PhysicObject {
 
 	public final Body body;
 	public final FixtureDef fixtureDef = new FixtureDef();
+	private Shape[] shapes;
 	public Type type;
 	public float mass;
 
 	public PhysicObject(Body body) {
 		this.body = body;
-		mass = PhysicSettings.World.DEAULT_MASS;
+		mass = PhysicSettings.Object.DEFAULT_MASS;
 
-		fixtureDef.density = 1.0f;
-		fixtureDef.friction = 0.2f;
-		fixtureDef.restitution = 0.0f;
+		fixtureDef.density = PhysicSettings.Object.DEFAULT_DENSITY;
+		fixtureDef.friction = PhysicSettings.Object.DEFAULT_FRICTION;
+		fixtureDef.restitution = PhysicSettings.Object.DEFAULT_RESTITUTION;
 
 		setType(Type.NONE);
 	}
 
-	public void setShape(Shape shape) {
-		if (shape == fixtureDef.shape) {
+	public void setShape(Shape[] shapes) {
+
+		if (this.shapes == shapes) {
 			return;
 		}
 
-		fixtureDef.shape = shape;
+		this.shapes = shapes;
 
 		List<Fixture> fixturesOld = new ArrayList<Fixture>(body.getFixtureList());
 
-		if (shape != null) {
-			body.createFixture(fixtureDef);
+		if (shapes != null) {
+			for (Shape tempShape : shapes) {
+				fixtureDef.shape = tempShape;
+				body.createFixture(fixtureDef);
+			}
 		}
 
 		for (Fixture fixture : fixturesOld) {
@@ -80,6 +85,7 @@ public class PhysicObject {
 		switch (type) {
 			case DYNAMIC:
 				body.setType(BodyType.DynamicBody);
+				setMass(mass);
 				body.setActive(true);
 				break;
 			case FIXED:
@@ -117,13 +123,28 @@ public class PhysicObject {
 	}
 
 	public void setMass(float mass) {
-		float area = body.getMass() / fixtureDef.density;
-		float density = mass / area;
 
+		if (mass <= 0.0f) {
+			mass = 1.0f;
+		}
+		this.mass = mass;
+
+		float bodyMass = body.getMass();
+		if (bodyMass == 0.0f) {
+			return;
+		}
+
+		float area = bodyMass / fixtureDef.density;
+
+		float density = mass / area;
+		setDensity(density);
+	}
+
+	public void setDensity(float density) {
+		fixtureDef.density = density;
 		for (Fixture fixture : body.getFixtureList()) {
 			fixture.setDensity(density);
 		}
-		fixtureDef.density = density;
 		body.resetMassData();
 		this.mass = mass;
 	}
@@ -135,18 +156,18 @@ public class PhysicObject {
 		}
 	}
 
-	public void setRestitution(float restitution) {
-		fixtureDef.restitution = restitution;
+	public void setBounceFactor(float bounceFactor) {
+		fixtureDef.restitution = bounceFactor;
 		for (Fixture fixture : body.getFixtureList()) {
-			fixture.setRestitution(restitution);
+			fixture.setRestitution(bounceFactor);
 		}
 	}
 
-	public void setAngularVelocicty(float radian) {
+	public void setRotationSpeed(float radian) {
 		body.setAngularVelocity(radian);
 	}
 
-	public void setLinearVelocicty(Vector2 velocity) {
+	public void setVelocity(Vector2 velocity) {
 		body.setLinearVelocity(velocity);
 	}
 }

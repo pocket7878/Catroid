@@ -99,7 +99,7 @@ public class LegoNXTTest extends ActivityInstrumentationTestCase2<MainMenuActivi
 	public void testNXTFunctionality() {
 		createTestproject(projectName);
 
-		LegoNXTBtCommunicator.enableRequestConfirmFromDevice(true);
+		LegoNXTCommunicator.enableRequestConfirmFromDevice(true);
 		BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		assertTrue("Bluetooth not supported on device", bluetoothAdapter != null);
 		if (!bluetoothAdapter.isEnabled()) {
@@ -176,14 +176,14 @@ public class LegoNXTTest extends ActivityInstrumentationTestCase2<MainMenuActivi
 			}
 			i++;
 		}
-		LegoNXTBtCommunicator.enableRequestConfirmFromDevice(false);
+		LegoNXTCommunicator.enableRequestConfirmFromDevice(false);
 	}
 
 	// This test requires the NXTBTTestServer to be running or a LegoNXT Robot to run! Check connect string to see if you connect to the right device!
 	public void testNXTPersistentConnection() {
 		createTestproject(projectName);
 
-		LegoNXTBtCommunicator.enableRequestConfirmFromDevice(false);
+		LegoNXTCommunicator.enableRequestConfirmFromDevice(false);
 		BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		assertTrue("Bluetooth not supported on device", bluetoothAdapter != null);
 		if (!bluetoothAdapter.isEnabled()) {

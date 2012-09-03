@@ -1,26 +1,24 @@
 package at.tugraz.ist.catroid.test.content.brick;
 
-import android.test.AndroidTestCase;
+import junit.framework.TestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.SetMassBrick;
+import at.tugraz.ist.catroid.content.bricks.SetAngularVelocityBrick;
 import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
-import at.tugraz.ist.catroid.test.utils.TestUtils;
 
-public class SetMassBrickTest extends AndroidTestCase {
-
-	private float mass = 10.50f;
+public class SetAngularVelocityBrickTest extends TestCase {
+	private float degreesPerSec = 3.50f;
 	private PhysicWorld physicWorld;
 	private Sprite sprite;
-	private SetMassBrick setMassBrick;
+	private SetAngularVelocityBrick angularVelocityBrick;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		sprite = new Sprite("testSprite");
 		physicWorld = new PhysicWorldMock();
-		setMassBrick = new SetMassBrick(physicWorld, sprite, mass);
+		angularVelocityBrick = new SetAngularVelocityBrick(physicWorld, sprite, degreesPerSec);
 	}
 
 	@Override
@@ -28,42 +26,38 @@ public class SetMassBrickTest extends AndroidTestCase {
 		super.tearDown();
 		sprite = null;
 		physicWorld = null;
-		setMassBrick = null;
+		angularVelocityBrick = null;
 	}
 
 	public void testRequiredResources() {
-		assertEquals(setMassBrick.getRequiredResources(), Brick.NO_RESOURCES);
+		assertEquals(angularVelocityBrick.getRequiredResources(), Brick.NO_RESOURCES);
 	}
 
 	public void testGetSprite() {
-		assertEquals(setMassBrick.getSprite(), sprite);
+		assertEquals(angularVelocityBrick.getSprite(), sprite);
 	}
 
 	public void testClone() {
-		Brick clone = setMassBrick.clone();
-		assertEquals(setMassBrick.getSprite(), clone.getSprite());
-		assertEquals(setMassBrick.getRequiredResources(), clone.getRequiredResources());
+		Brick clone = angularVelocityBrick.clone();
+		assertEquals(angularVelocityBrick.getSprite(), clone.getSprite());
+		assertEquals(angularVelocityBrick.getRequiredResources(), clone.getRequiredResources());
 	}
 
 	public void testExecution() {
 		assertFalse(((PhysicWorldMock) physicWorld).wasExecuted());
-		setMassBrick.execute();
+		angularVelocityBrick.execute();
 		assertTrue(((PhysicWorldMock) physicWorld).wasExecuted());
 	}
 
 	public void testNullSprite() {
-		setMassBrick = new SetMassBrick(null, sprite, mass);
+		angularVelocityBrick = new SetAngularVelocityBrick(null, sprite, degreesPerSec);
 		try {
-			setMassBrick.execute();
-			fail("Execution of SetMassBrick with null Sprite did not cause a " + "NullPointerException to be thrown");
+			angularVelocityBrick.execute();
+			fail("Execution of SetAngularVelocityBrick with null Sprite did not cause a "
+					+ "NullPointerException to be thrown");
 		} catch (NullPointerException expected) {
 			// expected behavior
 		}
-	}
-
-	public void testMass() {
-		float physicObjectMass = (Float) TestUtils.getPrivateField("mass", setMassBrick, false);
-		assertEquals(mass, physicObjectMass);
 	}
 
 	@SuppressWarnings("serial")
@@ -95,7 +89,7 @@ public class SetMassBrickTest extends AndroidTestCase {
 		}
 
 		@Override
-		public void setMass(float mass) {
+		public void setRotationSpeed(float radian) {
 			executed = true;
 		}
 

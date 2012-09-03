@@ -31,16 +31,24 @@ public class PhysicSettings {
 	}
 
 	public static class World {
-		// Ratio of pixels to meters
 		public final static float RATIO = 40.0f;
 		public final static int VELOCITY_ITERATIONS = 10;
 		public final static int POSITION_ITERATIONS = 10;
 
-		public final static int DEAULT_MASS = 1;
 		public final static Vector2 DEFAULT_GRAVITY = new Vector2(0, -10);
 		public final static boolean IGNORE_SLEEPING_OBJECTS = false;
 
 		public final static boolean SURROUNDING_BOX = true;
 		public final static int SURROUNDING_BOX_FRAME_SIZE = 1;
+	}
+
+	public static class Object {
+		public final static float DEFAULT_DENSITY = 1.0f;
+		public final static float DEFAULT_FRICTION = 0.2f;
+		public final static float DEFAULT_RESTITUTION = 0.8f;
+		public final static float DEFAULT_MASS = 1.0f;
+		public final static float MIN_MASS = 0.000001f;
+		public final static float DEFAULT_ANGULAR_VELOCITY = 15.0f;
+		public final static Vector2 DEFAULT_VELOCITY = new Vector2(0, 0);
 	}
 }

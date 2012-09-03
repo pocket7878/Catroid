@@ -11,19 +11,18 @@ import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.SetVelocityBrick;
+import at.tugraz.ist.catroid.content.bricks.SetAngularVelocityBrick;
 import at.tugraz.ist.catroid.ui.ScriptActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
-import com.badlogic.gdx.math.Vector2;
 import com.jayway.android.robotium.solo.Solo;
 
-public class SetVelocityBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
+public class SetAngularVelocityBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
 	private Solo solo;
 	private Project project;
-	private SetVelocityBrick setVelocityBrick;
+	private SetAngularVelocityBrick setAngularVelocityBrick;
 
-	public SetVelocityBrickTest() {
+	public SetAngularVelocityBrickTest() {
 		super("at.tugraz.ist.catroid", ScriptActivity.class);
 	}
 
@@ -46,7 +45,7 @@ public class SetVelocityBrickTest extends ActivityInstrumentationTestCase2<Scrip
 	}
 
 	@Smoke
-	public void testSetVelocityByBrick() {
+	public void testSetAngularVelocityBrick() {
 		int childrenCount = getActivity().getAdapter().getChildCountFromLastGroup();
 		int groupCount = getActivity().getAdapter().getGroupCount();
 
@@ -58,24 +57,20 @@ public class SetVelocityBrickTest extends ActivityInstrumentationTestCase2<Scrip
 
 		assertEquals("Wrong Brick instance.", projectBrickList.get(0),
 				getActivity().getAdapter().getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist", solo.getText(getActivity().getString(R.string.brick_set_velocity)));
+		assertNotNull("TextView does not exist",
+				solo.getText(getActivity().getString(R.string.brick_set_angular_velocity)));
 
-		Vector2 velocity = new Vector2(1.2f, -3.4f);
+		float angularVelocity = 10.0f;
 
-		UiTestUtils.clickEnterClose(solo, 0, Float.toString(velocity.x));
-		Vector2 actualVelocity = (Vector2) UiTestUtils.getPrivateField("velocity", setVelocityBrick);
-		assertEquals("Text not updated", Float.toString(velocity.x), solo.getEditText(0).getText().toString());
-		assertEquals("Value in Brick is not updated", velocity.x, actualVelocity.x);
-
-		UiTestUtils.clickEnterClose(solo, 1, Float.toString(velocity.y));
-		actualVelocity = (Vector2) UiTestUtils.getPrivateField("velocity", setVelocityBrick);
-		assertEquals("Text not updated", Float.toString(velocity.y), solo.getEditText(1).getText().toString());
-		assertEquals("Value in Brick is not updated", velocity.y, actualVelocity.y);
+		UiTestUtils.clickEnterClose(solo, 0, Float.toString(angularVelocity));
+		float actualAngularVelocity = (Float) UiTestUtils.getPrivateField("degreesPerSec", setAngularVelocityBrick);
+		assertEquals("Text not updated", Float.toString(angularVelocity), solo.getEditText(0).getText().toString());
+		assertEquals("Value in Brick is not updated", angularVelocity, actualAngularVelocity);
 	}
 
 	public void testResizeInputField() {
-		for (int editTextIndex = 0; editTextIndex < 2; editTextIndex++) {
-			UiTestUtils.testDoubleEditText(solo, editTextIndex, 12345.0, 50, false);
+		for (int editTextIndex = 0; editTextIndex < 1; editTextIndex++) {
+			UiTestUtils.testDoubleEditText(solo, editTextIndex, 123456789.0, 50, false);
 			UiTestUtils.testDoubleEditText(solo, editTextIndex, 1.0, 50, true);
 			UiTestUtils.testDoubleEditText(solo, editTextIndex, 123.0, 50, true);
 			UiTestUtils.testDoubleEditText(solo, editTextIndex, -1, 50, true);
@@ -86,8 +81,8 @@ public class SetVelocityBrickTest extends ActivityInstrumentationTestCase2<Scrip
 		project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		setVelocityBrick = new SetVelocityBrick(null, sprite, new Vector2());
-		script.addBrick(setVelocityBrick);
+		setAngularVelocityBrick = new SetAngularVelocityBrick(null, sprite, 0.0f);
+		script.addBrick(setAngularVelocityBrick);
 
 		sprite.addScript(script);
 		project.addSprite(sprite);

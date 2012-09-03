@@ -12,6 +12,7 @@ public class SetGravityBrickTest extends AndroidTestCase {
 
 	private float xValue = 3.50f;
 	private float yValue = 5.50f;
+	private Vector2 gravity = new Vector2(xValue, yValue);
 	private PhysicWorld physicWorld;
 	private Sprite sprite;
 	private SetGravityBrick setGtravityBrick;
@@ -21,7 +22,7 @@ public class SetGravityBrickTest extends AndroidTestCase {
 		super.setUp();
 		sprite = new Sprite("testSprite");
 		physicWorld = new PhysicWorldMock();
-		setGtravityBrick = new SetGravityBrick(physicWorld, sprite, xValue, yValue);
+		setGtravityBrick = new SetGravityBrick(physicWorld, sprite, gravity);
 	}
 
 	@Override
@@ -53,10 +54,10 @@ public class SetGravityBrickTest extends AndroidTestCase {
 	}
 
 	public void testNullSprite() {
-		setGtravityBrick = new SetGravityBrick(null, sprite, xValue, yValue);
+		setGtravityBrick = new SetGravityBrick(null, sprite, gravity);
 		try {
 			setGtravityBrick.execute();
-			fail("Execution of ChangeXByBrick with null Sprite did not cause a " + "NullPointerException to be thrown");
+			fail("Execution of SetGravityBrick with null Sprite did not cause a " + "NullPointerException to be thrown");
 		} catch (NullPointerException expected) {
 			// expected behavior
 		}

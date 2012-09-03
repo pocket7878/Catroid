@@ -50,10 +50,10 @@ public class SetGravityBrick implements Brick, OnClickListener {
 	@XStreamOmitField
 	private transient View view;
 
-	public SetGravityBrick(PhysicWorld physicWorld, Sprite sprite, float x, float y) {
+	public SetGravityBrick(PhysicWorld physicWorld, Sprite sprite, Vector2 gravity) {
 		this.physicWorld = physicWorld;
 		this.sprite = sprite;
-		this.gravity = new Vector2(x, y);
+		this.gravity = gravity.cpy();
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class SetGravityBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new SetGravityBrick(physicWorld, sprite, gravity.x, gravity.y);
+		return new SetGravityBrick(physicWorld, sprite, gravity);
 	}
 
 	@Override

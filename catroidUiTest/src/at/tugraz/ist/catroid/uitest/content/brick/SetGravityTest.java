@@ -18,9 +18,6 @@ import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.jayway.android.robotium.solo.Solo;
 
-/*
- * TODO: Test doesn' work correctly.
- */
 public class SetGravityTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
 	private Solo solo;
 	private Project project;
@@ -78,7 +75,7 @@ public class SetGravityTest extends ActivityInstrumentationTestCase2<ScriptActiv
 
 	public void testResizeInputField() {
 		for (int editTextIndex = 0; editTextIndex < 2; editTextIndex++) {
-			UiTestUtils.testDoubleEditText(solo, editTextIndex, 1234.0, 50, false);
+			UiTestUtils.testDoubleEditText(solo, editTextIndex, 123456.0, 50, false);
 			UiTestUtils.testDoubleEditText(solo, editTextIndex, 1.0, 50, true);
 			UiTestUtils.testDoubleEditText(solo, editTextIndex, 123.0, 50, true);
 			UiTestUtils.testDoubleEditText(solo, editTextIndex, -1, 50, true);
@@ -89,7 +86,7 @@ public class SetGravityTest extends ActivityInstrumentationTestCase2<ScriptActiv
 		project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		setGravityBrick = new SetGravityBrick(null, sprite, 0.0f, 0.0f);
+		setGravityBrick = new SetGravityBrick(null, sprite, new Vector2(0, 0));
 		script.addBrick(setGravityBrick);
 
 		sprite.addScript(script);

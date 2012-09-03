@@ -3,24 +3,23 @@ package at.tugraz.ist.catroid.test.content.brick;
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.SetMassBrick;
+import at.tugraz.ist.catroid.content.bricks.SetPhysicObjectTypeBrick;
 import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
-import at.tugraz.ist.catroid.test.utils.TestUtils;
 
-public class SetMassBrickTest extends AndroidTestCase {
+public class SetPhysicObjectTypeBrickTest extends AndroidTestCase {
 
-	private float mass = 10.50f;
+	private PhysicObject.Type type;
 	private PhysicWorld physicWorld;
 	private Sprite sprite;
-	private SetMassBrick setMassBrick;
+	private SetPhysicObjectTypeBrick setPhysicObjectTypeBrickTest;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		sprite = new Sprite("testSprite");
 		physicWorld = new PhysicWorldMock();
-		setMassBrick = new SetMassBrick(physicWorld, sprite, mass);
+		setPhysicObjectTypeBrickTest = new SetPhysicObjectTypeBrick(physicWorld, sprite, type);
 	}
 
 	@Override
@@ -28,42 +27,38 @@ public class SetMassBrickTest extends AndroidTestCase {
 		super.tearDown();
 		sprite = null;
 		physicWorld = null;
-		setMassBrick = null;
+		setPhysicObjectTypeBrickTest = null;
 	}
 
 	public void testRequiredResources() {
-		assertEquals(setMassBrick.getRequiredResources(), Brick.NO_RESOURCES);
+		assertEquals(setPhysicObjectTypeBrickTest.getRequiredResources(), Brick.NO_RESOURCES);
 	}
 
 	public void testGetSprite() {
-		assertEquals(setMassBrick.getSprite(), sprite);
+		assertEquals(setPhysicObjectTypeBrickTest.getSprite(), sprite);
 	}
 
 	public void testClone() {
-		Brick clone = setMassBrick.clone();
-		assertEquals(setMassBrick.getSprite(), clone.getSprite());
-		assertEquals(setMassBrick.getRequiredResources(), clone.getRequiredResources());
+		Brick clone = setPhysicObjectTypeBrickTest.clone();
+		assertEquals(setPhysicObjectTypeBrickTest.getSprite(), clone.getSprite());
+		assertEquals(setPhysicObjectTypeBrickTest.getRequiredResources(), clone.getRequiredResources());
 	}
 
 	public void testExecution() {
 		assertFalse(((PhysicWorldMock) physicWorld).wasExecuted());
-		setMassBrick.execute();
+		setPhysicObjectTypeBrickTest.execute();
 		assertTrue(((PhysicWorldMock) physicWorld).wasExecuted());
 	}
 
 	public void testNullSprite() {
-		setMassBrick = new SetMassBrick(null, sprite, mass);
+		setPhysicObjectTypeBrickTest = new SetPhysicObjectTypeBrick(null, sprite, type);
 		try {
-			setMassBrick.execute();
-			fail("Execution of SetMassBrick with null Sprite did not cause a " + "NullPointerException to be thrown");
+			setPhysicObjectTypeBrickTest.execute();
+			fail("Execution of SetPhysicObjectTypeBrick with null Sprite did not cause a "
+					+ "NullPointerException to be thrown");
 		} catch (NullPointerException expected) {
 			// expected behavior
 		}
-	}
-
-	public void testMass() {
-		float physicObjectMass = (Float) TestUtils.getPrivateField("mass", setMassBrick, false);
-		assertEquals(mass, physicObjectMass);
 	}
 
 	@SuppressWarnings("serial")
@@ -95,18 +90,13 @@ public class SetMassBrickTest extends AndroidTestCase {
 		}
 
 		@Override
-		public void setMass(float mass) {
+		public void setType(Type type) {
 			executed = true;
 		}
 
 		public boolean wasExecuted() {
 			return executed;
 		}
-
-		@Override
-		public void setType(Type type) {
-		}
-
 	}
 
 }

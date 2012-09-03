@@ -1,26 +1,25 @@
 package at.tugraz.ist.catroid.test.content.brick;
 
-import android.test.AndroidTestCase;
+import junit.framework.TestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.SetMassBrick;
+import at.tugraz.ist.catroid.content.bricks.SetBounceFactorBrick;
 import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 
-public class SetMassBrickTest extends AndroidTestCase {
-
-	private float mass = 10.50f;
+public class SetBounceFactorBrickTest extends TestCase {
+	private float bounceFactor = 35f;
 	private PhysicWorld physicWorld;
 	private Sprite sprite;
-	private SetMassBrick setMassBrick;
+	private SetBounceFactorBrick bounceFactorBrick;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		sprite = new Sprite("testSprite");
 		physicWorld = new PhysicWorldMock();
-		setMassBrick = new SetMassBrick(physicWorld, sprite, mass);
+		bounceFactorBrick = new SetBounceFactorBrick(physicWorld, sprite, bounceFactor);
 	}
 
 	@Override
@@ -28,42 +27,45 @@ public class SetMassBrickTest extends AndroidTestCase {
 		super.tearDown();
 		sprite = null;
 		physicWorld = null;
-		setMassBrick = null;
+		bounceFactorBrick = null;
 	}
 
 	public void testRequiredResources() {
-		assertEquals(setMassBrick.getRequiredResources(), Brick.NO_RESOURCES);
+		assertEquals(bounceFactorBrick.getRequiredResources(), Brick.NO_RESOURCES);
 	}
 
 	public void testGetSprite() {
-		assertEquals(setMassBrick.getSprite(), sprite);
+		assertEquals(bounceFactorBrick.getSprite(), sprite);
 	}
 
 	public void testClone() {
-		Brick clone = setMassBrick.clone();
-		assertEquals(setMassBrick.getSprite(), clone.getSprite());
-		assertEquals(setMassBrick.getRequiredResources(), clone.getRequiredResources());
+		Brick clone = bounceFactorBrick.clone();
+		assertEquals(bounceFactorBrick.getSprite(), clone.getSprite());
+		assertEquals(bounceFactorBrick.getRequiredResources(), clone.getRequiredResources());
+		assertEquals(TestUtils.getPrivateField("bounceFactor", bounceFactorBrick, false),
+				TestUtils.getPrivateField("bounceFactor", clone, false));
 	}
 
 	public void testExecution() {
 		assertFalse(((PhysicWorldMock) physicWorld).wasExecuted());
-		setMassBrick.execute();
+		bounceFactorBrick.execute();
 		assertTrue(((PhysicWorldMock) physicWorld).wasExecuted());
 	}
 
 	public void testNullSprite() {
-		setMassBrick = new SetMassBrick(null, sprite, mass);
+		bounceFactorBrick = new SetBounceFactorBrick(null, sprite, bounceFactor);
 		try {
-			setMassBrick.execute();
-			fail("Execution of SetMassBrick with null Sprite did not cause a " + "NullPointerException to be thrown");
+			bounceFactorBrick.execute();
+			fail("Execution of SetBounceFactorBrick with null Sprite did not cause a "
+					+ "NullPointerException to be thrown");
 		} catch (NullPointerException expected) {
 			// expected behavior
 		}
 	}
 
-	public void testMass() {
-		float physicObjectMass = (Float) TestUtils.getPrivateField("mass", setMassBrick, false);
-		assertEquals(mass, physicObjectMass);
+	public void testValue() {
+		float physicObjectBounceFactor = (Float) TestUtils.getPrivateField("bounceFactor", bounceFactorBrick, false);
+		assertEquals(bounceFactor, physicObjectBounceFactor);
 	}
 
 	@SuppressWarnings("serial")
@@ -95,7 +97,7 @@ public class SetMassBrickTest extends AndroidTestCase {
 		}
 
 		@Override
-		public void setMass(float mass) {
+		public void setBounceFactor(float restitution) {
 			executed = true;
 		}
 
