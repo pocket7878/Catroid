@@ -227,6 +227,7 @@
     <string name="brick_repeat">Repeat</string>
     <string name="times_label">times</string>
     <string name="brick_loop_end">End of loop</string>
+    <string name="brick_led_on">Led on</string>
     <!-- Actions -->
     <string name="action_tapped">tapped</string>
     <string name="action_doubleTapped">double tapped</string>
