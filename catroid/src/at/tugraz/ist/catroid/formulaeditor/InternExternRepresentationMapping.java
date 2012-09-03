@@ -37,10 +37,6 @@ public class InternExternRepresentationMapping {
 		internExternMapping = new SparseArray<Integer>();
 	}
 
-	public void insertNewMapping() {
-
-	}
-
 	public void insertNewExternInternMapping(int keyStartIndex, int keyEndIndex, int mappingIndex) {
 		externInternMapping.put(keyStartIndex, mappingIndex);
 		externInternMapping.put(keyEndIndex, mappingIndex);
