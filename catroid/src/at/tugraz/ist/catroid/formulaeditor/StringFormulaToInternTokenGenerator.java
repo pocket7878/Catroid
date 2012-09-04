@@ -25,35 +25,49 @@ package at.tugraz.ist.catroid.formulaeditor;
 import java.util.LinkedList;
 import java.util.List;
 
-public class XMLStringToInternGenerator {
+public class StringFormulaToInternTokenGenerator {
 
-	public XMLStringToInternGenerator() {
+	public StringFormulaToInternTokenGenerator() {
 	}
 
-	public static List<InternToken> generateInternRepresentationByString(String stringInternFormulaRepresentation) {
+	public static List<InternToken> generateInternRepresentationByString(String internFormulaRepresentation) {
 		List<InternToken> internTokenList = new LinkedList<InternToken>();
 
-		while (stringInternFormulaRepresentation.length() > 0) {
-			InternToken tokenToAdd = getNextToken(stringInternFormulaRepresentation);
+		while (internFormulaRepresentation.length() > 0) {
+			InternToken tokenToAdd = getNextToken(internFormulaRepresentation);
 			if (tokenToAdd == null) {
 				return null;
 			}
 			internTokenList.add(tokenToAdd);
-			stringInternFormulaRepresentation = stringInternFormulaRepresentation.substring(tokenToAdd.getTokenSring()
+			internFormulaRepresentation = internFormulaRepresentation.substring(tokenToAdd.getTokenSringValue()
 					.length());
 		}
 
 		return internTokenList;
 	}
 
-	private static InternToken getNextToken(String stringInternFormulaRepresentation) {
+	public static InternToken generateInternTokenByIndex(int index, String internFormulaRepresentation) {
+		internFormulaRepresentation = internFormulaRepresentation.substring(index);
 
-		int internTokenTypeNameEndIndex = stringInternFormulaRepresentation.indexOf(":", 1);
-		String internTokenTypeName = stringInternFormulaRepresentation.substring(0, internTokenTypeNameEndIndex);
+		return getNextToken(internFormulaRepresentation);
+	}
+
+	private static InternToken getNextToken(String internFormulaRepresentation) {
+
+		int internTokenTypeNameEndIndex = internFormulaRepresentation.indexOf(":", 1);
+		String internTokenTypeName = internFormulaRepresentation.substring(0, internTokenTypeNameEndIndex + 1);
 
 		InternTokenType internTokenType = InternTokenType.getInternTokenTypeByString(internTokenTypeName);
 
-		return null;
+		String internTokenValue = internFormulaRepresentation.substring(internTokenTypeNameEndIndex + 1);
+		int internTokenValueEndIndex = internTokenValue.indexOf(":", 1);
+		if (internTokenValueEndIndex != -1) {
+			internTokenValue = internTokenValue.substring(0, internTokenValueEndIndex);
+		}
+
+		InternToken returnInternToken = new InternToken(internTokenValue, internTokenType);
+
+		return returnInternToken;
 	}
 
 }

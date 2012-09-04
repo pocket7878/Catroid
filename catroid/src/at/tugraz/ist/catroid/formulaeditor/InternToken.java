@@ -24,20 +24,24 @@ package at.tugraz.ist.catroid.formulaeditor;
 
 public class InternToken {
 
-	private String tokenString;
+	private String tokenStringValue = "";
 	private InternTokenType internTokenType;
 
-	public InternToken(String tokenString, InternTokenType internTokenType) {
-		this.tokenString = tokenString;
+	public InternToken(InternTokenType internTokenType) {
 		this.internTokenType = internTokenType;
 	}
 
-	public void setTokenString(String tokenString) {
-		this.tokenString = tokenString;
+	public InternToken(String tokenStringValue, InternTokenType internTokenType) {
+		this.tokenStringValue = tokenStringValue;
+		this.internTokenType = internTokenType;
 	}
 
-	public String getTokenSring() {
-		return this.tokenString;
+	public void setTokenStringValue(String tokenString) {
+		this.tokenStringValue = tokenString;
+	}
+
+	public String getTokenSringValue() {
+		return this.tokenStringValue;
 	}
 
 	public boolean isNumber() {
@@ -48,12 +52,21 @@ public class InternToken {
 		return false;
 	}
 
-	public void appendToTokenString(String stringToAppend) {
-		this.tokenString += stringToAppend;
+	public void appendToTokenStringValue(String stringToAppend) {
+		this.tokenStringValue += stringToAppend;
 	}
 
 	public InternTokenType getInternTokenType() {
 		return this.internTokenType;
+	}
+
+	public void setInternTokenType(InternTokenType newInternTokenType) {
+		this.internTokenType = newInternTokenType;
+	}
+
+	@Override
+	public String toString() {
+		return internTokenType.getInternTokenPrefix() + tokenStringValue;
 	}
 
 }

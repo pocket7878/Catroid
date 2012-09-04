@@ -26,25 +26,27 @@ import android.util.SparseArray;
 
 public class ExternInternRepresentationMapping {
 
-	private SparseArray<InternToken> externInternMapping;
+	private SparseArray<Integer> externInternMapping;
+	private SparseArray<Integer> internExternMapping;
 
 	private int externInternMappingMaximalIndex;
+	private int internExternMappingMaximalIndex;
 
 	public ExternInternRepresentationMapping() {
-		externInternMapping = new SparseArray<InternToken>();
+		externInternMapping = new SparseArray<Integer>();
+		internExternMapping = new SparseArray<Integer>();
 	}
 
-	public void insertNewExternInternMapping(int keyStartIndex, int keyEndIndex, InternToken internTokenToMap) {
+	public void insertNewExternInternMapping(int keyStartIndex, int keyEndIndex, Integer internTokenToMap) {
 		externInternMapping.put(keyStartIndex, internTokenToMap);
 		externInternMapping.put(keyEndIndex, internTokenToMap);
 	}
 
-	public InternToken getInternTokenByExternIndex(int externIndex) {
+	public Integer getInternTokenByExternIndex(int externIndex) {
 
-		InternToken searchDownInternToken = searchDown(externInternMapping, externIndex - 1);
-		InternToken currentInternToken = externInternMapping.get(externIndex);
-		InternToken searchUpInternToken = searchUp(externInternMapping, externIndex + 1,
-				externInternMappingMaximalIndex);
+		Integer searchDownInternToken = searchDown(externInternMapping, externIndex - 1);
+		Integer currentInternToken = externInternMapping.get(externIndex);
+		Integer searchUpInternToken = searchUp(externInternMapping, externIndex + 1, externInternMappingMaximalIndex);
 
 		if (currentInternToken != null) {
 			return currentInternToken;
@@ -58,7 +60,7 @@ public class ExternInternRepresentationMapping {
 		return null;
 	}
 
-	public int getExternTokenStartOffset(int externIndex, InternToken internTokenOffsetTo) {
+	public int getExternTokenStartOffset(int externIndex, Integer internTokenOffsetTo) {
 		for (int searchIndex = externIndex; searchIndex > 0; searchIndex--) {
 			if (externInternMapping.get(searchIndex) == internTokenOffsetTo) {
 				return externIndex - searchIndex;
@@ -67,7 +69,7 @@ public class ExternInternRepresentationMapping {
 		return -1;
 	}
 
-	private InternToken searchDown(SparseArray<InternToken> mapping, int index) {
+	private Integer searchDown(SparseArray<Integer> mapping, int index) {
 
 		for (int searchIndex = index; searchIndex > 0; searchIndex--) {
 			if (mapping.get(searchIndex) != null) {
@@ -77,7 +79,7 @@ public class ExternInternRepresentationMapping {
 		return null;
 	}
 
-	private InternToken searchUp(SparseArray<InternToken> mapping, int index, int maximalIndex) {
+	private Integer searchUp(SparseArray<Integer> mapping, int index, int maximalIndex) {
 		for (int searchIndex = index; searchIndex < maximalIndex; searchIndex++) {
 			if (mapping.get(searchIndex) != null) {
 				return mapping.get(searchIndex);

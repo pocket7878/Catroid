@@ -20,33 +20,22 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.tugraz.ist.catroid.formulaeditor;
+package at.tugraz.ist.catroid.test.formulaeditor;
 
-import java.util.EnumSet;
+import android.test.AndroidTestCase;
+import at.tugraz.ist.catroid.formulaeditor.InternToken;
+import at.tugraz.ist.catroid.formulaeditor.InternTokenType;
+import at.tugraz.ist.catroid.formulaeditor.StringFormulaToInternTokenGenerator;
 
-public enum InternTokenType {
-	NUMBER(":number:"), OPERATOR(":operator:"), FUNCTION_NAME(":function_name:"), BRACKET_OPEN(":bracket_open:"), BRACKET_CLOSE(
-			":bracket_close:"), SENSOR(":sensor:"), FUNCTION_PARAMETERS_BRACKET_OPEN(
-			":function_parameter_bracket_open:"), FUNCTION_PARAMETERS_BRACKET_CLOSE(
-			":function_parameters_bracket_close:"), COSTUME(":costume:");
+public class StringFormulaToInternTokenGeneratorTest extends AndroidTestCase {
 
-	private String tokenPrefix;
+	private static final double DELTA = 0.01;
 
-	InternTokenType(String tokenPrefix) {
-		this.tokenPrefix = tokenPrefix;
+	public void testGenerateInternTokenByIndex() {
+
+		InternToken internToken = StringFormulaToInternTokenGenerator.generateInternTokenByIndex(0, ":number:23");
+		assertNotNull("InternToken generation failed", internToken);
+		assertEquals("InternToken-type generation failed", InternTokenType.NUMBER, internToken.getInternTokenType());
+		assertEquals("InternToken-value generation failed", "23", internToken.getTokenSringValue());
 	}
-
-	public static InternTokenType getInternTokenTypeByString(String value) {
-		for (InternTokenType internTokenType : EnumSet.allOf(InternTokenType.class)) {
-			if (value.equals(value)) {
-				return internTokenType;
-			}
-		}
-		return null;
-	}
-
-	public String getInternTokenPrefix() {
-		return tokenPrefix;
-	}
-
 }
