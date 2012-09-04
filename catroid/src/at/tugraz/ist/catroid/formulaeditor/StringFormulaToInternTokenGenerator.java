@@ -49,6 +49,10 @@ public class StringFormulaToInternTokenGenerator {
 	public static InternToken generateInternTokenByIndex(int index, String internFormulaRepresentation) {
 		internFormulaRepresentation = internFormulaRepresentation.substring(index);
 
+		if (internFormulaRepresentation.startsWith(":") == false) {
+			return null;
+		}
+
 		return getNextToken(internFormulaRepresentation);
 	}
 
@@ -60,7 +64,7 @@ public class StringFormulaToInternTokenGenerator {
 		InternTokenType internTokenType = InternTokenType.getInternTokenTypeByString(internTokenTypeName);
 
 		String internTokenValue = internFormulaRepresentation.substring(internTokenTypeNameEndIndex + 1);
-		int internTokenValueEndIndex = internTokenValue.indexOf(":", 1);
+		int internTokenValueEndIndex = internTokenValue.indexOf(":");
 		if (internTokenValueEndIndex != -1) {
 			internTokenValue = internTokenValue.substring(0, internTokenValueEndIndex);
 		}

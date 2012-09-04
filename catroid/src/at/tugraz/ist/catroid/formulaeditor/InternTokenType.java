@@ -38,7 +38,7 @@ public enum InternTokenType {
 
 	public static InternTokenType getInternTokenTypeByString(String value) {
 		for (InternTokenType internTokenType : EnumSet.allOf(InternTokenType.class)) {
-			if (value.equals(value)) {
+			if (value.equals(internTokenType.tokenPrefix)) {
 				return internTokenType;
 			}
 		}

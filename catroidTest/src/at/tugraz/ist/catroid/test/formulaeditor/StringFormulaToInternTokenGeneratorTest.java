@@ -37,5 +37,41 @@ public class StringFormulaToInternTokenGeneratorTest extends AndroidTestCase {
 		assertNotNull("InternToken generation failed", internToken);
 		assertEquals("InternToken-type generation failed", InternTokenType.NUMBER, internToken.getInternTokenType());
 		assertEquals("InternToken-value generation failed", "23", internToken.getTokenSringValue());
+
+		internToken = StringFormulaToInternTokenGenerator.generateInternTokenByIndex(0, ":number:23:function:e");
+		assertNotNull("InternToken generation failed", internToken);
+		assertEquals("InternToken-type generation failed", InternTokenType.NUMBER, internToken.getInternTokenType());
+		assertEquals("InternToken-value generation failed", "23", internToken.getTokenSringValue());
+
+		internToken = StringFormulaToInternTokenGenerator.generateInternTokenByIndex(10, ":number:23:function_name:e");
+		assertNotNull("InternToken generation failed", internToken);
+		assertEquals("InternToken-type generation failed", InternTokenType.FUNCTION_NAME,
+				internToken.getInternTokenType());
+		assertEquals("InternToken-value generation failed", "e", internToken.getTokenSringValue());
+
+		internToken = StringFormulaToInternTokenGenerator
+				.generateInternTokenByIndex(28,
+						":number:23:function_name:sin:function_parameter_bracket_open::number:54:function_parameter_bracket_close:");
+		assertNotNull("InternToken generation failed", internToken);
+		assertEquals("InternToken-type generation failed", InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN,
+				internToken.getInternTokenType());
+		assertEquals("InternToken-value should not be generated", "", internToken.getTokenSringValue());
+
+		internToken = StringFormulaToInternTokenGenerator
+				.generateInternTokenByIndex(11,
+						":number:23:function_name:sin:function_parameter_bracket_open::number:54:function_parameter_bracket_close:");
+		assertNull("InternToken should not be generated", internToken);
+
 	}
+
+	public void testSingle() {
+		InternToken internToken = StringFormulaToInternTokenGenerator
+				.generateInternTokenByIndex(28,
+						":number:23:function_name:sin:function_parameter_bracket_open::number:54:function_parameter_bracket_close:");
+		assertNotNull("InternToken generation failed", internToken);
+		assertEquals("InternToken-type generation failed", InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN,
+				internToken.getInternTokenType());
+		assertEquals("InternToken-value should not be generated", "", internToken.getTokenSringValue());
+	}
+
 }
