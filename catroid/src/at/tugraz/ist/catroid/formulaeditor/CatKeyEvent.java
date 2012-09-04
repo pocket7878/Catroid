@@ -210,17 +210,19 @@ public class CatKeyEvent extends KeyEvent {
 		return returnList;
 	}
 
-	private List<InternToken> buildDoubleParameterFunction(String functionName, String firstParameterValue,
-			String secondParameterValue) {
+	private List<InternToken> buildDoubleParameterFunction(String functionName, String firstParameterNumberValue,
+			String secondParameterNumberValue) {
 
 		List<InternToken> returnList = new LinkedList<InternToken>();
 		returnList.add(new InternToken("function:" + functionName, InternToken.InternTokenType.FUNCTION_NAME));
 
 		returnList.add(new InternToken("(", InternToken.InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
 
-		returnList.add(new InternToken(firstParameterValue, InternToken.InternTokenType.NUMBER));
+		returnList.add(new InternToken(InternalFormula.INTERN_TOKEN_PREFIX_NUMBER + firstParameterNumberValue,
+				InternToken.InternTokenType.NUMBER));
 
-		returnList.add(new InternToken(secondParameterValue, InternToken.InternTokenType.NUMBER));
+		returnList.add(new InternToken(InternalFormula.INTERN_TOKEN_PREFIX_NUMBER + secondParameterNumberValue,
+				InternToken.InternTokenType.NUMBER));
 
 		returnList.add(new InternToken(")", InternToken.InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
 
@@ -228,14 +230,15 @@ public class CatKeyEvent extends KeyEvent {
 
 	}
 
-	private List<InternToken> buildSingleParameterFunction(String functionName, String parameterValue) {
+	private List<InternToken> buildSingleParameterFunction(String functionName, String parameterNumberValue) {
 
 		List<InternToken> returnList = new LinkedList<InternToken>();
 		returnList.add(new InternToken("function:" + functionName, InternToken.InternTokenType.FUNCTION_NAME));
 
 		returnList.add(new InternToken("(", InternToken.InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
 
-		returnList.add(new InternToken(parameterValue, InternToken.InternTokenType.NUMBER));
+		returnList.add(new InternToken(InternalFormula.INTERN_TOKEN_PREFIX_NUMBER + parameterNumberValue,
+				InternToken.InternTokenType.NUMBER));
 
 		returnList.add(new InternToken(")", InternToken.InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
 
