@@ -28,7 +28,7 @@ import java.util.List;
 public class InternalFormula {
 
 	//TODO: enter all prefixes
-	public static final String INTERN_TOKEN_PREFIX_NUMBER = "number:";
+	public static final String INTERN_TOKEN_PREFIX_NUMBER = ":number:";
 
 	private ExternInternRepresentationMapping externInternRepresentationMapping;
 	private LinkedList<InternToken> internTokenList;

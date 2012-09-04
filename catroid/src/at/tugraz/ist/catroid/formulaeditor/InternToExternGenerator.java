@@ -22,38 +22,10 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
-public class InternToken {
 
-	private String tokenString;
-	private InternTokenType internTokenType;
+public class InternToExternGenerator {
 
-	public InternToken(String tokenString, InternTokenType internTokenType) {
-		this.tokenString = tokenString;
-		this.internTokenType = internTokenType;
-	}
-
-	public void setTokenString(String tokenString) {
-		this.tokenString = tokenString;
-	}
-
-	public String getTokenSring() {
-		return this.tokenString;
-	}
-
-	public boolean isNumber() {
-		if (internTokenType == InternTokenType.NUMBER) {
-			return true;
-		}
-
-		return false;
-	}
-
-	public void appendToTokenString(String stringToAppend) {
-		this.tokenString += stringToAppend;
-	}
-
-	public InternTokenType getInternTokenType() {
-		return this.internTokenType;
+	public InternToExternGenerator() {
 	}
 
 }

@@ -22,38 +22,38 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
-public class InternToken {
+import java.util.LinkedList;
+import java.util.List;
 
-	private String tokenString;
-	private InternTokenType internTokenType;
+public class XMLStringToInternGenerator {
 
-	public InternToken(String tokenString, InternTokenType internTokenType) {
-		this.tokenString = tokenString;
-		this.internTokenType = internTokenType;
+	public XMLStringToInternGenerator() {
 	}
 
-	public void setTokenString(String tokenString) {
-		this.tokenString = tokenString;
-	}
+	public static List<InternToken> generateInternRepresentationByString(String stringInternFormulaRepresentation) {
+		List<InternToken> internTokenList = new LinkedList<InternToken>();
 
-	public String getTokenSring() {
-		return this.tokenString;
-	}
-
-	public boolean isNumber() {
-		if (internTokenType == InternTokenType.NUMBER) {
-			return true;
+		while (stringInternFormulaRepresentation.length() > 0) {
+			InternToken tokenToAdd = getNextToken(stringInternFormulaRepresentation);
+			if (tokenToAdd == null) {
+				return null;
+			}
+			internTokenList.add(tokenToAdd);
+			stringInternFormulaRepresentation = stringInternFormulaRepresentation.substring(tokenToAdd.getTokenSring()
+					.length());
 		}
 
-		return false;
+		return internTokenList;
 	}
 
-	public void appendToTokenString(String stringToAppend) {
-		this.tokenString += stringToAppend;
-	}
+	private static InternToken getNextToken(String stringInternFormulaRepresentation) {
 
-	public InternTokenType getInternTokenType() {
-		return this.internTokenType;
+		int internTokenTypeNameEndIndex = stringInternFormulaRepresentation.indexOf(":", 1);
+		String internTokenTypeName = stringInternFormulaRepresentation.substring(0, internTokenTypeNameEndIndex);
+
+		InternTokenType internTokenType = InternTokenType.getInternTokenTypeByString(internTokenTypeName);
+
+		return null;
 	}
 
 }

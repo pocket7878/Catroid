@@ -22,38 +22,27 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
-public class InternToken {
+import java.util.EnumSet;
 
-	private String tokenString;
-	private InternTokenType internTokenType;
+public enum InternTokenType {
+	NUMBER(":number:"), OPERATOR(":operator:"), FUNCTION_NAME(":function_name:"), BRACKET_OPEN(":bracket_open:"), BRACKET_CLOSE(
+			":bracket_close:"), SENSOR(":sensor:"), FUNCTION_PARAMETERS_BRACKET_OPEN(
+			":function_parameter_bracket_open:"), FUNCTION_PARAMETERS_BRACKET_CLOSE(
+			":function_parameters_bracket_close:"), COSTUME(":costume:");
 
-	public InternToken(String tokenString, InternTokenType internTokenType) {
-		this.tokenString = tokenString;
-		this.internTokenType = internTokenType;
+	private String tokenPrefix;
+
+	InternTokenType(String tokenPrefix) {
+		this.tokenPrefix = tokenPrefix;
 	}
 
-	public void setTokenString(String tokenString) {
-		this.tokenString = tokenString;
-	}
-
-	public String getTokenSring() {
-		return this.tokenString;
-	}
-
-	public boolean isNumber() {
-		if (internTokenType == InternTokenType.NUMBER) {
-			return true;
+	public static InternTokenType getInternTokenTypeByString(String value) {
+		for (InternTokenType internTokenType : EnumSet.allOf(InternTokenType.class)) {
+			if (value.equals(value)) {
+				return internTokenType;
+			}
 		}
-
-		return false;
-	}
-
-	public void appendToTokenString(String stringToAppend) {
-		this.tokenString += stringToAppend;
-	}
-
-	public InternTokenType getInternTokenType() {
-		return this.internTokenType;
+		return null;
 	}
 
 }

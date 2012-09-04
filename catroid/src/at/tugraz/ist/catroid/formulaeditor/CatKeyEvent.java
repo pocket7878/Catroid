@@ -27,7 +27,6 @@ import java.util.List;
 
 import android.util.SparseArray;
 import android.view.KeyEvent;
-import at.tugraz.ist.catroid.formulaeditor.InternToken.InternTokenType;
 
 /**
  * @author obusher
@@ -214,17 +213,17 @@ public class CatKeyEvent extends KeyEvent {
 			String secondParameterNumberValue) {
 
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken("function:" + functionName, InternToken.InternTokenType.FUNCTION_NAME));
+		returnList.add(new InternToken("function:" + functionName, InternTokenType.FUNCTION_NAME));
 
-		returnList.add(new InternToken("(", InternToken.InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
+		returnList.add(new InternToken("(", InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
 
 		returnList.add(new InternToken(InternalFormula.INTERN_TOKEN_PREFIX_NUMBER + firstParameterNumberValue,
-				InternToken.InternTokenType.NUMBER));
+				InternTokenType.NUMBER));
 
 		returnList.add(new InternToken(InternalFormula.INTERN_TOKEN_PREFIX_NUMBER + secondParameterNumberValue,
-				InternToken.InternTokenType.NUMBER));
+				InternTokenType.NUMBER));
 
-		returnList.add(new InternToken(")", InternToken.InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
+		returnList.add(new InternToken(")", InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
 
 		return returnList;
 
@@ -233,14 +232,14 @@ public class CatKeyEvent extends KeyEvent {
 	private List<InternToken> buildSingleParameterFunction(String functionName, String parameterNumberValue) {
 
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken("function:" + functionName, InternToken.InternTokenType.FUNCTION_NAME));
+		returnList.add(new InternToken("function:" + functionName, InternTokenType.FUNCTION_NAME));
 
-		returnList.add(new InternToken("(", InternToken.InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
+		returnList.add(new InternToken("(", InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
 
 		returnList.add(new InternToken(InternalFormula.INTERN_TOKEN_PREFIX_NUMBER + parameterNumberValue,
-				InternToken.InternTokenType.NUMBER));
+				InternTokenType.NUMBER));
 
-		returnList.add(new InternToken(")", InternToken.InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
+		returnList.add(new InternToken(")", InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
 
 		return returnList;
 
@@ -249,7 +248,7 @@ public class CatKeyEvent extends KeyEvent {
 	private List<InternToken> buildFunctionWithoutParametersAndBrackets(String functionName) {
 
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken("function:" + functionName, InternToken.InternTokenType.FUNCTION_NAME));
+		returnList.add(new InternToken("function:" + functionName, InternTokenType.FUNCTION_NAME));
 
 		return returnList;
 
