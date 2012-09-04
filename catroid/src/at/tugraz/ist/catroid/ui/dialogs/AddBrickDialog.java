@@ -96,6 +96,7 @@ import at.tugraz.ist.catroid.content.bricks.WaitBrick;
 import at.tugraz.ist.catroid.content.bricks.WhenBrick;
 import at.tugraz.ist.catroid.content.bricks.WhenStartedBrick;
 import at.tugraz.ist.catroid.physics.PhysicObject;
+import at.tugraz.ist.catroid.physics.PhysicSettings;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.adapter.PrototypeBrickAdapter;
@@ -184,12 +185,13 @@ public class AddBrickDialog extends Dialog {
 		PhysicWorld physicWorld = ProjectManager.getInstance().getCurrentProject().getPhysicWorld();
 		List<Brick> physicBrickList = new ArrayList<Brick>();
 		physicBrickList.add(new SetPhysicObjectTypeBrick(physicWorld, sprite, PhysicObject.Type.DYNAMIC));
-		physicBrickList.add(new SetMassBrick(physicWorld, sprite, 1.0f));
-		physicBrickList.add(new SetGravityBrick(physicWorld, sprite, 0.0f, 0.0f));
-		physicBrickList.add(new SetVelocityBrick(physicWorld, sprite, 0.0f, 0.0f));
-		physicBrickList.add(new SetAngularVelocityBrick(physicWorld, sprite, 15.0f));
-		physicBrickList.add(new SetBounceFactorBrick(physicWorld, sprite, 100.0f));
-		physicBrickList.add(new SetFrictionBrick(physicWorld, sprite, 100.0f));
+		physicBrickList.add(new SetMassBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_MASS));
+		physicBrickList.add(new SetGravityBrick(physicWorld, sprite, PhysicSettings.World.DEFAULT_GRAVITY));
+		physicBrickList.add(new SetVelocityBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_VELOCITY));
+		physicBrickList.add(new SetAngularVelocityBrick(physicWorld, sprite,
+				PhysicSettings.Object.DEFAULT_ANGULAR_VELOCITY));
+		physicBrickList.add(new SetBounceFactorBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_FRICTION * 100));
+		physicBrickList.add(new SetFrictionBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_FRICTION));
 		brickMap.put(context.getString(R.string.category_physic), physicBrickList);
 
 		return brickMap;

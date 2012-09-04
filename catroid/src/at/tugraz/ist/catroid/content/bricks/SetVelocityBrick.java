@@ -50,10 +50,10 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 	@XStreamOmitField
 	private transient View view;
 
-	public SetVelocityBrick(PhysicWorld physicWorld, Sprite sprite, float x, float y) {
+	public SetVelocityBrick(PhysicWorld physicWorld, Sprite sprite, Vector2 velocity) {
 		this.physicWorld = physicWorld;
 		this.sprite = sprite;
-		this.velocity = new Vector2(x, y);
+		this.velocity = velocity.cpy();
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 	@Override
 	public void execute() {
 		Vector2 box2dVelocity = PhysicWorldConverter.vecCatToBox2d(velocity);
-		physicWorld.getPhysicObject(sprite).setLinearVelocicty(box2dVelocity);
+		physicWorld.getPhysicObject(sprite).setVelocity(box2dVelocity);
 	}
 
 	@Override
@@ -78,12 +78,10 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 
 		EditText editX = (EditText) view.findViewById(R.id.brick_set_velocity_x_edit_text);
 		editX.setText(String.valueOf(velocity.x));
-
 		editX.setOnClickListener(this);
 
 		EditText editY = (EditText) view.findViewById(R.id.brick_set_velocity_y_edit_text);
 		editY.setText(String.valueOf(velocity.y));
-
 		editY.setOnClickListener(this);
 
 		return view;
@@ -96,7 +94,7 @@ public class SetVelocityBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new SetVelocityBrick(physicWorld, sprite, velocity.x, velocity.y);
+		return new SetVelocityBrick(physicWorld, sprite, velocity);
 	}
 
 	@Override

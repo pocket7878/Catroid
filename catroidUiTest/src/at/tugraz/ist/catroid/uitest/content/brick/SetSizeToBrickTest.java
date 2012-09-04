@@ -27,7 +27,6 @@ import java.util.ArrayList;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.Smoke;
 import android.util.DisplayMetrics;
@@ -53,6 +52,7 @@ import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
 
+import com.badlogic.gdx.graphics.Color;
 import com.jayway.android.robotium.solo.Solo;
 
 public class SetSizeToBrickTest extends ActivityInstrumentationTestCase2<ScriptTabActivity> {

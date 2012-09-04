@@ -1,26 +1,24 @@
 package at.tugraz.ist.catroid.test.content.brick;
 
-import android.test.AndroidTestCase;
+import junit.framework.TestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.SetMassBrick;
+import at.tugraz.ist.catroid.content.bricks.SetFrictionBrick;
 import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
-import at.tugraz.ist.catroid.test.utils.TestUtils;
 
-public class SetMassBrickTest extends AndroidTestCase {
-
-	private float mass = 10.50f;
+public class SetFrictionBrickTest extends TestCase {
+	private float friction = 1.0f;
 	private PhysicWorld physicWorld;
 	private Sprite sprite;
-	private SetMassBrick setMassBrick;
+	private SetFrictionBrick frictionBrick;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		sprite = new Sprite("testSprite");
 		physicWorld = new PhysicWorldMock();
-		setMassBrick = new SetMassBrick(physicWorld, sprite, mass);
+		frictionBrick = new SetFrictionBrick(physicWorld, sprite, friction);
 	}
 
 	@Override
@@ -28,42 +26,38 @@ public class SetMassBrickTest extends AndroidTestCase {
 		super.tearDown();
 		sprite = null;
 		physicWorld = null;
-		setMassBrick = null;
+		frictionBrick = null;
 	}
 
 	public void testRequiredResources() {
-		assertEquals(setMassBrick.getRequiredResources(), Brick.NO_RESOURCES);
+		assertEquals(frictionBrick.getRequiredResources(), Brick.NO_RESOURCES);
 	}
 
 	public void testGetSprite() {
-		assertEquals(setMassBrick.getSprite(), sprite);
+		assertEquals(frictionBrick.getSprite(), sprite);
 	}
 
 	public void testClone() {
-		Brick clone = setMassBrick.clone();
-		assertEquals(setMassBrick.getSprite(), clone.getSprite());
-		assertEquals(setMassBrick.getRequiredResources(), clone.getRequiredResources());
+		Brick clone = frictionBrick.clone();
+		assertEquals(frictionBrick.getSprite(), clone.getSprite());
+		assertEquals(frictionBrick.getRequiredResources(), clone.getRequiredResources());
 	}
 
 	public void testExecution() {
 		assertFalse(((PhysicWorldMock) physicWorld).wasExecuted());
-		setMassBrick.execute();
+		frictionBrick.execute();
 		assertTrue(((PhysicWorldMock) physicWorld).wasExecuted());
 	}
 
 	public void testNullSprite() {
-		setMassBrick = new SetMassBrick(null, sprite, mass);
+		frictionBrick = new SetFrictionBrick(null, sprite, friction);
 		try {
-			setMassBrick.execute();
-			fail("Execution of SetMassBrick with null Sprite did not cause a " + "NullPointerException to be thrown");
+			frictionBrick.execute();
+			fail("Execution of SetFrictionBrick with null Sprite did not cause a "
+					+ "NullPointerException to be thrown");
 		} catch (NullPointerException expected) {
 			// expected behavior
 		}
-	}
-
-	public void testMass() {
-		float physicObjectMass = (Float) TestUtils.getPrivateField("mass", setMassBrick, false);
-		assertEquals(mass, physicObjectMass);
 	}
 
 	@SuppressWarnings("serial")
@@ -95,7 +89,7 @@ public class SetMassBrickTest extends AndroidTestCase {
 		}
 
 		@Override
-		public void setMass(float mass) {
+		public void setFriction(float friction) {
 			executed = true;
 		}
 

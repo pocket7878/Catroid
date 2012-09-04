@@ -61,7 +61,7 @@ public class SetBounceFactorBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		physicWorld.getPhysicObject(sprite).setRestitution(bounceFactor / 100.0f);
+		physicWorld.getPhysicObject(sprite).setBounceFactor(bounceFactor / 100.0f);
 	}
 
 	@Override

@@ -36,30 +36,36 @@ public class PhysicObject {
 
 	public final Body body;
 	public final FixtureDef fixtureDef = new FixtureDef();
+	private Shape[] shapes;
 	public Type type;
 	public float mass;
 
 	public PhysicObject(Body body) {
 		this.body = body;
-		mass = PhysicSettings.World.DEAULT_MASS;
+		mass = PhysicSettings.Object.DEFAULT_MASS;
 
-		fixtureDef.density = 1.0f;
-		fixtureDef.friction = 0.2f;
-		fixtureDef.restitution = 0.0f;
+		fixtureDef.density = PhysicSettings.Object.DEFAULT_DENSITY;
+		fixtureDef.friction = PhysicSettings.Object.DEFAULT_FRICTION;
+		fixtureDef.restitution = PhysicSettings.Object.DEFAULT_RESTITUTION;
 
 		setType(Type.NONE);
 	}
 
-	public void setShape(Shape shape) {
-		if (shape == fixtureDef.shape) {
+	public void setShape(Shape[] shapes) {
+
+		if (this.shapes == shapes) {
 			return;
 		}
-		fixtureDef.shape = shape;
+
+		this.shapes = shapes;
 
 		List<Fixture> fixturesOld = new ArrayList<Fixture>(body.getFixtureList());
 
-		if (shape != null) {
-			body.createFixture(fixtureDef);
+		if (shapes != null) {
+			for (Shape tempShape : shapes) {
+				fixtureDef.shape = tempShape;
+				body.createFixture(fixtureDef);
+			}
 		}
 
 		for (Fixture fixture : fixturesOld) {
@@ -67,6 +73,7 @@ public class PhysicObject {
 		}
 
 		setMass(mass);
+
 	}
 
 	public void setType(Type type) {
@@ -86,7 +93,6 @@ public class PhysicObject {
 				body.setActive(true);
 				break;
 			case NONE:
-				body.setType(BodyType.StaticBody);
 				body.setActive(false);
 				break;
 		}
@@ -117,6 +123,7 @@ public class PhysicObject {
 	}
 
 	public void setMass(float mass) {
+
 		if (mass <= 0.0f) {
 			mass = 1.0f;
 		}
@@ -128,6 +135,7 @@ public class PhysicObject {
 		}
 
 		float area = bodyMass / fixtureDef.density;
+
 		float density = mass / area;
 		setDensity(density);
 	}
@@ -138,6 +146,7 @@ public class PhysicObject {
 			fixture.setDensity(density);
 		}
 		body.resetMassData();
+		this.mass = mass;
 	}
 
 	public void setFriction(float friction) {
@@ -147,18 +156,18 @@ public class PhysicObject {
 		}
 	}
 
-	public void setRestitution(float restitution) {
-		fixtureDef.restitution = restitution;
+	public void setBounceFactor(float bounceFactor) {
+		fixtureDef.restitution = bounceFactor;
 		for (Fixture fixture : body.getFixtureList()) {
-			fixture.setRestitution(restitution);
+			fixture.setRestitution(bounceFactor);
 		}
 	}
 
-	public void setAngularVelocicty(float radian) {
+	public void setRotationSpeed(float radian) {
 		body.setAngularVelocity(radian);
 	}
 
-	public void setLinearVelocicty(Vector2 velocity) {
+	public void setVelocity(Vector2 velocity) {
 		body.setLinearVelocity(velocity);
 	}
 }

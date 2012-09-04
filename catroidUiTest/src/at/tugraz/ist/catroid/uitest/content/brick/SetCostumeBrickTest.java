@@ -126,7 +126,7 @@ public class SetCostumeBrickTest extends ActivityInstrumentationTestCase2<Script
 		solo.goBack();
 		solo.waitForActivity(ScriptTabActivity.class.getSimpleName());
 
-		solo.clickOnText(costumeName);
+		solo.clickOnText(costumeName); // here is finish
 		solo.clickOnText(costumeName2);
 		assertTrue(costumeName2 + " is not selected in Spinner", solo.searchText(costumeName2));
 		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_play);

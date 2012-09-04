@@ -18,6 +18,10 @@
  */
 package at.tugraz.ist.catroid.physics;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Costume;
 
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -28,13 +32,30 @@ import com.badlogic.gdx.physics.box2d.Shape;
  * 
  */
 public class PhysicShapeBuilder {
-	public Shape createShape(Costume costume) {
-		int[] resolution = costume.getCostumeData().getResolution();
-		float width = PhysicWorldConverter.lengthCatToBox2d(resolution[0]);
-		float height = PhysicWorldConverter.lengthCatToBox2d(resolution[1]);
+
+	private final Map<CostumeData, Shape[]> shapes;
+
+	public PhysicShapeBuilder() {
+		shapes = new HashMap<CostumeData, Shape[]>();
+	}
+
+	public Shape[] createShape(Costume costume) {
+
+		CostumeData costumeData = costume.getCostumeData();
+
+		if (shapes.containsKey(costumeData)) {
+			return shapes.get(costumeData);
+		}
+
+		int[] imageResolution = costumeData.getResolution();
+		float width = PhysicWorldConverter.lengthCatToBox2d(imageResolution[0]);
+		float height = PhysicWorldConverter.lengthCatToBox2d(imageResolution[1]);
 
 		PolygonShape shape = new PolygonShape();
 		shape.setAsBox(width / 2f, height / 2f);
-		return shape;
+
+		Shape[] shapeArray = new Shape[] { shape };
+		shapes.put(costumeData, shapeArray);
+		return shapeArray;
 	}
 }

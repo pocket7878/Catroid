@@ -29,7 +29,7 @@ public class PhysicWorldConverterTest extends AndroidTestCase {
 		Assert.assertEquals(90.0f, PhysicWorldConverter.angleBox2dToCat((float) (Math.PI / 2.0)));
 		Assert.assertEquals(180.0f, PhysicWorldConverter.angleBox2dToCat((float) Math.PI));
 
-		float[] angles = { 123.456f, -123.456f };
+		float[] angles = { 123.456f, -123.456f, 1024.0f };
 		for (float currentAngle : angles) {
 			Assert.assertEquals((float) Math.toDegrees(currentAngle),
 					PhysicWorldConverter.angleBox2dToCat(currentAngle));

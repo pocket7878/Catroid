@@ -11,19 +11,18 @@ import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.SetVelocityBrick;
+import at.tugraz.ist.catroid.content.bricks.SetPhysicObjectTypeBrick;
+import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.ui.ScriptActivity;
-import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
-import com.badlogic.gdx.math.Vector2;
 import com.jayway.android.robotium.solo.Solo;
 
-public class SetVelocityBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
+public class SetPhysicObjectTypeBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
 	private Solo solo;
 	private Project project;
-	private SetVelocityBrick setVelocityBrick;
+	private SetPhysicObjectTypeBrick setPhysicObjectTypeBrick;
 
-	public SetVelocityBrickTest() {
+	public SetPhysicObjectTypeBrickTest() {
 		super("at.tugraz.ist.catroid", ScriptActivity.class);
 	}
 
@@ -46,7 +45,7 @@ public class SetVelocityBrickTest extends ActivityInstrumentationTestCase2<Scrip
 	}
 
 	@Smoke
-	public void testSetVelocityByBrick() {
+	public void testPhysicObjectTypeBrick() {
 		int childrenCount = getActivity().getAdapter().getChildCountFromLastGroup();
 		int groupCount = getActivity().getAdapter().getGroupCount();
 
@@ -58,36 +57,36 @@ public class SetVelocityBrickTest extends ActivityInstrumentationTestCase2<Scrip
 
 		assertEquals("Wrong Brick instance.", projectBrickList.get(0),
 				getActivity().getAdapter().getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist", solo.getText(getActivity().getString(R.string.brick_set_velocity)));
 
-		Vector2 velocity = new Vector2(1.2f, -3.4f);
+		String physicObjectTypeByString = solo.getString(R.string.brick_set_physic_object_type);
+		solo.waitForText(physicObjectTypeByString);
 
-		UiTestUtils.clickEnterClose(solo, 0, Float.toString(velocity.x));
-		Vector2 actualVelocity = (Vector2) UiTestUtils.getPrivateField("velocity", setVelocityBrick);
-		assertEquals("Text not updated", Float.toString(velocity.x), solo.getEditText(0).getText().toString());
-		assertEquals("Value in Brick is not updated", velocity.x, actualVelocity.x);
+		assertNotNull("TextView does not exist", solo.getText(physicObjectTypeByString));
 
-		UiTestUtils.clickEnterClose(solo, 1, Float.toString(velocity.y));
-		actualVelocity = (Vector2) UiTestUtils.getPrivateField("velocity", setVelocityBrick);
-		assertEquals("Text not updated", Float.toString(velocity.y), solo.getEditText(1).getText().toString());
-		assertEquals("Value in Brick is not updated", velocity.y, actualVelocity.y);
-	}
+		PhysicObject.Type type = PhysicObject.Type.DYNAMIC;
 
-	public void testResizeInputField() {
-		for (int editTextIndex = 0; editTextIndex < 2; editTextIndex++) {
-			UiTestUtils.testDoubleEditText(solo, editTextIndex, 12345.0, 50, false);
-			UiTestUtils.testDoubleEditText(solo, editTextIndex, 1.0, 50, true);
-			UiTestUtils.testDoubleEditText(solo, editTextIndex, 123.0, 50, true);
-			UiTestUtils.testDoubleEditText(solo, editTextIndex, -1, 50, true);
-		}
+		solo.pressSpinnerItem(0, 0);
+		solo.sleep(200);
+		String[] directionStringArray = getActivity().getResources().getStringArray(R.array.physical_object_type);
+		assertEquals("Wrong selection", directionStringArray[0], solo.getCurrentSpinners().get(0).getSelectedItem());
+
+		solo.pressSpinnerItem(0, 1);
+		solo.sleep(200);
+		assertEquals("Wrong selection", directionStringArray[1], solo.getCurrentSpinners().get(0).getSelectedItem());
+
+		solo.pressSpinnerItem(0, 2);
+		solo.sleep(200);
+		assertEquals("Wrong selection", directionStringArray[2], solo.getCurrentSpinners().get(0).getSelectedItem());
+
 	}
 
 	private void createProject() {
 		project = new Project(null, "testProject");
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		setVelocityBrick = new SetVelocityBrick(null, sprite, new Vector2());
-		script.addBrick(setVelocityBrick);
+		PhysicObject.Type type = PhysicObject.Type.DYNAMIC;
+		setPhysicObjectTypeBrick = new SetPhysicObjectTypeBrick(null, sprite, type);
+		script.addBrick(setPhysicObjectTypeBrick);
 
 		sprite.addScript(script);
 		project.addSprite(sprite);

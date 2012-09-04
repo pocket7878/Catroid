@@ -258,7 +258,7 @@
     <string name="brick_set_gravity_unit">pixels/s²</string>
     <string name="brick_set_velocity">Set velocity to</string>
     <string name="brick_set_velocity_unit">pixels/s</string>
-    <string name="brick_set_angular_velocity">Set angular velocity to</string>
+    <string name="brick_set_angular_velocity">Set rotation speed to</string>
     <string name="brick_set_angular_velocity_unit">degrees/s</string>
     <string name="brick_set_friction">Set friction to</string>
     <string name="brick_set_bounce_factor">Set bounce factor to</string>

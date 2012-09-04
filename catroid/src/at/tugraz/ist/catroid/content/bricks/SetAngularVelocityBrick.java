@@ -44,7 +44,7 @@ public class SetAngularVelocityBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private PhysicWorld physicWorld;
 	private Sprite sprite;
-	private float degrees;
+	private float degreesPerSec;
 
 	@XStreamOmitField
 	private transient View view;
@@ -52,7 +52,7 @@ public class SetAngularVelocityBrick implements Brick, OnClickListener {
 	public SetAngularVelocityBrick(PhysicWorld physicWorld, Sprite sprite, float degrees) {
 		this.physicWorld = physicWorld;
 		this.sprite = sprite;
-		this.degrees = degrees;
+		this.degreesPerSec = degrees;
 	}
 
 	@Override
@@ -62,8 +62,8 @@ public class SetAngularVelocityBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		float radian = PhysicWorldConverter.angleCatToBox2d(degrees);
-		physicWorld.getPhysicObject(sprite).setAngularVelocicty(radian);
+		float radian = PhysicWorldConverter.angleCatToBox2d(degreesPerSec);
+		physicWorld.getPhysicObject(sprite).setRotationSpeed(radian);
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class SetAngularVelocityBrick implements Brick, OnClickListener {
 		view = View.inflate(context, R.layout.brick_set_angular_velocity, null);
 
 		EditText editText = (EditText) view.findViewById(R.id.brick_set_angular_velocity_edit_text);
-		editText.setText(String.valueOf(degrees));
+		editText.setText(String.valueOf(degreesPerSec));
 
 		editText.setOnClickListener(this);
 
@@ -90,7 +90,7 @@ public class SetAngularVelocityBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new SetAngularVelocityBrick(physicWorld, sprite, degrees);
+		return new SetAngularVelocityBrick(physicWorld, sprite, degreesPerSec);
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class SetAngularVelocityBrick implements Brick, OnClickListener {
 
 		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
 		final EditText input = new EditText(context);
-		input.setText(String.valueOf(degrees));
+		input.setText(String.valueOf(degreesPerSec));
 		input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 		input.setSelectAllOnFocus(true);
 		dialog.setView(input);
@@ -108,7 +108,7 @@ public class SetAngularVelocityBrick implements Brick, OnClickListener {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				try {
-					degrees = Float.parseFloat(input.getText().toString());
+					degreesPerSec = Float.parseFloat(input.getText().toString());
 				} catch (NumberFormatException exception) {
 					Toast.makeText(context, R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 				}
