@@ -164,6 +164,8 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 					LONG_TEST_SOUND, getInstrumentation().getContext());
 		}
 
+		//SEE soundfragementtest how to setup and save sounds correctly!!
+
 		//Project uploadProject = StorageHandler.getInstance().loadProject(newTestProject);
 		//ProjectManager.INSTANCE.setProject(uploadProject);
 		//ProjectManager.INSTANCE.saveProject();
