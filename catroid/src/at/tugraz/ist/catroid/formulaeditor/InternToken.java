@@ -41,6 +41,22 @@ public class InternToken {
 		this.tokenString = tokenString;
 	}
 
+	public String getTokenSring() {
+		return this.tokenString;
+	}
+
+	public boolean isNumber() {
+		if (internTokenType == InternTokenType.NUMBER) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public void appendToTokenString(String stringToAppend) {
+		this.tokenString += stringToAppend;
+	}
+
 	public InternTokenType getInternTokenType() {
 		return this.internTokenType;
 	}

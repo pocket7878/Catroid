@@ -58,6 +58,15 @@ public class ExternInternRepresentationMapping {
 		return null;
 	}
 
+	public int getExternTokenStartOffset(int externIndex, InternToken internTokenOffsetTo) {
+		for (int searchIndex = externIndex; searchIndex > 0; searchIndex--) {
+			if (externInternMapping.get(searchIndex) == internTokenOffsetTo) {
+				return externIndex - searchIndex;
+			}
+		}
+		return -1;
+	}
+
 	private InternToken searchDown(SparseArray<InternToken> mapping, int index) {
 
 		for (int searchIndex = index; searchIndex > 0; searchIndex--) {

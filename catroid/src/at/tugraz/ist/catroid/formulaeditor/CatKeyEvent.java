@@ -179,7 +179,8 @@ public class CatKeyEvent extends KeyEvent {
 
 	private List<InternToken> buildNumber(String numberValue) {
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken("number:" + numberValue, InternTokenType.NUMBER));
+		returnList
+				.add(new InternToken(InternalFormula.INTERN_TOKEN_PREFIX_NUMBER + numberValue, InternTokenType.NUMBER));
 		return returnList;
 	}
 

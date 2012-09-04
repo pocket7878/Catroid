@@ -27,6 +27,9 @@ import java.util.List;
 
 public class InternalFormula {
 
+	//TODO: enter all prefixes
+	public static final String INTERN_TOKEN_PREFIX_NUMBER = "number:";
+
 	private ExternInternRepresentationMapping externInternRepresentationMapping;
 	private LinkedList<InternToken> internTokenList;
 
@@ -34,7 +37,6 @@ public class InternalFormula {
 			ExternInternRepresentationMapping internExternRepresentationMapping) {
 		this.externInternRepresentationMapping = internExternRepresentationMapping;
 		internTokenList = new LinkedList<InternToken>();
-
 	}
 
 	public void setInternExternRepresentationMapping(ExternInternRepresentationMapping internExternRepresentationMapping) {
@@ -46,7 +48,12 @@ public class InternalFormula {
 				.getInternTokenByExternIndex(externCursorPosition);
 
 		if (cursorPositionToken != null) {
-			replaceInternTokenByCatKeyEvent(cursorPositionToken, catKeyEvent);
+			if (cursorPositionToken.isNumber() && catKeyEvent.isNumber()) {
+				insertNumberIntoNumberToken(cursorPositionToken, externCursorPosition,
+						catKeyEvent.getDisplayLabelString());
+			} else {
+				replaceInternTokenByCatKeyEvent(cursorPositionToken, catKeyEvent);
+			}
 		} else {
 			InternToken firstLeftToken = getFirstLeftInternToken(externCursorPosition);
 			if (firstLeftToken == null) {
@@ -58,8 +65,33 @@ public class InternalFormula {
 
 	}
 
+	private void insertNumberIntoNumberToken(InternToken numberTokenToBeModified, int externCursorPosition,
+			String numberToInsert) {
+
+		int externNumberCursorIndex = externInternRepresentationMapping.getExternTokenStartOffset(externCursorPosition,
+				numberTokenToBeModified);
+
+		String numberString = numberTokenToBeModified.getTokenSring();
+		numberString = numberString.substring(INTERN_TOKEN_PREFIX_NUMBER.length());
+		String leftPart = numberString.substring(0, externNumberCursorIndex);
+		String rightPart = numberString.substring(externNumberCursorIndex);
+
+		numberTokenToBeModified.setTokenString(leftPart + numberToInsert + rightPart);
+
+	}
+
 	private void appendInternTokenByCatKeyEvent(InternToken firstLeftToken, CatKeyEvent catKeyEvent) {
-		// TODO implement
+		int indexToInsert = internTokenList.indexOf(firstLeftToken);
+
+		if (indexToInsert == -1) {
+			return;
+		}
+
+		if (firstLeftToken.isNumber() && catKeyEvent.isNumber()) {
+			firstLeftToken.appendToTokenString(catKeyEvent.getDisplayLabelString());
+		} else {
+			internTokenList.addAll(indexToInsert, catKeyEvent.createInternTokensByCatKeyEvent());
+		}
 
 	}
 
@@ -71,7 +103,7 @@ public class InternalFormula {
 	}
 
 	private void replaceInternTokenByCatKeyEvent(InternToken internTokenToReplace, CatKeyEvent catKeyEvent) {
-		//TODO implement
+
 	}
 
 	private InternToken getFirstLeftInternToken(int externIndex) {
