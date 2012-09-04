@@ -57,6 +57,8 @@ public class ExternInternRepresentationMapping {
 			}
 		}
 
+		//TODO return functionName Token when parameter delimiter deleted
+
 		return null;
 	}
 

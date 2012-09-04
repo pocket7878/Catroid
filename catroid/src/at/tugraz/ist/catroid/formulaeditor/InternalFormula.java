@@ -51,7 +51,7 @@ public class InternalFormula {
 				insertNumberIntoNumberToken(cursorPositionToken, cursorPositionTokenIndex, externCursorPosition,
 						catKeyEvent.getDisplayLabelString());
 			} else {
-				replaceInternTokenByCatKeyEvent(cursorPositionToken, catKeyEvent);
+				replaceInternTokenByCatKeyEvent(cursorPositionToken, cursorPositionTokenIndex, catKeyEvent);
 			}
 		} else {
 			InternToken firstLeftToken = getFirstLeftInternToken(externCursorPosition);
@@ -101,8 +101,18 @@ public class InternalFormula {
 
 	}
 
-	private void replaceInternTokenByCatKeyEvent(InternToken internTokenToReplace, CatKeyEvent catKeyEvent) {
+	private void replaceInternTokenByCatKeyEvent(InternToken internTokenToReplace, int internTokenToReplaceIndex,
+			CatKeyEvent catKeyEvent) {
 
+		if (internTokenToReplace.getInternTokenType() == InternTokenType.NUMBER && catKeyEvent.isFunction()) {
+			//When NUMBER selected
+			//  set Number to first parameter when FUNCTION inserted
+		}
+		if (internTokenToReplace.getInternTokenType() == InternTokenType.FUNCTION_NAME
+				|| internTokenToReplace.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN
+				|| internTokenToReplace.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE) {
+
+		}
 	}
 
 	private InternToken getFirstLeftInternToken(int externIndex) {
@@ -116,5 +126,11 @@ public class InternalFormula {
 		}
 
 		return null;
+	}
+
+	private void generateInternStringByReplace(int indexToReplace, InternToken tokenToReplaceWith) {
+		InternToken cursorPositionToken = StringFormulaToInternTokenGenerator.generateInternTokenByIndex(
+				indexToReplace, internalFormulaString);
+
 	}
 }

@@ -58,6 +58,10 @@ public class StringFormulaToInternTokenGenerator {
 
 	private static InternToken getNextToken(String internFormulaRepresentation) {
 
+		if (internFormulaRepresentation.startsWith(":") == false) {
+			return null;
+		}
+
 		int internTokenTypeNameEndIndex = internFormulaRepresentation.indexOf(":", 1);
 		String internTokenTypeName = internFormulaRepresentation.substring(0, internTokenTypeNameEndIndex + 1);
 
