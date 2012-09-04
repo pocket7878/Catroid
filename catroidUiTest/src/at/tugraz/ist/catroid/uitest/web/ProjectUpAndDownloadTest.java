@@ -47,6 +47,7 @@ import com.jayway.android.robotium.solo.Solo;
 
 public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
 	private static final String TEST_FILE_DOWNLOAD_URL = "http://catroidtest.ist.tugraz.at/catroid/download/";
+	private static final int LONG_TEST_SOUND = at.tugraz.ist.catroid.uitest.R.raw.longsound;
 
 	private Solo solo;
 	private String testProject = UiTestUtils.PROJECTNAME1;
@@ -149,6 +150,28 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 				serverProjectName.equalsIgnoreCase(projectNameSetWhenUploading));
 		assertTrue("Project name on server was not correctly renamed",
 				serverProjectDescription.equalsIgnoreCase(projectDescriptionSetWhenUploading));
+	}
+
+	public void testDownloadWithOrientationChange() throws Throwable {
+		setServerURLToTestUrl();
+
+		String projectName = testProject + 5;
+		createTestProject(projectName);
+		int numberMediaFiles = 16; //~ 1 MB
+		for (int start = 0; start < numberMediaFiles; start++) {
+			UiTestUtils.createTestMediaFile(Constants.DEFAULT_ROOT + "/" + projectName + "/"
+					+ Constants.SOUND_DIRECTORY + "/" + "longsound" + Integer.toString(start) + ".mp3",
+					LONG_TEST_SOUND, getInstrumentation().getContext());
+		}
+
+		//Project uploadProject = StorageHandler.getInstance().loadProject(newTestProject);
+		//ProjectManager.INSTANCE.setProject(uploadProject);
+		//ProjectManager.INSTANCE.saveProject();
+		//SoundManager.getInstance().playSoundFile(
+		//		Constants.DEFAULT_ROOT + "/" + projectName + "/" + Constants.SOUND_DIRECTORY + "/" + "longsound" + 1
+		//			+ ".mp3");
+
+		solo.sleep(10000);
 	}
 
 	private void createTestProject(String projectToCreate) {
