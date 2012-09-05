@@ -30,21 +30,25 @@ public class InternFormulaToInternTokenGenerator {
 	public InternFormulaToInternTokenGenerator() {
 	}
 
-	//	public static List<InternToken> generateInternRepresentationByString(String internFormulaRepresentation) {
-	//		List<InternToken> internTokenList = new LinkedList<InternToken>();
-	//
-	//		while (internFormulaRepresentation.length() > 0) {
-	//			InternToken tokenToAdd = getNextToken(internFormulaRepresentation);
-	//			if (tokenToAdd == null) {
-	//				return null;
-	//			}
-	//			internTokenList.add(tokenToAdd);
-	//			internFormulaRepresentation = internFormulaRepresentation.substring(tokenToAdd.getTokenSringValue()
-	//					.length());
-	//		}
-	//
-	//		return internTokenList;
-	//	}
+	public static List<InternToken> generateInternRepresentationByString(String internFormulaRepresentation) {
+		List<InternToken> internTokenList = new LinkedList<InternToken>();
+
+		int currentIndex = 0;
+
+		while (currentIndex < internFormulaRepresentation.length()) {
+			InternToken tokenToAdd = generateInternTokenByIndex(currentIndex, internFormulaRepresentation);
+			if (tokenToAdd == null) {
+				return null;
+			}
+			tokenToAdd.setInternPositionIndex(currentIndex);
+			internTokenList.add(tokenToAdd);
+
+			currentIndex += tokenToAdd.toString().length();
+
+		}
+
+		return internTokenList;
+	}
 
 	public static List<InternToken> generateInternTokenListByFunctionIndex(int functionStartIndex,
 			String internFormulaRepresentation) {

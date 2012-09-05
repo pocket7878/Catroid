@@ -133,7 +133,7 @@ public class CatKeyEvent extends KeyEvent {
 
 				//PERIOD
 			case CatKeyEvent.KEYCODE_PERIOD:
-				return buildPeriod(".");
+				return buildPeriod();
 
 				//OPERATOR
 

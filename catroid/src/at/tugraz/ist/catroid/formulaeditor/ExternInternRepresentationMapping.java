@@ -29,24 +29,35 @@ public class ExternInternRepresentationMapping {
 	private SparseArray<Integer> externInternMapping;
 	private SparseArray<Integer> internExternMapping;
 
-	private int externInternMappingMaximalIndex;
-	private int internExternMappingMaximalIndex;
+	private int externStringLength;
+	private int internStringLength;
 
 	public ExternInternRepresentationMapping() {
 		externInternMapping = new SparseArray<Integer>();
 		internExternMapping = new SparseArray<Integer>();
 	}
 
-	public void insertNewExternInternMapping(int keyStartIndex, int keyEndIndex, Integer internTokenToMap) {
-		externInternMapping.put(keyStartIndex, internTokenToMap);
-		externInternMapping.put(keyEndIndex, internTokenToMap);
+	public void putExternIndernMapping(int externStartIndex, int externEndIndex, int internStartIndex) {
+		externInternMapping.put(externStartIndex, internStartIndex);
+		externInternMapping.put(externEndIndex, internStartIndex);
+	}
+
+	public void putInternExternMapping(int internStartIndex, int externStartIndex) {
+		internExternMapping.put(internStartIndex, externStartIndex);
+
+	}
+
+	public Integer getExternIndexByInternIndex(int internIndex) {
+		//TODO implement to show parse errors
+
+		return null;
 	}
 
 	public Integer getInternTokenByExternIndex(int externIndex) {
 
 		Integer searchDownInternToken = searchDown(externInternMapping, externIndex - 1);
 		Integer currentInternToken = externInternMapping.get(externIndex);
-		Integer searchUpInternToken = searchUp(externInternMapping, externIndex + 1, externInternMappingMaximalIndex);
+		Integer searchUpInternToken = searchUp(externInternMapping, externIndex + 1, externStringLength);
 
 		if (currentInternToken != null) {
 			return currentInternToken;

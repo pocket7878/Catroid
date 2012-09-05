@@ -22,10 +22,62 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
+import java.util.List;
+
+import android.content.Context;
 
 public class InternToExternGenerator {
 
-	public InternToExternGenerator() {
+	private String generatedExternString;
+	private ExternInternRepresentationMapping externInternRepresentationMapping;
+
+	private InternToExternLanguageConverter internToExternLanguageConverter;
+
+	public InternToExternGenerator(Context context) {
+		generatedExternString = "";
+		externInternRepresentationMapping = new ExternInternRepresentationMapping();
+		internToExternLanguageConverter = new InternToExternLanguageConverter(context);
 	}
 
+	public void generateExternStringAndMapping(String internFormulaRepresentation) {
+
+		List<InternToken> internTokenList = InternFormulaToInternTokenGenerator
+				.generateInternRepresentationByString(internFormulaRepresentation);
+
+		generatedExternString = "";
+		InternToken currentToken;
+		String externTokenString;
+		int externStartIndex;
+		int externEndIndex;
+
+		while (internTokenList.size() > 0) {
+			generatedExternString += " "; //TODO handle whitespace insertion
+			externStartIndex = generatedExternString.length();
+			currentToken = internTokenList.get(0);
+			externTokenString = generateExternStringFromToken(currentToken);
+			generatedExternString += externTokenString;
+			externEndIndex = generatedExternString.length(); //TODO cursor position determination
+
+			externInternRepresentationMapping.putExternIndernMapping(externStartIndex, externEndIndex,
+					currentToken.getInternPositionIndex());
+			externInternRepresentationMapping.putInternExternMapping(currentToken.getInternPositionIndex(),
+					externStartIndex);
+
+		}
+	}
+
+	private String generateExternStringFromToken(InternToken internToken) {
+		switch (internToken.getInternTokenType()) {
+			case NUMBER:
+				return internToken.getTokenSringValue();
+			case OPERATOR:
+				return internToken.getTokenSringValue();
+
+			default:
+				return internToExternLanguageConverter.getExternStringForInternTokenValue(internToken
+						.getTokenSringValue());
+
+				//TODO handle all cases(UserVariables etc...)
+		}
+	}
 }
