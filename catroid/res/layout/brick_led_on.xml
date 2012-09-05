@@ -28,7 +28,7 @@
     android:background="@drawable/brick_yellow"
     android:focusable="false"
     android:focusableInTouchMode="false" >
-
+
     <TextView
         android:id="@+id/ValueTextView"
         style="@style/brick_text_style"
@@ -36,6 +36,7 @@
         android:layout_centerVertical="true"
         android:paddingRight="40dip"
         android:text="@string/brick_led_on" >
+
     </TextView>
 
     <TextView
@@ -47,15 +48,13 @@
         android:paddingRight="10dip"
         android:text="@string/percent" >
     </TextView>
-
+
     <TextView
         android:id="@+id/brick_led_on_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="5dip"
         android:layout_toLeftOf="@+id/LabelTextView"
-        android:layout_toRightOf="@+id/ValueTextView"
         android:background="@color/white"
         android:gravity="right"
         android:minHeight="30dip"
@@ -63,6 +62,7 @@
         android:paddingRight="5dip"
         android:text="1.0"
         android:textSize="20dip" >
+
     </TextView>
 
     <EditText
@@ -77,10 +77,10 @@
         android:focusableInTouchMode="false"
         android:visibility="gone"
         android:gravity="right"
-        android:inputType="number|numberDecimal"
-        android:maxLength="8"
+        android:inputType="number"
+        android:maxLength="3"
         android:maxLines="1"
-        android:minWidth="60dip"
+        android:minWidth="40dip"
         android:text="1.0" >
     </EditText>
 

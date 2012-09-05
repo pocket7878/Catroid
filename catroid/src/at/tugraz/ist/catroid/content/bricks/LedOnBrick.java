@@ -37,13 +37,13 @@ import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 
 public class LedOnBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
-	private int timeToWaitInMilliSeconds;
+	private int insensitivitätInPercent;
 	private Sprite sprite;
 
 	private transient View view;
 
-	public LedOnBrick(Sprite sprite, int timeToWaitInMilliseconds) {
-		this.timeToWaitInMilliSeconds = timeToWaitInMilliseconds;
+	public LedOnBrick(Sprite sprite, int insensitivitätInPercent) {
+		this.insensitivitätInPercent = insensitivitätInPercent;
 		this.sprite = sprite;
 	}
 
@@ -54,24 +54,26 @@ public class LedOnBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		long startTime = System.currentTimeMillis();
-		int timeToWait = timeToWaitInMilliSeconds;
-		while (System.currentTimeMillis() <= (startTime + timeToWait)) {
-			if (!sprite.isAlive(Thread.currentThread())) {
-				break;
-			}
-			if (sprite.isPaused) {
-				timeToWait = timeToWait - (int) (System.currentTimeMillis() - startTime);
-				while (sprite.isPaused) {
-					if (sprite.isFinished) {
-						return;
-					}
-					Thread.yield();
-				}
-				startTime = System.currentTimeMillis();
-			}
-			Thread.yield();
-		}
+		/*
+		 * long startTime = System.currentTimeMillis();
+		 * int timeToWait = insensitivitätInPercent;
+		 * while (System.currentTimeMillis() <= (startTime + timeToWait)) {
+		 * if (!sprite.isAlive(Thread.currentThread())) {
+		 * break;
+		 * }
+		 * if (sprite.isPaused) {
+		 * timeToWait = timeToWait - (int) (System.currentTimeMillis() - startTime);
+		 * while (sprite.isPaused) {
+		 * if (sprite.isFinished) {
+		 * return;
+		 * }
+		 * Thread.yield();
+		 * }
+		 * startTime = System.currentTimeMillis();
+		 * }
+		 * Thread.yield();
+		 * }
+		 */
 	}
 
 	@Override
@@ -85,7 +87,7 @@ public class LedOnBrick implements Brick, OnClickListener {
 
 		TextView text = (TextView) view.findViewById(R.id.brick_led_on_text_view);
 		EditText edit = (EditText) view.findViewById(R.id.brick_led_on_edit_text);
-		edit.setText((timeToWaitInMilliSeconds / 1000.0) + "");
+		edit.setText((insensitivitätInPercent) + "");
 
 		text.setVisibility(View.GONE);
 		edit.setVisibility(View.VISIBLE);
@@ -101,7 +103,7 @@ public class LedOnBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new LedOnBrick(getSprite(), timeToWaitInMilliSeconds);
+		return new LedOnBrick(getSprite(), insensitivitätInPercent);
 	}
 
 	@Override
@@ -111,15 +113,15 @@ public class LedOnBrick implements Brick, OnClickListener {
 		BrickTextDialog editDialog = new BrickTextDialog() {
 			@Override
 			protected void initialize() {
-				input.setText(String.valueOf(timeToWaitInMilliSeconds / 1000.0));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+				input.setText(String.valueOf(insensitivitätInPercent));
+				input.setInputType(InputType.TYPE_CLASS_NUMBER);
 				input.setSelectAllOnFocus(true);
 			}
 
 			@Override
 			protected boolean handleOkButton() {
 				try {
-					timeToWaitInMilliSeconds = (int) (Double.parseDouble(input.getText().toString()) * 1000);
+					insensitivitätInPercent = (int) (Double.parseDouble(input.getText().toString()) * 100);
 				} catch (NumberFormatException exception) {
 					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 				}
