@@ -22,6 +22,8 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
+import java.util.List;
+
 public class InternToken {
 
 	private String tokenStringValue = "";
@@ -57,6 +59,13 @@ public class InternToken {
 		this.tokenStringValue += stringToAppend;
 	}
 
+	public void appendToTokenStringValue(List<InternToken> internTokensToAppend) {
+		for (InternToken internToken : internTokensToAppend) {
+			this.tokenStringValue += internToken.tokenStringValue;
+		}
+
+	}
+
 	public InternTokenType getInternTokenType() {
 		return this.internTokenType;
 	}
@@ -76,6 +85,59 @@ public class InternToken {
 
 	public int getInternPositionIndex() {
 		return this.internPositionIndex;
+	}
+
+	private static InternTokenType getFirstInternTokenType(List<InternToken> internTokens) {
+		if (internTokens.size() == 0) {
+			return null;
+		}
+
+		return internTokens.get(0).getInternTokenType();
+
+	}
+
+	public static boolean isPeriodToken(List<InternToken> internTokens) {
+		InternTokenType firstInternTokenType = getFirstInternTokenType(internTokens);
+
+		if (firstInternTokenType == null) {
+			return false;
+		}
+
+		if (firstInternTokenType == InternTokenType.PERIOD) {
+			return true;
+
+		}
+
+		return false;
+	}
+
+	public static boolean isFunctionToken(List<InternToken> internTokens) {
+		InternTokenType firstInternTokenType = getFirstInternTokenType(internTokens);
+
+		if (firstInternTokenType == null) {
+			return false;
+		}
+
+		if (firstInternTokenType == InternTokenType.FUNCTION_NAME) {
+			return true;
+
+		}
+
+		return false;
+	}
+
+	public static boolean isNumberToken(List<InternToken> internTokens) {
+		InternTokenType firstInternTokenType = getFirstInternTokenType(internTokens);
+
+		if (firstInternTokenType == null) {
+			return false;
+		}
+
+		if (firstInternTokenType == InternTokenType.NUMBER) {
+			return true;
+		}
+
+		return false;
 	}
 
 }

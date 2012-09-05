@@ -28,7 +28,7 @@ public enum InternTokenType {
 	NUMBER(":number:"), OPERATOR(":operator:"), FUNCTION_NAME(":function_name:"), BRACKET_OPEN(":bracket_open:"), BRACKET_CLOSE(
 			":bracket_close:"), SENSOR(":sensor:"), FUNCTION_PARAMETERS_BRACKET_OPEN(
 			":function_parameter_bracket_open:"), FUNCTION_PARAMETERS_BRACKET_CLOSE(
-			":function_parameters_bracket_close:"), COSTUME(":costume:");
+			":function_parameters_bracket_close:"), COSTUME(":costume:"), PERIOD(":period:");
 
 	private String tokenPrefix;
 

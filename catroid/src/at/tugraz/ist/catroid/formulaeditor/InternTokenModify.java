@@ -26,16 +26,16 @@ import java.util.List;
 
 public class InternTokenModify {
 
-	public static List<InternToken> replaceFunctionByCatKeyEvent(List<InternToken> functionToReplace,
-			CatKeyEvent catKeyEvent) {
+	public static List<InternToken> replaceFunctionByTokens(List<InternToken> functionToReplace,
+			List<InternToken> internTokensToReplace) {
 
-		if (catKeyEvent.isFunction()) {
+		if (InternToken.isFunctionToken(internTokensToReplace)) {
 			//TODO replace function with function
 			//keep all parameters of the replaced function
 
 		} else {
 
-			return catKeyEvent.createInternTokensByCatKeyEvent();
+			return internTokensToReplace;
 		}
 
 		return null;

@@ -131,6 +131,10 @@ public class CatKeyEvent extends KeyEvent {
 			case CatKeyEvent.KEYCODE_SENSOR7:
 				return buildSensor("SLIDER_");
 
+				//PERIOD
+			case CatKeyEvent.KEYCODE_PERIOD:
+				return buildPeriod(".");
+
 				//OPERATOR
 
 			case CatKeyEvent.KEYCODE_PLUS:
@@ -141,8 +145,6 @@ public class CatKeyEvent extends KeyEvent {
 				return buildOperator("*");
 			case CatKeyEvent.KEYCODE_SLASH:
 				return buildOperator("/");
-			case CatKeyEvent.KEYCODE_PERIOD:
-				return buildOperator(".");
 			case CatKeyEvent.KEYCODE_POWER:
 				return buildOperator("^");
 
@@ -172,6 +174,12 @@ public class CatKeyEvent extends KeyEvent {
 
 		return null;
 
+	}
+
+	private List<InternToken> buildPeriod() {
+		List<InternToken> returnList = new LinkedList<InternToken>();
+		returnList.add(new InternToken(InternTokenType.PERIOD));
+		return returnList;
 	}
 
 	private List<InternToken> buildNumber(String numberValue) {
