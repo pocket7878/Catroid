@@ -22,6 +22,7 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class InternFormulaStringModify {
@@ -52,11 +53,24 @@ public class InternFormulaStringModify {
 				internalFormulaString);
 	}
 
-	public static String generateInternStringByAppend(int indexToAppend, List<InternToken> tokensToAppend,
+	public static String generateInternStringByReplace(int internTokenToReplaceIndex, InternToken tokenToReplace,
+			String internalFormulaString) {
+		List<InternToken> tokensToReplaceWith = new LinkedList<InternToken>();
+		tokensToReplaceWith.add(tokenToReplace);
+		return generateInternStringByReplace(internTokenToReplaceIndex, internTokenToReplaceIndex, tokensToReplaceWith,
+				internalFormulaString);
+	}
+
+	public static String generateInternStringByAppend(int internTokenToAppendIndex, List<InternToken> tokensToAppend,
 			String internalFormulaString) {
 
+		//TODO implement iff needed
 		return null;
+	}
 
+	public static String generateInternStringByInsertAtBeginning(List<InternToken> tokensToInsert,
+			String internalFormulaString) {
+		return generateInternStringByInternTokenList(tokensToInsert) + internalFormulaString;
 	}
 
 	private static String generateInternStringByInternTokenList(List<InternToken> internTokenList) {

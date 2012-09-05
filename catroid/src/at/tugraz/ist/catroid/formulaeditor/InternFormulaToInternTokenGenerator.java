@@ -30,20 +30,67 @@ public class InternFormulaToInternTokenGenerator {
 	public InternFormulaToInternTokenGenerator() {
 	}
 
-	public static List<InternToken> generateInternRepresentationByString(String internFormulaRepresentation) {
-		List<InternToken> internTokenList = new LinkedList<InternToken>();
+	//	public static List<InternToken> generateInternRepresentationByString(String internFormulaRepresentation) {
+	//		List<InternToken> internTokenList = new LinkedList<InternToken>();
+	//
+	//		while (internFormulaRepresentation.length() > 0) {
+	//			InternToken tokenToAdd = getNextToken(internFormulaRepresentation);
+	//			if (tokenToAdd == null) {
+	//				return null;
+	//			}
+	//			internTokenList.add(tokenToAdd);
+	//			internFormulaRepresentation = internFormulaRepresentation.substring(tokenToAdd.getTokenSringValue()
+	//					.length());
+	//		}
+	//
+	//		return internTokenList;
+	//	}
 
-		while (internFormulaRepresentation.length() > 0) {
-			InternToken tokenToAdd = getNextToken(internFormulaRepresentation);
-			if (tokenToAdd == null) {
-				return null;
-			}
-			internTokenList.add(tokenToAdd);
-			internFormulaRepresentation = internFormulaRepresentation.substring(tokenToAdd.getTokenSringValue()
-					.length());
+	public static List<InternToken> generateInternTokenListByFunctionIndex(int functionStartIndex,
+			String internFormulaRepresentation) {
+
+		List<InternToken> functionInternTokenList = new LinkedList<InternToken>();
+
+		InternToken functionNameToken = generateInternTokenByIndex(functionStartIndex, internFormulaRepresentation);
+
+		if (functionNameToken.getInternTokenType() != InternTokenType.FUNCTION_NAME) {
+			return null;
 		}
 
-		return internTokenList;
+		functionInternTokenList.add(functionNameToken);
+
+		int functionIndex = functionStartIndex + functionNameToken.toString().length();
+
+		InternToken functionStartParameter = generateInternTokenByIndex(functionIndex, internFormulaRepresentation);
+
+		if (functionStartParameter == null) {
+			return functionInternTokenList;
+		}
+
+		functionInternTokenList.add(functionStartParameter);
+
+		functionIndex += functionNameToken.toString().length();
+		InternToken tempSearchToken;
+		int nestedFunctionsCounter = 0;
+
+		do {
+			tempSearchToken = generateInternTokenByIndex(functionIndex, internFormulaRepresentation);
+			if (tempSearchToken == null) {
+				return null;
+			}
+			functionIndex += tempSearchToken.toString().length();
+			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
+				nestedFunctionsCounter++;
+			}
+			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE) {
+				nestedFunctionsCounter--;
+			}
+			functionInternTokenList.add(tempSearchToken);
+
+		} while (tempSearchToken.getInternTokenType() != InternTokenType.BRACKET_CLOSE || nestedFunctionsCounter != 0);
+
+		return functionInternTokenList;
+
 	}
 
 	public static InternToken generateInternTokenByIndex(int index, String internFormulaRepresentation) {
@@ -52,15 +99,10 @@ public class InternFormulaToInternTokenGenerator {
 		if (internFormulaRepresentation.startsWith(":") == false) {
 			return null;
 		}
+		InternToken returnToken = getNextToken(internFormulaRepresentation);
+		returnToken.setInternPositionIndex(index);
 
-		return getNextToken(internFormulaRepresentation);
-	}
-
-	public static List<InternToken> generateInternTokenListByFunctionIndex(int functionStartIndex,
-			String internFormulaRepresentation) {
-
-		return null;
-
+		return returnToken;
 	}
 
 	private static InternToken getNextToken(String internFormulaRepresentation) {

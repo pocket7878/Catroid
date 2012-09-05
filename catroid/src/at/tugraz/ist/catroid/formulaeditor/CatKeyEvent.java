@@ -252,9 +252,17 @@ public class CatKeyEvent extends KeyEvent {
 
 	}
 
-	public boolean isOperator(KeyEvent event) {
-		if (event.getKeyCode() == KeyEvent.KEYCODE_PLUS || event.getKeyCode() == KeyEvent.KEYCODE_MINUS
-				|| event.getKeyCode() == KeyEvent.KEYCODE_STAR || event.getKeyCode() == KeyEvent.KEYCODE_SLASH) {
+	public boolean isOperator() {
+		if (this.getKeyCode() == KeyEvent.KEYCODE_PLUS || this.getKeyCode() == KeyEvent.KEYCODE_MINUS
+				|| this.getKeyCode() == KeyEvent.KEYCODE_STAR || this.getKeyCode() == KeyEvent.KEYCODE_SLASH) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean isPeriod() {
+		if (this.getKeyCode() == CatKeyEvent.KEYCODE_PERIOD) {
 			return true;
 		}
 

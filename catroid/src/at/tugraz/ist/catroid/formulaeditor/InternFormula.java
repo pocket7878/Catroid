@@ -50,11 +50,8 @@ public class InternFormula {
 
 		if (cursorPositionToken == null) {
 			InternToken firstLeftToken = getFirstLeftInternToken(externCursorPosition);
-			if (firstLeftToken == null) {
-				insertInternTokenByCatKeyEvent(0, catKeyEvent);
-			} else {
-				appendInternTokenByKeyEvent(firstLeftToken, externCursorPosition, catKeyEvent);
-			}
+			appendInternTokenByKeyEvent(firstLeftToken, cursorPositionTokenIndex, externCursorPosition, catKeyEvent);
+
 		} else {
 			if (cursorPositionToken.isNumber() && catKeyEvent.isNumber()) {
 				insertNumberIntoNumberToken(cursorPositionToken, cursorPositionTokenIndex, externCursorPosition,
@@ -66,6 +63,7 @@ public class InternFormula {
 
 	}
 
+	//TODO move to correct position
 	private void insertNumberIntoNumberToken(InternToken numberTokenToBeModified, int cursorPositionTokenIndex,
 			int externCursorPosition, String numberToInsert) {
 
@@ -81,8 +79,26 @@ public class InternFormula {
 
 	}
 
-	private void appendInternTokenByKeyEvent(InternToken firstLeftToken, int externCursorPosition,
-			CatKeyEvent catKeyEvent) {
+	private void appendInternTokenByKeyEvent(InternToken firstLeftToken, int firstLeftTokenInternIndex,
+			int externCursorPosition, CatKeyEvent catKeyEvent) {
+
+		if (firstLeftToken == null) {
+			internalFormulaString = InternFormulaStringModify.generateInternStringByInsertAtBeginning(
+					catKeyEvent.createInternTokensByCatKeyEvent(), internalFormulaString);
+
+		} else if (firstLeftToken.isNumber() && catKeyEvent.isNumber()) {
+			firstLeftToken.appendToTokenStringValue(catKeyEvent.getDisplayLabelString());
+			internalFormulaString = InternFormulaStringModify.generateInternStringByReplace(firstLeftTokenInternIndex,
+					firstLeftToken, internalFormulaString);
+		} else if (firstLeftToken.isNumber() && catKeyEvent.isPeriod()) {
+			String numberString = firstLeftToken.getTokenSringValue();
+			if (numberString.contains(catKeyEvent.getDisplayLabelString())) {
+				return;
+			}
+			firstLeftToken.appendToTokenStringValue(catKeyEvent.getDisplayLabelString());
+			internalFormulaString = InternFormulaStringModify.generateInternStringByReplace(firstLeftTokenInternIndex,
+					firstLeftToken, internalFormulaString);
+		}
 
 		//		int indexToInsert = externInternRepresentationMapping.indexOf(firstLeftToken);
 		//
@@ -128,9 +144,10 @@ public class InternFormula {
 
 			int lastListIndex = functionInternTokens.size() - 1;
 			InternToken lastFunctionToken = functionInternTokens.get(lastListIndex);
-			int endIndexToReplace = lastFunctionToken.getExternPositionIndex();
+			int endIndexToReplace = lastFunctionToken.getInternPositionIndex();
 
-			List<InternToken> replacedFunctionTokens = replaceFunctionByCatKeyEvent(functionInternTokens, catKeyEvent);
+			List<InternToken> replacedFunctionTokens = InternTokenModify.replaceFunctionByCatKeyEvent(
+					functionInternTokens, catKeyEvent);
 
 			internalFormulaString = InternFormulaStringModify.generateInternStringByReplace(internTokenToReplaceIndex,
 					endIndexToReplace, replacedFunctionTokens, internalFormulaString);
@@ -151,23 +168,9 @@ public class InternFormula {
 				int internTokenIndex = externInternRepresentationMapping.getInternTokenByExternIndex(searchIndex);
 				InternToken internTokenToReturn = InternFormulaToInternTokenGenerator.generateInternTokenByIndex(
 						internTokenIndex, internalFormulaString);
-				internTokenToReturn.setExternPositionIndex(searchIndex);
+				internTokenToReturn.setInternPositionIndex(searchIndex);
 				return internTokenToReturn;
 			}
-		}
-
-		return null;
-	}
-
-	private List<InternToken> replaceFunctionByCatKeyEvent(List<InternToken> functionToReplace, CatKeyEvent catKeyEvent) {
-
-		if (catKeyEvent.isFunction()) {
-			//TODO replace function with function
-			//keep all parameters of the replaced function
-
-		} else {
-
-			return catKeyEvent.createInternTokensByCatKeyEvent();
 		}
 
 		return null;
