@@ -156,14 +156,14 @@ public class DeleteDialogTest extends ActivityInstrumentationTestCase2<MainMenuA
 		costumeData.setCostumeFilename(imageFile.getName());
 		costumeData.setCostumeName(costumeName);
 		costumeDataList.add(costumeData);
-		ProjectManager.INSTANCE.getFileChecksumContainer().addChecksum(costumeData.getChecksum(),
-				costumeData.getAbsolutePath());
+		ProjectManager.INSTANCE.getFileChecksumContainer()
+				.addChecksum(costumeData.getChecksum(), costumeData.getPath());
 		costumeData = new CostumeData();
 		costumeData.setCostumeFilename(imageFile2.getName());
 		costumeData.setCostumeName("costumeNameTest2");
 		costumeDataList.add(costumeData);
-		ProjectManager.INSTANCE.getFileChecksumContainer().addChecksum(costumeData.getChecksum(),
-				costumeData.getAbsolutePath());
+		ProjectManager.INSTANCE.getFileChecksumContainer()
+				.addChecksum(costumeData.getChecksum(), costumeData.getPath());
 		Display display = getActivity().getWindowManager().getDefaultDisplay();
 		ProjectManager.INSTANCE.getCurrentProject().virtualScreenWidth = display.getWidth();
 		ProjectManager.INSTANCE.getCurrentProject().virtualScreenHeight = display.getHeight();
