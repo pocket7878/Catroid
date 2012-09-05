@@ -35,6 +35,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import at.tugraz.ist.catroid.web.ServerCalls;
@@ -59,6 +60,7 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		solo = new Solo(getInstrumentation(), getActivity());
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		saveToken = prefs.getString(Constants.TOKEN, "0");
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

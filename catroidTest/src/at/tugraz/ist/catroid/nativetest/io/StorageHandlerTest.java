@@ -22,8 +22,6 @@
  */
 package at.tugraz.ist.catroid.nativetest.io;
 
-import java.io.IOException;
-
 import android.test.InstrumentationTestCase;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.bricks.ComeToFrontBrick;
@@ -32,6 +30,7 @@ import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaySoundBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.stage.NativeAppActivity;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
@@ -39,12 +38,16 @@ import at.tugraz.ist.catroid.test.utils.TestUtils;
 public class StorageHandlerTest extends InstrumentationTestCase {
 	private StorageHandler storageHandler;
 
-	public StorageHandlerTest() throws IOException {
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
 		storageHandler = StorageHandler.getInstance();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
+		super.tearDown();
 		NativeAppActivity.setContext(null);
 	}
 

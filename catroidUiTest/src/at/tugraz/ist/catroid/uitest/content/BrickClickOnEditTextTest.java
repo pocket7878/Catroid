@@ -36,6 +36,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.SetXBrick;
 import at.tugraz.ist.catroid.content.bricks.SetYBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
@@ -56,6 +57,7 @@ public class BrickClickOnEditTextTest extends ActivityInstrumentationTestCase2<M
 		UiTestUtils.createEmptyProject();
 		solo = new Solo(getInstrumentation(), getActivity());
 		getIntoActivity();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

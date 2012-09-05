@@ -39,6 +39,7 @@ import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetGhostEffectBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.TurnLeftBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
@@ -61,6 +62,7 @@ public class ComplexStageTest extends ActivityInstrumentationTestCase2<StageActi
 		createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
 		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

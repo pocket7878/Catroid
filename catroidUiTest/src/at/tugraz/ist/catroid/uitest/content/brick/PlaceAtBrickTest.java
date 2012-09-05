@@ -39,6 +39,7 @@ import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaySoundBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
 import at.tugraz.ist.catroid.ui.fragment.ScriptFragment;
@@ -65,6 +66,7 @@ public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 	public void setUp() throws Exception {
 		createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

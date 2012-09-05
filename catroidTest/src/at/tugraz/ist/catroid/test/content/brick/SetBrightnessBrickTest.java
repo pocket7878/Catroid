@@ -25,10 +25,17 @@ package at.tugraz.ist.catroid.test.content.brick;
 import android.test.InstrumentationTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.SetBrightnessBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class SetBrightnessBrickTest extends InstrumentationTestCase {
 
 	private double brightnessValue = 50.1;
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
 
 	public void testBrightnessEffect() {
 		Sprite sprite = new Sprite("testSprite");

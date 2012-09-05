@@ -27,17 +27,24 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 
 public class ProjectTest extends AndroidTestCase {
 
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
+
 	public void testVersionNameAndNumber() throws NameNotFoundException {
 		Project project = new Project(getContext(), "testProject");
 		PackageInfo packageInfo = getContext().getPackageManager().getPackageInfo("at.tugraz.ist.catroid", 0);
-		assertEquals("Incorrect version name", packageInfo.versionName, (String) TestUtils.getPrivateField(
-				"catroidVersionName", project, false));
-		assertEquals("Incorrect version code", packageInfo.versionCode, TestUtils.getPrivateField("catroidVersionCode",
-				project, false));
+		assertEquals("Incorrect version name", packageInfo.versionName,
+				(String) TestUtils.getPrivateField("catroidVersionName", project, false));
+		assertEquals("Incorrect version code", packageInfo.versionCode,
+				TestUtils.getPrivateField("catroidVersionCode", project, false));
 	}
 
 	public void testAddRemoveSprite() {

@@ -42,6 +42,7 @@ import at.tugraz.ist.catroid.content.bricks.BroadcastWaitBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaySoundBrick;
 import at.tugraz.ist.catroid.content.bricks.PointToBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
@@ -69,6 +70,7 @@ public class EmptyBrickSpinnersTest extends ActivityInstrumentationTestCase2<Scr
 		createSpinnerProject();
 		solo = new Solo(getInstrumentation(), getActivity());
 		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

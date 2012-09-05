@@ -28,13 +28,21 @@ import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.stage.NativeAppActivity;
 
 public class SetCostumeBrickTest extends InstrumentationTestCase {
 	private String testName = "testName";
 
 	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
+
+	@Override
 	protected void tearDown() throws Exception {
+		super.tearDown();
 		NativeAppActivity.setContext(null);
 	}
 

@@ -57,6 +57,7 @@ import at.tugraz.ist.catroid.content.bricks.SetXBrick;
 import at.tugraz.ist.catroid.content.bricks.SetYBrick;
 import at.tugraz.ist.catroid.content.bricks.SpeakBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
@@ -80,6 +81,7 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 	public void setUp() throws Exception {
 		solo = new Solo(getInstrumentation(), getActivity());
 		createProject();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

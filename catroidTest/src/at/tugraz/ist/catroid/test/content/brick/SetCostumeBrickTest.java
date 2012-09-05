@@ -33,6 +33,7 @@ import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.test.R;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
@@ -49,7 +50,7 @@ public class SetCostumeBrickTest extends InstrumentationTestCase {
 
 	@Override
 	protected void setUp() throws Exception {
-
+		super.setUp();
 		File projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName);
 
 		if (projectFile.exists()) {
@@ -69,10 +70,13 @@ public class SetCostumeBrickTest extends InstrumentationTestCase {
 
 		this.width = bitmapOptions.outWidth;
 		this.height = bitmapOptions.outHeight;
+
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
+		super.tearDown();
 		File projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName);
 
 		if (projectFile.exists()) {

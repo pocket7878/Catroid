@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
@@ -47,6 +48,7 @@ public class NewProjectDialogTest extends ActivityInstrumentationTestCase2<MainM
 		super.setUp();
 		UiTestUtils.clearAllUtilTestProjects();
 		solo = new Solo(getInstrumentation(), getActivity());
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

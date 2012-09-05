@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
@@ -67,6 +68,7 @@ public class ScriptTabActivityTest extends ActivityInstrumentationTestCase2<Scri
 		super.setUp();
 		UiTestUtils.createTestProject();
 		solo = new Solo(getInstrumentation(), getActivity());
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

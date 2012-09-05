@@ -35,6 +35,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.MyProjectsActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
@@ -62,6 +63,7 @@ public class UploadDialogTest extends ActivityInstrumentationTestCase2<MainMenuA
 		super.setUp();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		saveToken = prefs.getString(Constants.TOKEN, "0");
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

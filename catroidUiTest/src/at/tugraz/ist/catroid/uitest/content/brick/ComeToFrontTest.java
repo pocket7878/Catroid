@@ -34,6 +34,7 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.ComeToFrontBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
 import at.tugraz.ist.catroid.ui.fragment.ScriptFragment;
@@ -53,6 +54,7 @@ public class ComeToFrontTest extends ActivityInstrumentationTestCase2<ScriptTabA
 
 	public ComeToFrontTest() {
 		super(ScriptTabActivity.class);
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

@@ -28,8 +28,15 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class SpriteTest extends AndroidTestCase {
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
 
 	public void testAddScript() {
 		Sprite sprite = new Sprite("new sprite");

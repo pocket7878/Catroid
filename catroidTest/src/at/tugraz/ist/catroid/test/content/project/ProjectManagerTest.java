@@ -41,6 +41,7 @@ import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -55,7 +56,14 @@ public class ProjectManagerTest extends InstrumentationTestCase {
 	private Script otherScript;
 
 	@Override
-	public void tearDown() {
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
+
+	@Override
+	public void tearDown() throws Exception {
+		super.tearDown();
 		TestUtils.clearProject(projectNameOne);
 		TestUtils.clearProject("oldProject");
 		TestUtils.clearProject("newProject");

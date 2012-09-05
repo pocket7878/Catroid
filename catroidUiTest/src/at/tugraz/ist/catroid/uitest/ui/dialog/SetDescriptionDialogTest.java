@@ -27,6 +27,7 @@ import android.widget.EditText;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.MyProjectsActivity;
@@ -48,6 +49,7 @@ public class SetDescriptionDialogTest extends ActivityInstrumentationTestCase2<M
 		super.setUp();
 		UiTestUtils.clearAllUtilTestProjects();
 		solo = new Solo(getInstrumentation(), getActivity());
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

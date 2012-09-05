@@ -30,6 +30,7 @@ import at.tugraz.ist.catroid.content.bricks.ChangeYByBrick;
 import at.tugraz.ist.catroid.content.bricks.ForeverBrick;
 import at.tugraz.ist.catroid.content.bricks.LoopBeginBrick;
 import at.tugraz.ist.catroid.content.bricks.LoopEndBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 
 public class ForeverBrickTest extends InstrumentationTestCase {
@@ -41,7 +42,9 @@ public class ForeverBrickTest extends InstrumentationTestCase {
 
 	@Override
 	protected void setUp() throws Exception {
+		super.setUp();
 		testSprite = new Sprite("testSprite");
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@FlakyTest(tolerance = 3)

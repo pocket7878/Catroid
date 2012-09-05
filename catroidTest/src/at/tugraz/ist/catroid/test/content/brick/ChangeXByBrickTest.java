@@ -25,10 +25,17 @@ package at.tugraz.ist.catroid.test.content.brick;
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.ChangeXByBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class ChangeXByBrickTest extends AndroidTestCase {
 
 	private int xMovement = 100;
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
 
 	public void testNormalBehavior() {
 		Sprite sprite = new Sprite("testSprite");

@@ -32,6 +32,7 @@ import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class ScriptTest extends AndroidTestCase {
 
@@ -43,10 +44,13 @@ public class ScriptTest extends AndroidTestCase {
 
 	@Override
 	protected void setUp() throws Exception {
+		super.setUp();
 		sprite = new Sprite("testSprite");
 		hideBrick = new HideBrick(sprite);
 		showBrick = new ShowBrick(sprite);
 		placeAtBrick = new PlaceAtBrick(sprite, 0, 0);
+
+		SaveProjectTask.mForceSynchronousSave = true;
 	};
 
 	public void testAddBricks() {

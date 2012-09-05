@@ -48,6 +48,7 @@ import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.MyProjectsActivity;
@@ -75,6 +76,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 	public void setUp() throws Exception {
 		super.setUp();
 		solo = new Solo(getInstrumentation(), getActivity());
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
@@ -294,8 +296,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		// Prevent Utils from returning true in isApplicationDebuggable
 		UiTestUtils.setPrivateField2(Utils.class, null, "isUnderTest", true);
 
-		boolean result = UiTestUtils.createTestProjectOnLocalStorageWithVersionCode(Integer.MAX_VALUE);
-		assertTrue("Could not create test project.", result);
+		UiTestUtils.createTestProjectOnLocalStorageWithVersionCode(Integer.MAX_VALUE);
 
 		runTestOnUiThread(new Runnable() {
 			public void run() {

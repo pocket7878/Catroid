@@ -35,6 +35,7 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.NXTMotorActionBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
 import at.tugraz.ist.catroid.ui.fragment.ScriptFragment;
@@ -60,6 +61,7 @@ public class NXTMotorActionBrickTest extends ActivityInstrumentationTestCase2<Sc
 	public void setUp() throws Exception {
 		createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

@@ -38,6 +38,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.CostumeData;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.fragment.CostumeFragment;
@@ -94,6 +95,7 @@ public class CostumeFragmentTest extends ActivityInstrumentationTestCase2<MainMe
 		projectManager.getCurrentProject().virtualScreenHeight = display.getHeight();
 
 		solo = new Solo(getInstrumentation(), getActivity());
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

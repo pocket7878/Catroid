@@ -25,11 +25,18 @@ package at.tugraz.ist.catroid.test.content.brick;
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.SpeakBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class SpeakBrickTest extends AndroidTestCase {
 
 	private String text = "hello world!";
 	private String text2 = "nice to meet you.";
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
 
 	public void testSpeak() {
 		Sprite sprite = new Sprite("new sprite");

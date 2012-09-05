@@ -28,8 +28,15 @@ import java.util.Vector;
 import android.test.InstrumentationTestCase;
 import at.tugraz.ist.catroid.common.MessageContainer;
 import at.tugraz.ist.catroid.content.BroadcastScript;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class MessageContainerTest extends InstrumentationTestCase {
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
 
 	public void testContainer() {
 		String testMessage1 = "test1";

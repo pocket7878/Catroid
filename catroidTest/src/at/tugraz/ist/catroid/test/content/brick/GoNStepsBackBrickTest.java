@@ -25,10 +25,17 @@ package at.tugraz.ist.catroid.test.content.brick;
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.GoNStepsBackBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class GoNStepsBackBrickTest extends AndroidTestCase {
 
 	private final int steps = 17;
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
 
 	public void testSteps() {
 		Sprite sprite = new Sprite("testSprite");

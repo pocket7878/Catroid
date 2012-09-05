@@ -28,12 +28,20 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.ComeToFrontBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 
 public class ComeToFrontBrickTest extends AndroidTestCase {
 
 	@Override
-	public void tearDown() {
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
+
+	@Override
+	public void tearDown() throws Exception {
+		super.tearDown();
 		TestUtils.clearProject("testProject");
 	}
 

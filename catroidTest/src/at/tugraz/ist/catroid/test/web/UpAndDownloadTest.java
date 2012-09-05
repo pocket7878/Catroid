@@ -28,6 +28,7 @@ import java.util.HashMap;
 
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.common.Constants;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.transfers.ProjectDownloadTask;
 import at.tugraz.ist.catroid.transfers.ProjectUploadTask;
@@ -48,12 +49,13 @@ public class UpAndDownloadTest extends AndroidTestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		projectZipOnMockServer = new File(Constants.TMP_PATH + "/projectSave" + Constants.CATROID_EXTENTION);
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
-		TestUtils.clearProject("uploadtestProject");
 		super.tearDown();
+		TestUtils.clearProject("uploadtestProject");
 	}
 
 	public void testUpAndDownloadWithService() throws Throwable {

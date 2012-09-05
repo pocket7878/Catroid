@@ -34,6 +34,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.FileChecksumContainer;
 import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.test.R;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
@@ -48,11 +49,9 @@ public class FileChecksumContainerTest extends InstrumentationTestCase {
 	private File testSound;
 	private String currentProjectName = "testCopyFile2";
 
-	public FileChecksumContainerTest() throws IOException {
-	}
-
 	@Override
 	protected void setUp() throws Exception {
+		super.setUp();
 
 		TestUtils.clearProject(currentProjectName);
 		storageHandler = StorageHandler.getInstance();
@@ -97,10 +96,12 @@ public class FileChecksumContainerTest extends InstrumentationTestCase {
 		in.close();
 		out.flush();
 		out.close();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
+		super.tearDown();
 		TestUtils.clearProject(currentProjectName);
 		if (testImage != null && testImage.exists()) {
 			testImage.delete();

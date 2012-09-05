@@ -25,11 +25,18 @@ package at.tugraz.ist.catroid.test.content.brick;
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.ChangeGhostEffectBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class ChangeGhostEffectBrickTest extends AndroidTestCase {
 
 	private final float increaseGhostEffect = 1f;
 	private final float decreaseGhostEffect = -0.1f;
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
 
 	public void testNormalBehavior() {
 		Sprite sprite = new Sprite("testSprite");

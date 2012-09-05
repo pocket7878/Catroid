@@ -43,6 +43,7 @@ import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.SetXBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
@@ -63,6 +64,7 @@ public class MoveBrickAcrossScriptTest extends ActivityInstrumentationTestCase2<
 		createProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 		solo = new Solo(getInstrumentation(), getActivity());
 		UiTestUtils.getIntoScriptTabActivityFromMainMenu(solo);
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

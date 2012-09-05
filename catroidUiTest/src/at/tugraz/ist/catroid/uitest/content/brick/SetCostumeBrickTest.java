@@ -36,6 +36,7 @@ import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
@@ -102,6 +103,7 @@ public class SetCostumeBrickTest extends ActivityInstrumentationTestCase2<Script
 		Intent intent = new Intent(getActivity(), ScriptTabActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		getActivity().startActivity(intent);
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

@@ -31,22 +31,23 @@ import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.WhenScript;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 
 public class StandardProjectHandlerTest extends AndroidTestCase {
 
-	private String testProjectName = "testStandardProjectBuilding";
-
-	public StandardProjectHandlerTest() throws IOException {
-	}
+	private static final String testProjectName = "testStandardProjectBuilding";
 
 	@Override
-	public void tearDown() {
+	public void setUp() throws Exception {
+		super.setUp();
 		TestUtils.clearProject(testProjectName);
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
-	public void setUp() {
+	public void tearDown() throws Exception {
+		super.tearDown();
 		TestUtils.clearProject(testProjectName);
 	}
 

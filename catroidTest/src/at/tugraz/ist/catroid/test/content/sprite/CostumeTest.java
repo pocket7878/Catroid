@@ -29,6 +29,7 @@ import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Costume;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class CostumeTest extends InstrumentationTestCase {
 	private Costume costume;
@@ -36,9 +37,12 @@ public class CostumeTest extends InstrumentationTestCase {
 	private Project project;
 
 	@Override
-	protected void setUp() {
+	protected void setUp() throws Exception {
+		super.setUp();
 		sprite = new Sprite("test");
 		costume = sprite.costume;
+
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	public void testConstructor() {
@@ -86,8 +90,8 @@ public class CostumeTest extends InstrumentationTestCase {
 		CostumeData costumeData = new CostumeData();
 		costumeData.setCostumeFilename(fileName);
 		costume.setCostumeData(costumeData);
-		assertEquals("Wrong image path!", Constants.DEFAULT_ROOT + "/" + projectName + "/" + Constants.IMAGE_DIRECTORY + "/"
-				+ fileName, costume.getImagePath());
+		assertEquals("Wrong image path!", Constants.DEFAULT_ROOT + "/" + projectName + "/" + Constants.IMAGE_DIRECTORY
+				+ "/" + fileName, costume.getImagePath());
 	}
 
 	public void testSize() {

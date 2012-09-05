@@ -36,6 +36,7 @@ import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.WhenScript;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.TurnLeftBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
@@ -54,6 +55,7 @@ public class TouchAxisTest extends ActivityInstrumentationTestCase2<StageActivit
 		createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
 		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

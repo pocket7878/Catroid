@@ -35,6 +35,7 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.BroadcastBrick;
 import at.tugraz.ist.catroid.content.bricks.BroadcastWaitBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
 import at.tugraz.ist.catroid.ui.fragment.ScriptFragment;
@@ -55,6 +56,7 @@ public class BroadcastBricksTest extends ActivityInstrumentationTestCase2<Script
 	public void setUp() throws Exception {
 		createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

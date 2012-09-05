@@ -34,6 +34,7 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.TurnLeftBrick;
 import at.tugraz.ist.catroid.content.bricks.TurnRightBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.test.R;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
@@ -49,7 +50,7 @@ public class TurnRightBrickTest extends InstrumentationTestCase {
 
 	@Override
 	public void setUp() throws Exception {
-
+		super.setUp();
 		File projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName);
 
 		if (projectFile.exists()) {
@@ -70,10 +71,12 @@ public class TurnRightBrickTest extends InstrumentationTestCase {
 		Values.SCREEN_HEIGHT = 800;
 		Values.SCREEN_WIDTH = 480;
 
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
+		super.tearDown();
 		File projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName);
 
 		if (projectFile.exists()) {

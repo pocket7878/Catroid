@@ -44,6 +44,7 @@ import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.stage.StageListener;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
@@ -77,6 +78,7 @@ public class SetSizeToBrickTest extends ActivityInstrumentationTestCase2<ScriptT
 	public void setUp() throws Exception {
 		createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

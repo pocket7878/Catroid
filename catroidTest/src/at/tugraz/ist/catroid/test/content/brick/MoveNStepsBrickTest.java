@@ -25,8 +25,15 @@ package at.tugraz.ist.catroid.test.content.brick;
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.MoveNStepsBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class MoveNStepsBrickTest extends AndroidTestCase {
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
 
 	public void testMoveHorizontalForward() {
 		Sprite sprite = new Sprite("test");

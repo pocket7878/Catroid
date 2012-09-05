@@ -22,12 +22,10 @@
  */
 package at.tugraz.ist.catroid.io;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -53,18 +51,20 @@ public class StorageHandler {
 
 	private static final int JPG_COMPRESSION_SETTING = 95;
 	private static final String TAG = StorageHandler.class.getSimpleName();
-	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>\n";
+	//	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>\n";
 	private static StorageHandler instance;
-	private XStream xstream;
 
-	private StorageHandler() throws IOException {
+	static final XStream xstream;
 
+	static {
 		xstream = new XStream(new PureJavaReflectionProvider(new FieldDictionary(new CatroidFieldKeySorter())));
 		xstream.processAnnotations(Project.class);
 		xstream.aliasPackage("Bricks", "at.tugraz.ist.catroid.content.bricks");
 		xstream.aliasPackage("Common", "at.tugraz.ist.catroid.common");
 		xstream.aliasPackage("Content", "at.tugraz.ist.catroid.content");
+	}
 
+	private StorageHandler() throws IOException {
 		if (!Utils.hasSdCard()) {
 			throw new IOException("Could not read external storage");
 		}
@@ -114,48 +114,50 @@ public class StorageHandler {
 		}
 	}
 
-	public boolean saveProject(Project project) {
-		createCatroidRoot();
-		if (project == null) {
-			return false;
-		}
-		try {
-			String projectFile = xstream.toXML(project);
-
-			String projectDirectoryName = Utils.buildProjectPath(project.getName());
-			File projectDirectory = new File(projectDirectoryName);
-
-			if (!(projectDirectory.exists() && projectDirectory.isDirectory() && projectDirectory.canWrite())) {
-				projectDirectory.mkdir();
-
-				File imageDirectory = new File(Utils.buildPath(projectDirectoryName, Constants.IMAGE_DIRECTORY));
-				imageDirectory.mkdir();
-
-				File noMediaFile = new File(Utils.buildPath(projectDirectoryName, Constants.IMAGE_DIRECTORY,
-						Constants.NO_MEDIA_FILE));
-				noMediaFile.createNewFile();
-
-				File soundDirectory = new File(projectDirectoryName + "/" + Constants.SOUND_DIRECTORY);
-				soundDirectory.mkdir();
-
-				noMediaFile = new File(Utils.buildPath(projectDirectoryName, Constants.SOUND_DIRECTORY,
-						Constants.NO_MEDIA_FILE));
-				noMediaFile.createNewFile();
-			}
-
-			BufferedWriter writer = new BufferedWriter(new FileWriter(Utils.buildPath(projectDirectoryName,
-					Constants.PROJECTCODE_NAME)), Constants.BUFFER_8K);
-
-			writer.write(XML_HEADER.concat(projectFile));
-			writer.flush();
-			writer.close();
-
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			Log.e(TAG, "saveProject threw an exception and failed.");
-			return false;
-		}
+	public void saveProject(Project project) {
+		//		createCatroidRoot();
+		//		if (project == null) {
+		//			return false;
+		//		}
+		//		try {
+		//			String projectFile = xstream.toXML(project);
+		//
+		//			String projectDirectoryName = Utils.buildProjectPath(project.getName());
+		//			File projectDirectory = new File(projectDirectoryName);
+		//
+		//			if (!(projectDirectory.exists() && projectDirectory.isDirectory() && projectDirectory.canWrite())) {
+		//				projectDirectory.mkdir();
+		//
+		//				File imageDirectory = new File(Utils.buildPath(projectDirectoryName, Constants.IMAGE_DIRECTORY));
+		//				imageDirectory.mkdir();
+		//
+		//				File noMediaFile = new File(Utils.buildPath(projectDirectoryName, Constants.IMAGE_DIRECTORY,
+		//						Constants.NO_MEDIA_FILE));
+		//				noMediaFile.createNewFile();
+		//
+		//				File soundDirectory = new File(projectDirectoryName + "/" + Constants.SOUND_DIRECTORY);
+		//				soundDirectory.mkdir();
+		//
+		//				noMediaFile = new File(Utils.buildPath(projectDirectoryName, Constants.SOUND_DIRECTORY,
+		//						Constants.NO_MEDIA_FILE));
+		//				noMediaFile.createNewFile();
+		//			}
+		//
+		//			BufferedWriter writer = new BufferedWriter(new FileWriter(Utils.buildPath(projectDirectoryName,
+		//					Constants.PROJECTCODE_NAME)), Constants.BUFFER_8K);
+		//
+		//			writer.write(XML_HEADER.concat(projectFile));
+		//			writer.flush();
+		//			writer.close();
+		//
+		//			return true;
+		//		} catch (Exception e) {
+		//			e.printStackTrace();
+		//			Log.e(TAG, "saveProject threw an exception and failed.");
+		//			return false;
+		//		}
+		SaveProjectTask saveProjectTask = new SaveProjectTask(null);
+		saveProjectTask.saveProject(project);
 	}
 
 	public boolean deleteProject(Project project) {

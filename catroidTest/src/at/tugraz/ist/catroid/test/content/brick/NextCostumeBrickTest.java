@@ -34,6 +34,7 @@ import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.NextCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.test.R;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
@@ -43,11 +44,11 @@ public class NextCostumeBrickTest extends InstrumentationTestCase {
 
 	private static final int IMAGE_FILE_ID = R.raw.icon;
 	private File testImage;
-	private String projectName;
+	private static final String projectName = TestUtils.DEFAULT_TEST_PROJECT_NAME;
 
 	@Override
 	protected void setUp() throws Exception {
-
+		super.setUp();
 		File projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName);
 
 		if (projectFile.exists()) {
@@ -63,10 +64,13 @@ public class NextCostumeBrickTest extends InstrumentationTestCase {
 
 		Values.SCREEN_HEIGHT = 200;
 		Values.SCREEN_WIDTH = 200;
+
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
+		super.tearDown();
 		File projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName);
 
 		if (projectFile.exists()) {

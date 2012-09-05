@@ -43,6 +43,7 @@ import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.StandardProjectHandler;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.MyProjectsActivity;
@@ -84,6 +85,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		unzip = false;
 		UiTestUtils.clearAllUtilTestProjects();
 		solo = new Solo(getInstrumentation(), getActivity());
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

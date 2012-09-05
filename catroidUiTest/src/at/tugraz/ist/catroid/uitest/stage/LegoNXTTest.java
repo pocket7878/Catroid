@@ -47,6 +47,7 @@ import at.tugraz.ist.catroid.content.bricks.NXTMotorTurnAngleBrick;
 import at.tugraz.ist.catroid.content.bricks.NXTPlayToneBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
@@ -87,6 +88,7 @@ public class LegoNXTTest extends ActivityInstrumentationTestCase2<MainMenuActivi
 		UiTestUtils.clearAllUtilTestProjects();
 		solo = new Solo(getInstrumentation(), getActivity());
 		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

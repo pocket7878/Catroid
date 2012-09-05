@@ -90,23 +90,23 @@ public class Project implements Serializable {
 		return spriteList.remove(sprite);
 	}
 
-	public List<Sprite> getSpriteList() {
+	public synchronized List<Sprite> getSpriteList() {
 		return spriteList;
 	}
 
-	public void setName(String name) {
+	public synchronized void setName(String name) {
 		this.projectName = name;
 	}
 
-	public String getName() {
+	public synchronized String getName() {
 		return projectName;
 	}
 
-	public void setDescription(String description) {
+	public synchronized void setDescription(String description) {
 		this.description = description;
 	}
 
-	public String getDescription() {
+	public synchronized String getDescription() {
 		return description;
 	}
 
@@ -114,7 +114,7 @@ public class Project implements Serializable {
 		return catroidVersionCode;
 	}
 
-	public void setDeviceData(Context context) {
+	public synchronized void setDeviceData(Context context) {
 		deviceName = Build.MODEL;
 		androidVersion = Build.VERSION.SDK_INT;
 

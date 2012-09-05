@@ -35,6 +35,7 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.SpeakBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
@@ -56,6 +57,7 @@ public class SpeakStageTestSimple extends ActivityInstrumentationTestCase2<PreSt
 		createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
 		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

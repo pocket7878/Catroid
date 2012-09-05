@@ -26,6 +26,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
@@ -46,6 +47,7 @@ public class SettingsActivityTest extends ActivityInstrumentationTestCase2<MainM
 	public void setUp() throws Exception {
 		super.setUp();
 		solo = new Solo(getInstrumentation(), getActivity());
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

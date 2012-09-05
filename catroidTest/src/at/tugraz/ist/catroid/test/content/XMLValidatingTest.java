@@ -41,6 +41,7 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.WhenScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.test.utils.XMLValidationUtil;
@@ -50,16 +51,16 @@ import at.tugraz.ist.catroid.utils.UtilFile;
 public class XMLValidatingTest extends AndroidTestCase {
 	private String testProjectName = "xmlTestProjectName";
 
-	public XMLValidatingTest() throws IOException {
-	}
-
 	@Override
-	public void tearDown() {
+	public void setUp() throws Exception {
+		super.setUp();
 		TestUtils.clearProject(testProjectName);
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
-	public void setUp() {
+	public void tearDown() throws Exception {
+		super.tearDown();
 		TestUtils.clearProject(testProjectName);
 	}
 

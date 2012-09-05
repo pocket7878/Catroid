@@ -32,6 +32,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.SoundInfo;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.fragment.CostumeFragment;
@@ -70,6 +71,7 @@ public class DeleteDialogTest extends ActivityInstrumentationTestCase2<MainMenuA
 		solo = new Solo(getInstrumentation(), getActivity());
 		soundInfoList = ProjectManager.INSTANCE.getCurrentSprite().getSoundList();
 		costumeDataList = ProjectManager.INSTANCE.getCurrentSprite().getCostumeDataList();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

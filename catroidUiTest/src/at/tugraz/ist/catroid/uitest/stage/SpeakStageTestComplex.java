@@ -39,6 +39,7 @@ import at.tugraz.ist.catroid.content.bricks.BroadcastBrick;
 import at.tugraz.ist.catroid.content.bricks.BroadcastReceiverBrick;
 import at.tugraz.ist.catroid.content.bricks.SpeakBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.stage.PreStageActivity;
 import at.tugraz.ist.catroid.stage.StageActivity;
@@ -61,6 +62,7 @@ public class SpeakStageTestComplex extends ActivityInstrumentationTestCase2<PreS
 		createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
 		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

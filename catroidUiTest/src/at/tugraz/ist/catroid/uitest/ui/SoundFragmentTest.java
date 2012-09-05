@@ -31,6 +31,7 @@ import android.widget.ListAdapter;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.SoundInfo;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
@@ -82,6 +83,7 @@ public class SoundFragmentTest extends ActivityInstrumentationTestCase2<MainMenu
 				.addChecksum(soundInfo2.getChecksum(), soundInfo2.getAbsolutePath());
 
 		solo = new Solo(getInstrumentation(), getActivity());
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

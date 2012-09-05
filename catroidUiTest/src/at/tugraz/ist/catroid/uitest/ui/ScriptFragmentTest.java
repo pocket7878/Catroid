@@ -37,6 +37,7 @@ import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
@@ -57,6 +58,7 @@ public class ScriptFragmentTest extends ActivityInstrumentationTestCase2<ScriptT
 		super.setUp();
 		brickListToCheck = UiTestUtils.createTestProject();
 		solo = new Solo(getInstrumentation(), getActivity());
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

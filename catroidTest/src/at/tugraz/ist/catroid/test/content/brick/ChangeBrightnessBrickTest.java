@@ -26,11 +26,18 @@ import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.ChangeBrightnessBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeGhostEffectBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class ChangeBrightnessBrickTest extends AndroidTestCase {
 
 	private final float brighter = 50.5f;
 	private final float dimmer = -20.8f;
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
 
 	public void testNormalBehavior() {
 		Sprite sprite = new Sprite("testSprite");

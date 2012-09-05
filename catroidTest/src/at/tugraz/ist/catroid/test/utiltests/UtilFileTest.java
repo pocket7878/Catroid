@@ -28,10 +28,12 @@ import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import android.os.Environment;
 import android.test.InstrumentationTestCase;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -46,7 +48,9 @@ public class UtilFileTest extends InstrumentationTestCase {
 
 	@Override
 	protected void setUp() throws Exception {
-		final String catroidDirectory = "/sdcard/catroid";
+		super.setUp();
+
+		final String catroidDirectory = Environment.getExternalStorageDirectory() + "catroid";
 		UtilFile.deleteDirectory(new File(catroidDirectory + "/testDirectory"));
 		TestUtils.clearProject(projectName);
 
@@ -59,11 +63,12 @@ public class UtilFileTest extends InstrumentationTestCase {
 		file2 = new File(subDirectory.getAbsolutePath() + "/file2");
 		file2.createNewFile();
 
-		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
+		super.tearDown();
 		UtilFile.deleteDirectory(testDirectory);
 		TestUtils.clearProject(projectName);
 	}
@@ -130,7 +135,7 @@ public class UtilFileTest extends InstrumentationTestCase {
 		project.addSprite(sprite);
 		ProjectManager.getInstance().saveProject();
 
-		String catroidDirectoryPath = "/sdcard/catroid";
+		String catroidDirectoryPath = Environment.getExternalStorageDirectory() + "catroid";
 		File catroidDirectory = new File(catroidDirectoryPath);
 		File project1Directory = new File(catroidDirectory + "/" + projectName);
 

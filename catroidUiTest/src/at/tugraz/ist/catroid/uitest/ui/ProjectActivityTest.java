@@ -46,6 +46,7 @@ import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.ChangeXByBrick;
 import at.tugraz.ist.catroid.content.bricks.SetXBrick;
 import at.tugraz.ist.catroid.content.bricks.SetYBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
@@ -65,6 +66,7 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 		super.setUp();
 		solo = new Solo(getInstrumentation(), getActivity());
 		UiTestUtils.createEmptyProject();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

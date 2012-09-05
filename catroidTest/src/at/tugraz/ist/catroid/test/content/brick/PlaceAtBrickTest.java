@@ -25,11 +25,18 @@ package at.tugraz.ist.catroid.test.content.brick;
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class PlaceAtBrickTest extends AndroidTestCase {
 
 	private int xPosition = 100;
 	private int yPosition = 200;
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
 
 	public void testNormalBehavior() {
 		Sprite sprite = new Sprite("testSprite");

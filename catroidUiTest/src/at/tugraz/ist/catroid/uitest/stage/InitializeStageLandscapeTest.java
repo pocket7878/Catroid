@@ -25,6 +25,7 @@ package at.tugraz.ist.catroid.uitest.stage;
 import android.test.ActivityInstrumentationTestCase2;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Values;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
@@ -43,6 +44,7 @@ public class InitializeStageLandscapeTest extends ActivityInstrumentationTestCas
 	public void setUp() throws Exception {
 		solo = new Solo(getInstrumentation(), getActivity());
 		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

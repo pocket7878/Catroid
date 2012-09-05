@@ -24,13 +24,21 @@ package at.tugraz.ist.catroid.nativetest.content.sprite;
 
 import android.media.MediaPlayer;
 import android.test.InstrumentationTestCase;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.stage.NativeAppActivity;
 
 public class SoundManagerTest extends InstrumentationTestCase {
 
 	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
+
+	@Override
 	protected void tearDown() throws Exception {
+		super.tearDown();
 		NativeAppActivity.setContext(null);
 	}
 

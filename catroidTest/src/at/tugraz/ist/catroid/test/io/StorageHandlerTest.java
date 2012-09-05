@@ -52,6 +52,7 @@ import at.tugraz.ist.catroid.content.bricks.SetYBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
 import at.tugraz.ist.catroid.content.bricks.WhenStartedBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
@@ -64,18 +65,23 @@ public class StorageHandlerTest extends AndroidTestCase {
 	}
 
 	@Override
-	public void tearDown() {
-		TestUtils.clearProject(getContext().getString(R.string.default_project_name));
-		TestUtils.clearProject("testProject");
-	}
-
-	@Override
-	public void setUp() {
-		File projectFile = new File(Constants.DEFAULT_ROOT + "/" + getContext().getString(R.string.default_project_name));
+	protected void setUp() throws Exception {
+		super.setUp();
+		File projectFile = new File(Constants.DEFAULT_ROOT + "/"
+				+ getContext().getString(R.string.default_project_name));
 
 		if (projectFile.exists()) {
 			UtilFile.deleteDirectory(projectFile);
 		}
+
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
+
+	@Override
+	public void tearDown() throws Exception {
+		super.tearDown();
+		TestUtils.clearProject(getContext().getString(R.string.default_project_name));
+		TestUtils.clearProject("testProject");
 	}
 
 	public void testSerializeProject() {

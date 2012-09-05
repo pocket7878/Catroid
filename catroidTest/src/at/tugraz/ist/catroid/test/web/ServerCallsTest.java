@@ -24,6 +24,7 @@ package at.tugraz.ist.catroid.test.web;
 
 import android.test.AndroidTestCase;
 import android.util.Log;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.utils.UtilToken;
 import at.tugraz.ist.catroid.web.ServerCalls;
@@ -45,13 +46,14 @@ public class ServerCallsTest extends AndroidTestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		ServerCalls.useTestUrl = true;
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
+		super.tearDown();
 		TestUtils.clearProject("uploadtestProject");
 		ServerCalls.useTestUrl = false;
-		super.tearDown();
 	}
 
 	public void testRegistrationOk() {

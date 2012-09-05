@@ -26,8 +26,15 @@ import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.PointInDirectionBrick;
 import at.tugraz.ist.catroid.content.bricks.PointInDirectionBrick.Direction;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class PointInDirectionBrickTest extends AndroidTestCase {
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
 
 	public void testPointRight() {
 		Sprite sprite = new Sprite("test");

@@ -32,6 +32,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class EditTextAlignmentTest extends AndroidTestCase {
 
@@ -40,8 +41,11 @@ public class EditTextAlignmentTest extends AndroidTestCase {
 
 	@Override
 	protected void setUp() throws Exception {
+		super.setUp();
 		context = getContext();
 		inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	/*

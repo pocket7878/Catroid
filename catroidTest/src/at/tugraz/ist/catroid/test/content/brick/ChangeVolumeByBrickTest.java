@@ -31,6 +31,7 @@ import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.ChangeVolumeByBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.test.R;
@@ -47,13 +48,16 @@ public class ChangeVolumeByBrickTest extends InstrumentationTestCase {
 
 	@Override
 	protected void setUp() throws Exception {
+		super.setUp();
 		File directory = new File(Constants.DEFAULT_ROOT + "/" + projectName);
 		UtilFile.deleteDirectory(directory);
 		this.createTestProject();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
+		super.tearDown();
 		if (soundFile != null && soundFile.exists()) {
 			soundFile.delete();
 		}

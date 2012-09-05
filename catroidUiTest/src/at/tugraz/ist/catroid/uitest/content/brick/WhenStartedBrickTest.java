@@ -34,6 +34,7 @@ import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.WhenScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.dragndrop.DragAndDropListView;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
@@ -55,6 +56,7 @@ public class WhenStartedBrickTest extends ActivityInstrumentationTestCase2<MainM
 		createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
 		UiTestUtils.getIntoScriptTabActivityFromMainMenu(solo);
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

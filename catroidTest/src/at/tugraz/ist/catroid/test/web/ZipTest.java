@@ -27,6 +27,7 @@ import java.io.IOException;
 
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.common.Constants;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.UtilZip;
 
@@ -39,11 +40,7 @@ public class ZipTest extends AndroidTestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	public void testZipUnzip() throws IOException {

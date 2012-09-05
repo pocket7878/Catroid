@@ -25,10 +25,17 @@ package at.tugraz.ist.catroid.test.content.brick;
 import android.test.InstrumentationTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.SetGhostEffectBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class SetGhostEffectBrickTest extends InstrumentationTestCase {
 
 	private double effectValue = 50.5;
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
 
 	public void testGhostEffect() {
 		Sprite sprite = new Sprite("testSprite");

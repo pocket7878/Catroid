@@ -35,6 +35,7 @@ import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
@@ -56,6 +57,7 @@ public class ScriptDeleteTest extends ActivityInstrumentationTestCase2<MainMenuA
 		solo = new Solo(getInstrumentation(), getActivity());
 		UiTestUtils.getIntoScriptTabActivityFromMainMenu(solo);
 		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

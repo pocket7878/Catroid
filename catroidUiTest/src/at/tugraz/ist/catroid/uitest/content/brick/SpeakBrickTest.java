@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.uitest.content.brick;
 
 import android.test.ActivityInstrumentationTestCase2;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
@@ -46,6 +47,7 @@ public class SpeakBrickTest extends ActivityInstrumentationTestCase2<ScriptTabAc
 	public void setUp() throws Exception {
 		//createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

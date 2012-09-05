@@ -30,12 +30,19 @@ import at.tugraz.ist.catroid.content.bricks.GlideToBrick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class GlideToBrickTest extends AndroidTestCase {
 
 	int xPosition = 100;
 	int yPosition = 100;
 	int duration = 1000;
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
 
 	public void testNormalBehavior() throws InterruptedException {
 		Sprite sprite = new Sprite("testSprite");
@@ -47,10 +54,10 @@ public class GlideToBrickTest extends AndroidTestCase {
 
 		Thread.sleep(1100);
 
-		assertEquals("Incorrect sprite x position after GlideToBrick executed", (float) xPosition, sprite.costume
-				.getXPosition());
-		assertEquals("Incorrect sprite y position after GlideToBrick executed", (float) yPosition, sprite.costume
-				.getYPosition());
+		assertEquals("Incorrect sprite x position after GlideToBrick executed", (float) xPosition,
+				sprite.costume.getXPosition());
+		assertEquals("Incorrect sprite y position after GlideToBrick executed", (float) yPosition,
+				sprite.costume.getYPosition());
 	}
 
 	public void testNullSprite() {

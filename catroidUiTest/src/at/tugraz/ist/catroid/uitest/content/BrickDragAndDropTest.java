@@ -35,6 +35,7 @@ import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.BroadcastBrick;
 import at.tugraz.ist.catroid.content.bricks.SetXBrick;
 import at.tugraz.ist.catroid.content.bricks.StopAllSoundsBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
@@ -54,6 +55,7 @@ public class BrickDragAndDropTest extends ActivityInstrumentationTestCase2<MainM
 		UiTestUtils.createEmptyProject();
 		solo = new Solo(getInstrumentation(), getActivity());
 		UiTestUtils.getIntoScriptTabActivityFromMainMenu(solo);
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

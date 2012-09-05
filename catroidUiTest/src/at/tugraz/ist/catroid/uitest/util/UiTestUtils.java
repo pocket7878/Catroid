@@ -741,7 +741,7 @@ public class UiTestUtils {
 		}
 	}
 
-	public static boolean createTestProjectOnLocalStorageWithVersionCode(int versionCode) {
+	public static void createTestProjectOnLocalStorageWithVersionCode(int versionCode) {
 		Project project = new ProjectWithVersionCode(DEFAULT_TEST_PROJECT_NAME, versionCode);
 		Sprite firstSprite = new Sprite("cat");
 		Script testScript = new StartScript(firstSprite);
@@ -753,7 +753,7 @@ public class UiTestUtils {
 		ProjectManager.INSTANCE.setProject(project);
 		ProjectManager.INSTANCE.setCurrentSprite(firstSprite);
 		ProjectManager.INSTANCE.setCurrentScript(testScript);
-		return ProjectManager.INSTANCE.saveProject();
+		ProjectManager.INSTANCE.saveProject();
 	}
 
 	public static void goToHomeActivity(Activity activity) {

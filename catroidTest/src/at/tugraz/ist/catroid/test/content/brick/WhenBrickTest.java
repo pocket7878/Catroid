@@ -27,8 +27,15 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.WhenScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 
 public class WhenBrickTest extends AndroidTestCase {
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		SaveProjectTask.mForceSynchronousSave = true;
+	}
 
 	public void testWhenBrick() throws InterruptedException {
 		int testPosition = 100;

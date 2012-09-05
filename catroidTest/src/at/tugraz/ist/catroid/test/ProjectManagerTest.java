@@ -26,6 +26,7 @@ import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Project;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -43,6 +44,7 @@ public class ProjectManagerTest extends AndroidTestCase {
 		projectManager = ProjectManager.getInstance();
 		// Prevent Utils from returning true in isApplicationDebuggable
 		TestUtils.setPrivateField(Utils.class, null, "isUnderTest", true);
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
