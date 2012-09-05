@@ -22,10 +22,12 @@
  */
 package at.tugraz.ist.catroid.content;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
-import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.CostumeData;
+import at.tugraz.ist.catroid.content.CostumeEvent.Type;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -51,6 +53,8 @@ public class Costume extends Image {
 	protected boolean internalPath;
 	public boolean show;
 	public int zPosition;
+
+	private final List<CostumeListener> costumeListeners = new ArrayList<CostumeListener>();
 
 	public Costume(Sprite sprite) {
 		this.sprite = sprite;
@@ -88,6 +92,7 @@ public class Costume extends Image {
 		// We use Y-down, libgdx Y-up. This is the fix for accurate y-axis detection
 		y = height - y;
 
+		// XXX: < width & < height
 		if (x >= 0 && x <= width && y >= 0 && y <= height) {
 			if (currentAlphaPixmap != null && ((currentAlphaPixmap.getPixel((int) x, (int) y) & 0x000000FF) > 10)) {
 				sprite.startWhenScripts("Tapped");
@@ -99,12 +104,10 @@ public class Costume extends Image {
 
 	@Override
 	public void touchUp(float x, float y, int pointer) {
-
 	}
 
 	@Override
 	public void touchDragged(float x, float y, int pointer) {
-
 	}
 
 	@Override
@@ -128,47 +131,48 @@ public class Costume extends Image {
 				this.height = 0f;
 				xYWidthHeightLock.release();
 				this.setRegion(new TextureRegion());
-				imageChanged = false;
-				imageLock.release();
-				return;
-			}
-
-			Pixmap pixmap;
-			if (internalPath) {
-				pixmap = new Pixmap(Gdx.files.internal(costumeData.getAbsolutePath()));
 			} else {
-				pixmap = new Pixmap(Gdx.files.absolute(costumeData.getAbsolutePath()));
+
+				Pixmap pixmap;
+				if (internalPath) {
+					pixmap = new Pixmap(Gdx.files.internal(costumeData.getAbsolutePath()));
+				} else {
+					pixmap = new Pixmap(Gdx.files.absolute(costumeData.getAbsolutePath()));
+				}
+
+				xYWidthHeightLock.acquireUninterruptibly();
+				this.x += this.width / 2f;
+				this.y += this.height / 2f;
+				this.width = pixmap.getWidth();
+				this.height = pixmap.getHeight();
+				this.x -= this.width / 2f;
+				this.y -= this.height / 2f;
+				this.originX = this.width / 2f;
+				this.originY = this.height / 2f;
+				xYWidthHeightLock.release();
+
+				currentAlphaPixmap = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), Format.Alpha);
+				currentAlphaPixmap.drawPixmap(pixmap, 0, 0, 0, 0, pixmap.getWidth(), pixmap.getHeight());
+
+				brightnessLock.acquireUninterruptibly();
+				if (brightnessValue != 1f) {
+					pixmap = this.adjustBrightness(pixmap);
+				}
+				brightnessLock.release();
+
+				Texture texture = new Texture(pixmap);
+				pixmap.dispose();
+
+				this.setRegion(new TextureRegion(texture));
+
+				// TODO: Is this really the best place to recognize a costume change?
+				//				ProjectManager.getInstance().getCurrentProject().getPhysicWorld().changeCostume(sprite);
 			}
-
-			xYWidthHeightLock.acquireUninterruptibly();
-			this.x += this.width / 2f;
-			this.y += this.height / 2f;
-			this.width = pixmap.getWidth();
-			this.height = pixmap.getHeight();
-			this.x -= this.width / 2f;
-			this.y -= this.height / 2f;
-			this.originX = this.width / 2f;
-			this.originY = this.height / 2f;
-			xYWidthHeightLock.release();
-
-			currentAlphaPixmap = new Pixmap(pixmap.getWidth(), pixmap.getHeight(), Format.Alpha);
-			currentAlphaPixmap.drawPixmap(pixmap, 0, 0, 0, 0, pixmap.getWidth(), pixmap.getHeight());
-
-			brightnessLock.acquireUninterruptibly();
-			if (brightnessValue != 1f) {
-				pixmap = this.adjustBrightness(pixmap);
-			}
-			brightnessLock.release();
-
-			Texture texture = new Texture(pixmap);
-			pixmap.dispose();
-
-			this.setRegion(new TextureRegion(texture));
-
-			// TODO: Is this really the best place to recognize a costume change?
-			ProjectManager.getInstance().getCurrentProject().getPhysicWorld().changeCostume(sprite);
-			imageChanged = false;
 		}
+
+		notifyListeners(new CostumeEvent(Type.COSTUMECHANGED, this));
+
+		imageChanged = false;
 		imageLock.release();
 	}
 
@@ -375,4 +379,26 @@ public class Costume extends Image {
 		return costumeData;
 	}
 
+	private void notifyListeners(CostumeEvent event) {
+		synchronized (costumeListeners) {
+			for (CostumeListener costumeListener : costumeListeners) {
+				costumeListener.costumeChanged(event);
+			}
+		}
+	}
+
+	public void addListener(CostumeListener listener) {
+		synchronized (costumeListeners) {
+			if (costumeListeners.contains(listener)) {
+				return;
+			}
+			costumeListeners.add(listener);
+		}
+	}
+
+	public void removeListener(CostumeListener listener) {
+		synchronized (costumeListeners) {
+			costumeListeners.remove(listener);
+		}
+	}
 }
