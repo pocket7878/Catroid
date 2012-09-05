@@ -26,6 +26,7 @@ public class InternToken {
 
 	private String tokenStringValue = "";
 	private InternTokenType internTokenType;
+	private int externPositionIndex;
 
 	public InternToken(InternTokenType internTokenType) {
 		this.internTokenType = internTokenType;
@@ -67,6 +68,14 @@ public class InternToken {
 	@Override
 	public String toString() {
 		return internTokenType.getInternTokenPrefix() + tokenStringValue;
+	}
+
+	public void setExternPositionIndex(int externPositionIndex) {
+		this.externPositionIndex = externPositionIndex;
+	}
+
+	public int getExternPositionIndex() {
+		return this.externPositionIndex;
 	}
 
 }

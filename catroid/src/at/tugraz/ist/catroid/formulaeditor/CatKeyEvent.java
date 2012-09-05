@@ -141,8 +141,6 @@ public class CatKeyEvent extends KeyEvent {
 				return buildOperator("*");
 			case CatKeyEvent.KEYCODE_SLASH:
 				return buildOperator("/");
-			case CatKeyEvent.KEYCODE_COMMA:
-				return buildOperator(",");
 			case CatKeyEvent.KEYCODE_PERIOD:
 				return buildOperator(".");
 			case CatKeyEvent.KEYCODE_POWER:
@@ -280,11 +278,18 @@ public class CatKeyEvent extends KeyEvent {
 	}
 
 	public boolean isSensor() {
-		if (this.getKeyCode() >= CatKeyEvent.KEYCODE_SENSOR1 && this.getKeyCode() <= CatKeyEvent.KEYCODE_SENSOR5) {
+		if (this.getKeyCode() >= CatKeyEvent.KEYCODE_SENSOR1 && this.getKeyCode() <= CatKeyEvent.KEYCODE_SENSOR7) {
 			return true;
 		}
 		return false;
 
+	}
+
+	public boolean isBracket() {
+		if (this.getKeyCode() == CatKeyEvent.KEYCODE_BRACKET) {
+			return true;
+		}
+		return false;
 	}
 
 	public String getDisplayLabelString() {

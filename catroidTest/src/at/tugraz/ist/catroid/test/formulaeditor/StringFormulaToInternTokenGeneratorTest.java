@@ -25,7 +25,7 @@ package at.tugraz.ist.catroid.test.formulaeditor;
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.formulaeditor.InternToken;
 import at.tugraz.ist.catroid.formulaeditor.InternTokenType;
-import at.tugraz.ist.catroid.formulaeditor.StringFormulaToInternTokenGenerator;
+import at.tugraz.ist.catroid.formulaeditor.InternFormulaToInternTokenGenerator;
 
 public class StringFormulaToInternTokenGeneratorTest extends AndroidTestCase {
 
@@ -33,23 +33,23 @@ public class StringFormulaToInternTokenGeneratorTest extends AndroidTestCase {
 
 	public void testGenerateInternTokenByIndex() {
 
-		InternToken internToken = StringFormulaToInternTokenGenerator.generateInternTokenByIndex(0, ":number:23");
+		InternToken internToken = InternFormulaToInternTokenGenerator.generateInternTokenByIndex(0, ":number:23");
 		assertNotNull("InternToken generation failed", internToken);
 		assertEquals("InternToken-type generation failed", InternTokenType.NUMBER, internToken.getInternTokenType());
 		assertEquals("InternToken-value generation failed", "23", internToken.getTokenSringValue());
 
-		internToken = StringFormulaToInternTokenGenerator.generateInternTokenByIndex(0, ":number:23:function:e");
+		internToken = InternFormulaToInternTokenGenerator.generateInternTokenByIndex(0, ":number:23:function:e");
 		assertNotNull("InternToken generation failed", internToken);
 		assertEquals("InternToken-type generation failed", InternTokenType.NUMBER, internToken.getInternTokenType());
 		assertEquals("InternToken-value generation failed", "23", internToken.getTokenSringValue());
 
-		internToken = StringFormulaToInternTokenGenerator.generateInternTokenByIndex(10, ":number:23:function_name:e");
+		internToken = InternFormulaToInternTokenGenerator.generateInternTokenByIndex(10, ":number:23:function_name:e");
 		assertNotNull("InternToken generation failed", internToken);
 		assertEquals("InternToken-type generation failed", InternTokenType.FUNCTION_NAME,
 				internToken.getInternTokenType());
 		assertEquals("InternToken-value generation failed", "e", internToken.getTokenSringValue());
 
-		internToken = StringFormulaToInternTokenGenerator
+		internToken = InternFormulaToInternTokenGenerator
 				.generateInternTokenByIndex(28,
 						":number:23:function_name:sin:function_parameter_bracket_open::number:54:function_parameter_bracket_close:");
 		assertNotNull("InternToken generation failed", internToken);
@@ -57,7 +57,7 @@ public class StringFormulaToInternTokenGeneratorTest extends AndroidTestCase {
 				internToken.getInternTokenType());
 		assertEquals("InternToken-value should not be generated", "", internToken.getTokenSringValue());
 
-		internToken = StringFormulaToInternTokenGenerator
+		internToken = InternFormulaToInternTokenGenerator
 				.generateInternTokenByIndex(11,
 						":number:23:function_name:sin:function_parameter_bracket_open::number:54:function_parameter_bracket_close:");
 		assertNull("InternToken should not be generated", internToken);
@@ -65,7 +65,7 @@ public class StringFormulaToInternTokenGeneratorTest extends AndroidTestCase {
 	}
 
 	public void testSingle() {
-		InternToken internToken = StringFormulaToInternTokenGenerator
+		InternToken internToken = InternFormulaToInternTokenGenerator
 				.generateInternTokenByIndex(28,
 						":number:23:function_name:sin:function_parameter_bracket_open::number:54:function_parameter_bracket_close:");
 		assertNotNull("InternToken generation failed", internToken);

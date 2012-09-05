@@ -25,9 +25,9 @@ package at.tugraz.ist.catroid.formulaeditor;
 import java.util.LinkedList;
 import java.util.List;
 
-public class StringFormulaToInternTokenGenerator {
+public class InternFormulaToInternTokenGenerator {
 
-	public StringFormulaToInternTokenGenerator() {
+	public InternFormulaToInternTokenGenerator() {
 	}
 
 	public static List<InternToken> generateInternRepresentationByString(String internFormulaRepresentation) {
@@ -54,6 +54,13 @@ public class StringFormulaToInternTokenGenerator {
 		}
 
 		return getNextToken(internFormulaRepresentation);
+	}
+
+	public static List<InternToken> generateInternTokenListByFunctionIndex(int functionStartIndex,
+			String internFormulaRepresentation) {
+
+		return null;
+
 	}
 
 	private static InternToken getNextToken(String internFormulaRepresentation) {
