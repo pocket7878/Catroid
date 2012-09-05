@@ -27,22 +27,28 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
@@ -65,16 +71,21 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 
 public class SoundFragment extends SherlockListFragment implements OnSoundCheckedListener, OnSoundPlayPauseListener,
-		OnSoundEditListener, LoaderManager.LoaderCallbacks<Cursor> {
+		OnSoundEditListener, LoaderManager.LoaderCallbacks<Cursor>, OnClickListener {
 
 	private static final String BUNDLE_ARGUMENTS_SELECTED_SOUND = "selected_sound";
 	private static final int ID_LOADER_MEDIA_IMAGE = 1;
+	private static final int FOOTER_ADD_SOUND_ALPHA_VALUE = 35;
 	private final int REQUEST_SELECT_MUSIC = 0;
 
-	public MediaPlayer mediaPlayer;
+	private MediaPlayer mediaPlayer;
 	private SoundAdapter adapter;
 	private ArrayList<SoundInfo> soundInfoList;
-	public SoundInfo selectedSoundInfo;
+
+	private SoundInfo selectedSoundInfo;
+
+	private View viewBelowSoundlistNonScrollable;
+	private View soundlistFooterView;
 
 	private ActionMode actionMode;
 
@@ -102,14 +113,23 @@ public class SoundFragment extends SherlockListFragment implements OnSoundChecke
 			selectedSoundInfo = (SoundInfo) savedInstanceState.getSerializable(BUNDLE_ARGUMENTS_SELECTED_SOUND);
 		}
 
+		viewBelowSoundlistNonScrollable = getActivity().findViewById(R.id.view_below_soundlist_non_scrollable);
+		viewBelowSoundlistNonScrollable.setOnClickListener(this);
+
+		View footerView = getActivity().getLayoutInflater().inflate(R.layout.fragment_sound_soundlist_footer,
+				getListView(), false);
+		soundlistFooterView = footerView.findViewById(R.id.soundlist_footerview);
+		ImageView footerAddImage = (ImageView) footerView.findViewById(R.id.soundlist_footerview_add_image);
+		footerAddImage.setAlpha(FOOTER_ADD_SOUND_ALPHA_VALUE);
+		soundlistFooterView.setOnClickListener(this);
+		getListView().addFooterView(footerView);
+
 		soundInfoList = ProjectManager.getInstance().getCurrentSprite().getSoundList();
 		adapter = new SoundAdapter(getActivity(), R.layout.fragment_sound_soundlist_item, soundInfoList);
 		adapter.setOnSoundCheckedListener(this);
 		adapter.setOnSoundPlayPauseListener(this);
 		adapter.setOnSoundEditListener(this);
 		setListAdapter(adapter);
-
-		mediaPlayer = new MediaPlayer();
 	}
 
 	@Override
@@ -127,14 +147,17 @@ public class SoundFragment extends SherlockListFragment implements OnSoundChecke
 		addItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
-				Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-				intent.setType("audio/*");
-				startActivityForResult(Intent.createChooser(intent, getString(R.string.sound_select_source)),
-						REQUEST_SELECT_MUSIC);
-
+				startSelectSoundIntent();
 				return true;
 			}
 		});
+	}
+
+	private void startSelectSoundIntent() {
+		Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+		intent.setType("audio/*");
+		startActivityForResult(Intent.createChooser(intent, getString(R.string.sound_select_source)),
+				REQUEST_SELECT_MUSIC);
 	}
 
 	@Override
@@ -166,8 +189,9 @@ public class SoundFragment extends SherlockListFragment implements OnSoundChecke
 		IntentFilter intentFilterTabChanged = new IntentFilter(ScriptTabActivity.ACTION_TAB_CHANGED);
 		getActivity().registerReceiver(tabChangedReceiver, intentFilterTabChanged);
 
-		stopSound(null);
+		stopSound();
 		reloadAdapter();
+		addSoundViewsSetClickableFlag(true);
 	}
 
 	@Override
@@ -178,7 +202,7 @@ public class SoundFragment extends SherlockListFragment implements OnSoundChecke
 		if (projectManager.getCurrentProject() != null) {
 			projectManager.saveProject();
 		}
-		stopSound(null);
+		stopSound();
 
 		if (soundDeletedReceiver != null) {
 			getActivity().unregisterReceiver(soundDeletedReceiver);
@@ -193,6 +217,20 @@ public class SoundFragment extends SherlockListFragment implements OnSoundChecke
 		}
 
 		destroyActionMode();
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		mediaPlayer = new MediaPlayer();
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		mediaPlayer.reset();
+		mediaPlayer.release();
+		mediaPlayer = null;
 	}
 
 	@Override
@@ -229,12 +267,17 @@ public class SoundFragment extends SherlockListFragment implements OnSoundChecke
 		if (data == null) {
 			audioPath = cursorLoader.getUri().getPath();
 		} else {
-			int actualSoundColumnIndex = data.getColumnIndex(MediaStore.Audio.Media.DATA);
 			data.moveToFirst();
-			audioPath = data.getString(actualSoundColumnIndex);
+			audioPath = data.getString(data.getColumnIndex(MediaStore.Audio.Media.DATA));
 		}
 
-		copySoundToCatroid(audioPath);
+		if (audioPath.equalsIgnoreCase("")) {
+			Utils.displayErrorMessage(getActivity(), getString(R.string.error_load_sound));
+		} else {
+			new CopyAudioFilesTask().execute(audioPath);
+		}
+
+		getLoaderManager().destroyLoader(ID_LOADER_MEDIA_IMAGE);
 	}
 
 	@Override
@@ -276,22 +319,23 @@ public class SoundFragment extends SherlockListFragment implements OnSoundChecke
 		}
 	}
 
-	private void copySoundToCatroid(String audioPath) {
-		try {
-			if (audioPath.equalsIgnoreCase("")) {
-				throw new IOException("Audio path can not be empty.");
-			}
-
-			File soundFile = StorageHandler.getInstance().copySoundFile(audioPath);
-			String soundFileName = soundFile.getName();
-			String soundTitle = soundFileName.substring(soundFileName.indexOf('_') + 1, soundFileName.lastIndexOf('.'));
-			updateSoundAdapter(soundTitle, soundFileName);
-		} catch (Exception e) {
-			e.printStackTrace();
-			Utils.displayErrorMessage(getActivity(), getActivity().getString(R.string.error_load_sound));
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+			case R.id.view_below_soundlist_non_scrollable:
+				addSoundViewsSetClickableFlag(false);
+				startSelectSoundIntent();
+				break;
+			case R.id.soundlist_footerview:
+				addSoundViewsSetClickableFlag(false);
+				startSelectSoundIntent();
+				break;
 		}
+	}
 
-		getLoaderManager().destroyLoader(ID_LOADER_MEDIA_IMAGE);
+	private void addSoundViewsSetClickableFlag(boolean setClickableFlag) {
+		viewBelowSoundlistNonScrollable.setClickable(setClickableFlag);
+		soundlistFooterView.setClickable(setClickableFlag);
 	}
 
 	private void reloadAdapter() {
@@ -332,18 +376,19 @@ public class SoundFragment extends SherlockListFragment implements OnSoundChecke
 		renameSoundDialog.show(getFragmentManager(), RenameSoundDialog.DIALOG_FRAGMENT_TAG);
 	}
 
-	private void handlePlaySoundButton(View v) {
+	public void handlePlaySoundButton(View v) {
 		final int position = (Integer) v.getTag();
 		final SoundInfo soundInfo = soundInfoList.get(position);
 
-		stopSound(soundInfo);
-		startSound(soundInfo);
+		stopSound();
+		if (!soundInfo.isPlaying) {
+			startSound(soundInfo);
+		}
 
 		mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
 			@Override
 			public void onCompletion(MediaPlayer mp) {
 				soundInfo.isPlaying = false;
-				soundInfo.isPaused = false;
 				adapter.notifyDataSetChanged();
 			}
 		});
@@ -358,7 +403,7 @@ public class SoundFragment extends SherlockListFragment implements OnSoundChecke
 	}
 
 	private void handleDeleteSounds(int[] positions) {
-		stopSound(null);
+		stopSound();
 		selectedSoundInfo = soundInfoList.get(positions[positions.length - 1]);
 
 		DeleteSoundDialog deleteSoundDialog = DeleteSoundDialog.newInstance(positions);
@@ -367,37 +412,32 @@ public class SoundFragment extends SherlockListFragment implements OnSoundChecke
 
 	private void pauseSound(SoundInfo soundInfo) {
 		mediaPlayer.pause();
-
 		soundInfo.isPlaying = false;
-		soundInfo.isPaused = true;
 	}
 
-	private void stopSound(SoundInfo exceptionSoundInfo) {
-		if (exceptionSoundInfo != null && exceptionSoundInfo.isPaused) {
-			return;
+	private void stopSound() {
+		if (mediaPlayer.isPlaying()) {
+			mediaPlayer.stop();
 		}
-		mediaPlayer.stop();
 
-		for (SoundInfo soundInfo : soundInfoList) {
-			soundInfo.isPlaying = false;
-			soundInfo.isPaused = false;
+		for (int i = 0; i < soundInfoList.size(); i++) {
+			soundInfoList.get(i).isPlaying = false;
 		}
 	}
 
 	private void startSound(SoundInfo soundInfo) {
-		soundInfo.isPlaying = true;
-		if (soundInfo.isPaused) {
-			soundInfo.isPaused = false;
-			mediaPlayer.start();
+		if (soundInfo.isPlaying) {
 			return;
 		}
 		try {
 			mediaPlayer.reset();
+			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.setDataSource(soundInfo.getAbsolutePath());
 			mediaPlayer.prepare();
 			mediaPlayer.start();
+			soundInfo.isPlaying = true;
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e("CATROID", "Cannot start sound.", e);
 		}
 	}
 
@@ -484,6 +524,41 @@ public class SoundFragment extends SherlockListFragment implements OnSoundChecke
 		@Override
 		public void onDestroyActionMode(ActionMode mode) {
 			adapter.uncheckAllSounds();
+		}
+	}
+
+	private class CopyAudioFilesTask extends AsyncTask<String, Void, File> {
+		private ProgressDialog progressDialog = new ProgressDialog(getActivity());
+
+		@Override
+		protected void onPreExecute() {
+			progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			progressDialog.setTitle(getString(R.string.loading));
+			progressDialog.show();
+		}
+
+		@Override
+		protected File doInBackground(String... path) {
+			File file = null;
+			try {
+				file = StorageHandler.getInstance().copySoundFile(path[0]);
+			} catch (IOException e) {
+				Log.e("CATROID", "Cannot load sound.", e);
+			}
+			return file;
+		}
+
+		@Override
+		protected void onPostExecute(File file) {
+			progressDialog.dismiss();
+
+			if (file != null) {
+				String fileName = file.getName();
+				String soundTitle = fileName.substring(fileName.indexOf('_') + 1, fileName.lastIndexOf('.'));
+				updateSoundAdapter(soundTitle, fileName);
+			} else {
+				Utils.displayErrorMessage(getActivity(), getString(R.string.error_load_sound));
+			}
 		}
 	}
 }
