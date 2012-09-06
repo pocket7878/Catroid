@@ -41,8 +41,8 @@ public class ComeToFrontBrickTest extends AndroidTestCase {
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		TestUtils.clearProject("testProject");
+		super.tearDown();
 	}
 
 	public void testComeToFront() {

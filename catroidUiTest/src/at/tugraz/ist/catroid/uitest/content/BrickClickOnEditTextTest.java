@@ -62,7 +62,6 @@ public class BrickClickOnEditTextTest extends ActivityInstrumentationTestCase2<M
 
 	@Override
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		// workaround to disable mindstorm settings
 		// should be disabled no matter if test failed or succeeded
 		String settingsText = solo.getString(R.string.settings);
@@ -74,6 +73,8 @@ public class BrickClickOnEditTextTest extends ActivityInstrumentationTestCase2<M
 
 		UiTestUtils.goBackToHome(getInstrumentation());
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	public void testIfEditTextAreVisibleAndClickOnTextSetXandYInAddBrickDialog() {

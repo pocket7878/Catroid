@@ -93,8 +93,9 @@ public class LegoNXTTest extends ActivityInstrumentationTestCase2<MainMenuActivi
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	// This test requires the NXTBTTestServer to be running or a LegoNXT Robot to run! Check connect string to see if you connect to the right device!

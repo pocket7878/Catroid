@@ -90,7 +90,6 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		ProjectManager.getInstance().deleteCurrentProject();
 		UiTestUtils.clearAllUtilTestProjects();
@@ -109,6 +108,8 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		if (unzip) {
 			unzipProjects();
 		}
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	public void saveProjectsToZip() {

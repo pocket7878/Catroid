@@ -42,8 +42,8 @@ public class SetCostumeBrickTest extends InstrumentationTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		NativeAppActivity.setContext(null);
+		super.tearDown();
 	}
 
 	public void testSetCostume() throws Exception {

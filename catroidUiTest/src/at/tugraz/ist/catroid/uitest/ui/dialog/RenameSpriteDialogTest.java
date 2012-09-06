@@ -61,10 +61,11 @@ public class RenameSpriteDialogTest extends ActivityInstrumentationTestCase2<Mai
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		ProjectManager.getInstance().deleteCurrentProject();
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	public void testRenameSpriteDialog() throws NameNotFoundException, IOException {

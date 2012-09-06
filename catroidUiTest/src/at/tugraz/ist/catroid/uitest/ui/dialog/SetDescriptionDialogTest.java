@@ -54,10 +54,11 @@ public class SetDescriptionDialogTest extends ActivityInstrumentationTestCase2<M
 
 	@Override
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		ProjectManager.getInstance().deleteCurrentProject();
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	public void testMultiLineProjectDescription() {

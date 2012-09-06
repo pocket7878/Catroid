@@ -61,9 +61,10 @@ public class RepeatBrickTest extends ActivityInstrumentationTestCase2<ScriptTabA
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	@Smoke

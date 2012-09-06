@@ -53,7 +53,6 @@ public class SoundManagerTest extends InstrumentationTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		if (soundFile != null && soundFile.exists()) {
 			soundFile.delete();
 		}
@@ -61,6 +60,7 @@ public class SoundManagerTest extends InstrumentationTestCase {
 			longSoundFile.delete();
 		}
 		SoundManager.getInstance().clear();
+		super.tearDown();
 	}
 
 	public void testGetInstance() {

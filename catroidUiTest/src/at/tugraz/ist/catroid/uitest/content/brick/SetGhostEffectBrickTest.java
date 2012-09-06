@@ -62,9 +62,10 @@ public class SetGhostEffectBrickTest extends ActivityInstrumentationTestCase2<Sc
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	@Smoke

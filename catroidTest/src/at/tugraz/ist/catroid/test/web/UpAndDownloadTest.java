@@ -54,8 +54,8 @@ public class UpAndDownloadTest extends AndroidTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		TestUtils.clearProject("uploadtestProject");
+		super.tearDown();
 	}
 
 	public void testUpAndDownloadWithService() throws Throwable {

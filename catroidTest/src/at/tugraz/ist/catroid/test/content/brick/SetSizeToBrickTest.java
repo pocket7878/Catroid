@@ -66,7 +66,6 @@ public class SetSizeToBrickTest extends InstrumentationTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		File projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName);
 
 		if (projectFile.exists()) {
@@ -75,6 +74,7 @@ public class SetSizeToBrickTest extends InstrumentationTestCase {
 		if (testImage != null && testImage.exists()) {
 			testImage.delete();
 		}
+		super.tearDown();
 	}
 
 	public void testSize() {

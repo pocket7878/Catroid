@@ -67,9 +67,10 @@ public class ComplexStageTest extends ActivityInstrumentationTestCase2<StageActi
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	public void testShowTexture() {

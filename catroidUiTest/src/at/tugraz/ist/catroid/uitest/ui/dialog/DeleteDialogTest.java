@@ -76,10 +76,11 @@ public class DeleteDialogTest extends ActivityInstrumentationTestCase2<MainMenuA
 
 	@Override
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		ProjectManager.getInstance().deleteCurrentProject();
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	public void testDeleteCostumes() throws Exception {

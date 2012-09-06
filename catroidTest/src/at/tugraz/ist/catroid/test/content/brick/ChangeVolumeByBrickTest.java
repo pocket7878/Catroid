@@ -57,12 +57,12 @@ public class ChangeVolumeByBrickTest extends InstrumentationTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		if (soundFile != null && soundFile.exists()) {
 			soundFile.delete();
 		}
 		TestUtils.clearProject(projectName);
 		SoundManager.getInstance().clear();
+		super.tearDown();
 	}
 
 	public void testVolume() {

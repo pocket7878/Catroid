@@ -101,7 +101,6 @@ public class FileChecksumContainerTest extends InstrumentationTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		TestUtils.clearProject(currentProjectName);
 		if (testImage != null && testImage.exists()) {
 			testImage.delete();
@@ -109,6 +108,7 @@ public class FileChecksumContainerTest extends InstrumentationTestCase {
 		if (testSound != null && testSound.exists()) {
 			testSound.delete();
 		}
+		super.tearDown();
 	}
 
 	public void testContainer() throws IOException, InterruptedException {

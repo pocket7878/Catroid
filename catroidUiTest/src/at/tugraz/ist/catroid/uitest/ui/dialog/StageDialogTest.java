@@ -75,10 +75,11 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 
 	@Override
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		ProjectManager.getInstance().deleteCurrentProject();
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	public void testBackButtonPressedTwice() throws NameNotFoundException, IOException {

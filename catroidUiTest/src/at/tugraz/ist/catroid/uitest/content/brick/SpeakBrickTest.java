@@ -52,9 +52,10 @@ public class SpeakBrickTest extends ActivityInstrumentationTestCase2<ScriptTabAc
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	/*

@@ -69,12 +69,13 @@ public class UploadDialogTest extends ActivityInstrumentationTestCase2<MainMenuA
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		prefs.edit().putString(Constants.TOKEN, saveToken).commit();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		ProjectManager.getInstance().deleteCurrentProject();
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	private void setServerURLToTestURL() throws Throwable {

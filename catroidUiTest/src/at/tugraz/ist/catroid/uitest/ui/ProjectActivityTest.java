@@ -71,10 +71,11 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		ProjectManager.getInstance().deleteCurrentProject();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	private void addNewSprite(String spriteName) {

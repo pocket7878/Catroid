@@ -64,9 +64,10 @@ public class ChangeBrightnessTest extends ActivityInstrumentationTestCase2<Scrip
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	@Smoke

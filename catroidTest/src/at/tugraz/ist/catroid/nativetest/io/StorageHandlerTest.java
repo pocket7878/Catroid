@@ -47,8 +47,8 @@ public class StorageHandlerTest extends InstrumentationTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		NativeAppActivity.setContext(null);
+		super.tearDown();
 	}
 
 	public void testLoadProject() throws Exception {

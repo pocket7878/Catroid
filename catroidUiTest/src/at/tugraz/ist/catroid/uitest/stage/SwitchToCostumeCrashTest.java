@@ -69,8 +69,9 @@ public class SwitchToCostumeCrashTest extends ActivityInstrumentationTestCase2<M
 
 	@Override
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	public void testSwitchToCostumeCrashPNG() throws IOException {

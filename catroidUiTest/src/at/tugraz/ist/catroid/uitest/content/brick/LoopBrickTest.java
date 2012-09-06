@@ -69,9 +69,10 @@ public class LoopBrickTest extends ActivityInstrumentationTestCase2<MainMenuActi
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		ProjectManager.getInstance().deleteCurrentProject();
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	public void testRepeatBrick() {

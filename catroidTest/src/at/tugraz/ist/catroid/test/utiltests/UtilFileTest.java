@@ -70,9 +70,9 @@ public class UtilFileTest extends InstrumentationTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		UtilFile.deleteDirectory(testDirectory);
 		TestUtils.clearProject(projectName);
+		super.tearDown();
 	}
 
 	public void testClearDirectory() {

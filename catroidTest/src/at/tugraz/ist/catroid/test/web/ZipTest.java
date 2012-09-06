@@ -33,10 +33,6 @@ import at.tugraz.ist.catroid.utils.UtilZip;
 
 public class ZipTest extends AndroidTestCase {
 
-	public ZipTest() {
-		super();
-	}
-
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();

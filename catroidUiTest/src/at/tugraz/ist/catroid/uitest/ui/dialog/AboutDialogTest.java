@@ -49,9 +49,10 @@ public class AboutDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		ProjectManager.getInstance().deleteCurrentProject();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	public void testAboutDialog() {

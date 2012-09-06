@@ -47,8 +47,8 @@ public class StandardProjectHandlerTest extends AndroidTestCase {
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		TestUtils.clearProject(testProjectName);
+		super.tearDown();
 	}
 
 	public void testCreateStandardProject() throws IOException {

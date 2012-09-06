@@ -108,7 +108,6 @@ public class SetCostumeBrickTest extends ActivityInstrumentationTestCase2<Script
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		UiTestUtils.clearAllUtilTestProjects();
 		if (costumeFile.exists()) {
@@ -117,6 +116,8 @@ public class SetCostumeBrickTest extends ActivityInstrumentationTestCase2<Script
 		if (costumeFile2.exists()) {
 			costumeFile2.delete();
 		}
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	public void testSelectCostumeAndPlay() {

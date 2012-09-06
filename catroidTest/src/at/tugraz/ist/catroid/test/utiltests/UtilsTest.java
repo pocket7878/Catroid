@@ -70,13 +70,13 @@ public class UtilsTest extends AndroidTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		if (mTestFile != null && mTestFile.exists()) {
 			mTestFile.delete();
 		}
 		if (copiedFile != null && copiedFile.exists()) {
 			copiedFile.delete();
 		}
+		super.tearDown();
 	}
 
 	public void testMD5CheckSumOfFile() {

@@ -60,9 +60,10 @@ public class TouchAxisTest extends ActivityInstrumentationTestCase2<StageActivit
 
 	@Override
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	// This prevents regression of https://github.com/Catrobat/Catroid/issues/3

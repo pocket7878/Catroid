@@ -60,8 +60,8 @@ public class XMLValidatingTest extends AndroidTestCase {
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		TestUtils.clearProject(testProjectName);
+		super.tearDown();
 	}
 
 	@SuppressWarnings("unchecked")

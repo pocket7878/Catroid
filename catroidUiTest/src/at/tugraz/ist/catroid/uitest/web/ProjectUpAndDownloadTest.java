@@ -74,11 +74,12 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		prefs.edit().putString(Constants.TOKEN, saveToken).commit();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		UiTestUtils.clearAllUtilTestProjects();
+		solo.finishOpenedActivities();
+		super.tearDown();
 	}
 
 	private void setServerURLToTestUrl() throws Throwable {
