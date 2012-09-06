@@ -47,6 +47,7 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
+import at.tugraz.ist.catroid.stage.StageListener;
 import at.tugraz.ist.catroid.transfers.ProjectUploadTask;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -199,6 +200,25 @@ public class UploadProjectDialog extends DialogFragment {
 		projectManager.saveProject();
 
 		String projectPath = Constants.DEFAULT_ROOT + "/" + projectManager.getCurrentProject().getName();
+
+		boolean hasThumbnail = false;
+		String screenshotPath = Utils.buildPath(projectPath, StageListener.SCREENSHOT_FILE_NAME);
+		if (new File(screenshotPath).exists()) {
+			hasThumbnail = true;
+		}
+
+		if (!hasThumbnail) {
+			AddProjectScreenshot addProjectScreenshot = new AddProjectScreenshot();
+			addProjectScreenshot.show(getFragmentManager(), AddProjectScreenshot.DIALOG_FRAGMENT_TAG);
+
+			Utils.displayErrorMessageFragment(getString(R.string.upload_project_no_thumbnail_error),
+					getFragmentManager());
+			return;
+		}
+
+		if (projectDescriptionField.length() != 0) {
+			projectDescription = projectDescriptionField.getText().toString();
+		}
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		String token = prefs.getString(Constants.TOKEN, "0");
