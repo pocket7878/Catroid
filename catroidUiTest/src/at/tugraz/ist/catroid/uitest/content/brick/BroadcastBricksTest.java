@@ -54,6 +54,7 @@ public class BroadcastBricksTest extends ActivityInstrumentationTestCase2<Script
 
 	@Override
 	public void setUp() throws Exception {
+		super.setUp();
 		createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
 		SaveProjectTask.mForceSynchronousSave = true;
@@ -61,10 +62,9 @@ public class BroadcastBricksTest extends ActivityInstrumentationTestCase2<Script
 
 	@Override
 	public void tearDown() throws Exception {
-		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
-		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
+		UiTestUtils.goBackToHome(getInstrumentation());
+		UiTestUtils.clearAllUtilTestProjects();
 	}
 
 	@Smoke

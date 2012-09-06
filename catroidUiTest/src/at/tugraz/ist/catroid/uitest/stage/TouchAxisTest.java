@@ -52,18 +52,17 @@ public class TouchAxisTest extends ActivityInstrumentationTestCase2<StageActivit
 
 	@Override
 	protected void setUp() throws Exception {
+		super.setUp();
 		createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
-		super.setUp();
 		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
-		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
-		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
+		UiTestUtils.goBackToHome(getInstrumentation());
+		UiTestUtils.clearAllUtilTestProjects();
 	}
 
 	// This prevents regression of https://github.com/Catrobat/Catroid/issues/3

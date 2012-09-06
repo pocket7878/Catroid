@@ -54,18 +54,17 @@ public class SpeakStageTestSimple extends ActivityInstrumentationTestCase2<PreSt
 
 	@Override
 	public void setUp() throws Exception {
+		super.setUp();
 		createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
-		super.setUp();
 		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
 	public void tearDown() throws Exception {
-		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
-		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
+		UiTestUtils.goBackToHome(getInstrumentation());
+		UiTestUtils.clearAllUtilTestProjects();
 	}
 
 	public void testSimple() {

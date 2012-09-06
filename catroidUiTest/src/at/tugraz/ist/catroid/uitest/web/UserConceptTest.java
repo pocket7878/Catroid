@@ -57,6 +57,7 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 	@Override
 	@UiThreadTest
 	public void setUp() throws Exception {
+		super.setUp();
 		solo = new Solo(getInstrumentation(), getActivity());
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		saveToken = prefs.getString(Constants.TOKEN, "0");
@@ -65,13 +66,12 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 
 	@Override
 	public void tearDown() throws Exception {
+		super.tearDown();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		prefs.edit().putString(Constants.TOKEN, saveToken).commit();
 		UiTestUtils.setPrivateField("emailForUiTests", ServerCalls.getInstance(), null, false);
 		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
-		super.tearDown();
 	}
 
 	public void testRegisterNewUser() throws Throwable {

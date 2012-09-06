@@ -62,10 +62,9 @@ public class ScriptDeleteTest extends ActivityInstrumentationTestCase2<MainMenuA
 
 	@Override
 	public void tearDown() throws Exception {
-		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
-		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
+		UiTestUtils.goBackToHome(getInstrumentation());
+		UiTestUtils.clearAllUtilTestProjects();
 	}
 
 	public void testAddLooksCategoryBrick() {

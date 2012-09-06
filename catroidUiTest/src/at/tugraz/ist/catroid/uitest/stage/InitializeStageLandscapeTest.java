@@ -42,17 +42,16 @@ public class InitializeStageLandscapeTest extends ActivityInstrumentationTestCas
 
 	@Override
 	public void setUp() throws Exception {
-		solo = new Solo(getInstrumentation(), getActivity());
 		super.setUp();
+		solo = new Solo(getInstrumentation(), getActivity());
 		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
 	public void tearDown() throws Exception {
-		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
-		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
+		UiTestUtils.goBackToHome(getInstrumentation());
+		UiTestUtils.clearAllUtilTestProjects();
 	}
 
 	public void testStartStageInLandscape() {

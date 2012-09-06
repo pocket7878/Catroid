@@ -88,9 +88,8 @@ public class SoundFragmentTest extends ActivityInstrumentationTestCase2<MainMenu
 
 	@Override
 	public void tearDown() throws Exception {
-		solo.finishOpenedActivities();
-		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
+		UiTestUtils.clearAllUtilTestProjects();
 	}
 
 	public void testDeleteSound() {

@@ -61,6 +61,7 @@ public class MoveBrickAcrossScriptTest extends ActivityInstrumentationTestCase2<
 
 	@Override
 	public void setUp() throws Exception {
+		super.setUp();
 		createProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 		solo = new Solo(getInstrumentation(), getActivity());
 		UiTestUtils.getIntoScriptTabActivityFromMainMenu(solo);
@@ -69,10 +70,9 @@ public class MoveBrickAcrossScriptTest extends ActivityInstrumentationTestCase2<
 
 	@Override
 	public void tearDown() throws Exception {
-		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
-		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
+		UiTestUtils.goBackToHome(getInstrumentation());
+		UiTestUtils.clearAllUtilTestProjects();
 	}
 
 	private void longClickAndDrag(final float xFrom, final float yFrom, final float xTo, final float yTo,

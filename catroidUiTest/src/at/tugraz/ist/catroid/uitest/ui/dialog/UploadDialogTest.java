@@ -73,7 +73,6 @@ public class UploadDialogTest extends ActivityInstrumentationTestCase2<MainMenuA
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		prefs.edit().putString(Constants.TOKEN, saveToken).commit();
 		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
 		ProjectManager.getInstance().deleteCurrentProject();
 		UiTestUtils.clearAllUtilTestProjects();
 	}

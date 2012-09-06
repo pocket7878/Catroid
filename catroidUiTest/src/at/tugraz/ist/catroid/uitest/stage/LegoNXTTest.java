@@ -84,18 +84,17 @@ public class LegoNXTTest extends ActivityInstrumentationTestCase2<MainMenuActivi
 
 	@Override
 	public void setUp() throws Exception {
+		super.setUp();
 		UiTestUtils.goBackToHome(getInstrumentation());
 		UiTestUtils.clearAllUtilTestProjects();
 		solo = new Solo(getInstrumentation(), getActivity());
-		super.setUp();
 		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
 	public void tearDown() throws Exception {
-		solo.finishOpenedActivities();
-		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
+		UiTestUtils.clearAllUtilTestProjects();
 	}
 
 	// This test requires the NXTBTTestServer to be running or a LegoNXT Robot to run! Check connect string to see if you connect to the right device!

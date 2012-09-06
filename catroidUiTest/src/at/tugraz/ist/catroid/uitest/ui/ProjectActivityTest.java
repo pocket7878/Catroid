@@ -74,7 +74,6 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 		super.tearDown();
 		ProjectManager.getInstance().deleteCurrentProject();
 		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 	}
 

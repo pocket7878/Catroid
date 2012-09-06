@@ -53,6 +53,7 @@ public class WhenStartedBrickTest extends ActivityInstrumentationTestCase2<MainM
 
 	@Override
 	public void setUp() throws Exception {
+		super.setUp();
 		createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
 		UiTestUtils.getIntoScriptTabActivityFromMainMenu(solo);
@@ -61,12 +62,9 @@ public class WhenStartedBrickTest extends ActivityInstrumentationTestCase2<MainM
 
 	@Override
 	public void tearDown() throws Exception {
-		solo.finishOpenedActivities();
-
+		super.tearDown();
 		ProjectManager.getInstance().deleteCurrentProject();
 		UiTestUtils.clearAllUtilTestProjects();
-
-		super.tearDown();
 	}
 
 	public void testWhenStartedBrick() {

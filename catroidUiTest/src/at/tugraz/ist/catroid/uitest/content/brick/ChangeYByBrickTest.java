@@ -55,6 +55,7 @@ public class ChangeYByBrickTest extends ActivityInstrumentationTestCase2<ScriptT
 
 	@Override
 	public void setUp() throws Exception {
+		super.setUp();
 		createProject();
 		solo = new Solo(getInstrumentation(), getActivity());
 		SaveProjectTask.mForceSynchronousSave = true;
@@ -62,10 +63,9 @@ public class ChangeYByBrickTest extends ActivityInstrumentationTestCase2<ScriptT
 
 	@Override
 	public void tearDown() throws Exception {
-		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
-		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
+		UiTestUtils.goBackToHome(getInstrumentation());
+		UiTestUtils.clearAllUtilTestProjects();
 	}
 
 	@Smoke

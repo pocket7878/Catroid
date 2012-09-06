@@ -67,7 +67,6 @@ public class NXTMotorTurnAngleBrickTest extends ActivityInstrumentationTestCase2
 	public void tearDown() throws Exception {
 		super.tearDown();
 		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 	}
 

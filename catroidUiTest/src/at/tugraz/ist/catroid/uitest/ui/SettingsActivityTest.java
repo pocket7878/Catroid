@@ -52,9 +52,8 @@ public class SettingsActivityTest extends ActivityInstrumentationTestCase2<MainM
 
 	@Override
 	public void tearDown() throws Exception {
-		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
 		super.tearDown();
+		UiTestUtils.goBackToHome(getInstrumentation());
 	}
 
 	public void testToggleMindstormBricks() {

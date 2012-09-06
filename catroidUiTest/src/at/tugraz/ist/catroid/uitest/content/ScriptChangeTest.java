@@ -57,18 +57,17 @@ public class ScriptChangeTest extends ActivityInstrumentationTestCase2<ScriptTab
 
 	@Override
 	public void setUp() throws Exception {
+		super.setUp();
 		createTestProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 		solo = new Solo(getInstrumentation(), getActivity());
-		super.setUp();
 		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
 	public void tearDown() throws Exception {
-		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
-		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
+		UiTestUtils.goBackToHome(getInstrumentation());
+		UiTestUtils.clearAllUtilTestProjects();
 	}
 
 	public void testChangeScript() {

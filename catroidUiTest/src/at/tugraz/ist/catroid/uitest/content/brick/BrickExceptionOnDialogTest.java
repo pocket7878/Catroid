@@ -79,6 +79,7 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 
 	@Override
 	public void setUp() throws Exception {
+		super.setUp();
 		solo = new Solo(getInstrumentation(), getActivity());
 		createProject();
 		SaveProjectTask.mForceSynchronousSave = true;
@@ -86,10 +87,9 @@ public class BrickExceptionOnDialogTest extends ActivityInstrumentationTestCase2
 
 	@Override
 	public void tearDown() throws Exception {
-		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
-		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
+		UiTestUtils.goBackToHome(getInstrumentation());
+		UiTestUtils.clearAllUtilTestProjects();
 	}
 
 	public void testBroadCastBrick() {

@@ -61,11 +61,10 @@ public class NewSpriteDialogTest extends ActivityInstrumentationTestCase2<MainMe
 
 	@Override
 	protected void tearDown() throws Exception {
+		super.tearDown();
 		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
 		ProjectManager.getInstance().deleteCurrentProject();
 		UiTestUtils.clearAllUtilTestProjects();
-		super.tearDown();
 	}
 
 	public void testNewSpriteDialog() throws NameNotFoundException, IOException {

@@ -100,10 +100,9 @@ public class CostumeFragmentTest extends ActivityInstrumentationTestCase2<MainMe
 
 	@Override
 	public void tearDown() throws Exception {
-		solo.finishOpenedActivities();
+		super.tearDown();
 		UiTestUtils.clearAllUtilTestProjects();
 		paintroidImageFile.delete();
-		super.tearDown();
 	}
 
 	public void testAddNewCostumeActionbarIcon() {

@@ -66,19 +66,18 @@ public class EmptyBrickSpinnersTest extends ActivityInstrumentationTestCase2<Scr
 
 	@Override
 	public void setUp() throws Exception {
+		super.setUp();
 		UiTestUtils.clearAllUtilTestProjects();
 		createSpinnerProject();
 		solo = new Solo(getInstrumentation(), getActivity());
-		super.setUp();
 		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
 	public void tearDown() throws Exception {
-		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
-		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
+		UiTestUtils.goBackToHome(getInstrumentation());
+		UiTestUtils.clearAllUtilTestProjects();
 	}
 
 	public void testBricksWithEmptySpinner() throws IllegalArgumentException, IllegalAccessException,

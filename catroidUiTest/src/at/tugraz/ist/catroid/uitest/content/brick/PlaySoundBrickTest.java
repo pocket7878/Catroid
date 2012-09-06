@@ -104,8 +104,8 @@ public class PlaySoundBrickTest extends ActivityInstrumentationTestCase2<ScriptT
 
 	@Override
 	public void tearDown() throws Exception {
+		super.tearDown();
 		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 		if (soundFile.exists()) {
 			soundFile.delete();
@@ -113,7 +113,6 @@ public class PlaySoundBrickTest extends ActivityInstrumentationTestCase2<ScriptT
 		if (soundFile2.exists()) {
 			soundFile2.delete();
 		}
-		super.tearDown();
 	}
 
 	public void testSelectandPlaySoundFile() {

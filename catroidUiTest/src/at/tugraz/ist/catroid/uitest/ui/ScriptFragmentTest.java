@@ -63,11 +63,10 @@ public class ScriptFragmentTest extends ActivityInstrumentationTestCase2<ScriptT
 
 	@Override
 	public void tearDown() throws Exception {
+		super.tearDown();
 		solo.setActivityOrientation(Solo.PORTRAIT);
 		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
-		super.tearDown();
 	}
 
 	public void testCreateNewBrickButton() {

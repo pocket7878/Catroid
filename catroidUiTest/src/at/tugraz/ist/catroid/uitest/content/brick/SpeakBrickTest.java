@@ -45,17 +45,16 @@ public class SpeakBrickTest extends ActivityInstrumentationTestCase2<ScriptTabAc
 
 	@Override
 	public void setUp() throws Exception {
-		//createProject();
+		super.setUp();
 		solo = new Solo(getInstrumentation(), getActivity());
 		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override
 	public void tearDown() throws Exception {
-		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
-		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
+		UiTestUtils.goBackToHome(getInstrumentation());
+		UiTestUtils.clearAllUtilTestProjects();
 	}
 
 	/*

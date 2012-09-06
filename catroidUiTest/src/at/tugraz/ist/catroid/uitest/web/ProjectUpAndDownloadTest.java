@@ -65,6 +65,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 	@Override
 	@UiThreadTest
 	public void setUp() throws Exception {
+		super.setUp();
 		solo = new Solo(getInstrumentation(), getActivity());
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		saveToken = prefs.getString(Constants.TOKEN, "0");
@@ -73,12 +74,11 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 
 	@Override
 	public void tearDown() throws Exception {
+		super.tearDown();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		prefs.edit().putString(Constants.TOKEN, saveToken).commit();
 		UiTestUtils.goBackToHome(getInstrumentation());
-		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
-		super.tearDown();
 	}
 
 	private void setServerURLToTestUrl() throws Throwable {
