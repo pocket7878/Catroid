@@ -47,7 +47,6 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
-import at.tugraz.ist.catroid.stage.StageListener;
 import at.tugraz.ist.catroid.transfers.ProjectUploadTask;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -64,6 +63,7 @@ public class UploadProjectDialog extends DialogFragment {
 	private Button cancelButton;
 
 	private String currentProjectName;
+	private String currentProjectDescription;
 	private String newProjectName;
 
 	@Override
@@ -98,11 +98,12 @@ public class UploadProjectDialog extends DialogFragment {
 	}
 
 	private void initControls() {
-		currentProjectName = ProjectManager.getInstance().getCurrentProject().getName();
+		currentProjectName = ProjectManager.INSTANCE.getCurrentProject().getName();
+		currentProjectDescription = ProjectManager.INSTANCE.getCurrentProject().getDescription();
 		sizeOfProject.setText(UtilFile.getSizeAsString(new File(Constants.DEFAULT_ROOT + "/" + currentProjectName)));
 		projectRename.setVisibility(View.GONE);
 		projectUploadName.setText(currentProjectName);
-		projectDescriptionField.setText("");
+		projectDescriptionField.setText(currentProjectDescription);
 		projectUploadName.requestFocus();
 		projectUploadName.selectAll();
 
@@ -172,18 +173,24 @@ public class UploadProjectDialog extends DialogFragment {
 	}
 
 	private void handleUploadButtonClick() {
-		ProjectManager projectManager = ProjectManager.getInstance();
+		ProjectManager projectManager = ProjectManager.INSTANCE;
 
 		String uploadName = projectUploadName.getText().toString();
+		String projectDescription = projectDescriptionField.getText().toString();
+
 		if (uploadName.length() == 0) {
 			Utils.displayErrorMessage(getActivity(), getString(R.string.error_no_name_entered));
 			return;
-		} else if (!uploadName.equals(currentProjectName)) {
+		}
+		if (!uploadName.equals(currentProjectName)) {
 			projectRename.setVisibility(View.VISIBLE);
-			boolean renamed = projectManager.renameProject(newProjectName, getActivity());
+			boolean renamed = projectManager.renameProjectNameAndDescription(newProjectName, projectDescription,
+					getActivity());
 			if (!renamed) {
 				return;
 			}
+		} else if (uploadName.equals(currentProjectName) && (!projectDescription.equals(currentProjectDescription))) {
+			projectManager.getCurrentProject().setDescription(projectDescription);
 		}
 
 		dismiss();
@@ -192,26 +199,6 @@ public class UploadProjectDialog extends DialogFragment {
 		projectManager.saveProject();
 
 		String projectPath = Constants.DEFAULT_ROOT + "/" + projectManager.getCurrentProject().getName();
-		String projectDescription = "";
-
-		boolean hasThumbnail = false;
-		String screenshotPath = Utils.buildPath(projectPath, StageListener.SCREENSHOT_FILE_NAME);
-		if (new File(screenshotPath).exists()) {
-			hasThumbnail = true;
-		}
-
-		if (!hasThumbnail) {
-			AddProjectScreenshot addProjectScreenshot = new AddProjectScreenshot();
-			addProjectScreenshot.show(getFragmentManager(), AddProjectScreenshot.DIALOG_FRAGMENT_TAG);
-
-			Utils.displayErrorMessageFragment(getString(R.string.upload_project_no_thumbnail_error),
-					getFragmentManager());
-			return;
-		}
-
-		if (projectDescriptionField.length() != 0) {
-			projectDescription = projectDescriptionField.getText().toString();
-		}
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		String token = prefs.getString(Constants.TOKEN, "0");

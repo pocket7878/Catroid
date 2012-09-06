@@ -30,6 +30,7 @@ import static junit.framework.Assert.fail;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,13 +47,20 @@ import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.os.Build;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -75,6 +83,8 @@ import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
+import at.tugraz.ist.catroid.ui.ProjectActivity;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.UtilToken;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -96,7 +106,11 @@ public class UiTestUtils {
 	public static final String PROJECTNAME1 = "testproject1";
 	public static final String PROJECTNAME2 = "testproject2";
 	public static final String PROJECTNAME3 = "testproject3";
+	public static final String PROJECTDESCRIPTION1 = "testdescription1";
+	public static final String PROJECTDESCRIPTION2 = "testdescription2";
+	public static final String PROJECTDESCRIPTION3 = "testdescription3";
 	public static final String DEFAULT_TEST_PROJECT_NAME_MIXED_CASE = "TeStPROjeCt";
+	public static final String COPIED_PROJECT_NAME = "copiedProject";
 
 	public static enum FileTypes {
 		IMAGE, SOUND, ROOT
@@ -226,9 +240,24 @@ public class UiTestUtils {
 	}
 
 	public static void addNewBrick(Solo solo, int categoryStringId, int brickStringId) {
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_add);
+		addNewBrick(solo, categoryStringId, brickStringId, 0);
+	}
+
+	public static void addNewBrick(Solo solo, int categoryStringId, int brickStringId, int nThElement) {
+		if (Build.VERSION.SDK_INT < 15) {
+			UiTestUtils.clickOnLinearLayout(solo, R.id.menu_add);
+		} else {
+			solo.clickOnActionBarItem(R.id.menu_add);
+		}
+		if (!solo.waitForText(solo.getCurrentActivity().getString(categoryStringId), 0, 5000)) {
+			fail("Text not shown in 5 secs!");
+		}
 		solo.clickOnText(solo.getCurrentActivity().getString(categoryStringId));
-		solo.clickOnText(solo.getCurrentActivity().getString(brickStringId));
+		if (!solo.waitForText(solo.getCurrentActivity().getString(brickStringId), nThElement, 5000)) {
+			fail("Text not shown in 5 secs!");
+		}
+		solo.clickOnText(solo.getCurrentActivity().getString(brickStringId), nThElement, true);
+		solo.sleep(500);
 	}
 
 	public static List<Brick> createTestProject() {
@@ -416,6 +445,16 @@ public class UiTestUtils {
 		if (directory.exists()) {
 			UtilFile.deleteDirectory(directory);
 		}
+
+		directory = new File(Constants.DEFAULT_ROOT + "/" + DEFAULT_TEST_PROJECT_NAME_MIXED_CASE);
+		if (directory.exists()) {
+			UtilFile.deleteDirectory(directory);
+		}
+
+		directory = new File(Constants.DEFAULT_ROOT + "/" + COPIED_PROJECT_NAME);
+		if (directory.exists()) {
+			UtilFile.deleteDirectory(directory);
+		}
 	}
 
 	public static Object getPrivateField(String fieldName, Object object) {
@@ -487,10 +526,24 @@ public class UiTestUtils {
 		field.set(object, value);
 	}
 
+	/**
+	 * @deprecated Will fail on devices with API > 14, replaced by {@link #clickOnActionBar(Solo, int)}
+	 */
+	@Deprecated
 	public static void clickOnLinearLayout(Solo solo, int imageButtonId) {
 		solo.waitForView(LinearLayout.class);
 		LinearLayout linearLayout = (LinearLayout) solo.getView(imageButtonId);
 		solo.clickOnView(linearLayout);
+	}
+
+	public static void clickOnActionBar(Solo solo, int imageButtonId) {
+		if (Build.VERSION.SDK_INT < 15) {
+			solo.waitForView(LinearLayout.class);
+			LinearLayout linearLayout = (LinearLayout) solo.getView(imageButtonId);
+			solo.clickOnView(linearLayout);
+		} else {
+			solo.clickOnActionBarItem(imageButtonId);
+		}
 	}
 
 	public static File createTestMediaFile(String filePath, int fileID, Context context) throws IOException {
@@ -580,7 +633,7 @@ public class UiTestUtils {
 		String buttonOKText = solo.getCurrentActivity().getString(R.string.ok);
 		solo.waitForText(buttonOKText);
 		solo.clickOnText(buttonOKText);
-		solo.sleep(100);
+		solo.sleep(400);
 		int width = 0;
 		if (assertMode) {
 			assertTrue("EditText not resized - value not (fully) visible", solo.searchText(value));
@@ -599,6 +652,10 @@ public class UiTestUtils {
 	 */
 	public static ArrayList<Integer> getListItemYPositions(final Solo solo) {
 		ArrayList<Integer> yPositionList = new ArrayList<Integer>();
+		if (!solo.waitForView(ListView.class, 0, 10000, false)) {
+			fail("ListView not shown in 10 secs!");
+		}
+
 		ListView listView = solo.getCurrentListViews().get(0);
 
 		for (int i = 0; i < listView.getChildCount(); ++i) {
@@ -606,11 +663,67 @@ public class UiTestUtils {
 
 			Rect globalVisibleRect = new Rect();
 			currentViewInList.getGlobalVisibleRect(globalVisibleRect);
-			int middleYPos = globalVisibleRect.top + globalVisibleRect.height() / 2;
-			yPositionList.add(middleYPos);
+			int middleYPosition = globalVisibleRect.top + globalVisibleRect.height() / 2;
+			yPositionList.add(middleYPosition);
 		}
 
 		return yPositionList;
+	}
+
+	public static int getAddedListItemYPosition(Solo solo) {
+		ArrayList<Integer> yPositionList = getListItemYPositions(solo);
+		int pos = (yPositionList.size() - 1) / 2;
+
+		return yPositionList.get(pos);
+	}
+
+	public static void longClickAndDrag(final Solo solo, final float xFrom, final float yFrom, final float xTo,
+			final float yTo, final int steps) {
+		final Activity activity = solo.getCurrentActivity();
+		Handler handler = new Handler(activity.getMainLooper());
+
+		handler.post(new Runnable() {
+
+			public void run() {
+				MotionEvent downEvent = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(),
+						MotionEvent.ACTION_DOWN, xFrom, yFrom, 0);
+				activity.dispatchTouchEvent(downEvent);
+			}
+		});
+
+		solo.sleep(ViewConfiguration.getLongPressTimeout() + 200);
+
+		handler.post(new Runnable() {
+			public void run() {
+				double offsetX = xTo - xFrom;
+				offsetX /= steps;
+				double offsetY = yTo - yFrom;
+				offsetY /= steps;
+				for (int i = 0; i <= steps; i++) {
+					float x = xFrom + (float) (offsetX * i);
+					float y = yFrom + (float) (offsetY * i);
+					MotionEvent moveEvent = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(),
+							MotionEvent.ACTION_MOVE, x, y, 0);
+					activity.dispatchTouchEvent(moveEvent);
+
+					solo.sleep(20);
+				}
+			}
+		});
+
+		solo.sleep(steps * 20 + 200);
+
+		handler.post(new Runnable() {
+
+			public void run() {
+				MotionEvent upEvent = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(),
+						MotionEvent.ACTION_UP, xTo, yTo, 0);
+				activity.dispatchTouchEvent(upEvent);
+			}
+		});
+
+		solo.clickInList(0); // needed because of bug(?) in Nexus S 2.3.6
+		solo.sleep(1000);
 	}
 
 	private static class ProjectWithVersionCode extends Project {
@@ -661,14 +774,23 @@ public class UiTestUtils {
 		absc.onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, logoNavItem);
 	}
 
-	/**
-	 * This method is needed because sometimes bricks are staying in hovering state.
-	 */
-	public static void clickOnAddBrickAndGoBack(Solo solo) {
-		solo.sleep(300);
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_add);
-		solo.goBack();
-		solo.sleep(300);
+	public static void getIntoScriptTabActivityFromMainMenu(Solo solo) {
+		getIntoScriptTabActivityFromMainMenu(solo, 0);
+	}
+
+	public static void getIntoScriptTabActivityFromMainMenu(Solo solo, int spriteIndex) {
+		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
+		solo.sleep(200);
+
+		solo.clickOnButton(solo.getString(R.string.current_project_button));
+		solo.waitForActivity(ProjectActivity.class.getSimpleName());
+		solo.waitForView(ListView.class);
+		solo.sleep(200);
+
+		solo.clickInList(spriteIndex);
+		solo.waitForActivity(ScriptTabActivity.class.getSimpleName());
+		solo.waitForView(ListView.class);
+		solo.sleep(200);
 	}
 
 	public static boolean clickOnTextInList(Solo solo, String text) {
@@ -677,6 +799,18 @@ public class UiTestUtils {
 			TextView view = textViews.get(i);
 			if (view.getText().toString().equalsIgnoreCase(text)) {
 				solo.clickOnView(view);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean longClickOnTextInList(Solo solo, String text) {
+		ArrayList<TextView> textViews = solo.getCurrentTextViews(solo.getView(android.R.id.list));
+		for (int i = 0; i < textViews.size(); i++) {
+			TextView view = textViews.get(i);
+			if (view.getText().toString().equalsIgnoreCase(text)) {
+				solo.clickLongOnView(view);
 				return true;
 			}
 		}
@@ -700,4 +834,13 @@ public class UiTestUtils {
 			}
 		}
 	}
+
+	public static void cropImage(String pathToImageFile, int sampleSize) throws FileNotFoundException {
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inSampleSize = sampleSize;
+		Bitmap imageBitmap = BitmapFactory.decodeFile(pathToImageFile, options);
+		File imageFile = new File(pathToImageFile);
+		StorageHandler.saveBitmapToImageFile(imageFile, imageBitmap);
+	}
+
 }

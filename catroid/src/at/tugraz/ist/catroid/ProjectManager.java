@@ -184,7 +184,6 @@ public class ProjectManager {
 				directoryRenamed = tmpProjectDirectory.renameTo(newProjectDirectory);
 			}
 		} else {
-
 			directoryRenamed = oldProjectDirectory.renameTo(newProjectDirectory);
 		}
 
@@ -193,7 +192,49 @@ public class ProjectManager {
 			this.saveProject();
 		}
 
-		return (directoryRenamed);
+		if (!directoryRenamed) {
+			Utils.displayErrorMessage(context, context.getString(R.string.error_rename_project));
+		}
+
+		return directoryRenamed;
+	}
+
+	public boolean renameProjectNameAndDescription(String newProjectName, String newProjectDescription, Context context) {
+		if (StorageHandler.getInstance().projectExistsCheckCase(newProjectName)) {
+			Utils.displayErrorMessage(context, context.getString(R.string.error_project_exists));
+			return false;
+		}
+
+		String oldProjectPath = Utils.buildProjectPath(project.getName());
+		File oldProjectDirectory = new File(oldProjectPath);
+
+		String newProjectPath = Utils.buildProjectPath(newProjectName);
+		File newProjectDirectory = new File(newProjectPath);
+
+		boolean directoryRenamed = false;
+
+		if (oldProjectPath.equalsIgnoreCase(newProjectPath)) {
+			String tmpProjectPath = Utils.buildProjectPath(createTemporaryDirectoryName(newProjectName));
+			File tmpProjectDirectory = new File(tmpProjectPath);
+			directoryRenamed = oldProjectDirectory.renameTo(tmpProjectDirectory);
+			if (directoryRenamed) {
+				directoryRenamed = tmpProjectDirectory.renameTo(newProjectDirectory);
+			}
+		} else {
+			directoryRenamed = oldProjectDirectory.renameTo(newProjectDirectory);
+		}
+
+		if (directoryRenamed) {
+			project.setName(newProjectName);
+			project.setDescription(newProjectDescription);
+			this.saveProject();
+		}
+
+		if (!directoryRenamed) {
+			Utils.displayErrorMessage(context, context.getString(R.string.error_rename_project));
+		}
+
+		return directoryRenamed;
 	}
 
 	public Sprite getCurrentSprite() {
