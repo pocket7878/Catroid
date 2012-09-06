@@ -32,6 +32,7 @@ import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.Smoke;
 import android.util.Log;
 import at.tugraz.ist.catroid.common.Constants;
+import at.tugraz.ist.catroid.io.SaveProjectTask;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -64,6 +65,7 @@ public class UtilsTest extends AndroidTestCase {
 				outputStream.close();
 			}
 		}
+		SaveProjectTask.mForceSynchronousSave = true;
 	}
 
 	@Override

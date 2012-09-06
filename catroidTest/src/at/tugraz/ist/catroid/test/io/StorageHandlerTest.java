@@ -251,13 +251,12 @@ public class StorageHandlerTest extends AndroidTestCase {
 		String projectString = TestUtils.getProjectfileAsString(projectName);
 		assertFalse("project contains package information", projectString.contains("at.tugraz.ist"));
 
-		String xmlHeader = (String) TestUtils.getPrivateField("XML_HEADER", storageHandler, false);
-		assertTrue("Project file did not contain correct XML header.", projectString.startsWith(xmlHeader));
+		final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>\n";
+		assertTrue("Project file did not contain correct XML header.", projectString.startsWith(XML_HEADER));
 
 		projectFile = new File(Constants.DEFAULT_ROOT + "/" + projectName);
 		if (projectFile.exists()) {
 			UtilFile.deleteDirectory(projectFile);
 		}
 	}
-
 }

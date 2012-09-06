@@ -30,6 +30,7 @@ import java.util.List;
 
 import android.os.Environment;
 import android.test.InstrumentationTestCase;
+import android.util.Log;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -50,13 +51,14 @@ public class UtilFileTest extends InstrumentationTestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 
-		final String catroidDirectory = Environment.getExternalStorageDirectory() + "catroid";
+		final String catroidDirectory = Environment.getExternalStorageDirectory() + "/catroid";
 		UtilFile.deleteDirectory(new File(catroidDirectory + "/testDirectory"));
 		TestUtils.clearProject(projectName);
 
 		testDirectory = new File(catroidDirectory + "/testDirectory");
 		testDirectory.mkdir();
 		file1 = new File(testDirectory.getAbsolutePath() + "/file1");
+		Log.d("CATROID", "Create file " + file1.getAbsolutePath());
 		file1.createNewFile();
 		subDirectory = new File(testDirectory.getAbsolutePath() + "/subDirectory");
 		subDirectory.mkdir();
@@ -95,15 +97,17 @@ public class UtilFileTest extends InstrumentationTestCase {
 					at.tugraz.ist.catroid.test.R.raw.longtestsound, getInstrumentation().getContext(),
 					UtilFile.TYPE_SOUND_FILE);
 		}
-		assertEquals("not the expected string", "84.2 KB", UtilFile.getSizeAsString(testDirectory));
+		DecimalFormat decimalFormat = new DecimalFormat("#.#");
+		String expected = decimalFormat.format(84.2) + " KB";
+		assertEquals("not the expected string", expected, UtilFile.getSizeAsString(testDirectory));
 
 		for (int i = 2; i < 48; i++) {
 			UtilFile.saveFileToProject("testDirectory", i + "testsound.mp3",
 					at.tugraz.ist.catroid.test.R.raw.longtestsound, getInstrumentation().getContext(),
 					UtilFile.TYPE_SOUND_FILE);
 		}
-		DecimalFormat decimalFormat = new DecimalFormat("#.0");
-		String expected = decimalFormat.format(2.0) + " MB";
+		decimalFormat = new DecimalFormat("#.0");
+		expected = decimalFormat.format(2.0) + " MB";
 		assertEquals("not the expected string", expected, UtilFile.getSizeAsString(testDirectory));
 
 		PrintWriter printWriter = null;
@@ -135,7 +139,7 @@ public class UtilFileTest extends InstrumentationTestCase {
 		project.addSprite(sprite);
 		ProjectManager.getInstance().saveProject();
 
-		String catroidDirectoryPath = Environment.getExternalStorageDirectory() + "catroid";
+		String catroidDirectoryPath = Environment.getExternalStorageDirectory() + "/catroid";
 		File catroidDirectory = new File(catroidDirectoryPath);
 		File project1Directory = new File(catroidDirectory + "/" + projectName);
 
