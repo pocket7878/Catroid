@@ -53,10 +53,11 @@ public class InternToExternGenerator {
 		int externStartIndex;
 		int externEndIndex;
 
-		while (internTokenList.size() > 0) {
+		while (internTokenList.isEmpty() == false) {
 			generatedExternFormulaString += " "; //TODO handle whitespace insertion
 			externStartIndex = generatedExternFormulaString.length();
 			currentToken = internTokenList.get(0);
+			Log.i("info", "generateExternStringAndMapping: currentTokenText = " + currentToken.getTokenSringValue());
 			externTokenString = generateExternStringFromToken(currentToken);
 			generatedExternFormulaString += externTokenString;
 			externEndIndex = generatedExternFormulaString.length(); //TODO cursor position determination
@@ -69,6 +70,9 @@ public class InternToExternGenerator {
 			internTokenList.remove(0);
 
 		}
+		generatedExternFormulaString += " ";
+		Log.i("info", "generateExternStringAndMapping: generatedExternFormulaString = " + generatedExternFormulaString);
+
 	}
 
 	private String generateExternStringFromToken(InternToken internToken) {

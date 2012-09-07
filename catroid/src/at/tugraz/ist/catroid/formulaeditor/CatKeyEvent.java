@@ -90,6 +90,7 @@ public class CatKeyEvent extends KeyEvent {
 		}
 
 		switch (getKeyCode()) {
+
 		//FUNCTIONS:
 			case CatKeyEvent.KEYCODE_SIN:
 				return buildSingleParameterFunction("sin", "0");

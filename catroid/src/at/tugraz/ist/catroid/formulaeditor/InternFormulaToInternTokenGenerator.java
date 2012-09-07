@@ -25,12 +25,18 @@ package at.tugraz.ist.catroid.formulaeditor;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.util.Log;
+
 public class InternFormulaToInternTokenGenerator {
 
 	public InternFormulaToInternTokenGenerator() {
 	}
 
 	public static List<InternToken> generateInternRepresentationByString(String internFormulaRepresentation) {
+
+		Log.i("info", "generateInternRepresentationByString:enter");
+		Log.i("info", "generateInternRepresentationByString: internFormulaRepresentation = "
+				+ internFormulaRepresentation);
 		List<InternToken> internTokenList = new LinkedList<InternToken>();
 
 		int currentIndex = 0;

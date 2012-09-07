@@ -26,6 +26,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.KeyEvent;
 
 public class InternFormula {
 
@@ -59,10 +60,16 @@ public class InternFormula {
 		} else {
 			this.cursorPositionInternToken = InternFormulaToInternTokenGenerator.generateInternTokenByIndex(
 					cursorPositionTokenIndex, internalFormulaString);
+
+			Log.i("info",
+					"cursorPositionInternToken = "
+							+ cursorPositionInternToken.getInternTokenType().getInternTokenPrefix()
+							+ cursorPositionInternToken.getTokenSringValue());
 		}
 	}
 
 	public String getExternFormulaString() {
+		Log.i("info", "Intern Formula = \"" + internalFormulaString + "\"");
 		return externFormulaString;
 	}
 
@@ -71,7 +78,10 @@ public class InternFormula {
 
 		List<InternToken> catKeyEventTokenList = catKeyEvent.createInternTokensByCatKeyEvent();
 
-		if (cursorPositionInternToken == null) {
+		//TODO handle deletion
+		if (catKeyEvent.getKeyCode() == KeyEvent.KEYCODE_DEL) {
+
+		} else if (cursorPositionInternToken == null) {
 
 			appendToFirstLeftToken(externCursorPosition, catKeyEventTokenList);
 
@@ -94,6 +104,8 @@ public class InternFormula {
 		internToExternGenerator.generateExternStringAndMapping(internalFormulaString);
 		externFormulaString = internToExternGenerator.getGeneratedExternFormulaString();
 		externInternRepresentationMapping = internToExternGenerator.getGeneratedExternInternRepresentationMapping();
+
+		setCursorAndSelection(externCursorPosition, tokenSelection); //TODO refactor
 
 	}
 
@@ -152,6 +164,7 @@ public class InternFormula {
 
 	private void replaceCursorPositionInternTokenByTokenList(List<InternToken> internTokensToReplaceWith) {
 
+		Log.i("info", "replaceCursorPositionInternTokenByTokenList:enter");
 		int internTokenToReplaceIndex = cursorPositionInternToken.getInternPositionIndex();
 
 		if (cursorPositionInternToken.getInternTokenType() == InternTokenType.NUMBER
@@ -166,14 +179,20 @@ public class InternFormula {
 				return;
 			}
 
-			InternTokenModify.insertNumberIntoNumberToken(numberTokenToInsert, externNumberOffset,
-					numberTokenToInsert.getTokenSringValue());
+			InternToken modifiedToken = InternTokenModify.insertNumberIntoNumberToken(cursorPositionInternToken,
+					externNumberOffset, numberTokenToInsert.getTokenSringValue());
 
 			internalFormulaString = InternFormulaStringModify.generateInternStringByReplace(
-					cursorPositionInternToken.getInternPositionIndex(), numberTokenToInsert, internalFormulaString);
+					cursorPositionInternToken.getInternPositionIndex(), modifiedToken, internalFormulaString);
 
-		}
-		if (cursorPositionInternToken.getInternTokenType() == InternTokenType.NUMBER
+			Log.i("info",
+					"replaceCursorPositionInternTokenByTokenList: modifiedToken = "
+							+ modifiedToken.getTokenSringValue());
+
+			Log.i("info", "replaceCursorPositionInternTokenByTokenList: generated internalFormulaString = "
+					+ internalFormulaString);
+
+		} else if (cursorPositionInternToken.getInternTokenType() == InternTokenType.NUMBER
 				&& InternToken.isFunctionToken(internTokensToReplaceWith)) {
 			//When NUMBER selected
 			//  set Number to first parameter when FUNCTION inserted

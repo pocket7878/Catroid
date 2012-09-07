@@ -49,13 +49,14 @@ public class InternTokenModify {
 		Log.i("info", "insertNumberIntoNumberToken:enter");
 		Log.i("info", "insertNumberIntoNumberToken: externNumberOffset = " + externNumberOffset);
 
+		Log.i("info", "insertNumberIntoNumberToken: Before Insertion = " + numberTokenToBeModified.getTokenSringValue());
+
 		String numberString = numberTokenToBeModified.getTokenSringValue();
 		String leftPart = numberString.substring(0, externNumberOffset);
 		String rightPart = numberString.substring(externNumberOffset);
 
 		numberTokenToBeModified.setTokenStringValue(leftPart + numberToInsert + rightPart);
 
-		Log.i("info", "insertNumberIntoNumberToken: Before Insertion = " + numberString);
 		Log.i("info", "insertNumberIntoNumberToken: After  Insertion = " + numberTokenToBeModified.getTokenSringValue());
 
 		return numberTokenToBeModified;
