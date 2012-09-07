@@ -63,6 +63,7 @@ public class UploadProjectDialog extends DialogFragment {
 	private Button cancelButton;
 
 	private String currentProjectName;
+	private String currentProjectDescription;
 	private String newProjectName;
 
 	@Override
@@ -97,11 +98,12 @@ public class UploadProjectDialog extends DialogFragment {
 	}
 
 	private void initControls() {
-		currentProjectName = ProjectManager.getInstance().getCurrentProject().getName();
+		currentProjectName = ProjectManager.INSTANCE.getCurrentProject().getName();
+		currentProjectDescription = ProjectManager.INSTANCE.getCurrentProject().getDescription();
 		sizeOfProject.setText(UtilFile.getSizeAsString(new File(Constants.DEFAULT_ROOT + "/" + currentProjectName)));
 		projectRename.setVisibility(View.GONE);
 		projectUploadName.setText(currentProjectName);
-		projectDescriptionField.setText("");
+		projectDescriptionField.setText(currentProjectDescription);
 		projectUploadName.requestFocus();
 		projectUploadName.selectAll();
 
@@ -171,18 +173,24 @@ public class UploadProjectDialog extends DialogFragment {
 	}
 
 	private void handleUploadButtonClick() {
-		ProjectManager projectManager = ProjectManager.getInstance();
+		ProjectManager projectManager = ProjectManager.INSTANCE;
 
 		String uploadName = projectUploadName.getText().toString();
+		String projectDescription = projectDescriptionField.getText().toString();
+
 		if (uploadName.length() == 0) {
 			Utils.displayErrorMessage(getActivity(), getString(R.string.error_no_name_entered));
 			return;
-		} else if (!uploadName.equals(currentProjectName)) {
+		}
+		if (!uploadName.equals(currentProjectName)) {
 			projectRename.setVisibility(View.VISIBLE);
-			boolean renamed = projectManager.renameProject(newProjectName, getActivity());
+			boolean renamed = projectManager.renameProjectNameAndDescription(newProjectName, projectDescription,
+					getActivity());
 			if (!renamed) {
 				return;
 			}
+		} else if (uploadName.equals(currentProjectName) && (!projectDescription.equals(currentProjectDescription))) {
+			projectManager.getCurrentProject().setDescription(projectDescription);
 		}
 
 		projectManager.getCurrentProject().setDeviceData(getActivity());
@@ -190,13 +198,6 @@ public class UploadProjectDialog extends DialogFragment {
 
 		dismiss();
 		String projectPath = Constants.DEFAULT_ROOT + "/" + projectManager.getCurrentProject().getName();
-		String projectDescription;
-
-		if (projectDescriptionField.length() != 0) {
-			projectDescription = projectDescriptionField.getText().toString();
-		} else {
-			projectDescription = "";
-		}
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		String token = prefs.getString(Constants.TOKEN, "0");
