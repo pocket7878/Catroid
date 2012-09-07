@@ -77,6 +77,8 @@ public class ExternInternRepresentationMapping {
 		for (int searchIndex = externIndex; searchIndex > 0; searchIndex--) {
 			if (externInternMapping.get(searchIndex) == internTokenOffsetTo) {
 				return externIndex - searchIndex;
+			} else if (externInternMapping.get(searchIndex) != null) {
+				return -1;
 			}
 		}
 		return -1;

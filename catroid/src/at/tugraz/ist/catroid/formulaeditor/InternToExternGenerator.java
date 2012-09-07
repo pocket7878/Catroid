@@ -25,6 +25,7 @@ package at.tugraz.ist.catroid.formulaeditor;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 
 public class InternToExternGenerator {
 
@@ -41,6 +42,7 @@ public class InternToExternGenerator {
 	}
 
 	public void generateExternStringAndMapping(String internFormulaRepresentation) {
+		Log.i("info", "generateExternStringAndMapping:enter");
 
 		List<InternToken> internTokenList = InternFormulaToInternTokenGenerator
 				.generateInternRepresentationByString(internFormulaRepresentation);
@@ -63,6 +65,8 @@ public class InternToExternGenerator {
 					currentToken.getInternPositionIndex());
 			generatedExternInternRepresentationMapping.putInternExternMapping(currentToken.getInternPositionIndex(),
 					externStartIndex);
+
+			internTokenList.remove(0);
 
 		}
 	}

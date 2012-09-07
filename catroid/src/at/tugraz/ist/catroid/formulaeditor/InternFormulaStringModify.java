@@ -25,6 +25,8 @@ package at.tugraz.ist.catroid.formulaeditor;
 import java.util.LinkedList;
 import java.util.List;
 
+import android.util.Log;
+
 public class InternFormulaStringModify {
 
 	public static String generateInternStringByReplace(int startIndexToReplace, int endIndexToReplace,
@@ -70,10 +72,12 @@ public class InternFormulaStringModify {
 
 	public static String generateInternStringByInsertAtBeginning(List<InternToken> tokensToInsert,
 			String internalFormulaString) {
+
 		return generateInternStringByInternTokenList(tokensToInsert) + internalFormulaString;
 	}
 
 	private static String generateInternStringByInternTokenList(List<InternToken> internTokenList) {
+		Log.i("info", "generateInternStringByInternTokenList:enter");
 		String returnValue = "";
 		for (InternToken internToken : internTokenList) {
 			returnValue += internToken.toString();

@@ -24,6 +24,8 @@ package at.tugraz.ist.catroid.formulaeditor;
 
 import java.util.List;
 
+import android.util.Log;
+
 public class InternTokenModify {
 
 	public static List<InternToken> replaceFunctionByTokens(List<InternToken> functionToReplace,
@@ -39,5 +41,24 @@ public class InternTokenModify {
 		}
 
 		return null;
+	}
+
+	//TODO move to correct position
+	public static InternToken insertNumberIntoNumberToken(InternToken numberTokenToBeModified, int externNumberOffset,
+			String numberToInsert) {
+		Log.i("info", "insertNumberIntoNumberToken:enter");
+		Log.i("info", "insertNumberIntoNumberToken: externNumberOffset = " + externNumberOffset);
+
+		String numberString = numberTokenToBeModified.getTokenSringValue();
+		String leftPart = numberString.substring(0, externNumberOffset);
+		String rightPart = numberString.substring(externNumberOffset);
+
+		numberTokenToBeModified.setTokenStringValue(leftPart + numberToInsert + rightPart);
+
+		Log.i("info", "insertNumberIntoNumberToken: Before Insertion = " + numberString);
+		Log.i("info", "insertNumberIntoNumberToken: After  Insertion = " + numberTokenToBeModified.getTokenSringValue());
+
+		return numberTokenToBeModified;
+
 	}
 }
