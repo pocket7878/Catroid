@@ -29,7 +29,7 @@ public class ExternInternRepresentationMapping {
 	private SparseArray<Integer> externInternMapping;
 	private SparseArray<Integer> internExternMapping;
 
-	private int externStringLength;
+	private int externStringLength = 10;
 	private int internStringLength;
 
 	public ExternInternRepresentationMapping() {
@@ -37,7 +37,7 @@ public class ExternInternRepresentationMapping {
 		internExternMapping = new SparseArray<Integer>();
 	}
 
-	public void putExternIndernMapping(int externStartIndex, int externEndIndex, int internStartIndex) {
+	public void putExternInternMapping(int externStartIndex, int externEndIndex, int internStartIndex) {
 		externInternMapping.put(externStartIndex, internStartIndex);
 		externInternMapping.put(externEndIndex, internStartIndex);
 	}
@@ -48,7 +48,7 @@ public class ExternInternRepresentationMapping {
 	}
 
 	public Integer getExternIndexByInternIndex(int internIndex) {
-		//TODO implement to show parse errors
+		//TODO implement to show parse errors and to update selection indizes
 
 		return null;
 	}

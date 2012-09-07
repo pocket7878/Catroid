@@ -26,6 +26,8 @@ import java.util.Stack;
 
 public class FormulaEditorHistory {
 
+	//TODO: History should contain InternFormula member to generate extern representation
+
 	private static final int MAXIMUM_HISTORY_LENGTH = 15;
 	private Stack<FormulaEditorHistoryElement> undoStack = null;
 	private Stack<FormulaEditorHistoryElement> redoStack = null;

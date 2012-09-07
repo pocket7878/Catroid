@@ -28,15 +28,16 @@ import android.content.Context;
 
 public class InternToExternGenerator {
 
-	private String generatedExternString;
-	private ExternInternRepresentationMapping externInternRepresentationMapping;
+	private String generatedExternFormulaString;
+	private ExternInternRepresentationMapping generatedExternInternRepresentationMapping;
+	private Context context;
 
 	private InternToExternLanguageConverter internToExternLanguageConverter;
 
 	public InternToExternGenerator(Context context) {
-		generatedExternString = "";
-		externInternRepresentationMapping = new ExternInternRepresentationMapping();
-		internToExternLanguageConverter = new InternToExternLanguageConverter(context);
+		this.context = context;
+		generatedExternFormulaString = "";
+		generatedExternInternRepresentationMapping = new ExternInternRepresentationMapping();
 	}
 
 	public void generateExternStringAndMapping(String internFormulaRepresentation) {
@@ -44,23 +45,23 @@ public class InternToExternGenerator {
 		List<InternToken> internTokenList = InternFormulaToInternTokenGenerator
 				.generateInternRepresentationByString(internFormulaRepresentation);
 
-		generatedExternString = "";
+		generatedExternFormulaString = "";
 		InternToken currentToken;
 		String externTokenString;
 		int externStartIndex;
 		int externEndIndex;
 
 		while (internTokenList.size() > 0) {
-			generatedExternString += " "; //TODO handle whitespace insertion
-			externStartIndex = generatedExternString.length();
+			generatedExternFormulaString += " "; //TODO handle whitespace insertion
+			externStartIndex = generatedExternFormulaString.length();
 			currentToken = internTokenList.get(0);
 			externTokenString = generateExternStringFromToken(currentToken);
-			generatedExternString += externTokenString;
-			externEndIndex = generatedExternString.length(); //TODO cursor position determination
+			generatedExternFormulaString += externTokenString;
+			externEndIndex = generatedExternFormulaString.length(); //TODO cursor position determination
 
-			externInternRepresentationMapping.putExternIndernMapping(externStartIndex, externEndIndex,
+			generatedExternInternRepresentationMapping.putExternInternMapping(externStartIndex, externEndIndex,
 					currentToken.getInternPositionIndex());
-			externInternRepresentationMapping.putInternExternMapping(currentToken.getInternPositionIndex(),
+			generatedExternInternRepresentationMapping.putInternExternMapping(currentToken.getInternPositionIndex(),
 					externStartIndex);
 
 		}
@@ -74,10 +75,18 @@ public class InternToExternGenerator {
 				return internToken.getTokenSringValue();
 
 			default:
-				return internToExternLanguageConverter.getExternStringForInternTokenValue(internToken
-						.getTokenSringValue());
+				return InternToExternLanguageConverter.getExternStringForInternTokenValue(
+						internToken.getTokenSringValue(), context);
 
 				//TODO handle all cases(UserVariables etc...)
 		}
+	}
+
+	public String getGeneratedExternFormulaString() {
+		return generatedExternFormulaString;
+	}
+
+	public ExternInternRepresentationMapping getGeneratedExternInternRepresentationMapping() {
+		return generatedExternInternRepresentationMapping;
 	}
 }

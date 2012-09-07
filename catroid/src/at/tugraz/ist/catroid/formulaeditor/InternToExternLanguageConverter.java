@@ -29,17 +29,8 @@ import at.tugraz.ist.catroid.R;
 
 public class InternToExternLanguageConverter {
 
-	HashMap<String, Integer> internExternLanguageConverterMap;
-	private Context context;
-
-	public InternToExternLanguageConverter(Context context) {
-
-		this.context = context;
-
-		createInternExternLanguageConverterMapping();
-	}
-
-	private void createInternExternLanguageConverterMapping() {
+	private static final HashMap<String, Integer> internExternLanguageConverterMap = new HashMap<String, Integer>();
+	static {
 		internExternLanguageConverterMap.put("sin", R.string.formula_editor_function_sin);
 
 		internExternLanguageConverterMap.put(".", R.string.formula_editor_decimal_mark);
@@ -68,10 +59,9 @@ public class InternToExternLanguageConverter {
 		internExternLanguageConverterMap.put("COSTUME_SIZE_", R.string.formula_editor_costume_size);
 		internExternLanguageConverterMap.put("COSTUME_ROTATION_", R.string.formula_editor_costume_rotation);
 		internExternLanguageConverterMap.put("COSTUME_LAYER_", R.string.formula_editor_costume_layer);
-
 	}
 
-	public String getExternStringForInternTokenValue(String internTokenValue) {
+	public static String getExternStringForInternTokenValue(String internTokenValue, Context context) {
 		Integer stringResourceID = internExternLanguageConverterMap.get(internTokenValue);
 		if (stringResourceID == null) {
 			return null;

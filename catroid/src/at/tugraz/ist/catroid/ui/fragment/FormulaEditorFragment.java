@@ -36,11 +36,9 @@ import android.widget.LinearLayout;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.formulaeditor.CalcGrammarParser;
 import at.tugraz.ist.catroid.formulaeditor.CatKeyboardView;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.formulaeditor.FormulaEditorEditText;
-import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
 import at.tugraz.ist.catroid.utils.Utils;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -227,15 +225,19 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 	}
 
 	private int parseFormula(String formulaToParse) {
-		CalcGrammarParser parser = CalcGrammarParser.getFormulaParser(formulaToParse);
-		FormulaElement parserFormulaElement = parser.parseFormula();
-		int parserResult = parser.getErrorCharacterPosition();
+		//TODO Adapt for InternExtern Representation
 
-		if (parserResult == PARSER_OK) {
-			currentFormula.setRoot(parserFormulaElement);
-		}
+		//		CalcGrammarParser parser = CalcGrammarParser.getFormulaParser(formulaToParse);
+		//		FormulaElement parserFormulaElement = parser.parseFormula();
+		//		int parserResult = parser.getErrorCharacterPosition();
+		//
+		//		if (parserResult == PARSER_OK) {
+		//			currentFormula.setRoot(parserFormulaElement);
+		//		}
+		//
+		//		return parserResult;
 
-		return parserResult;
+		return 0;
 	}
 
 	//	@Override

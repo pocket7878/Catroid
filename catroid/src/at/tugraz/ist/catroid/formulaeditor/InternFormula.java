@@ -24,37 +24,46 @@ package at.tugraz.ist.catroid.formulaeditor;
 
 import java.util.List;
 
+import android.content.Context;
+import android.util.Log;
+
 public class InternFormula {
 
 	//TODO: enter all prefixes
 	public static final String INTERN_TOKEN_PREFIX_NUMBER = ":number:";
 
 	private ExternInternRepresentationMapping externInternRepresentationMapping;
+	private InternToExternGenerator internToExternGenerator;
 
 	private String internalFormulaString;
+	private String externFormulaString;
 
-	public InternFormula(String internalFormulaString) {
+	public InternFormula(String internalFormulaString, Context context) {
 		this.internalFormulaString = internalFormulaString;
+		externFormulaString = null;
+		internToExternGenerator = new InternToExternGenerator(context);
+		externInternRepresentationMapping = new ExternInternRepresentationMapping();
 	}
 
-	public void setInternExternRepresentationMapping(ExternInternRepresentationMapping internExternRepresentationMapping) {
-		this.externInternRepresentationMapping = internExternRepresentationMapping;
+	public String getExternFormulaString() {
+		return externFormulaString;
 	}
 
 	public void handleKeyInput(CatKeyEvent catKeyEvent, int externCursorPosition) {
+		Log.i("info", "handleKeyInput:enter");
+
 		Integer cursorPositionTokenIndex = externInternRepresentationMapping
 				.getInternTokenByExternIndex(externCursorPosition);
 
-		InternToken cursorPositionToken = InternFormulaToInternTokenGenerator.generateInternTokenByIndex(
-				cursorPositionTokenIndex, internalFormulaString);
-
 		List<InternToken> catKeyEventTokenList = catKeyEvent.createInternTokensByCatKeyEvent();
 
-		if (cursorPositionToken == null) {
+		if (cursorPositionTokenIndex == null) {
 			InternToken firstLeftToken = getFirstLeftInternToken(externCursorPosition);
-			appendToLeftToken(firstLeftToken, cursorPositionTokenIndex, externCursorPosition, catKeyEventTokenList);
+			appendToLeftToken(firstLeftToken, 0, externCursorPosition, catKeyEventTokenList);
 
 		} else {
+			InternToken cursorPositionToken = InternFormulaToInternTokenGenerator.generateInternTokenByIndex(
+					cursorPositionTokenIndex, internalFormulaString);
 			if (cursorPositionToken.isNumber() && InternToken.isNumberToken(catKeyEventTokenList)) {
 				//TODO handle PERIOD(Comma)
 				insertNumberIntoNumberToken(cursorPositionToken, cursorPositionTokenIndex, externCursorPosition,
@@ -62,7 +71,17 @@ public class InternFormula {
 			} else {
 				replaceInternTokenByTokenList(cursorPositionToken, cursorPositionTokenIndex, catKeyEventTokenList);
 			}
+			//TODO handle all cases
 		}
+
+		externFormulaString = null;
+
+	}
+
+	public void generateExternFormulaStringAndInternExternMapping() {
+		internToExternGenerator.generateExternStringAndMapping(internalFormulaString);
+		externFormulaString = internToExternGenerator.getGeneratedExternFormulaString();
+		externInternRepresentationMapping = internToExternGenerator.getGeneratedExternInternRepresentationMapping();
 
 	}
 
@@ -82,8 +101,11 @@ public class InternFormula {
 
 	}
 
+	//TODO use internTokenIndex instead of "int firstLeftTokenInternIndex"
 	private void appendToLeftToken(InternToken firstLeftToken, int firstLeftTokenInternIndex, int externCursorPosition,
 			List<InternToken> internTokensToAppend) {
+
+		Log.i("info", "appendToLeftToken:enter");
 
 		if (firstLeftToken == null) {
 			internalFormulaString = InternFormulaStringModify.generateInternStringByInsertAtBeginning(
