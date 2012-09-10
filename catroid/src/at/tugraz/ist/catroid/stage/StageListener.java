@@ -312,7 +312,7 @@ public class StageListener implements ApplicationListener {
 			stage.draw();
 		}
 
-		if (makeFirstScreenshot && !NativeAppActivity.isRunning()) {
+		if (makeFirstScreenshot && !Utils.isLoadingFromAssetsNecessary()) {
 			File file = new File(pathForScreenshot + SCREENSHOT_FILE_NAME);
 			if (!file.exists()) {
 				File noMediaFile = new File(pathForScreenshot + ".nomedia");

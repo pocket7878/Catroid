@@ -70,6 +70,7 @@ import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.stage.NativeAppActivity;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -404,5 +405,12 @@ public class Utils {
 			return null;
 		}
 		return pixmap;
+	}
+
+	public static boolean isLoadingFromAssetsNecessary() {
+		if (NativeAppActivity.isRunning()) {
+			return true;
+		}
+		return false;
 	}
 }

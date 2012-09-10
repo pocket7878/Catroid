@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
 import sys
+import argparse
 import zipfile
 import shutil
 import fileinput
@@ -41,6 +42,11 @@ python handle_project.py test.zip ~/hg/catroid 42 .
 #Constants
 PROJECTCODE_NAME = 'projectcode.xml'
 ANT_BUILD_TARGET = 'debug'
+
+class ConversionConfig:
+    """Class to represent the configuration options for this script"""
+    working_dir = mkdtemp()
+
 
 def unzip_project(archive_name, working_dir):
     project_name = os.path.splitext(archive_name)[0]
@@ -171,24 +177,45 @@ def copyApkToOutputFolder(working_dir, project_filename, output_dir):
         if filename.endswith('.apk'):
             shutil.move(os.path.join(working_dir, 'catroid', 'bin', filename),\
                     os.path.join(output_dir, project_filename + '.apk'))
-
-
 def main():
-    if len(sys.argv) != 6:
-        print 'Invalid arguments. Correct usage:'
-        print 'python handle_project.py <path_to_project_archive> <path_to_catroid>\
-                <path_to_libs> <project_id> <output_folder>'
-        return 1
-
-    path_to_project_archive, archive_name = os.path.split(sys.argv[1])
-    project_filename = os.path.splitext(archive_name)[0]
-
-    path_to_catroid = sys.argv[2]
-    path_to_lib = sys.argv[3]
-    project_id = sys.argv[4]
-    output_folder = sys.argv[5]
+    parser = argparse.ArgumentParser(description="Catrobat NativeApp Converter",
+            add_help=False)
+    msg_mode_group = parser.add_mutually_exclusive_group()
+    msg_mode_group.add_argument("-v", "--verbose", action="store_true")
+    msg_mode_group.add_argument("-q", "--quiet", action="store_true")
+    convert_mode_group = parser.add_mutually_exclusive_group(required=True)
+    convert_mode_group.add_argument("-n", "--native-app", action="store_true",
+            help="Convert to native app")
+    convert_mode_group.add_argument("-w", "--live-wallpaper",
+    action="store_true", help="Convert to live wallpaper")
+    parser.add_argument('project', help="path to project archive that should be to converted")
+    parser.add_argument('catrobatsrc', help="path to catroid sources")
+    parser.add_argument('lib_src', help="path to lib folder")
+    parser.add_argument('project_id', type=int, help='project id')
+    parser.add_argument('output_dir', help="path to output folder")
+    args = parser.parse_args()
 
     working_dir = mkdtemp()
+    path_to_project_archive, archive_name = os.path.split(args.project)
+    project_filename = os.path.splitext(archive_name)[0]
+    verbose = args.verbose
+    quiet = args.quiet
+    path_to_catroid = args.catrobatsrc
+    path_to_lib = args.lib_src
+    project_id = args.project_id
+    output_folder = args.output_dir
+
+    if verbose == True:
+        print "Starting Native App Converter"
+        print "------------------------------"
+        print "Script starting with following params:"
+        print "Path to project: ", path_to_project_archive
+        print "Project filename: ", project_filename
+        print "Mode: Verbose"
+        print "Project ID: ", project_id
+        print "Output folder: ", output_folder
+        print "------------------------------"
+
 
     unzip_project(os.path.join(path_to_project_archive, archive_name), working_dir)
     project_name = get_project_name(os.path.join(working_dir, PROJECTCODE_NAME))

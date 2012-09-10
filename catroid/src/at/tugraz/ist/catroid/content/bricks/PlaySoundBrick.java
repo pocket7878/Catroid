@@ -33,7 +33,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.SoundManager;
-import at.tugraz.ist.catroid.stage.NativeAppActivity;
+import at.tugraz.ist.catroid.utils.Utils;
 
 public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 	private static final long serialVersionUID = 1L;
@@ -53,13 +53,10 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 	@Override
 	public void execute() {
 		if (soundInfo != null && sprite.getSoundList().contains(soundInfo)) {
-			if (!NativeAppActivity.isRunning()
-					&& soundInfo.getAbsolutePath() != null) {
-				SoundManager.getInstance().playSoundFile(
-						soundInfo.getAbsolutePath());
+			if (!Utils.isLoadingFromAssetsNecessary() && soundInfo.getAbsolutePath() != null) {
+				SoundManager.getInstance().playSoundFile(soundInfo.getAbsolutePath());
 			} else {
-				SoundManager.getInstance().playSoundFile(
-						"sounds/" + soundInfo.getSoundFileName());
+				SoundManager.getInstance().playSoundFile("sounds/" + soundInfo.getSoundFileName());
 			}
 		}
 	}
@@ -73,16 +70,14 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 	public View getView(final Context context, int brickId, BaseAdapter adapter) {
 		View view = View.inflate(context, R.layout.brick_play_sound, null);
 
-		Spinner soundbrickSpinner = (Spinner) view
-				.findViewById(R.id.playsound_spinner);
+		Spinner soundbrickSpinner = (Spinner) view.findViewById(R.id.playsound_spinner);
 		soundbrickSpinner.setAdapter(createSoundAdapter(context));
 		soundbrickSpinner.setClickable(true);
 		soundbrickSpinner.setFocusable(true);
 		soundbrickSpinner.setOnItemSelectedListener(this);
 
 		if (sprite.getSoundList().contains(soundInfo)) {
-			soundbrickSpinner.setSelection(
-					sprite.getSoundList().indexOf(soundInfo) + 1, true);
+			soundbrickSpinner.setSelection(sprite.getSoundList().indexOf(soundInfo) + 1, true);
 		} else {
 			soundbrickSpinner.setSelection(0);
 		}
@@ -91,13 +86,11 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 	}
 
 	private ArrayAdapter<?> createSoundAdapter(Context context) {
-		ArrayAdapter<SoundInfo> arrayAdapter = new ArrayAdapter<SoundInfo>(
-				context, android.R.layout.simple_spinner_item);
-		arrayAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ArrayAdapter<SoundInfo> arrayAdapter = new ArrayAdapter<SoundInfo>(context,
+				android.R.layout.simple_spinner_item);
+		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		SoundInfo dummySoundInfo = new SoundInfo();
-		dummySoundInfo.setTitle(context
-				.getString(R.string.broadcast_nothing_selected));
+		dummySoundInfo.setTitle(context.getString(R.string.broadcast_nothing_selected));
 		arrayAdapter.add(dummySoundInfo);
 		for (SoundInfo soundInfo : sprite.getSoundList()) {
 			arrayAdapter.add(soundInfo);
@@ -115,14 +108,13 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 		return new PlaySoundBrick(getSprite());
 	}
 
-	// for testing purposes:
+	//for testing purposes:
 	public void setSoundInfo(SoundInfo soundInfo) {
 		this.soundInfo = soundInfo;
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> parent, View arg1, int position,
-			long arg3) {
+	public void onItemSelected(AdapterView<?> parent, View arg1, int position, long arg3) {
 		if (position == 0) {
 			soundInfo = null;
 		} else {
@@ -132,11 +124,5 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
-	}
-
-	@Override
-	public void executeLiveWallpaper() {
-		execute();
-
 	}
 }

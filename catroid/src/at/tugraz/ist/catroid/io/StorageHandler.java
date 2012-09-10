@@ -93,7 +93,7 @@ public class StorageHandler {
 	public Project loadProject(String projectName) {
 		createCatroidRoot();
 		try {
-			if (NativeAppActivity.isRunning()) {
+			if (Utils.isLoadingFromAssetsNecessary()) {
 				InputStream spfFileStream = NativeAppActivity.getContext().getAssets().open(projectName);
 				return (Project) xstream.fromXML(spfFileStream);
 			}
