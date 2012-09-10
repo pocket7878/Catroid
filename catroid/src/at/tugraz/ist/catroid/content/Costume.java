@@ -22,12 +22,10 @@
  */
 package at.tugraz.ist.catroid.content;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.CostumeData;
-import at.tugraz.ist.catroid.content.CostumeEvent.Type;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -36,6 +34,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+//import at.tugraz.ist.catroid.content.CostumeEvent.Type;
 
 public class Costume extends Image {
 	protected Semaphore xYWidthHeightLock = new Semaphore(1);
@@ -54,7 +53,7 @@ public class Costume extends Image {
 	public boolean show;
 	public int zPosition;
 
-	private final List<CostumeListener> costumeListeners = new ArrayList<CostumeListener>();
+	//	private final List<CostumeListener> costumeListeners = new ArrayList<CostumeListener>();
 
 	public Costume(Sprite sprite) {
 		this.sprite = sprite;
@@ -92,7 +91,7 @@ public class Costume extends Image {
 		// We use Y-down, libgdx Y-up. This is the fix for accurate y-axis detection
 		y = height - y;
 
-		// XXX: < width & < height
+		// XXX: Should be < width & < height
 		if (x >= 0 && x <= width && y >= 0 && y <= height) {
 			if (currentAlphaPixmap != null && ((currentAlphaPixmap.getPixel((int) x, (int) y) & 0x000000FF) > 10)) {
 				sprite.startWhenScripts("Tapped");
@@ -166,11 +165,11 @@ public class Costume extends Image {
 				this.setRegion(new TextureRegion(texture));
 
 				// TODO: Is this really the best place to recognize a costume change?
-				//				ProjectManager.getInstance().getCurrentProject().getPhysicWorld().changeCostume(sprite);
+				ProjectManager.getInstance().getCurrentProject().getPhysicWorld().changeCostume(sprite);
 			}
 		}
 
-		notifyListeners(new CostumeEvent(Type.COSTUMECHANGED, this));
+		//		notifyListeners(new CostumeEvent(Type.COSTUMECHANGED, this));
 
 		imageChanged = false;
 		imageLock.release();
@@ -379,26 +378,26 @@ public class Costume extends Image {
 		return costumeData;
 	}
 
-	private void notifyListeners(CostumeEvent event) {
-		synchronized (costumeListeners) {
-			for (CostumeListener costumeListener : costumeListeners) {
-				costumeListener.costumeChanged(event);
-			}
-		}
-	}
-
-	public void addListener(CostumeListener listener) {
-		synchronized (costumeListeners) {
-			if (costumeListeners.contains(listener)) {
-				return;
-			}
-			costumeListeners.add(listener);
-		}
-	}
-
-	public void removeListener(CostumeListener listener) {
-		synchronized (costumeListeners) {
-			costumeListeners.remove(listener);
-		}
-	}
+	//	private void notifyListeners(CostumeEvent event) {
+	//		synchronized (costumeListeners) {
+	//			for (CostumeListener costumeListener : costumeListeners) {
+	//				costumeListener.costumeChanged(event);
+	//			}
+	//		}
+	//	}
+	//
+	//	public void addListener(CostumeListener listener) {
+	//		synchronized (costumeListeners) {
+	//			if (costumeListeners.contains(listener)) {
+	//				return;
+	//			}
+	//			costumeListeners.add(listener);
+	//		}
+	//	}
+	//
+	//	public void removeListener(CostumeListener listener) {
+	//		synchronized (costumeListeners) {
+	//			costumeListeners.remove(listener);
+	//		}
+	//	}
 }
