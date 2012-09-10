@@ -33,7 +33,7 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.stage.NativeAppActivity;
+import at.tugraz.ist.catroid.utils.Utils;
 
 public class SetCostumeBrick implements Brick {
 	private static final long serialVersionUID = 1L;
@@ -57,7 +57,7 @@ public class SetCostumeBrick implements Brick {
 	@Override
 	public void execute() {
 		if (costumeData != null && sprite != null && sprite.getCostumeDataList().contains(costumeData)) {
-			if (!NativeAppActivity.isRunning()) {
+			if (!Utils.isLoadingFromAssetsNecessary()) {
 				sprite.costume.setCostumeData(costumeData);
 			} else {
 				sprite.costume.setCostumeDataInternal(costumeData);

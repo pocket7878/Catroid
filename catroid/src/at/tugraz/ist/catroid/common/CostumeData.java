@@ -27,7 +27,6 @@ import java.io.Serializable;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.stage.NativeAppActivity;
 import at.tugraz.ist.catroid.utils.ImageEditing;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -64,7 +63,7 @@ public class CostumeData implements Serializable {
 
 	public Pixmap getPixmap() {
 		if (pixmap == null) {
-			if (NativeAppActivity.isRunning()) {
+			if (Utils.isLoadingFromAssetsNecessary()) {
 				pixmap = new Pixmap(Gdx.files.internal(getPath()));//No absolute path to assets possible.
 			} else {
 				pixmap = new Pixmap(Gdx.files.absolute(getPath()));
@@ -79,7 +78,7 @@ public class CostumeData implements Serializable {
 
 	public Pixmap getOriginalPixmap() {
 		if (originalPixmap == null) {
-			if (NativeAppActivity.isRunning()) {
+			if (Utils.isLoadingFromAssetsNecessary()) {
 				originalPixmap = new Pixmap(Gdx.files.internal(getPath()));//No absolute path to assets possible.
 			} else {
 				originalPixmap = new Pixmap(Gdx.files.absolute(getPath()));
@@ -95,7 +94,7 @@ public class CostumeData implements Serializable {
 	public String getPath() {
 		String path;
 		if (fileName != null) {
-			if (NativeAppActivity.isRunning()) {
+			if (Utils.isLoadingFromAssetsNecessary()) {
 				path = Constants.IMAGE_DIRECTORY + '/' + fileName;//Path has to be relative.
 			} else {
 				path = Utils.buildPath(getPathToImageDirectory(), fileName);
@@ -131,7 +130,7 @@ public class CostumeData implements Serializable {
 
 	private String getPathToImageDirectory() {
 		String path = null;
-		if (NativeAppActivity.isRunning()) {
+		if (Utils.isLoadingFromAssetsNecessary()) {
 			path = Constants.IMAGE_DIRECTORY;//Root is automatically asset folder.
 		} else {
 			path = Utils.buildPath(Utils.buildProjectPath(ProjectManager.getInstance().getCurrentProject().getName()),
