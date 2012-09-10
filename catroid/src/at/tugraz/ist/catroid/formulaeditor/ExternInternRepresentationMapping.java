@@ -22,6 +22,7 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
+import android.util.Log;
 import android.util.SparseArray;
 
 public class ExternInternRepresentationMapping {
@@ -38,8 +39,14 @@ public class ExternInternRepresentationMapping {
 	}
 
 	public void putExternInternMapping(int externStartIndex, int externEndIndex, int internStartIndex) {
+		Log.i("info", "Mapping put extern to intern: FROM extern start/end = " + externStartIndex + "/"
+				+ externEndIndex + " TO " + internStartIndex);
 		externInternMapping.put(externStartIndex, internStartIndex);
 		externInternMapping.put(externEndIndex, internStartIndex);
+
+		if (externEndIndex >= externStringLength) {
+			externStringLength = externEndIndex + 1;
+		}
 	}
 
 	public void putInternExternMapping(int internStartIndex, int externStartIndex) {
@@ -76,7 +83,12 @@ public class ExternInternRepresentationMapping {
 	public int getExternTokenStartOffset(int externIndex, Integer internTokenOffsetTo) {
 		for (int searchIndex = externIndex; searchIndex > 0; searchIndex--) {
 			if (externInternMapping.get(searchIndex) == internTokenOffsetTo) {
-				return externIndex - searchIndex;
+				int rightEdgeSelectionToken = getExternTokenStartOffset(searchIndex - 1, internTokenOffsetTo);
+				if (rightEdgeSelectionToken == -1) {
+					return externIndex - searchIndex;
+				} else {
+					return rightEdgeSelectionToken + 1;
+				}
 			} else if (externInternMapping.get(searchIndex) != null) {
 				return -1;
 			}
@@ -102,4 +114,5 @@ public class ExternInternRepresentationMapping {
 		}
 		return null;
 	}
+
 }

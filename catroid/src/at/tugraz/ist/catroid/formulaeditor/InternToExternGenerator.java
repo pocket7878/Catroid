@@ -47,6 +47,8 @@ public class InternToExternGenerator {
 		List<InternToken> internTokenList = InternFormulaToInternTokenGenerator
 				.generateInternRepresentationByString(internFormulaRepresentation);
 
+		generatedExternInternRepresentationMapping = new ExternInternRepresentationMapping();
+
 		generatedExternFormulaString = "";
 		InternToken currentToken;
 		String externTokenString;

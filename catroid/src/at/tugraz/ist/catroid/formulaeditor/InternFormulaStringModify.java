@@ -29,17 +29,17 @@ import android.util.Log;
 
 public class InternFormulaStringModify {
 
-	public static String generateInternStringByReplace(int startIndexToReplace, int endIndexToReplace,
-			List<InternToken> tokensToReplaceWith, String internalFormulaString) {
+	public static String generateInternStringByReplace(int startInternTokenIndexToReplace,
+			int endInternTokenIndexToReplace, List<InternToken> tokensToReplaceWith, String internalFormulaString) {
 
-		String leftPart = internalFormulaString.substring(0, startIndexToReplace);
+		String leftPart = internalFormulaString.substring(0, startInternTokenIndexToReplace);
 
 		//		internalFormulaString = internalFormulaString.substring(startIndexToReplace);
 
 		InternToken endTokenToReplace = InternFormulaToInternTokenGenerator.generateInternTokenByIndex(
-				endIndexToReplace, internalFormulaString);
+				endInternTokenIndexToReplace, internalFormulaString);
 
-		int righPartStartIndex = endTokenToReplace.toString().length() + endIndexToReplace;
+		int righPartStartIndex = endTokenToReplace.toString().length() + endInternTokenIndexToReplace;
 
 		String rightPart = internalFormulaString.substring(righPartStartIndex);
 		String middlePart = generateInternStringByInternTokenList(tokensToReplaceWith);
@@ -48,26 +48,28 @@ public class InternFormulaStringModify {
 
 	}
 
-	public static String generateInternStringByReplace(int internTokenToReplaceIndex,
+	public static String generateInternStringByReplace(int internTokenIndexToReplace,
 			List<InternToken> tokensToReplaceWith, String internalFormulaString) {
 
-		return generateInternStringByReplace(internTokenToReplaceIndex, internTokenToReplaceIndex, tokensToReplaceWith,
+		return generateInternStringByReplace(internTokenIndexToReplace, internTokenIndexToReplace, tokensToReplaceWith,
 				internalFormulaString);
 	}
 
-	public static String generateInternStringByReplace(int internTokenToReplaceIndex, InternToken tokenToReplace,
+	public static String generateInternStringByReplace(int internTokenIndexToReplace, InternToken tokenToReplace,
 			String internalFormulaString) {
 		List<InternToken> tokensToReplaceWith = new LinkedList<InternToken>();
 		tokensToReplaceWith.add(tokenToReplace);
-		return generateInternStringByReplace(internTokenToReplaceIndex, internTokenToReplaceIndex, tokensToReplaceWith,
+		return generateInternStringByReplace(internTokenIndexToReplace, internTokenIndexToReplace, tokensToReplaceWith,
 				internalFormulaString);
 	}
 
-	public static String generateInternStringByAppend(int internTokenToAppendIndex, List<InternToken> tokensToAppend,
-			String internalFormulaString) {
+	public static String generateInternStringByAppend(InternToken internTokenToAppend,
+			List<InternToken> tokensToAppend, String internalFormulaString) {
 
-		//TODO implement iff needed
-		return null;
+		tokensToAppend.add(0, internTokenToAppend);
+
+		return generateInternStringByReplace(internTokenToAppend.getInternPositionIndex(),
+				internTokenToAppend.getInternPositionIndex(), tokensToAppend, internalFormulaString);
 	}
 
 	public static String generateInternStringByInsertAtBeginning(List<InternToken> tokensToInsert,
