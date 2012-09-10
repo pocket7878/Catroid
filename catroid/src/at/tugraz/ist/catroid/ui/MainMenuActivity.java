@@ -233,7 +233,13 @@ public class MainMenuActivity extends SherlockFragmentActivity implements OnChec
 	}
 
 	public void handleWebResourcesButton(View v) {
-		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getText(R.string.catroid_website).toString()));
+		String url = getText(R.string.catroid_website).toString();
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		String token = preferences.getString(Constants.TOKEN, null);
+		if (token != null && !(token.length() == 0) && !token.equals("0")) {
+			url = url + "/?token=" + token;
+		}
+		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 		startActivity(browserIntent);
 	}
 
