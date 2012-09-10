@@ -46,6 +46,7 @@ import at.tugraz.ist.catroid.ui.dialogs.NewProjectDialog;
 import at.tugraz.ist.catroid.ui.dialogs.UploadProjectDialog;
 import at.tugraz.ist.catroid.utils.UtilZip;
 import at.tugraz.ist.catroid.utils.Utils;
+import at.tugraz.ist.catroid.web.ServerCalls;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -233,7 +234,13 @@ public class MainMenuActivity extends SherlockFragmentActivity implements OnChec
 	}
 
 	public void handleWebResourcesButton(View v) {
-		String url = getText(R.string.catroid_website).toString();
+		String url = "";
+		if (ServerCalls.useTestUrl == true) {
+			url = ServerCalls.BASE_URL_TEST;
+		} else {
+			url = getText(R.string.catroid_website).toString();
+		}
+
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		String token = preferences.getString(Constants.TOKEN, null);
 		if (token != null && !(token.length() == 0) && !token.equals("0")) {
