@@ -79,9 +79,9 @@ public class InternFormulaToInternTokenGenerator {
 
 		functionInternTokenList.add(functionStartParameter);
 
-		functionIndex += functionNameToken.toString().length();
+		functionIndex += functionStartParameter.toString().length();
 		InternToken tempSearchToken;
-		int nestedFunctionsCounter = 0;
+		int nestedFunctionsCounter = 1;
 
 		do {
 			tempSearchToken = generateInternTokenByIndex(functionIndex, internFormulaRepresentation);
@@ -97,7 +97,8 @@ public class InternFormulaToInternTokenGenerator {
 			}
 			functionInternTokenList.add(tempSearchToken);
 
-		} while (tempSearchToken.getInternTokenType() != InternTokenType.BRACKET_CLOSE || nestedFunctionsCounter != 0);
+		} while (tempSearchToken.getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE
+				|| nestedFunctionsCounter != 0);
 
 		return functionInternTokenList;
 

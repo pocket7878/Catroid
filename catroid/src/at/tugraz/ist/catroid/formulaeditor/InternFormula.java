@@ -52,6 +52,7 @@ public class InternFormula {
 	public synchronized void setCursorAndSelection(int externCursorPosition, boolean tokenIsSelected) {
 		this.tokenSelection = tokenIsSelected;
 		this.externCursorPosition = externCursorPosition;
+		Log.i("info", "setCursorAndSelection: externCursorPosition = " + externCursorPosition);
 		Integer cursorPositionTokenIndex = externInternRepresentationMapping
 				.getInternTokenByExternIndex(externCursorPosition);
 
@@ -234,9 +235,7 @@ public class InternFormula {
 			//When NUMBER selected
 			//  set Number to first parameter when FUNCTION inserted
 
-		} else if (cursorPositionInternToken.getInternTokenType() == InternTokenType.FUNCTION_NAME
-				|| cursorPositionInternToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN
-				|| cursorPositionInternToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE) {
+		} else if (cursorPositionInternToken.getInternTokenType() == InternTokenType.FUNCTION_NAME) {
 
 			List<InternToken> functionInternTokens = InternFormulaToInternTokenGenerator
 					.generateInternTokenListByFunctionIndex(internTokenToReplaceIndex, internalFormulaString);
@@ -252,9 +251,17 @@ public class InternFormula {
 			List<InternToken> replacedFunctionTokens = InternTokenModify.replaceFunctionByTokens(functionInternTokens,
 					internTokensToReplaceWith);
 
+			if (replacedFunctionTokens == null) {
+				return;
+			}
+
 			internalFormulaString = InternFormulaStringModify.generateInternStringByReplace(internTokenToReplaceIndex,
 					endIndexToReplace, replacedFunctionTokens, internalFormulaString);
 
+		} else if (cursorPositionInternToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
+			//TODO implement
+		} else if (cursorPositionInternToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE) {
+			//TODO implement
 		} else if (InternToken.isFunctionToken(internTokensToReplaceWith)) {
 			//TODO: handle single token value replaced by function
 		} else if (InternToken.isPeriodToken(internTokensToReplaceWith)) {

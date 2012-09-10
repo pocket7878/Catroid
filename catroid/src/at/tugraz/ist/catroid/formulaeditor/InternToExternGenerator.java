@@ -64,6 +64,12 @@ public class InternToExternGenerator {
 			generatedExternFormulaString += externTokenString;
 			externEndIndex = generatedExternFormulaString.length(); //TODO cursor position determination
 
+			externStartIndex++; //TODO check Mapping
+
+			if (externEndIndex < externStartIndex) {
+				return;
+			}
+
 			generatedExternInternRepresentationMapping.putExternInternMapping(externStartIndex, externEndIndex,
 					currentToken.getInternPositionIndex());
 			generatedExternInternRepresentationMapping.putInternExternMapping(currentToken.getInternPositionIndex(),
@@ -83,6 +89,13 @@ public class InternToExternGenerator {
 				return internToken.getTokenSringValue();
 			case OPERATOR:
 				return internToken.getTokenSringValue();
+
+			case FUNCTION_PARAMETERS_BRACKET_OPEN:
+				return "(";
+			case FUNCTION_PARAMETERS_BRACKET_CLOSE:
+				return ")";
+			case FUNCTION_PARAMETER_DELIMITER:
+				return ","; //TODO hardcoded delimiter value
 
 			default:
 				return InternToExternLanguageConverter.getExternStringForInternTokenValue(

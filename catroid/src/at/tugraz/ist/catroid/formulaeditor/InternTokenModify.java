@@ -22,6 +22,7 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import android.util.Log;
@@ -29,18 +30,18 @@ import android.util.Log;
 public class InternTokenModify {
 
 	public static List<InternToken> replaceFunctionByTokens(List<InternToken> functionToReplace,
-			List<InternToken> internTokensToReplace) {
+			List<InternToken> internTokensToReplaceWith) {
 
-		if (InternToken.isFunctionToken(internTokensToReplace)) {
-			//TODO replace function with function
-			//keep all parameters of the replaced function
+		if (InternToken.isFunctionToken(internTokensToReplaceWith)) {
+
+			//			List<List<InternToken>> parameterInternTokenList = getFunctionParameterInternTokensAsLists(functionToReplace);
+
+			return replaceFunctionButKeepParameters(functionToReplace, internTokensToReplaceWith);
 
 		} else {
 
-			return internTokensToReplace;
+			return internTokensToReplaceWith;
 		}
-
-		return null;
 	}
 
 	public static InternToken insertNumberIntoNumberToken(InternToken numberTokenToBeModified, int externNumberOffset,
@@ -84,5 +85,159 @@ public class InternTokenModify {
 
 		return numberTokenToBeModified;
 
+	}
+
+	private static List<InternToken> replaceFunctionButKeepParameters(List<InternToken> functionToReplace,
+			List<InternToken> functionToReplaceWith) {
+
+		List<List<InternToken>> keepParameterInternTokenList = getFunctionParameterInternTokensAsLists(functionToReplace);
+		List<InternToken> replacedParametersFunction = new LinkedList<InternToken>();
+		List<List<InternToken>> originalParameterInternTokenList = getFunctionParameterInternTokensAsLists(functionToReplaceWith);
+
+		if (functionToReplace == null || keepParameterInternTokenList == null
+				|| originalParameterInternTokenList == null) {
+			return functionToReplaceWith;
+		}
+
+		if (functionToReplace.size() < 4 || functionToReplaceWith.size() < 4) {
+			return functionToReplaceWith;
+		}
+
+		if (functionToReplace.get(0).getInternTokenType() != InternTokenType.FUNCTION_NAME) {
+			return null;
+		}
+
+		if (functionToReplace.get(1).getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
+			return null;
+		}
+
+		replacedParametersFunction.add(functionToReplaceWith.get(0));
+		replacedParametersFunction.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
+
+		int functionParameterCount = getFunctionParameterCount(functionToReplaceWith);
+
+		for (int index = 0; index < functionParameterCount; index++) {
+			if (index < keepParameterInternTokenList.size()) {
+				replacedParametersFunction.addAll(keepParameterInternTokenList.get(index));
+			} else {
+				replacedParametersFunction.addAll(originalParameterInternTokenList.get(index));
+			}
+
+			if (index < functionParameterCount - 1) {
+				replacedParametersFunction.add(new InternToken(InternTokenType.FUNCTION_PARAMETER_DELIMITER));
+			}
+
+		}
+
+		replacedParametersFunction.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
+
+		return replacedParametersFunction;
+
+	}
+
+	private static int getFunctionParameterCount(List<InternToken> functionInternTokenList) {
+
+		if (functionInternTokenList == null) {
+			return 0;
+		}
+
+		if (functionInternTokenList.size() < 4) {
+			return 0;
+		}
+
+		if (functionInternTokenList.get(0).getInternTokenType() != InternTokenType.FUNCTION_NAME) {
+			return 0;
+		}
+
+		if (functionInternTokenList.get(1).getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
+			return 0;
+		}
+
+		int searchIndex = 2;
+
+		InternToken tempSearchToken;
+		int nestedFunctionsCounter = 1;
+
+		int functionParameterCount = 1;
+		do {
+			if (searchIndex >= functionInternTokenList.size()) {
+				return 0;
+			}
+
+			tempSearchToken = functionInternTokenList.get(searchIndex);
+
+			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
+				nestedFunctionsCounter++;
+			} else if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE) {
+				nestedFunctionsCounter--;
+			} else if (nestedFunctionsCounter == 1
+					&& tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETER_DELIMITER) {
+
+				functionParameterCount++;
+
+			}
+			searchIndex++;
+
+		} while (tempSearchToken.getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE
+				|| nestedFunctionsCounter != 0);
+		return functionParameterCount;
+	}
+
+	private static List<List<InternToken>> getFunctionParameterInternTokensAsLists(
+			List<InternToken> functionInternTokenList) {
+
+		List<List<InternToken>> functionParameterInternTokenList = new LinkedList<List<InternToken>>();
+
+		if (functionInternTokenList == null) {
+			return null;
+		}
+
+		if (functionInternTokenList.size() < 4) {
+			return null;
+		}
+
+		if (functionInternTokenList.get(0).getInternTokenType() != InternTokenType.FUNCTION_NAME) {
+			return null;
+		}
+
+		if (functionInternTokenList.get(1).getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
+			return null;
+		}
+
+		int searchIndex = 2;
+		List<InternToken> currentParameterInternTokenList = new LinkedList<InternToken>();
+
+		InternToken tempSearchToken;
+		int nestedFunctionsCounter = 1;
+
+		do {
+			if (searchIndex >= functionInternTokenList.size()) {
+				return null;
+			}
+
+			tempSearchToken = functionInternTokenList.get(searchIndex);
+
+			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
+				nestedFunctionsCounter++;
+			} else if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE) {
+				nestedFunctionsCounter--;
+			} else if (nestedFunctionsCounter == 1
+					&& tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETER_DELIMITER) {
+				functionParameterInternTokenList.add(currentParameterInternTokenList);
+				currentParameterInternTokenList = new LinkedList<InternToken>();
+			} else {
+				currentParameterInternTokenList.add(tempSearchToken);
+			}
+
+			searchIndex++;
+
+		} while (tempSearchToken.getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE
+				|| nestedFunctionsCounter != 0);
+
+		if (currentParameterInternTokenList.size() > 0) {
+			functionParameterInternTokenList.add(currentParameterInternTokenList);
+		}
+
+		return functionParameterInternTokenList;
 	}
 }

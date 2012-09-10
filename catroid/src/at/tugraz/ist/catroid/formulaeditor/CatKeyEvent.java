@@ -225,6 +225,8 @@ public class CatKeyEvent extends KeyEvent {
 
 		returnList.add(new InternToken(firstParameterNumberValue, InternTokenType.NUMBER));
 
+		returnList.add(new InternToken(InternTokenType.FUNCTION_PARAMETER_DELIMITER));
+
 		returnList.add(new InternToken(secondParameterNumberValue, InternTokenType.NUMBER));
 
 		returnList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
