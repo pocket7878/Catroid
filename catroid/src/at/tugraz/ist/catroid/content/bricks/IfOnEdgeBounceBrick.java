@@ -28,6 +28,7 @@ import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -38,15 +39,19 @@ public class IfOnEdgeBounceBrick implements Brick {
 
 	@XStreamOmitField
 	private transient View view;
+	private PhysicWorld physicWorld;
 
-	public IfOnEdgeBounceBrick(Sprite sprite) {
+	public IfOnEdgeBounceBrick(PhysicWorld physicWorld, Sprite sprite) {
 		this.sprite = sprite;
+		this.physicWorld = physicWorld;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		float size = sprite.costume.getSize();
 
@@ -59,7 +64,7 @@ public class IfOnEdgeBounceBrick implements Brick {
 
 		int virtualScreenWidth = ProjectManager.getInstance().getCurrentProject().virtualScreenWidth / 2;
 		int virtualScreenHeight = ProjectManager.getInstance().getCurrentProject().virtualScreenHeight / 2;
-		float rotationResult = -sprite.costume.rotation + 90f;
+		float rotationResult = -sprite.costume.getRotation() + 90f;
 
 		if (xPosition < -virtualScreenWidth + width / 2) {
 
@@ -98,17 +103,19 @@ public class IfOnEdgeBounceBrick implements Brick {
 			yPosition = -virtualScreenHeight + (int) (height / 2);
 		}
 
-		sprite.costume.rotation = -rotationResult + 90f;
+		sprite.costume.setRotation(-rotationResult + 90f);
 
 		sprite.costume.aquireXYWidthHeightLock();
 		sprite.costume.setXYPosition(xPosition, yPosition);
 		sprite.costume.releaseXYWidthHeightLock();
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
 			view = View.inflate(context, R.layout.brick_if_on_edge_bounce, null);
@@ -117,13 +124,14 @@ public class IfOnEdgeBounceBrick implements Brick {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_if_on_edge_bounce, null);
 	}
 
 	@Override
 	public Brick clone() {
-		return new IfOnEdgeBounceBrick(sprite);
+		return new IfOnEdgeBounceBrick(physicWorld, sprite);
 	}
 
 }

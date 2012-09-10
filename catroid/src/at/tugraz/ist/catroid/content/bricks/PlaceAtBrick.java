@@ -35,8 +35,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
+import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 import at.tugraz.ist.catroid.utils.Utils;
 
+import com.badlogic.gdx.math.Vector2;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 public class PlaceAtBrick implements Brick, OnClickListener {
@@ -44,14 +47,16 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 	private int xPosition;
 	private int yPosition;
 	private Sprite sprite;
+	private PhysicWorld physicWorld;
 
 	@XStreamOmitField
 	private transient View view;
 
-	public PlaceAtBrick(Sprite sprite, int xPosition, int yPosition) {
+	public PlaceAtBrick(PhysicWorld physicWorld, Sprite sprite, int xPosition, int yPosition) {
 		this.sprite = sprite;
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
+		this.physicWorld = physicWorld;
 	}
 
 	@Override
@@ -61,9 +66,14 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		sprite.costume.aquireXYWidthHeightLock();
-		sprite.costume.setXYPosition(xPosition, yPosition);
-		sprite.costume.releaseXYWidthHeightLock();
+		if (physicWorld.isPhysicObject(sprite)) {
+			physicWorld.getPhysicObject(sprite).setXYPosition(
+					PhysicWorldConverter.vecCatToBox2d(new Vector2(xPosition, yPosition)));
+		} else {
+			sprite.costume.aquireXYWidthHeightLock();
+			sprite.costume.setXYPosition(xPosition, yPosition);
+			sprite.costume.releaseXYWidthHeightLock();
+		}
 	}
 
 	@Override
@@ -109,7 +119,7 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new PlaceAtBrick(getSprite(), xPosition, yPosition);
+		return new PlaceAtBrick(physicWorld, getSprite(), xPosition, yPosition);
 	}
 
 	@Override

@@ -35,26 +35,33 @@ import android.widget.Spinner;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
+import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 
 public class PointToBrick implements Brick {
 
 	private static final long serialVersionUID = 1L;
 	private Sprite sprite;
 	private Sprite pointedSprite;
+	private PhysicWorld physicWorld;
 
-	public PointToBrick(Sprite sprite, Sprite pointedSprite) {
+	public PointToBrick(PhysicWorld physicWorld, Sprite sprite, Sprite pointedSprite) {
 		this.sprite = sprite;
 		this.pointedSprite = pointedSprite;
+		this.physicWorld = physicWorld;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return sprite;
 	}
 
+	@Override
 	public void execute() {
 		final ArrayList<Sprite> spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject()
 				.getSpriteList();
@@ -116,9 +123,17 @@ public class PointToBrick implements Brick {
 				}
 			}
 		}
-		sprite.costume.rotation = (-(float) rotationDegrees) + 90f;
+
+		if (physicWorld.isPhysicObject(sprite)) {
+			physicWorld.getPhysicObject(sprite).setAngle(
+					PhysicWorldConverter.angleCatToBox2d((-(float) rotationDegrees) + 90f));
+		} else {
+			sprite.costume.setRotation((-(float) rotationDegrees) + 90f);
+		}
+
 	}
 
+	@Override
 	public View getView(final Context context, int brickId, BaseAdapter adapter) {
 
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -147,6 +162,7 @@ public class PointToBrick implements Brick {
 
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
+			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				String itemSelected = parent.getSelectedItem().toString();
 				String nothingSelected = context.getString(R.string.broadcast_nothing_selected);
@@ -164,6 +180,7 @@ public class PointToBrick implements Brick {
 				}
 			}
 
+			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
@@ -178,6 +195,7 @@ public class PointToBrick implements Brick {
 		return brickView;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.brick_point_to, null);
@@ -186,6 +204,6 @@ public class PointToBrick implements Brick {
 
 	@Override
 	public Brick clone() {
-		return new PointToBrick(sprite, pointedSprite);
+		return new PointToBrick(physicWorld, sprite, pointedSprite);
 	}
 }

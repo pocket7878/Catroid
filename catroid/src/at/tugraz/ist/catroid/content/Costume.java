@@ -34,6 +34,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+
 //import at.tugraz.ist.catroid.content.CostumeEvent.Type;
 
 public class Costume extends Image {
@@ -50,6 +51,7 @@ public class Costume extends Image {
 	protected float alphaValue;
 	protected float brightnessValue;
 	protected boolean internalPath;
+	protected float rotation;
 	public boolean show;
 	public int zPosition;
 
@@ -65,7 +67,6 @@ public class Costume extends Image {
 		this.brightnessValue = 1f;
 		this.scaleX = 1f;
 		this.scaleY = 1f;
-		this.rotation = 0f;
 		this.width = 0f;
 		this.height = 0f;
 		this.touchable = true;
@@ -242,6 +243,14 @@ public class Costume extends Image {
 	public void setXYPosition(float x, float y) {
 		this.x = x - (this.width / 2f);
 		this.y = y - (this.height / 2f);
+	}
+
+	public void setRotation(float degrees) {
+		super.rotation = degrees;
+	}
+
+	public float getRotation() {
+		return super.rotation;
 	}
 
 	public float getXPosition() {

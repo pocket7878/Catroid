@@ -36,7 +36,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.utils.Utils;
+
+import com.badlogic.gdx.math.Vector2;
 
 public class MoveNStepsBrick implements Brick, OnClickListener {
 
@@ -45,33 +48,45 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 	private double steps;
 
 	private transient View view;
+	private PhysicWorld physicWorld;
 
-	public MoveNStepsBrick(Sprite sprite, double steps) {
+	public MoveNStepsBrick(PhysicWorld physicWorld, Sprite sprite, double steps) {
 		this.sprite = sprite;
 		this.steps = steps;
+		this.physicWorld = physicWorld;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		sprite.costume.aquireXYWidthHeightLock();
 
-		double radians = Math.toRadians(sprite.costume.rotation);
+		double radians = Math.toRadians(sprite.costume.getRotation());
 
 		int newXPosition = (int) Math.round(sprite.costume.getXPosition() + steps * Math.cos(radians));
 		int newYPosition = (int) Math.round(sprite.costume.getYPosition() + steps * Math.sin(radians));
 
-		sprite.costume.setXYPosition(newXPosition, newYPosition);
-		sprite.costume.releaseXYWidthHeightLock();
+		if (physicWorld.isPhysicObject(sprite)) {
+			sprite.costume.releaseXYWidthHeightLock();
+			Vector2 newPos = new Vector2(newXPosition, newYPosition);
+			physicWorld.getPhysicObject(sprite).setXYPosition(newPos);
+		} else {
+			sprite.costume.setXYPosition(newXPosition, newYPosition);
+			sprite.costume.releaseXYWidthHeightLock();
+		}
 
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		view = View.inflate(context, R.layout.brick_move_n_steps, null);
@@ -87,6 +102,7 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.brick_move_n_steps, null);
@@ -95,9 +111,10 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new MoveNStepsBrick(getSprite(), steps);
+		return new MoveNStepsBrick(physicWorld, getSprite(), steps);
 	}
 
+	@Override
 	public void onClick(View view) {
 		final Context context = view.getContext();
 
@@ -110,6 +127,7 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 		dialog.setView(input);
 		dialog.setOnCancelListener((OnCancelListener) context);
 		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				try {
 					steps = Double.parseDouble(input.getText().toString());
@@ -120,6 +138,7 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 			}
 		});
 		dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
 			}

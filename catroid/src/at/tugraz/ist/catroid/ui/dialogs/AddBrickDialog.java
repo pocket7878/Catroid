@@ -119,20 +119,21 @@ public class AddBrickDialog extends Dialog {
 
 	private static HashMap<String, List<Brick>> setupBrickMap(Sprite sprite, Context context) {
 		HashMap<String, List<Brick>> brickMap = new HashMap<String, List<Brick>>();
+		PhysicWorld physicWorld = ProjectManager.getInstance().getCurrentProject().getPhysicWorld();
 
 		List<Brick> motionBrickList = new ArrayList<Brick>();
-		motionBrickList.add(new PlaceAtBrick(sprite, 0, 0));
-		motionBrickList.add(new SetXBrick(sprite, 0));
-		motionBrickList.add(new SetYBrick(sprite, 0));
-		motionBrickList.add(new ChangeXByBrick(sprite, 100));
-		motionBrickList.add(new ChangeYByBrick(sprite, 100));
-		motionBrickList.add(new IfOnEdgeBounceBrick(sprite));
-		motionBrickList.add(new MoveNStepsBrick(sprite, 10));
-		motionBrickList.add(new TurnLeftBrick(sprite, 15));
-		motionBrickList.add(new TurnRightBrick(sprite, 15));
-		motionBrickList.add(new PointInDirectionBrick(sprite, Direction.DIRECTION_RIGHT));
-		motionBrickList.add(new PointToBrick(sprite, null));
-		motionBrickList.add(new GlideToBrick(sprite, 800, 0, 1000));
+		motionBrickList.add(new PlaceAtBrick(physicWorld, sprite, 0, 0));
+		motionBrickList.add(new SetXBrick(physicWorld, sprite, 0));
+		motionBrickList.add(new SetYBrick(physicWorld, sprite, 0));
+		motionBrickList.add(new ChangeXByBrick(physicWorld, sprite, 100));
+		motionBrickList.add(new ChangeYByBrick(physicWorld, sprite, 100));
+		motionBrickList.add(new IfOnEdgeBounceBrick(physicWorld, sprite));
+		motionBrickList.add(new MoveNStepsBrick(physicWorld, sprite, 10));
+		motionBrickList.add(new TurnLeftBrick(physicWorld, sprite, 15));
+		motionBrickList.add(new TurnRightBrick(physicWorld, sprite, 15));
+		motionBrickList.add(new PointInDirectionBrick(physicWorld, sprite, Direction.DIRECTION_RIGHT));
+		motionBrickList.add(new PointToBrick(physicWorld, sprite, null));
+		motionBrickList.add(new GlideToBrick(physicWorld, sprite, 800, 0, 1000));
 		if (!isBackground(sprite)) {
 			motionBrickList.add(new GoNStepsBackBrick(sprite, 1));
 			motionBrickList.add(new ComeToFrontBrick(sprite));
@@ -182,7 +183,6 @@ public class AddBrickDialog extends Dialog {
 		legoNXTBrickList.add(new NXTPlayToneBrick(sprite, 200, 1000));
 		brickMap.put(context.getString(R.string.category_lego_nxt), legoNXTBrickList);
 
-		PhysicWorld physicWorld = ProjectManager.getInstance().getCurrentProject().getPhysicWorld();
 		List<Brick> physicBrickList = new ArrayList<Brick>();
 		physicBrickList.add(new SetPhysicObjectTypeBrick(physicWorld, sprite, PhysicObject.Type.DYNAMIC));
 		physicBrickList.add(new SetMassBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_MASS));
@@ -190,7 +190,8 @@ public class AddBrickDialog extends Dialog {
 		physicBrickList.add(new SetVelocityBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_VELOCITY));
 		physicBrickList.add(new SetAngularVelocityBrick(physicWorld, sprite,
 				PhysicSettings.Object.DEFAULT_ANGULAR_VELOCITY));
-		physicBrickList.add(new SetBounceFactorBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_FRICTION * 100));
+		physicBrickList
+				.add(new SetBounceFactorBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_FRICTION * 100));
 		physicBrickList.add(new SetFrictionBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_FRICTION));
 		brickMap.put(context.getString(R.string.category_physic), physicBrickList);
 

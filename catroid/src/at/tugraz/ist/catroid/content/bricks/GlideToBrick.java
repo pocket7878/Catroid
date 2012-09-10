@@ -35,7 +35,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
+import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 import at.tugraz.ist.catroid.utils.Utils;
+
+import com.badlogic.gdx.math.Vector2;
 
 public class GlideToBrick implements Brick, OnClickListener {
 	private static final long serialVersionUID = 1L;
@@ -45,18 +49,23 @@ public class GlideToBrick implements Brick, OnClickListener {
 	private Sprite sprite;
 
 	private transient View view;
+	private PhysicWorld physicWorld;
 
-	public GlideToBrick(Sprite sprite, int xDestination, int yDestination, int durationInMilliSeconds) {
+	public GlideToBrick(PhysicWorld physicWorld, Sprite sprite, int xDestination, int yDestination,
+			int durationInMilliSeconds) {
 		this.sprite = sprite;
 		this.xDestination = xDestination;
 		this.yDestination = yDestination;
 		this.durationInMilliSeconds = durationInMilliSeconds;
+		this.physicWorld = physicWorld;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		/* That's the way how an action is made */
 		//		Action action = MoveBy.$(xDestination, yDestination, this.durationInMilliSeconds / 1000);
@@ -105,9 +114,16 @@ public class GlideToBrick implements Brick, OnClickListener {
 		if (!sprite.isAlive(Thread.currentThread())) {
 			// -stay at last position
 		} else {
-			sprite.costume.aquireXYWidthHeightLock();
-			sprite.costume.setXYPosition(xDestination, yDestination);
-			sprite.costume.releaseXYWidthHeightLock();
+
+			if (physicWorld.isPhysicObject(sprite)) {
+				Vector2 newPos = new Vector2(xDestination, yDestination);
+				physicWorld.getPhysicObject(sprite).setXYPosition(PhysicWorldConverter.vecCatToBox2d(newPos));
+			} else {
+				sprite.costume.aquireXYWidthHeightLock();
+				sprite.costume.setXYPosition(xDestination, yDestination);
+				sprite.costume.releaseXYWidthHeightLock();
+			}
+
 		}
 	}
 
@@ -123,6 +139,7 @@ public class GlideToBrick implements Brick, OnClickListener {
 		sprite.costume.releaseXYWidthHeightLock();
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
@@ -131,6 +148,7 @@ public class GlideToBrick implements Brick, OnClickListener {
 		return durationInMilliSeconds;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		view = View.inflate(context, R.layout.brick_glide_to, null);
@@ -161,15 +179,17 @@ public class GlideToBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_glide_to, null);
 	}
 
 	@Override
 	public Brick clone() {
-		return new GlideToBrick(getSprite(), xDestination, yDestination, getDurationInMilliSeconds());
+		return new GlideToBrick(physicWorld, getSprite(), xDestination, yDestination, getDurationInMilliSeconds());
 	}
 
+	@Override
 	public void onClick(final View view) {
 		final Context context = view.getContext();
 
@@ -190,6 +210,7 @@ public class GlideToBrick implements Brick, OnClickListener {
 		dialog.setView(input);
 		dialog.setOnCancelListener((OnCancelListener) context);
 		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 
 				try {
@@ -207,6 +228,7 @@ public class GlideToBrick implements Brick, OnClickListener {
 			}
 		});
 		dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
 			}

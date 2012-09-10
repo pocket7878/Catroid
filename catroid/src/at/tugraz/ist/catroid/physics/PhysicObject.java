@@ -157,4 +157,9 @@ public class PhysicObject {
 	public void setVelocity(Vector2 velocity) {
 		body.setLinearVelocity(velocity);
 	}
+
+	public void setXYPosition(Vector2 vecCatToBox2d) {
+		body.setTransform(vecCatToBox2d, body.getAngle());
+	}
+
 }
