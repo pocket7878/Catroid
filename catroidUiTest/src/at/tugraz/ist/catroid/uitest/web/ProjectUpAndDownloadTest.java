@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.uitest.web;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +37,7 @@ import android.test.UiThreadTest;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
+import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
@@ -198,11 +200,14 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 
 		String projectName = testProject + 5;
 		createTestProject(projectName);
-		int numberMediaFiles = 16; //~ 1 MB
+		//Add a sufficient number of media files so that the project is big enough (~ 1MB) for download-testing
+		int numberMediaFiles = 16;
+		ArrayList<SoundInfo> soundInfoList;
 		for (int start = 0; start < numberMediaFiles; start++) {
 			UiTestUtils.createTestMediaFile(Constants.DEFAULT_ROOT + "/" + projectName + "/"
 					+ Constants.SOUND_DIRECTORY + "/" + "longsound" + Integer.toString(start) + ".mp3",
 					LONG_TEST_SOUND, getInstrumentation().getContext());
+
 		}
 
 		//SEE soundfragementtest how to setup and save sounds correctly!!
