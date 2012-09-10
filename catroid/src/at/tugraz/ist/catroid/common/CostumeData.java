@@ -51,6 +51,8 @@ public class CostumeData implements Serializable {
 	private transient Pixmap originalPixmap = null;
 	private transient TextureRegion region = null;
 
+	private Bitmap imageBitmap;
+
 	public TextureRegion getTextureRegion() {
 		if (region == null) {
 			region = new TextureRegion(new Texture(getPixmap()));
@@ -65,7 +67,11 @@ public class CostumeData implements Serializable {
 	public Pixmap getPixmap() {
 		if (pixmap == null) {
 			if (NativeAppActivity.isRunning()) {
-				pixmap = new Pixmap(Gdx.files.internal(getPath()));//No absolute path to assets possible.
+				pixmap = new Pixmap(Gdx.files.internal(getPath()));// No
+																	// absolute
+																	// path to
+																	// assets
+																	// possible.
 			} else {
 				pixmap = new Pixmap(Gdx.files.absolute(getPath()));
 			}
@@ -80,7 +86,12 @@ public class CostumeData implements Serializable {
 	public Pixmap getOriginalPixmap() {
 		if (originalPixmap == null) {
 			if (NativeAppActivity.isRunning()) {
-				originalPixmap = new Pixmap(Gdx.files.internal(getPath()));//No absolute path to assets possible.
+				originalPixmap = new Pixmap(Gdx.files.internal(getPath()));// No
+																			// absolute
+																			// path
+																			// to
+																			// assets
+																			// possible.
 			} else {
 				originalPixmap = new Pixmap(Gdx.files.absolute(getPath()));
 			}
@@ -96,7 +107,9 @@ public class CostumeData implements Serializable {
 		String path;
 		if (fileName != null) {
 			if (NativeAppActivity.isRunning()) {
-				path = Constants.IMAGE_DIRECTORY + '/' + fileName;//Path has to be relative.
+				path = Constants.IMAGE_DIRECTORY + '/' + fileName;// Path has to
+																	// be
+																	// relative.
 			} else {
 				path = Utils.buildPath(getPathToImageDirectory(), fileName);
 			}
@@ -132,9 +145,12 @@ public class CostumeData implements Serializable {
 	private String getPathToImageDirectory() {
 		String path = null;
 		if (NativeAppActivity.isRunning()) {
-			path = Constants.IMAGE_DIRECTORY;//Root is automatically asset folder.
+			path = Constants.IMAGE_DIRECTORY;// Root is automatically asset
+												// folder.
 		} else {
-			path = Utils.buildPath(Utils.buildProjectPath(ProjectManager.getInstance().getCurrentProject().getName()),
+			path = Utils.buildPath(
+					Utils.buildProjectPath(ProjectManager.getInstance()
+							.getCurrentProject().getName()),
 					Constants.IMAGE_DIRECTORY);
 		}
 		return path;
@@ -142,7 +158,8 @@ public class CostumeData implements Serializable {
 
 	public Bitmap getThumbnailBitmap() {
 		if (thumbnailBitmap == null) {
-			thumbnailBitmap = ImageEditing.getScaledBitmapFromPath(getPath(), THUMBNAIL_HEIGHT, THUMBNAIL_WIDTH, false);
+			thumbnailBitmap = ImageEditing.getScaledBitmapFromPath(getPath(),
+					THUMBNAIL_HEIGHT, THUMBNAIL_WIDTH, false);
 		}
 		return thumbnailBitmap;
 	}
@@ -159,6 +176,14 @@ public class CostumeData implements Serializable {
 		height = options.outHeight;
 
 		return new int[] { width, height };
+	}
+
+	public Bitmap getImageBitmap() {
+		if (imageBitmap == null) {
+			imageBitmap = BitmapFactory.decodeFile(getPath());
+		}
+		return imageBitmap;
+
 	}
 
 	@Override

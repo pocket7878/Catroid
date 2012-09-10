@@ -43,10 +43,12 @@ public class IfOnEdgeBounceBrick implements Brick {
 		this.sprite = sprite;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		float size = sprite.costume.getSize();
 
@@ -57,8 +59,10 @@ public class IfOnEdgeBounceBrick implements Brick {
 		int yPosition = (int) sprite.costume.getYPosition();
 		sprite.costume.releaseXYWidthHeightLock();
 
-		int virtualScreenWidth = ProjectManager.getInstance().getCurrentProject().virtualScreenWidth / 2;
-		int virtualScreenHeight = ProjectManager.getInstance().getCurrentProject().virtualScreenHeight / 2;
+		int virtualScreenWidth = ProjectManager.getInstance()
+				.getCurrentProject().virtualScreenWidth / 2;
+		int virtualScreenHeight = ProjectManager.getInstance()
+				.getCurrentProject().virtualScreenHeight / 2;
 		float rotationResult = -sprite.costume.rotation + 90f;
 
 		if (xPosition < -virtualScreenWidth + width / 2) {
@@ -105,18 +109,22 @@ public class IfOnEdgeBounceBrick implements Brick {
 		sprite.costume.releaseXYWidthHeightLock();
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
-			view = View.inflate(context, R.layout.brick_if_on_edge_bounce, null);
+			view = View
+					.inflate(context, R.layout.brick_if_on_edge_bounce, null);
 		}
 
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_if_on_edge_bounce, null);
 	}
@@ -124,6 +132,12 @@ public class IfOnEdgeBounceBrick implements Brick {
 	@Override
 	public Brick clone() {
 		return new IfOnEdgeBounceBrick(sprite);
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

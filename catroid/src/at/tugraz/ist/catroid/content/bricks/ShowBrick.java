@@ -27,6 +27,8 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperHelper;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -41,18 +43,22 @@ public class ShowBrick implements Brick {
 		this.sprite = sprite;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		sprite.costume.show = true;
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
 			view = View.inflate(context, R.layout.brick_show, null);
@@ -60,6 +66,7 @@ public class ShowBrick implements Brick {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_show, null);
 	}
@@ -67,5 +74,16 @@ public class ShowBrick implements Brick {
 	@Override
 	public Brick clone() {
 		return new ShowBrick(getSprite());
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		WallpaperCostume wallpaperCostume = WallpaperHelper.getInstance()
+				.getWallpaperCostume(sprite);
+		if (wallpaperCostume == null) {
+			wallpaperCostume = new WallpaperCostume(sprite, null);
+		}
+
+		wallpaperCostume.setCostumeHidden(false);
 	}
 }

@@ -75,4 +75,10 @@ public class StopAllSoundsBrick implements Brick {
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_stop_all_sounds, null);
 	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		SoundManager.getInstance().pause();
+
+	}
 }

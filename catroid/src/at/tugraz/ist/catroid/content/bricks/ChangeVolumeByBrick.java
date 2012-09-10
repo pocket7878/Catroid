@@ -79,8 +79,10 @@ public class ChangeVolumeByBrick implements Brick, OnClickListener {
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		view = View.inflate(context, R.layout.brick_change_volume_by, null);
 
-		TextView text = (TextView) view.findViewById(R.id.brick_change_volume_by_text_view);
-		EditText edit = (EditText) view.findViewById(R.id.brick_change_volume_by_edit_text);
+		TextView text = (TextView) view
+				.findViewById(R.id.brick_change_volume_by_text_view);
+		EditText edit = (EditText) view
+				.findViewById(R.id.brick_change_volume_by_edit_text);
 		edit.setText(String.valueOf(volume));
 
 		text.setVisibility(View.GONE);
@@ -93,7 +95,8 @@ public class ChangeVolumeByBrick implements Brick, OnClickListener {
 
 	@Override
 	public View getPrototypeView(Context context) {
-		View view = View.inflate(context, R.layout.brick_change_volume_by, null);
+		View view = View
+				.inflate(context, R.layout.brick_change_volume_by, null);
 		return view;
 	}
 
@@ -110,7 +113,8 @@ public class ChangeVolumeByBrick implements Brick, OnClickListener {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(volume));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
+				input.setInputType(InputType.TYPE_CLASS_NUMBER
+						| InputType.TYPE_NUMBER_FLAG_DECIMAL
 						| InputType.TYPE_NUMBER_FLAG_SIGNED);
 				input.setSelectAllOnFocus(true);
 			}
@@ -120,13 +124,21 @@ public class ChangeVolumeByBrick implements Brick, OnClickListener {
 				try {
 					volume = Float.parseFloat(input.getText().toString());
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(),
+							R.string.error_no_number_entered,
+							Toast.LENGTH_SHORT).show();
 				}
 
 				return true;
 			}
 		};
 
-		editDialog.show(activity.getSupportFragmentManager(), "dialog_change_volume_by_brick");
+		editDialog.show(activity.getSupportFragmentManager(),
+				"dialog_change_volume_by_brick");
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		execute();
 	}
 }

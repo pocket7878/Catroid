@@ -37,7 +37,8 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 	private static final long serialVersionUID = 1L;
 
 	public static enum Direction {
-		DIRECTION_RIGHT(90), DIRECTION_LEFT(-90), DIRECTION_UP(0), DIRECTION_DOWN(180);
+		DIRECTION_RIGHT(90), DIRECTION_LEFT(-90), DIRECTION_UP(0), DIRECTION_DOWN(
+				180);
 
 		private double directionDegrees;
 
@@ -72,27 +73,36 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 		this.degrees = direction.getDegrees();
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		double degreeOffset = 90f;
 		sprite.costume.rotation = (float) (-degrees + degreeOffset);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
-		View view = View.inflate(context, R.layout.brick_point_in_direction, null);
-		ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(context,
-				R.array.point_in_direction_strings, android.R.layout.simple_spinner_item);
-		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		View view = View.inflate(context, R.layout.brick_point_in_direction,
+				null);
+		ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter
+				.createFromResource(context,
+						R.array.point_in_direction_strings,
+						android.R.layout.simple_spinner_item);
+		arrayAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		Spinner spinner = (Spinner) view.findViewById(R.id.point_in_direction_spinner);
+		Spinner spinner = (Spinner) view
+				.findViewById(R.id.point_in_direction_spinner);
 		spinner.setAdapter(arrayAdapter);
 
 		spinner.setClickable(true);
@@ -105,6 +115,7 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_point_in_direction, null);
 	}
@@ -114,11 +125,20 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 		return new PointInDirectionBrick(getSprite(), direction);
 	}
 
-	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+	@Override
+	public void onItemSelected(AdapterView<?> parent, View view, int position,
+			long id) {
 		direction = Direction.values()[position];
 		degrees = direction.getDegrees();
 	}
 
+	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
 	}
 }

@@ -47,14 +47,18 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 		this.changeGhostEffect = changeGhostEffect;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
-		sprite.costume.changeAlphaValueBy((float) this.changeGhostEffect / -100);
+		sprite.costume
+				.changeAlphaValueBy((float) this.changeGhostEffect / -100);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
@@ -63,12 +67,15 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 		return changeGhostEffect;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		view = View.inflate(context, R.layout.brick_change_ghost_effect, null);
 
-		TextView textX = (TextView) view.findViewById(R.id.brick_change_ghost_effect_text_view);
-		EditText editX = (EditText) view.findViewById(R.id.brick_change_ghost_effect_edit_text);
+		TextView textX = (TextView) view
+				.findViewById(R.id.brick_change_ghost_effect_text_view);
+		EditText editX = (EditText) view
+				.findViewById(R.id.brick_change_ghost_effect_edit_text);
 		editX.setText(String.valueOf(changeGhostEffect));
 
 		textX.setVisibility(View.GONE);
@@ -78,6 +85,7 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_change_ghost_effect, null);
 	}
@@ -87,30 +95,42 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 		return new ChangeGhostEffectBrick(getSprite(), getChangeGhostEffect());
 	}
 
+	@Override
 	public void onClick(View view) {
 		ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
-		
+
 		BrickTextDialog editDialog = new BrickTextDialog() {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(changeGhostEffect));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
+				input.setInputType(InputType.TYPE_CLASS_NUMBER
+						| InputType.TYPE_NUMBER_FLAG_DECIMAL
 						| InputType.TYPE_NUMBER_FLAG_SIGNED);
 				input.setSelectAllOnFocus(true);
 			}
-			
+
 			@Override
 			protected boolean handleOkButton() {
 				try {
-					changeGhostEffect = Double.parseDouble(input.getText().toString());
+					changeGhostEffect = Double.parseDouble(input.getText()
+							.toString());
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(),
+							R.string.error_no_number_entered,
+							Toast.LENGTH_SHORT).show();
 				}
-				
+
 				return true;
 			}
 		};
-		
-		editDialog.show(activity.getSupportFragmentManager(), "dialog_change_ghost_effect_brick");
+
+		editDialog.show(activity.getSupportFragmentManager(),
+				"dialog_change_ghost_effect_brick");
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
 	}
 }

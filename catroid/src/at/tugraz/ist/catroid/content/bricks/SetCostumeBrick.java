@@ -33,6 +33,8 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperHelper;
 import at.tugraz.ist.catroid.stage.NativeAppActivity;
 
 public class SetCostumeBrick implements Brick {
@@ -56,7 +58,8 @@ public class SetCostumeBrick implements Brick {
 
 	@Override
 	public void execute() {
-		if (costumeData != null && sprite != null && sprite.getCostumeDataList().contains(costumeData)) {
+		if (costumeData != null && sprite != null
+				&& sprite.getCostumeDataList().contains(costumeData)) {
 			if (!NativeAppActivity.isRunning()) {
 				sprite.costume.setCostumeData(costumeData);
 			} else {
@@ -79,34 +82,40 @@ public class SetCostumeBrick implements Brick {
 
 		view = View.inflate(context, R.layout.brick_set_costume, null);
 
-		Spinner costumebrickSpinner = (Spinner) view.findViewById(R.id.setcostume_spinner);
+		Spinner costumebrickSpinner = (Spinner) view
+				.findViewById(R.id.setcostume_spinner);
 		costumebrickSpinner.setAdapter(createCostumeAdapter(context));
 		costumebrickSpinner.setClickable(true);
 		costumebrickSpinner.setFocusable(true);
 
-		costumebrickSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				if (position == 0) {
-					costumeData = null;
-				} else {
-					costumeData = (CostumeData) parent.getItemAtPosition(position);
-				}
-			}
+		costumebrickSpinner
+				.setOnItemSelectedListener(new OnItemSelectedListener() {
+					@Override
+					public void onItemSelected(AdapterView<?> parent,
+							View view, int position, long id) {
+						if (position == 0) {
+							costumeData = null;
+						} else {
+							costumeData = (CostumeData) parent
+									.getItemAtPosition(position);
+						}
+					}
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
+					@Override
+					public void onNothingSelected(AdapterView<?> arg0) {
+					}
+				});
 
 		if (sprite.getCostumeDataList().contains(costumeData)) {
-			costumebrickSpinner.setSelection(sprite.getCostumeDataList().indexOf(costumeData) + 1, true);
+			costumebrickSpinner.setSelection(sprite.getCostumeDataList()
+					.indexOf(costumeData) + 1, true);
 		} else {
 			costumebrickSpinner.setSelection(0);
 		}
 
 		if (sprite.getName().equals(context.getString(R.string.background))) {
-			TextView textView = (TextView) view.findViewById(R.id.tv_set_costume);
+			TextView textView = (TextView) view
+					.findViewById(R.id.tv_set_costume);
 			textView.setText(R.string.brick_set_background);
 		}
 
@@ -114,11 +123,13 @@ public class SetCostumeBrick implements Brick {
 	}
 
 	private ArrayAdapter<?> createCostumeAdapter(Context context) {
-		ArrayAdapter<CostumeData> arrayAdapter = new ArrayAdapter<CostumeData>(context,
-				android.R.layout.simple_spinner_item);
-		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ArrayAdapter<CostumeData> arrayAdapter = new ArrayAdapter<CostumeData>(
+				context, android.R.layout.simple_spinner_item);
+		arrayAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		CostumeData dummyCostumeData = new CostumeData();
-		dummyCostumeData.setCostumeName(context.getString(R.string.broadcast_nothing_selected));
+		dummyCostumeData.setCostumeName(context
+				.getString(R.string.broadcast_nothing_selected));
 		arrayAdapter.add(dummyCostumeData);
 		for (CostumeData costumeData : sprite.getCostumeDataList()) {
 			arrayAdapter.add(costumeData);
@@ -128,9 +139,11 @@ public class SetCostumeBrick implements Brick {
 
 	@Override
 	public View getPrototypeView(Context context) {
-		View prototypeView = View.inflate(context, R.layout.brick_set_costume, null);
+		View prototypeView = View.inflate(context, R.layout.brick_set_costume,
+				null);
 		if (sprite.getName().equals(context.getString(R.string.background))) {
-			TextView textView = (TextView) prototypeView.findViewById(R.id.tv_set_costume);
+			TextView textView = (TextView) prototypeView
+					.findViewById(R.id.tv_set_costume);
 			textView.setText(R.string.brick_set_background);
 		}
 		return prototypeView;
@@ -144,5 +157,21 @@ public class SetCostumeBrick implements Brick {
 		}
 
 		return clonedBrick;
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+
+		WallpaperHelper wallpaperHelper = WallpaperHelper.getInstance();
+		WallpaperCostume wallpaperCostume = wallpaperHelper
+				.getWallpaperCostume(sprite);
+
+		if (wallpaperCostume != null) {
+			wallpaperCostume.setCostume(costumeData);
+		} else {
+			new WallpaperCostume(sprite, costumeData);
+
+		}
+
 	}
 }

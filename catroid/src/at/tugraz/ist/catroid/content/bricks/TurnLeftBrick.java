@@ -48,24 +48,31 @@ public class TurnLeftBrick implements Brick, OnClickListener {
 		this.degrees = degrees;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
-		sprite.costume.rotation = (sprite.costume.rotation % 360) + (float) degrees;
+		sprite.costume.rotation = (sprite.costume.rotation % 360)
+				+ (float) degrees;
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		view = View.inflate(context, R.layout.brick_turn_left, null);
 
-		TextView textDegrees = (TextView) view.findViewById(R.id.brick_turn_left_text_view);
-		EditText editDegrees = (EditText) view.findViewById(R.id.brick_turn_left_edit_text);
+		TextView textDegrees = (TextView) view
+				.findViewById(R.id.brick_turn_left_text_view);
+		EditText editDegrees = (EditText) view
+				.findViewById(R.id.brick_turn_left_edit_text);
 		editDegrees.setText(String.valueOf(degrees));
 
 		textDegrees.setVisibility(View.GONE);
@@ -75,6 +82,7 @@ public class TurnLeftBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_turn_left, null);
 	}
@@ -84,30 +92,41 @@ public class TurnLeftBrick implements Brick, OnClickListener {
 		return new TurnLeftBrick(getSprite(), degrees);
 	}
 
+	@Override
 	public void onClick(View view) {
 		ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
-		
+
 		BrickTextDialog editDialog = new BrickTextDialog() {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(degrees));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+				input.setInputType(InputType.TYPE_CLASS_NUMBER
+						| InputType.TYPE_NUMBER_FLAG_DECIMAL);
 				input.setSelectAllOnFocus(true);
 			}
-			
+
 			@Override
 			protected boolean handleOkButton() {
 				try {
 					degrees = Double.parseDouble(input.getText().toString());
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(),
+							R.string.error_no_number_entered,
+							Toast.LENGTH_SHORT).show();
 				}
-				
+
 				return true;
 			}
 		};
-		
-		editDialog.show(activity.getSupportFragmentManager(), "dialog_turn_left_brick");
+
+		editDialog.show(activity.getSupportFragmentManager(),
+				"dialog_turn_left_brick");
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

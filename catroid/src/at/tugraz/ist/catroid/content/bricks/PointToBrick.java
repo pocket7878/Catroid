@@ -47,17 +47,20 @@ public class PointToBrick implements Brick {
 		this.pointedSprite = pointedSprite;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return sprite;
 	}
 
+	@Override
 	public void execute() {
-		final ArrayList<Sprite> spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject()
-				.getSpriteList();
+		final ArrayList<Sprite> spriteList = (ArrayList<Sprite>) ProjectManager
+				.getInstance().getCurrentProject().getSpriteList();
 		if (!spriteList.contains(pointedSprite)) {
 			pointedSprite = null;
 		}
@@ -80,9 +83,11 @@ public class PointToBrick implements Brick {
 		pointedSprite.costume.releaseXYWidthHeightLock();
 
 		double rotationDegrees;
-		if (spriteXPosition == pointedSpriteXPosition && spriteYPosition == pointedSpriteYPosition) {
+		if (spriteXPosition == pointedSpriteXPosition
+				&& spriteYPosition == pointedSpriteYPosition) {
 			rotationDegrees = 90;
-		} else if (spriteXPosition == pointedSpriteXPosition || spriteYPosition == pointedSpriteYPosition) {
+		} else if (spriteXPosition == pointedSpriteXPosition
+				|| spriteYPosition == pointedSpriteYPosition) {
 			if (spriteXPosition == pointedSpriteXPosition) {
 				if (spriteYPosition > pointedSpriteYPosition) {
 					rotationDegrees = 180;
@@ -119,23 +124,29 @@ public class PointToBrick implements Brick {
 		sprite.costume.rotation = (-(float) rotationDegrees) + 90f;
 	}
 
+	@Override
 	public View getView(final Context context, int brickId, BaseAdapter adapter) {
 
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View brickView = inflater.inflate(R.layout.brick_point_to, null);
 
-		final Spinner spinner = (Spinner) brickView.findViewById(R.id.point_to_spinner);
+		final Spinner spinner = (Spinner) brickView
+				.findViewById(R.id.point_to_spinner);
 		spinner.setFocusableInTouchMode(false);
 		spinner.setFocusable(false);
 		spinner.setClickable(true);
 		spinner.setEnabled(true);
 
-		ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item);
-		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinnerAdapter.add(context.getString(R.string.broadcast_nothing_selected));
+		ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(context,
+				android.R.layout.simple_spinner_item);
+		spinnerAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinnerAdapter.add(context
+				.getString(R.string.broadcast_nothing_selected));
 
-		final ArrayList<Sprite> spriteList = (ArrayList<Sprite>) ProjectManager.getInstance().getCurrentProject()
-				.getSpriteList();
+		final ArrayList<Sprite> spriteList = (ArrayList<Sprite>) ProjectManager
+				.getInstance().getCurrentProject().getSpriteList();
 		for (Sprite sprite : spriteList) {
 			String spriteName = sprite.getName();
 			String temp = this.sprite.getName();
@@ -147,11 +158,14 @@ public class PointToBrick implements Brick {
 
 		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
 				String itemSelected = parent.getSelectedItem().toString();
-				String nothingSelected = context.getString(R.string.broadcast_nothing_selected);
-				final ArrayList<Sprite> spriteList = (ArrayList<Sprite>) ProjectManager.getInstance()
-						.getCurrentProject().getSpriteList();
+				String nothingSelected = context
+						.getString(R.string.broadcast_nothing_selected);
+				final ArrayList<Sprite> spriteList = (ArrayList<Sprite>) ProjectManager
+						.getInstance().getCurrentProject().getSpriteList();
 
 				if (itemSelected.equals(nothingSelected)) {
 					pointedSprite = null;
@@ -164,12 +178,14 @@ public class PointToBrick implements Brick {
 				}
 			}
 
+			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
 
 		if (spriteList.contains(pointedSprite)) {
-			int pointedSpriteIndex = spinnerAdapter.getPosition(pointedSprite.getName());
+			int pointedSpriteIndex = spinnerAdapter.getPosition(pointedSprite
+					.getName());
 			spinner.setSelection(pointedSpriteIndex);
 		} else {
 			spinner.setSelection(0);
@@ -178,8 +194,10 @@ public class PointToBrick implements Brick {
 		return brickView;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.brick_point_to, null);
 		return view;
 	}
@@ -187,5 +205,11 @@ public class PointToBrick implements Brick {
 	@Override
 	public Brick clone() {
 		return new PointToBrick(sprite, pointedSprite);
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
 	}
 }

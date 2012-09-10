@@ -43,7 +43,8 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 
-public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnClickListener {
+public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener,
+		OnClickListener {
 	private static final long serialVersionUID = 1L;
 
 	public static enum Motor {
@@ -85,12 +86,14 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 	public void execute() {
 
 		if (motorEnum.equals(Motor.MOTOR_A_C)) {
-			LegoNXT.sendBTCMotorMessage(NO_DELAY, Motor.MOTOR_A.ordinal(), speed, 0);
-			LegoNXT.sendBTCMotorMessage(NO_DELAY, Motor.MOTOR_C.ordinal(), speed, 0);
+			LegoNXT.sendBTCMotorMessage(NO_DELAY, Motor.MOTOR_A.ordinal(),
+					speed, 0);
+			LegoNXT.sendBTCMotorMessage(NO_DELAY, Motor.MOTOR_C.ordinal(),
+					speed, 0);
 		} else {
 			LegoNXT.sendBTCMotorMessage(NO_DELAY, motorEnum.ordinal(), speed, 0);
 		}
-		//LegoNXT.sendBTCMotorMessage((int) (duration * 1000), motor, 0, 0);
+		// LegoNXT.sendBTCMotorMessage((int) (duration * 1000), motor, 0, 0);
 	}
 
 	@Override
@@ -100,8 +103,10 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 
 	@Override
 	public View getPrototypeView(Context context) {
-		View view = View.inflate(context, R.layout.brick_nxt_motor_action, null);
-		SeekBar noClick = (SeekBar) view.findViewById(R.id.seekBarSpeedMotorAction);
+		View view = View
+				.inflate(context, R.layout.brick_nxt_motor_action, null);
+		SeekBar noClick = (SeekBar) view
+				.findViewById(R.id.seekBarSpeedMotorAction);
 		noClick.setEnabled(false);
 		return view;
 	}
@@ -114,10 +119,13 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
-		View brickView = View.inflate(context, R.layout.brick_nxt_motor_action, null);
+		View brickView = View.inflate(context, R.layout.brick_nxt_motor_action,
+				null);
 
-		TextView textSpeed = (TextView) brickView.findViewById(R.id.motor_action_speed_text_view);
-		editSpeed = (EditText) brickView.findViewById(R.id.motor_action_speed_edit_text);
+		TextView textSpeed = (TextView) brickView
+				.findViewById(R.id.motor_action_speed_text_view);
+		editSpeed = (EditText) brickView
+				.findViewById(R.id.motor_action_speed_edit_text);
 		editSpeed.setText(String.valueOf(speed));
 
 		textSpeed.setVisibility(View.GONE);
@@ -125,17 +133,21 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 
 		editSpeed.setOnClickListener(this);
 
-		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context, R.array.nxt_motor_chooser,
-				android.R.layout.simple_spinner_item);
-		motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		Spinner motorSpinner = (Spinner) brickView.findViewById(R.id.motor_spinner);
+		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter
+				.createFromResource(context, R.array.nxt_motor_chooser,
+						android.R.layout.simple_spinner_item);
+		motorAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		Spinner motorSpinner = (Spinner) brickView
+				.findViewById(R.id.motor_spinner);
 		motorSpinner.setClickable(true);
 		motorSpinner.setEnabled(true);
 		motorSpinner.setAdapter(motorAdapter);
 		motorSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
 				motorEnum = Motor.values()[position];
 				motor = motorEnum.name();
 			}
@@ -148,7 +160,8 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 
 		motorSpinner.setSelection(motorEnum.ordinal());
 
-		speedBar = (SeekBar) brickView.findViewById(R.id.seekBarSpeedMotorAction);
+		speedBar = (SeekBar) brickView
+				.findViewById(R.id.seekBarSpeedMotorAction);
 		speedBar.setOnSeekBarChangeListener(this);
 		speedBar.setMax(MAX_SPEED * 2);
 		speedBar.setEnabled(true);
@@ -188,9 +201,10 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 	}
 
 	@Override
-	public void onProgressChanged(SeekBar speedBar, int progress, boolean fromUser) {
+	public void onProgressChanged(SeekBar speedBar, int progress,
+			boolean fromUser) {
 		if (!fromUser) {
-			if (progress == 0) {//Robotium fromUser=false
+			if (progress == 0) {// Robotium fromUser=false
 				return;
 			}
 		}
@@ -228,7 +242,8 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(speed));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+				input.setInputType(InputType.TYPE_CLASS_NUMBER
+						| InputType.TYPE_NUMBER_FLAG_SIGNED);
 				input.setSelectAllOnFocus(true);
 			}
 
@@ -238,21 +253,32 @@ public class NXTMotorActionBrick implements Brick, OnSeekBarChangeListener, OnCl
 					int newSpeed = Integer.parseInt(input.getText().toString());
 					if (newSpeed > MAX_SPEED) {
 						newSpeed = MAX_SPEED;
-						Toast.makeText(getActivity(), R.string.number_to_big, Toast.LENGTH_SHORT).show();
+						Toast.makeText(getActivity(), R.string.number_to_big,
+								Toast.LENGTH_SHORT).show();
 					} else if (newSpeed < MIN_SPEED) {
 						newSpeed = MIN_SPEED;
-						Toast.makeText(getActivity(), R.string.number_to_small, Toast.LENGTH_SHORT).show();
+						Toast.makeText(getActivity(), R.string.number_to_small,
+								Toast.LENGTH_SHORT).show();
 					}
 					speed = newSpeed;
 					speedToSeekBarVal();
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(),
+							R.string.error_no_number_entered,
+							Toast.LENGTH_SHORT).show();
 				}
 
 				return true;
 			}
 		};
 
-		editDialog.show(activity.getSupportFragmentManager(), "dialog_nxt_moto_action_brick");
+		editDialog.show(activity.getSupportFragmentManager(),
+				"dialog_nxt_moto_action_brick");
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
 	}
 }

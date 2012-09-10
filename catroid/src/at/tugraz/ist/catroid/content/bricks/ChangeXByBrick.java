@@ -32,6 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperHelper;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 
@@ -50,10 +52,12 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 		this.xMovement = xMovement;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		sprite.costume.aquireXYWidthHeightLock();
 		int xPosition = (int) sprite.costume.getXPosition();
@@ -70,16 +74,20 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 		sprite.costume.releaseXYWidthHeightLock();
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		view = View.inflate(context, R.layout.brick_change_x, null);
 
-		TextView textX = (TextView) view.findViewById(R.id.brick_change_x_text_view);
-		EditText editX = (EditText) view.findViewById(R.id.brick_change_x_edit_text);
+		TextView textX = (TextView) view
+				.findViewById(R.id.brick_change_x_text_view);
+		EditText editX = (EditText) view
+				.findViewById(R.id.brick_change_x_edit_text);
 		editX.setText(String.valueOf(xMovement));
 
 		textX.setVisibility(View.GONE);
@@ -89,6 +97,7 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_change_x, null);
 	}
@@ -98,29 +107,46 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 		return new ChangeXByBrick(getSprite(), xMovement);
 	}
 
+	@Override
 	public void onClick(View view) {
 		ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
-		
+
 		BrickTextDialog editDialog = new BrickTextDialog() {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(xMovement));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+				input.setInputType(InputType.TYPE_CLASS_NUMBER
+						| InputType.TYPE_NUMBER_FLAG_SIGNED);
 				input.setSelectAllOnFocus(true);
 			}
-			
+
 			@Override
 			protected boolean handleOkButton() {
 				try {
 					xMovement = Integer.parseInt(input.getText().toString());
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(),
+							R.string.error_no_number_entered,
+							Toast.LENGTH_SHORT).show();
 				}
-				
+
 				return true;
 			}
 		};
-		
-		editDialog.show(activity.getSupportFragmentManager(), "dialog_change_x_by_brick");
+
+		editDialog.show(activity.getSupportFragmentManager(),
+				"dialog_change_x_by_brick");
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+
+		WallpaperCostume wallpaperCostume = WallpaperHelper.getInstance()
+				.getWallpaperCostume(sprite);
+		if (wallpaperCostume == null) {
+			wallpaperCostume = new WallpaperCostume(sprite, null);
+		}
+
+		wallpaperCostume.changeXBy(xMovement);
 	}
 }

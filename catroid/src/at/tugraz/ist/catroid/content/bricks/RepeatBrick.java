@@ -45,6 +45,7 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 		this.timesToRepeat = timesToRepeat;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
@@ -53,7 +54,8 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 	public void execute() {
 		if (timesToRepeat <= 0) {
 			Script script = loopEndBrick.getScript();
-			script.setExecutingBrickIndex(script.getBrickList().indexOf(loopEndBrick));
+			script.setExecutingBrickIndex(script.getBrickList().indexOf(
+					loopEndBrick));
 			return;
 		}
 		loopEndBrick.setTimesToRepeat(timesToRepeat);
@@ -65,12 +67,15 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 		return new RepeatBrick(getSprite(), timesToRepeat);
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		View view = View.inflate(context, R.layout.brick_repeat, null);
 
-		TextView text = (TextView) view.findViewById(R.id.brick_repeat_text_view);
-		EditText edit = (EditText) view.findViewById(R.id.brick_repeat_edit_text);
+		TextView text = (TextView) view
+				.findViewById(R.id.brick_repeat_text_view);
+		EditText edit = (EditText) view
+				.findViewById(R.id.brick_repeat_edit_text);
 		edit.setText(timesToRepeat + "");
 
 		text.setVisibility(View.GONE);
@@ -80,34 +85,47 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_repeat, null);
 	}
 
+	@Override
 	public void onClick(View view) {
 		ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
-		
+
 		BrickTextDialog editDialog = new BrickTextDialog() {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(timesToRepeat));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
+				input.setInputType(InputType.TYPE_CLASS_NUMBER
+						| InputType.TYPE_NUMBER_FLAG_DECIMAL
 						| InputType.TYPE_NUMBER_FLAG_SIGNED);
 				input.setSelectAllOnFocus(true);
 			}
-			
+
 			@Override
 			protected boolean handleOkButton() {
 				try {
-					timesToRepeat = Integer.parseInt(input.getText().toString());
+					timesToRepeat = Integer
+							.parseInt(input.getText().toString());
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(),
+							R.string.error_no_number_entered,
+							Toast.LENGTH_SHORT).show();
 				}
-				
+
 				return true;
 			}
 		};
-		
-		editDialog.show(activity.getSupportFragmentManager(), "dialog_repeat_brick");
+
+		editDialog.show(activity.getSupportFragmentManager(),
+				"dialog_repeat_brick");
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
 	}
 }

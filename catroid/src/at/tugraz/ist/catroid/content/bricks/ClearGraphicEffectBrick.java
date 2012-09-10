@@ -39,34 +39,47 @@ public class ClearGraphicEffectBrick implements Brick {
 		this.sprite = sprite;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		sprite.costume.setBrightnessValue(1f);
 		sprite.costume.setAlphaValue(1f);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
-			view = View.inflate(context, R.layout.brick_clear_graphic_effect, null);
+			view = View.inflate(context, R.layout.brick_clear_graphic_effect,
+					null);
 		}
 
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		return inflater.inflate(R.layout.brick_clear_graphic_effect, null);
 	}
 
 	@Override
 	public Brick clone() {
 		return new ClearGraphicEffectBrick(getSprite());
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
 	}
 }

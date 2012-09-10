@@ -45,10 +45,12 @@ public class GoNStepsBackBrick implements Brick, OnClickListener {
 		this.steps = steps;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		int zPosition = sprite.costume.zPosition;
 		if (steps > 0 && (zPosition - steps) > zPosition) {
@@ -60,15 +62,19 @@ public class GoNStepsBackBrick implements Brick, OnClickListener {
 		}
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		View view = View.inflate(context, R.layout.brick_go_back, null);
 
-		TextView text = (TextView) view.findViewById(R.id.brick_go_back_n_text_view);
-		EditText edit = (EditText) view.findViewById(R.id.brick_go_back_edit_text);
+		TextView text = (TextView) view
+				.findViewById(R.id.brick_go_back_n_text_view);
+		EditText edit = (EditText) view
+				.findViewById(R.id.brick_go_back_edit_text);
 
 		edit.setText(String.valueOf(steps));
 		text.setVisibility(View.GONE);
@@ -78,6 +84,7 @@ public class GoNStepsBackBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_go_back, null);
 	}
@@ -87,29 +94,40 @@ public class GoNStepsBackBrick implements Brick, OnClickListener {
 		return new GoNStepsBackBrick(getSprite(), steps);
 	}
 
+	@Override
 	public void onClick(View view) {
 		ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
-		
+
 		BrickTextDialog editDialog = new BrickTextDialog() {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(steps));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
+				input.setInputType(InputType.TYPE_CLASS_NUMBER
+						| InputType.TYPE_NUMBER_FLAG_SIGNED);
 				input.setSelectAllOnFocus(true);
 			}
-			
+
 			@Override
 			protected boolean handleOkButton() {
 				try {
 					steps = Integer.parseInt(input.getText().toString());
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(),
+							R.string.error_no_number_entered,
+							Toast.LENGTH_SHORT).show();
 				}
-				
+
 				return true;
 			}
 		};
-		
-		editDialog.show(activity.getSupportFragmentManager(), "dialog_go_n_steps_brick");
+
+		editDialog.show(activity.getSupportFragmentManager(),
+				"dialog_go_n_steps_brick");
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
 	}
 }

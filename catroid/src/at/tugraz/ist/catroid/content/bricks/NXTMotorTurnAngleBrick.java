@@ -90,18 +90,19 @@ public class NXTMotorTurnAngleBrick implements Brick {
 		}
 
 		if (motorEnum.equals(Motor.MOTOR_A_C)) {
-			LegoNXT.sendBTCMotorMessage(NO_DELAY, Motor.MOTOR_A.ordinal(), -1 * direction * 30, temp_angle);
-			LegoNXT.sendBTCMotorMessage(NO_DELAY, Motor.MOTOR_C.ordinal(), direction * 30, temp_angle);
+			LegoNXT.sendBTCMotorMessage(NO_DELAY, Motor.MOTOR_A.ordinal(), -1
+					* direction * 30, temp_angle);
+			LegoNXT.sendBTCMotorMessage(NO_DELAY, Motor.MOTOR_C.ordinal(),
+					direction * 30, temp_angle);
 		} else {
-			LegoNXT.sendBTCMotorMessage(NO_DELAY, motorEnum.ordinal(), direction * 30, temp_angle);
+			LegoNXT.sendBTCMotorMessage(NO_DELAY, motorEnum.ordinal(),
+					direction * 30, temp_angle);
 		}
 
 		/*
-		 * if (inverse == false) {
-		 * LegoNXT.sendBTCMotorMessage(NO_DELAY, motor, 30, angle);
-		 * } else {
-		 * LegoNXT.sendBTCMotorMessage(NO_DELAY, motor, -30, angle);
-		 * }
+		 * if (inverse == false) { LegoNXT.sendBTCMotorMessage(NO_DELAY, motor,
+		 * 30, angle); } else { LegoNXT.sendBTCMotorMessage(NO_DELAY, motor,
+		 * -30, angle); }
 		 */
 
 	}
@@ -123,27 +124,34 @@ public class NXTMotorTurnAngleBrick implements Brick {
 
 	@Override
 	public View getView(final Context context, int brickId, BaseAdapter adapter) {
-		View brickView = View.inflate(context, R.layout.brick_nxt_motor_turn_angle, null);
+		View brickView = View.inflate(context,
+				R.layout.brick_nxt_motor_turn_angle, null);
 
-		TextView textX = (TextView) brickView.findViewById(R.id.motor_turn_angle_text_view);
-		editX = (EditText) brickView.findViewById(R.id.motor_turn_angle_edit_text);
+		TextView textX = (TextView) brickView
+				.findViewById(R.id.motor_turn_angle_text_view);
+		editX = (EditText) brickView
+				.findViewById(R.id.motor_turn_angle_edit_text);
 		editX.setText(String.valueOf(degrees));
 
 		textX.setVisibility(View.GONE);
 		editX.setVisibility(View.VISIBLE);
 
-		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context, R.array.nxt_motor_chooser,
-				android.R.layout.simple_spinner_item);
-		motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter
+				.createFromResource(context, R.array.nxt_motor_chooser,
+						android.R.layout.simple_spinner_item);
+		motorAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		Spinner motorSpinner = (Spinner) brickView.findViewById(R.id.motor_spinner);
+		Spinner motorSpinner = (Spinner) brickView
+				.findViewById(R.id.motor_spinner);
 		motorSpinner.setClickable(true);
 		motorSpinner.setEnabled(true);
 		motorSpinner.setAdapter(motorAdapter);
 		motorSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
 				motorEnum = Motor.values()[position];
 				motor = motorEnum.name();
 			}
@@ -156,7 +164,8 @@ public class NXTMotorTurnAngleBrick implements Brick {
 
 		motorSpinner.setSelection(motorEnum.ordinal());
 
-		Button directionsButton = (Button) brickView.findViewById(R.id.directions_btn);
+		Button directionsButton = (Button) brickView
+				.findViewById(R.id.directions_btn);
 		directionsButton.setClickable(true);
 		directionsButton.setEnabled(true);
 		directionsButton.setOnClickListener(new OnClickListener() {
@@ -164,87 +173,112 @@ public class NXTMotorTurnAngleBrick implements Brick {
 			public void onClick(View v) {
 				ScriptTabActivity activity = (ScriptTabActivity) context;
 				EditNxtMotorTurnAngleBrickDialog dialog = new EditNxtMotorTurnAngleBrickDialog();
-				dialog.show(activity.getSupportFragmentManager(), "dialog_nxt_motor_turn_angle_brick");
+				dialog.show(activity.getSupportFragmentManager(),
+						"dialog_nxt_motor_turn_angle_brick");
 			}
 		});
 
 		return brickView;
 	}
-	
+
 	private class EditNxtMotorTurnAngleBrickDialog extends DialogFragment {
-		
+
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			setRetainInstance(true);
 		}
-		
+
 		@Override
 		public void onDestroyView() {
-			if (getDialog() != null && getRetainInstance())
+			if (getDialog() != null && getRetainInstance()) {
 				getDialog().setOnDismissListener(null);
+			}
 			super.onDestroyView();
 		}
-		
+
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			final EditText input = new EditText(getActivity());
-			input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
-			//final EditIntegerDialog test = new EditIntegerDialog(context, input, angle, false);
+			input.setInputType(InputType.TYPE_CLASS_NUMBER
+					| InputType.TYPE_NUMBER_FLAG_SIGNED);
+			// final EditIntegerDialog test = new EditIntegerDialog(context,
+			// input, angle, false);
 			input.setText(degrees + "");
-			
+
 			Dialog dialog = new AlertDialog.Builder(getActivity())
-				.setView(input)
-				.setTitle("Choose and edit direction")
-				.setSingleChoiceItems(R.array.fancy_directions_chooser, -1, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int item) {
+					.setView(input)
+					.setTitle("Choose and edit direction")
+					.setSingleChoiceItems(R.array.fancy_directions_chooser, -1,
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int item) {
 
-						switch (item) {
-							case 0:
-								input.setText("45");
-								break;
-							case 1:
-								input.setText("90");
-								break;
-							case 2:
-								input.setText("-45");
-								break;
-							case 3:
-								input.setText("-90");
-								break;
-							case 4:
-								input.setText("180");
-								break;
-							case 5:
-								input.setText("360");
-								break;
-						}
+									switch (item) {
+									case 0:
+										input.setText("45");
+										break;
+									case 1:
+										input.setText("90");
+										break;
+									case 2:
+										input.setText("-45");
+										break;
+									case 3:
+										input.setText("-90");
+										break;
+									case 4:
+										input.setText("180");
+										break;
+									case 5:
+										input.setText("360");
+										break;
+									}
 
-						//Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
-					}
-				}).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						if (input.getText().toString().equals("")) {
-							input.setText("0");
-						}
-						editX.setText(input.getText().toString());
-						degrees = Integer.parseInt(input.getText().toString());
-					}
-				}).setNegativeButton(getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-					}
-				}).create();
-			
+									// Toast.makeText(getApplicationContext(),
+									// items[item], Toast.LENGTH_SHORT).show();
+								}
+							})
+					.setPositiveButton(getString(R.string.ok),
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									if (input.getText().toString().equals("")) {
+										input.setText("0");
+									}
+									editX.setText(input.getText().toString());
+									degrees = Integer.parseInt(input.getText()
+											.toString());
+								}
+							})
+					.setNegativeButton(getString(R.string.cancel_button),
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									dialog.cancel();
+								}
+							}).create();
+
 			dialog.setOnShowListener(new OnShowListener() {
+				@Override
 				public void onShow(DialogInterface dialog) {
 					InputMethodManager inputManager = (InputMethodManager) getActivity()
 							.getSystemService(Context.INPUT_METHOD_SERVICE);
-					inputManager.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
+					inputManager.showSoftInput(input,
+							InputMethodManager.SHOW_IMPLICIT);
 				}
 			});
-			
+
 			return dialog;
 		}
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
 	}
 }

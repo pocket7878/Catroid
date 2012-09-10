@@ -58,49 +58,54 @@ public class WhenBrick extends ScriptBrick {
 	}
 
 	@Override
-	public View getView(final Context context, int brickId, final BaseAdapter adapter) {
+	public View getView(final Context context, int brickId,
+			final BaseAdapter adapter) {
 		view = View.inflate(context, R.layout.brick_when, null);
-		TextView spinnerActionText = (TextView) view.findViewById(R.id.WhenBrickActionTapped);
+		TextView spinnerActionText = (TextView) view
+				.findViewById(R.id.WhenBrickActionTapped);
 		spinnerActionText.setText(" " + spinnerActionText.getText());
 
 		// inactive until spinner has more than one element
-		//		final Spinner spinner = (Spinner) view.findViewById(R.id.brick_when_spinner);
-		//		spinner.setFocusable(false);
-		//		spinner.setClickable(true);
-		//		ArrayAdapter<CharSequence> spinnerAdapter = new ArrayAdapter<CharSequence>(context,
-		//				android.R.layout.simple_spinner_item);
-		//		spinnerAdapter.add(context.getString(R.string.action_tapped));
+		// final Spinner spinner = (Spinner)
+		// view.findViewById(R.id.brick_when_spinner);
+		// spinner.setFocusable(false);
+		// spinner.setClickable(true);
+		// ArrayAdapter<CharSequence> spinnerAdapter = new
+		// ArrayAdapter<CharSequence>(context,
+		// android.R.layout.simple_spinner_item);
+		// spinnerAdapter.add(context.getString(R.string.action_tapped));
 
-		//		TODO: not working with OpenGL yet, uncomment this when it does
-		//		spinnerAdapter.add(context.getString(R.string.action_doubleTapped));
-		//		spinnerAdapter.add(context.getString(R.string.action_longPressed));
-		//		spinnerAdapter.add(context.getString(R.string.action_swipeUp));
-		//		spinnerAdapter.add(context.getString(R.string.action_swipeDown));
-		//		spinnerAdapter.add(context.getString(R.string.action_swipeLeft));
-		//		spinnerAdapter.add(context.getString(R.string.action_swipeRight));
+		// TODO: not working with OpenGL yet, uncomment this when it does
+		// spinnerAdapter.add(context.getString(R.string.action_doubleTapped));
+		// spinnerAdapter.add(context.getString(R.string.action_longPressed));
+		// spinnerAdapter.add(context.getString(R.string.action_swipeUp));
+		// spinnerAdapter.add(context.getString(R.string.action_swipeDown));
+		// spinnerAdapter.add(context.getString(R.string.action_swipeLeft));
+		// spinnerAdapter.add(context.getString(R.string.action_swipeRight));
 
-		//		spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		//		spinner.setAdapter(spinnerAdapter);
+		// spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// spinner.setAdapter(spinnerAdapter);
 		//
-		//		if (whenScript.getAction() != null) {
-		//			spinner.setSelection(whenScript.getPosition(), true);
-		//		}
+		// if (whenScript.getAction() != null) {
+		// spinner.setSelection(whenScript.getPosition(), true);
+		// }
 		//
-		//		if (spinner.getSelectedItem() == null) {
-		//			spinner.setSelection(0);
-		//		}
+		// if (spinner.getSelectedItem() == null) {
+		// spinner.setSelection(0);
+		// }
 		//
-		//		spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-		//			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		//				spinner.setSelected(true);
-		//				whenScript.setAction(position);
-		//				spinner.setSelection(position);
-		//				adapter.notifyDataSetChanged();
-		//			}
+		// spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+		// public void onItemSelected(AdapterView<?> parent, View view, int
+		// position, long id) {
+		// spinner.setSelected(true);
+		// whenScript.setAction(position);
+		// spinner.setSelection(position);
+		// adapter.notifyDataSetChanged();
+		// }
 		//
-		//			public void onNothingSelected(AdapterView<?> parent) {
-		//			}
-		//		});
+		// public void onNothingSelected(AdapterView<?> parent) {
+		// }
+		// });
 
 		return view;
 	}
@@ -122,6 +127,12 @@ public class WhenBrick extends ScriptBrick {
 		}
 
 		return whenScript;
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

@@ -49,33 +49,41 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 		this.steps = steps;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		sprite.costume.aquireXYWidthHeightLock();
 
 		double radians = Math.toRadians(sprite.costume.rotation);
 
-		int newXPosition = (int) Math.round(sprite.costume.getXPosition() + steps * Math.cos(radians));
-		int newYPosition = (int) Math.round(sprite.costume.getYPosition() + steps * Math.sin(radians));
+		int newXPosition = (int) Math.round(sprite.costume.getXPosition()
+				+ steps * Math.cos(radians));
+		int newYPosition = (int) Math.round(sprite.costume.getYPosition()
+				+ steps * Math.sin(radians));
 
 		sprite.costume.setXYPosition(newXPosition, newYPosition);
 		sprite.costume.releaseXYWidthHeightLock();
 
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		view = View.inflate(context, R.layout.brick_move_n_steps, null);
 
-		TextView text = (TextView) view.findViewById(R.id.brick_move_n_steps_text_view);
-		EditText edit = (EditText) view.findViewById(R.id.brick_move_n_steps_edit_text);
+		TextView text = (TextView) view
+				.findViewById(R.id.brick_move_n_steps_text_view);
+		EditText edit = (EditText) view
+				.findViewById(R.id.brick_move_n_steps_edit_text);
 
 		edit.setText(String.valueOf(steps));
 		text.setVisibility(View.GONE);
@@ -85,8 +93,10 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.brick_move_n_steps, null);
 		return view;
 	}
@@ -96,30 +106,41 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 		return new MoveNStepsBrick(getSprite(), steps);
 	}
 
+	@Override
 	public void onClick(View view) {
 		ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
-		
+
 		BrickTextDialog editDialog = new BrickTextDialog() {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(steps));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
+				input.setInputType(InputType.TYPE_CLASS_NUMBER
+						| InputType.TYPE_NUMBER_FLAG_DECIMAL
 						| InputType.TYPE_NUMBER_FLAG_SIGNED);
 				input.setSelectAllOnFocus(true);
 			}
-			
+
 			@Override
 			protected boolean handleOkButton() {
 				try {
 					steps = Double.parseDouble(input.getText().toString());
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(),
+							R.string.error_no_number_entered,
+							Toast.LENGTH_SHORT).show();
 				}
-				
+
 				return true;
 			}
 		};
-		
-		editDialog.show(activity.getSupportFragmentManager(), "dialog_move_n_steps_brick");
+
+		editDialog.show(activity.getSupportFragmentManager(),
+				"dialog_move_n_steps_brick");
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
 	}
 }

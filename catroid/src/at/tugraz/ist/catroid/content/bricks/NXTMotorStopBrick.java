@@ -96,13 +96,17 @@ public class NXTMotorStopBrick implements Brick, OnItemSelectedListener {
 
 	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
-		View brickView = View.inflate(context, R.layout.brick_nxt_motor_stop, null);
+		View brickView = View.inflate(context, R.layout.brick_nxt_motor_stop,
+				null);
 
-		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter.createFromResource(context,
-				R.array.nxt_stop_motor_chooser, android.R.layout.simple_spinner_item);
-		motorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ArrayAdapter<CharSequence> motorAdapter = ArrayAdapter
+				.createFromResource(context, R.array.nxt_stop_motor_chooser,
+						android.R.layout.simple_spinner_item);
+		motorAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		Spinner motorSpinner = (Spinner) brickView.findViewById(R.id.stop_motor_spinner);
+		Spinner motorSpinner = (Spinner) brickView
+				.findViewById(R.id.stop_motor_spinner);
 		motorSpinner.setOnItemSelectedListener(this);
 		motorSpinner.setClickable(true);
 		motorSpinner.setEnabled(true);
@@ -113,12 +117,19 @@ public class NXTMotorStopBrick implements Brick, OnItemSelectedListener {
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+	public void onItemSelected(AdapterView<?> parent, View view, int position,
+			long id) {
 		motorEnum = Motor.values()[position];
 		motor = motorEnum.name();
 	}
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
 	}
 }

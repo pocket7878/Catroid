@@ -39,12 +39,28 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.BIND_WALLPAPER"/>
 
+    <uses-feature android:name="android.software.live_wallpaper"> 
+ </uses-feature>
+    
     <application
         android:debuggable="true"
         android:icon="@drawable/ic_launcher_catroid_fat"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Light.NoTitleBar" >
+        
+        <service android:name=".livewallpaper.LiveWallpaper" 
+        android:label="@string/app_name" 
+        android:permission="android.permission.BIND_WALLPAPER" 
+        android:enabled="true"> 
+        <intent-filter> 
+            <action android:name="android.service.wallpaper.WallpaperService"/> 
+            </intent-filter> 
+            <meta-data android:name="android.service.wallpaper" 
+                android:resource="@xml/mywallpaper"/> 
+        </service>
+        
         <activity
             android:name=".ui.MainMenuActivity"
             android:configChanges="keyboardHidden|orientation" 

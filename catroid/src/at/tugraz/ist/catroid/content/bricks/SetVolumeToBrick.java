@@ -47,10 +47,12 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 		this.volume = volume;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		if (volume < 0.0f) {
 			volume = 0.0f;
@@ -60,15 +62,19 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 		SoundManager.getInstance().setVolume(volume);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		View view = View.inflate(context, R.layout.brick_set_volume_to, null);
 
-		TextView text = (TextView) view.findViewById(R.id.brick_set_volume_to_text_view);
-		EditText edit = (EditText) view.findViewById(R.id.brick_set_volume_to_edit_text);
+		TextView text = (TextView) view
+				.findViewById(R.id.brick_set_volume_to_text_view);
+		EditText edit = (EditText) view
+				.findViewById(R.id.brick_set_volume_to_edit_text);
 		edit.setText(String.valueOf(volume));
 
 		text.setVisibility(View.GONE);
@@ -79,6 +85,7 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_set_volume_to, null);
 	}
@@ -88,29 +95,40 @@ public class SetVolumeToBrick implements Brick, OnClickListener {
 		return new SetVolumeToBrick(getSprite(), volume);
 	}
 
+	@Override
 	public void onClick(View view) {
 		ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
-		
+
 		BrickTextDialog editDialog = new BrickTextDialog() {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(volume));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+				input.setInputType(InputType.TYPE_CLASS_NUMBER
+						| InputType.TYPE_NUMBER_FLAG_DECIMAL);
 				input.setSelectAllOnFocus(true);
 			}
-			
+
 			@Override
 			protected boolean handleOkButton() {
 				try {
 					volume = Float.parseFloat(input.getText().toString());
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(),
+							R.string.error_no_number_entered,
+							Toast.LENGTH_SHORT).show();
 				}
-				
+
 				return true;
 			}
 		};
-		
-		editDialog.show(activity.getSupportFragmentManager(), "dialog_set_volume_to_brick");
+
+		editDialog.show(activity.getSupportFragmentManager(),
+				"dialog_set_volume_to_brick");
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		execute();
+
 	}
 }

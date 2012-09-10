@@ -32,6 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperHelper;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 
@@ -50,26 +52,32 @@ public class SetYBrick implements Brick, OnClickListener {
 		this.yPosition = yPosition;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		sprite.costume.aquireXYWidthHeightLock();
 		sprite.costume.setYPosition(yPosition);
 		sprite.costume.releaseXYWidthHeightLock();
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		view = View.inflate(context, R.layout.brick_set_y, null);
 
-		TextView textY = (TextView) view.findViewById(R.id.brick_set_y_text_view);
-		EditText editY = (EditText) view.findViewById(R.id.brick_set_y_edit_text);
+		TextView textY = (TextView) view
+				.findViewById(R.id.brick_set_y_text_view);
+		EditText editY = (EditText) view
+				.findViewById(R.id.brick_set_y_edit_text);
 		editY.setText(String.valueOf(yPosition));
 
 		textY.setVisibility(View.GONE);
@@ -79,6 +87,7 @@ public class SetYBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_set_y, null);
 	}
@@ -88,30 +97,47 @@ public class SetYBrick implements Brick, OnClickListener {
 		return new SetYBrick(getSprite(), yPosition);
 	}
 
+	@Override
 	public void onClick(View view) {
 		ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
-		
+
 		BrickTextDialog editDialog = new BrickTextDialog() {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(yPosition));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
+				input.setInputType(InputType.TYPE_CLASS_NUMBER
+						| InputType.TYPE_NUMBER_FLAG_DECIMAL
 						| InputType.TYPE_NUMBER_FLAG_SIGNED);
 				input.setSelectAllOnFocus(true);
 			}
-			
+
 			@Override
 			protected boolean handleOkButton() {
 				try {
 					yPosition = Integer.parseInt(input.getText().toString());
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(),
+							R.string.error_no_number_entered,
+							Toast.LENGTH_SHORT).show();
 				}
-				
+
 				return true;
 			}
 		};
-		
-		editDialog.show(activity.getSupportFragmentManager(), "dialog_set_y_brick");
+
+		editDialog.show(activity.getSupportFragmentManager(),
+				"dialog_set_y_brick");
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		WallpaperCostume wallpaperCostume = WallpaperHelper.getInstance()
+				.getWallpaperCostume(sprite);
+		if (wallpaperCostume == null) {
+			wallpaperCostume = new WallpaperCostume(sprite, null);
+		}
+
+		wallpaperCostume.setY(yPosition);
+
 	}
 }

@@ -40,6 +40,7 @@ public class ForeverBrick extends LoopBeginBrick {
 		this.sprite = sprite;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
@@ -55,6 +56,7 @@ public class ForeverBrick extends LoopBeginBrick {
 		return new ForeverBrick(getSprite());
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
 			view = View.inflate(context, R.layout.brick_forever, null);
@@ -63,6 +65,7 @@ public class ForeverBrick extends LoopBeginBrick {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_forever, null);
 	}
@@ -70,5 +73,11 @@ public class ForeverBrick extends LoopBeginBrick {
 	@Override
 	public void initialize() {
 		loopEndBrick = new LoopEndlessBrick(sprite, this);
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
 	}
 }

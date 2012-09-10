@@ -87,4 +87,10 @@ public class WhenStartedBrick extends ScriptBrick {
 
 		return script;
 	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
+	}
 }

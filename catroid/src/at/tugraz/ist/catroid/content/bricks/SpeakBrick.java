@@ -79,7 +79,8 @@ public class SpeakBrick implements Brick {
 		activeSpeakBricks.put(utteranceId, this);
 
 		HashMap<String, String> speakParameter = new HashMap<String, String>();
-		speakParameter.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceId);
+		speakParameter.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,
+				utteranceId);
 
 		long time = System.currentTimeMillis();
 		PreStageActivity.textToSpeech(getText(), listener, speakParameter);
@@ -102,11 +103,14 @@ public class SpeakBrick implements Brick {
 	}
 
 	@Override
-	public View getView(final Context context, int brickId, final BaseAdapter adapter) {
+	public View getView(final Context context, int brickId,
+			final BaseAdapter adapter) {
 		view = View.inflate(context, R.layout.brick_speak, null);
 
-		TextView textHolder = (TextView) view.findViewById(R.id.brick_speak_text_view);
-		EditText editText = (EditText) view.findViewById(R.id.brick_speak_edit_text);
+		TextView textHolder = (TextView) view
+				.findViewById(R.id.brick_speak_text_view);
+		EditText editText = (EditText) view
+				.findViewById(R.id.brick_speak_edit_text);
 		editText.setText(text);
 
 		textHolder.setVisibility(View.GONE);
@@ -117,22 +121,23 @@ public class SpeakBrick implements Brick {
 			@Override
 			public void onClick(View v) {
 				ScriptTabActivity activity = (ScriptTabActivity) context;
-				
+
 				BrickTextDialog editDialog = new BrickTextDialog() {
 					@Override
 					protected void initialize() {
 						input.setText(text);
 						input.setSelectAllOnFocus(true);
 					}
-					
+
 					@Override
 					protected boolean handleOkButton() {
 						text = (input.getText().toString()).trim();
 						return true;
 					}
 				};
-				
-				editDialog.show(activity.getSupportFragmentManager(), "dialog_speak_brick");
+
+				editDialog.show(activity.getSupportFragmentManager(),
+						"dialog_speak_brick");
 			}
 		});
 		return view;
@@ -146,5 +151,11 @@ public class SpeakBrick implements Brick {
 	@Override
 	public Brick clone() {
 		return new SpeakBrick(this.sprite, this.text);
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
 	}
 }

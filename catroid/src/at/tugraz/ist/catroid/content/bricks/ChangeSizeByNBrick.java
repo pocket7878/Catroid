@@ -47,10 +47,12 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 		this.size = size;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		float newSize = sprite.costume.getSize() + ((float) size / 100f);
 		if (newSize < 0f) {
@@ -59,16 +61,20 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 		sprite.costume.setSize(newSize);
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		view = View.inflate(context, R.layout.brick_change_size_by_n, null);
 
-		TextView text = (TextView) view.findViewById(R.id.brick_change_size_by_text_view);
-		EditText edit = (EditText) view.findViewById(R.id.brick_change_size_by_edit_text);
+		TextView text = (TextView) view
+				.findViewById(R.id.brick_change_size_by_text_view);
+		EditText edit = (EditText) view
+				.findViewById(R.id.brick_change_size_by_edit_text);
 		edit.setText(String.valueOf(size));
 
 		text.setVisibility(View.GONE);
@@ -79,6 +85,7 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_change_size_by_n, null);
 	}
@@ -88,30 +95,41 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 		return new ChangeSizeByNBrick(getSprite(), size);
 	}
 
+	@Override
 	public void onClick(View view) {
 		ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
-		
+
 		BrickTextDialog editDialog = new BrickTextDialog() {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(size));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
+				input.setInputType(InputType.TYPE_CLASS_NUMBER
+						| InputType.TYPE_NUMBER_FLAG_DECIMAL
 						| InputType.TYPE_NUMBER_FLAG_SIGNED);
 				input.setSelectAllOnFocus(true);
 			}
-			
+
 			@Override
 			protected boolean handleOkButton() {
 				try {
 					size = Double.parseDouble(input.getText().toString());
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(),
+							R.string.error_no_number_entered,
+							Toast.LENGTH_SHORT).show();
 				}
-				
+
 				return true;
 			}
 		};
-		
-		editDialog.show(activity.getSupportFragmentManager(), "dialog_change_size_by_n_brick");
+
+		editDialog.show(activity.getSupportFragmentManager(),
+				"dialog_change_size_by_n_brick");
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
 	}
 }
