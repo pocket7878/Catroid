@@ -143,7 +143,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		UiTestUtils.clearAllUtilTestProjects();
 
 		//Download replaces project. Name and description should be testproject2 and testdescription2
-		downloadProjectAndReplace(newTestProject);
+		downloadProjectAndReplace(newTestProject, false);
 		Project downloadedProject = StorageHandler.getInstance().loadProject(newTestProject);
 
 		String serverProjectName = downloadedProject.getName();
@@ -185,7 +185,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		UiTestUtils.clearAllUtilTestProjects();
 
 		//Download replaces project. Name and description should be testproject1 and testdescription2
-		downloadProjectAndReplace(projectName);
+		downloadProjectAndReplace(projectName, false);
 		Project downloadedProject = StorageHandler.getInstance().loadProject(projectName);
 
 		String serverProjectName = downloadedProject.getName();
@@ -198,28 +198,43 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 	public void testDownloadWithOrientationChange() throws Throwable {
 		setServerURLToTestUrl();
 
-		String projectName = testProject + 5;
-		createTestProject(projectName);
-		//Add a sufficient number of media files so that the project is big enough (~ 1MB) for download-testing
+		String projectName = UiTestUtils.DEFAULT_TEST_PROJECT_NAME;
+		UiTestUtils.createTestProject();
+
+		//Adds a sufficient number of media files so that the project is big enough (~ 1MB) for download-testing
 		int numberMediaFiles = 16;
-		ArrayList<SoundInfo> soundInfoList;
-		for (int start = 0; start < numberMediaFiles; start++) {
-			UiTestUtils.createTestMediaFile(Constants.DEFAULT_ROOT + "/" + projectName + "/"
-					+ Constants.SOUND_DIRECTORY + "/" + "longsound" + Integer.toString(start) + ".mp3",
-					LONG_TEST_SOUND, getInstrumentation().getContext());
+		String soundName = "testSound";
 
+		ArrayList<SoundInfo> soundInfoList = ProjectManager.INSTANCE.getCurrentSprite().getSoundList();
+		for (int number = 0; number < numberMediaFiles; number++) {
+			File soundFile = UiTestUtils.saveFileToProject(projectName,
+					"longsound" + Integer.toString(number) + ".mp3", LONG_TEST_SOUND,
+					getInstrumentation().getContext(), UiTestUtils.FileTypes.SOUND);
+			SoundInfo soundInfo = new SoundInfo();
+			soundInfo.setSoundFileName(soundFile.getName());
+			soundInfo.setTitle(soundName + Integer.toString(number));
+			soundInfoList.add(soundInfo);
+			ProjectManager.INSTANCE.getFileChecksumContainer().addChecksum(soundInfo.getChecksum(),
+					soundInfo.getAbsolutePath());
 		}
+		ProjectManager.INSTANCE.saveProject();
+		Project newProject = StorageHandler.getInstance().loadProject(projectName);
+		ProjectManager.INSTANCE.setProject(newProject);
 
-		//SEE soundfragementtest how to setup and save sounds correctly!!
+		UiTestUtils.createValidUser(getActivity());
+		uploadProject(projectName, "");
+		solo.waitForDialogToClose(30000);
 
-		//Project uploadProject = StorageHandler.getInstance().loadProject(newTestProject);
-		//ProjectManager.INSTANCE.setProject(uploadProject);
-		//ProjectManager.INSTANCE.saveProject();
-		//SoundManager.getInstance().playSoundFile(
-		//		Constants.DEFAULT_ROOT + "/" + projectName + "/" + Constants.SOUND_DIRECTORY + "/" + "longsound" + 1
-		//			+ ".mp3");
+		Project uploadProject = StorageHandler.getInstance().loadProject(projectName);
+		String DeserializedProjectName = uploadProject.getName();
+		assertTrue("Project was successfully uploaded", DeserializedProjectName.equalsIgnoreCase(projectName));
+		UiTestUtils.clearAllUtilTestProjects();
 
-		solo.sleep(10000);
+		downloadProjectAndReplace(projectName, true);
+		solo.waitForDialogToClose(30000);
+		Project downloadedProject = StorageHandler.getInstance().loadProject(projectName);
+		String serverProjectName = downloadedProject.getName();
+		assertTrue("Project was successfully downloaded", serverProjectName.equalsIgnoreCase(projectName));
 	}
 
 	private void createTestProject(String projectToCreate) {
@@ -281,7 +296,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		}
 	}
 
-	private void downloadProjectAndReplace(String projectName) {
+	private void downloadProjectAndReplace(String projectName, boolean testChangeOrientation) {
 		String downloadUrl = TEST_FILE_DOWNLOAD_URL + serverProjectId + Constants.CATROID_EXTENTION;
 		downloadUrl += "?fname=" + projectName;
 
@@ -289,8 +304,16 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		intent.setAction(Intent.ACTION_VIEW);
 		intent.setData(Uri.parse(downloadUrl));
 		launchActivityWithIntent("at.tugraz.ist.catroid", MainMenuActivity.class, intent);
+		if (testChangeOrientation) {
+			solo.setActivityOrientation(Solo.LANDSCAPE);
+			solo.setActivityOrientation(Solo.PORTRAIT);
+		}
 
 		boolean waitResult = solo.waitForActivity("MainMenuActivity", 10000);
+		if (testChangeOrientation) {
+			solo.setActivityOrientation(Solo.LANDSCAPE);
+			solo.setActivityOrientation(Solo.PORTRAIT);
+		}
 		assertTrue("Download takes too long.", waitResult);
 		assertTrue("Testproject not loaded.", solo.searchText(projectName));
 		assertTrue("OverwriteRenameDialog not showed.",
