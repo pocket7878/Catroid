@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.CostumeEvent.Type;
 
@@ -92,7 +93,7 @@ public class Costume extends Image {
 		// We use Y-down, libgdx Y-up. This is the fix for accurate y-axis detection
 		y = height - y;
 
-		// XXX: < width & < height
+		// XXX: Should be < width & < height
 		if (x >= 0 && x <= width && y >= 0 && y <= height) {
 			if (currentAlphaPixmap != null && ((currentAlphaPixmap.getPixel((int) x, (int) y) & 0x000000FF) > 10)) {
 				sprite.startWhenScripts("Tapped");
@@ -166,7 +167,7 @@ public class Costume extends Image {
 				this.setRegion(new TextureRegion(texture));
 
 				// TODO: Is this really the best place to recognize a costume change?
-				//				ProjectManager.getInstance().getCurrentProject().getPhysicWorld().changeCostume(sprite);
+				ProjectManager.getInstance().getCurrentProject().getPhysicWorld().changeCostume(sprite);
 			}
 		}
 
