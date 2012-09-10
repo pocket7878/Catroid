@@ -33,6 +33,8 @@ import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperHelper;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class SetCostumeBrick implements Brick {
@@ -144,5 +146,20 @@ public class SetCostumeBrick implements Brick {
 		}
 
 		return clonedBrick;
+	}
+
+	@Override
+	public void executeLiveWallpaper() {
+
+		WallpaperHelper wallpaperHelper = WallpaperHelper.getInstance();
+		WallpaperCostume wallpaperCostume = wallpaperHelper.getWallpaperCostume(sprite);
+
+		if (wallpaperCostume != null) {
+			wallpaperCostume.setCostume(costumeData);
+		} else {
+			new WallpaperCostume(sprite, costumeData);
+
+		}
+
 	}
 }

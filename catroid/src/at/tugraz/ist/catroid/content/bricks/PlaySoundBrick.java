@@ -125,4 +125,10 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 	}
+
+	@Override
+	public void executeLiveWallpaper() {
+		// TODO Auto-generated method stub
+
+	}
 }

@@ -50,6 +50,8 @@ public class CostumeData implements Serializable {
 	private transient Pixmap originalPixmap = null;
 	private transient TextureRegion region = null;
 
+	private Bitmap imageBitmap;
+
 	public TextureRegion getTextureRegion() {
 		if (region == null) {
 			region = new TextureRegion(new Texture(getPixmap()));
@@ -158,6 +160,14 @@ public class CostumeData implements Serializable {
 		height = options.outHeight;
 
 		return new int[] { width, height };
+	}
+
+	public Bitmap getImageBitmap() {
+		if (imageBitmap == null) {
+			imageBitmap = BitmapFactory.decodeFile(getPath());
+		}
+		return imageBitmap;
+
 	}
 
 	@Override
