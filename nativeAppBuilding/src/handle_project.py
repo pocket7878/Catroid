@@ -43,9 +43,48 @@ python handle_project.py test.zip ~/hg/catroid 42 .
 PROJECTCODE_NAME = 'projectcode.xml'
 ANT_BUILD_TARGET = 'debug'
 
+class ConversionMode:
+    LIVE_WALLPAPER = 2
+    NATIVE_APP = 2
+
 class ConversionConfig:
     """Class to represent the configuration options for this script"""
-    working_dir = mkdtemp()
+    def __init__(self, args):
+        self._working_dir = mkdtemp()
+        self._path_to_project_archive, archive_name = os.path.split(args.project)
+        self._verbose = args.verbose
+        self._quiet = args.quiet
+        self._path_to_catroid = args.catrobatsrc
+        self._path_to_lib = args.lib_src
+        self._project_id = args.project_id
+        self._output_folder = args.output_dir
+        if (args.native_app == True):
+            self._conversion_mode = ConversionMode.NATIVE_APP
+        elif (args.live_wallpaper == True):
+            self._conversion_mode = ConversionMode.LIVE_WALLPAPER
+        else:
+            print "Error, invalid mode in config"
+            sys.exit()
+    def getMode():
+        return True
+    def getProjectFilename():
+        return os.path.splitext(self._archive_name)[0]
+    def getProjectId():
+        return self._project_id
+    def isVerbose():
+        return self._verbose
+    def isQuiet():
+        return self._quiet
+    def getWorkingDir():
+        return self._working_dir
+    def getPathToProject():
+        return self._path_to_project
+    def getFullProjectPath():
+        return os.path.join(self._path_to_project, self._archive_name)
+    def getArchiveName():
+        return self._archive_name
+    def getPathToOutputDirectory():
+        return self._output_dir
 
 
 def unzip_project(archive_name, working_dir):
@@ -177,6 +216,20 @@ def copyApkToOutputFolder(working_dir, project_filename, output_dir):
         if filename.endswith('.apk'):
             shutil.move(os.path.join(working_dir, 'catroid', 'bin', filename),\
                     os.path.join(output_dir, project_filename + '.apk'))
+
+def printConfig(config_to_print):
+    print "Starting Native App Converter"
+    print "------------------------------"
+    print "Script starting with following params:"
+    print "Path to project: ", config_to_print.getFullProjectPath()
+    print "Project filename: ", config_to_print.getProjectFilename()
+    print "Conversion Mode: ", config_to_print.getMode() 
+    print "Project ID: ", config_to_print.getProjectId()
+    print "Output folder: ", config_to_print.getOutputDirectory()
+    print "------------------------------"
+
+
+
 def main():
     parser = argparse.ArgumentParser(description="Catrobat NativeApp Converter",
             add_help=False)
@@ -205,16 +258,10 @@ def main():
     project_id = args.project_id
     output_folder = args.output_dir
 
-    if verbose == True:
-        print "Starting Native App Converter"
-        print "------------------------------"
-        print "Script starting with following params:"
-        print "Path to project: ", path_to_project_archive
-        print "Project filename: ", project_filename
-        print "Mode: Verbose"
-        print "Project ID: ", project_id
-        print "Output folder: ", output_folder
-        print "------------------------------"
+    config = ConversionConfig(args)
+
+    if config.isVerbose == True:
+        printconfig(config)
 
 
     unzip_project(os.path.join(path_to_project_archive, archive_name), working_dir)
