@@ -22,13 +22,10 @@
  */
 package at.tugraz.ist.catroid.content;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.CostumeData;
-import at.tugraz.ist.catroid.content.CostumeEvent.Type;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -37,6 +34,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+//import at.tugraz.ist.catroid.content.CostumeEvent.Type;
 
 public class Costume extends Image {
 	protected Semaphore xYWidthHeightLock = new Semaphore(1);
@@ -55,7 +53,7 @@ public class Costume extends Image {
 	public boolean show;
 	public int zPosition;
 
-	private final List<CostumeListener> costumeListeners = new ArrayList<CostumeListener>();
+	//	private final List<CostumeListener> costumeListeners = new ArrayList<CostumeListener>();
 
 	public Costume(Sprite sprite) {
 		this.sprite = sprite;
@@ -171,7 +169,7 @@ public class Costume extends Image {
 			}
 		}
 
-		notifyListeners(new CostumeEvent(Type.COSTUMECHANGED, this));
+		//		notifyListeners(new CostumeEvent(Type.COSTUMECHANGED, this));
 
 		imageChanged = false;
 		imageLock.release();
@@ -380,26 +378,26 @@ public class Costume extends Image {
 		return costumeData;
 	}
 
-	private void notifyListeners(CostumeEvent event) {
-		synchronized (costumeListeners) {
-			for (CostumeListener costumeListener : costumeListeners) {
-				costumeListener.costumeChanged(event);
-			}
-		}
-	}
-
-	public void addListener(CostumeListener listener) {
-		synchronized (costumeListeners) {
-			if (costumeListeners.contains(listener)) {
-				return;
-			}
-			costumeListeners.add(listener);
-		}
-	}
-
-	public void removeListener(CostumeListener listener) {
-		synchronized (costumeListeners) {
-			costumeListeners.remove(listener);
-		}
-	}
+	//	private void notifyListeners(CostumeEvent event) {
+	//		synchronized (costumeListeners) {
+	//			for (CostumeListener costumeListener : costumeListeners) {
+	//				costumeListener.costumeChanged(event);
+	//			}
+	//		}
+	//	}
+	//
+	//	public void addListener(CostumeListener listener) {
+	//		synchronized (costumeListeners) {
+	//			if (costumeListeners.contains(listener)) {
+	//				return;
+	//			}
+	//			costumeListeners.add(listener);
+	//		}
+	//	}
+	//
+	//	public void removeListener(CostumeListener listener) {
+	//		synchronized (costumeListeners) {
+	//			costumeListeners.remove(listener);
+	//		}
+	//	}
 }
