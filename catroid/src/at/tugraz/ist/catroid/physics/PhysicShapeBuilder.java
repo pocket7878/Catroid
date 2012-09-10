@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import at.tugraz.ist.catroid.common.CostumeData;
-import at.tugraz.ist.catroid.content.Costume;
 
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
@@ -39,10 +38,7 @@ public class PhysicShapeBuilder {
 		shapes = new HashMap<CostumeData, Shape[]>();
 	}
 
-	public Shape[] createShape(Costume costume) {
-
-		CostumeData costumeData = costume.getCostumeData();
-
+	public Shape[] createShape(CostumeData costumeData) {
 		if (shapes.containsKey(costumeData)) {
 			return shapes.get(costumeData);
 		}

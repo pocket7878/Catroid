@@ -21,6 +21,7 @@ package at.tugraz.ist.catroid.physics;
 import java.io.Serializable;
 import java.util.Map.Entry;
 
+import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Costume;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -33,6 +34,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 
@@ -125,6 +127,8 @@ public class PhysicWorld implements Serializable {
 	}
 
 	public void changeCostume(Sprite sprite) {
-		objects.get(sprite).setShape(shapeBuilder.createShape(sprite.costume));
+		CostumeData costumeData = sprite.costume.getCostumeData();
+		Shape[] shapes = shapeBuilder.createShape(costumeData);
+		objects.get(sprite).setShape(shapes);
 	}
 }
