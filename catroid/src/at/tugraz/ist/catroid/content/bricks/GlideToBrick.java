@@ -35,6 +35,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.physics.PhysicObject;
+import at.tugraz.ist.catroid.physics.PhysicObject.Type;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -47,6 +49,7 @@ public class GlideToBrick implements Brick, OnClickListener {
 	private int yDestination;
 	private int durationInMilliSeconds;
 	private Sprite sprite;
+	private Type oldPhysicObjectType;
 
 	private transient View view;
 	private PhysicWorld physicWorld;
@@ -66,7 +69,7 @@ public class GlideToBrick implements Brick, OnClickListener {
 	}
 
 	@Override
-	public void execute() {
+	public synchronized void execute() {
 		/* That's the way how an action is made */
 		//		Action action = MoveBy.$(xDestination, yDestination, this.durationInMilliSeconds / 1000);
 		//		final CountDownLatch latch = new CountDownLatch(1);
@@ -80,6 +83,15 @@ public class GlideToBrick implements Brick, OnClickListener {
 		//			latch.await();
 		//		} catch (InterruptedException e) {
 		//		}
+		//		semaphore.acquireUninterruptibly();
+
+		PhysicObject physicObject = physicWorld.getPhysicObject(sprite);
+		oldPhysicObjectType = physicObject.getType();
+
+		physicObject.setVelocity(new Vector2());
+		physicObject.setRotationSpeed(0.0f);
+		physicObject.setType(Type.FIXED);
+
 		long startTime = System.currentTimeMillis();
 		int duration = durationInMilliSeconds;
 		while (duration > 0) {
@@ -123,8 +135,8 @@ public class GlideToBrick implements Brick, OnClickListener {
 				sprite.costume.setXYPosition(xDestination, yDestination);
 				sprite.costume.releaseXYWidthHeightLock();
 			}
-
 		}
+		physicObject.setType(oldPhysicObjectType);
 	}
 
 	private void updatePositions(int timePassed, int duration) {
@@ -135,8 +147,14 @@ public class GlideToBrick implements Brick, OnClickListener {
 		xPosition += ((float) timePassed / duration) * (xDestination - xPosition);
 		yPosition += ((float) timePassed / duration) * (yDestination - yPosition);
 
-		sprite.costume.setXYPosition(xPosition, yPosition);
-		sprite.costume.releaseXYWidthHeightLock();
+		if (physicWorld.isPhysicObject(sprite)) {
+			sprite.costume.releaseXYWidthHeightLock();
+			Vector2 newPos = new Vector2(xPosition, yPosition);
+			physicWorld.getPhysicObject(sprite).setXYPosition(PhysicWorldConverter.vecCatToBox2d(newPos));
+		} else {
+			sprite.costume.setXYPosition(xPosition, yPosition);
+			sprite.costume.releaseXYWidthHeightLock();
+		}
 	}
 
 	@Override

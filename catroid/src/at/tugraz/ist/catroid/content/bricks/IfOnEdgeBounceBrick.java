@@ -53,61 +53,66 @@ public class IfOnEdgeBounceBrick implements Brick {
 
 	@Override
 	public void execute() {
-		float size = sprite.costume.getSize();
+		if (physicWorld.isPhysicObject(sprite)) {
+			physicWorld.getPhysicObject(sprite).setIfOnEdgeBounce(true);
+		} else {
 
-		sprite.costume.aquireXYWidthHeightLock();
-		float width = sprite.costume.getWidth() * size;
-		float height = sprite.costume.getHeight() * size;
-		int xPosition = (int) sprite.costume.getXPosition();
-		int yPosition = (int) sprite.costume.getYPosition();
-		sprite.costume.releaseXYWidthHeightLock();
+			float size = sprite.costume.getSize();
 
-		int virtualScreenWidth = ProjectManager.getInstance().getCurrentProject().virtualScreenWidth / 2;
-		int virtualScreenHeight = ProjectManager.getInstance().getCurrentProject().virtualScreenHeight / 2;
-		float rotationResult = -sprite.costume.getRotation() + 90f;
+			sprite.costume.aquireXYWidthHeightLock();
+			float width = sprite.costume.getWidth() * size;
+			float height = sprite.costume.getHeight() * size;
+			int xPosition = (int) sprite.costume.getXPosition();
+			int yPosition = (int) sprite.costume.getYPosition();
+			sprite.costume.releaseXYWidthHeightLock();
 
-		if (xPosition < -virtualScreenWidth + width / 2) {
+			int virtualScreenWidth = ProjectManager.getInstance().getCurrentProject().virtualScreenWidth / 2;
+			int virtualScreenHeight = ProjectManager.getInstance().getCurrentProject().virtualScreenHeight / 2;
+			float rotationResult = -sprite.costume.getRotation() + 90f;
 
-			rotationResult = Math.abs(rotationResult);
-			xPosition = -virtualScreenWidth + (int) (width / 2);
+			if (xPosition < -virtualScreenWidth + width / 2) {
 
-		} else if (xPosition > virtualScreenWidth - width / 2) {
+				rotationResult = Math.abs(rotationResult);
+				xPosition = -virtualScreenWidth + (int) (width / 2);
 
-			rotationResult = -Math.abs(rotationResult);
+			} else if (xPosition > virtualScreenWidth - width / 2) {
 
-			xPosition = virtualScreenWidth - (int) (width / 2);
-		}
+				rotationResult = -Math.abs(rotationResult);
 
-		if (yPosition > virtualScreenHeight - height / 2) {
-
-			if (Math.abs(rotationResult) < 90f) {
-				if (rotationResult < 0f) {
-					rotationResult = -180f - rotationResult;
-				} else {
-					rotationResult = 180f - rotationResult;
-				}
+				xPosition = virtualScreenWidth - (int) (width / 2);
 			}
 
-			yPosition = virtualScreenHeight - (int) (height / 2);
+			if (yPosition > virtualScreenHeight - height / 2) {
 
-		} else if (yPosition < -virtualScreenHeight + height / 2) {
-
-			if (Math.abs(rotationResult) > 90f) {
-				if (rotationResult < 0f) {
-					rotationResult = -180f - rotationResult;
-				} else {
-					rotationResult = 180f - rotationResult;
+				if (Math.abs(rotationResult) < 90f) {
+					if (rotationResult < 0f) {
+						rotationResult = -180f - rotationResult;
+					} else {
+						rotationResult = 180f - rotationResult;
+					}
 				}
+
+				yPosition = virtualScreenHeight - (int) (height / 2);
+
+			} else if (yPosition < -virtualScreenHeight + height / 2) {
+
+				if (Math.abs(rotationResult) > 90f) {
+					if (rotationResult < 0f) {
+						rotationResult = -180f - rotationResult;
+					} else {
+						rotationResult = 180f - rotationResult;
+					}
+				}
+
+				yPosition = -virtualScreenHeight + (int) (height / 2);
 			}
 
-			yPosition = -virtualScreenHeight + (int) (height / 2);
+			sprite.costume.setRotation(-rotationResult + 90f);
+
+			sprite.costume.aquireXYWidthHeightLock();
+			sprite.costume.setXYPosition(xPosition, yPosition);
+			sprite.costume.releaseXYWidthHeightLock();
 		}
-
-		sprite.costume.setRotation(-rotationResult + 90f);
-
-		sprite.costume.aquireXYWidthHeightLock();
-		sprite.costume.setXYPosition(xPosition, yPosition);
-		sprite.costume.releaseXYWidthHeightLock();
 	}
 
 	@Override

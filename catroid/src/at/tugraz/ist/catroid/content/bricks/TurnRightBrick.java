@@ -65,7 +65,8 @@ public class TurnRightBrick implements Brick, OnClickListener {
 	@Override
 	public void execute() {
 		if (physicWorld.isPhysicObject(sprite)) {
-			physicWorld.getPhysicObject(sprite).setAngle(PhysicWorldConverter.angleCatToBox2d((float) degrees));
+			physicWorld.getPhysicObject(sprite).setAngle(
+					PhysicWorldConverter.angleCatToBox2d((sprite.costume.getRotation() % 360) - (float) degrees));
 		} else {
 			sprite.costume.setRotation((sprite.costume.getRotation() % 360) - (float) degrees);
 		}

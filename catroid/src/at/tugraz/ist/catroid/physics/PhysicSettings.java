@@ -38,8 +38,11 @@ public class PhysicSettings {
 		public final static Vector2 DEFAULT_GRAVITY = new Vector2(0, -10);
 		public final static boolean IGNORE_SLEEPING_OBJECTS = false;
 
-		public final static boolean SURROUNDING_BOX = true;
-		public final static int SURROUNDING_BOX_FRAME_SIZE = 1;
+		public static class BoundaryBox {
+			//			public final static boolean DEBUGFLAG = true;
+			public final static int FRAME_SIZE = 1;
+			public final static short COLLISION_MASK = 0x0002;
+		}
 	}
 
 	public static class Object {
@@ -50,5 +53,6 @@ public class PhysicSettings {
 		public final static float MIN_MASS = 0.000001f;
 		public final static float DEFAULT_ANGULAR_VELOCITY = 15.0f;
 		public final static Vector2 DEFAULT_VELOCITY = new Vector2(0, 0);
+		public final static short COLLISION_MASK = 0x0004;
 	}
 }

@@ -182,6 +182,11 @@ public class PhysicObjectTest extends AndroidTestCase {
 				physicObject.setXYPosition(position.x, position.y);
 				assertEquals(position, getBody(physicObject).getPosition());
 			}
+
+			for (Vector2 position : positions) {
+				physicObject.setXYPosition(position);
+				assertEquals(position, getBody(physicObject).getPosition());
+			}
 		}
 	}
 
@@ -397,7 +402,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 		PhysicObject physicObject = objects.get(new Sprite("TestSprite"));
 
 		if (type != null) {
-			physicObject.setType(type);
+			physicObject.setType(type).release();
 		}
 
 		if (shape != null) {

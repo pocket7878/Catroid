@@ -24,6 +24,7 @@ import java.util.List;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
@@ -39,6 +40,7 @@ public class PhysicObject {
 	private Shape[] shapes;
 	private Type type;
 	private float mass;
+	private boolean ifOnEdgeBounce = false;
 
 	public PhysicObject(Body body) {
 		this.body = body;
@@ -47,6 +49,8 @@ public class PhysicObject {
 		fixtureDef.density = PhysicSettings.Object.DEFAULT_DENSITY;
 		fixtureDef.friction = PhysicSettings.Object.DEFAULT_FRICTION;
 		fixtureDef.restitution = PhysicSettings.Object.DEFAULT_RESTITUTION;
+		fixtureDef.filter.categoryBits = PhysicSettings.Object.COLLISION_MASK;
+		fixtureDef.filter.maskBits = PhysicSettings.Object.COLLISION_MASK;
 
 		setType(Type.NONE);
 	}
@@ -71,6 +75,30 @@ public class PhysicObject {
 		}
 
 		setMass(mass);
+	}
+
+	public void setIfOnEdgeBounce(boolean bounce) {
+		if (ifOnEdgeBounce == bounce) {
+			return;
+		}
+		ifOnEdgeBounce = bounce;
+
+		short bitMask;
+		if (bounce) {
+			bitMask = PhysicSettings.World.BoundaryBox.COLLISION_MASK | PhysicSettings.Object.COLLISION_MASK;
+		} else {
+			bitMask = PhysicSettings.Object.COLLISION_MASK;
+		}
+
+		for (Fixture fixture : body.getFixtureList()) {
+			Filter filter = fixture.getFilterData();
+			filter.maskBits = bitMask;
+			fixture.setFilterData(filter);
+		}
+	}
+
+	public Type getType() {
+		return type;
 	}
 
 	public void setType(Type type) {

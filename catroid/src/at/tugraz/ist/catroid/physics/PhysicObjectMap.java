@@ -39,7 +39,9 @@ public class PhysicObjectMap implements Iterable<Entry<Sprite, PhysicObject>> {
 	public PhysicObject get(Sprite sprite) {
 		PhysicObject physicObject = objects.get(sprite);
 		if (physicObject == null) {
-			physicObject = new PhysicObject(world.createBody(new BodyDef()));
+			BodyDef bodyDef = new BodyDef();
+
+			physicObject = new PhysicObject(world.createBody(bodyDef));
 			objects.put(sprite, physicObject);
 		}
 

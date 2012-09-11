@@ -54,27 +54,25 @@ public class PhysicWorld implements Serializable {
 	public PhysicWorld() {
 		objects = new PhysicObjectMap(world);
 		shapeBuilder = new PhysicShapeBuilder();
-		if (PhysicSettings.World.SURROUNDING_BOX) {
-			createSurroundingBox();
-		}
+		createBoundaryBox();
 	}
 
-	private void createSurroundingBox() {
+	private void createBoundaryBox() {
 		float boxWidth = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_WIDTH);
 		float boxHeight = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_HEIGHT);
-		float boxElementSize = PhysicSettings.World.SURROUNDING_BOX_FRAME_SIZE;
+		float boxElementSize = PhysicSettings.World.BoundaryBox.FRAME_SIZE;
 
 		// Top Element
-		createSurroundingBoxElement(0.0f, boxHeight / 2 + boxElementSize, boxWidth, boxElementSize * 2);
+		createBoundaryBoxElement(0.0f, boxHeight / 2 + boxElementSize, boxWidth, boxElementSize * 2);
 		// Bottom Element
-		createSurroundingBoxElement(0.0f, -boxHeight / 2 - boxElementSize, boxWidth, boxElementSize * 2);
+		createBoundaryBoxElement(0.0f, -boxHeight / 2 - boxElementSize, boxWidth, boxElementSize * 2);
 		// Left Element
-		createSurroundingBoxElement(-boxWidth / 2 - boxElementSize, 0.0f, boxElementSize * 2, boxHeight);
+		createBoundaryBoxElement(-boxWidth / 2 - boxElementSize, 0.0f, boxElementSize * 2, boxHeight);
 		// Right Element
-		createSurroundingBoxElement(boxWidth / 2 + boxElementSize, 0.0f, boxElementSize * 2, boxHeight);
+		createBoundaryBoxElement(boxWidth / 2 + boxElementSize, 0.0f, boxElementSize * 2, boxHeight);
 	}
 
-	private void createSurroundingBoxElement(float x, float y, float width, float height) {
+	private void createBoundaryBoxElement(float x, float y, float width, float height) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
 
@@ -83,6 +81,8 @@ public class PhysicWorld implements Serializable {
 
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
+		fixtureDef.filter.categoryBits = PhysicSettings.World.BoundaryBox.COLLISION_MASK;
+		fixtureDef.filter.maskBits = PhysicSettings.Object.COLLISION_MASK;
 
 		Body body = world.createBody(bodyDef);
 		body.createFixture(fixtureDef);
@@ -99,6 +99,7 @@ public class PhysicWorld implements Serializable {
 		Costume costume;
 		for (Entry<Sprite, PhysicObject> entry : objects) {
 			physicObject = entry.getValue();
+			physicObject.setIfOnEdgeBounce(false);
 			Vector2 position = PhysicWorldConverter.vecBox2dToCat(physicObject.getPosition());
 			float angle = PhysicWorldConverter.angleBox2dToCat(physicObject.getAngle());
 
