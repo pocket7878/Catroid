@@ -27,6 +27,7 @@ import java.io.File;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnShowListener;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -47,6 +48,7 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
+import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.stage.StageListener;
 import at.tugraz.ist.catroid.transfers.ProjectUploadTask;
 import at.tugraz.ist.catroid.utils.UtilFile;
@@ -208,11 +210,14 @@ public class UploadProjectDialog extends DialogFragment {
 		}
 
 		if (!hasThumbnail) {
-			AddProjectScreenshot addProjectScreenshot = new AddProjectScreenshot();
-			addProjectScreenshot.show(getFragmentManager(), AddProjectScreenshot.DIALOG_FRAGMENT_TAG);
+			//AddProjectScreenshot addProjectScreenshot = new AddProjectScreenshot();
+			//addProjectScreenshot.show(getFragmentManager(), AddProjectScreenshot.DIALOG_FRAGMENT_TAG);
 
-			Utils.displayErrorMessageFragment(getString(R.string.upload_project_no_thumbnail_error),
-					getFragmentManager());
+			Intent takeScreenshotIntent = new Intent(getActivity(), StageActivity.class);
+			takeScreenshotIntent.putExtra("takeScreenshotForUpload", true);
+			startActivity(takeScreenshotIntent);
+			//Utils.displayErrorMessageFragment(getString(R.string.upload_project_no_thumbnail_error),
+			//	getFragmentManager());
 			return;
 		}
 

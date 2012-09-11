@@ -25,7 +25,9 @@ package at.tugraz.ist.catroid.ui.dialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 
@@ -53,5 +55,14 @@ public class TakeScreenshotInformationDialog extends Dialog {
 
 		TextView InformationTextView = (TextView) findViewById(R.id.dialog_take_screenshot_information);
 		InformationTextView.setText(context.getString(R.string.take_screenshot_information));
+
+		Button okButton = (Button) findViewById(R.id.dialog_take_screenshot_ok_button);
+		okButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				dismiss();
+			}
+		});
 	}
 }
