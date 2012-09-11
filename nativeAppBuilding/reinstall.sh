@@ -34,11 +34,13 @@ adb shell rm -r /sdcard/catroid > /dev/null
 
 if [ $# -eq 1 ]; then
   echo "Converting"
-  python2 $NA_CONVERTER $1 $CATROID_SRC $LIB_SRC 1 $TMP_DIR
+  python2 $NA_CONVERTER -n -v $1 $CATROID_SRC $LIB_SRC 1 $TMP_DIR
   
   if $INSTALL_APK ; then
     echo "Installing specified app"
     adb install tmp/$APK_FILENAME 
+    echo "Removing generated apk file"
+    rm tmp/$APK_FILENAME
   fi
 fi
 

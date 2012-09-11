@@ -1,5 +1,5 @@
 '''
-Catroid: An on-device graphical programming language for Android devices
+Catrobat: An on-device graphical programming language for Android devices
 Copyright (C) 2010-2012 The Catrobat Team
 (<http://code.google.com/p/catroid/wiki/Credits>)
 
@@ -30,61 +30,59 @@ import glob
 import subprocess
 from tempfile import mkdtemp
 
-'''
-Automatically build and sign Catroid application.
-
-python handle_project.py <path_to_project> <path_to_catroid> <project_id> <output_folder>
-
-Example:
-python handle_project.py test.zip ~/hg/catroid 42 .
-'''
-
 #Constants
 PROJECTCODE_NAME = 'projectcode.xml'
 ANT_BUILD_TARGET = 'debug'
 
 class ConversionMode:
-    LIVE_WALLPAPER = 2
+    LIVE_WALLPAPER = 1
     NATIVE_APP = 2
 
 class ConversionConfig:
     """Class to represent the configuration options for this script"""
     def __init__(self, args):
         self._working_dir = mkdtemp()
-        self._path_to_project_archive, archive_name = os.path.split(args.project)
+        self._path_to_project_archive, self._archive_name = os.path.split(args.project)
         self._verbose = args.verbose
-        self._quiet = args.quiet
         self._path_to_catroid = args.catrobatsrc
         self._path_to_lib = args.lib_src
         self._project_id = args.project_id
-        self._output_folder = args.output_dir
+        self._output_dir = args.output_dir
         if (args.native_app == True):
             self._conversion_mode = ConversionMode.NATIVE_APP
         elif (args.live_wallpaper == True):
             self._conversion_mode = ConversionMode.LIVE_WALLPAPER
         else:
-            print "Error, invalid mode in config"
+            print "Error, invalid mode in config, this mustn't happen"
             sys.exit()
-    def getMode():
-        return True
-    def getProjectFilename():
+    def getConversionMode(self):
+        return self._conversion_mode
+    def setPermissions(self, permissions):
+        self._permissions = permissions
+    def getPermissions(self):
+        return self._permissions
+    def getLibPath(self):
+        return self._path_to_lib
+    def getPathToCatroidSrc(self):
+        return self._path_to_catroid
+    def getProjectFilename(self):
         return os.path.splitext(self._archive_name)[0]
-    def getProjectId():
+    def getProjectId(self):
         return self._project_id
-    def isVerbose():
+    def isVerbose(self):
         return self._verbose
-    def isQuiet():
-        return self._quiet
-    def getWorkingDir():
+    def getWorkingDir(self):
         return self._working_dir
-    def getPathToProject():
+    def getPathToProject(self):
         return self._path_to_project
-    def getFullProjectPath():
-        return os.path.join(self._path_to_project, self._archive_name)
-    def getArchiveName():
+    def getFullProjectPath(self):
+        return os.path.join(self._path_to_project_archive, self._archive_name)
+    def getArchiveName(self):
         return self._archive_name
-    def getPathToOutputDirectory():
+    def getPathToOutputDirectory(self):
         return self._output_dir
+    def getPathToProjectCode(self):
+        return os.path.join(self.getWorkingDir(), PROJECTCODE_NAME)
 
 
 def unzip_project(archive_name, working_dir):
@@ -102,12 +100,6 @@ def verify_checksum(path_to_file):
 
 def rename_file_in_project(old_name, new_name, project_file_path, resource_type):
     doc = xml.dom.minidom.parse(project_file_path)
-
-    # TODO: Check if filename of sound files can include project name
-    #OLD: if resource_type == 'images':
-    #OLD:     tag_name = 'costumeFileName'
-    #OLD: elif resource_type == 'sounds':
-    #OLD:     tag_name = 'fileName'
 
     tag_name = 'fileName'
 
@@ -185,12 +177,12 @@ def rename_package(path_to_project, new_package):
                         line = line.replace(catroid_package, catroid_package + '.' + new_package)
                     sys.stdout.write(line)
 
-def edit_manifest(path_to_project, permissions):
-    path_to_manifest = os.path.join(path_to_project, 'catroid', 'AndroidManifest.xml')
+def editManifest(config):
+    path_to_manifest = os.path.join(config.getWorkingDir(), 'catroid', 'AndroidManifest.xml')
     doc = xml.dom.minidom.parse(path_to_manifest)
 
     for node in doc.getElementsByTagName('uses-permission'):
-        if not node.attributes.item(0).value in permissions:
+        if not node.attributes.item(0).value in config.getPermissions(): 
             node.parentNode.removeChild(node)
 
     for node in doc.getElementsByTagName('activity'):
@@ -203,13 +195,18 @@ def edit_manifest(path_to_project, permissions):
     doc.writexml(f, encoding='utf-8')
     f.close()
     
-def getNecessaryPermissions(path_to_projectcode):
+def acquireNecessaryPermissions(config):
    permissions = []
-   projectcode = codecs.open(path_to_projectcode)
+   projectcode = codecs.open(config.getPathToProjectCode())
    read = projectcode.read()
    if 'NXTMotor' in read:
        permissions.append('android.permission.BLUETOOTH')
-   return permissions
+   if config.getConversionMode() == ConversionMode.LIVE_WALLPAPER:
+       permissions.append('android.permissions.STATE') #TODO: correct that
+
+   config.setPermissions(permissions)
+   if config.isVerbose():
+       print "Neccessary permissions: ", permissions
 
 def copyApkToOutputFolder(working_dir, project_filename, output_dir):
     for filename in os.listdir(os.path.join(working_dir, 'catroid', 'bin')):
@@ -223,19 +220,15 @@ def printConfig(config_to_print):
     print "Script starting with following params:"
     print "Path to project: ", config_to_print.getFullProjectPath()
     print "Project filename: ", config_to_print.getProjectFilename()
-    print "Conversion Mode: ", config_to_print.getMode() 
+    print "Conversion Mode: ", config_to_print.getConversionMode() 
     print "Project ID: ", config_to_print.getProjectId()
-    print "Output folder: ", config_to_print.getOutputDirectory()
+    print "Working directory: ", config_to_print.getWorkingDir()
+    print "Output folder: ", config_to_print.getPathToOutputDirectory()
     print "------------------------------"
 
-
-
 def main():
-    parser = argparse.ArgumentParser(description="Catrobat NativeApp Converter",
-            add_help=False)
-    msg_mode_group = parser.add_mutually_exclusive_group()
-    msg_mode_group.add_argument("-v", "--verbose", action="store_true")
-    msg_mode_group.add_argument("-q", "--quiet", action="store_true")
+    parser = argparse.ArgumentParser(description="Catrobat NativeApp Converter")
+    parser.add_argument("-v", "--verbose", action="store_true")
     convert_mode_group = parser.add_mutually_exclusive_group(required=True)
     convert_mode_group.add_argument("-n", "--native-app", action="store_true",
             help="Convert to native app")
@@ -248,59 +241,59 @@ def main():
     parser.add_argument('output_dir', help="path to output folder")
     args = parser.parse_args()
 
-    working_dir = mkdtemp()
-    path_to_project_archive, archive_name = os.path.split(args.project)
-    project_filename = os.path.splitext(archive_name)[0]
-    verbose = args.verbose
-    quiet = args.quiet
-    path_to_catroid = args.catrobatsrc
-    path_to_lib = args.lib_src
-    project_id = args.project_id
-    output_folder = args.output_dir
 
     config = ConversionConfig(args)
+    if config.isVerbose() == True:
+        printConfig(config)
 
-    if config.isVerbose == True:
-        printconfig(config)
 
-
-    unzip_project(os.path.join(path_to_project_archive, archive_name), working_dir)
-    project_name = get_project_name(os.path.join(working_dir, PROJECTCODE_NAME))
-    permissions = getNecessaryPermissions(os.path.join(working_dir, PROJECTCODE_NAME))
-    rename_resources(working_dir, project_filename)
-    copy_project(path_to_catroid, working_dir)
-    shutil.copytree(path_to_lib, os.path.join(working_dir, 'libraryProjects'))
+    unzip_project(config.getFullProjectPath(), config.getWorkingDir())
+    project_name = get_project_name(config.getPathToProjectCode())
+    acquireNecessaryPermissions(config)
+    rename_resources(config.getWorkingDir(), config.getProjectFilename())
+    copy_project(config.getPathToCatroidSrc(), config.getWorkingDir())
+    shutil.copytree(config.getLibPath(), os.path.join(config.getWorkingDir(), 'libraryProjects'))
 
 #Update build.xml files / Generate if not available.
     with open(os.devnull, 'wb') as devnull:
+        if config.isVerbose():
+            output_redir = None
+        else:
+            output_redir = devnull
+
         subprocess.check_call(['android', 'update', 'project', '-p',
-            os.path.join(working_dir, 'catroid')],
-            stdout=devnull)
+            os.path.join(config.getWorkingDir(), 'catroid')],
+            stdout=output_redir)
         subprocess.check_call(['android', 'update', 'lib-project', '-p',
-            os.path.join(working_dir, 'libraryProjects/actionbarsherlock')],
-            stdout=devnull)
+            os.path.join(config.getWorkingDir(), 'libraryProjects/actionbarsherlock')],
+            stdout=output_redir)
 
-    if os.path.exists(os.path.join(working_dir, 'catroid', 'gen')):
-        shutil.rmtree(os.path.join(working_dir, 'catroid', 'gen'))
+    if os.path.exists(os.path.join(config.getWorkingDir(), 'catroid', 'gen')):
+        shutil.rmtree(os.path.join(config.getWorkingDir(), 'catroid', 'gen'))
 
-    edit_manifest(working_dir, permissions)
+    editManifest(config)
 
-    rename_package(working_dir, 'app_' + str(project_id))
+    rename_package(config.getWorkingDir(), 'app_' + str(config.getProjectId()))
 
-    language_dirs = glob.glob(os.path.join(working_dir, 'catroid', 'res', 'values*'))
+    language_dirs = glob.glob(os.path.join(config.getWorkingDir(), 'catroid', 'res', 'values*'))
     for curr_lang_dir in language_dirs:
         editing_file = os.path.join(curr_lang_dir, 'strings.xml')
         if os.path.exists(editing_file):
             set_project_name(project_name, editing_file)
 
     with open(os.devnull, 'wb') as devnull:
+        if config.isVerbose():
+            output_redir = None
+        else:
+            output_redir = devnull
         subprocess.check_call(['ant', ANT_BUILD_TARGET ,'-f',
-            os.path.join(working_dir, 'catroid', 'build.xml')],
-            stdout=devnull)
+            os.path.join(config.getWorkingDir(), 'catroid', 'build.xml')],
+            stdout=output_redir)
 
-    copyApkToOutputFolder(working_dir, project_filename, output_folder)
+    copyApkToOutputFolder(config.getWorkingDir(), config.getProjectFilename(),
+            config.getPathToOutputDirectory())
 
-    shutil.rmtree(working_dir)
+    shutil.rmtree(config.getWorkingDir())
     return 0
 
 if __name__ == '__main__':
