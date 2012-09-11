@@ -108,8 +108,12 @@ public class PhysicObject {
 		return body.getPosition();
 	}
 
-	public void setPosition(float x, float y) {
+	public void setXYPosition(float x, float y) {
 		body.setTransform(x, y, body.getAngle());
+	}
+
+	public void setXYPosition(Vector2 vecCatToBox2d) {
+		body.setTransform(vecCatToBox2d, body.getAngle());
 	}
 
 	public void setMass(float mass) {
@@ -157,4 +161,5 @@ public class PhysicObject {
 	public void setVelocity(Vector2 velocity) {
 		body.setLinearVelocity(velocity);
 	}
+
 }

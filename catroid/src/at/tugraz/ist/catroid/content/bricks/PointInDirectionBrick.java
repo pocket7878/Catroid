@@ -31,6 +31,8 @@ import android.widget.BaseAdapter;
 import android.widget.Spinner;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
+import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 
 public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 
@@ -54,6 +56,7 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 	private double degrees;
 
 	private transient Direction direction;
+	private PhysicWorld physicWorld;
 
 	protected Object readResolve() {
 		// initialize direction if parsing from xml with XStream
@@ -66,25 +69,38 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 		return this;
 	}
 
-	public PointInDirectionBrick(Sprite sprite, Direction direction) {
+	public PointInDirectionBrick(PhysicWorld physicWorld, Sprite sprite, Direction direction) {
 		this.sprite = sprite;
 		this.direction = direction;
 		this.degrees = direction.getDegrees();
+		this.physicWorld = physicWorld;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
 		double degreeOffset = 90f;
-		sprite.costume.rotation = (float) (-degrees + degreeOffset);
+		sprite.costume.setRotation((float) (-degrees + degreeOffset));
+
+		if (physicWorld.isPhysicObject(sprite)) {
+			physicWorld.getPhysicObject(sprite).setAngle(
+					PhysicWorldConverter.angleCatToBox2d((float) (-degrees + degreeOffset)));
+		} else {
+			sprite.costume.setRotation((float) (-degrees + degreeOffset));
+		}
+
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		View view = View.inflate(context, R.layout.brick_point_in_direction, null);
@@ -105,20 +121,23 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_point_in_direction, null);
 	}
 
 	@Override
 	public Brick clone() {
-		return new PointInDirectionBrick(getSprite(), direction);
+		return new PointInDirectionBrick(physicWorld, getSprite(), direction);
 	}
 
+	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 		direction = Direction.values()[position];
 		degrees = direction.getDegrees();
 	}
 
+	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
 
 	}

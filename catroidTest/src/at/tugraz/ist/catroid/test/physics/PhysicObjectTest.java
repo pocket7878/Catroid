@@ -179,7 +179,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 
 			Vector2[] positions = { new Vector2(12.34f, 56.78f), new Vector2(-87.65f, -43.21f) };
 			for (Vector2 position : positions) {
-				physicObject.setPosition(position.x, position.y);
+				physicObject.setXYPosition(position.x, position.y);
 				assertEquals(position, getBody(physicObject).getPosition());
 			}
 		}
@@ -194,7 +194,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 			float angle = 1.56f;
 			Vector2 position = new Vector2(12.34f, 56.78f);
 			physicObject.setAngle(angle);
-			physicObject.setPosition(position.x, position.y);
+			physicObject.setXYPosition(position.x, position.y);
 
 			assertEquals(angle, getBody(physicObject).getAngle());
 			assertEquals(position, getBody(physicObject).getPosition());

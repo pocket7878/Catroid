@@ -35,8 +35,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
+import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 import at.tugraz.ist.catroid.utils.Utils;
 
+import com.badlogic.gdx.math.Vector2;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 public class SetYBrick implements Brick, OnClickListener {
@@ -46,26 +49,37 @@ public class SetYBrick implements Brick, OnClickListener {
 
 	@XStreamOmitField
 	private transient View view;
+	private PhysicWorld physicWorld;
 
-	public SetYBrick(Sprite sprite, int yPosition) {
+	public SetYBrick(PhysicWorld physicWorld, Sprite sprite, int yPosition) {
 		this.sprite = sprite;
 		this.yPosition = yPosition;
+		this.physicWorld = physicWorld;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
-		sprite.costume.aquireXYWidthHeightLock();
-		sprite.costume.setYPosition(yPosition);
-		sprite.costume.releaseXYWidthHeightLock();
+		if (physicWorld.isPhysicObject(sprite)) {
+			Vector2 newPos = new Vector2(sprite.costume.getXPosition(), yPosition);
+			physicWorld.getPhysicObject(sprite).setXYPosition(PhysicWorldConverter.vecCatToBox2d(newPos));
+		} else {
+			sprite.costume.aquireXYWidthHeightLock();
+			sprite.costume.setYPosition(yPosition);
+			sprite.costume.releaseXYWidthHeightLock();
+		}
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		view = View.inflate(context, R.layout.brick_set_y, null);
@@ -81,15 +95,17 @@ public class SetYBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_set_y, null);
 	}
 
 	@Override
 	public Brick clone() {
-		return new SetYBrick(getSprite(), yPosition);
+		return new SetYBrick(physicWorld, getSprite(), yPosition);
 	}
 
+	@Override
 	public void onClick(View view) {
 		final Context context = view.getContext();
 
@@ -102,6 +118,7 @@ public class SetYBrick implements Brick, OnClickListener {
 		dialog.setView(input);
 		dialog.setOnCancelListener((OnCancelListener) context);
 		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				try {
 					yPosition = Integer.parseInt(input.getText().toString());
@@ -112,6 +129,7 @@ public class SetYBrick implements Brick, OnClickListener {
 			}
 		});
 		dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
 			}

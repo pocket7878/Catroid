@@ -22,13 +22,10 @@
  */
 package at.tugraz.ist.catroid.content;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.CostumeData;
-import at.tugraz.ist.catroid.content.CostumeEvent.Type;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -37,6 +34,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+
+//import at.tugraz.ist.catroid.content.CostumeEvent.Type;
 
 public class Costume extends Image {
 	protected Semaphore xYWidthHeightLock = new Semaphore(1);
@@ -52,10 +51,11 @@ public class Costume extends Image {
 	protected float alphaValue;
 	protected float brightnessValue;
 	protected boolean internalPath;
+	protected float rotation;
 	public boolean show;
 	public int zPosition;
 
-	private final List<CostumeListener> costumeListeners = new ArrayList<CostumeListener>();
+	//	private final List<CostumeListener> costumeListeners = new ArrayList<CostumeListener>();
 
 	public Costume(Sprite sprite) {
 		this.sprite = sprite;
@@ -67,7 +67,6 @@ public class Costume extends Image {
 		this.brightnessValue = 1f;
 		this.scaleX = 1f;
 		this.scaleY = 1f;
-		this.rotation = 0f;
 		this.width = 0f;
 		this.height = 0f;
 		this.touchable = true;
@@ -171,7 +170,7 @@ public class Costume extends Image {
 			}
 		}
 
-		notifyListeners(new CostumeEvent(Type.COSTUMECHANGED, this));
+		//		notifyListeners(new CostumeEvent(Type.COSTUMECHANGED, this));
 
 		imageChanged = false;
 		imageLock.release();
@@ -244,6 +243,14 @@ public class Costume extends Image {
 	public void setXYPosition(float x, float y) {
 		this.x = x - (this.width / 2f);
 		this.y = y - (this.height / 2f);
+	}
+
+	public void setRotation(float degrees) {
+		super.rotation = degrees;
+	}
+
+	public float getRotation() {
+		return super.rotation;
 	}
 
 	public float getXPosition() {
@@ -380,26 +387,26 @@ public class Costume extends Image {
 		return costumeData;
 	}
 
-	private void notifyListeners(CostumeEvent event) {
-		synchronized (costumeListeners) {
-			for (CostumeListener costumeListener : costumeListeners) {
-				costumeListener.costumeChanged(event);
-			}
-		}
-	}
-
-	public void addListener(CostumeListener listener) {
-		synchronized (costumeListeners) {
-			if (costumeListeners.contains(listener)) {
-				return;
-			}
-			costumeListeners.add(listener);
-		}
-	}
-
-	public void removeListener(CostumeListener listener) {
-		synchronized (costumeListeners) {
-			costumeListeners.remove(listener);
-		}
-	}
+	//	private void notifyListeners(CostumeEvent event) {
+	//		synchronized (costumeListeners) {
+	//			for (CostumeListener costumeListener : costumeListeners) {
+	//				costumeListener.costumeChanged(event);
+	//			}
+	//		}
+	//	}
+	//
+	//	public void addListener(CostumeListener listener) {
+	//		synchronized (costumeListeners) {
+	//			if (costumeListeners.contains(listener)) {
+	//				return;
+	//			}
+	//			costumeListeners.add(listener);
+	//		}
+	//	}
+	//
+	//	public void removeListener(CostumeListener listener) {
+	//		synchronized (costumeListeners) {
+	//			costumeListeners.remove(listener);
+	//		}
+	//	}
 }

@@ -105,7 +105,7 @@ public class PhysicWorld implements Serializable {
 			costume = entry.getKey().costume;
 			costume.aquireXYWidthHeightLock();
 			costume.setXYPosition(position.x, position.y);
-			costume.rotation = angle;
+			costume.setRotation(angle);
 			costume.releaseXYWidthHeightLock();
 		}
 	}
@@ -124,6 +124,10 @@ public class PhysicWorld implements Serializable {
 
 	public PhysicObject getPhysicObject(Sprite sprite) {
 		return objects.get(sprite);
+	}
+
+	public boolean isPhysicObject(Sprite sprite) {
+		return objects.contains(sprite);
 	}
 
 	public void changeCostume(Sprite sprite) {

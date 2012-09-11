@@ -49,7 +49,7 @@ public class PhysicPlaceAtBrick implements Brick, OnClickListener {
 		float box2dYPosition = PhysicWorldConverter.lengthCatToBox2d(placeAtBrick.getYPosition());
 
 		placeAtBrick.execute();
-		physicWorld.getPhysicObject(getSprite()).setPosition(box2dXPosition, box2dYPosition);
+		physicWorld.getPhysicObject(getSprite()).setXYPosition(box2dXPosition, box2dYPosition);
 	}
 
 	@Override

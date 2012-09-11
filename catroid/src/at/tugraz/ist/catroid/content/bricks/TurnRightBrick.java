@@ -35,6 +35,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
+import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class TurnRightBrick implements Brick, OnClickListener {
@@ -47,23 +49,34 @@ public class TurnRightBrick implements Brick, OnClickListener {
 
 	private transient View view;
 
-	public TurnRightBrick(Sprite sprite, double degrees) {
+	private PhysicWorld physicWorld;
+
+	public TurnRightBrick(PhysicWorld physicWorld, Sprite sprite, double degrees) {
 		this.sprite = sprite;
 		this.degrees = degrees;
+		this.physicWorld = physicWorld;
 	}
 
+	@Override
 	public int getRequiredResources() {
 		return NO_RESOURCES;
 	}
 
+	@Override
 	public void execute() {
-		sprite.costume.rotation = (sprite.costume.rotation % 360) - (float) degrees;
+		if (physicWorld.isPhysicObject(sprite)) {
+			physicWorld.getPhysicObject(sprite).setAngle(PhysicWorldConverter.angleCatToBox2d((float) degrees));
+		} else {
+			sprite.costume.setRotation((sprite.costume.getRotation() % 360) - (float) degrees);
+		}
 	}
 
+	@Override
 	public Sprite getSprite() {
 		return sprite;
 	}
 
+	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
 		view = View.inflate(context, R.layout.brick_turn_right, null);
@@ -79,15 +92,17 @@ public class TurnRightBrick implements Brick, OnClickListener {
 		return view;
 	}
 
+	@Override
 	public View getPrototypeView(Context context) {
 		return View.inflate(context, R.layout.brick_turn_right, null);
 	}
 
 	@Override
 	public Brick clone() {
-		return new TurnRightBrick(getSprite(), degrees);
+		return new TurnRightBrick(physicWorld, getSprite(), degrees);
 	}
 
+	@Override
 	public void onClick(View view) {
 		final Context context = view.getContext();
 
@@ -99,6 +114,7 @@ public class TurnRightBrick implements Brick, OnClickListener {
 		dialog.setView(input);
 		dialog.setOnCancelListener((OnCancelListener) context);
 		dialog.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				try {
 					degrees = Double.parseDouble(input.getText().toString());
@@ -109,6 +125,7 @@ public class TurnRightBrick implements Brick, OnClickListener {
 			}
 		});
 		dialog.setNeutralButton(context.getString(R.string.cancel_button), new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
 			}
