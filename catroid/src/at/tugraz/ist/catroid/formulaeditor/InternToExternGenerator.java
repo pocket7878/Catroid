@@ -64,7 +64,7 @@ public class InternToExternGenerator {
 			generatedExternFormulaString += externTokenString;
 			externEndIndex = generatedExternFormulaString.length(); //TODO cursor position determination
 
-			externStartIndex++; //TODO check Mapping
+			externEndIndex--; //TODO check Mapping
 
 			if (externEndIndex < externStartIndex) {
 				return;

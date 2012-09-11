@@ -44,7 +44,7 @@ public class InternTokenModify {
 		}
 	}
 
-	public static InternToken insertNumberIntoNumberToken(InternToken numberTokenToBeModified, int externNumberOffset,
+	public static InternToken insertIntoNumberToken(InternToken numberTokenToBeModified, int externNumberOffset,
 			String numberToInsert) {
 		Log.i("info", "insertNumberIntoNumberToken:enter");
 		Log.i("info", "insertNumberIntoNumberToken: externNumberOffset = " + externNumberOffset);
@@ -247,6 +247,10 @@ public class InternTokenModify {
 
 		if (externNumberOffset < 1) {
 			return cursorPositionInternToken;
+		}
+
+		if (externNumberOffset > numberString.length()) {
+			externNumberOffset = numberString.length();
 		}
 
 		String leftPart = numberString.substring(0, externNumberOffset - 1);

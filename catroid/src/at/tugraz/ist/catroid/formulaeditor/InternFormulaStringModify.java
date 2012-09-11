@@ -63,13 +63,23 @@ public class InternFormulaStringModify {
 				internalFormulaString);
 	}
 
-	public static String generateInternStringByAppend(InternToken internTokenToAppend,
+	public static String generateInternStringByAppend(InternToken internTokenToAppendTo,
 			List<InternToken> tokensToAppend, String internalFormulaString) {
 
-		tokensToAppend.add(0, internTokenToAppend);
+		tokensToAppend.add(0, internTokenToAppendTo);
 
-		return generateInternStringByReplace(internTokenToAppend.getInternPositionIndex(),
-				internTokenToAppend.getInternPositionIndex(), tokensToAppend, internalFormulaString);
+		return generateInternStringByReplace(internTokenToAppendTo.getInternPositionIndex(),
+				internTokenToAppendTo.getInternPositionIndex(), tokensToAppend, internalFormulaString);
+	}
+
+	public static String generateInternStringByPrepend(InternToken internTokenToPrependTo,
+			List<InternToken> tokensToPrepend, String internalFormulaString) {
+
+		tokensToPrepend.add(0, internTokenToPrependTo);
+
+		return generateInternStringByReplace(internTokenToPrependTo.getInternPositionIndex(),
+				internTokenToPrependTo.getInternPositionIndex(), tokensToPrepend, internalFormulaString);
+
 	}
 
 	public static String generateInternStringByInsertAtBeginning(List<InternToken> tokensToInsert,

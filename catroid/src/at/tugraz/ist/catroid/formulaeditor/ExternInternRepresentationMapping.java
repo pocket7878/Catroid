@@ -62,6 +62,10 @@ public class ExternInternRepresentationMapping {
 
 	public Integer getInternTokenByExternIndex(int externIndex) {
 
+		if (externIndex < 0) {
+			return null;
+		}
+
 		Integer searchDownInternToken = searchDown(externInternMapping, externIndex - 1);
 		Integer currentInternToken = externInternMapping.get(externIndex);
 		Integer searchUpInternToken = searchUp(externInternMapping, externIndex + 1, externStringLength);
@@ -89,9 +93,9 @@ public class ExternInternRepresentationMapping {
 			} else if (externInternMapping.get(searchIndex).equals(internTokenOffsetTo)) {
 				int rightEdgeSelectionToken = getExternTokenStartOffset(searchIndex - 1, internTokenOffsetTo);
 				if (rightEdgeSelectionToken == -1) {
-					return externIndex - searchIndex + 1;
+					return externIndex - searchIndex;
 				} else {
-					return rightEdgeSelectionToken + 1;
+					return externIndex - searchIndex + rightEdgeSelectionToken + 1;
 				}
 			} else if (externInternMapping.get(searchIndex) != null) {
 				return -1;
