@@ -27,6 +27,7 @@ import android.graphics.Bitmap;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.utils.ImageEditing;
 
 public class WallpaperCostume {
 
@@ -134,8 +135,7 @@ public class WallpaperCostume {
 
 		if (isBackground && Values.SCREEN_WIDTH != costumeImage.getWidth()
 				&& Values.SCREEN_HEIGHT != costumeImage.getHeight()) {
-			BitmapResizer bitmapResizer = new BitmapResizer(costumeImage);
-			this.costume = bitmapResizer.doInBackground(Values.SCREEN_WIDTH, Values.SCREEN_HEIGHT);
+			this.costume = ImageEditing.scaleBitmap(costumeImage, Values.SCREEN_WIDTH, Values.SCREEN_HEIGHT);
 
 		} else {
 			this.costume = costumeImage;
@@ -153,10 +153,9 @@ public class WallpaperCostume {
 	}
 
 	private void resizeCostume() {
-		BitmapResizer bitmapResizer = new BitmapResizer(costume);
 		int newWidth = (int) (costume.getWidth() * size);
 		int newHeight = (int) (costume.getHeight() * size);
-		this.costume = bitmapResizer.doInBackground(newWidth, newHeight);
+		this.costume = ImageEditing.scaleBitmap(this.costume, newWidth, newHeight);
 
 		this.topNeedsAdjustment = true;
 		this.leftNeedsAdjustment = true;
