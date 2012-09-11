@@ -240,4 +240,24 @@ public class InternTokenModify {
 
 		return functionParameterInternTokenList;
 	}
+
+	public static InternToken deleteNumberByOffset(InternToken cursorPositionInternToken, int externNumberOffset) {
+
+		String numberString = cursorPositionInternToken.getTokenSringValue();
+
+		if (externNumberOffset < 1) {
+			return cursorPositionInternToken;
+		}
+
+		String leftPart = numberString.substring(0, externNumberOffset - 1);
+		String rightPart = numberString.substring(externNumberOffset);
+
+		cursorPositionInternToken.setTokenStringValue(leftPart + rightPart);
+
+		if (cursorPositionInternToken.getTokenSringValue().length() == 0) {
+			return null;
+		}
+
+		return cursorPositionInternToken;
+	}
 }

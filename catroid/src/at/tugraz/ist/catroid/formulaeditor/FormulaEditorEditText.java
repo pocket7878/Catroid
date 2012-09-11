@@ -29,6 +29,7 @@ import android.text.Layout;
 import android.text.Spannable;
 import android.text.style.BackgroundColorSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -97,7 +98,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	public void enterNewFormula(String internFormulaString) {
 
-		internFormula = new InternFormula(":number:0", context);
+		internFormula = new InternFormula("", context);
 		internFormula.generateExternFormulaStringAndInternExternMapping();
 		setText(internFormula.getExternFormulaString());
 
@@ -490,10 +491,18 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	}
 
 	public void checkAndModifyKeyInput(CatKeyEvent catKey) {
+		Log.i("info", "checkAndModifyKeyInput:enter");
 
 		internFormula.handleKeyInput(catKey);
 		internFormula.generateExternFormulaStringAndInternExternMapping();
-		setText(internFormula.getExternFormulaString());
+		String newExternFormulaString = internFormula.getExternFormulaString();
+
+		setText(newExternFormulaString);
+		absoluteCursorPosition = internFormula.getExternCursorPosition();
+
+		if (absoluteCursorPosition > getText().length()) {
+			absoluteCursorPosition = getText().length();
+		}
 
 		//		String newElement = null;
 		//		if (catKey.getKeyCode() == CatKeyEvent.KEYCODE_COMMA) {
@@ -713,6 +722,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			doSelectionAndHighlighting();
 			history.updateCurrentSelection(absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
 			internFormula.setCursorAndSelection(absoluteCursorPosition, true);
+
 			return true;
 		}
 
