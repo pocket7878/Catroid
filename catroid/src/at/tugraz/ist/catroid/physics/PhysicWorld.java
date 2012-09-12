@@ -24,18 +24,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import at.tugraz.ist.catroid.common.CostumeData;
-import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Costume;
 import at.tugraz.ist.catroid.content.Sprite;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.GdxNativesLoader;
@@ -56,39 +51,8 @@ public class PhysicWorld implements Serializable {
 	public PhysicWorld() {
 		physicObjects = new HashMap<Sprite, PhysicObject>();
 		shapeBuilder = new PhysicShapeBuilder();
-		createBoundaryBox();
-	}
 
-	private void createBoundaryBox() {
-		float boxWidth = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_WIDTH);
-		float boxHeight = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_HEIGHT);
-		float boxElementSize = PhysicSettings.World.BoundaryBox.FRAME_SIZE;
-
-		// Top Element
-		createBoundaryBoxElement(0.0f, boxHeight / 2 + boxElementSize, boxWidth, boxElementSize * 2);
-		// Bottom Element
-		createBoundaryBoxElement(0.0f, -boxHeight / 2 - boxElementSize, boxWidth, boxElementSize * 2);
-		// Left Element
-		createBoundaryBoxElement(-boxWidth / 2 - boxElementSize, 0.0f, boxElementSize * 2, boxHeight);
-		// Right Element
-		createBoundaryBoxElement(boxWidth / 2 + boxElementSize, 0.0f, boxElementSize * 2, boxHeight);
-	}
-
-	private void createBoundaryBoxElement(float x, float y, float width, float height) {
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.StaticBody;
-
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width / 2f, height / 2f);
-
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = shape;
-		fixtureDef.filter.categoryBits = PhysicSettings.World.BoundaryBox.COLLISION_MASK;
-		fixtureDef.filter.maskBits = PhysicSettings.Object.COLLISION_MASK;
-
-		Body body = world.createBody(bodyDef);
-		body.createFixture(fixtureDef);
-		body.setTransform(x, y, 0.0f);
+		new PhysicBoundaryBox(world).create();
 	}
 
 	public void step(float deltaTime) {
@@ -147,6 +111,6 @@ public class PhysicWorld implements Serializable {
 	public void changeCostume(Sprite sprite) {
 		CostumeData costumeData = sprite.costume.getCostumeData();
 		Shape[] shapes = shapeBuilder.createShape(costumeData);
-		physicObjects.get(sprite).setShape(shapes);
+		this.getPhysicObject(sprite).setShape(shapes);
 	}
 }
