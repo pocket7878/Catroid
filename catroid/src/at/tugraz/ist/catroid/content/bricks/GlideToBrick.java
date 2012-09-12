@@ -83,7 +83,6 @@ public class GlideToBrick implements Brick, OnClickListener {
 		//			latch.await();
 		//		} catch (InterruptedException e) {
 		//		}
-		//		semaphore.acquireUninterruptibly();
 
 		PhysicObject physicObject = physicWorld.getPhysicObject(sprite);
 		oldPhysicObjectType = physicObject.getType();

@@ -19,6 +19,8 @@
 package at.tugraz.ist.catroid.physics;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import at.tugraz.ist.catroid.common.CostumeData;
@@ -47,12 +49,12 @@ public class PhysicWorld implements Serializable {
 
 	private final transient World world = new World(PhysicSettings.World.DEFAULT_GRAVITY,
 			PhysicSettings.World.IGNORE_SLEEPING_OBJECTS);
-	private final transient PhysicObjectMap objects;
+	private final transient Map<Sprite, PhysicObject> physicObjects;
 	private final transient PhysicShapeBuilder shapeBuilder;
 	private transient Box2DDebugRenderer renderer;
 
 	public PhysicWorld() {
-		objects = new PhysicObjectMap(world);
+		physicObjects = new HashMap<Sprite, PhysicObject>();
 		shapeBuilder = new PhysicShapeBuilder();
 		createBoundaryBox();
 	}
@@ -97,7 +99,7 @@ public class PhysicWorld implements Serializable {
 	private void updateSprites() {
 		PhysicObject physicObject;
 		Costume costume;
-		for (Entry<Sprite, PhysicObject> entry : objects) {
+		for (Entry<Sprite, PhysicObject> entry : physicObjects.entrySet()) {
 			physicObject = entry.getValue();
 			physicObject.setIfOnEdgeBounce(false);
 			Vector2 position = PhysicWorldConverter.vecBox2dToCat(physicObject.getPosition());
@@ -123,17 +125,28 @@ public class PhysicWorld implements Serializable {
 		world.setGravity(gravity);
 	}
 
+	public PhysicObject createPhysicObject(Sprite sprite) {
+		if (physicObjects.containsKey(sprite)) {
+			return physicObjects.get(sprite);
+		}
+
+		PhysicObject physicObject = new PhysicObject(world.createBody(new BodyDef()));
+		physicObjects.put(sprite, physicObject);
+
+		return physicObject;
+	}
+
 	public PhysicObject getPhysicObject(Sprite sprite) {
-		return objects.get(sprite);
+		return createPhysicObject(sprite);
 	}
 
 	public boolean isPhysicObject(Sprite sprite) {
-		return objects.contains(sprite);
+		return physicObjects.containsKey(sprite);
 	}
 
 	public void changeCostume(Sprite sprite) {
 		CostumeData costumeData = sprite.costume.getCostumeData();
 		Shape[] shapes = shapeBuilder.createShape(costumeData);
-		objects.get(sprite).setShape(shapes);
+		physicObjects.get(sprite).setShape(shapes);
 	}
 }
