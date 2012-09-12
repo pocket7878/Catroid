@@ -48,7 +48,7 @@ class ConversionConfig:
         self._path_to_lib = None
         self._path_to_catroid = None
         self._project_id =  None
-        self._verbose = True
+        self._verbose = False
         self._path_to_project_archive = None
         self._archive_name = None
         self._output_dir = None
@@ -66,7 +66,7 @@ class ConversionConfig:
         return self._path_to_lib
     def set_lib_path(self, lib_path):
         self._path_to_lib = lib_path
-    def getPathToCatrobatSrc(self):
+    def get_catrobat_src_path(self):
         return self._path_to_catroid
     def set_catrobat_src_path(self, path_to_catroid_src):
         self._path_to_catroid = path_to_catroid_src
@@ -76,19 +76,18 @@ class ConversionConfig:
         return self._project_id
     def set_project_id(self, project_id):
         self._project_id = project_id
-    def isVerbose(self):
+    def is_verbose(self):
         return self._verbose
     def set_verbose(self, is_verbose):
         self._verbose = is_verbose
-    def getWorkingDir(self):
+    def get_working_dir(self):
         return self._working_dir
     def delete_temp_dir(self):
         shutil.rmtree(self._working_dir) #Delete tmp dir
-
-    def setWorkingDir(self, working_dir):
+    def set_working_dir(self, working_dir):
         self.delete_temp_dir()
         self._working_dir = working_dir
-    def getFullProjectPath(self):
+    def get_full_project_path(self):
         return os.path.join(self._path_to_project_archive, self._archive_name)
     def set_project_path(self, project_path):
         self._path_to_project_archive, self._archive_name = os.path.split(project_path)
@@ -101,10 +100,10 @@ class ConversionConfig:
     def set_projectcode_name(self, new_name):
         self._projectcode_name = new_name
     def set_projectcode(self, path):
-        self.delete_temp_dir()
+        self.delete_temp_dir() #Deleting of tmp dir neccessary when overwriting it
         self._working_dir, self._projectcode_name = os.path.split(path)
     def get_project_code_path(self):
-        return os.path.join(self.getWorkingDir(), self._projectcode_name)
+        return os.path.join(self.get_working_dir(), self._projectcode_name)
 
 
 def unzip_project(archive_name, working_dir):
@@ -200,7 +199,7 @@ def rename_package(path_to_project, new_package):
                     sys.stdout.write(line)
 
 def edit_manifest(config):
-    path_to_manifest = os.path.join(config.getWorkingDir(), 'catroid', 'AndroidManifest.xml')
+    path_to_manifest = os.path.join(config.get_working_dir(), 'catroid', 'AndroidManifest.xml')
     doc = xml.dom.minidom.parse(path_to_manifest)
 
     for node in doc.getElementsByTagName('uses-permission'):
@@ -223,24 +222,24 @@ def set_necessary_permissions_in_config(config):
    read = projectcode.read()
    if 'NXTMotor' in read:
        permissions.append('android.permission.BLUETOOTH')
+   projectcode.close()
    if config.get_conversion_mode() == ConversionMode.LIVE_WALLPAPER:
-       permissions.append('android.permissions.STATE') #TODO: correct that
-
+       permissions.append('android.permission.BIND_WALLPAPER')
    config.set_permissions(permissions)
-   if config.isVerbose():
+   if config.is_verbose():
        print "Neccessary permissions: ", permissions
 
-def copyApkToOutputFolder(working_dir, project_filename, output_dir):
+def copy_apk_to_output_folder(working_dir, project_filename, output_dir):
     for filename in os.listdir(os.path.join(working_dir, 'catroid', 'bin')):
         if filename.endswith('.apk'):
             shutil.move(os.path.join(working_dir, 'catroid', 'bin', filename),\
                     os.path.join(output_dir, project_filename + '.apk'))
 
-def printConfig(config_to_print):
+def print_config(config_to_print):
     print "Starting Native App Converter"
     print "------------------------------"
     print "Script starting with following params:"
-    print "Path to project: ", config_to_print.getFullProjectPath()
+    print "Path to project: ", config_to_print.get_full_project_path()
     print "Project filename: ", config_to_print.getProjectFilename()
     if config_to_print.get_conversion_mode() is ConversionMode.NATIVE_APP:
         conversion_mode = "Native App"
@@ -248,11 +247,11 @@ def printConfig(config_to_print):
         conversion_mode = "Live Wallaper"
     print "Conversion Mode: {}".format(conversion_mode) 
     print "Project ID: ", config_to_print.getProjectId()
-    print "Working directory: ", config_to_print.getWorkingDir()
+    print "Working directory: ", config_to_print.get_working_dir()
     print "Output folder: ", config_to_print.getPathToOutputDirectory()
     print "------------------------------"
 
-def getConversionConfigFromArgs(args):
+def get_conversion_config_from_args(args):
     new_config = ConversionConfig()
     new_config.set_project_path(args.project)
     new_config.set_verbose(args.verbose)
@@ -285,58 +284,58 @@ def main():
     args = parser.parse_args()
 
 
-    config = getConversionConfigFromArgs(args)
-    if config.isVerbose() == True:
-        printConfig(config)
+    config = get_conversion_config_from_args(args)
+    if config.is_verbose() == True:
+        print_config(config)
 
 
-    unzip_project(config.getFullProjectPath(), config.getWorkingDir())
+    unzip_project(config.get_full_project_path(), config.get_working_dir())
     project_name = get_project_name(config.get_project_code_path())
     set_necessary_permissions_in_config(config)
-    rename_resources(config.getWorkingDir(), config.getProjectFilename())
-    copy_project(config.getPathToCatrobatSrc(), config.getWorkingDir())
-    shutil.copytree(config.getLibPath(), os.path.join(config.getWorkingDir(), 'libraryProjects'))
+    rename_resources(config.get_working_dir(), config.getProjectFilename())
+    copy_project(config.get_catrobat_src_path(), config.get_working_dir())
+    shutil.copytree(config.getLibPath(), os.path.join(config.get_working_dir(), 'libraryProjects'))
 
 #Update build.xml files / Generate if not available.
     with open(os.devnull, 'wb') as devnull:
-        if config.isVerbose():
+        if config.is_verbose():
             output_redir = None
         else:
             output_redir = devnull
 
         subprocess.check_call(['android', 'update', 'project', '-p',
-            os.path.join(config.getWorkingDir(), 'catroid')],
+            os.path.join(config.get_working_dir(), 'catroid')],
             stdout=output_redir)
         subprocess.check_call(['android', 'update', 'lib-project', '-p',
-            os.path.join(config.getWorkingDir(), 'libraryProjects/actionbarsherlock')],
+            os.path.join(config.get_working_dir(), 'libraryProjects/actionbarsherlock')],
             stdout=output_redir)
 
-    if os.path.exists(os.path.join(config.getWorkingDir(), 'catroid', 'gen')):
-        shutil.rmtree(os.path.join(config.getWorkingDir(), 'catroid', 'gen'))
+    if os.path.exists(os.path.join(config.get_working_dir(), 'catroid', 'gen')):
+        shutil.rmtree(os.path.join(config.get_working_dir(), 'catroid', 'gen'))
 
     edit_manifest(config)
 
-    rename_package(config.getWorkingDir(), 'app_' + str(config.getProjectId()))
+    rename_package(config.get_working_dir(), 'app_' + str(config.getProjectId()))
 
-    language_dirs = glob.glob(os.path.join(config.getWorkingDir(), 'catroid', 'res', 'values*'))
+    language_dirs = glob.glob(os.path.join(config.get_working_dir(), 'catroid', 'res', 'values*'))
     for curr_lang_dir in language_dirs:
         editing_file = os.path.join(curr_lang_dir, 'strings.xml')
         if os.path.exists(editing_file):
             set_project_name(project_name, editing_file)
 
     with open(os.devnull, 'wb') as devnull:
-        if config.isVerbose():
+        if config.is_verbose():
             output_redir = None
         else:
             output_redir = devnull
         subprocess.check_call(['ant', ANT_BUILD_TARGET ,'-f',
-            os.path.join(config.getWorkingDir(), 'catroid', 'build.xml')],
+            os.path.join(config.get_working_dir(), 'catroid', 'build.xml')],
             stdout=output_redir)
 
-    copyApkToOutputFolder(config.getWorkingDir(), config.getProjectFilename(),
+    copy_apk_to_output_folder(config.get_working_dir(), config.getProjectFilename(),
             config.getPathToOutputDirectory())
 
-    shutil.rmtree(config.getWorkingDir())
+    shutil.rmtree(config.get_working_dir())
     return 0
 
 if __name__ == '__main__':

@@ -77,7 +77,7 @@ class TesthandleProject(unittest.TestCase):
                 self.nxt_test_config_2.get_permissions())
     def test_livewallpaper_permission(self):
         set_necessary_permissions_in_config(self.live_wallpaper_test_config_1)
-        self.assertTrue('android.permission.BLUETOOTH' in
+        self.assertTrue('android.permission.BIND_WALLPAPER' in
                 self.live_wallpaper_test_config_1.get_permissions())
 
 
