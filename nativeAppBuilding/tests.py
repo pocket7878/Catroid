@@ -10,7 +10,7 @@ from src.handle_project import verify_checksum
 from src.handle_project import get_project_name
 from src.handle_project import rename_file_in_project
 from src.handle_project import set_project_name
-from src.handle_project import getNecessaryPermissions
+from src.handle_project import acquireNecessaryPermissions
 
 class TesthandleProject(unittest.TestCase):
 
