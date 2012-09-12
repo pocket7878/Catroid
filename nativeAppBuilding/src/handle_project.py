@@ -52,14 +52,15 @@ class ConversionConfig:
         self._path_to_project_archive = None
         self._archive_name = None
         self._output_dir = None
+        self._projectcode_name = PROJECTCODE_NAME
 
     def get_conversion_mode(self):
         return self._conversion_mode
     def set_conversion_mode(self, mode):
         self._conversion_mode = mode
-    def setPermissions(self, permissions):
+    def set_permissions(self, permissions):
         self._permissions = permissions
-    def getPermissions(self):
+    def get_permissions(self):
         return self._permissions
     def getLibPath(self):
         return self._path_to_lib
@@ -81,6 +82,12 @@ class ConversionConfig:
         self._verbose = is_verbose
     def getWorkingDir(self):
         return self._working_dir
+    def delete_temp_dir(self):
+        shutil.rmtree(self._working_dir) #Delete tmp dir
+
+    def setWorkingDir(self, working_dir):
+        self.delete_temp_dir()
+        self._working_dir = working_dir
     def getFullProjectPath(self):
         return os.path.join(self._path_to_project_archive, self._archive_name)
     def set_project_path(self, project_path):
@@ -91,8 +98,13 @@ class ConversionConfig:
         return self._output_dir
     def set_output_directory_path(self, output_dir):
         self._output_dir = output_dir
-    def getPathToProjectCode(self):
-        return os.path.join(self.getWorkingDir(), PROJECTCODE_NAME)
+    def set_projectcode_name(self, new_name):
+        self._projectcode_name = new_name
+    def set_projectcode(self, path):
+        self.delete_temp_dir()
+        self._working_dir, self._projectcode_name = os.path.split(path)
+    def get_project_code_path(self):
+        return os.path.join(self.getWorkingDir(), self._projectcode_name)
 
 
 def unzip_project(archive_name, working_dir):
@@ -192,7 +204,7 @@ def edit_manifest(config):
     doc = xml.dom.minidom.parse(path_to_manifest)
 
     for node in doc.getElementsByTagName('uses-permission'):
-        if not node.attributes.item(0).value in config.getPermissions(): 
+        if not node.attributes.item(0).value in config.get_permissions(): 
             node.parentNode.removeChild(node)
 
     for node in doc.getElementsByTagName('activity'):
@@ -205,16 +217,16 @@ def edit_manifest(config):
     doc.writexml(f, encoding='utf-8')
     f.close()
     
-def acquireNecessaryPermissions(config):
+def set_necessary_permissions_in_config(config):
    permissions = []
-   projectcode = codecs.open(config.getPathToProjectCode())
+   projectcode = codecs.open(config.get_project_code_path())
    read = projectcode.read()
    if 'NXTMotor' in read:
        permissions.append('android.permission.BLUETOOTH')
    if config.get_conversion_mode() == ConversionMode.LIVE_WALLPAPER:
        permissions.append('android.permissions.STATE') #TODO: correct that
 
-   config.setPermissions(permissions)
+   config.set_permissions(permissions)
    if config.isVerbose():
        print "Neccessary permissions: ", permissions
 
@@ -279,8 +291,8 @@ def main():
 
 
     unzip_project(config.getFullProjectPath(), config.getWorkingDir())
-    project_name = get_project_name(config.getPathToProjectCode())
-    acquireNecessaryPermissions(config)
+    project_name = get_project_name(config.get_project_code_path())
+    set_necessary_permissions_in_config(config)
     rename_resources(config.getWorkingDir(), config.getProjectFilename())
     copy_project(config.getPathToCatrobatSrc(), config.getWorkingDir())
     shutil.copytree(config.getLibPath(), os.path.join(config.getWorkingDir(), 'libraryProjects'))

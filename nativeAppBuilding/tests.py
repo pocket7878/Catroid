@@ -10,7 +10,9 @@ from src.handle_project import verify_checksum
 from src.handle_project import get_project_name
 from src.handle_project import rename_file_in_project
 from src.handle_project import set_project_name
-from src.handle_project import acquireNecessaryPermissions
+from src.handle_project import set_necessary_permissions_in_config
+from src.handle_project import ConversionConfig
+from src.handle_project import ConversionMode
 
 class TesthandleProject(unittest.TestCase):
 
@@ -30,7 +32,18 @@ class TesthandleProject(unittest.TestCase):
         self.new_image_name_1 = 'new_image_name_1'
         self.new_image_name_2 = 'new_image_name_2'
         self.new_sound_name = 'new_sound_name'
-        self.nxt_test_config_1 = os.path.join('test_resources', 'NXTprojectcode.xml')
+        self.nxt_test_config_1 = ConversionConfig()
+        self.nxt_test_config_1.set_projectcode(os.path.join('test_resources',
+            'NXTprojectcode.xml'))
+        self.nxt_test_config_2 = ConversionConfig()
+        self.nxt_test_config_2.set_projectcode(os.path.join('test_resources',
+            'projectcode.xml'))
+        self.live_wallpaper_test_config_1 = ConversionConfig()
+        self.live_wallpaper_test_config_1.set_projectcode(os.path.join('test_resources',
+            'projectcode.xml'))
+        self.live_wallpaper_test_config_1.set_conversion_mode(ConversionMode.LIVE_WALLPAPER)
+
+
 
     def test_checksum(self):
         self.assertFalse(verify_checksum(self.bad_checksum_filename))
@@ -54,12 +67,20 @@ class TesthandleProject(unittest.TestCase):
         os.remove(temp_project_filename)
 
     def test_permission_recognition_true_pos(self):
-        permissions = getNecessaryPermissions(self.nxt_test_config_1)
-        self.assertTrue('android.permission.BLUETOOTH' in permissions)
+        set_necessary_permissions_in_config(self.nxt_test_config_1)
+        self.assertTrue('android.permission.BLUETOOTH' in
+                self.nxt_test_config_1.get_permissions())
     
     def test_permission_recognition_false(self):
-        permissions = getNecessaryPermissions(self.new_project_filename)
-        self.assertFalse('android.permission.BLUETOOTH' in permissions)
+        permissions = set_necessary_permissions_in_config(self.nxt_test_config_2)
+        self.assertFalse('android.permission.BLUETOOTH' in
+                self.nxt_test_config_2.get_permissions())
+    def test_livewallpaper_permission(self):
+        set_necessary_permissions_in_config(self.live_wallpaper_test_config_1)
+        self.assertTrue('android.permission.BLUETOOTH' in
+                self.live_wallpaper_test_config_1.get_permissions())
+
+
 
 if __name__ == '__main__':
     unittest.main()
