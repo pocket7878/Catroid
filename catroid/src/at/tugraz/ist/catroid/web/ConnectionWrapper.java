@@ -32,12 +32,13 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import at.tugraz.ist.catroid.common.Constants;
+import at.tugraz.ist.catroid.transfers.ProjectDownloadTask;
 
 public class ConnectionWrapper {
 
@@ -93,8 +94,8 @@ public class ConnectionWrapper {
 		return getString(resultStream);
 	}
 
-	public void doHttpPostFileDownload(String urlString, HashMap<String, String> postValues, String filePath)
-			throws IOException {
+	public void doHttpPostFileDownload(String urlString, HashMap<String, String> postValues, String filePath,
+			ProjectDownloadTask task) throws IOException {
 		MultiPartFormOutputStream out = buildPost(urlString, postValues);
 		out.close();
 
@@ -107,7 +108,12 @@ public class ConnectionWrapper {
 
 		byte[] buffer = new byte[Constants.BUFFER_8K];
 		int length = 0;
+		long total = 0;
+		//int fileLength = urlConnection.getContentLength();
 		while ((length = input.read(buffer)) != -1) {
+			total += length;
+			int percentCompleted = (int) total * 100 / length;
+			task.setProgress(percentCompleted);
 			fos.write(buffer, 0, length);
 		}
 		input.close();

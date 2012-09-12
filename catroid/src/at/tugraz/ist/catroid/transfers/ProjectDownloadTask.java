@@ -40,7 +40,7 @@ import at.tugraz.ist.catroid.web.ConnectionWrapper;
 import at.tugraz.ist.catroid.web.ServerCalls;
 import at.tugraz.ist.catroid.web.WebconnectionException;
 
-public class ProjectDownloadTask extends AsyncTask<Void, Void, Boolean> implements OnClickListener {
+public class ProjectDownloadTask extends AsyncTask<Void, Integer, Boolean> implements OnClickListener {
 	private MainMenuActivity activity;
 	private String projectName;
 	private String zipFileString;
@@ -68,16 +68,28 @@ public class ProjectDownloadTask extends AsyncTask<Void, Void, Boolean> implemen
 		if (activity == null) {
 			return;
 		}
+		progressDialog = new ProgressDialog(activity);
 		String title = activity.getString(R.string.please_wait);
 		String message = activity.getString(R.string.loading);
+		//progressDialog = ProgressDialog.show(activity, title, message);
+		progressDialog.setMax(100);
+		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		progressDialog = ProgressDialog.show(activity, title, message);
+		//progressDialog.setIndeterminate(false);
+		//setindeterminate + setprogressstyle
 	}
 
 	@Override
 	protected Boolean doInBackground(Void... arg0) {
 		showOverwriteDialog = false;
+		int urlLength = url.length();
+		int currentProgress = 0;
 		try {
-			ServerCalls.getInstance().downloadProject(url, zipFileString);
+			//for (int i = 0; i < urlLength; i++) {
+			ServerCalls.getInstance().downloadProject(url, zipFileString, this);
+			//currentProgress = 2; //(int) ((i / (float) urlLength) * 100);
+			//publishProgress(currentProgress);
+			//}
 
 			if (StorageHandler.getInstance().projectExistsIgnoreCase(projectName)) {
 				showOverwriteDialog = true;
@@ -94,6 +106,12 @@ public class ProjectDownloadTask extends AsyncTask<Void, Void, Boolean> implemen
 		}
 		return false;
 
+	}
+
+	@Override
+	protected void onProgressUpdate(Integer... progress) {
+		super.onProgressUpdate(progress);
+		progressDialog.setProgress(progress[0]);
 	}
 
 	@Override
@@ -124,6 +142,10 @@ public class ProjectDownloadTask extends AsyncTask<Void, Void, Boolean> implemen
 		}
 	}
 
+	public void setProgress(int currentProgress) {
+		publishProgress(currentProgress);
+	}
+
 	private void showDialog(int messageId) {
 		if (activity == null) {
 			return;
@@ -132,6 +154,7 @@ public class ProjectDownloadTask extends AsyncTask<Void, Void, Boolean> implemen
 		new Builder(activity).setMessage(messageId).setPositiveButton("OK", null).show();
 	}
 
+	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		if (!result) {
 			activity.finish();

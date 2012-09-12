@@ -310,6 +310,7 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		}
 
 		boolean waitResult = solo.waitForActivity("MainMenuActivity", 10000);
+		//TODO: replace waitForActivity with sleep.. so that orientation is changing while downloading!!
 		if (testChangeOrientation) {
 			solo.setActivityOrientation(Solo.LANDSCAPE);
 			solo.setActivityOrientation(Solo.PORTRAIT);
@@ -369,5 +370,10 @@ public class ProjectUpAndDownloadTest extends ActivityInstrumentationTestCase2<M
 		downloadedProjectFile = new File(projectPath + "/" + Constants.PROJECTCODE_NAME);
 		assertTrue("Original Directory does not exist.", downloadedDirectory.exists());
 		assertTrue("Original Project File does not exist.", downloadedProjectFile.exists());
+	}
+
+	public void testDownload() throws Throwable {
+		setServerURLToTestUrl();
+		downloadProject();
 	}
 }
