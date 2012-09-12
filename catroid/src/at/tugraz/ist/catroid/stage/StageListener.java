@@ -37,7 +37,7 @@ import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.SoundManager;
-import at.tugraz.ist.catroid.physics.PhysicBrickConverter;
+import at.tugraz.ist.catroid.physics.PhysicObjectConverter;
 import at.tugraz.ist.catroid.physics.PhysicSettings;
 import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -165,7 +165,7 @@ public class StageListener implements ApplicationListener {
 
 		// TODO: Find better place to replace motion bricks with corresponding physic bricks
 		// if necessary.
-		PhysicBrickConverter physicBrickConverter = new PhysicBrickConverter();
+		PhysicObjectConverter physicBrickConverter = new PhysicObjectConverter();
 		physicBrickConverter.convert(project);
 	}
 
@@ -264,7 +264,7 @@ public class StageListener implements ApplicationListener {
 
 			// TODO: Find better place to replace motion bricks with corresponding physic bricks
 			// if necessary.
-			PhysicBrickConverter physicBrickConverter = new PhysicBrickConverter();
+			PhysicObjectConverter physicBrickConverter = new PhysicObjectConverter();
 			physicBrickConverter.convert(project);
 
 			paused = true;

@@ -31,9 +31,9 @@ import at.tugraz.ist.catroid.content.bricks.SetPhysicObjectTypeBrick;
 /**
  * TODO: Find better name.
  */
-public class PhysicBrickConverter {
+public class PhysicObjectConverter {
 
-	public PhysicBrickConverter() {
+	public PhysicObjectConverter() {
 	}
 
 	public void convert(Project project) {
