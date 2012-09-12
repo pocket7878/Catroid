@@ -206,11 +206,15 @@ def edit_manifest(config):
         if not node.attributes.item(0).value in config.get_permissions(): 
             node.parentNode.removeChild(node)
 
-    for node in doc.getElementsByTagName('activity'):
-        for i in range(0, node.attributes.length):
-            if node.attributes.item(i).name == 'android:name':
-                if node.attributes.item(i).value == '.ui.MainMenuActivity':
-                   node.attributes.item(i).value = '.stage.NativeAppActivity'        
+    if config.get_conversion_mode() is ConversionMode.NATIVE_APP:
+        for node in doc.getElementsByTagName('activity'):
+            for i in range(0, node.attributes.length):
+                if node.attributes.item(i).name == 'android:name':
+                    if node.attributes.item(i).value == '.ui.MainMenuActivity':
+                        node.attributes.item(i).value = '.stage.NativeAppActivity'
+    else:
+        #Add livewallpaper relevant content here.
+        pass
 
     f = codecs.open(path_to_manifest, 'wb', 'utf-8')
     doc.writexml(f, encoding='utf-8')
@@ -246,6 +250,7 @@ def print_config(config_to_print):
     else:
         conversion_mode = "Live Wallaper"
     print "Conversion Mode: {}".format(conversion_mode) 
+    print "Current permissions: {}".format(config_to_print.get_permissions())
     print "Project ID: ", config_to_print.getProjectId()
     print "Working directory: ", config_to_print.get_working_dir()
     print "Output folder: ", config_to_print.getPathToOutputDirectory()
