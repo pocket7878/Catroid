@@ -28,6 +28,7 @@ import java.io.IOException;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.utils.UtilDeviceInfo;
@@ -36,7 +37,7 @@ import at.tugraz.ist.catroid.utils.Utils;
 import at.tugraz.ist.catroid.web.ServerCalls;
 import at.tugraz.ist.catroid.web.WebconnectionException;
 
-public class ProjectUploadTask extends IntentService {
+public class ProjectUploadService extends IntentService {
 
 	private static final String UPLOAD_FILE_NAME = "upload" + Constants.CATROID_EXTENTION;
 	private Context context;
@@ -46,7 +47,7 @@ public class ProjectUploadTask extends IntentService {
 	private String token;
 	private String serverAnswer;
 
-	public ProjectUploadTask(Context context, String projectName, String projectDescription, String projectPath,
+	public ProjectUploadService(Context context, String projectName, String projectDescription, String projectPath,
 			String token) {
 		super("Download" + projectName);
 		this.context = context;
@@ -62,6 +63,11 @@ public class ProjectUploadTask extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
+
+		Uri data = intent.getData();
+		String urlPath = intent.getStringExtra("urlpath");
+		String fileName = data.getLastPathSegment(); // last??
+
 		try {
 			File directoryPath = new File(projectPath);
 			String[] paths = directoryPath.list();
@@ -91,6 +97,7 @@ public class ProjectUploadTask extends IntentService {
 
 			ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString, userEmail,
 					language, token);
+
 			zipFile.delete();
 		} catch (IOException e) {
 			e.printStackTrace();
