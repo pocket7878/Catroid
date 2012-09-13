@@ -32,6 +32,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperHelper;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 
@@ -71,10 +73,8 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 
 		view = View.inflate(context, R.layout.brick_change_size_by_n, null);
 
-		TextView text = (TextView) view
-				.findViewById(R.id.brick_change_size_by_text_view);
-		EditText edit = (EditText) view
-				.findViewById(R.id.brick_change_size_by_edit_text);
+		TextView text = (TextView) view.findViewById(R.id.brick_change_size_by_text_view);
+		EditText edit = (EditText) view.findViewById(R.id.brick_change_size_by_edit_text);
 		edit.setText(String.valueOf(size));
 
 		text.setVisibility(View.GONE);
@@ -103,8 +103,7 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(size));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER
-						| InputType.TYPE_NUMBER_FLAG_DECIMAL
+				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
 						| InputType.TYPE_NUMBER_FLAG_SIGNED);
 				input.setSelectAllOnFocus(true);
 			}
@@ -114,22 +113,25 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 				try {
 					size = Double.parseDouble(input.getText().toString());
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(),
-							R.string.error_no_number_entered,
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 				}
 
 				return true;
 			}
 		};
 
-		editDialog.show(activity.getSupportFragmentManager(),
-				"dialog_change_size_by_n_brick");
+		editDialog.show(activity.getSupportFragmentManager(), "dialog_change_size_by_n_brick");
 	}
 
 	@Override
 	public void executeLiveWallpaper() {
-		// TODO Auto-generated method stub
+		WallpaperCostume wallpaperCostume = WallpaperHelper.getInstance().getWallpaperCostume(sprite);
+
+		if (wallpaperCostume == null) {
+			wallpaperCostume = new WallpaperCostume(sprite, null);
+		}
+
+		wallpaperCostume.changeCostumeSizeBy(size);
 
 	}
 }

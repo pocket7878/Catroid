@@ -32,6 +32,7 @@ import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.content.bricks.ChangeSizeByNBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeXByBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeYByBrick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
@@ -249,7 +250,7 @@ public class LiveWallpaperTest extends AndroidTestCase {
 		int oldWidth = wallpaperCostume.getCostume().getWidth();
 		int oldHeight = wallpaperCostume.getCostume().getHeight();
 
-		double size = 50;
+		double size = 50.0;
 
 		Brick brick = new SetSizeToBrick(catroidSprite, size);
 		brick.executeLiveWallpaper();
@@ -260,8 +261,30 @@ public class LiveWallpaperTest extends AndroidTestCase {
 		int expectedNewWidth = (int) (oldWidth * (size / 100));
 		int expectedNewHeight = (int) (oldHeight * (size / 100));
 
-		assertEquals("Costume has not been scaled properly", newWidth, expectedNewWidth);
-		assertEquals("Costume has not been scaled properly", newHeight, expectedNewHeight);
+		assertEquals("The costume has not been scaled properly: width differs", newWidth, expectedNewWidth);
+		assertEquals("The Costume has not been scaled properly: height differs", newHeight, expectedNewHeight);
+
+	}
+
+	public void changeSetSizeByBrick() {
+		WallpaperCostume wallpaperCostume = new WallpaperCostume(catroidSprite, catroidSprite.getCostumeDataList().get(
+				0));
+		int oldWidth = wallpaperCostume.getCostume().getWidth();
+		int oldHeight = wallpaperCostume.getCostume().getHeight();
+
+		double size = 20.0;
+
+		Brick brick = new ChangeSizeByNBrick(catroidSprite, size);
+		brick.executeLiveWallpaper();
+
+		int newWidth = wallpaperCostume.getCostume().getWidth();
+		int newHeight = wallpaperCostume.getCostume().getHeight();
+
+		int expectedNewWidth = (int) (oldWidth + (oldWidth * (size / 100)));
+		int expectedNewHeight = (int) (oldHeight + (oldHeight * (size / 100)));
+
+		assertEquals("The costume has not been scaled properly: width differs", newWidth, expectedNewWidth);
+		assertEquals("The Costume has not been scaled properly: height differs", newHeight, expectedNewHeight);
 
 	}
 
