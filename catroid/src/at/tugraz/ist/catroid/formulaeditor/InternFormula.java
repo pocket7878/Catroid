@@ -358,6 +358,8 @@ public class InternFormula {
 
 			externCursorPosition++;
 
+		} else if (cursorPositionInternToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
+			replaceCursorPositionInternTokenByTokenList(internTokensToInsert);
 		} else if (InternToken.isPeriodToken(internTokensToInsert)) {
 			return; //TODO Find better period solution
 		} else {
@@ -561,7 +563,30 @@ public class InternFormula {
 					endIndexToReplace, replacedFunctionTokens, internFormulaString);
 
 		} else if (cursorPositionInternToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
-			//TODO implement
+
+			List<InternToken> functionInternTokens = InternFormulaToInternTokenGenerator
+					.generateInternTokenListByFunctionBracketOpen(internTokenToReplaceIndex, internFormulaString);
+
+			if (functionInternTokens.size() == 0) {
+				return;
+			}
+
+			int lastListIndex = functionInternTokens.size() - 1;
+			InternToken lastFunctionToken = functionInternTokens.get(lastListIndex);
+
+			int startInternIndexToReplace = functionInternTokens.get(0).getInternPositionIndex();
+			int endInternIndexToReplace = lastFunctionToken.getInternPositionIndex();
+
+			List<InternToken> replacedFunctionTokens = InternTokenModify.replaceFunctionByTokens(functionInternTokens,
+					internTokensToReplaceWith);
+
+			if (replacedFunctionTokens == null) {
+				return;
+			}
+
+			internFormulaString = InternFormulaStringModify.generateInternStringByReplace(startInternIndexToReplace,
+					endInternIndexToReplace, replacedFunctionTokens, internFormulaString);
+
 		} else if (cursorPositionInternToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE) {
 			//TODO implement
 		} else if (InternToken.isFunctionToken(internTokensToReplaceWith)) {

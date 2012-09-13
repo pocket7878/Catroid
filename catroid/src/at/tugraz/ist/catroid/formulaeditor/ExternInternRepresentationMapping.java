@@ -87,7 +87,7 @@ public class ExternInternRepresentationMapping {
 	}
 
 	public int getExternTokenStartOffset(int externIndex, Integer internTokenOffsetTo) {
-		for (int searchIndex = externIndex; searchIndex > 0; searchIndex--) {
+		for (int searchIndex = externIndex; searchIndex >= 0; searchIndex--) {
 			if (externInternMapping.get(searchIndex) == null) {
 			} else if (externInternMapping.get(searchIndex).equals(internTokenOffsetTo)) {
 				int rightEdgeSelectionToken = getExternTokenStartOffset(searchIndex - 1, internTokenOffsetTo);
@@ -103,7 +103,7 @@ public class ExternInternRepresentationMapping {
 
 	private Integer searchDown(SparseArray<Integer> mapping, int index) {
 
-		for (int searchIndex = index; searchIndex > 0; searchIndex--) {
+		for (int searchIndex = index; searchIndex >= 0; searchIndex--) {
 			if (mapping.get(searchIndex) != null) {
 				return mapping.get(searchIndex);
 			}

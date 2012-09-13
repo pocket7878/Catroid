@@ -34,8 +34,6 @@ public class InternTokenModify {
 
 		if (InternToken.isFunctionToken(internTokensToReplaceWith)) {
 
-			//			List<List<InternToken>> parameterInternTokenList = getFunctionParameterInternTokensAsLists(functionToReplace);
-
 			return replaceFunctionButKeepParameters(functionToReplace, internTokensToReplaceWith);
 
 		} else {

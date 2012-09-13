@@ -75,6 +75,10 @@ public class InternFormulaToInternTokenGenerator {
 			return null;
 		}
 
+		if (internTokenList.get(internTokenListIndex).getInternTokenType() != InternTokenType.FUNCTION_NAME) {
+			return null;
+		}
+
 		List<InternToken> functionInternTokenList = getFunctionFromList(internTokenListIndex, internTokenList);
 
 		return functionInternTokenList;
@@ -293,6 +297,10 @@ public class InternFormulaToInternTokenGenerator {
 		functionInternTokenList.add(functionNameToken);
 
 		int functionIndex = functionStartListIndex + 1;
+
+		if (functionIndex >= internTokenList.size()) {
+			return functionInternTokenList;
+		}
 
 		InternToken functionStartParameter = internTokenList.get(functionIndex);
 

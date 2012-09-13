@@ -50,15 +50,23 @@ public class InternToExternGenerator {
 		generatedExternInternRepresentationMapping = new ExternInternRepresentationMapping();
 
 		generatedExternFormulaString = "";
-		InternToken currentToken;
+		InternToken currentToken = null;
+		InternToken nextToken = null;
 		String externTokenString;
 		int externStartIndex;
 		int externEndIndex;
 
 		while (internTokenList.isEmpty() == false) {
-			generatedExternFormulaString += " "; //TODO handle whitespace insertion
+			if (appendWhiteSpace(currentToken, nextToken)) {
+				generatedExternFormulaString += " ";
+			}
 			externStartIndex = generatedExternFormulaString.length();
 			currentToken = internTokenList.get(0);
+			if (internTokenList.size() < 2) {
+				nextToken = null;
+			} else {
+				nextToken = internTokenList.get(1);
+			}
 			//			Log.i("info", "generateExternStringAndMapping: currentTokenText = " + currentToken.getTokenSringValue());
 			externTokenString = generateExternStringFromToken(currentToken);
 			generatedExternFormulaString += externTokenString;
@@ -95,6 +103,7 @@ public class InternToExternGenerator {
 			case FUNCTION_PARAMETERS_BRACKET_CLOSE:
 				return ")";
 			case FUNCTION_PARAMETER_DELIMITER:
+
 				return ","; //TODO hardcoded delimiter value
 
 			default:
@@ -103,6 +112,22 @@ public class InternToExternGenerator {
 
 				//TODO handle all cases(UserVariables etc...)
 		}
+	}
+
+	private boolean appendWhiteSpace(InternToken currentToken, InternToken nextToken) {
+		if (currentToken == null) {
+			return false;
+		}
+		if (nextToken == null) {
+			return true;
+		}
+
+		switch (nextToken.getInternTokenType()) {
+			case FUNCTION_PARAMETERS_BRACKET_OPEN:
+				return false;
+		}
+		return true;
+
 	}
 
 	public String getGeneratedExternFormulaString() {
