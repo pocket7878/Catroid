@@ -193,12 +193,13 @@ public class WallpaperCostume {
 
 	public void setBrightness(float brightness) {
 
-		setCostume(costumeData);
-		Bitmap resultBitmap = Bitmap.createBitmap(costume.getWidth(), costume.getHeight(), costume.getConfig());
+		setCostume(this.costumeData);
+		Bitmap resultBitmap = Bitmap.createBitmap(this.costume.getWidth(), this.costume.getHeight(),
+				this.costume.getConfig());
 
-		for (int x = 0; x < costume.getWidth(); x++) {
-			for (int y = 0; y < costume.getHeight(); y++) {
-				int oldPixelColor = costume.getPixel(x, y);
+		for (int x = 0; x < this.costume.getWidth(); x++) {
+			for (int y = 0; y < this.costume.getHeight(); y++) {
+				int oldPixelColor = this.costume.getPixel(x, y);
 
 				int red = Color.red(oldPixelColor) + (int) (255 * (brightness - 1));
 				int green = Color.green(oldPixelColor) + (int) (255 * (brightness - 1));
@@ -226,7 +227,7 @@ public class WallpaperCostume {
 			}
 		}
 
-		costume = resultBitmap;
+		this.costume = resultBitmap;
 
 	}
 }
