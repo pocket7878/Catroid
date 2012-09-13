@@ -162,6 +162,14 @@ public class WallpaperCostume {
 
 	}
 
+	public void clear() {
+		setX(0);
+		setY(0);
+		this.sizeNeedsAdjustment = false;
+		this.hidden = false;
+		this.size = 1;
+	}
+
 	public CostumeData getCostumeData() {
 		return costumeData;
 	}

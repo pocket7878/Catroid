@@ -101,31 +101,14 @@ public class WallpaperHelper {
 	}
 
 	public void destroy() {
-		wallpaperCostumes.clear();
-	}
 
-	//	public int getOriginalBackgroundWidth() {
-	//		return originalBackgroundWidth;
-	//	}
-	//
-	//	public void setOriginalBackgroundWidth(int originalBackgroundWidth) {
-	//		this.originalBackgroundWidth = originalBackgroundWidth;
-	//	}
-	//
-	//	public int getOriginalBackgroundHeight() {
-	//		return originalBackgroundHeight;
-	//	}
-	//
-	//	public void setOriginalBackgroundHeight(int originalBackgroundHeight) {
-	//		this.originalBackgroundHeight = originalBackgroundHeight;
-	//	}
-	//
-	//	public boolean isCostumesNeedScaling() {
-	//		return costumesNeedScaling;
-	//	}
-	//
-	//	public void setCostumesNeedScaling(boolean costumesNeedScaling) {
-	//		this.costumesNeedScaling = costumesNeedScaling;
-	//	}
+		Iterator<WallpaperCostume> iterator = wallpaperCostumes.iterator();
+		while (iterator.hasNext()) {
+			iterator.next().clear();
+		}
+
+		wallpaperCostumes.clear();
+
+	}
 
 }
