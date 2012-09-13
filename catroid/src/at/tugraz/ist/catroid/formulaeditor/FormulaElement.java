@@ -29,7 +29,7 @@ public class FormulaElement implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static enum ElementType {
-		OPERATOR, FUNCTION, VALUE, SENSOR, CONSTANT, VARIABLE, BRACKET
+		OPERATOR, FUNCTION, VALUE, SENSOR, VARIABLE, BRACKET
 	}
 
 	//	public static final int ELEMENT_OPERATOR = 2;
@@ -116,9 +116,6 @@ public class FormulaElement implements Serializable {
 					result += rightChild.getEditTextRepresentation();
 				}
 				result += ") ";
-				break;
-			case CONSTANT:
-				result += this.value + " ";
 				break;
 			case VARIABLE:
 				result += this.value + " ";
@@ -213,15 +210,14 @@ public class FormulaElement implements Serializable {
 			if (value.equals("round")) {
 				return (double) java.lang.Math.round(left);
 			}
-		} else if (type == ElementType.SENSOR) {
-			return SensorManager.getSensorValue(value);
-		} else if (type == ElementType.CONSTANT) {
 			if (value.equals("pi")) {
 				return java.lang.Math.PI;
 			}
 			if (value.equals("e")) {
 				return java.lang.Math.E;
 			}
+		} else if (type == ElementType.SENSOR) {
+			return SensorManager.getSensorValue(value);
 		} else if (type == ElementType.VARIABLE) {
 			//			TODO ^_^
 			return null;

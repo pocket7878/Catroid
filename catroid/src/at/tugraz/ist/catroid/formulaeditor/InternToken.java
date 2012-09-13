@@ -55,6 +55,73 @@ public class InternToken {
 		return false;
 	}
 
+	public boolean isOperator() {
+
+		if (internTokenType == InternTokenType.OPERATOR) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean isBracketOpen() {
+		if (internTokenType == InternTokenType.BRACKET_OPEN) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean isBracketClose() {
+		if (internTokenType == InternTokenType.BRACKET_OPEN) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean isFunctionParameterBracketOpen() {
+		if (internTokenType == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isFunctionParameterBracketClose() {
+		if (internTokenType == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isFunctionParameterDelimiter() {
+		if (internTokenType == InternTokenType.FUNCTION_PARAMETER_DELIMITER) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isFunctionName() {
+		if (internTokenType == InternTokenType.FUNCTION_NAME) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isSensor() {
+		if (internTokenType == InternTokenType.SENSOR) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isCostume() {
+		if (internTokenType == InternTokenType.COSTUME) {
+			return true;
+		}
+		return false;
+	}
+
 	public void appendToTokenStringValue(String stringToAppend) {
 		this.tokenStringValue += stringToAppend;
 	}

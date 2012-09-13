@@ -500,7 +500,7 @@ public class CalcGrammarParser extends Parser {
 				{
 					CONSTANT7 = (Token) match(input, CONSTANT, FOLLOW_CONSTANT_in_variableOrFunction255);
 
-					variableOrFunctionTree = new FormulaElement(FormulaElement.ElementType.CONSTANT,
+					variableOrFunctionTree = new FormulaElement(FormulaElement.ElementType.FUNCTION,
 							CONSTANT7.getText(), null, null, null);
 
 				}
