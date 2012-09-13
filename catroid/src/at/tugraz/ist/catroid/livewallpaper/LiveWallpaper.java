@@ -137,28 +137,23 @@ public class LiveWallpaper extends WallpaperService {
 			}
 		}
 
-		// @Override
-		// public void onTouchEvent(MotionEvent event) {
-		// if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction()
-		// == MotionEvent.ACTION_POINTER_DOWN) {
+		//		@Override
+		//		public void onTouchEvent(MotionEvent event) {
+		//			if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_POINTER_DOWN) {
 		//
-		// ArrayList<WallpaperCostume> wallpaperCostumes =
-		// wallpaperHelper.getWallpaperCostumes();
+		//				ArrayList<WallpaperCostume> wallpaperCostumes = wallpaperHelper.getWallpaperCostumes();
 		//
-		// for (int costumeIndex = wallpaperCostumes.size() - 1; costumeIndex >
-		// 0; costumeIndex--) {
-		// if
-		// (wallpaperCostumes.get(costumeIndex).touchedInsideTheCostume(event.getX(),
-		// event.getY())) {
-		// isWhenScript = true;
-		// executeSprite(wallpaperCostumes.get(costumeIndex).getSprite());
-		// isWhenScript = false;
-		// break;
-		// }
-		// }
+		//				for (int costumeIndex = wallpaperCostumes.size() - 1; costumeIndex > 0; costumeIndex--) {
+		//					if (wallpaperCostumes.get(costumeIndex).touchedInsideTheCostume(event.getX(), event.getY())) {
+		//						isWhenScript = true;
+		//						executeSprite(wallpaperCostumes.get(costumeIndex).getSprite());
+		//						isWhenScript = false;
+		//						break;
+		//					}
+		//				}
 		//
-		// }
-		// }
+		//			}
+		//		}
 
 		@Override
 		public Bundle onCommand(String action, int x, int y, int z, Bundle extras, boolean resultRequested) {
