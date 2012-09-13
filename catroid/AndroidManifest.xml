@@ -61,9 +61,6 @@
                 android:resource="@xml/mywallpaper"/> 
         </service>
         
-            <activity
-            android:name=".livewallaper.DummyActivity" />
-        
         <activity
             android:name=".ui.MainMenuActivity"
             android:configChanges="keyboardHidden|orientation" 
