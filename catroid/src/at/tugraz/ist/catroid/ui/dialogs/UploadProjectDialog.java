@@ -47,7 +47,6 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
-import at.tugraz.ist.catroid.transfers.ProjectUploadTask;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -201,7 +200,7 @@ public class UploadProjectDialog extends DialogFragment {
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		String token = prefs.getString(Constants.TOKEN, "0");
-		new ProjectUploadTask(getActivity(), uploadName, projectDescription, projectPath, token).execute();
+		//new ProjectUploadTask(getActivity(), uploadName, projectDescription, projectPath, token).execute();
 	}
 
 	private void handleCancelButtonClick() {

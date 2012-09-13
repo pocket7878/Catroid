@@ -25,10 +25,9 @@ package at.tugraz.ist.catroid.transfers;
 import java.io.File;
 import java.io.IOException;
 
-import android.app.AlertDialog.Builder;
-import android.app.ProgressDialog;
+import android.app.IntentService;
 import android.content.Context;
-import android.os.AsyncTask;
+import android.content.Intent;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.utils.UtilDeviceInfo;
@@ -37,20 +36,19 @@ import at.tugraz.ist.catroid.utils.Utils;
 import at.tugraz.ist.catroid.web.ServerCalls;
 import at.tugraz.ist.catroid.web.WebconnectionException;
 
-public class ProjectUploadTask extends AsyncTask<Void, Void, Boolean> {
-	//private final static String TAG = ProjectUploadTask.class.getSimpleName();
+public class ProjectUploadTask extends IntentService {
 
+	private static final String UPLOAD_FILE_NAME = "upload" + Constants.CATROID_EXTENTION;
 	private Context context;
-	private String projectPath;
-	private ProgressDialog progressdialog;
 	private String projectName;
 	private String projectDescription;
-	private String serverAnswer;
+	private String projectPath;
 	private String token;
-	private static final String UPLOAD_FILE_NAME = "upload" + Constants.CATROID_EXTENTION;
+	private String serverAnswer;
 
 	public ProjectUploadTask(Context context, String projectName, String projectDescription, String projectPath,
 			String token) {
+		super("Download" + projectName);
 		this.context = context;
 		this.projectPath = projectPath;
 		this.projectName = projectName;
@@ -63,24 +61,13 @@ public class ProjectUploadTask extends AsyncTask<Void, Void, Boolean> {
 	}
 
 	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		if (context == null) {
-			return;
-		}
-		String title = context.getString(R.string.please_wait);
-		String message = context.getString(R.string.loading);
-		progressdialog = ProgressDialog.show(context, title, message);
-	}
-
-	@Override
-	protected Boolean doInBackground(Void... arg0) {
+	protected void onHandleIntent(Intent intent) {
 		try {
 			File directoryPath = new File(projectPath);
 			String[] paths = directoryPath.list();
 
 			if (paths == null) {
-				return false;
+				return;
 			}
 
 			for (int i = 0; i < paths.length; i++) {
@@ -95,7 +82,7 @@ public class ProjectUploadTask extends AsyncTask<Void, Void, Boolean> {
 			}
 			if (!UtilZip.writeToZipFile(paths, zipFileString)) {
 				zipFile.delete();
-				return false;
+				return;
 			}
 
 			//String deviceIMEI = UtilDeviceInfo.getDeviceIMEI(context);
@@ -105,36 +92,115 @@ public class ProjectUploadTask extends AsyncTask<Void, Void, Boolean> {
 			ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString, userEmail,
 					language, token);
 			zipFile.delete();
-			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (WebconnectionException webException) {
 			serverAnswer = webException.getMessage();
 		}
-
-		return false;
-	}
-
-	@Override
-	protected void onPostExecute(Boolean result) {
-		super.onPostExecute(result);
-		if (progressdialog != null && progressdialog.isShowing()) {
-			progressdialog.dismiss();
-		}
-
-		if (!result) {
-			showDialog(serverAnswer);
-			return;
-		}
-
-		showDialog(context.getString(R.string.success_project_upload));
-	}
-
-	private void showDialog(String message) {
-		if (context == null) {
-			return;
-		}
-		new Builder(context).setMessage(message).setPositiveButton(context.getString(R.string.ok), null).show();
 	}
 
 }
+
+/*
+ * public class ProjectUploadTask extends AsyncTask<Void, Void, Boolean> {
+ * //private final static String TAG = ProjectUploadTask.class.getSimpleName();
+ * 
+ * private Context context;
+ * private String projectPath;
+ * private ProgressDialog progressdialog;
+ * private String projectName;
+ * private String projectDescription;
+ * private String serverAnswer;
+ * private String token;
+ * private static final String UPLOAD_FILE_NAME = "upload" + Constants.CATROID_EXTENTION;
+ * 
+ * public ProjectUploadTask(Context context, String projectName, String projectDescription, String projectPath,
+ * String token) {
+ * this.context = context;
+ * this.projectPath = projectPath;
+ * this.projectName = projectName;
+ * this.projectDescription = projectDescription;
+ * this.token = token;
+ * 
+ * if (context != null) {
+ * serverAnswer = context.getString(R.string.error_project_upload);
+ * }
+ * }
+ * 
+ * @Override
+ * protected void onPreExecute() {
+ * super.onPreExecute();
+ * if (context == null) {
+ * return;
+ * }
+ * String title = context.getString(R.string.please_wait);
+ * String message = context.getString(R.string.loading);
+ * progressdialog = ProgressDialog.show(context, title, message);
+ * }
+ * 
+ * @Override
+ * protected Boolean doInBackground(Void... arg0) {
+ * try {
+ * File directoryPath = new File(projectPath);
+ * String[] paths = directoryPath.list();
+ * 
+ * if (paths == null) {
+ * return false;
+ * }
+ * 
+ * for (int i = 0; i < paths.length; i++) {
+ * paths[i] = Utils.buildPath(directoryPath.getAbsolutePath(), paths[i]);
+ * }
+ * 
+ * String zipFileString = Utils.buildPath(Constants.TMP_PATH, UPLOAD_FILE_NAME);
+ * File zipFile = new File(zipFileString);
+ * if (!zipFile.exists()) {
+ * zipFile.getParentFile().mkdirs();
+ * zipFile.createNewFile();
+ * }
+ * if (!UtilZip.writeToZipFile(paths, zipFileString)) {
+ * zipFile.delete();
+ * return false;
+ * }
+ * 
+ * //String deviceIMEI = UtilDeviceInfo.getDeviceIMEI(context);
+ * String userEmail = UtilDeviceInfo.getUserEmail(context);
+ * String language = UtilDeviceInfo.getUserLanguageCode(context);
+ * 
+ * ServerCalls.getInstance().uploadProject(projectName, projectDescription, zipFileString, userEmail,
+ * language, token);
+ * zipFile.delete();
+ * return true;
+ * } catch (IOException e) {
+ * e.printStackTrace();
+ * } catch (WebconnectionException webException) {
+ * serverAnswer = webException.getMessage();
+ * }
+ * 
+ * return false;
+ * }
+ * 
+ * @Override
+ * protected void onPostExecute(Boolean result) {
+ * super.onPostExecute(result);
+ * if (progressdialog != null && progressdialog.isShowing()) {
+ * progressdialog.dismiss();
+ * }
+ * 
+ * if (!result) {
+ * showDialog(serverAnswer);
+ * return;
+ * }
+ * 
+ * showDialog(context.getString(R.string.success_project_upload));
+ * }
+ * 
+ * private void showDialog(String message) {
+ * if (context == null) {
+ * return;
+ * }
+ * new Builder(context).setMessage(message).setPositiveButton(context.getString(R.string.ok), null).show();
+ * }
+ * 
+ * }
+ */

@@ -111,6 +111,7 @@
                 <data android:mimeType="audio/*" />
             </intent-filter>
         </activity>
+        <service android:name=".web.UploadService"></service>
     </application>
 
 </manifest>
