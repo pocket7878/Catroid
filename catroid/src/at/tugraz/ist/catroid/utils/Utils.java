@@ -70,6 +70,7 @@ import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.livewallpaper.DummyLiveWallpaperActivity;
 import at.tugraz.ist.catroid.stage.NativeAppActivity;
 
 import com.badlogic.gdx.files.FileHandle;
@@ -408,9 +409,11 @@ public class Utils {
 	}
 
 	public static boolean isLoadingFromAssetsNecessary() {
-		if (NativeAppActivity.isRunning()) {
+		if (NativeAppActivity.isRunning() || DummyLiveWallpaperActivity.isRunning()) {
 			return true;
 		}
+
 		return false;
 	}
+
 }

@@ -48,10 +48,9 @@ public class LiveWallpaper extends WallpaperService {
 	@Override
 	public Engine onCreateEngine() {
 
-		ProjectManager.getInstance().loadProject(Constants.PROJECTCODE_NAME,
-				getApplicationContext(), false);
-		WallpaperHelper.getInstance().setProject(
-				ProjectManager.getInstance().getCurrentProject());
+		ProjectManager.getInstance().loadProject(Constants.PROJECTCODE_NAME, getApplicationContext(), false);
+		WallpaperHelper.getInstance().setProject(ProjectManager.getInstance().getCurrentProject());
+
 		return new CatWallEngine();
 
 	}
@@ -81,8 +80,7 @@ public class LiveWallpaper extends WallpaperService {
 			mVisible = visible;
 			if (visible) {
 				isStartScript = true;
-				List<Sprite> spriteList = wallpaperHelper.getProject()
-						.getSpriteList();
+				List<Sprite> spriteList = wallpaperHelper.getProject().getSpriteList();
 				for (Sprite sprite : spriteList) {
 					executeSprite(sprite);
 				}
@@ -95,8 +93,7 @@ public class LiveWallpaper extends WallpaperService {
 		}
 
 		@Override
-		public void onSurfaceChanged(SurfaceHolder holder, int format,
-				int width, int height) {
+		public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 			draw();
 		}
 
@@ -116,15 +113,13 @@ public class LiveWallpaper extends WallpaperService {
 			try {
 				c = holder.lockCanvas();
 				if (c != null) {
-					Iterator<WallpaperCostume> iterator = wallpaperHelper
-							.getWallpaperCostumes().iterator();
+					Iterator<WallpaperCostume> iterator = wallpaperHelper.getWallpaperCostumes().iterator();
 
 					WallpaperCostume wallpaperCostume;
 					while (iterator.hasNext()) {
 						wallpaperCostume = iterator.next();
 						if (wallpaperCostume.getCostume() != null) {
-							c.drawBitmap(wallpaperCostume.getCostume(),
-									wallpaperCostume.getTop(),
+							c.drawBitmap(wallpaperCostume.getCostume(), wallpaperCostume.getTop(),
 									wallpaperCostume.getLeft(), paint);
 						}
 					}
@@ -166,18 +161,14 @@ public class LiveWallpaper extends WallpaperService {
 		// }
 
 		@Override
-		public Bundle onCommand(String action, int x, int y, int z,
-				Bundle extras, boolean resultRequested) {
+		public Bundle onCommand(String action, int x, int y, int z, Bundle extras, boolean resultRequested) {
 			if (action.equals(WallpaperManager.COMMAND_TAP)) {
-				ArrayList<WallpaperCostume> wallpaperCostumes = wallpaperHelper
-						.getWallpaperCostumes();
+				ArrayList<WallpaperCostume> wallpaperCostumes = wallpaperHelper.getWallpaperCostumes();
 
 				for (int costumeIndex = wallpaperCostumes.size() - 1; costumeIndex > 0; costumeIndex--) {
-					if (wallpaperCostumes.get(costumeIndex)
-							.touchedInsideTheCostume(x, y)) {
+					if (wallpaperCostumes.get(costumeIndex).touchedInsideTheCostume(x, y)) {
 						isWhenScript = true;
-						executeSprite(wallpaperCostumes.get(costumeIndex)
-								.getSprite());
+						executeSprite(wallpaperCostumes.get(costumeIndex).getSprite());
 						isWhenScript = false;
 						break;
 					}

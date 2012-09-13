@@ -112,6 +112,7 @@ public class MainMenuActivity extends SherlockFragmentActivity implements OnChec
 				}
 			}
 		}
+
 	}
 
 	@Override

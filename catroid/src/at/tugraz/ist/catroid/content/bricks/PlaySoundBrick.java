@@ -53,6 +53,7 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 	@Override
 	public void execute() {
 		if (soundInfo != null && sprite.getSoundList().contains(soundInfo)) {
+
 			if (!Utils.isLoadingFromAssetsNecessary() && soundInfo.getAbsolutePath() != null) {
 				SoundManager.getInstance().playSoundFile(soundInfo.getAbsolutePath());
 			} else {
@@ -128,7 +129,7 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 
 	@Override
 	public void executeLiveWallpaper() {
-		// TODO Auto-generated method stub
+		execute();
 
 	}
 }
