@@ -24,6 +24,7 @@
 package at.tugraz.ist.catroid.livewallpaper;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -190,4 +191,44 @@ public class WallpaperCostume {
 		this.isBackground = isBackground;
 	}
 
+	/**
+	 * @param brightness
+	 */
+	public void setBrightness(float brightness) {
+
+		Bitmap resultBitmap = Bitmap.createBitmap(costume.getWidth(), costume.getHeight(), costume.getConfig());
+
+		for (int x = 0; x < costume.getWidth(); x++) {
+			for (int y = 0; y < costume.getHeight(); y++) {
+				int oldPixelColor = costume.getPixel(x, y);
+
+				int red = Color.red(oldPixelColor) + (int) (255 * (brightness - 1));
+				int green = Color.green(oldPixelColor) + (int) (255 * (brightness - 1));
+				int blue = Color.blue(oldPixelColor) + (int) (255 * (brightness - 1));
+				int alpha = Color.alpha(oldPixelColor);
+
+				if (red > 255) {
+					red = 255;
+				} else if (red < 0) {
+					red = 0;
+				}
+				if (green > 255) {
+					green = 255;
+				} else if (green < 0) {
+					green = 0;
+				}
+				if (blue > 255) {
+					blue = 255;
+				} else if (blue < 0) {
+					blue = 0;
+				}
+
+				int newPixel = Color.argb(alpha, red, green, blue);
+				resultBitmap.setPixel(x, y, newPixel);
+			}
+		}
+
+		costume = resultBitmap;
+
+	}
 }
