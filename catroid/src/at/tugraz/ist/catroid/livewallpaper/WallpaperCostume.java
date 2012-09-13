@@ -191,11 +191,9 @@ public class WallpaperCostume {
 		this.isBackground = isBackground;
 	}
 
-	/**
-	 * @param brightness
-	 */
 	public void setBrightness(float brightness) {
 
+		setCostume(costumeData);
 		Bitmap resultBitmap = Bitmap.createBitmap(costume.getWidth(), costume.getHeight(), costume.getConfig());
 
 		for (int x = 0; x < costume.getWidth(); x++) {
