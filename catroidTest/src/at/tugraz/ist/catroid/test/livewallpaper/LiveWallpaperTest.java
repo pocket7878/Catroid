@@ -38,6 +38,7 @@ import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.NextCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
+import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.SetXBrick;
 import at.tugraz.ist.catroid.content.bricks.SetYBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
@@ -239,6 +240,28 @@ public class LiveWallpaperTest extends AndroidTestCase {
 				- movingY;
 
 		assertEquals("The y coordinate was not set properly", y, wallpaperCostume.getLeft());
+
+	}
+
+	public void testSetSizeToBrick() {
+		WallpaperCostume wallpaperCostume = new WallpaperCostume(catroidSprite, catroidSprite.getCostumeDataList().get(
+				0));
+		int oldWidth = wallpaperCostume.getCostume().getWidth();
+		int oldHeight = wallpaperCostume.getCostume().getHeight();
+
+		double size = 50;
+
+		Brick brick = new SetSizeToBrick(catroidSprite, size);
+		brick.executeLiveWallpaper();
+
+		int newWidth = wallpaperCostume.getCostume().getWidth();
+		int newHeight = wallpaperCostume.getCostume().getHeight();
+
+		int expectedNewWidth = (int) (oldWidth * (size / 100));
+		int expectedNewHeight = (int) (oldHeight * (size / 100));
+
+		assertEquals("Costume has not been scaled properly", newWidth, expectedNewWidth);
+		assertEquals("Costume has not been scaled properly", newHeight, expectedNewHeight);
 
 	}
 

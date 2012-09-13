@@ -46,7 +46,6 @@ public class WallpaperCostume {
 	private boolean isBackground = false;
 	private boolean topNeedsAdjustment = false;
 	private boolean leftNeedsAdjustment = false;
-	private boolean sizeNeedsAdjustment = false;
 
 	private WallpaperHelper wallpaperHelper;
 
@@ -141,7 +140,7 @@ public class WallpaperCostume {
 			this.costume = costumeImage;
 		}
 
-		if (sizeNeedsAdjustment) {
+		if (size != 1) {
 			resizeCostume();
 		}
 
@@ -149,7 +148,7 @@ public class WallpaperCostume {
 
 	public void setCostumeSize(double size) {
 		this.size = size / 100;
-		this.sizeNeedsAdjustment = true;
+		resizeCostume();
 	}
 
 	private void resizeCostume() {
@@ -165,9 +164,7 @@ public class WallpaperCostume {
 	public void clear() {
 		setX(0);
 		setY(0);
-		this.sizeNeedsAdjustment = false;
 		this.hidden = false;
-		this.size = 1;
 	}
 
 	public CostumeData getCostumeData() {
