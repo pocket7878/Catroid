@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 
@@ -45,6 +46,7 @@ public class TakeScreenshotInformationDialog extends Dialog {
 		requestWindowFeature(Window.FEATURE_LEFT_ICON);
 		setContentView(R.layout.dialog_take_screenshot);
 		setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, android.R.drawable.ic_dialog_info);
+		getWindow().setLayout(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 
 		setTitle(context.getString(R.string.take_screenshot_title));
 		setCanceledOnTouchOutside(true);
