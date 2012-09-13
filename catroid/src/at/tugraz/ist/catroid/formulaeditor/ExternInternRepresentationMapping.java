@@ -22,7 +22,6 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
-import android.util.Log;
 import android.util.SparseArray;
 
 public class ExternInternRepresentationMapping {
@@ -39,8 +38,8 @@ public class ExternInternRepresentationMapping {
 	}
 
 	public void putExternInternMapping(int externStartIndex, int externEndIndex, int internStartIndex) {
-		Log.i("info", "Mapping put extern to intern: FROM extern start/end = " + externStartIndex + "/"
-				+ externEndIndex + " TO " + internStartIndex);
+		//		Log.i("info", "Mapping put extern to intern: FROM extern start/end = " + externStartIndex + "/"
+		//				+ externEndIndex + " TO " + internStartIndex);
 		externInternMapping.put(externStartIndex, internStartIndex);
 		externInternMapping.put(externEndIndex, internStartIndex);
 
@@ -70,8 +69,8 @@ public class ExternInternRepresentationMapping {
 		Integer currentInternToken = externInternMapping.get(externIndex);
 		Integer searchUpInternToken = searchUp(externInternMapping, externIndex + 1, externStringLength);
 
-		Log.i("info", "getInternTokenByExternIndex: search Down/Up/Current = " + searchDownInternToken + "/"
-				+ searchUpInternToken + "/" + currentInternToken);
+		//		Log.i("info", "getInternTokenByExternIndex: search Down/Up/Current = " + searchDownInternToken + "/"
+		//				+ searchUpInternToken + "/" + currentInternToken);
 
 		if (currentInternToken != null) {
 			return currentInternToken;
@@ -97,8 +96,6 @@ public class ExternInternRepresentationMapping {
 				} else {
 					return externIndex - searchIndex + rightEdgeSelectionToken + 1;
 				}
-			} else if (externInternMapping.get(searchIndex) != null) {
-				return -1;
 			}
 		}
 		return -1;

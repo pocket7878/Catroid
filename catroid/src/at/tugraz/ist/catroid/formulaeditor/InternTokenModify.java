@@ -219,8 +219,12 @@ public class InternTokenModify {
 
 			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
 				nestedFunctionsCounter++;
+				currentParameterInternTokenList.add(tempSearchToken);
 			} else if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE) {
 				nestedFunctionsCounter--;
+				if (nestedFunctionsCounter != 0) {
+					currentParameterInternTokenList.add(tempSearchToken);
+				}
 			} else if (nestedFunctionsCounter == 1
 					&& tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETER_DELIMITER) {
 				functionParameterInternTokenList.add(currentParameterInternTokenList);

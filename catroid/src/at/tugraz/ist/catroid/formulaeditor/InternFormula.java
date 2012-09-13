@@ -22,7 +22,6 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
@@ -59,6 +58,7 @@ public class InternFormula {
 	public synchronized void setCursorAndSelection(int externCursorPosition, boolean tokenIsSelected) {
 		this.tokenSelection = tokenIsSelected;
 		this.externCursorPosition = externCursorPosition;
+
 		Log.i("info", "setCursorAndSelection: externCursorPosition = " + externCursorPosition);
 
 		Integer cursorPositionTokenIndex = externInternRepresentationMapping
@@ -90,14 +90,17 @@ public class InternFormula {
 			case LEFT:
 				this.cursorPositionInternToken = InternFormulaToInternTokenGenerator.generateInternTokenByIndex(
 						cursorPositionTokenIndex, internFormulaString);
+				Log.i("info", "LEFT of " + cursorPositionInternToken.getTokenSringValue());
 				break;
 			case MIDDLE:
 				this.cursorPositionInternToken = InternFormulaToInternTokenGenerator.generateInternTokenByIndex(
 						cursorPositionTokenIndex, internFormulaString);
+				Log.i("info", "SELECTED " + cursorPositionInternToken.getTokenSringValue());
 				break;
 			case RIGHT:
 				this.cursorPositionInternToken = InternFormulaToInternTokenGenerator.generateInternTokenByIndex(
 						leftCursorPositionTokenIndex, internFormulaString);
+				Log.i("info", "RIGHT of " + cursorPositionInternToken.getTokenSringValue());
 				break;
 
 		}
@@ -177,6 +180,7 @@ public class InternFormula {
 		} else if (cursorTokenPosition == CursorTokenPosition.LEFT) {
 
 			InternToken firstLeftInternToken = getFirstLeftInternToken(externCursorPosition - 1);
+
 			if (firstLeftInternToken == null) {
 				return;
 			}
@@ -207,6 +211,8 @@ public class InternFormula {
 				int externNumberOffset = externInternRepresentationMapping.getExternTokenStartOffset(
 						externCursorPosition, internTokenIndex);
 
+				Log.i("info", "Delete number offset = " + externNumberOffset);
+
 				if (externNumberOffset == -1) {
 					return;
 				}
@@ -215,9 +221,8 @@ public class InternFormula {
 
 				if (modifiedToken == null) {
 					Log.i("info", "deleteInternTokenByIndex: Numer modifiedToken = NULL");
-					List<InternToken> emptyTokenListForDeletion = new LinkedList<InternToken>();
-					internFormulaString = InternFormulaStringModify.generateInternStringByReplace(
-							tokenToDelete.getInternPositionIndex(), emptyTokenListForDeletion, internFormulaString);
+					internFormulaString = InternFormulaStringModify.generateInternStringByDelete(
+							tokenToDelete.getInternPositionIndex(), internFormulaString);
 
 				} else {
 					Log.i("info", "deleteInternTokenByIndex: modifiedToken = " + modifiedToken.toString());
@@ -237,21 +242,76 @@ public class InternFormula {
 
 				int lastListIndex = functionInternTokens.size() - 1;
 				InternToken lastFunctionToken = functionInternTokens.get(lastListIndex);
-				int endIndexToReplace = lastFunctionToken.getInternPositionIndex();
+				int endIndexToDelete = lastFunctionToken.getInternPositionIndex();
 
-				List<InternToken> emptyTokenListForDeletion = new LinkedList<InternToken>();
-
-				internFormulaString = InternFormulaStringModify.generateInternStringByReplace(internTokenIndex,
-						endIndexToReplace, emptyTokenListForDeletion, internFormulaString);
+				internFormulaString = InternFormulaStringModify.generateInternStringByDelete(internTokenIndex,
+						endIndexToDelete, internFormulaString);
 				break;
+
 			case FUNCTION_PARAMETERS_BRACKET_OPEN:
+				functionInternTokens = InternFormulaToInternTokenGenerator
+						.generateInternTokenListByFunctionBracketOpen(tokenToDelete.getInternPositionIndex(),
+								internFormulaString);
+
+				if (functionInternTokens == null || functionInternTokens.size() == 0) {
+					return;
+				}
+
+				int functionInternTokensLastIndex = functionInternTokens.size() - 1;
+
+				int startDeletionIndex = functionInternTokens.get(0).getInternPositionIndex();
+				int endDeletionIndex = functionInternTokens.get(functionInternTokensLastIndex).getInternPositionIndex();
+
+				internFormulaString = InternFormulaStringModify.generateInternStringByDelete(startDeletionIndex,
+						endDeletionIndex, internFormulaString);
+
 				break;
 			case FUNCTION_PARAMETERS_BRACKET_CLOSE:
+				functionInternTokens = InternFormulaToInternTokenGenerator
+						.generateInternTokenListByFunctionBracketClose(tokenToDelete.getInternPositionIndex(),
+								internFormulaString);
+
+				if (functionInternTokens == null || functionInternTokens.size() == 0) {
+					return;
+				}
+
+				functionInternTokensLastIndex = functionInternTokens.size() - 1;
+
+				startDeletionIndex = functionInternTokens.get(0).getInternPositionIndex();
+				endDeletionIndex = functionInternTokens.get(functionInternTokensLastIndex).getInternPositionIndex();
+
+				internFormulaString = InternFormulaStringModify.generateInternStringByDelete(startDeletionIndex,
+						endDeletionIndex, internFormulaString);
+
+				break;
+			case FUNCTION_PARAMETER_DELIMITER:
+				functionInternTokens = InternFormulaToInternTokenGenerator
+						.generateInternTokenListByFunctionParameterDelimiter(tokenToDelete.getInternPositionIndex(),
+								internFormulaString);
+
+				if (functionInternTokens == null || functionInternTokens.size() == 0) {
+					return;
+				}
+
+				Log.i("info", "DELETE FUNCTION_PARAMETER_DELIMITER show generated Function do delete");
+
+				//TESTOUTPUT
+				for (InternToken internToken : functionInternTokens) {
+					Log.i("info", internToken.toString());
+				}
+
+				functionInternTokensLastIndex = functionInternTokens.size() - 1;
+
+				startDeletionIndex = functionInternTokens.get(0).getInternPositionIndex();
+				endDeletionIndex = functionInternTokens.get(functionInternTokensLastIndex).getInternPositionIndex();
+
+				internFormulaString = InternFormulaStringModify.generateInternStringByDelete(startDeletionIndex,
+						endDeletionIndex, internFormulaString);
+
 				break;
 			default:
-				emptyTokenListForDeletion = new LinkedList<InternToken>();
-				internFormulaString = InternFormulaStringModify.generateInternStringByReplace(internTokenIndex,
-						emptyTokenListForDeletion, internFormulaString);
+				internFormulaString = InternFormulaStringModify.generateInternStringByDelete(internTokenIndex,
+						internFormulaString);
 				break;
 		}
 

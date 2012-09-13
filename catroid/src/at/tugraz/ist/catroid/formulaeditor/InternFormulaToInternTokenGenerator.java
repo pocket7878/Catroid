@@ -22,6 +22,7 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,46 +60,22 @@ public class InternFormulaToInternTokenGenerator {
 	public static List<InternToken> generateInternTokenListByFunctionIndex(int functionStartIndex,
 			String internFormulaRepresentation) {
 
-		List<InternToken> functionInternTokenList = new LinkedList<InternToken>();
+		List<InternToken> internTokenList = generateInternRepresentationByString(internFormulaRepresentation);
 
-		InternToken functionNameToken = generateInternTokenByIndex(functionStartIndex, internFormulaRepresentation);
+		int internTokenListIndex = 0;
 
-		if (functionNameToken.getInternTokenType() != InternTokenType.FUNCTION_NAME) {
+		for (InternToken internToken : internTokenList) {
+			if (internToken.getInternPositionIndex() == functionStartIndex) {
+				break;
+			}
+			internTokenListIndex++;
+		}
+
+		if (internTokenListIndex == internTokenList.size()) {
 			return null;
 		}
 
-		functionInternTokenList.add(functionNameToken);
-
-		int functionIndex = functionStartIndex + functionNameToken.toString().length();
-
-		InternToken functionStartParameter = generateInternTokenByIndex(functionIndex, internFormulaRepresentation);
-
-		if (functionStartParameter == null) {
-			return functionInternTokenList;
-		}
-
-		functionInternTokenList.add(functionStartParameter);
-
-		functionIndex += functionStartParameter.toString().length();
-		InternToken tempSearchToken;
-		int nestedFunctionsCounter = 1;
-
-		do {
-			tempSearchToken = generateInternTokenByIndex(functionIndex, internFormulaRepresentation);
-			if (tempSearchToken == null) {
-				return null;
-			}
-			functionIndex += tempSearchToken.toString().length();
-			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
-				nestedFunctionsCounter++;
-			}
-			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE) {
-				nestedFunctionsCounter--;
-			}
-			functionInternTokenList.add(tempSearchToken);
-
-		} while (tempSearchToken.getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE
-				|| nestedFunctionsCounter != 0);
+		List<InternToken> functionInternTokenList = getFunctionFromList(internTokenListIndex, internTokenList);
 
 		return functionInternTokenList;
 
@@ -136,6 +113,223 @@ public class InternFormulaToInternTokenGenerator {
 		InternToken returnInternToken = new InternToken(internTokenValue, internTokenType);
 
 		return returnInternToken;
+	}
+
+	public static List<InternToken> generateInternTokenListByFunctionBracketOpen(int internPositionIndex,
+			String internFormulaString) {
+
+		List<InternToken> internTokenList = generateInternRepresentationByString(internFormulaString);
+
+		int functionBracketOpenInternTokenListIndex = 0;
+
+		for (InternToken internToken : internTokenList) {
+			if (internToken.getInternPositionIndex() == internPositionIndex) {
+				break;
+			}
+			functionBracketOpenInternTokenListIndex++;
+		}
+
+		if (functionBracketOpenInternTokenListIndex == 0
+				|| functionBracketOpenInternTokenListIndex == internTokenList.size()) {
+			return null;
+		}
+
+		InternToken functionNameInternToken = internTokenList.get(functionBracketOpenInternTokenListIndex - 1);
+
+		if (functionNameInternToken.getInternTokenType() != InternTokenType.FUNCTION_NAME) {
+			return null;
+		}
+
+		List<InternToken> functionInternTokenList = getFunctionFromList(functionBracketOpenInternTokenListIndex - 1,
+				internTokenList);
+
+		return functionInternTokenList;
+	}
+
+	public static List<InternToken> generateInternTokenListByFunctionBracketClose(int internPositionIndex,
+			String internFormulaString) {
+		List<InternToken> internTokenList = generateInternRepresentationByString(internFormulaString);
+
+		int functionBracketCloseInternTokenListIndex = 0;
+
+		for (InternToken internToken : internTokenList) {
+			if (internToken.getInternPositionIndex() == internPositionIndex) {
+				break;
+			}
+			functionBracketCloseInternTokenListIndex++;
+		}
+
+		if (functionBracketCloseInternTokenListIndex == 0
+				|| functionBracketCloseInternTokenListIndex == internTokenList.size()) {
+			return null;
+		}
+
+		List<InternToken> functionInternTokenList = new LinkedList<InternToken>();
+		functionInternTokenList.add(internTokenList.get(functionBracketCloseInternTokenListIndex));
+
+		int functionIndex = functionBracketCloseInternTokenListIndex - 1;
+		InternToken tempSearchToken;
+		int nestedFunctionsCounter = 1;
+
+		do {
+			if (functionIndex < 0) {
+				return null;
+			}
+			tempSearchToken = internTokenList.get(functionIndex);
+			functionIndex--;
+
+			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
+				nestedFunctionsCounter--;
+			}
+			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE) {
+				nestedFunctionsCounter++;
+			}
+			functionInternTokenList.add(tempSearchToken);
+
+		} while (tempSearchToken.getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN
+				|| nestedFunctionsCounter != 0);
+
+		tempSearchToken = internTokenList.get(functionIndex);
+
+		if (tempSearchToken.getInternTokenType() != InternTokenType.FUNCTION_NAME) {
+			return null;
+		}
+
+		functionInternTokenList.add(tempSearchToken);
+
+		Collections.reverse(functionInternTokenList);
+
+		return functionInternTokenList;
+
+	}
+
+	public static List<InternToken> generateInternTokenListByFunctionParameterDelimiter(int internPositionIndex,
+			String internFormulaString) {
+		List<InternToken> internTokenList = generateInternRepresentationByString(internFormulaString);
+
+		int functionParameterDelimiterInternTokenListIndex = 0;
+
+		for (InternToken internToken : internTokenList) {
+			if (internToken.getInternPositionIndex() == internPositionIndex) {
+				break;
+			}
+			functionParameterDelimiterInternTokenListIndex++;
+		}
+
+		if (functionParameterDelimiterInternTokenListIndex == 0
+				|| functionParameterDelimiterInternTokenListIndex == internTokenList.size()) {
+			return null;
+		}
+
+		List<InternToken> functionInternTokenList = new LinkedList<InternToken>();
+		functionInternTokenList.add(internTokenList.get(functionParameterDelimiterInternTokenListIndex));
+
+		int functionIndex = functionParameterDelimiterInternTokenListIndex - 1;
+		InternToken tempSearchToken;
+		int nestedFunctionsCounter = 1;
+
+		do {
+			if (functionIndex < 0) {
+				return null;
+			}
+			tempSearchToken = internTokenList.get(functionIndex);
+			functionIndex--;
+
+			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
+				nestedFunctionsCounter--;
+			}
+			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE) {
+				nestedFunctionsCounter++;
+			}
+			functionInternTokenList.add(tempSearchToken);
+
+		} while (tempSearchToken.getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN
+				|| nestedFunctionsCounter != 0);
+
+		tempSearchToken = internTokenList.get(functionIndex);
+
+		if (tempSearchToken.getInternTokenType() != InternTokenType.FUNCTION_NAME) {
+			return null;
+		}
+
+		functionInternTokenList.add(tempSearchToken);
+
+		Collections.reverse(functionInternTokenList);
+
+		functionIndex = functionParameterDelimiterInternTokenListIndex + 1;
+		nestedFunctionsCounter = 1;
+
+		do {
+			if (functionIndex >= internTokenList.size()) {
+				return null;
+			}
+			tempSearchToken = internTokenList.get(functionIndex);
+			functionIndex++;
+
+			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
+				nestedFunctionsCounter++;
+			}
+			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE) {
+				nestedFunctionsCounter--;
+			}
+			functionInternTokenList.add(tempSearchToken);
+
+		} while (tempSearchToken.getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE
+				|| nestedFunctionsCounter != 0);
+
+		return functionInternTokenList;
+	}
+
+	private static List<InternToken> getFunctionFromList(int functionStartListIndex, List<InternToken> internTokenList) {
+
+		InternToken functionNameToken = internTokenList.get(functionStartListIndex);
+
+		List<InternToken> functionInternTokenList = new LinkedList<InternToken>();
+
+		if (functionNameToken.getInternTokenType() != InternTokenType.FUNCTION_NAME) {
+			return null;
+		}
+
+		functionInternTokenList.add(functionNameToken);
+
+		int functionIndex = functionStartListIndex + 1;
+
+		InternToken functionStartParameter = internTokenList.get(functionIndex);
+
+		if (functionStartParameter == null) {
+			return functionInternTokenList;
+		}
+
+		if (functionStartParameter.getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
+			return functionInternTokenList;
+		}
+
+		functionInternTokenList.add(functionStartParameter);
+
+		functionIndex++;
+		InternToken tempSearchToken;
+		int nestedFunctionsCounter = 1;
+
+		do {
+			if (functionIndex >= internTokenList.size()) {
+				return null;
+			}
+			tempSearchToken = internTokenList.get(functionIndex);
+			functionIndex++;
+
+			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
+				nestedFunctionsCounter++;
+			}
+			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE) {
+				nestedFunctionsCounter--;
+			}
+			functionInternTokenList.add(tempSearchToken);
+
+		} while (tempSearchToken.getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE
+				|| nestedFunctionsCounter != 0);
+
+		return functionInternTokenList;
+
 	}
 
 }

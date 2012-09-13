@@ -75,7 +75,7 @@ public class InternFormulaStringModify {
 	public static String generateInternStringByPrepend(InternToken internTokenToPrependTo,
 			List<InternToken> tokensToPrepend, String internalFormulaString) {
 
-		tokensToPrepend.add(0, internTokenToPrependTo);
+		tokensToPrepend.add(internTokenToPrependTo);
 
 		return generateInternStringByReplace(internTokenToPrependTo.getInternPositionIndex(),
 				internTokenToPrependTo.getInternPositionIndex(), tokensToPrepend, internalFormulaString);
@@ -95,6 +95,20 @@ public class InternFormulaStringModify {
 			returnValue += internToken.toString();
 		}
 		return returnValue;
+	}
+
+	public static String generateInternStringByDelete(int internTokenIndex, int endIndexToDelete,
+			String internFormulaString) {
+
+		List<InternToken> emptyTokenListForDeletion = new LinkedList<InternToken>();
+
+		return InternFormulaStringModify.generateInternStringByReplace(internTokenIndex, endIndexToDelete,
+				emptyTokenListForDeletion, internFormulaString);
+	}
+
+	public static String generateInternStringByDelete(int internPositionIndex, String internFormulaString) {
+
+		return generateInternStringByDelete(internPositionIndex, internPositionIndex, internFormulaString);
 	}
 
 }

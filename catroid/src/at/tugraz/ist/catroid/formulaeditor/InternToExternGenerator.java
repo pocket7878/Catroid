@@ -59,7 +59,7 @@ public class InternToExternGenerator {
 			generatedExternFormulaString += " "; //TODO handle whitespace insertion
 			externStartIndex = generatedExternFormulaString.length();
 			currentToken = internTokenList.get(0);
-			Log.i("info", "generateExternStringAndMapping: currentTokenText = " + currentToken.getTokenSringValue());
+			//			Log.i("info", "generateExternStringAndMapping: currentTokenText = " + currentToken.getTokenSringValue());
 			externTokenString = generateExternStringFromToken(currentToken);
 			generatedExternFormulaString += externTokenString;
 			externEndIndex = generatedExternFormulaString.length(); //TODO cursor position determination
