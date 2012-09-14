@@ -266,9 +266,9 @@ public class WallpaperCostume {
 	public void changeGhostEffect(float alpha) {
 		this.alphaValue += alpha;
 
-		if (alpha < 0f) {
+		if (this.alphaValue < 0f) {
 			this.alphaValue = 0f;
-		} else if (alpha > 1f) {
+		} else if (this.alphaValue > 1f) {
 			this.alphaValue = 1f;
 		}
 

@@ -130,6 +130,6 @@ public class ChangeGhostEffectBrick implements Brick, OnClickListener {
 			wallpaperCostume = new WallpaperCostume(sprite, null);
 		}
 
-		wallpaperCostume.changeGhostEffect((100f - (float) this.changeGhostEffect) / 100);
+		wallpaperCostume.changeGhostEffect((float) this.changeGhostEffect / -100);
 	}
 }
