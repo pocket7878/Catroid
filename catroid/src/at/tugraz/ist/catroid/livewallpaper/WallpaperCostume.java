@@ -41,6 +41,7 @@ public class WallpaperCostume {
 	private int top;
 	private int left;
 
+	private float alphaValue = 1f;
 	private float brightness = 1f;
 
 	private double size = 1;
@@ -250,4 +251,57 @@ public class WallpaperCostume {
 		}
 		this.costume = resultBitmap;
 	}
+
+	public void setGhostEffect(float alpha) {
+		if (alpha < 0f) {
+			this.alphaValue = 0f;
+		} else if (alpha > 1f) {
+			this.alphaValue = 1f;
+		}
+		this.alphaValue = alpha;
+
+		adjustGhostEffect();
+	}
+
+	public void changeGhostEffect(float alpha) {
+		this.alphaValue += alpha;
+
+		if (alpha < 0f) {
+			this.alphaValue = 0f;
+		} else if (alpha > 1f) {
+			this.alphaValue = 1f;
+		}
+
+		adjustGhostEffect();
+
+	}
+
+	private void adjustGhostEffect() {
+		setCostume(this.costumeData);
+		Bitmap resultBitmap = Bitmap.createBitmap(this.costume.getWidth(), this.costume.getHeight(),
+				this.costume.getConfig());
+
+		for (int x = 0; x < this.costume.getWidth(); x++) {
+			for (int y = 0; y < this.costume.getHeight(); y++) {
+
+				int oldPixelColor = this.costume.getPixel(x, y);
+
+				int red = Color.red(oldPixelColor);
+				int green = Color.green(oldPixelColor);
+				int blue = Color.blue(oldPixelColor);
+				int alpha = Color.alpha(oldPixelColor) + (int) (255 * (this.alphaValue - 1));
+
+				if (alpha > 255) {
+					alpha = 255;
+				} else if (alpha < 0) {
+					alpha = 0;
+				}
+
+				int newPixel = Color.argb(alpha, red, green, blue);
+				resultBitmap.setPixel(x, y, newPixel);
+			}
+		}
+		this.costume = resultBitmap;
+	}
+
 }
