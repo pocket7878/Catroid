@@ -23,10 +23,13 @@
 package at.tugraz.ist.catroid.test.formulaeditor;
 
 import java.util.EnumSet;
+import java.util.List;
 
 import android.test.AndroidTestCase;
-import at.tugraz.ist.catroid.formulaeditor.CalcGrammarParser;
 import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
+import at.tugraz.ist.catroid.formulaeditor.InternFormulaParser;
+import at.tugraz.ist.catroid.formulaeditor.InternFormulaToInternTokenGenerator;
+import at.tugraz.ist.catroid.formulaeditor.InternToken;
 
 public class ParserTest extends AndroidTestCase {
 
@@ -34,7 +37,11 @@ public class ParserTest extends AndroidTestCase {
 
 	public void testParserTreeGenerationFormulas() {
 		for (ParserFormulaTestData parserTest : EnumSet.allOf(ParserFormulaTestData.class)) {
-			CalcGrammarParser parser = CalcGrammarParser.getFormulaParser(parserTest.getInput());
+
+			List<InternToken> internTokensToParse = InternFormulaToInternTokenGenerator
+					.generateInternRepresentationByString(parserTest.getInput());
+			InternFormulaParser parser = new InternFormulaParser(internTokensToParse);
+
 			FormulaElement parserFormulaElement = parser.parseFormula();
 
 			assertNotNull(
@@ -46,23 +53,12 @@ public class ParserTest extends AndroidTestCase {
 		}
 	}
 
-	public void testParserTreeGenerationInvalidFormulas() {
-		for (InvalidParserFormulaTestData parserTest : EnumSet.allOf(InvalidParserFormulaTestData.class)) {
-			CalcGrammarParser parser = CalcGrammarParser.getFormulaParser(parserTest.getInput());
-			FormulaElement parserFormulaElement = parser.parseFormula();
-
-			assertNull("Invalid formula parsed: Testname: " + parserTest.name() + ": " + parserTest.getInput() + "=",
-					parserFormulaElement);
-			assertEquals("First error character position is not as expected: Testname: " + parserTest.name() + ": "
-					+ parserTest.getInput() + "=", parserTest.getFirstErrorPosition(),
-					Integer.valueOf(parser.getErrorCharacterPosition()));
-
-		}
-	}
-
 	public void testParserFunctionInterpretation() {
 		for (ParserFormulaFunctionsTestData parserTest : EnumSet.allOf(ParserFormulaFunctionsTestData.class)) {
-			CalcGrammarParser parser = CalcGrammarParser.getFormulaParser(parserTest.getInput());
+			List<InternToken> internTokensToParse = InternFormulaToInternTokenGenerator
+					.generateInternRepresentationByString(parserTest.getInput());
+			InternFormulaParser parser = new InternFormulaParser(internTokensToParse);
+
 			FormulaElement parserFormulaElement = parser.parseFormula();
 
 			assertNotNull(
@@ -75,4 +71,22 @@ public class ParserTest extends AndroidTestCase {
 		}
 
 	}
+
+	public void testParserTreeGenerationInvalidFormulas() {
+		for (InvalidParserFormulaTestData parserTest : EnumSet.allOf(InvalidParserFormulaTestData.class)) {
+			List<InternToken> internTokensToParse = InternFormulaToInternTokenGenerator
+					.generateInternRepresentationByString(parserTest.getInput());
+			InternFormulaParser parser = new InternFormulaParser(internTokensToParse);
+
+			FormulaElement parserFormulaElement = parser.parseFormula();
+
+			assertNull("Invalid formula parsed: Testname: " + parserTest.name() + ": " + parserTest.getInput() + "=",
+					parserFormulaElement);
+			assertEquals("First error character position is not as expected: Testname: " + parserTest.name() + ": "
+					+ parserTest.getInput() + "=", parserTest.getFirstErrorPosition(),
+					Integer.valueOf(parser.getErrorCharacterPosition()));
+
+		}
+	}
+
 }

@@ -29,7 +29,7 @@ public enum InternTokenType {
 			":bracket_close:"), SENSOR(":sensor:"), FUNCTION_PARAMETERS_BRACKET_OPEN(
 			":function_parameter_bracket_open:"), FUNCTION_PARAMETERS_BRACKET_CLOSE(
 			":function_parameter_bracket_close:"), FUNCTION_PARAMETER_DELIMITER(":function_parameter_delimiter:"), COSTUME(
-			":costume:"), PERIOD(":period:"), EOF(":eof_token_only_used_by_parser:");
+			":costume:"), PERIOD(":period:"), PARSER_END_OF_FILE(":eof_token_only_used_by_parser:");
 
 	private String tokenPrefix;
 

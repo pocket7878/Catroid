@@ -26,25 +26,39 @@ import java.util.List;
 
 public class InternFormulaParser {
 
+	private class InternFormulaParserException extends Exception {
+
+		public InternFormulaParserException(String errorMessage) {
+			super(errorMessage);
+		}
+	}
+
+	public static final int PARSER_OK = -1;
+	public static final int PARSER_STACK_OVERFLOW = -2;
+	public static final int PARSER_INPUT_SYNTAX_ERROR = -3;
+	public static final int PARSER_NO_INPUT = -4;
+
 	private List<InternToken> internTokensToParse;
 	private int currentTokenParseIndex;
+	private int errorCharacterPosition;
 	private InternToken currentToken;
 
 	public InternFormulaParser(List<InternToken> internTokensToParse) {
 		this.internTokensToParse = internTokensToParse;
 	}
 
-	private void getNextToken() {
+	private void getNextToken() throws InternFormulaParserException {
 		currentTokenParseIndex++;
-		if (currentTokenParseIndex == internTokensToParse.size()) {
+		if (currentTokenParseIndex >= internTokensToParse.size()) {
 			currentToken = null;
-			return;
-		}
-		if (currentTokenParseIndex > internTokensToParse.size()) {
-			currentToken = null;
-			return; //TODO throw Error
+			throw new InternFormulaParserException("Parse Error");
 		}
 		currentToken = internTokensToParse.get(currentTokenParseIndex);
+
+	}
+
+	public int getErrorCharacterPosition() {
+		return errorCharacterPosition;
 
 	}
 
@@ -103,27 +117,58 @@ public class InternFormulaParser {
 		//        System.out.println("handleOperator-after: " + curElem.getRoot().getTreeString());
 	}
 
+	private void addEndOfFileToken() {
+		int lastIndex = internTokensToParse.size() - 1;
+
+		if (internTokensToParse.get(lastIndex).isEndOfFileToken()) {
+			return;
+		}
+
+		InternToken endOfFileParserToken = new InternToken(InternTokenType.PARSER_END_OF_FILE);
+		internTokensToParse.add(endOfFileParserToken);
+	}
+
 	public FormulaElement parseFormula() {
+		errorCharacterPosition = PARSER_OK;
 		currentTokenParseIndex = 0;
-		currentToken = internTokensToParse.get(0); //TODO sizecheck
 
-		//TODO enter EOF Token at the end :)
+		if (internTokensToParse == null) {
+			errorCharacterPosition = PARSER_NO_INPUT;
+			return null;
+		}
+		if (internTokensToParse.size() == 0) {
+			errorCharacterPosition = PARSER_NO_INPUT;
+			return null;
+		}
 
-		return formula();
+		currentToken = internTokensToParse.get(0);
+
+		addEndOfFileToken();
+
+		FormulaElement formulaParseTree = null;
+
+		try {
+			formulaParseTree = formula();
+		} catch (InternFormulaParserException parseExeption) {
+			errorCharacterPosition = currentTokenParseIndex;
+		}
+
+		return formulaParseTree;
 
 	}
 
-	private FormulaElement formula() {
+	private FormulaElement formula() throws InternFormulaParserException {
+
 		FormulaElement termListTree = termList();
 
-		if (currentTokenParseIndex == internTokensToParse.size()) {
+		if (currentToken.isEndOfFileToken()) {
 			return termListTree;
 		}
 
-		return termListTree;
+		throw new InternFormulaParserException("Parse Error");
 	}
 
-	private FormulaElement termList() {
+	private FormulaElement termList() throws InternFormulaParserException {
 		FormulaElement curElem = term();
 
 		FormulaElement loopTermTree;
@@ -141,12 +186,12 @@ public class InternFormulaParser {
 		return curElem.getRoot();
 	}
 
-	private FormulaElement term() {
+	private FormulaElement term() throws InternFormulaParserException {
 
 		FormulaElement termTree = new FormulaElement(FormulaElement.ElementType.VALUE, null, null);
 		FormulaElement curElem = termTree;
 
-		if (currentToken.isOperator() && currentToken.getTokenSringValue() == "-") {
+		if (currentToken.isOperator() && currentToken.getTokenSringValue().equals("-")) {
 
 			curElem = new FormulaElement(FormulaElement.ElementType.VALUE, null, termTree, null, null);
 			termTree.replaceElement(FormulaElement.ElementType.OPERATOR, "-", null, curElem);
@@ -160,15 +205,17 @@ public class InternFormulaParser {
 
 		} else if (currentToken.isBracketOpen()) {
 
+			getNextToken();
+
 			curElem.replaceElement(FormulaElement.ElementType.BRACKET, null, null, termList());
 
 			if (!currentToken.isBracketClose()) {
-				//TODO throw error
+				throw new InternFormulaParserException("Parse Error");
 			}
+			getNextToken();
 
 		} else if (currentToken.isFunctionName()) {
 			curElem.replaceElement(FormulaElement.ElementType.BRACKET, null, null, function());
-			getNextToken();
 
 		} else if (currentToken.isSensor()) {
 
@@ -179,26 +226,22 @@ public class InternFormulaParser {
 			//TODO implement
 
 		} else {
-			//TODO throw error
+			throw new InternFormulaParserException("Parse Error");
 		}
 
 		return termTree;
 
 	}
 
-	private FormulaElement function() {
+	private FormulaElement function() throws InternFormulaParserException {
 		FormulaElement functionTree = new FormulaElement(FormulaElement.ElementType.FUNCTION, null, null);
 
-		if (currentToken.isFunctionName()) {
-			//TODO check if functionName is valid
-			functionTree = new FormulaElement(FormulaElement.ElementType.FUNCTION, currentToken.getTokenSringValue(),
-					null);
-			getNextToken();
-		} else {
-			//TODO throw error
-		}
+		//TODO check if functionName is valid
+		functionTree = new FormulaElement(FormulaElement.ElementType.FUNCTION, currentToken.getTokenSringValue(), null);
+		getNextToken();
 
 		if (currentToken.isFunctionParameterBracketOpen()) {
+			getNextToken();
 			functionTree.setLeftChild(termList());
 
 			if (currentToken.isFunctionParameterDelimiter()) {
@@ -207,7 +250,7 @@ public class InternFormulaParser {
 			}
 
 			if (!currentToken.isFunctionParameterBracketClose()) {
-				//TODO throw error
+				throw new InternFormulaParserException("Parse Error");
 			}
 			getNextToken();
 
@@ -216,15 +259,15 @@ public class InternFormulaParser {
 		return functionTree;
 	}
 
-	private String number() {
-		//TODO implement valid numbers
+	private String number() throws InternFormulaParserException {
 
 		String numberToCheck = currentToken.getTokenSringValue();
 
 		if (!numberToCheck.matches("(\\d)+(\\.(\\d)+)?")) {
-			//TODO throw Error#
-			return null;
+			throw new InternFormulaParserException("Parse Error");
 		}
+
+		getNextToken();
 
 		return numberToCheck;
 	}

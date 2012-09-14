@@ -73,7 +73,7 @@ public class InternToken {
 	}
 
 	public boolean isBracketClose() {
-		if (internTokenType == InternTokenType.BRACKET_OPEN) {
+		if (internTokenType == InternTokenType.BRACKET_CLOSE) {
 			return true;
 		}
 
@@ -119,6 +119,14 @@ public class InternToken {
 		if (internTokenType == InternTokenType.COSTUME) {
 			return true;
 		}
+		return false;
+	}
+
+	public boolean isEndOfFileToken() {
+		if (internTokenType == InternTokenType.PARSER_END_OF_FILE) {
+			return true;
+		}
+
 		return false;
 	}
 

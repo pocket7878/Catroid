@@ -23,10 +23,27 @@
 package at.tugraz.ist.catroid.test.formulaeditor;
 
 public enum ParserFormulaFunctionsTestData {
-	SIN("sin(90)", 1.0), COS("cos(180)", -1.0), TAN("tan(45)", 1.0), LN("ln(e ^ 2)", 2.0), LOG("log(10^2)", 2.0), SQRT(
-			"sqrt(4^2)", 4.0), ABS("abs(-4)", 4.0), ROUND("round(3.2)", 3.0), PI("pi", Math.PI), RANDOM_1(
-			"rand(0.0001, 0.0002)", 0.00015), RANDOM_2("rand(0.0008, 0.0009)", 0.00085), RANDOM_3(
-			"rand(0.0005, 0.0006)", 0.00055), RANDOM_4("rand(0.0007, 0.0008)", 0.00075);
+	SIN(":function_name:sin:function_parameter_bracket_open::number:90:function_parameter_bracket_close:", 1.0), COS(
+			":function_name:cos:function_parameter_bracket_open::number:180:function_parameter_bracket_close:", -1.0), TAN(
+			":function_name:tan:function_parameter_bracket_open::number:45:function_parameter_bracket_close:", 1.0), LN(
+			":function_name:ln:function_parameter_bracket_open::function_name:e:operator:^:number:2:function_parameter_bracket_close:",
+			2.0), LOG(
+			":function_name:log:function_parameter_bracket_open::number:10:operator:^:number:2:function_parameter_bracket_close:",
+			2.0), SQRT(
+			":function_name:sqrt:function_parameter_bracket_open::number:4:operator:^:number:2:function_parameter_bracket_close:",
+			4.0), ABS(
+			":function_name:abs:function_parameter_bracket_open::operator:-:number:4:function_parameter_bracket_close:",
+			4.0), ROUND(
+			":function_name:round:function_parameter_bracket_open::number:3.2:function_parameter_bracket_close:", 3.0), PI(
+			":function_name:pi", Math.PI), RANDOM_1(
+			":function_name:rand:function_parameter_bracket_open::number:0.0001:function_parameter_delimiter:,:number:0.0002:function_parameter_bracket_close:",
+			0.00015), RANDOM_2(
+			":function_name:rand:function_parameter_bracket_open::number:0.0008:function_parameter_delimiter:,:number:0.0009:function_parameter_bracket_close:",
+			0.00085), RANDOM_3(
+			":function_name:rand:function_parameter_bracket_open::number:0.0005:function_parameter_delimiter::number:0.0006:function_parameter_bracket_close:",
+			0.00055), RANDOM_4(
+			":function_name:rand:function_parameter_bracket_open::number:0.0007:function_parameter_delimiter::number:0.0008:function_parameter_bracket_close:",
+			0.00075);
 
 	private String input;
 	private Double output;
