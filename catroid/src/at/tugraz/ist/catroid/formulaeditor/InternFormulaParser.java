@@ -219,11 +219,11 @@ public class InternFormulaParser {
 
 		} else if (currentToken.isSensor()) {
 
-			//TODO implement
+			curElem.replaceElement(FormulaElement.ElementType.BRACKET, null, null, sensor());
 
 		} else if (currentToken.isCostume()) {
 
-			//TODO implement
+			curElem.replaceElement(FormulaElement.ElementType.BRACKET, null, null, costume());
 
 		} else {
 			throw new InternFormulaParserException("Parse Error");
@@ -231,6 +231,28 @@ public class InternFormulaParser {
 
 		return termTree;
 
+	}
+
+	private FormulaElement costume() throws InternFormulaParserException {
+		//TODO check if costume-name exists
+
+		FormulaElement costumeTree = new FormulaElement(FormulaElement.ElementType.SENSOR,
+				currentToken.getTokenSringValue(), null);
+
+		getNextToken();
+
+		return costumeTree;
+	}
+
+	private FormulaElement sensor() throws InternFormulaParserException {
+		//TODO check if sensor-name exists
+
+		FormulaElement costumeTree = new FormulaElement(FormulaElement.ElementType.SENSOR,
+				currentToken.getTokenSringValue(), null);
+
+		getNextToken();
+
+		return costumeTree;
 	}
 
 	private FormulaElement function() throws InternFormulaParserException {

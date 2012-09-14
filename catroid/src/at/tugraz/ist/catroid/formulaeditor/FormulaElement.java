@@ -86,6 +86,7 @@ public class FormulaElement implements Serializable {
 		return rightChild;
 	}
 
+	//TODO remove Method
 	public String getEditTextRepresentation() {
 		String result = "";
 
