@@ -41,6 +41,8 @@ public class InternFormula {
 	private String externFormulaString;
 
 	private boolean tokenSelection;
+	private int internTokenSelectionStart;
+	private int internTokenSelectionEnd;
 	private int externCursorPosition;
 
 	private InternToken cursorPositionInternToken;
@@ -53,6 +55,8 @@ public class InternFormula {
 		externInternRepresentationMapping = new ExternInternRepresentationMapping();
 		tokenSelection = false;
 		externCursorPosition = 0;
+		internTokenSelectionEnd = -1;
+		internTokenSelectionStart = -1;
 	}
 
 	public synchronized void setCursorAndSelection(int externCursorPosition, boolean tokenIsSelected) {
@@ -105,20 +109,43 @@ public class InternFormula {
 
 		}
 
-		//		///////////////////
-		//
-		//		if (cursorPositionTokenIndex == null) {
-		//			this.cursorPositionInternToken = null;
-		//			Log.i("info", "setCursorAndSelection: cursorPositionInternToken = null");
-		//		} else {
-		//			this.cursorPositionInternToken = InternFormulaToInternTokenGenerator.generateInternTokenByIndex(
-		//					cursorPositionTokenIndex, internFormulaString);
-		//
-		//			Log.i("info",
-		//					"setCursorAndSelection: cursorPositionInternToken = "
-		//							+ cursorPositionInternToken.getInternTokenType().getInternTokenPrefix()
-		//							+ cursorPositionInternToken.getTokenSringValue());
-		//		}
+		if (tokenIsSelected) {
+			selectCursorPositionInternToken();
+		} else {
+			internTokenSelectionEnd = -1;
+			internTokenSelectionStart = -1;
+		}
+
+	}
+
+	public int getExternSelectionStartIndex() {
+		if (tokenSelection == false) {
+			return -1;
+		}
+
+		Integer externSelectionStartIndex = externInternRepresentationMapping
+				.getExternTokenStartIndex(internTokenSelectionStart);
+
+		if (externSelectionStartIndex == null) {
+			return -1;
+		}
+
+		return externSelectionStartIndex;
+	}
+
+	public int getExternSelectionEndIndex() {
+		if (tokenSelection == false) {
+			return -1;
+		}
+
+		Integer externSelectionEndIndex = externInternRepresentationMapping
+				.getExternTokenEndIndex(internTokenSelectionEnd);
+
+		if (externSelectionEndIndex == null) {
+			return -1;
+		}
+
+		return externSelectionEndIndex;
 	}
 
 	public String getExternFormulaString() {
@@ -136,6 +163,11 @@ public class InternFormula {
 
 			handleDeletion();
 
+		} else if (tokenSelection) {
+			replaceSelection(catKeyEventTokenList);
+			tokenSelection = false;
+			internTokenSelectionStart = -1;
+			internTokenSelectionEnd = -1;
 		} else if (cursorTokenPosition == null) {
 
 			appendToFirstLeftToken(catKeyEventTokenList);
@@ -152,10 +184,6 @@ public class InternFormula {
 
 			insertRightToCurrentToken(catKeyEventTokenList);
 
-		} else if (tokenSelection) {
-
-			replaceSelectionByTokenList(catKeyEventTokenList);
-
 		} else {
 
 			//			appendToFirstLeftToken(catKeyEventTokenList);
@@ -166,8 +194,26 @@ public class InternFormula {
 
 	}
 
+	private void replaceSelection(List<InternToken> tokenList) {
+
+		if (internTokenSelectionStart > internTokenSelectionEnd || internTokenSelectionStart < 0
+				|| internTokenSelectionEnd < 0) {
+			return;
+		}
+
+		internFormulaString = InternFormulaStringModify.generateInternStringByReplace(internTokenSelectionStart,
+				internTokenSelectionEnd, tokenList, internFormulaString);
+
+	}
+
 	private void handleDeletion() {
-		if (cursorTokenPosition == null) {
+		if (tokenSelection) {
+			internFormulaString = InternFormulaStringModify.generateInternStringByDelete(internTokenSelectionStart,
+					internTokenSelectionEnd, internFormulaString);
+			tokenSelection = false;
+			internTokenSelectionStart = -1;
+			internTokenSelectionEnd = -1;
+		} else if (cursorTokenPosition == null) {
 
 			InternToken firstLeftInternToken = getFirstLeftInternToken(externCursorPosition);
 
@@ -293,17 +339,46 @@ public class InternFormula {
 					return;
 				}
 
-				Log.i("info", "DELETE FUNCTION_PARAMETER_DELIMITER show generated Function do delete");
-
-				//TESTOUTPUT
-				for (InternToken internToken : functionInternTokens) {
-					Log.i("info", internToken.toString());
-				}
-
 				functionInternTokensLastIndex = functionInternTokens.size() - 1;
 
 				startDeletionIndex = functionInternTokens.get(0).getInternPositionIndex();
 				endDeletionIndex = functionInternTokens.get(functionInternTokensLastIndex).getInternPositionIndex();
+
+				internFormulaString = InternFormulaStringModify.generateInternStringByDelete(startDeletionIndex,
+						endDeletionIndex, internFormulaString);
+
+				break;
+			case BRACKET_OPEN:
+				List<InternToken> bracketsInternTokens = InternFormulaToInternTokenGenerator
+						.generateTokenListByBracketOpen(tokenToDelete.getInternPositionIndex(), internFormulaString);
+
+				if (bracketsInternTokens == null || bracketsInternTokens.size() == 0) {
+					return;
+				}
+
+				int bracketsInternTokensLastIndex = bracketsInternTokens.size() - 1;
+
+				startDeletionIndex = bracketsInternTokens.get(0).getInternPositionIndex();
+				endDeletionIndex = bracketsInternTokens.get(bracketsInternTokensLastIndex).getInternPositionIndex();
+
+				internFormulaString = InternFormulaStringModify.generateInternStringByDelete(startDeletionIndex,
+						endDeletionIndex, internFormulaString);
+
+				break;
+
+			case BRACKET_CLOSE:
+
+				bracketsInternTokens = InternFormulaToInternTokenGenerator.generateTokenListByBracketClose(
+						tokenToDelete.getInternPositionIndex(), internFormulaString);
+
+				if (bracketsInternTokens == null || bracketsInternTokens.size() == 0) {
+					return;
+				}
+
+				bracketsInternTokensLastIndex = bracketsInternTokens.size() - 1;
+
+				startDeletionIndex = bracketsInternTokens.get(0).getInternPositionIndex();
+				endDeletionIndex = bracketsInternTokens.get(bracketsInternTokensLastIndex).getInternPositionIndex();
 
 				internFormulaString = InternFormulaStringModify.generateInternStringByDelete(startDeletionIndex,
 						endDeletionIndex, internFormulaString);
@@ -325,6 +400,128 @@ public class InternFormula {
 		externInternRepresentationMapping = internToExternGenerator.getGeneratedExternInternRepresentationMapping();
 
 		setCursorAndSelection(externCursorPosition, tokenSelection); //TODO refactor
+
+	}
+
+	private void selectCursorPositionInternToken() {
+		switch (cursorPositionInternToken.getInternTokenType()) {
+			case FUNCTION_NAME:
+				List<InternToken> functionInternTokens = InternFormulaToInternTokenGenerator
+						.generateInternTokenListByFunctionIndex(cursorPositionInternToken.getInternPositionIndex(),
+								internFormulaString);
+
+				if (functionInternTokens.size() == 0) {
+					return;
+				}
+
+				int lastListIndex = functionInternTokens.size() - 1;
+				InternToken lastFunctionToken = functionInternTokens.get(lastListIndex);
+
+				int endSelectionIndex = lastFunctionToken.getInternPositionIndex();
+
+				this.internTokenSelectionStart = cursorPositionInternToken.getInternPositionIndex();
+				this.internTokenSelectionEnd = endSelectionIndex;
+
+				break;
+			case FUNCTION_PARAMETERS_BRACKET_OPEN:
+
+				functionInternTokens = InternFormulaToInternTokenGenerator
+						.generateInternTokenListByFunctionBracketOpen(
+								cursorPositionInternToken.getInternPositionIndex(), internFormulaString);
+
+				if (functionInternTokens == null || functionInternTokens.size() == 0) {
+					return;
+				}
+
+				int functionInternTokensLastIndex = functionInternTokens.size() - 1;
+
+				int startSelectionIndex = functionInternTokens.get(0).getInternPositionIndex();
+				endSelectionIndex = functionInternTokens.get(functionInternTokensLastIndex).getInternPositionIndex();
+
+				this.internTokenSelectionStart = startSelectionIndex;
+				this.internTokenSelectionEnd = endSelectionIndex;
+
+				break;
+			case FUNCTION_PARAMETERS_BRACKET_CLOSE:
+				functionInternTokens = InternFormulaToInternTokenGenerator
+						.generateInternTokenListByFunctionBracketClose(
+								cursorPositionInternToken.getInternPositionIndex(), internFormulaString);
+
+				if (functionInternTokens == null || functionInternTokens.size() == 0) {
+					return;
+				}
+
+				functionInternTokensLastIndex = functionInternTokens.size() - 1;
+
+				startSelectionIndex = functionInternTokens.get(0).getInternPositionIndex();
+				endSelectionIndex = functionInternTokens.get(functionInternTokensLastIndex).getInternPositionIndex();
+
+				this.internTokenSelectionStart = startSelectionIndex;
+				this.internTokenSelectionEnd = endSelectionIndex;
+				break;
+
+			case FUNCTION_PARAMETER_DELIMITER:
+				functionInternTokens = InternFormulaToInternTokenGenerator
+						.generateInternTokenListByFunctionParameterDelimiter(
+								cursorPositionInternToken.getInternPositionIndex(), internFormulaString);
+
+				if (functionInternTokens == null || functionInternTokens.size() == 0) {
+					return;
+				}
+
+				functionInternTokensLastIndex = functionInternTokens.size() - 1;
+
+				startSelectionIndex = functionInternTokens.get(0).getInternPositionIndex();
+				endSelectionIndex = functionInternTokens.get(functionInternTokensLastIndex).getInternPositionIndex();
+
+				this.internTokenSelectionStart = startSelectionIndex;
+				this.internTokenSelectionEnd = endSelectionIndex;
+
+				break;
+
+			case BRACKET_OPEN:
+				List<InternToken> bracketsInternTokens = InternFormulaToInternTokenGenerator
+						.generateTokenListByBracketOpen(cursorPositionInternToken.getInternPositionIndex(),
+								internFormulaString);
+
+				if (bracketsInternTokens == null || bracketsInternTokens.size() == 0) {
+					return;
+				}
+
+				int bracketsInternTokensLastIndex = bracketsInternTokens.size() - 1;
+
+				startSelectionIndex = bracketsInternTokens.get(0).getInternPositionIndex();
+				endSelectionIndex = bracketsInternTokens.get(bracketsInternTokensLastIndex).getInternPositionIndex();
+
+				this.internTokenSelectionStart = startSelectionIndex;
+				this.internTokenSelectionEnd = endSelectionIndex;
+
+				break;
+
+			case BRACKET_CLOSE:
+
+				bracketsInternTokens = InternFormulaToInternTokenGenerator.generateTokenListByBracketClose(
+						cursorPositionInternToken.getInternPositionIndex(), internFormulaString);
+
+				if (bracketsInternTokens == null || bracketsInternTokens.size() == 0) {
+					return;
+				}
+
+				bracketsInternTokensLastIndex = bracketsInternTokens.size() - 1;
+
+				startSelectionIndex = bracketsInternTokens.get(0).getInternPositionIndex();
+				endSelectionIndex = bracketsInternTokens.get(bracketsInternTokensLastIndex).getInternPositionIndex();
+
+				this.internTokenSelectionStart = startSelectionIndex;
+				this.internTokenSelectionEnd = endSelectionIndex;
+
+				break;
+
+			default:
+				this.internTokenSelectionStart = cursorPositionInternToken.getInternPositionIndex();
+				this.internTokenSelectionEnd = cursorPositionInternToken.getInternPositionIndex();
+				break;
+		}
 
 	}
 
@@ -459,19 +656,6 @@ public class InternFormula {
 
 	}
 
-	private void insertInternTokenByCatKeyEvent(int internTokenListIndex, CatKeyEvent catKeyEvent) {
-		//		List<InternToken> internTokensToInsert = catKeyEvent.createInternTokensByCatKeyEvent();
-		//
-		//		internTokenList.addAll(internTokenListIndex, internTokensToInsert);
-
-		//TODO GOON here
-
-	}
-
-	private void replaceSelectionByTokenList(List<InternToken> internTokensToReplaceWith) {
-		//TODO implement selection replace
-	}
-
 	private void replaceCursorPositionInternTokenByTokenList(List<InternToken> internTokensToReplaceWith) {
 
 		Log.i("info", "replaceCursorPositionInternTokenByTokenList:enter");
@@ -536,7 +720,7 @@ public class InternFormula {
 
 		} else if (cursorPositionInternToken.getInternTokenType() == InternTokenType.NUMBER
 				&& InternToken.isFunctionToken(internTokensToReplaceWith)) {
-			//When NUMBER selected
+			//TODO: When NUMBER selected
 			//  set Number to first parameter when FUNCTION inserted
 
 		} else if (cursorPositionInternToken.getInternTokenType() == InternTokenType.FUNCTION_NAME) {

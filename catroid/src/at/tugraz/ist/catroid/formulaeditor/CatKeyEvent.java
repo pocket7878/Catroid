@@ -197,9 +197,9 @@ public class CatKeyEvent extends KeyEvent {
 
 	private List<InternToken> buildBracket(String bracketValue) {
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
+		returnList.add(new InternToken(InternTokenType.BRACKET_OPEN));
 		returnList.add(new InternToken(bracketValue, InternTokenType.NUMBER));
-		returnList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
+		returnList.add(new InternToken(InternTokenType.BRACKET_CLOSE));
 		return returnList;
 	}
 

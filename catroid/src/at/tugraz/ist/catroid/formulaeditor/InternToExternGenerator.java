@@ -81,7 +81,7 @@ public class InternToExternGenerator {
 			generatedExternInternRepresentationMapping.putExternInternMapping(externStartIndex, externEndIndex,
 					currentToken.getInternPositionIndex());
 			generatedExternInternRepresentationMapping.putInternExternMapping(currentToken.getInternPositionIndex(),
-					externStartIndex);
+					externStartIndex, externEndIndex + 1);
 
 			internTokenList.remove(0);
 
@@ -98,12 +98,13 @@ public class InternToExternGenerator {
 			case OPERATOR:
 				return internToken.getTokenSringValue();
 
+			case BRACKET_OPEN:
 			case FUNCTION_PARAMETERS_BRACKET_OPEN:
 				return "(";
+			case BRACKET_CLOSE:
 			case FUNCTION_PARAMETERS_BRACKET_CLOSE:
 				return ")";
 			case FUNCTION_PARAMETER_DELIMITER:
-
 				return ","; //TODO hardcoded delimiter value
 
 			default:

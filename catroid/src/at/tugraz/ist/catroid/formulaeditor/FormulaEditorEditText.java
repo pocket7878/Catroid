@@ -168,7 +168,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	public void doSelectionAndHighlighting() {
 
-		//TODO Selection is done by InternFormula
+		highlightSelection();
 
 		//		clearSelectionHighlighting();
 		//		Editable currentInput = this.getText();
@@ -429,11 +429,13 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		highlightSpan = this.getText();
 		highlightSpan.removeSpan(COLOR_HIGHLIGHT);
 
-		//		if (selectionStartIndex < 0) {
-		//			selectionStartIndex = 0;
-		//		}
+		int selectionStartIndex = internFormula.getExternSelectionStartIndex();
+		int selectionEndIndex = internFormula.getExternSelectionEndIndex();
 
-		if (selectionEndIndex == selectionStartIndex || selectionEndIndex > highlightSpan.length()) {
+		Log.i("info", "highlightSelection: start=" + selectionStartIndex + "  end=" + selectionEndIndex);
+
+		if (selectionStartIndex == -1 || selectionEndIndex == -1 || selectionEndIndex == selectionStartIndex
+				|| selectionEndIndex > highlightSpan.length()) {
 			return;
 		}
 
@@ -705,6 +707,10 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	}
 
+	private void updateSelection() {
+
+	}
+
 	@Override
 	protected void onCreateContextMenu(ContextMenu menu) {
 		// dont want it!
@@ -718,10 +724,11 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	final GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
 		@Override
 		public boolean onDoubleTap(MotionEvent e) {
-			//TODO: handle via InternFormula
-			doSelectionAndHighlighting();
+			//TODO: history update
 			history.updateCurrentSelection(absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
+
 			internFormula.setCursorAndSelection(absoluteCursorPosition, true);
+			doSelectionAndHighlighting();
 
 			return true;
 		}
@@ -773,10 +780,11 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 				absoluteCursorPosition = tempCursorPosition;
 				postInvalidate();
 
-				updateSelectionIndices();
-				history.updateCurrentSelection(absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
-
 				internFormula.setCursorAndSelection(absoluteCursorPosition, false);
+
+				doSelectionAndHighlighting();
+
+				history.updateCurrentSelection(absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
 			}
 			return true;
 

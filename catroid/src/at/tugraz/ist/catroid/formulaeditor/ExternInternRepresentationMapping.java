@@ -27,14 +27,14 @@ import android.util.SparseArray;
 public class ExternInternRepresentationMapping {
 
 	private SparseArray<Integer> externInternMapping;
-	private SparseArray<Integer> internExternMapping;
+	private SparseArray<ExternToken> internExternMapping;
 
 	private int externStringLength = 10;
 	private int internStringLength;
 
 	public ExternInternRepresentationMapping() {
 		externInternMapping = new SparseArray<Integer>();
-		internExternMapping = new SparseArray<Integer>();
+		internExternMapping = new SparseArray<ExternToken>();
 	}
 
 	public void putExternInternMapping(int externStartIndex, int externEndIndex, int internStartIndex) {
@@ -48,15 +48,30 @@ public class ExternInternRepresentationMapping {
 		}
 	}
 
-	public void putInternExternMapping(int internStartIndex, int externStartIndex) {
-		internExternMapping.put(internStartIndex, externStartIndex);
+	public void putInternExternMapping(int internStartIndex, int externStartIndex, int externEndIndex) {
+		ExternToken externToken = new ExternToken(externStartIndex, externEndIndex);
+		internExternMapping.put(internStartIndex, externToken);
 
 	}
 
-	public Integer getExternIndexByInternIndex(int internIndex) {
-		//TODO implement to show parse errors and to update selection indizes
+	public Integer getExternTokenStartIndex(int internIndex) {
+		ExternToken externToken = internExternMapping.get(internIndex);
 
-		return null;
+		if (externToken == null) {
+			return null;
+		}
+
+		return externToken.getStartIndex();
+	}
+
+	public Integer getExternTokenEndIndex(int internIndex) {
+		ExternToken externToken = internExternMapping.get(internIndex);
+
+		if (externToken == null) {
+			return null;
+		}
+
+		return externToken.getEndIndex();
 	}
 
 	public Integer getInternTokenByExternIndex(int externIndex) {
