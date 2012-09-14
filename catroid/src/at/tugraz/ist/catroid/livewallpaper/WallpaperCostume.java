@@ -41,6 +41,8 @@ public class WallpaperCostume {
 	private int top;
 	private int left;
 
+	private float brightness = 1f;
+
 	private double size = 1;
 
 	private boolean hidden = false;
@@ -191,8 +193,28 @@ public class WallpaperCostume {
 		this.isBackground = isBackground;
 	}
 
-	public void setBrightness(float brightness) {
+	public void setBrightness(float percentage) {
 
+		if (percentage < 0f) {
+			percentage = 0f;
+		}
+
+		this.brightness = percentage;
+
+		adjustBrightness();
+	}
+
+	public void changeBrightness(float percentage) {
+
+		this.brightness += percentage;
+		if (this.brightness < 0f) {
+			this.brightness = 0f;
+		}
+
+		adjustBrightness();
+	}
+
+	private void adjustBrightness() {
 		setCostume(this.costumeData);
 		Bitmap resultBitmap = Bitmap.createBitmap(this.costume.getWidth(), this.costume.getHeight(),
 				this.costume.getConfig());
@@ -201,9 +223,9 @@ public class WallpaperCostume {
 			for (int y = 0; y < this.costume.getHeight(); y++) {
 				int oldPixelColor = this.costume.getPixel(x, y);
 
-				int red = Color.red(oldPixelColor) + (int) (255 * (brightness - 1));
-				int green = Color.green(oldPixelColor) + (int) (255 * (brightness - 1));
-				int blue = Color.blue(oldPixelColor) + (int) (255 * (brightness - 1));
+				int red = Color.red(oldPixelColor) + (int) (255 * (this.brightness - 1));
+				int green = Color.green(oldPixelColor) + (int) (255 * (this.brightness - 1));
+				int blue = Color.blue(oldPixelColor) + (int) (255 * (this.brightness - 1));
 				int alpha = Color.alpha(oldPixelColor);
 
 				if (red > 255) {
@@ -226,8 +248,6 @@ public class WallpaperCostume {
 				resultBitmap.setPixel(x, y, newPixel);
 			}
 		}
-
 		this.costume = resultBitmap;
-
 	}
 }
