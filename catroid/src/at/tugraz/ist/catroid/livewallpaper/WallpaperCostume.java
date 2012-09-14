@@ -24,6 +24,7 @@
 package at.tugraz.ist.catroid.livewallpaper;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -39,6 +40,9 @@ public class WallpaperCostume {
 	private int y;
 	private int top;
 	private int left;
+
+	private float alphaValue = 1f;
+	private float brightness = 1f;
 
 	private double size = 1;
 
@@ -202,6 +206,116 @@ public class WallpaperCostume {
 
 	public void setBackground(boolean isBackground) {
 		this.isBackground = isBackground;
+	}
+
+	public void setBrightness(float percentage) {
+
+		if (percentage < 0f) {
+			percentage = 0f;
+		}
+
+		this.brightness = percentage;
+
+		adjustBrightness();
+	}
+
+	public void changeBrightness(float percentage) {
+
+		this.brightness += percentage;
+		if (this.brightness < 0f) {
+			this.brightness = 0f;
+		}
+
+		adjustBrightness();
+	}
+
+	private void adjustBrightness() {
+		setCostume(this.costumeData);
+		Bitmap resultBitmap = Bitmap.createBitmap(this.costume.getWidth(), this.costume.getHeight(),
+				this.costume.getConfig());
+
+		for (int x = 0; x < this.costume.getWidth(); x++) {
+			for (int y = 0; y < this.costume.getHeight(); y++) {
+				int oldPixelColor = this.costume.getPixel(x, y);
+
+				int red = Color.red(oldPixelColor) + (int) (255 * (this.brightness - 1));
+				int green = Color.green(oldPixelColor) + (int) (255 * (this.brightness - 1));
+				int blue = Color.blue(oldPixelColor) + (int) (255 * (this.brightness - 1));
+				int alpha = Color.alpha(oldPixelColor);
+
+				if (red > 255) {
+					red = 255;
+				} else if (red < 0) {
+					red = 0;
+				}
+				if (green > 255) {
+					green = 255;
+				} else if (green < 0) {
+					green = 0;
+				}
+				if (blue > 255) {
+					blue = 255;
+				} else if (blue < 0) {
+					blue = 0;
+				}
+
+				int newPixel = Color.argb(alpha, red, green, blue);
+				resultBitmap.setPixel(x, y, newPixel);
+			}
+		}
+		this.costume = resultBitmap;
+	}
+
+	public void setGhostEffect(float alpha) {
+		if (alpha < 0f) {
+			this.alphaValue = 0f;
+		} else if (alpha > 1f) {
+			this.alphaValue = 1f;
+		}
+		this.alphaValue = alpha;
+
+		adjustGhostEffect();
+	}
+
+	public void changeGhostEffect(float alpha) {
+		this.alphaValue += alpha;
+
+		if (this.alphaValue < 0f) {
+			this.alphaValue = 0f;
+		} else if (this.alphaValue > 1f) {
+			this.alphaValue = 1f;
+		}
+
+		adjustGhostEffect();
+
+	}
+
+	private void adjustGhostEffect() {
+		setCostume(this.costumeData);
+		Bitmap resultBitmap = Bitmap.createBitmap(this.costume.getWidth(), this.costume.getHeight(),
+				this.costume.getConfig());
+
+		for (int x = 0; x < this.costume.getWidth(); x++) {
+			for (int y = 0; y < this.costume.getHeight(); y++) {
+
+				int oldPixelColor = this.costume.getPixel(x, y);
+
+				int red = Color.red(oldPixelColor);
+				int green = Color.green(oldPixelColor);
+				int blue = Color.blue(oldPixelColor);
+				int alpha = Color.alpha(oldPixelColor) + (int) (255 * (this.alphaValue - 1));
+
+				if (alpha > 255) {
+					alpha = 255;
+				} else if (alpha < 0) {
+					alpha = 0;
+				}
+
+				int newPixel = Color.argb(alpha, red, green, blue);
+				resultBitmap.setPixel(x, y, newPixel);
+			}
+		}
+		this.costume = resultBitmap;
 	}
 
 }
