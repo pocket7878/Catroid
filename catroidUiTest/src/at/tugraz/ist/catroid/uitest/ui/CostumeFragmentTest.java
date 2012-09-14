@@ -550,9 +550,7 @@ public class CostumeFragmentTest extends ActivityInstrumentationTestCase2<MainMe
 		solo.sleep(500);
 		UiTestUtils.clickOnActionModeOverflowMenuItem(solo, solo.getString(R.string.copy_costume));
 		solo.sleep(500);
-		while (solo.scrollUp()) {
-			;
-		}
+		solo.scrollToTop();
 
 		String defaultCostumeName = solo.getString(R.string.default_costume_name);
 		String expectedCostumeName = "";
@@ -566,9 +564,7 @@ public class CostumeFragmentTest extends ActivityInstrumentationTestCase2<MainMe
 		assertEquals("costume not renamed correctly", expectedCostumeName, costumeDataList.get(2).getCostumeName());
 
 		renameCostume(defaultCostumeName + "1", "a");
-		while (solo.scrollUp()) {
-			;
-		}
+		solo.scrollToTop();
 		solo.clickOnCheckBox(0);
 		solo.sleep(500);
 		UiTestUtils.clickOnActionModeOverflowMenuItem(solo, solo.getString(R.string.copy_costume));

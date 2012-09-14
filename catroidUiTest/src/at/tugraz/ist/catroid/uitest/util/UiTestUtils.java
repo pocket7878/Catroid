@@ -105,14 +105,15 @@ public class UiTestUtils {
 	private static SparseIntArray brickCategoryMap;
 
 	public static final String DEFAULT_TEST_PROJECT_NAME = "testProject";
-	public static final String PROJECTNAME1 = "testproject1";
-	public static final String PROJECTNAME2 = "testproject2";
-	public static final String PROJECTNAME3 = "testproject3";
+	public static final String PROJECTNAME1 = "testingproject1";
+	public static final String PROJECTNAME2 = "testingproject2";
+	public static final String PROJECTNAME3 = "testingproject3";
 	public static final String PROJECTDESCRIPTION1 = "testdescription1";
 	public static final String PROJECTDESCRIPTION2 = "testdescription2";
 	public static final String PROJECTDESCRIPTION3 = "testdescription3";
 	public static final String DEFAULT_TEST_PROJECT_NAME_MIXED_CASE = "TeStPROjeCt";
 	public static final String COPIED_PROJECT_NAME = "copiedProject";
+	public static final String JAPANESE_PROJECT_NAME = "これは例の説明です。";
 
 	public static enum FileTypes {
 		IMAGE, SOUND, ROOT
@@ -246,11 +247,7 @@ public class UiTestUtils {
 	}
 
 	public static void addNewBrick(Solo solo, int categoryStringId, int brickStringId, int nThElement) {
-		if (Build.VERSION.SDK_INT < 15) {
-			UiTestUtils.clickOnLinearLayout(solo, R.id.menu_add);
-		} else {
-			solo.clickOnActionBarItem(R.id.menu_add);
-		}
+		clickOnActionBar(solo, R.id.menu_add);
 		if (!solo.waitForText(solo.getCurrentActivity().getString(categoryStringId), 0, 5000)) {
 			fail("Text not shown in 5 secs!");
 		}
@@ -457,6 +454,11 @@ public class UiTestUtils {
 		if (directory.exists()) {
 			UtilFile.deleteDirectory(directory);
 		}
+
+		directory = new File(Constants.DEFAULT_ROOT + "/" + JAPANESE_PROJECT_NAME);
+		if (directory.exists()) {
+			UtilFile.deleteDirectory(directory);
+		}
 	}
 
 	public static Object getPrivateField(String fieldName, Object object) {
@@ -526,16 +528,6 @@ public class UiTestUtils {
 		Field field = classFromObject.getDeclaredField(fieldName);
 		field.setAccessible(true);
 		field.set(object, value);
-	}
-
-	/**
-	 * @deprecated Will fail on devices with API > 14, replaced by {@link #clickOnActionBar(Solo, int)}
-	 */
-	@Deprecated
-	public static void clickOnLinearLayout(Solo solo, int imageButtonId) {
-		solo.waitForView(LinearLayout.class);
-		LinearLayout linearLayout = (LinearLayout) solo.getView(imageButtonId);
-		solo.clickOnView(linearLayout);
 	}
 
 	public static void clickOnActionBar(Solo solo, int imageButtonId) {
@@ -632,9 +624,8 @@ public class UiTestUtils {
 
 	private static void testEditText(Solo solo, int editTextIndex, String value, int editTextMinWidth,
 			boolean assertMode) {
-		String buttonOKText = solo.getCurrentActivity().getString(R.string.ok);
-		solo.waitForText(buttonOKText);
-		solo.clickOnText(buttonOKText);
+		solo.sleep(200);
+		solo.sendKey(Solo.ENTER);
 		solo.sleep(400);
 		int width = 0;
 		if (assertMode) {
@@ -817,6 +808,7 @@ public class UiTestUtils {
 	}
 
 	public static boolean clickOnTextInList(Solo solo, String text) {
+		solo.sleep(300);
 		ArrayList<TextView> textViews = solo.getCurrentTextViews(solo.getView(android.R.id.list));
 		for (int i = 0; i < textViews.size(); i++) {
 			TextView view = textViews.get(i);
@@ -829,6 +821,7 @@ public class UiTestUtils {
 	}
 
 	public static boolean longClickOnTextInList(Solo solo, String text) {
+		solo.sleep(300);
 		ArrayList<TextView> textViews = solo.getCurrentTextViews(solo.getView(android.R.id.list));
 		for (int i = 0; i < textViews.size(); i++) {
 			TextView view = textViews.get(i);

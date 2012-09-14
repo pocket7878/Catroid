@@ -26,30 +26,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.view.Display;
-import android.view.MotionEvent;
-import android.view.ViewConfiguration;
 import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
-import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
 
-public class ScriptFragmentTest extends ActivityInstrumentationTestCase2<ScriptTabActivity> {
+public class ScriptFragmentTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
 
 	private Solo solo;
 	private List<Brick> brickListToCheck;
 
 	public ScriptFragmentTest() {
-		super(ScriptTabActivity.class);
+		super(MainMenuActivity.class);
 	}
 
 	@Override
@@ -57,6 +53,7 @@ public class ScriptFragmentTest extends ActivityInstrumentationTestCase2<ScriptT
 		super.setUp();
 		brickListToCheck = UiTestUtils.createTestProject();
 		solo = new Solo(getInstrumentation(), getActivity());
+		UiTestUtils.getIntoScriptTabActivityFromMainMenu(solo);
 	}
 
 	@Override
@@ -126,16 +123,13 @@ public class ScriptFragmentTest extends ActivityInstrumentationTestCase2<ScriptT
 		solo.goBack();
 		assertTrue("Could not go back to BrickCategoryDialog from AddBrickDialog",
 				solo.searchText(categoryLegoNXTLabel));
-
-		// needed to fix NullPointerException in next Testcase
-		solo.finishInactiveActivities();
 	}
 
 	public void testSimpleDragNDrop() {
 		ArrayList<Integer> yPositionList = UiTestUtils.getListItemYPositions(solo);
 		assertTrue("Test project brick list smaller than expected", yPositionList.size() >= 6);
 
-		longClickAndDrag(10, yPositionList.get(4), 10, yPositionList.get(2), 20);
+		UiTestUtils.longClickAndDrag(solo, 10, yPositionList.get(4), 10, yPositionList.get(2), 20);
 		ArrayList<Brick> brickList = ProjectManager.getInstance().getCurrentScript().getBrickList();
 
 		assertEquals("Brick count not equal before and after dragging & dropping", brickListToCheck.size(),
@@ -155,7 +149,7 @@ public class ScriptFragmentTest extends ActivityInstrumentationTestCase2<ScriptT
 		@SuppressWarnings("deprecation")
 		int displayWidth = display.getWidth();
 
-		longClickAndDrag(30, yPositionList.get(2), displayWidth, yPositionList.get(2), 40);
+		UiTestUtils.longClickAndDrag(solo, 30, yPositionList.get(2), displayWidth, yPositionList.get(2), 40);
 		solo.sleep(1000);
 		ArrayList<Brick> brickList = ProjectManager.getInstance().getCurrentScript().getBrickList();
 
@@ -213,9 +207,6 @@ public class ScriptFragmentTest extends ActivityInstrumentationTestCase2<ScriptT
 		solo.clickOnText(categoryMotion);
 		assertFalse("ComeToFrontBrick is in the brick list!", solo.searchText(comeToFront));
 		assertFalse("GoNStepsBackBrick is in the brick list!", solo.searchText(goNStepsBack));
-
-		// needed to fix NullPointerException in next Testcase
-		solo.finishInactiveActivities();
 	}
 
 	public void testSelectCategoryDialogOnOrientationChange() {
@@ -280,49 +271,5 @@ public class ScriptFragmentTest extends ActivityInstrumentationTestCase2<ScriptT
 		assertTrue("Not in AddBrickDialog - category motion", solo.searchText(brickWhenStarted));
 		solo.setActivityOrientation(Solo.LANDSCAPE);
 		assertTrue("dialog closed after orientation change", solo.searchText(brickWhenStarted));
-	}
-
-	private void longClickAndDrag(final float xFrom, final float yFrom, final float xTo, final float yTo,
-			final int steps) {
-		Handler handler = new Handler(getActivity().getMainLooper());
-
-		handler.post(new Runnable() {
-
-			public void run() {
-				MotionEvent downEvent = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(),
-						MotionEvent.ACTION_DOWN, xFrom, yFrom, 0);
-				getActivity().dispatchTouchEvent(downEvent);
-			}
-		});
-
-		solo.sleep(ViewConfiguration.getLongPressTimeout() + 200);
-
-		handler.post(new Runnable() {
-			public void run() {
-
-				for (int i = 0; i <= steps; i++) {
-					float x = xFrom + (((xTo - xFrom) / steps) * i);
-					float y = yFrom + (((yTo - yFrom) / steps) * i);
-					MotionEvent moveEvent = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(),
-							MotionEvent.ACTION_MOVE, x, y, 0);
-					getActivity().dispatchTouchEvent(moveEvent);
-
-					solo.sleep(20);
-				}
-			}
-		});
-
-		solo.sleep(steps * 20 + 200);
-
-		handler.post(new Runnable() {
-
-			public void run() {
-				MotionEvent upEvent = MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(),
-						MotionEvent.ACTION_UP, xTo, yTo, 0);
-				getActivity().dispatchTouchEvent(upEvent);
-			}
-		});
-
-		solo.sleep(1000);
 	}
 }
