@@ -78,56 +78,47 @@ public class BroadcastReceiverBrick extends ScriptBrick {
 
 		view = View.inflate(context, R.layout.brick_broadcast_receive, null);
 
-		final Spinner broadcastSpinner = (Spinner) view
-				.findViewById(R.id.broadcast_spinner);
-		broadcastSpinner.setAdapter(projectManager.getMessageContainer()
-				.getMessageAdapter(context));
+		final Spinner broadcastSpinner = (Spinner) view.findViewById(R.id.broadcast_spinner);
+		broadcastSpinner.setAdapter(projectManager.getMessageContainer().getMessageAdapter(context));
 		broadcastSpinner.setClickable(true);
 		broadcastSpinner.setFocusable(true);
-		broadcastSpinner
-				.setOnItemSelectedListener(new OnItemSelectedListener() {
-					private boolean start = true;
+		broadcastSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			private boolean start = true;
 
-					@Override
-					public void onItemSelected(AdapterView<?> parent,
-							View view, int pos, long id) {
-						if (start) {
-							start = false;
-							return;
-						}
-						String message = ((String) parent
-								.getItemAtPosition(pos)).trim();
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+				if (start) {
+					start = false;
+					return;
+				}
+				String message = ((String) parent.getItemAtPosition(pos)).trim();
 
-						if (message == context
-								.getString(R.string.broadcast_nothing_selected)) {
-							receiveScript.setBroadcastMessage("");
-						} else {
-							receiveScript.setBroadcastMessage(message);
-						}
-					}
+				if (message == context.getString(R.string.broadcast_nothing_selected)) {
+					receiveScript.setBroadcastMessage("");
+				} else {
+					receiveScript.setBroadcastMessage(message);
+				}
+			}
 
-					@Override
-					public void onNothingSelected(AdapterView<?> arg0) {
-					}
-				});
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
 
-		int position = projectManager.getMessageContainer()
-				.getPositionOfMessageInAdapter(
-						receiveScript.getBroadcastMessage());
+		int position = projectManager.getMessageContainer().getPositionOfMessageInAdapter(
+				receiveScript.getBroadcastMessage());
 		if (position > 0) {
 			broadcastSpinner.setSelection(position);
 		}
 
-		Button newBroadcastMessage = (Button) view
-				.findViewById(R.id.broadcast_new_message);
+		Button newBroadcastMessage = (Button) view.findViewById(R.id.broadcast_new_message);
 		newBroadcastMessage.setClickable(true);
 		newBroadcastMessage.setFocusable(true);
 		newBroadcastMessage.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				ScriptTabActivity activity = (ScriptTabActivity) view
-						.getContext();
+				ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
 
 				BrickTextDialog editDialog = new BrickTextDialog() {
 					@Override
@@ -138,15 +129,13 @@ public class BroadcastReceiverBrick extends ScriptBrick {
 					protected boolean handleOkButton() {
 						String newMessage = (input.getText().toString()).trim();
 						if (newMessage.length() == 0
-								|| newMessage.equals(context
-										.getString(R.string.broadcast_nothing_selected))) {
+								|| newMessage.equals(context.getString(R.string.broadcast_nothing_selected))) {
 							dismiss();
 							return false;
 						}
 
 						receiveScript.setBroadcastMessage(newMessage);
-						int position = projectManager.getMessageContainer()
-								.getPositionOfMessageInAdapter(newMessage);
+						int position = projectManager.getMessageContainer().getPositionOfMessageInAdapter(newMessage);
 
 						broadcastSpinner.setSelection(position);
 
@@ -154,8 +143,7 @@ public class BroadcastReceiverBrick extends ScriptBrick {
 					}
 				};
 
-				editDialog.show(activity.getSupportFragmentManager(),
-						"dialog_broadcast_receiver_brick");
+				editDialog.show(activity.getSupportFragmentManager(), "dialog_broadcast_receiver_brick");
 			}
 		});
 
@@ -185,7 +173,6 @@ public class BroadcastReceiverBrick extends ScriptBrick {
 
 	@Override
 	public void executeLiveWallpaper() {
-		// TODO Auto-generated method stub
 
 	}
 }

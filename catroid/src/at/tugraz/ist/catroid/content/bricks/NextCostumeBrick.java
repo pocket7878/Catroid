@@ -34,7 +34,6 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
-import at.tugraz.ist.catroid.livewallpaper.WallpaperHelper;
 
 public class NextCostumeBrick implements Brick {
 
@@ -49,14 +48,12 @@ public class NextCostumeBrick implements Brick {
 	@Override
 	public void execute() {
 
-		final ArrayList<CostumeData> costumeDataList = sprite
-				.getCostumeDataList();
+		final ArrayList<CostumeData> costumeDataList = sprite.getCostumeDataList();
 		int costumeDataListSize = costumeDataList.size();
 
 		if (costumeDataListSize > 0 && sprite.costume.getCostumeData() != null) {
 			CostumeData currentCostumeData = sprite.costume.getCostumeData();
-			CostumeData finalCostumeData = costumeDataList
-					.get(costumeDataListSize - 1);
+			CostumeData finalCostumeData = costumeDataList.get(costumeDataListSize - 1);
 			boolean executeOnce = true;
 
 			for (CostumeData costumeData : costumeDataList) {
@@ -87,12 +84,10 @@ public class NextCostumeBrick implements Brick {
 
 	@Override
 	public View getPrototypeView(Context context) {
-		LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.brick_next_costume, null);
 		if (sprite.getName().equals(context.getString(R.string.background))) {
-			TextView textView = (TextView) view
-					.findViewById(R.id.textview_next_costume);
+			TextView textView = (TextView) view.findViewById(R.id.textview_next_costume);
 			textView.setText(R.string.brick_next_background);
 		}
 		return view;
@@ -116,8 +111,7 @@ public class NextCostumeBrick implements Brick {
 		}
 
 		if (sprite.getName().equals(context.getString(R.string.background))) {
-			TextView textView = (TextView) view
-					.findViewById(R.id.textview_next_costume);
+			TextView textView = (TextView) view.findViewById(R.id.textview_next_costume);
 			textView.setText(R.string.brick_next_background);
 		}
 
@@ -126,12 +120,10 @@ public class NextCostumeBrick implements Brick {
 
 	@Override
 	public void executeLiveWallpaper() {
-		WallpaperHelper wallpaperHelper = WallpaperHelper.getInstance();
-		WallpaperCostume wallpaperCostume = wallpaperHelper
-				.getWallpaperCostume(sprite);
 
-		final ArrayList<CostumeData> costumeDataList = sprite
-				.getCostumeDataList();
+		final ArrayList<CostumeData> costumeDataList = sprite.getCostumeDataList();
+
+		WallpaperCostume wallpaperCostume = sprite.getWallpaperCostume();
 
 		if (wallpaperCostume == null) {
 			new WallpaperCostume(sprite, sprite.getCostumeDataList().get(0));

@@ -33,7 +33,6 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
-import at.tugraz.ist.catroid.livewallpaper.WallpaperHelper;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 
@@ -125,7 +124,7 @@ public class ChangeSizeByNBrick implements Brick, OnClickListener {
 
 	@Override
 	public void executeLiveWallpaper() {
-		WallpaperCostume wallpaperCostume = WallpaperHelper.getInstance().getWallpaperCostume(sprite);
+		WallpaperCostume wallpaperCostume = sprite.getWallpaperCostume();
 
 		if (wallpaperCostume == null) {
 			wallpaperCostume = new WallpaperCostume(sprite, null);

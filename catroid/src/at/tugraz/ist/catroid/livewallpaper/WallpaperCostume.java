@@ -69,7 +69,7 @@ public class WallpaperCostume {
 			setCostume(costumeData);
 		}
 
-		wallpaperHelper.addNewCostume(this);
+		sprite.setWallpaperCostume(this);
 
 	}
 
@@ -148,12 +148,17 @@ public class WallpaperCostume {
 	}
 
 	public void setCostumeSize(double size) {
+		this.sizeChanged = true;
 		this.size = size * 0.01;
-		this.costume = costumeData.getImageBitmap();
-		resizeCostume();
+		if (costumeData != null) {
+			this.costume = costumeData.getImageBitmap();
+			resizeCostume();
+		}
+
 	}
 
 	public void changeCostumeSizeBy(double changeValue) {
+		this.sizeChanged = true;
 		this.size += (changeValue * 0.01);
 		resizeCostume();
 	}
@@ -164,7 +169,6 @@ public class WallpaperCostume {
 		int newHeight = (int) (costume.getHeight() * size);
 		this.costume = ImageEditing.scaleBitmap(this.costume, newWidth, newHeight);
 
-		this.sizeChanged = true;
 		this.topNeedsAdjustment = true;
 		this.leftNeedsAdjustment = true;
 

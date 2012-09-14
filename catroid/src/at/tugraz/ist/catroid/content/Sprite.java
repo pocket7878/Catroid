@@ -36,6 +36,7 @@ import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.FileChecksumContainer;
 import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
 
 public class Sprite implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -47,6 +48,8 @@ public class Sprite implements Serializable {
 
 	public transient boolean isPaused;
 	public transient boolean isFinished;
+
+	private WallpaperCostume wallpaperCostume;
 
 	private transient Map<Thread, Boolean> activeThreads;
 	private transient Map<Script, List<Thread>> activeScripts;
@@ -107,6 +110,14 @@ public class Sprite implements Serializable {
 				if (!s.isFinished()) {
 					startScript(s);
 				}
+			}
+		}
+	}
+
+	public void resetStartScripts() {
+		for (Script s : scriptList) {
+			if (s instanceof StartScript) {
+				s.setFinished(false);
 			}
 		}
 	}
@@ -312,4 +323,13 @@ public class Sprite implements Serializable {
 			activeThreads.remove(thread);
 		}
 	}
+
+	public WallpaperCostume getWallpaperCostume() {
+		return wallpaperCostume;
+	}
+
+	public void setWallpaperCostume(WallpaperCostume wallpaperCostume) {
+		this.wallpaperCostume = wallpaperCostume;
+	}
+
 }

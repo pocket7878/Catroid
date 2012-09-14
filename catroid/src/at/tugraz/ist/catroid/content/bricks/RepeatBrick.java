@@ -54,8 +54,7 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 	public void execute() {
 		if (timesToRepeat <= 0) {
 			Script script = loopEndBrick.getScript();
-			script.setExecutingBrickIndex(script.getBrickList().indexOf(
-					loopEndBrick));
+			script.setExecutingBrickIndex(script.getBrickList().indexOf(loopEndBrick));
 			return;
 		}
 		loopEndBrick.setTimesToRepeat(timesToRepeat);
@@ -72,10 +71,8 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 
 		View view = View.inflate(context, R.layout.brick_repeat, null);
 
-		TextView text = (TextView) view
-				.findViewById(R.id.brick_repeat_text_view);
-		EditText edit = (EditText) view
-				.findViewById(R.id.brick_repeat_edit_text);
+		TextView text = (TextView) view.findViewById(R.id.brick_repeat_text_view);
+		EditText edit = (EditText) view.findViewById(R.id.brick_repeat_edit_text);
 		edit.setText(timesToRepeat + "");
 
 		text.setVisibility(View.GONE);
@@ -98,8 +95,7 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(timesToRepeat));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER
-						| InputType.TYPE_NUMBER_FLAG_DECIMAL
+				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
 						| InputType.TYPE_NUMBER_FLAG_SIGNED);
 				input.setSelectAllOnFocus(true);
 			}
@@ -107,25 +103,21 @@ public class RepeatBrick extends LoopBeginBrick implements OnClickListener {
 			@Override
 			protected boolean handleOkButton() {
 				try {
-					timesToRepeat = Integer
-							.parseInt(input.getText().toString());
+					timesToRepeat = Integer.parseInt(input.getText().toString());
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(),
-							R.string.error_no_number_entered,
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 				}
 
 				return true;
 			}
 		};
 
-		editDialog.show(activity.getSupportFragmentManager(),
-				"dialog_repeat_brick");
+		editDialog.show(activity.getSupportFragmentManager(), "dialog_repeat_brick");
 	}
 
 	@Override
 	public void executeLiveWallpaper() {
-		// TODO Auto-generated method stub
+		execute();
 
 	}
 }

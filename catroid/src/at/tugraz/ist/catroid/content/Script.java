@@ -79,9 +79,13 @@ public abstract class Script implements Serializable {
 			executingBrickIndex = i;
 			if (WallpaperHelper.getInstance().isLiveWallpaper()) {
 				brickList.get(i).executeLiveWallpaper();
+				WallpaperHelper helper = WallpaperHelper.getInstance();
+				helper.getDrawingThreadHandler().post(helper.getDrawingThread());
+
 			} else {
 				brickList.get(i).execute();
 			}
+
 			i = executingBrickIndex;
 		}
 		isFinished = true;

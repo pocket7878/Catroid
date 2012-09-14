@@ -77,7 +77,7 @@ public class ForeverBrick extends LoopBeginBrick {
 
 	@Override
 	public void executeLiveWallpaper() {
-		// TODO Auto-generated method stub
+		execute();
 
 	}
 }

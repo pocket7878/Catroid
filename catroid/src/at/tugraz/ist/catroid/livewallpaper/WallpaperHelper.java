@@ -18,9 +18,7 @@
  */
 package at.tugraz.ist.catroid.livewallpaper;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
+import android.os.Handler;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -34,12 +32,13 @@ public class WallpaperHelper {
 	private int centerXCoord;
 	private int centerYCoord;
 
+	private Handler drawingThreadHandler;
+	private Runnable drawingThread;
+
 	private boolean isLiveWallpaper = false;
 
-	private ArrayList<WallpaperCostume> wallpaperCostumes;
-
 	public WallpaperHelper() {
-		wallpaperCostumes = new ArrayList<WallpaperCostume>();
+
 	}
 
 	public static WallpaperHelper getInstance() {
@@ -48,24 +47,6 @@ public class WallpaperHelper {
 		}
 
 		return wallpaperHelper;
-	}
-
-	public void addNewCostume(WallpaperCostume wallpaperCostume) {
-		wallpaperCostumes.add(wallpaperCostume);
-
-	}
-
-	public WallpaperCostume getWallpaperCostume(Sprite sprite) {
-		Iterator<WallpaperCostume> iterator = wallpaperCostumes.iterator();
-		WallpaperCostume wallpaperCostume;
-		while (iterator.hasNext()) {
-			wallpaperCostume = iterator.next();
-			if (wallpaperCostume.getSprite() == sprite) {
-				return wallpaperCostume;
-			}
-		}
-		return null;
-
 	}
 
 	public Project getProject() {
@@ -94,22 +75,11 @@ public class WallpaperHelper {
 		this.centerYCoord = centerYCoord;
 	}
 
-	public ArrayList<WallpaperCostume> getWallpaperCostumes() {
-		return wallpaperCostumes;
-	}
-
-	public void setWallpaperCostumes(ArrayList<WallpaperCostume> wallpaperCostumes) {
-		this.wallpaperCostumes = wallpaperCostumes;
-	}
-
 	public void destroy() {
 
-		Iterator<WallpaperCostume> iterator = wallpaperCostumes.iterator();
-		while (iterator.hasNext()) {
-			iterator.next().clear();
+		for (Sprite sprite : project.getSpriteList()) {
+			sprite.getWallpaperCostume().clear();
 		}
-
-		wallpaperCostumes.clear();
 
 	}
 
@@ -119,6 +89,22 @@ public class WallpaperHelper {
 
 	public void setLiveWallpaper(boolean isLiveWallpaper) {
 		this.isLiveWallpaper = isLiveWallpaper;
+	}
+
+	public Handler getDrawingThreadHandler() {
+		return drawingThreadHandler;
+	}
+
+	public void setDrawingThreadHandler(Handler drawingThreadHandler) {
+		this.drawingThreadHandler = drawingThreadHandler;
+	}
+
+	public Runnable getDrawingThread() {
+		return drawingThread;
+	}
+
+	public void setDrawingThread(Runnable drawingThread) {
+		this.drawingThread = drawingThread;
 	}
 
 }
