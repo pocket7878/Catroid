@@ -34,6 +34,8 @@ public class WallpaperHelper {
 	private int centerXCoord;
 	private int centerYCoord;
 
+	private boolean isLiveWallpaper = false;
+
 	private ArrayList<WallpaperCostume> wallpaperCostumes;
 
 	public WallpaperHelper() {
@@ -109,6 +111,14 @@ public class WallpaperHelper {
 
 		wallpaperCostumes.clear();
 
+	}
+
+	public boolean isLiveWallpaper() {
+		return isLiveWallpaper;
+	}
+
+	public void setLiveWallpaper(boolean isLiveWallpaper) {
+		this.isLiveWallpaper = isLiveWallpaper;
 	}
 
 }

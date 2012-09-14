@@ -47,6 +47,7 @@ import at.tugraz.ist.catroid.bluetooth.BluetoothManager;
 import at.tugraz.ist.catroid.bluetooth.DeviceListActivity;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperHelper;
 
 public class PreStageActivity extends Activity {
 
@@ -66,6 +67,8 @@ public class PreStageActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		WallpaperHelper.getInstance().setLiveWallpaper(false);
 
 		int required_resources = getRequiredRessources();
 		int mask = 0x1;

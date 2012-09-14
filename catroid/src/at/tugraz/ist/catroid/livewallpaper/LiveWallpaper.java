@@ -50,6 +50,7 @@ public class LiveWallpaper extends WallpaperService {
 
 		ProjectManager.getInstance().loadProject(Constants.PROJECTCODE_NAME, getApplicationContext(), false);
 		WallpaperHelper.getInstance().setProject(ProjectManager.getInstance().getCurrentProject());
+		WallpaperHelper.getInstance().setLiveWallpaper(true);
 
 		return new CatWallEngine();
 
@@ -79,12 +80,19 @@ public class LiveWallpaper extends WallpaperService {
 		public void onVisibilityChanged(boolean visible) {
 			mVisible = visible;
 			if (visible) {
-				isStartScript = true;
-				List<Sprite> spriteList = wallpaperHelper.getProject().getSpriteList();
-				for (Sprite sprite : spriteList) {
-					executeSprite(sprite);
+				wallpaperHelper.setLiveWallpaper(true);
+				//				isStartScript = true;
+				//				List<Sprite> spriteList = wallpaperHelper.getProject().getSpriteList();
+				//				for (Sprite sprite : spriteList) {
+				//					executeSprite(sprite);
+				//				}
+				//				isStartScript = false;
+
+				List<Sprite> sprites = wallpaperHelper.getProject().getSpriteList();
+				for (int i = 0; i < sprites.size(); i++) {
+					sprites.get(i).startStartScripts();
+					draw();
 				}
-				isStartScript = false;
 
 			} else {
 				SoundManager.getInstance().stopAllSounds();
