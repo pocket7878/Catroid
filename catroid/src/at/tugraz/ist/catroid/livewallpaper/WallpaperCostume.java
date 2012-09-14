@@ -149,6 +149,7 @@ public class WallpaperCostume {
 
 	public void setCostumeSize(double size) {
 		this.size = size * 0.01;
+		this.costume = costumeData.getImageBitmap();
 		resizeCostume();
 	}
 
