@@ -23,24 +23,17 @@
 
 package at.tugraz.ist.catroid.livewallpaper;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import android.app.WallpaperManager;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.Bundle;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Constants;
-import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.content.StartScript;
-import at.tugraz.ist.catroid.content.WhenScript;
-import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.io.SoundManager;
 
 public class LiveWallpaper extends WallpaperService {
@@ -50,19 +43,18 @@ public class LiveWallpaper extends WallpaperService {
 
 		ProjectManager.getInstance().loadProject(Constants.PROJECTCODE_NAME, getApplicationContext(), false);
 		WallpaperHelper.getInstance().setProject(ProjectManager.getInstance().getCurrentProject());
+		WallpaperHelper.getInstance().setLiveWallpaper(true);
 
 		return new CatWallEngine();
 
 	}
 
-	private class CatWallEngine extends Engine {
+	public class CatWallEngine extends Engine {
 
 		private boolean mVisible = false;
 
-		private boolean isStartScript = false;
-		private boolean isWhenScript = false;
-
 		private Paint paint;
+		private List<Sprite> sprites;
 
 		private WallpaperHelper wallpaperHelper = WallpaperHelper.getInstance();
 
@@ -79,12 +71,18 @@ public class LiveWallpaper extends WallpaperService {
 		public void onVisibilityChanged(boolean visible) {
 			mVisible = visible;
 			if (visible) {
-				isStartScript = true;
-				List<Sprite> spriteList = wallpaperHelper.getProject().getSpriteList();
-				for (Sprite sprite : spriteList) {
-					executeSprite(sprite);
+				wallpaperHelper.setLiveWallpaper(true);
+				wallpaperHelper.setDrawingThread(mUpdateDisplay);
+				wallpaperHelper.setDrawingThreadHandler(mHandler);
+
+				sprites = wallpaperHelper.getProject().getSpriteList();
+
+				for (Sprite sprite : sprites) {
+
+					sprite.resetStartScripts();
+					sprite.startStartScripts();
+					draw();
 				}
-				isStartScript = false;
 
 			} else {
 				SoundManager.getInstance().stopAllSounds();
@@ -106,19 +104,18 @@ public class LiveWallpaper extends WallpaperService {
 			mHandler.removeCallbacks(mUpdateDisplay);
 		}
 
-		private void draw() {
+		public void draw() {
 			SurfaceHolder holder = getSurfaceHolder();
 			Canvas c = null;
 			paint = new Paint();
 			try {
 				c = holder.lockCanvas();
-				if (c != null) {
-					Iterator<WallpaperCostume> iterator = wallpaperHelper.getWallpaperCostumes().iterator();
+				if (c != null && sprites != null) {
 
 					WallpaperCostume wallpaperCostume;
-					while (iterator.hasNext()) {
-						wallpaperCostume = iterator.next();
-						if (wallpaperCostume.getCostume() != null) {
+					for (Sprite sprite : sprites) {
+						wallpaperCostume = sprite.getWallpaperCostume();
+						if (wallpaperCostume != null && wallpaperCostume.getCostume() != null) {
 							c.drawBitmap(wallpaperCostume.getCostume(), wallpaperCostume.getTop(),
 									wallpaperCostume.getLeft(), paint);
 						}
@@ -137,62 +134,38 @@ public class LiveWallpaper extends WallpaperService {
 			}
 		}
 
+		@Override
+		public void onTouchEvent(MotionEvent event) {
+			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+				for (Sprite sprite : sprites) {
+					if (sprite.getWallpaperCostume() != null
+							&& sprite.getWallpaperCostume().touchedInsideTheCostume(event.getX(), event.getY())) {
+						sprite.startWhenScripts("Tapped");
+						draw();
+					}
+				}
+
+			}
+		}
+
 		//		@Override
-		//		public void onTouchEvent(MotionEvent event) {
-		//			if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_POINTER_DOWN) {
-		//
+		//		public Bundle onCommand(String action, int x, int y, int z, Bundle extras, boolean resultRequested) {
+		//			if (action.equals(WallpaperManager.COMMAND_TAP)) {
 		//				ArrayList<WallpaperCostume> wallpaperCostumes = wallpaperHelper.getWallpaperCostumes();
 		//
 		//				for (int costumeIndex = wallpaperCostumes.size() - 1; costumeIndex > 0; costumeIndex--) {
-		//					if (wallpaperCostumes.get(costumeIndex).touchedInsideTheCostume(event.getX(), event.getY())) {
+		//					if (wallpaperCostumes.get(costumeIndex).touchedInsideTheCostume(x, y)) {
 		//						isWhenScript = true;
 		//						executeSprite(wallpaperCostumes.get(costumeIndex).getSprite());
 		//						isWhenScript = false;
 		//						break;
 		//					}
 		//				}
-		//
 		//			}
+		//			return null;
 		//		}
 
-		@Override
-		public Bundle onCommand(String action, int x, int y, int z, Bundle extras, boolean resultRequested) {
-			if (action.equals(WallpaperManager.COMMAND_TAP)) {
-				ArrayList<WallpaperCostume> wallpaperCostumes = wallpaperHelper.getWallpaperCostumes();
-
-				for (int costumeIndex = wallpaperCostumes.size() - 1; costumeIndex > 0; costumeIndex--) {
-					if (wallpaperCostumes.get(costumeIndex).touchedInsideTheCostume(x, y)) {
-						isWhenScript = true;
-						executeSprite(wallpaperCostumes.get(costumeIndex).getSprite());
-						isWhenScript = false;
-						break;
-					}
-				}
-			}
-			return null;
-		}
-
-		private void executeSprite(Sprite sprite) {
-			for (int scriptIndex = 0; scriptIndex < sprite.getNumberOfScripts(); scriptIndex++) {
-				if ((isStartScript && sprite.getScript(scriptIndex) instanceof StartScript)
-						|| (isWhenScript && sprite.getScript(scriptIndex) instanceof WhenScript)) {
-					executeScript(sprite.getScript(scriptIndex));
-					break;
-				}
-
-			}
-
-		}
-
-		public void executeScript(Script script) {
-			ArrayList<Brick> bricks = script.getBrickList();
-			for (Brick brick : bricks) {
-				brick.executeLiveWallpaper();
-				draw();
-
-			}
-
-		}
 	}
 
 }

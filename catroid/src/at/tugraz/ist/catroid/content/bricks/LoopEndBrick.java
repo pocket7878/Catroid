@@ -34,8 +34,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 
-public class LoopEndBrick extends NestingBrick implements
-		AllowedAfterDeadEndBrick {
+public class LoopEndBrick extends NestingBrick implements AllowedAfterDeadEndBrick {
 	static final int FOREVER = -1;
 	private static final int LOOP_DELAY = 20;
 	private static final int MILLION = 1000 * 1000;
@@ -62,12 +61,10 @@ public class LoopEndBrick extends NestingBrick implements
 
 		if (timesToRepeat == FOREVER) {
 			Script script = getScript();
-			script.setExecutingBrickIndex(script.getBrickList().indexOf(
-					loopBeginBrick));
+			script.setExecutingBrickIndex(script.getBrickList().indexOf(loopBeginBrick));
 		} else if (--timesToRepeat > 0) {
 			Script script = getScript();
-			script.setExecutingBrickIndex(script.getBrickList().indexOf(
-					loopBeginBrick));
+			script.setExecutingBrickIndex(script.getBrickList().indexOf(loopBeginBrick));
 		}
 
 		long loopBeginTime = loopBeginBrick.getBeginLoopTime() / MILLION;
@@ -107,8 +104,7 @@ public class LoopEndBrick extends NestingBrick implements
 
 	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
-		LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		return inflater.inflate(R.layout.brick_loop_end, null);
 	}
 
@@ -156,16 +152,14 @@ public class LoopEndBrick extends NestingBrick implements
 	}
 
 	@Override
-	public View getNoPuzzleView(Context context, int brickId,
-			BaseAdapter adapter) {
-		LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	public View getNoPuzzleView(Context context, int brickId, BaseAdapter adapter) {
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		return inflater.inflate(R.layout.brick_loop_end_no_puzzle, null);
 	}
 
 	@Override
 	public void executeLiveWallpaper() {
-		// TODO Auto-generated method stub
+		execute();
 
 	}
 

@@ -123,7 +123,7 @@ public class LiveWallpaperTest extends AndroidTestCase {
 		Brick brick = backgroundSprite.getScript(0).getBrick(0);
 		assertTrue("This brick should be an instance of SetCostumeBrick but it's not", brick instanceof SetCostumeBrick);
 		brick.executeLiveWallpaper();
-		WallpaperCostume wallpaperCostume = wallpaperHelper.getWallpaperCostume(backgroundSprite);
+		WallpaperCostume wallpaperCostume = backgroundSprite.getWallpaperCostume();
 
 		assertTrue("The isBackground flag was not set", wallpaperCostume.isBackground());
 		assertTrue("The background in the wallpaper is not the same as the default project background",
@@ -132,7 +132,7 @@ public class LiveWallpaperTest extends AndroidTestCase {
 		brick = catroidSprite.getScript(0).getBrick(0);
 		assertTrue("This brick should be an instance of SetCostumeBrick but it's not", brick instanceof SetCostumeBrick);
 		brick.executeLiveWallpaper();
-		wallpaperCostume = wallpaperHelper.getWallpaperCostume(catroidSprite);
+		wallpaperCostume = catroidSprite.getWallpaperCostume();
 		assertTrue("Expected normalCat but was " + wallpaperCostume.getCostumeData().getCostumeName(),
 				sameBitmaps(normalCatBitmap, wallpaperCostume.getCostume()));
 
@@ -142,7 +142,7 @@ public class LiveWallpaperTest extends AndroidTestCase {
 		Brick brick = new NextCostumeBrick(catroidSprite);
 
 		brick.executeLiveWallpaper();
-		WallpaperCostume wallpaperCostume = wallpaperHelper.getWallpaperCostume(catroidSprite);
+		WallpaperCostume wallpaperCostume = catroidSprite.getWallpaperCostume();
 		assertTrue("Expected normalCat but was " + wallpaperCostume.getCostumeData().getCostumeName(),
 				sameBitmaps(normalCatBitmap, wallpaperCostume.getCostume()));
 
@@ -163,7 +163,7 @@ public class LiveWallpaperTest extends AndroidTestCase {
 	public void testHideAndShowBricks() {
 		Brick brick = new HideBrick(catroidSprite);
 		brick.executeLiveWallpaper();
-		WallpaperCostume wallpaperCostume = wallpaperHelper.getWallpaperCostume(catroidSprite);
+		WallpaperCostume wallpaperCostume = catroidSprite.getWallpaperCostume();
 		assertTrue("The costume was not hidden!", wallpaperCostume.isCostumeHidden());
 
 		brick = new ShowBrick(catroidSprite);

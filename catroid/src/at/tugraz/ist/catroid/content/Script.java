@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.ScriptBrick;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperHelper;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -76,7 +77,15 @@ public abstract class Script implements Serializable {
 				Thread.yield();
 			}
 			executingBrickIndex = i;
-			brickList.get(i).execute();
+			if (WallpaperHelper.getInstance().isLiveWallpaper()) {
+				brickList.get(i).executeLiveWallpaper();
+				WallpaperHelper helper = WallpaperHelper.getInstance();
+				helper.getDrawingThreadHandler().post(helper.getDrawingThread());
+
+			} else {
+				brickList.get(i).execute();
+			}
+
 			i = executingBrickIndex;
 		}
 		isFinished = true;
@@ -116,6 +125,10 @@ public abstract class Script implements Serializable {
 
 	public boolean isFinished() {
 		return isFinished;
+	}
+
+	public void setFinished(boolean isFinished) {
+		this.isFinished = isFinished;
 	}
 
 	public int getExecutingBrickIndex() {

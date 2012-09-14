@@ -58,11 +58,9 @@ public class WhenBrick extends ScriptBrick {
 	}
 
 	@Override
-	public View getView(final Context context, int brickId,
-			final BaseAdapter adapter) {
+	public View getView(final Context context, int brickId, final BaseAdapter adapter) {
 		view = View.inflate(context, R.layout.brick_when, null);
-		TextView spinnerActionText = (TextView) view
-				.findViewById(R.id.WhenBrickActionTapped);
+		TextView spinnerActionText = (TextView) view.findViewById(R.id.WhenBrickActionTapped);
 		spinnerActionText.setText(" " + spinnerActionText.getText());
 
 		// inactive until spinner has more than one element
@@ -131,7 +129,6 @@ public class WhenBrick extends ScriptBrick {
 
 	@Override
 	public void executeLiveWallpaper() {
-		// TODO Auto-generated method stub
 
 	}
 

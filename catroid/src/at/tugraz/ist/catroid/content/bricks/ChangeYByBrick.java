@@ -33,7 +33,6 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
-import at.tugraz.ist.catroid.livewallpaper.WallpaperHelper;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 
@@ -84,10 +83,8 @@ public class ChangeYByBrick implements Brick, OnClickListener {
 
 		view = View.inflate(context, R.layout.brick_change_y, null);
 
-		TextView textY = (TextView) view
-				.findViewById(R.id.brick_change_y_text_view);
-		EditText editY = (EditText) view
-				.findViewById(R.id.brick_change_y_edit_text);
+		TextView textY = (TextView) view.findViewById(R.id.brick_change_y_text_view);
+		EditText editY = (EditText) view.findViewById(R.id.brick_change_y_edit_text);
 		editY.setText(String.valueOf(yMovement));
 
 		textY.setVisibility(View.GONE);
@@ -115,8 +112,7 @@ public class ChangeYByBrick implements Brick, OnClickListener {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(yMovement));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER
-						| InputType.TYPE_NUMBER_FLAG_SIGNED);
+				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
 				input.setSelectAllOnFocus(true);
 			}
 
@@ -125,23 +121,19 @@ public class ChangeYByBrick implements Brick, OnClickListener {
 				try {
 					yMovement = Integer.parseInt(input.getText().toString());
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(),
-							R.string.error_no_number_entered,
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 				}
 
 				return true;
 			}
 		};
 
-		editDialog.show(activity.getSupportFragmentManager(),
-				"dialog_change_y_by_brick");
+		editDialog.show(activity.getSupportFragmentManager(), "dialog_change_y_by_brick");
 	}
 
 	@Override
 	public void executeLiveWallpaper() {
-		WallpaperCostume wallpaperCostume = WallpaperHelper.getInstance()
-				.getWallpaperCostume(sprite);
+		WallpaperCostume wallpaperCostume = sprite.getWallpaperCostume();
 		if (wallpaperCostume == null) {
 			wallpaperCostume = new WallpaperCostume(sprite, null);
 		}

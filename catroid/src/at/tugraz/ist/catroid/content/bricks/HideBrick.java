@@ -28,7 +28,6 @@ import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
-import at.tugraz.ist.catroid.livewallpaper.WallpaperHelper;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -79,8 +78,7 @@ public class HideBrick implements Brick {
 
 	@Override
 	public void executeLiveWallpaper() {
-		WallpaperCostume wallpaperCostume = WallpaperHelper.getInstance()
-				.getWallpaperCostume(sprite);
+		WallpaperCostume wallpaperCostume = sprite.getWallpaperCostume();
 		if (wallpaperCostume == null) {
 			wallpaperCostume = new WallpaperCostume(sprite, null);
 		}
