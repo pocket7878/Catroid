@@ -27,7 +27,6 @@ import java.util.ArrayList;
 
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
-import at.tugraz.ist.catroid.stage.NativeAppActivity;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class SoundManager {
@@ -74,7 +73,7 @@ public class SoundManager {
 				if (!Utils.isLoadingFromAssetsNecessary()) {
 					mediaPlayer.setDataSource(pathToSoundfile);
 				} else {
-					AssetFileDescriptor afd = NativeAppActivity.getContext().getAssets().openFd(pathToSoundfile);
+					AssetFileDescriptor afd = Utils.getContext().getAssets().openFd(pathToSoundfile);
 					mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
 				}
 				mediaPlayer.prepare();

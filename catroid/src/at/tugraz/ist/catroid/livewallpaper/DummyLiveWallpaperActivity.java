@@ -58,4 +58,9 @@ public class DummyLiveWallpaperActivity extends Activity {
 		}
 
 	}
+
+	public static Context getContext() {
+		return context;
+	}
+
 }

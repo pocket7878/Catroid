@@ -39,7 +39,6 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.common.FileChecksumContainer;
 import at.tugraz.ist.catroid.content.Project;
-import at.tugraz.ist.catroid.stage.NativeAppActivity;
 import at.tugraz.ist.catroid.ui.fragment.ProjectsListFragment.ProjectData;
 import at.tugraz.ist.catroid.utils.ImageEditing;
 import at.tugraz.ist.catroid.utils.UtilFile;
@@ -94,7 +93,7 @@ public class StorageHandler {
 		createCatroidRoot();
 		try {
 			if (Utils.isLoadingFromAssetsNecessary()) {
-				InputStream spfFileStream = NativeAppActivity.getContext().getAssets().open(projectName);
+				InputStream spfFileStream = Utils.getContext().getAssets().open(projectName);
 				return (Project) xstream.fromXML(spfFileStream);
 			}
 

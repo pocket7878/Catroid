@@ -32,18 +32,18 @@ import android.service.wallpaper.WallpaperService;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import at.tugraz.ist.catroid.ProjectManager;
-import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.SoundManager;
+import at.tugraz.ist.catroid.utils.Utils;
 
 public class LiveWallpaper extends WallpaperService {
 
 	@Override
 	public Engine onCreateEngine() {
 
-		ProjectManager.getInstance().loadProject(Constants.PROJECTCODE_NAME, getApplicationContext(), false);
+		ProjectManager.getInstance().setProject(null);
+		Utils.loadProjectIfNeeded(getApplicationContext());
 		WallpaperHelper.getInstance().setProject(ProjectManager.getInstance().getCurrentProject());
-		//	WallpaperHelper.getInstance().setLiveWallpaper(true);
 
 		return new CatWallEngine();
 

@@ -250,9 +250,9 @@ public class WallpaperCostume {
 		Bitmap resultBitmap = Bitmap.createBitmap(this.costume.getWidth(), this.costume.getHeight(),
 				this.costume.getConfig());
 
-		for (int x = 0; x < this.costume.getWidth(); x++) {
-			for (int y = 0; y < this.costume.getHeight(); y++) {
-				int oldPixelColor = this.costume.getPixel(x, y);
+		for (int width = 0; width < this.costume.getWidth(); width++) {
+			for (int height = 0; height < this.costume.getHeight(); height++) {
+				int oldPixelColor = this.costume.getPixel(width, height);
 
 				int red = Color.red(oldPixelColor) + (int) (255 * (this.brightness - 1));
 				int green = Color.green(oldPixelColor) + (int) (255 * (this.brightness - 1));
@@ -276,7 +276,7 @@ public class WallpaperCostume {
 				}
 
 				int newPixel = Color.argb(alpha, red, green, blue);
-				resultBitmap.setPixel(x, y, newPixel);
+				resultBitmap.setPixel(width, height, newPixel);
 			}
 		}
 		this.costume = resultBitmap;
@@ -311,10 +311,10 @@ public class WallpaperCostume {
 		Bitmap resultBitmap = Bitmap.createBitmap(this.costume.getWidth(), this.costume.getHeight(),
 				this.costume.getConfig());
 
-		for (int x = 0; x < this.costume.getWidth(); x++) {
-			for (int y = 0; y < this.costume.getHeight(); y++) {
+		for (int width = 0; width < this.costume.getWidth(); width++) {
+			for (int height = 0; height < this.costume.getHeight(); height++) {
 
-				int oldPixelColor = this.costume.getPixel(x, y);
+				int oldPixelColor = this.costume.getPixel(width, height);
 
 				int red = Color.red(oldPixelColor);
 				int green = Color.green(oldPixelColor);
@@ -328,7 +328,7 @@ public class WallpaperCostume {
 				}
 
 				int newPixel = Color.argb(alpha, red, green, blue);
-				resultBitmap.setPixel(x, y, newPixel);
+				resultBitmap.setPixel(width, height, newPixel);
 			}
 		}
 		this.costume = resultBitmap;
