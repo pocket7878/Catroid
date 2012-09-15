@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 
@@ -71,10 +72,8 @@ public class SetGhostEffectBrick implements Brick, OnClickListener {
 
 		view = View.inflate(context, R.layout.brick_set_ghost_effect, null);
 
-		TextView textX = (TextView) view
-				.findViewById(R.id.brick_set_ghost_effect_to_text_view);
-		EditText editX = (EditText) view
-				.findViewById(R.id.brick_set_ghost_effect_to_edit_text);
+		TextView textX = (TextView) view.findViewById(R.id.brick_set_ghost_effect_to_text_view);
+		EditText editX = (EditText) view.findViewById(R.id.brick_set_ghost_effect_to_edit_text);
 		editX.setText(String.valueOf(transparency));
 
 		textX.setVisibility(View.GONE);
@@ -103,8 +102,7 @@ public class SetGhostEffectBrick implements Brick, OnClickListener {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(transparency));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER
-						| InputType.TYPE_NUMBER_FLAG_DECIMAL
+				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
 						| InputType.TYPE_NUMBER_FLAG_SIGNED);
 				input.setSelectAllOnFocus(true);
 			}
@@ -112,25 +110,27 @@ public class SetGhostEffectBrick implements Brick, OnClickListener {
 			@Override
 			protected boolean handleOkButton() {
 				try {
-					transparency = Double.parseDouble(input.getText()
-							.toString());
+					transparency = Double.parseDouble(input.getText().toString());
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(),
-							R.string.error_no_number_entered,
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 				}
 
 				return true;
 			}
 		};
 
-		editDialog.show(activity.getSupportFragmentManager(),
-				"dialog_set_ghost_effect_brick");
+		editDialog.show(activity.getSupportFragmentManager(), "dialog_set_ghost_effect_brick");
 	}
 
 	@Override
 	public void executeLiveWallpaper() {
-		// TODO Auto-generated method stub
 
+		WallpaperCostume wallpaperCostume = sprite.getWallpaperCostume();
+
+		if (wallpaperCostume == null) {
+			wallpaperCostume = new WallpaperCostume(sprite, null);
+		}
+
+		wallpaperCostume.setGhostEffect((100f - (float) this.transparency) / 100);
 	}
 }
