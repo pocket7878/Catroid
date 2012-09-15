@@ -212,6 +212,18 @@ public class WallpaperCostume {
 		this.isBackground = isBackground;
 	}
 
+	public float getAlphaValue() {
+		return alphaValue;
+	}
+
+	public void setAlphaValue(float alphaValue) {
+		this.alphaValue = alphaValue;
+	}
+
+	public float getBrightness() {
+		return brightness;
+	}
+
 	public void setBrightness(float percentage) {
 
 		if (percentage < 0f) {
