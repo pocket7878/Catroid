@@ -106,6 +106,14 @@ public class WallpaperCostume {
 		this.y = y;
 	}
 
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
 	public void changeXBy(int x) {
 		this.topNeedsAdjustment = true;
 		this.x += x;
@@ -355,7 +363,7 @@ public class WallpaperCostume {
 				break;
 			}
 			long timeBeforeSleep = System.currentTimeMillis();
-			int sleep = 33;
+			int sleep = 100;
 			while (System.currentTimeMillis() <= (timeBeforeSleep + sleep)) {
 
 				if (sprite.isPaused) {
@@ -376,31 +384,19 @@ public class WallpaperCostume {
 			long currentTime = System.currentTimeMillis();
 			duration -= (int) (currentTime - startTime);
 			long timePassed = currentTime - startTime;
-			//updatePositions((int) (currentTime - startTime), duration);
-			//-------------Method-----------------------------------------
-			// updatePositions(int timePassed, int duration)
-			float xPosition = sprite.costume.getXPosition();
-			float yPosition = sprite.costume.getYPosition();
 
-			//xPosition += ((float) timePassed / duration) * (xDestination - xPosition);
-			//yPosition += ((float) timePassed / duration) * (yDestination - yPosition);
-			//			this.topNeedsAdjustment = true;
-			//			this.x += ((float) timePassed / duration) * (xDestination - xPosition);
-			//			this.leftNeedsAdjustment = true;
-			//			this.y += ((float) timePassed / duration) * (yDestination - yPosition);
+			float xPosition = this.x;
+			float yPosition = this.y;
 
 			this.changeXBy((int) (((float) timePassed / duration) * (xDestination - xPosition)));
 			this.changeYby((int) (((float) timePassed / duration) * (yDestination - yPosition)));
-			//			sprite.costume.setXYPosition(xPosition, yPosition);
-			//-------------------------------------------------------------
+
 			startTime = currentTime;
 		}
 		if (!sprite.isAlive(Thread.currentThread())) {
 			// -stay at last position
 		} else {
-			//			sprite.costume.aquireXYWidthHeightLock();
-			//			sprite.costume.setXYPosition(xDestination, yDestination);
-			//			sprite.costume.releaseXYWidthHeightLock();
+
 			this.setX(xDestination);
 			this.setY(yDestination);
 		}

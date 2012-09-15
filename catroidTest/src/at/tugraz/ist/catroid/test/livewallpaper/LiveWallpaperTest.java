@@ -38,6 +38,7 @@ import at.tugraz.ist.catroid.content.bricks.ChangeSizeByNBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeXByBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeYByBrick;
 import at.tugraz.ist.catroid.content.bricks.ClearGraphicEffectBrick;
+import at.tugraz.ist.catroid.content.bricks.GlideToBrick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.NextCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
@@ -365,5 +366,23 @@ public class LiveWallpaperTest extends AndroidTestCase {
 
 		assertEquals("Ghost Effect was not cleared", 1f, wallpaperCostume.getAlphaValue());
 		assertEquals("Brightness was not cleared", 1f, wallpaperCostume.getBrightness());
+	}
+
+	public void testGlideToEffectBrick() {
+		WallpaperCostume wallpaperCostume = new WallpaperCostume(catroidSprite, catroidSprite.getCostumeDataList().get(
+				0));
+
+		int xDestination = 100;
+		int yDestination = 100;
+		int duration = 3;
+
+		Brick glideBrick = new GlideToBrick(catroidSprite, xDestination, yDestination, duration);
+		glideBrick.executeLiveWallpaper();
+
+		int x = wallpaperCostume.getX();
+		int y = wallpaperCostume.getY();
+
+		assertEquals("Object is not on the desired x destination", x, xDestination);
+		assertEquals("Object is not on the desired y destination", y, yDestination);
 	}
 }
