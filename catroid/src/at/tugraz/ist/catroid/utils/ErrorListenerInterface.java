@@ -20,42 +20,10 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.tugraz.ist.catroid.livewallpaper;
+package at.tugraz.ist.catroid.utils;
 
-import android.app.Activity;
-import android.content.Context;
-import android.os.Bundle;
-import android.util.DisplayMetrics;
-import at.tugraz.ist.catroid.common.Values;
+public interface ErrorListenerInterface {
 
-public class DummyLiveWallpaperActivity extends Activity {
-
-	private static Context context;
-
-	@Override
-	public void onCreate(Bundle savedInstance) {
-		super.onCreate(savedInstance);
-
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		Values.SCREEN_WIDTH = dm.widthPixels;
-		Values.SCREEN_HEIGHT = dm.heightPixels;
-
-		context = this;
-
-	}
-
-	public static boolean isRunning() {
-		if (context != null) {
-			return true;
-		} else {
-			return false;
-		}
-
-	}
-
-	public static Context getContext() {
-		return context;
-	}
+	public void showErrorDialog(String errorMessage);
 
 }

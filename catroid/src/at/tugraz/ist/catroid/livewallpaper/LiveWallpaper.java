@@ -44,7 +44,7 @@ public class LiveWallpaper extends WallpaperService {
 	public Engine onCreateEngine() {
 
 		ProjectManager.getInstance().setProject(null);
-		Utils.loadProjectIfNeeded(getApplicationContext());
+		Utils.loadProjectIfNeeded(getApplicationContext(), null);
 		WallpaperHelper.getInstance().setProject(ProjectManager.getInstance().getCurrentProject());
 
 		return new CatWallEngine();

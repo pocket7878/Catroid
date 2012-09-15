@@ -34,6 +34,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -58,6 +59,7 @@ import at.tugraz.ist.catroid.ui.dialogs.RenameProjectDialog;
 import at.tugraz.ist.catroid.ui.dialogs.RenameProjectDialog.OnProjectRenameListener;
 import at.tugraz.ist.catroid.ui.dialogs.SetDescriptionDialog;
 import at.tugraz.ist.catroid.ui.dialogs.SetDescriptionDialog.OnUpdateProjectDescriptionListener;
+import at.tugraz.ist.catroid.utils.ErrorListenerInterface;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -86,8 +88,8 @@ public class ProjectsListFragment extends SherlockListFragment implements OnProj
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
+		super.onCreate(savedInstanceState);
 	}
 
 	@Override
@@ -132,7 +134,6 @@ public class ProjectsListFragment extends SherlockListFragment implements OnProj
 		if (isCurrentProject) {
 			updateProjectTitle();
 		}
-
 		activeDialogId = NO_DIALOG_FRAGMENT_ACTIVE;
 		initAdapter();
 	}
@@ -217,11 +218,17 @@ public class ProjectsListFragment extends SherlockListFragment implements OnProj
 		getListView().setOnItemClickListener(new ListView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (!ProjectManager.getInstance().loadProject((adapter.getItem(position)).projectName, getActivity(),
-						true)) {
-					return; // error message already in ProjectManager
-							// loadProject
+				try {
+					if (!ProjectManager.getInstance().loadProject((adapter.getItem(position)).projectName,
+							getActivity(), (ErrorListenerInterface) getActivity(), true)) {
+						return; // error message already in ProjectManager
+								// loadProject
+					}
+				} catch (ClassCastException exception) {
+					Log.e("CATROID", getActivity().toString() + " does not implement ErrorListenerInterface", exception);
+					return;
 				}
+
 				Intent intent = new Intent(getActivity(), ProjectActivity.class);
 				getActivity().startActivity(intent);
 			}
@@ -276,13 +283,15 @@ public class ProjectsListFragment extends SherlockListFragment implements OnProj
 						RenameProjectDialog dialogRenameProject = RenameProjectDialog
 								.newInstance(projectToEdit.projectName);
 						dialogRenameProject.setOnProjectRenameListener(ProjectsListFragment.this);
-						dialogRenameProject.show(getFragmentManager(), RenameProjectDialog.DIALOG_FRAGMENT_TAG);
+						dialogRenameProject.show(getActivity().getSupportFragmentManager(),
+								RenameProjectDialog.DIALOG_FRAGMENT_TAG);
 						break;
 					case CONTEXT_MENU_ITEM_DESCRIPTION:
 						SetDescriptionDialog dialogSetDescription = SetDescriptionDialog
 								.newInstance(projectToEdit.projectName);
 						dialogSetDescription.setOnUpdateProjectDescriptionListener(ProjectsListFragment.this);
-						dialogSetDescription.show(getFragmentManager(), SetDescriptionDialog.DIALOG_FRAGMENT_TAG);
+						dialogSetDescription.show(getActivity().getSupportFragmentManager(),
+								SetDescriptionDialog.DIALOG_FRAGMENT_TAG);
 						break;
 					case CONTEXT_MENU_ITEM_DELETE:
 						deleteProject();
@@ -290,7 +299,8 @@ public class ProjectsListFragment extends SherlockListFragment implements OnProj
 					case CONTEXT_MENU_ITEM_COPY:
 						CopyProjectDialog dialogCopyProject = CopyProjectDialog.newInstance(projectToEdit.projectName);
 						dialogCopyProject.setOnCopyProjectListener(ProjectsListFragment.this);
-						dialogCopyProject.show(getFragmentManager(), CopyProjectDialog.DIALOG_FRAGMENT_TAG);
+						dialogCopyProject.show(getActivity().getSupportFragmentManager(),
+								CopyProjectDialog.DIALOG_FRAGMENT_TAG);
 						break;
 				}
 			}
@@ -306,13 +316,18 @@ public class ProjectsListFragment extends SherlockListFragment implements OnProj
 		} else {
 			StorageHandler.getInstance().deleteProject(projectToEdit);
 		}
+		try {
+			projectList.remove(projectToEdit);
+			if (projectList.size() == 0) {
+				projectManager.initializeDefaultProject(getActivity(), (ErrorListenerInterface) getActivity());
+			} else {
 
-		projectList.remove(projectToEdit);
-		if (projectList.size() == 0) {
-			projectManager.initializeDefaultProject(getActivity());
-		} else {
-			projectManager.loadProject((projectList.get(0)).projectName, getActivity(), false);
-			projectManager.saveProject();
+				projectManager.loadProject((projectList.get(0)).projectName, getActivity(),
+						(ErrorListenerInterface) getActivity(), false);
+				projectManager.saveProject();
+			}
+		} catch (ClassCastException exception) {
+			Log.e("CATROID", getActivity().toString() + " does not implement ErrorListenerInterface", exception);
 		}
 
 		updateProjectTitle();

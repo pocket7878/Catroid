@@ -237,7 +237,9 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.clickOnButton(myProjectsText);
 		UiTestUtils.clickOnTextInList(solo, solo.getString(R.string.default_project_name));
 		UiTestUtils.clickOnActionBar(solo, R.id.menu_add);
-
+		if (!solo.waitForText(solo.getString(R.string.new_sprite_dialog_default_sprite_name), 0, 5000)) {
+			fail("Edit-Dialog not shown in 5 secs!");
+		}
 		solo.enterText(0, "testSprite");
 		solo.sleep(200);
 		solo.sendKey(Solo.ENTER);
@@ -252,9 +254,13 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.waitForFragmentById(R.id.fr_projects_list);
 		solo.clickOnText(UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 
+		solo.setActivityOrientation(Solo.LANDSCAPE);
+		solo.sleep(200);
+		assertTrue("No error message was shown", solo.searchText(solo.getString(R.string.error_load_project)));
+
 		solo.clickOnButton(0);
 		solo.goBack();
-		solo.clickOnButton(getActivity().getString(R.string.current_project_button));
+		solo.clickOnButton(solo.getString(R.string.current_project_button));
 		List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteList();
 		assertTrue("Default Project should not be overwritten", spriteList.size() == 3);
 	}
@@ -655,7 +661,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.clearEditText(0);
 		solo.enterText(0, renameString);
 		solo.clickOnText(solo.getString(R.string.ok));
-		solo.sleep(200);
+		solo.waitForDialogToClose(500);
 		renameDirectory = new File(Utils.buildProjectPath(renameString));
 		assertTrue("Rename with whitelisted characters was not successfull", renameDirectory.isDirectory());
 	}
@@ -673,7 +679,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.clearEditText(0);
 		solo.enterText(0, renameString);
 		solo.clickOnText(solo.getString(R.string.ok));
-		solo.sleep(200);
+		solo.waitForDialogToClose(500);
 		renameDirectory = new File(Utils.buildProjectPath(renameString));
 		assertTrue("Rename with blacklisted characters was not successfull", renameDirectory.isDirectory());
 	}
@@ -691,7 +697,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.clearEditText(0);
 		solo.enterText(0, renameString);
 		solo.clickOnText(solo.getString(R.string.ok));
-		solo.sleep(200);
+		solo.waitForDialogToClose(500);
 		String errorMessageProjectExists = solo.getString(R.string.error_project_exists);
 		assertTrue("No or wrong error message shown", solo.searchText(errorMessageProjectExists));
 		solo.clickOnButton(getActivity().getString(R.string.close));
@@ -710,7 +716,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.enterText(0, UiTestUtils.DEFAULT_TEST_PROJECT_NAME_MIXED_CASE);
 		solo.sleep(200);
 		solo.sendKey(Solo.ENTER);
-		solo.sleep(200);
+		solo.waitForDialogToClose(500);
 		String errorMessageProjectExists = solo.getString(R.string.error_project_exists);
 		assertTrue("No or wrong error message shown", solo.searchText(errorMessageProjectExists));
 		solo.goBack();
@@ -733,7 +739,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.setActivityOrientation(Solo.PORTRAIT);
 		solo.sleep(300);
 		solo.sendKey(Solo.ENTER);
-		solo.sleep(200);
+		solo.waitForDialogToClose(500);
 		solo.clickOnText(solo.getString(R.string.project_name)); //just to get focus for solo
 		assertFalse("List was not updated after rename", solo.searchText(UiTestUtils.PROJECTNAME1));
 	}
@@ -910,7 +916,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.clickOnText(actionSetDescriptionText);
 		assertTrue("dialog not loaded in 5 seconds", solo.waitForText(setDescriptionDialogTitle, 0, 5000));
 		assertTrue("description is not shown in edittext", solo.searchText("Lorem ipsum"));
-		ProjectManager.INSTANCE.loadProject(UiTestUtils.PROJECTNAME1, getActivity(), true);
+		ProjectManager.INSTANCE.loadProject(UiTestUtils.PROJECTNAME1, getActivity(), getActivity(), true);
 		assertTrue("description is not set in project", ProjectManager.INSTANCE.getCurrentProject().getDescription()
 				.equalsIgnoreCase(lorem));
 	}

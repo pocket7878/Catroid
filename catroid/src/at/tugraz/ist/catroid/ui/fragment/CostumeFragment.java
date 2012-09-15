@@ -313,13 +313,13 @@ public class CostumeFragment extends SherlockListFragment implements OnCostumeEd
 			try {
 				originalImagePath = data.getString(columnIndex);
 			} catch (CursorIndexOutOfBoundsException e) {
-				Utils.displayErrorMessage(getActivity(), getString(R.string.error_load_image));
+				Utils.displayErrorMessageFragment(getFragmentManager(), getString(R.string.error_load_image));
 				return;
 			}
 		}
 
 		if (data == null && originalImagePath.equals("")) {
-			Utils.displayErrorMessage(getActivity(), getString(R.string.error_load_image));
+			Utils.displayErrorMessageFragment(getFragmentManager(), getString(R.string.error_load_image));
 			return;
 		}
 
@@ -414,7 +414,7 @@ public class CostumeFragment extends SherlockListFragment implements OnCostumeEd
 		int[] imageDimensions = ImageEditing.getImageDimensions(originalImagePath);
 
 		if (imageDimensions[0] < 0 || imageDimensions[1] < 0) {
-			Utils.displayErrorMessage(getActivity(), getString(R.string.error_load_image));
+			Utils.displayErrorMessageFragment(getFragmentManager(), getString(R.string.error_load_image));
 			return;
 		}
 
@@ -445,7 +445,8 @@ public class CostumeFragment extends SherlockListFragment implements OnCostumeEd
 				ImageEditing.overwriteImageFileWithNewBitmap(imageFile);
 				pixmap = Utils.getPixmapFromFile(imageFile);
 				if (pixmap == null) {
-					Utils.displayErrorMessage(getActivity(), getString(R.string.error_load_image));
+					Utils.displayErrorMessageFragment(getActivity().getSupportFragmentManager(),
+							getString(R.string.error_load_image));
 					StorageHandler.getInstance().deleteFile(imageFile.getAbsolutePath());
 					return;
 				}
@@ -453,7 +454,7 @@ public class CostumeFragment extends SherlockListFragment implements OnCostumeEd
 			pixmap = null;
 			updateCostumeAdapter(imageName, imageFileName);
 		} catch (IOException e) {
-			Utils.displayErrorMessage(getActivity(), getString(R.string.error_load_image));
+			Utils.displayErrorMessageFragment(getFragmentManager(), getString(R.string.error_load_image));
 		}
 
 		getLoaderManager().destroyLoader(ID_LOADER_MEDIA_IMAGE);
@@ -487,7 +488,7 @@ public class CostumeFragment extends SherlockListFragment implements OnCostumeEd
 
 		int[] imageDimensions = ImageEditing.getImageDimensions(pathOfPaintroidImage);
 		if (imageDimensions[0] < 0 || imageDimensions[1] < 0) {
-			Utils.displayErrorMessage(getActivity(), this.getString(R.string.error_load_image));
+			Utils.displayErrorMessageFragment(getFragmentManager(), this.getString(R.string.error_load_image));
 			return;
 		}
 
@@ -517,7 +518,7 @@ public class CostumeFragment extends SherlockListFragment implements OnCostumeEd
 			String originalImagePath = costumeFromCameraUri.getPath();
 			int[] imageDimensions = ImageEditing.getImageDimensions(originalImagePath);
 			if (imageDimensions[0] < 0 || imageDimensions[1] < 0) {
-				Utils.displayErrorMessage(getActivity(), getString(R.string.error_load_image));
+				Utils.displayErrorMessageFragment(getFragmentManager(), getString(R.string.error_load_image));
 				return;
 			}
 			copyImageToCatroid(originalImagePath);
@@ -553,7 +554,7 @@ public class CostumeFragment extends SherlockListFragment implements OnCostumeEd
 			String imageFileName = costumeData.getCostumeFileName();
 			updateCostumeAdapter(imageName, imageFileName);
 		} catch (IOException e) {
-			Utils.displayErrorMessage(getActivity(), getString(R.string.error_load_image));
+			Utils.displayErrorMessageFragment(getFragmentManager(), getString(R.string.error_load_image));
 			e.printStackTrace();
 		}
 
