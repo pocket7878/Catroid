@@ -78,7 +78,9 @@ public class WallpaperHelper {
 	public void destroy() {
 
 		for (Sprite sprite : project.getSpriteList()) {
-			sprite.getWallpaperCostume().clear();
+			if (sprite.getWallpaperCostume() != null) {
+				sprite.getWallpaperCostume().clear();
+			}
 		}
 
 	}

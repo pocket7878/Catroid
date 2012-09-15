@@ -114,11 +114,11 @@ public class Sprite implements Serializable {
 		}
 	}
 
-	public void resetStartScripts() {
+	public void resetScripts() {
 		for (Script s : scriptList) {
-			if (s instanceof StartScript) {
-				s.setFinished(false);
-			}
+			s.setFinished(false);
+			s.setFinish(false);
+			s.setPaused(false);
 		}
 	}
 

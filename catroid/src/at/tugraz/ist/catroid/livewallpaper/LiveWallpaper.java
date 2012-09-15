@@ -43,7 +43,7 @@ public class LiveWallpaper extends WallpaperService {
 
 		ProjectManager.getInstance().loadProject(Constants.PROJECTCODE_NAME, getApplicationContext(), false);
 		WallpaperHelper.getInstance().setProject(ProjectManager.getInstance().getCurrentProject());
-		WallpaperHelper.getInstance().setLiveWallpaper(true);
+		//	WallpaperHelper.getInstance().setLiveWallpaper(true);
 
 		return new CatWallEngine();
 
@@ -78,13 +78,13 @@ public class LiveWallpaper extends WallpaperService {
 				sprites = wallpaperHelper.getProject().getSpriteList();
 
 				for (Sprite sprite : sprites) {
-
-					sprite.resetStartScripts();
+					sprite.resetScripts();
 					sprite.startStartScripts();
 					draw();
 				}
 
 			} else {
+				wallpaperHelper.setLiveWallpaper(false);
 				SoundManager.getInstance().stopAllSounds();
 				mHandler.removeCallbacks(mUpdateDisplay);
 			}
