@@ -307,7 +307,7 @@ public class WallpaperCostume {
 	}
 
 	private void adjustGhostEffect() {
-		setCostume(this.costumeData);
+		//		setCostume(this.costumeData);
 		Bitmap resultBitmap = Bitmap.createBitmap(this.costume.getWidth(), this.costume.getHeight(),
 				this.costume.getConfig());
 
@@ -332,6 +332,13 @@ public class WallpaperCostume {
 			}
 		}
 		this.costume = resultBitmap;
+	}
+
+	public void clearGraphicEffect() {
+		this.alphaValue = 1f;
+		this.brightness = 1f;
+		adjustBrightness();
+		adjustGhostEffect();
 	}
 
 }

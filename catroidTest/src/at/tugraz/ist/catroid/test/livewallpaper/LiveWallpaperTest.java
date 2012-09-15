@@ -37,6 +37,7 @@ import at.tugraz.ist.catroid.content.bricks.ChangeGhostEffectBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeSizeByNBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeXByBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeYByBrick;
+import at.tugraz.ist.catroid.content.bricks.ClearGraphicEffectBrick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.NextCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
@@ -341,5 +342,28 @@ public class LiveWallpaperTest extends AndroidTestCase {
 		float alpha = 100 - (wallpaperCostume.getAlphaValue() * 100f);
 
 		assertEquals("The alpha value was not set properly", alpha, initialAlpha1 + initialAlpha2);
+	}
+
+	public void testClearGraphicEffectBrick() {
+		WallpaperCostume wallpaperCostume = new WallpaperCostume(catroidSprite, catroidSprite.getCostumeDataList().get(
+				0));
+		int initialAlpha = 50;
+		int initialBrightness = 50;
+		Brick brick1 = new SetBrightnessBrick(catroidSprite, initialBrightness);
+		Brick brick2 = new SetGhostEffectBrick(catroidSprite, initialAlpha);
+		brick1.executeLiveWallpaper();
+		brick2.executeLiveWallpaper();
+
+		int alpha = (int) (wallpaperCostume.getAlphaValue() * 100f);
+		assertEquals("The alpha value was not set properly", alpha, initialAlpha);
+
+		int brightness = (int) (wallpaperCostume.getBrightness() * 100f);
+		assertEquals("The brightness was not set properly", brightness, initialBrightness);
+
+		Brick brick3 = new ClearGraphicEffectBrick(catroidSprite);
+		brick3.executeLiveWallpaper();
+
+		assertEquals("Ghost Effect was not cleared", 1f, wallpaperCostume.getAlphaValue());
+		assertEquals("Brightness was not cleared", 1f, wallpaperCostume.getBrightness());
 	}
 }
