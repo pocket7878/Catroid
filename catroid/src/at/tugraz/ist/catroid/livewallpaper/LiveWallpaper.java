@@ -137,13 +137,18 @@ public class LiveWallpaper extends WallpaperService {
 		@Override
 		public void onTouchEvent(MotionEvent event) {
 			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				Sprite spriteToExecute = null;
 
 				for (Sprite sprite : sprites) {
 					if (sprite.getWallpaperCostume() != null
 							&& sprite.getWallpaperCostume().touchedInsideTheCostume(event.getX(), event.getY())) {
-						sprite.startWhenScripts("Tapped");
-						draw();
+						spriteToExecute = sprite;
 					}
+				}
+
+				if (spriteToExecute != null) {
+					spriteToExecute.startWhenScripts("Tapped");
+					draw();
 				}
 
 			}
