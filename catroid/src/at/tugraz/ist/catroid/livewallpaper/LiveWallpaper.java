@@ -25,11 +25,13 @@ package at.tugraz.ist.catroid.livewallpaper;
 
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
 import android.view.MotionEvent;
+import android.view.MotionEvent.PointerCoords;
 import android.view.SurfaceHolder;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -115,9 +117,11 @@ public class LiveWallpaper extends WallpaperService {
 					WallpaperCostume wallpaperCostume;
 					for (Sprite sprite : sprites) {
 						wallpaperCostume = sprite.getWallpaperCostume();
-						if (wallpaperCostume != null && wallpaperCostume.getCostume() != null) {
+						if (wallpaperCostume != null && wallpaperCostume.getCostume() != null
+								&& !wallpaperCostume.isCostumeHidden()) {
 							c.drawBitmap(wallpaperCostume.getCostume(), wallpaperCostume.getTop(),
 									wallpaperCostume.getLeft(), paint);
+
 						}
 					}
 
@@ -134,42 +138,33 @@ public class LiveWallpaper extends WallpaperService {
 			}
 		}
 
+		@SuppressLint("NewApi")
 		@Override
 		public void onTouchEvent(MotionEvent event) {
-			if (event.getAction() == MotionEvent.ACTION_DOWN) {
-				Sprite spriteToExecute = null;
 
-				for (Sprite sprite : sprites) {
-					if (sprite.getWallpaperCostume() != null
-							&& sprite.getWallpaperCostume().touchedInsideTheCostume(event.getX(), event.getY())) {
-						spriteToExecute = sprite;
+			Sprite spriteToExecute = null;
+			PointerCoords coords = new PointerCoords();
+
+			int action = event.getActionMasked();
+			if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN) {
+				for (int pointerIndex = 0; pointerIndex < event.getPointerCount(); pointerIndex++) {
+
+					event.getPointerCoords(pointerIndex, coords);
+
+					for (Sprite sprite : sprites) {
+						if (sprite.getWallpaperCostume() != null
+								&& sprite.getWallpaperCostume().touchedInsideTheCostume(coords.x, coords.y)) {
+							spriteToExecute = sprite;
+						}
+					}
+
+					if (spriteToExecute != null) {
+						spriteToExecute.startWhenScripts("Tapped");
+						draw();
 					}
 				}
-
-				if (spriteToExecute != null) {
-					spriteToExecute.startWhenScripts("Tapped");
-					draw();
-				}
-
 			}
 		}
-
-		//		@Override
-		//		public Bundle onCommand(String action, int x, int y, int z, Bundle extras, boolean resultRequested) {
-		//			if (action.equals(WallpaperManager.COMMAND_TAP)) {
-		//				ArrayList<WallpaperCostume> wallpaperCostumes = wallpaperHelper.getWallpaperCostumes();
-		//
-		//				for (int costumeIndex = wallpaperCostumes.size() - 1; costumeIndex > 0; costumeIndex--) {
-		//					if (wallpaperCostumes.get(costumeIndex).touchedInsideTheCostume(x, y)) {
-		//						isWhenScript = true;
-		//						executeSprite(wallpaperCostumes.get(costumeIndex).getSprite());
-		//						isWhenScript = false;
-		//						break;
-		//					}
-		//				}
-		//			}
-		//			return null;
-		//		}
 
 	}
 
