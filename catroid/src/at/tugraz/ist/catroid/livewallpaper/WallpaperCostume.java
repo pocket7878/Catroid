@@ -41,6 +41,9 @@ public class WallpaperCostume {
 	private int top;
 	private int left;
 
+	int xDestination;
+	int yDestination;
+
 	private float alphaValue = 1f;
 	private float brightness = 1f;
 
@@ -341,4 +344,65 @@ public class WallpaperCostume {
 		adjustGhostEffect();
 	}
 
+	public void glideTo(int xDest, int yDest, int durationInMilliSeconds) {
+		this.xDestination = xDest;
+		this.yDestination = yDest;
+
+		long startTime = System.currentTimeMillis();
+		int duration = durationInMilliSeconds;
+		while (duration > 0) {
+			if (!sprite.isAlive(Thread.currentThread())) {
+				break;
+			}
+			long timeBeforeSleep = System.currentTimeMillis();
+			int sleep = 33;
+			while (System.currentTimeMillis() <= (timeBeforeSleep + sleep)) {
+
+				if (sprite.isPaused) {
+					sleep = (int) ((timeBeforeSleep + sleep) - System.currentTimeMillis());
+					long milliSecondsBeforePause = System.currentTimeMillis();
+					while (sprite.isPaused) {
+						if (sprite.isFinished) {
+							return;
+						}
+						Thread.yield();
+					}
+					timeBeforeSleep = System.currentTimeMillis();
+					startTime += System.currentTimeMillis() - milliSecondsBeforePause;
+				}
+
+				Thread.yield();
+			}
+			long currentTime = System.currentTimeMillis();
+			duration -= (int) (currentTime - startTime);
+			long timePassed = currentTime - startTime;
+			//updatePositions((int) (currentTime - startTime), duration);
+			//-------------Method-----------------------------------------
+			// updatePositions(int timePassed, int duration)
+			float xPosition = sprite.costume.getXPosition();
+			float yPosition = sprite.costume.getYPosition();
+
+			//xPosition += ((float) timePassed / duration) * (xDestination - xPosition);
+			//yPosition += ((float) timePassed / duration) * (yDestination - yPosition);
+			//			this.topNeedsAdjustment = true;
+			//			this.x += ((float) timePassed / duration) * (xDestination - xPosition);
+			//			this.leftNeedsAdjustment = true;
+			//			this.y += ((float) timePassed / duration) * (yDestination - yPosition);
+
+			this.changeXBy((int) (((float) timePassed / duration) * (xDestination - xPosition)));
+			this.changeYby((int) (((float) timePassed / duration) * (yDestination - yPosition)));
+			//			sprite.costume.setXYPosition(xPosition, yPosition);
+			//-------------------------------------------------------------
+			startTime = currentTime;
+		}
+		if (!sprite.isAlive(Thread.currentThread())) {
+			// -stay at last position
+		} else {
+			//			sprite.costume.aquireXYWidthHeightLock();
+			//			sprite.costume.setXYPosition(xDestination, yDestination);
+			//			sprite.costume.releaseXYWidthHeightLock();
+			this.setX(xDestination);
+			this.setY(yDestination);
+		}
+	}
 }
