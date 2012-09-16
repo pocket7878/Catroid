@@ -30,10 +30,12 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.MotionEvent.PointerCoords;
 import android.view.SurfaceHolder;
 import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -57,6 +59,8 @@ public class LiveWallpaper extends WallpaperService {
 
 		private Paint paint;
 		private List<Sprite> sprites;
+
+		private boolean landscape;
 
 		private WallpaperHelper wallpaperHelper = WallpaperHelper.getInstance();
 
@@ -94,7 +98,23 @@ public class LiveWallpaper extends WallpaperService {
 
 		@Override
 		public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+			if (width > height) {
+				int temp = Values.SCREEN_WIDTH;
+				Values.SCREEN_WIDTH = Values.SCREEN_HEIGHT;
+				Values.SCREEN_HEIGHT = temp;
+				this.landscape = true;
+
+			} else if ((height > width) && this.landscape) {
+				Log.v("LANDSCAPE", "GOT BACK");
+				int temp = Values.SCREEN_WIDTH;
+				Values.SCREEN_WIDTH = Values.SCREEN_HEIGHT;
+				Values.SCREEN_HEIGHT = temp;
+				this.landscape = false;
+			}
+
 			draw();
+
 		}
 
 		@Override
