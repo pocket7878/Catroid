@@ -85,13 +85,6 @@ public class GlideToBrick implements Brick, OnClickListener {
 		//		}
 		//		semaphore.acquireUninterruptibly();
 
-		PhysicObject physicObject = physicWorld.getPhysicObject(sprite);
-		oldPhysicObjectType = physicObject.getType();
-
-		physicObject.setVelocity(new Vector2());
-		physicObject.setRotationSpeed(0.0f);
-		physicObject.setType(Type.FIXED);
-
 		long startTime = System.currentTimeMillis();
 		int duration = durationInMilliSeconds;
 		while (duration > 0) {
@@ -128,15 +121,22 @@ public class GlideToBrick implements Brick, OnClickListener {
 		} else {
 
 			if (physicWorld.isPhysicObject(sprite)) {
+				PhysicObject physicObject = physicWorld.getPhysicObject(sprite);
+				oldPhysicObjectType = physicObject.getType();
+
+				physicObject.setVelocity(new Vector2());
+				physicObject.setRotationSpeed(0.0f);
+				physicObject.setType(Type.FIXED);
 				Vector2 newPos = new Vector2(xDestination, yDestination);
 				physicWorld.getPhysicObject(sprite).setXYPosition(PhysicWorldConverter.vecCatToBox2d(newPos));
+				physicObject.setType(oldPhysicObjectType);
 			} else {
 				sprite.costume.aquireXYWidthHeightLock();
 				sprite.costume.setXYPosition(xDestination, yDestination);
 				sprite.costume.releaseXYWidthHeightLock();
 			}
 		}
-		physicObject.setType(oldPhysicObjectType);
+
 	}
 
 	private void updatePositions(int timePassed, int duration) {

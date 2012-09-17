@@ -30,22 +30,34 @@ import at.tugraz.ist.catroid.content.bricks.GlideToBrick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
 
 public class GlideToBrickTest extends AndroidTestCase {
 
 	int xPosition = 100;
 	int yPosition = 100;
 	int duration = 1000;
+	private PhysicWorld physicWorld;
+
+	@Override
+	public void setUp() throws Exception {
+		physicWorld = new PhysicWorld();
+	}
+
+	@Override
+	protected void tearDown() throws Exception {
+	}
 
 	public void testNormalBehavior() throws InterruptedException {
 		Sprite sprite = new Sprite("testSprite");
 		assertEquals("Unexpected initial sprite x position", 0f, sprite.costume.getXPosition());
 		assertEquals("Unexpected initial sprite y position", 0f, sprite.costume.getYPosition());
 
-		GlideToBrick glideToBrick = new GlideToBrick(null, sprite, xPosition, yPosition, duration);
+		GlideToBrick glideToBrick = new GlideToBrick(physicWorld, sprite, xPosition, yPosition, duration);
 		glideToBrick.execute();
-
-		Thread.sleep(1100);
+		boolean isPhysicObject = physicWorld.isPhysicObject(sprite);
+		assertFalse(physicWorld.isPhysicObject(sprite));
+		Thread.sleep(1200);
 
 		assertEquals("Incorrect sprite x position after GlideToBrick executed", (float) xPosition,
 				sprite.costume.getXPosition());
@@ -54,7 +66,7 @@ public class GlideToBrickTest extends AndroidTestCase {
 	}
 
 	public void testNullSprite() {
-		GlideToBrick glideToBrick = new GlideToBrick(null, null, xPosition, yPosition, duration);
+		GlideToBrick glideToBrick = new GlideToBrick(physicWorld, null, xPosition, yPosition, duration);
 		try {
 			glideToBrick.execute();
 			fail("Execution of GlideToBrick with null Sprite did not cause a " + "NullPointerException to be thrown");
@@ -66,7 +78,7 @@ public class GlideToBrickTest extends AndroidTestCase {
 	public void testBoundaryPositions() {
 		Sprite sprite = new Sprite("testSprite");
 
-		PlaceAtBrick brick = new PlaceAtBrick(null, sprite, Integer.MAX_VALUE, Integer.MAX_VALUE);
+		PlaceAtBrick brick = new PlaceAtBrick(physicWorld, sprite, Integer.MAX_VALUE, Integer.MAX_VALUE);
 		brick.execute();
 
 		assertEquals("PlaceAtBrick failed to place Sprite at maximum x float value", (float) Integer.MAX_VALUE,
@@ -74,7 +86,7 @@ public class GlideToBrickTest extends AndroidTestCase {
 		assertEquals("PlaceAtBrick failed to place Sprite at maximum y float value", (float) Integer.MAX_VALUE,
 				sprite.costume.getYPosition());
 
-		brick = new PlaceAtBrick(null, sprite, Integer.MIN_VALUE, Integer.MIN_VALUE);
+		brick = new PlaceAtBrick(physicWorld, sprite, Integer.MIN_VALUE, Integer.MIN_VALUE);
 		brick.execute();
 
 		assertEquals("PlaceAtBrick failed to place Sprite at minimum x float value", (float) Integer.MIN_VALUE,
@@ -87,7 +99,7 @@ public class GlideToBrickTest extends AndroidTestCase {
 		Sprite sprite = new Sprite("testSprite");
 		Script script = new StartScript(sprite);
 		HideBrick hideBrick = new HideBrick(sprite);
-		GlideToBrick glideToBrick = new GlideToBrick(null, sprite, 0, 0, 1000);
+		GlideToBrick glideToBrick = new GlideToBrick(physicWorld, sprite, 0, 0, 1000);
 		ShowBrick showBrick = new ShowBrick(sprite);
 
 		script.addBrick(hideBrick);
@@ -111,7 +123,7 @@ public class GlideToBrickTest extends AndroidTestCase {
 		Sprite sprite = new Sprite("testSprite");
 		Script script = new StartScript(sprite);
 		HideBrick hideBrick = new HideBrick(sprite);
-		GlideToBrick glideToBrick = new GlideToBrick(null, sprite, 0, 0, 3000);
+		GlideToBrick glideToBrick = new GlideToBrick(physicWorld, sprite, 0, 0, 3000);
 		ShowBrick showBrick = new ShowBrick(sprite);
 
 		script.addBrick(hideBrick);

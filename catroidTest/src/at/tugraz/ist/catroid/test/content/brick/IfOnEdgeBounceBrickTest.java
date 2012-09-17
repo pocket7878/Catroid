@@ -35,6 +35,7 @@ import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.IfOnEdgeBounceBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.test.R;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
@@ -54,6 +55,7 @@ public class IfOnEdgeBounceBrickTest extends InstrumentationTestCase {
 	private CostumeData costumeData;
 	private int width;
 	private int height;
+	private PhysicWorld physicWorld;
 
 	@Override
 	public void setUp() throws Exception {
@@ -90,6 +92,7 @@ public class IfOnEdgeBounceBrickTest extends InstrumentationTestCase {
 		Bitmap bitmap = BitmapFactory.decodeFile(testImage.getAbsolutePath());
 		width = bitmap.getWidth();
 		height = bitmap.getHeight();
+		physicWorld = new PhysicWorld();
 	}
 
 	@Override
@@ -113,7 +116,7 @@ public class IfOnEdgeBounceBrickTest extends InstrumentationTestCase {
 		sprite.costume.setXPosition(0);
 		sprite.costume.setYPosition(0);
 
-		IfOnEdgeBounceBrick ifOnEdgeBounceBrick = new IfOnEdgeBounceBrick(null, sprite);
+		IfOnEdgeBounceBrick ifOnEdgeBounceBrick = new IfOnEdgeBounceBrick(physicWorld, sprite);
 
 		ifOnEdgeBounceBrick.execute();
 		assertEquals("Wrong X-Position!", 0f, sprite.costume.getXPosition());
@@ -129,7 +132,7 @@ public class IfOnEdgeBounceBrickTest extends InstrumentationTestCase {
 		sprite.costume.width = width;
 		sprite.costume.height = height;
 
-		IfOnEdgeBounceBrick ifOnEdgeBounceBrick = new IfOnEdgeBounceBrick(null, sprite);
+		IfOnEdgeBounceBrick ifOnEdgeBounceBrick = new IfOnEdgeBounceBrick(physicWorld, sprite);
 
 		sprite.costume.setRotation(90f);
 		sprite.costume.setXYPosition(0, BOUNCE_UP_POS);
@@ -174,7 +177,7 @@ public class IfOnEdgeBounceBrickTest extends InstrumentationTestCase {
 		sprite.costume.width = width;
 		sprite.costume.height = height;
 
-		IfOnEdgeBounceBrick ifOnEdgeBounceBrick = new IfOnEdgeBounceBrick(null, sprite);
+		IfOnEdgeBounceBrick ifOnEdgeBounceBrick = new IfOnEdgeBounceBrick(physicWorld, sprite);
 
 		sprite.costume.setRotation(-180f + 90f);
 		sprite.costume.setXYPosition(0, BOUNCE_DOWN_POS);
@@ -220,7 +223,7 @@ public class IfOnEdgeBounceBrickTest extends InstrumentationTestCase {
 		sprite.costume.width = width;
 		sprite.costume.height = height;
 
-		IfOnEdgeBounceBrick brick = new IfOnEdgeBounceBrick(null, sprite);
+		IfOnEdgeBounceBrick brick = new IfOnEdgeBounceBrick(physicWorld, sprite);
 
 		sprite.costume.setRotation(0f);
 		sprite.costume.setXYPosition(BOUNCE_RIGHT_POS, 0);
@@ -266,7 +269,7 @@ public class IfOnEdgeBounceBrickTest extends InstrumentationTestCase {
 		sprite.costume.width = width;
 		sprite.costume.height = height;
 
-		IfOnEdgeBounceBrick ifOnEdgeBounceBrick = new IfOnEdgeBounceBrick(null, sprite);
+		IfOnEdgeBounceBrick ifOnEdgeBounceBrick = new IfOnEdgeBounceBrick(physicWorld, sprite);
 
 		sprite.costume.setRotation(90f + 90f);
 		sprite.costume.setXYPosition(BOUNCE_LEFT_POS, 0);

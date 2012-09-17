@@ -25,10 +25,22 @@ package at.tugraz.ist.catroid.test.content.brick;
 import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.ChangeYByBrick;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
 
 public class ChangeYByBrickTest extends AndroidTestCase {
 
 	private int yMovement = 100;
+
+	private PhysicWorld physicWorld;
+
+	@Override
+	public void setUp() throws Exception {
+		physicWorld = new PhysicWorld();
+	}
+
+	@Override
+	protected void tearDown() throws Exception {
+	}
 
 	public void testNormalBehavior() {
 		Sprite sprite = new Sprite("testSprite");
@@ -37,7 +49,7 @@ public class ChangeYByBrickTest extends AndroidTestCase {
 
 		int yPosition = (int) sprite.costume.getYPosition();
 
-		ChangeYByBrick changeYByBrick = new ChangeYByBrick(null, sprite, yMovement);
+		ChangeYByBrick changeYByBrick = new ChangeYByBrick(physicWorld, sprite, yMovement);
 		changeYByBrick.execute();
 
 		yPosition += yMovement;
@@ -46,7 +58,7 @@ public class ChangeYByBrickTest extends AndroidTestCase {
 	}
 
 	public void testNullSprite() {
-		ChangeYByBrick brick = new ChangeYByBrick(null, null, yMovement);
+		ChangeYByBrick brick = new ChangeYByBrick(physicWorld, null, yMovement);
 
 		try {
 			brick.execute();
@@ -61,7 +73,7 @@ public class ChangeYByBrickTest extends AndroidTestCase {
 
 		int yPosition = 10;
 		sprite.costume.setXYPosition(sprite.costume.getXPosition(), yPosition);
-		ChangeYByBrick changeYByBrick = new ChangeYByBrick(null, sprite, Integer.MAX_VALUE);
+		ChangeYByBrick changeYByBrick = new ChangeYByBrick(physicWorld, sprite, Integer.MAX_VALUE);
 		changeYByBrick.execute();
 
 		assertEquals("ChangeYByBrick failed to place Sprite at maximum y integer value", Integer.MAX_VALUE,
@@ -69,7 +81,7 @@ public class ChangeYByBrickTest extends AndroidTestCase {
 
 		yPosition = -10;
 		sprite.costume.setXYPosition(sprite.costume.getXPosition(), yPosition);
-		changeYByBrick = new ChangeYByBrick(null, sprite, Integer.MIN_VALUE);
+		changeYByBrick = new ChangeYByBrick(physicWorld, sprite, Integer.MIN_VALUE);
 		changeYByBrick.execute();
 
 		assertEquals("ChangeYByBrick failed to place Sprite at minimum y integer value", Integer.MIN_VALUE,

@@ -35,6 +35,7 @@ import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.TurnLeftBrick;
 import at.tugraz.ist.catroid.content.bricks.TurnRightBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.test.R;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 import at.tugraz.ist.catroid.utils.UtilFile;
@@ -46,6 +47,7 @@ public class TurnLeftBrickTest extends InstrumentationTestCase {
 	private final String projectName = "testProject";
 	private File testImage;
 	private CostumeData costumeData;
+	private PhysicWorld physicWorld;
 
 	@Override
 	public void setUp() throws Exception {
@@ -67,6 +69,8 @@ public class TurnLeftBrickTest extends InstrumentationTestCase {
 		costumeData.setCostumeFilename(testImage.getName());
 		costumeData.setCostumeName("CostumeName");
 
+		physicWorld = new PhysicWorld();
+
 		Values.SCREEN_HEIGHT = 800;
 		Values.SCREEN_WIDTH = 480;
 	}
@@ -87,7 +91,7 @@ public class TurnLeftBrickTest extends InstrumentationTestCase {
 		Sprite sprite = new Sprite("test");
 		sprite.costume.setCostumeData(costumeData);
 
-		TurnLeftBrick turnLeftBrick = new TurnLeftBrick(null, sprite, 10);
+		TurnLeftBrick turnLeftBrick = new TurnLeftBrick(physicWorld, sprite, 10);
 
 		turnLeftBrick.execute();
 		assertEquals("Wrong direction!", 10f, sprite.costume.getRotation(), 1e-3);
@@ -104,7 +108,7 @@ public class TurnLeftBrickTest extends InstrumentationTestCase {
 		Sprite sprite = new Sprite("test");
 		sprite.costume.setCostumeData(costumeData);
 
-		TurnLeftBrick turnLeftBrick = new TurnLeftBrick(null, sprite, 10);
+		TurnLeftBrick turnLeftBrick = new TurnLeftBrick(physicWorld, sprite, 10);
 		SetSizeToBrick brickScale = new SetSizeToBrick(sprite, 50);
 
 		turnLeftBrick.execute();
@@ -119,7 +123,7 @@ public class TurnLeftBrickTest extends InstrumentationTestCase {
 		Sprite sprite = new Sprite("test");
 		sprite.costume.setCostumeData(costumeData);
 
-		TurnLeftBrick turnLeftBrick = new TurnLeftBrick(null, sprite, 10);
+		TurnLeftBrick turnLeftBrick = new TurnLeftBrick(physicWorld, sprite, 10);
 		SetSizeToBrick brickScale = new SetSizeToBrick(sprite, 50);
 
 		brickScale.execute();
@@ -135,7 +139,7 @@ public class TurnLeftBrickTest extends InstrumentationTestCase {
 		Sprite sprite = new Sprite("test");
 		sprite.costume.setCostumeData(costumeData);
 
-		TurnLeftBrick turnLeftBrick = new TurnLeftBrick(null, sprite, -10);
+		TurnLeftBrick turnLeftBrick = new TurnLeftBrick(physicWorld, sprite, -10);
 
 		turnLeftBrick.execute();
 
@@ -148,7 +152,7 @@ public class TurnLeftBrickTest extends InstrumentationTestCase {
 		Sprite sprite = new Sprite("test");
 		sprite.costume.setCostumeData(costumeData);
 
-		TurnLeftBrick turnLeftBrick = new TurnLeftBrick(null, sprite, 370);
+		TurnLeftBrick turnLeftBrick = new TurnLeftBrick(physicWorld, sprite, 370);
 
 		turnLeftBrick.execute();
 
@@ -161,8 +165,8 @@ public class TurnLeftBrickTest extends InstrumentationTestCase {
 		Sprite sprite = new Sprite("test");
 		sprite.costume.setCostumeData(costumeData);
 
-		TurnLeftBrick brickTurnLeft = new TurnLeftBrick(null, sprite, 50);
-		TurnRightBrick brickTurnRight = new TurnRightBrick(null, sprite, 30);
+		TurnLeftBrick brickTurnLeft = new TurnLeftBrick(physicWorld, sprite, 50);
+		TurnRightBrick brickTurnRight = new TurnRightBrick(physicWorld, sprite, 30);
 
 		brickTurnLeft.execute();
 		brickTurnRight.execute();

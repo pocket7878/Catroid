@@ -67,6 +67,7 @@ import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.UtilToken;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -244,7 +245,7 @@ public class UiTestUtils {
 		brickList.add(new SetSizeToBrick(firstSprite, size));
 		brickList.add(new GoNStepsBackBrick(firstSprite, 1));
 		brickList.add(new ComeToFrontBrick(firstSprite));
-		brickList.add(new PlaceAtBrick(null, firstSprite, xPosition, yPosition));
+		brickList.add(new PlaceAtBrick(new PhysicWorld(), firstSprite, xPosition, yPosition));
 
 		for (Brick brick : brickList) {
 			testScript.addBrick(brick);

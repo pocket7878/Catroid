@@ -402,7 +402,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 		PhysicObject physicObject = objects.get(new Sprite("TestSprite"));
 
 		if (type != null) {
-			physicObject.setType(type).release();
+			physicObject.setType(type);
 		}
 
 		if (shape != null) {
