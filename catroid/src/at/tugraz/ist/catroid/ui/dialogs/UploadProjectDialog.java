@@ -34,6 +34,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,6 +52,7 @@ import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.stage.StageActivity;
 import at.tugraz.ist.catroid.stage.StageListener;
 import at.tugraz.ist.catroid.transfers.ProjectUploadTask;
+import at.tugraz.ist.catroid.utils.ErrorListenerInterface;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -182,15 +184,19 @@ public class UploadProjectDialog extends DialogFragment {
 		String projectDescription = projectDescriptionField.getText().toString();
 
 		if (uploadName.length() == 0) {
-			Utils.displayErrorMessage(getActivity(), getString(R.string.error_no_name_entered));
+			Utils.displayErrorMessageFragment(getFragmentManager(), getString(R.string.error_no_name_entered));
 			return;
 		}
 		if (!uploadName.equals(currentProjectName)) {
-			projectRename.setVisibility(View.VISIBLE);
-			boolean renamed = projectManager.renameProjectNameAndDescription(newProjectName, projectDescription,
-					getActivity());
-			if (!renamed) {
-				return;
+			try {
+				projectRename.setVisibility(View.VISIBLE);
+				boolean renamed = projectManager.renameProjectNameAndDescription(newProjectName, projectDescription,
+						getActivity(), (ErrorListenerInterface) getActivity());
+				if (!renamed) {
+					return;
+				}
+			} catch (ClassCastException exception) {
+				Log.e("CATROID", getActivity().toString() + " does not implement ErrorListenerInterface", exception);
 			}
 		} else if (uploadName.equals(currentProjectName) && (!projectDescription.equals(currentProjectDescription))) {
 			projectManager.getCurrentProject().setDescription(projectDescription);

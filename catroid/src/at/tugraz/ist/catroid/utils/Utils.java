@@ -173,24 +173,9 @@ public class Utils {
 	//		return projectFileName;
 	//	}
 
-	/**
-	 * Displays an AlertDialog with the given error message and just a close
-	 * button
-	 * 
-	 * @param context
-	 * @param errorMessage
-	 */
-	public static void displayErrorMessage(Context context, String errorMessage) {
-		Builder builder = new AlertDialog.Builder(context);
-
-		builder.setTitle(context.getString(R.string.error));
-		builder.setMessage(errorMessage);
-		builder.setNeutralButton(context.getString(R.string.close), new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-			}
-		});
-		builder.show();
+	public static void displayErrorMessageFragment(FragmentManager fragmentManager, String errorMessage) {
+		DialogFragment errorDialog = ErrorDialogFragment.newInstance(errorMessage);
+		errorDialog.show(fragmentManager, ErrorDialogFragment.DIALOG_FRAGMENT_TAG);
 	}
 
 	public static void displayErrorMessageFragment(String errorMessage, FragmentManager fragmentManager) {
@@ -320,18 +305,18 @@ public class Utils {
 		edit.commit();
 	}
 
-	public static void loadProjectIfNeeded(Context context) {
+	public static void loadProjectIfNeeded(Context context, ErrorListenerInterface errorListener) {
 		if (ProjectManager.getInstance().getCurrentProject() == null) {
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 			String projectName = prefs.getString(Constants.PREF_PROJECTNAME_KEY, null);
 
 			if (projectName != null) {
-				ProjectManager.getInstance().loadProject(projectName, context, false);
+				ProjectManager.getInstance().loadProject(projectName, context, errorListener, false);
 			} else if (ProjectManager.INSTANCE.canLoadProject(context.getString(R.string.default_project_name))) {
 				ProjectManager.getInstance().loadProject(context.getString(R.string.default_project_name), context,
-						false);
+						errorListener, false);
 			} else {
-				ProjectManager.getInstance().initializeDefaultProject(context);
+				ProjectManager.getInstance().initializeDefaultProject(context, errorListener);
 			}
 		}
 	}
