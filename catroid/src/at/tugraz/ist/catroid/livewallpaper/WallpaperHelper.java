@@ -22,6 +22,7 @@ import android.os.Handler;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.io.SoundManager;
 
 public class WallpaperHelper {
 
@@ -83,6 +84,11 @@ public class WallpaperHelper {
 				sprite.getWallpaperCostume().clear();
 			}
 		}
+
+		this.isLandscape = false;
+		this.isLiveWallpaper = false;
+
+		SoundManager.getInstance().stopAllSounds();
 
 	}
 

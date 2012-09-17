@@ -124,7 +124,6 @@ public class LiveWallpaper extends WallpaperService {
 		public void onSurfaceDestroyed(SurfaceHolder holder) {
 			super.onSurfaceDestroyed(holder);
 			wallpaperHelper.destroy();
-			SoundManager.getInstance().stopAllSounds();
 			mVisible = false;
 			mHandler.removeCallbacks(mUpdateDisplay);
 		}
@@ -178,7 +177,9 @@ public class LiveWallpaper extends WallpaperService {
 						if (sprite.getWallpaperCostume() != null
 								&& sprite.getWallpaperCostume().touchedInsideTheCostume(coords.x, coords.y)) {
 							spriteToExecute = sprite;
+
 						}
+
 					}
 
 					if (spriteToExecute != null) {
@@ -188,7 +189,6 @@ public class LiveWallpaper extends WallpaperService {
 				}
 			}
 		}
-
 	}
 
 }

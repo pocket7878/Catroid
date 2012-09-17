@@ -125,10 +125,20 @@ public class WallpaperCostume {
 			return false;
 		}
 
-		float right = costume.getWidth() + top;
-		float bottom = costume.getHeight() + left;
+		float right = top;
+		float bottom = left;
+
+		if (wallpaperHelper.isLandscape()) {
+			right += costumeRotated.getWidth();
+			bottom += costumeRotated.getHeight();
+
+		} else {
+			right += costume.getWidth();
+			bottom += costume.getHeight();
+		}
 
 		if (x > top && x < right && y > left && y < bottom) {
+
 			return true;
 		}
 
@@ -175,6 +185,8 @@ public class WallpaperCostume {
 		if (sizeChanged) {
 			resizeCostume();
 		}
+
+		costumeRotated = null;
 
 	}
 
