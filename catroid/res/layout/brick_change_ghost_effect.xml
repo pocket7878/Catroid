@@ -19,7 +19,11 @@
  *  GNU Affero General Public License for more details.
  *   
  *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+
+
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -40,7 +44,7 @@
             android:text="@string/brick_change_ghost_effect" >
         </TextView>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
@@ -60,9 +64,9 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="5dip"
-                android:layout_toRightOf="@+id/ChangeGhostEffectTextView"
+                android:layout_alignParentRight="true"
                 android:background="@color/white"
-                android:gravity="right"
+                android:gravity="center"
                 android:minHeight="30dip"
                 android:minWidth="50dip"
                 android:paddingRight="5dip"
@@ -74,12 +78,12 @@
                 android:id="@+id/brick_change_ghost_effect_edit_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/ChangeGhostEffectTextView"
+                android:layout_alignParentRight="true"
                 android:clickable="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:visibility="gone"
-                android:gravity="right"
+                android:gravity="center"
                 android:inputType="number|numberDecimal|numberSigned"
                 android:maxLength="6"
                 android:maxLines="1"
@@ -87,7 +91,7 @@
                 android:numeric="signed"
                 android:text="25" >
             </EditText>
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
 </RelativeLayout>

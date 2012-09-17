@@ -21,19 +21,17 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/LinearLayout01"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/brick_blue"
-    android:orientation="horizontal" >
+    android:background="@drawable/brick_blue" >
 
     <TextView
         android:id="@+id/ValueTextView"
         style="@style/brick_text_style"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:paddingRight="10dip"
         android:text="@string/brick_move" >
     </TextView>
 
@@ -65,11 +63,11 @@
         android:focusableInTouchMode="false"
         android:visibility="gone"
         android:freezesText="false"
-        android:gravity="right"
+        android:gravity="center"
         android:inputType="number|numberDecimal|numberSigned"
-        android:maxLength="10"
+        android:maxLength="6"
         android:maxLines="1"
-        android:minWidth="50dip"
+        android:minWidth="60dip"
         android:text="1" >
     </EditText>
 
@@ -78,10 +76,9 @@
         style="@style/brick_text_style"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:paddingBottom="10dip"
         android:paddingLeft="10dip"
         android:paddingRight="10dip"
         android:text="@string/brick_move_n_steps" >
     </TextView>
 
-</LinearLayout>
+</RelativeLayout>

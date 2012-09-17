@@ -21,34 +21,23 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:background="@drawable/brick_blue">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/brick_point_to_label"
+        style="@style/brick_text_style"
+        android:layout_alignParentLeft="true"
+        android:text="@string/brick_point_to" />
+
+    <Spinner
+        android:id="@+id/point_to_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/brick_blue"
-        android:orientation="vertical" >
+        android:layout_below="@id/brick_point_to_label"
+        android:clickable="false"
+        android:focusable="false" />
 
-        <TextView
-            style="@style/brick_text_style"
-            android:text="@string/brick_point_to" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <Spinner
-                android:id="@+id/point_to_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:clickable="false"
-                android:focusable="false" />
-        </LinearLayout>
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>
