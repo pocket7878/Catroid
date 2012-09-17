@@ -28,7 +28,6 @@ public class InternToken {
 
 	private String tokenStringValue = "";
 	private InternTokenType internTokenType;
-	private int internPositionIndex;
 
 	public InternToken(InternTokenType internTokenType) {
 		this.internTokenType = internTokenType;
@@ -147,19 +146,6 @@ public class InternToken {
 
 	public void setInternTokenType(InternTokenType newInternTokenType) {
 		this.internTokenType = newInternTokenType;
-	}
-
-	@Override
-	public String toString() {
-		return internTokenType.getInternTokenPrefix() + tokenStringValue;
-	}
-
-	public void setInternPositionIndex(int internPositionIndex) {
-		this.internPositionIndex = internPositionIndex;
-	}
-
-	public int getInternPositionIndex() {
-		return this.internPositionIndex;
 	}
 
 	private static InternTokenType getFirstInternTokenType(List<InternToken> internTokens) {

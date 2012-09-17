@@ -22,32 +22,7 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
-import java.util.EnumSet;
-
 public enum InternTokenType {
-	NUMBER(":number:"), OPERATOR(":operator:"), FUNCTION_NAME(":function_name:"), BRACKET_OPEN(":bracket_open:"), BRACKET_CLOSE(
-			":bracket_close:"), SENSOR(":sensor:"), FUNCTION_PARAMETERS_BRACKET_OPEN(
-			":function_parameter_bracket_open:"), FUNCTION_PARAMETERS_BRACKET_CLOSE(
-			":function_parameter_bracket_close:"), FUNCTION_PARAMETER_DELIMITER(":function_parameter_delimiter:"), COSTUME(
-			":costume:"), PERIOD(":period:"), PARSER_END_OF_FILE(":eof_token_only_used_by_parser:");
-
-	private String tokenPrefix;
-
-	InternTokenType(String tokenPrefix) {
-		this.tokenPrefix = tokenPrefix;
-	}
-
-	public static InternTokenType getInternTokenTypeByString(String value) {
-		for (InternTokenType internTokenType : EnumSet.allOf(InternTokenType.class)) {
-			if (value.equals(internTokenType.tokenPrefix)) {
-				return internTokenType;
-			}
-		}
-		return null;
-	}
-
-	public String getInternTokenPrefix() {
-		return tokenPrefix;
-	}
+	NUMBER, OPERATOR, FUNCTION_NAME, BRACKET_OPEN, BRACKET_CLOSE, SENSOR, FUNCTION_PARAMETERS_BRACKET_OPEN, FUNCTION_PARAMETERS_BRACKET_CLOSE, FUNCTION_PARAMETER_DELIMITER, COSTUME, PERIOD, PARSER_END_OF_FILE;
 
 }

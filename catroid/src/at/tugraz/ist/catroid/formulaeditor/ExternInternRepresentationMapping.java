@@ -37,11 +37,11 @@ public class ExternInternRepresentationMapping {
 		internExternMapping = new SparseArray<ExternToken>();
 	}
 
-	public void putExternInternMapping(int externStartIndex, int externEndIndex, int internStartIndex) {
+	public void putExternInternMapping(int externStartIndex, int externEndIndex, int internIndex) {
 		//		Log.i("info", "Mapping put extern to intern: FROM extern start/end = " + externStartIndex + "/"
 		//				+ externEndIndex + " TO " + internStartIndex);
-		externInternMapping.put(externStartIndex, internStartIndex);
-		externInternMapping.put(externEndIndex, internStartIndex);
+		externInternMapping.put(externStartIndex, internIndex);
+		externInternMapping.put(externEndIndex, internIndex);
 
 		if (externEndIndex >= externStringLength) {
 			externStringLength = externEndIndex + 1;

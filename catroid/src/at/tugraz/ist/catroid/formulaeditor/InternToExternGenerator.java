@@ -22,6 +22,7 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
@@ -41,11 +42,14 @@ public class InternToExternGenerator {
 		generatedExternInternRepresentationMapping = new ExternInternRepresentationMapping();
 	}
 
-	public void generateExternStringAndMapping(String internFormulaRepresentation) {
+	public void generateExternStringAndMapping(List<InternToken> internTokenFormula) {
 		Log.i("info", "generateExternStringAndMapping:enter");
 
-		List<InternToken> internTokenList = InternFormulaToInternTokenGenerator
-				.generateInternRepresentationByString(internFormulaRepresentation);
+		List<InternToken> internTokenList = new LinkedList<InternToken>();
+
+		for (InternToken internToken : internTokenFormula) {
+			internTokenList.add(internToken);
+		}
 
 		generatedExternInternRepresentationMapping = new ExternInternRepresentationMapping();
 
@@ -55,6 +59,8 @@ public class InternToExternGenerator {
 		String externTokenString;
 		int externStartIndex;
 		int externEndIndex;
+
+		int internTokenListIndex = 0;
 
 		while (internTokenList.isEmpty() == false) {
 			if (appendWhiteSpace(currentToken, nextToken)) {
@@ -79,13 +85,15 @@ public class InternToExternGenerator {
 			}
 
 			generatedExternInternRepresentationMapping.putExternInternMapping(externStartIndex, externEndIndex,
-					currentToken.getInternPositionIndex());
-			generatedExternInternRepresentationMapping.putInternExternMapping(currentToken.getInternPositionIndex(),
-					externStartIndex, externEndIndex + 1);
+					internTokenListIndex);
+			generatedExternInternRepresentationMapping.putInternExternMapping(internTokenListIndex, externStartIndex,
+					externEndIndex + 1);
 
 			internTokenList.remove(0);
+			internTokenListIndex++;
 
 		}
+
 		generatedExternFormulaString += " ";
 		Log.i("info", "generateExternStringAndMapping: generatedExternFormulaString = " + generatedExternFormulaString);
 
