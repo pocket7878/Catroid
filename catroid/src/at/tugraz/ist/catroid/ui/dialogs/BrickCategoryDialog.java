@@ -59,6 +59,7 @@ public class BrickCategoryDialog extends Dialog {
 
 		ImageButton closeButton = (ImageButton) findViewById(R.id.btn_close_dialog);
 		closeButton.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				abort();
 				dismiss();
@@ -80,7 +81,6 @@ public class BrickCategoryDialog extends Dialog {
 		categories.add(inflater.inflate(R.layout.brick_category_looks, null));
 		categories.add(inflater.inflate(R.layout.brick_category_sound, null));
 		categories.add(inflater.inflate(R.layout.brick_category_control, null));
-		categories.add(inflater.inflate(R.layout.brick_category_physic, null));
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
 		if (prefs.getBoolean("setting_mindstorm_bricks", false)) {
@@ -99,6 +99,7 @@ public class BrickCategoryDialog extends Dialog {
 
 		listView.setOnItemClickListener(new ListView.OnItemClickListener() {
 
+			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				activity.selectedCategory = adapter.getItem(position);
 				activity.removeDialog(ScriptTabActivity.DIALOG_ADD_BRICK);

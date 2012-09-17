@@ -83,7 +83,6 @@ public class GlideToBrick implements Brick, OnClickListener {
 		//			latch.await();
 		//		} catch (InterruptedException e) {
 		//		}
-		//		semaphore.acquireUninterruptibly();
 
 		long startTime = System.currentTimeMillis();
 		int duration = durationInMilliSeconds;

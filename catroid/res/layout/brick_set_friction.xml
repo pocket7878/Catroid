@@ -26,7 +26,7 @@
     android:id="@+id/RelativeLayout01"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/brick_green" >
+    android:background="@drawable/brick_blue" >
 
     <TextView
         android:id="@+id/brick_set_friction_text_view"

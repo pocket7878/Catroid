@@ -21,11 +21,10 @@
  *  You should have received a copy of the GNU Affero General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/brick_green"
+    android:background="@drawable/brick_blue"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -97,7 +96,7 @@
             android:maxLength="6"
             android:maxLines="1"
             android:minWidth="50dip"
-            android:text="0.0" >
+            android:text="10.0" >
         </EditText>
         
         <TextView

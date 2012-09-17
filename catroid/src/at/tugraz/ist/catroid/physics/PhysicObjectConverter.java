@@ -22,52 +22,30 @@
  */
 package at.tugraz.ist.catroid.physics;
 
-import java.util.List;
-
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.SetPhysicObjectTypeBrick;
-import at.tugraz.ist.catroid.physics.commands.PhysicPlaceAtBrick;
 
 /**
  * TODO: Find better name.
  */
-public class PhysicBrickConverter {
+public class PhysicObjectConverter {
 
-	public PhysicBrickConverter() {
+	public PhysicObjectConverter() {
 	}
 
-	// TODO: Here we are missing OOP!
 	public void convert(Project project) {
 		for (Sprite sprite : project.getSpriteList()) {
-			boolean containsPhysicObjectBrick = false;
 
-			for (int scriptIndex = 0; scriptIndex < sprite.getNumberOfScripts(); scriptIndex++) {
+			scriptLoop: for (int scriptIndex = 0; scriptIndex < sprite.getNumberOfScripts(); scriptIndex++) {
 				Script script = sprite.getScript(scriptIndex);
 
-				if (containsPhysicObjectBrick) {
-					List<Brick> brickList = script.getBrickList();
-
-					for (int brickIndex = 0; brickIndex < brickList.size(); brickIndex++) {
-						Brick brick = brickList.get(brickIndex);
-						// TODO: all bricks which require the PhysicWorld - separate method !
-						if (brick instanceof PlaceAtBrick) {
-							brick = new PhysicPlaceAtBrick((PlaceAtBrick) brick);
-							brickList.set(brickIndex, brick);
-						}
-					}
-				} else {
-					for (Brick brick : script.getBrickList()) {
-						if (brick instanceof SetPhysicObjectTypeBrick) {
-							containsPhysicObjectBrick = true;
-							// TODO: ??? is this necessary ? is there a better way to create PhysicObjects ?
-							project.getPhysicWorld().getPhysicObject(sprite);
-							scriptIndex = -1;
-							break;
-						}
+				for (Brick brick : script.getBrickList()) {
+					if (brick instanceof SetPhysicObjectTypeBrick) {
+						project.getPhysicWorld().createPhysicObject(sprite);
+						break scriptLoop;
 					}
 				}
 			}

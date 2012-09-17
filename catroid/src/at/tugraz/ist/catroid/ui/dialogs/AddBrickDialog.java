@@ -122,6 +122,15 @@ public class AddBrickDialog extends Dialog {
 		PhysicWorld physicWorld = ProjectManager.getInstance().getCurrentProject().getPhysicWorld();
 
 		List<Brick> motionBrickList = new ArrayList<Brick>();
+		motionBrickList.add(new SetPhysicObjectTypeBrick(physicWorld, sprite, PhysicObject.Type.DYNAMIC));
+		motionBrickList.add(new SetMassBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_MASS));
+		motionBrickList.add(new SetGravityBrick(physicWorld, sprite, PhysicSettings.World.DEFAULT_GRAVITY));
+		motionBrickList.add(new SetVelocityBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_VELOCITY));
+		motionBrickList.add(new SetAngularVelocityBrick(physicWorld, sprite,
+				PhysicSettings.Object.DEFAULT_ANGULAR_VELOCITY));
+		motionBrickList
+				.add(new SetBounceFactorBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_FRICTION * 100));
+		motionBrickList.add(new SetFrictionBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_FRICTION));
 		motionBrickList.add(new PlaceAtBrick(physicWorld, sprite, 0, 0));
 		motionBrickList.add(new SetXBrick(physicWorld, sprite, 0));
 		motionBrickList.add(new SetYBrick(physicWorld, sprite, 0));
@@ -182,18 +191,6 @@ public class AddBrickDialog extends Dialog {
 		legoNXTBrickList.add(new NXTMotorActionBrick(sprite, NXTMotorActionBrick.Motor.MOTOR_A, 100));
 		legoNXTBrickList.add(new NXTPlayToneBrick(sprite, 200, 1000));
 		brickMap.put(context.getString(R.string.category_lego_nxt), legoNXTBrickList);
-
-		List<Brick> physicBrickList = new ArrayList<Brick>();
-		physicBrickList.add(new SetPhysicObjectTypeBrick(physicWorld, sprite, PhysicObject.Type.DYNAMIC));
-		physicBrickList.add(new SetMassBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_MASS));
-		physicBrickList.add(new SetGravityBrick(physicWorld, sprite, PhysicSettings.World.DEFAULT_GRAVITY));
-		physicBrickList.add(new SetVelocityBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_VELOCITY));
-		physicBrickList.add(new SetAngularVelocityBrick(physicWorld, sprite,
-				PhysicSettings.Object.DEFAULT_ANGULAR_VELOCITY));
-		physicBrickList
-				.add(new SetBounceFactorBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_FRICTION * 100));
-		physicBrickList.add(new SetFrictionBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_FRICTION));
-		brickMap.put(context.getString(R.string.category_physic), physicBrickList);
 
 		return brickMap;
 	}

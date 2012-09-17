@@ -7,8 +7,8 @@ import android.test.AndroidTestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.physics.PhysicObject.Type;
-import at.tugraz.ist.catroid.physics.PhysicObjectMap;
 import at.tugraz.ist.catroid.physics.PhysicSettings;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 
 import com.badlogic.gdx.math.Vector2;
@@ -18,7 +18,6 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 
 public class PhysicObjectTest extends AndroidTestCase {
@@ -26,8 +25,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 		GdxNativesLoader.load();
 	}
 
-	private PhysicObjectMap objects = new PhysicObjectMap(new World(PhysicSettings.World.DEFAULT_GRAVITY,
-			PhysicSettings.World.IGNORE_SLEEPING_OBJECTS));
+	private PhysicWorld physicWorld = new PhysicWorld();
 
 	@Override
 	protected void setUp() throws Exception {
@@ -399,7 +397,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 	}
 
 	protected PhysicObject createPhysicObject(PhysicObject.Type type, Shape shape) {
-		PhysicObject physicObject = objects.get(new Sprite("TestSprite"));
+		PhysicObject physicObject = physicWorld.createPhysicObject(new Sprite("TestSprite"));
 
 		if (type != null) {
 			physicObject.setType(type);
