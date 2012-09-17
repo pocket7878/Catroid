@@ -19,21 +19,18 @@
 package at.tugraz.ist.catroid.physics;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import at.tugraz.ist.catroid.common.CostumeData;
-import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Costume;
 import at.tugraz.ist.catroid.content.Sprite;
 
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.GdxNativesLoader;
@@ -47,46 +44,15 @@ public class PhysicWorld implements Serializable {
 
 	private final transient World world = new World(PhysicSettings.World.DEFAULT_GRAVITY,
 			PhysicSettings.World.IGNORE_SLEEPING_OBJECTS);
-	private final transient PhysicObjectMap objects;
+	private final transient Map<Sprite, PhysicObject> physicObjects;
 	private final transient PhysicShapeBuilder shapeBuilder;
 	private transient Box2DDebugRenderer renderer;
 
 	public PhysicWorld() {
-		objects = new PhysicObjectMap(world);
+		physicObjects = new HashMap<Sprite, PhysicObject>();
 		shapeBuilder = new PhysicShapeBuilder();
-		createBoundaryBox();
-	}
 
-	private void createBoundaryBox() {
-		float boxWidth = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_WIDTH);
-		float boxHeight = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_HEIGHT);
-		float boxElementSize = PhysicSettings.World.BoundaryBox.FRAME_SIZE;
-
-		// Top Element
-		createBoundaryBoxElement(0.0f, boxHeight / 2 + boxElementSize, boxWidth, boxElementSize * 2);
-		// Bottom Element
-		createBoundaryBoxElement(0.0f, -boxHeight / 2 - boxElementSize, boxWidth, boxElementSize * 2);
-		// Left Element
-		createBoundaryBoxElement(-boxWidth / 2 - boxElementSize, 0.0f, boxElementSize * 2, boxHeight);
-		// Right Element
-		createBoundaryBoxElement(boxWidth / 2 + boxElementSize, 0.0f, boxElementSize * 2, boxHeight);
-	}
-
-	private void createBoundaryBoxElement(float x, float y, float width, float height) {
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.StaticBody;
-
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width / 2f, height / 2f);
-
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = shape;
-		fixtureDef.filter.categoryBits = PhysicSettings.World.BoundaryBox.COLLISION_MASK;
-		fixtureDef.filter.maskBits = PhysicSettings.Object.COLLISION_MASK;
-
-		Body body = world.createBody(bodyDef);
-		body.createFixture(fixtureDef);
-		body.setTransform(x, y, 0.0f);
+		new PhysicBoundaryBox(world).create();
 	}
 
 	public void step(float deltaTime) {
@@ -97,7 +63,7 @@ public class PhysicWorld implements Serializable {
 	private void updateSprites() {
 		PhysicObject physicObject;
 		Costume costume;
-		for (Entry<Sprite, PhysicObject> entry : objects) {
+		for (Entry<Sprite, PhysicObject> entry : physicObjects.entrySet()) {
 			physicObject = entry.getValue();
 			physicObject.setIfOnEdgeBounce(false);
 			Vector2 position = PhysicWorldConverter.vecBox2dToCat(physicObject.getPosition());
@@ -123,17 +89,28 @@ public class PhysicWorld implements Serializable {
 		world.setGravity(gravity);
 	}
 
+	public PhysicObject createPhysicObject(Sprite sprite) {
+		if (physicObjects.containsKey(sprite)) {
+			return physicObjects.get(sprite);
+		}
+
+		PhysicObject physicObject = new PhysicObject(world.createBody(new BodyDef()));
+		physicObjects.put(sprite, physicObject);
+
+		return physicObject;
+	}
+
 	public PhysicObject getPhysicObject(Sprite sprite) {
-		return objects.get(sprite);
+		return createPhysicObject(sprite);
 	}
 
 	public boolean isPhysicObject(Sprite sprite) {
-		return objects.contains(sprite);
+		return physicObjects.containsKey(sprite);
 	}
 
 	public void changeCostume(Sprite sprite) {
 		CostumeData costumeData = sprite.costume.getCostumeData();
 		Shape[] shapes = shapeBuilder.createShape(costumeData);
-		objects.get(sprite).setShape(shapes);
+		this.getPhysicObject(sprite).setShape(shapes);
 	}
 }

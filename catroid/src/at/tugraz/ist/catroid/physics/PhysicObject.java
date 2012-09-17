@@ -133,7 +133,7 @@ public class PhysicObject {
 	}
 
 	public Vector2 getPosition() {
-		return body.getPosition();
+		return new Vector2(body.getPosition());
 	}
 
 	public void setXYPosition(float x, float y) {
@@ -182,8 +182,16 @@ public class PhysicObject {
 		}
 	}
 
+	public float getRotationSpeed() {
+		return body.getAngularVelocity();
+	}
+
 	public void setRotationSpeed(float radian) {
 		body.setAngularVelocity(radian);
+	}
+
+	public Vector2 getVelocity() {
+		return new Vector2(body.getLinearVelocity());
 	}
 
 	public void setVelocity(Vector2 velocity) {
