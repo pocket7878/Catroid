@@ -99,7 +99,7 @@ public class ChangeYByBrickTest extends ActivityInstrumentationTestCase2<ScriptA
 		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		changeYByBrick = new ChangeYByBrick(sprite, 0);
+		changeYByBrick = new ChangeYByBrick(null, sprite, 0);
 		script.addBrick(changeYByBrick);
 
 		sprite.addScript(script);

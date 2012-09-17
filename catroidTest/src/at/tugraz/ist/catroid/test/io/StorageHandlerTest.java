@@ -71,7 +71,8 @@ public class StorageHandlerTest extends AndroidTestCase {
 
 	@Override
 	public void setUp() {
-		File projectFile = new File(Constants.DEFAULT_ROOT + "/" + getContext().getString(R.string.default_project_name));
+		File projectFile = new File(Constants.DEFAULT_ROOT + "/"
+				+ getContext().getString(R.string.default_project_name));
 
 		if (projectFile.exists()) {
 			UtilFile.deleteDirectory(projectFile);
@@ -95,7 +96,7 @@ public class StorageHandlerTest extends AndroidTestCase {
 		ShowBrick showBrick = new ShowBrick(firstSprite);
 		SetSizeToBrick setSizeToBrick = new SetSizeToBrick(secondSprite, size);
 		ComeToFrontBrick comeToFrontBrick = new ComeToFrontBrick(firstSprite);
-		PlaceAtBrick placeAtBrick = new PlaceAtBrick(secondSprite, xPosition, yPosition);
+		PlaceAtBrick placeAtBrick = new PlaceAtBrick(null, secondSprite, xPosition, yPosition);
 
 		// adding Bricks: ----------------
 		testScript.addBrick(hideBrick);
@@ -219,8 +220,8 @@ public class StorageHandlerTest extends AndroidTestCase {
 
 		ArrayList<Brick> startScriptBrickList = new ArrayList<Brick>();
 		ArrayList<Brick> whenScriptBrickList = new ArrayList<Brick>();
-		startScriptBrickList.add(new ChangeXByBrick(sprite, 4));
-		startScriptBrickList.add(new ChangeYByBrick(sprite, 5));
+		startScriptBrickList.add(new ChangeXByBrick(null, sprite, 4));
+		startScriptBrickList.add(new ChangeYByBrick(null, sprite, 5));
 		startScriptBrickList.add(new ComeToFrontBrick(sprite));
 		startScriptBrickList.add(new GoNStepsBackBrick(sprite, 5));
 		startScriptBrickList.add(new HideBrick(sprite));
@@ -229,8 +230,8 @@ public class StorageHandlerTest extends AndroidTestCase {
 		whenScriptBrickList.add(new PlaySoundBrick(sprite));
 		whenScriptBrickList.add(new SetSizeToBrick(sprite, 50));
 		whenScriptBrickList.add(new SetCostumeBrick(sprite));
-		whenScriptBrickList.add(new SetXBrick(sprite, 50));
-		whenScriptBrickList.add(new SetYBrick(sprite, 50));
+		whenScriptBrickList.add(new SetXBrick(null, sprite, 50));
+		whenScriptBrickList.add(new SetYBrick(null, sprite, 50));
 		whenScriptBrickList.add(new ShowBrick(sprite));
 		whenScriptBrickList.add(new WaitBrick(sprite, 1000));
 

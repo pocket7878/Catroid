@@ -37,7 +37,7 @@ public class ChangeXByBrickTest extends AndroidTestCase {
 
 		int xPosition = (int) sprite.costume.getXPosition();
 
-		ChangeXByBrick changeXByBrick = new ChangeXByBrick(sprite, xMovement);
+		ChangeXByBrick changeXByBrick = new ChangeXByBrick(null, sprite, xMovement);
 		changeXByBrick.execute();
 
 		xPosition += xMovement;
@@ -46,7 +46,7 @@ public class ChangeXByBrickTest extends AndroidTestCase {
 	}
 
 	public void testNullSprite() {
-		ChangeXByBrick changeXByBrick = new ChangeXByBrick(null, xMovement);
+		ChangeXByBrick changeXByBrick = new ChangeXByBrick(null, null, xMovement);
 		try {
 			changeXByBrick.execute();
 			fail("Execution of ChangeXByBrick with null Sprite did not cause a " + "NullPointerException to be thrown");
@@ -60,7 +60,7 @@ public class ChangeXByBrickTest extends AndroidTestCase {
 
 		int xPosition = 10;
 		sprite.costume.setXYPosition(xPosition, sprite.costume.getYPosition());
-		ChangeXByBrick changeXByBrick = new ChangeXByBrick(sprite, Integer.MAX_VALUE);
+		ChangeXByBrick changeXByBrick = new ChangeXByBrick(null, sprite, Integer.MAX_VALUE);
 		changeXByBrick.execute();
 
 		assertEquals("ChangeXByBrick failed to place Sprite at maximum x integer value", Integer.MAX_VALUE,
@@ -68,7 +68,7 @@ public class ChangeXByBrickTest extends AndroidTestCase {
 
 		xPosition = -10;
 		sprite.costume.setXYPosition(xPosition, sprite.costume.getYPosition());
-		changeXByBrick = new ChangeXByBrick(sprite, Integer.MIN_VALUE);
+		changeXByBrick = new ChangeXByBrick(null, sprite, Integer.MIN_VALUE);
 		changeXByBrick.execute();
 
 		assertEquals("ChangeXByBrick failed to place Sprite at minimum x integer value", Integer.MIN_VALUE,

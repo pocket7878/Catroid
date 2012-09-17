@@ -36,7 +36,7 @@ public class WhenBrickTest extends AndroidTestCase {
 		Sprite sprite = new Sprite("new sprite");
 		WhenScript whenScript = new WhenScript(sprite);
 		whenScript.setAction(1);
-		Brick placeAtBrick = new PlaceAtBrick(sprite, testPosition, testPosition);
+		Brick placeAtBrick = new PlaceAtBrick(null, sprite, testPosition, testPosition);
 		whenScript.addBrick(placeAtBrick);
 		sprite.addScript(whenScript);
 		sprite.startWhenScripts(whenScript.getAction());

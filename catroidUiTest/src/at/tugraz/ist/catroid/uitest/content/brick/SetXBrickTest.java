@@ -100,7 +100,7 @@ public class SetXBrickTest extends ActivityInstrumentationTestCase2<ScriptActivi
 		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		setXBrick = new SetXBrick(sprite, 0);
+		setXBrick = new SetXBrick(null, sprite, 0);
 		script.addBrick(setXBrick);
 
 		sprite.addScript(script);

@@ -99,7 +99,7 @@ public class ChangeXByBrickTest extends ActivityInstrumentationTestCase2<ScriptA
 		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		changeXByBrick = new ChangeXByBrick(sprite, 0);
+		changeXByBrick = new ChangeXByBrick(null, sprite, 0);
 		script.addBrick(changeXByBrick);
 
 		sprite.addScript(script);

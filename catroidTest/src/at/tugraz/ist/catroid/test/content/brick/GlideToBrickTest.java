@@ -42,19 +42,19 @@ public class GlideToBrickTest extends AndroidTestCase {
 		assertEquals("Unexpected initial sprite x position", 0f, sprite.costume.getXPosition());
 		assertEquals("Unexpected initial sprite y position", 0f, sprite.costume.getYPosition());
 
-		GlideToBrick glideToBrick = new GlideToBrick(sprite, xPosition, yPosition, duration);
+		GlideToBrick glideToBrick = new GlideToBrick(null, sprite, xPosition, yPosition, duration);
 		glideToBrick.execute();
 
 		Thread.sleep(1100);
 
-		assertEquals("Incorrect sprite x position after GlideToBrick executed", (float) xPosition, sprite.costume
-				.getXPosition());
-		assertEquals("Incorrect sprite y position after GlideToBrick executed", (float) yPosition, sprite.costume
-				.getYPosition());
+		assertEquals("Incorrect sprite x position after GlideToBrick executed", (float) xPosition,
+				sprite.costume.getXPosition());
+		assertEquals("Incorrect sprite y position after GlideToBrick executed", (float) yPosition,
+				sprite.costume.getYPosition());
 	}
 
 	public void testNullSprite() {
-		GlideToBrick glideToBrick = new GlideToBrick(null, xPosition, yPosition, duration);
+		GlideToBrick glideToBrick = new GlideToBrick(null, null, xPosition, yPosition, duration);
 		try {
 			glideToBrick.execute();
 			fail("Execution of GlideToBrick with null Sprite did not cause a " + "NullPointerException to be thrown");
@@ -66,7 +66,7 @@ public class GlideToBrickTest extends AndroidTestCase {
 	public void testBoundaryPositions() {
 		Sprite sprite = new Sprite("testSprite");
 
-		PlaceAtBrick brick = new PlaceAtBrick(sprite, Integer.MAX_VALUE, Integer.MAX_VALUE);
+		PlaceAtBrick brick = new PlaceAtBrick(null, sprite, Integer.MAX_VALUE, Integer.MAX_VALUE);
 		brick.execute();
 
 		assertEquals("PlaceAtBrick failed to place Sprite at maximum x float value", (float) Integer.MAX_VALUE,
@@ -74,7 +74,7 @@ public class GlideToBrickTest extends AndroidTestCase {
 		assertEquals("PlaceAtBrick failed to place Sprite at maximum y float value", (float) Integer.MAX_VALUE,
 				sprite.costume.getYPosition());
 
-		brick = new PlaceAtBrick(sprite, Integer.MIN_VALUE, Integer.MIN_VALUE);
+		brick = new PlaceAtBrick(null, sprite, Integer.MIN_VALUE, Integer.MIN_VALUE);
 		brick.execute();
 
 		assertEquals("PlaceAtBrick failed to place Sprite at minimum x float value", (float) Integer.MIN_VALUE,
@@ -87,7 +87,7 @@ public class GlideToBrickTest extends AndroidTestCase {
 		Sprite sprite = new Sprite("testSprite");
 		Script script = new StartScript(sprite);
 		HideBrick hideBrick = new HideBrick(sprite);
-		GlideToBrick glideToBrick = new GlideToBrick(sprite, 0, 0, 1000);
+		GlideToBrick glideToBrick = new GlideToBrick(null, sprite, 0, 0, 1000);
 		ShowBrick showBrick = new ShowBrick(sprite);
 
 		script.addBrick(hideBrick);
@@ -111,7 +111,7 @@ public class GlideToBrickTest extends AndroidTestCase {
 		Sprite sprite = new Sprite("testSprite");
 		Script script = new StartScript(sprite);
 		HideBrick hideBrick = new HideBrick(sprite);
-		GlideToBrick glideToBrick = new GlideToBrick(sprite, 0, 0, 3000);
+		GlideToBrick glideToBrick = new GlideToBrick(null, sprite, 0, 0, 3000);
 		ShowBrick showBrick = new ShowBrick(sprite);
 
 		script.addBrick(hideBrick);

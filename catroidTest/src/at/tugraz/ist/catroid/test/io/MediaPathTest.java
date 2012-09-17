@@ -257,8 +257,8 @@ public class MediaPathTest extends InstrumentationTestCase {
 
 		ArrayList<Brick> brickList1 = new ArrayList<Brick>();
 		ArrayList<Brick> brickList2 = new ArrayList<Brick>();
-		brickList1.add(new ChangeXByBrick(sprite, 4));
-		brickList1.add(new ChangeYByBrick(sprite, 5));
+		brickList1.add(new ChangeXByBrick(null, sprite, 4));
+		brickList1.add(new ChangeYByBrick(null, sprite, 5));
 		brickList1.add(new ComeToFrontBrick(sprite));
 		brickList1.add(new GoNStepsBackBrick(sprite, 5));
 		brickList1.add(new HideBrick(sprite));
@@ -279,12 +279,12 @@ public class MediaPathTest extends InstrumentationTestCase {
 		soundBrick.setSoundInfo(soundInfo);
 		sprite.getSoundList().add(soundInfo);
 
-		brickList2.add(new PlaceAtBrick(sprite, 50, 50));
+		brickList2.add(new PlaceAtBrick(null, sprite, 50, 50));
 		brickList2.add(soundBrick);
 		brickList2.add(new SetSizeToBrick(sprite, 50));
 		brickList2.add(costumeBrick);
-		brickList2.add(new SetXBrick(sprite, 50));
-		brickList2.add(new SetYBrick(sprite, 50));
+		brickList2.add(new SetXBrick(null, sprite, 50));
+		brickList2.add(new SetYBrick(null, sprite, 50));
 		brickList2.add(new ShowBrick(sprite));
 		brickList2.add(new WaitBrick(sprite, 1000));
 

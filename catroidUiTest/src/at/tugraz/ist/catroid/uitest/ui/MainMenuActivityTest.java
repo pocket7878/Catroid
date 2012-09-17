@@ -355,7 +355,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		ShowBrick showBrick = new ShowBrick(firstSprite);
 		SetSizeToBrick setSizeToBrick = new SetSizeToBrick(secondSprite, size);
 		ComeToFrontBrick comeToFrontBrick = new ComeToFrontBrick(firstSprite);
-		PlaceAtBrick placeAtBrick = new PlaceAtBrick(secondSprite, xPosition, yPosition);
+		PlaceAtBrick placeAtBrick = new PlaceAtBrick(null, secondSprite, xPosition, yPosition);
 
 		// adding Bricks: ----------------
 		testScript.addBrick(hideBrick);

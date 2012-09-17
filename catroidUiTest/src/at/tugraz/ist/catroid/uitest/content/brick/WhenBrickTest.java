@@ -105,7 +105,7 @@ public class WhenBrickTest extends ActivityInstrumentationTestCase2<ScriptActivi
 		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 		Sprite sprite = new Sprite("cat");
 		Script script = new WhenScript(sprite);
-		Brick placeAtBrick = new PlaceAtBrick(sprite, 100, 100);
+		Brick placeAtBrick = new PlaceAtBrick(null, sprite, 100, 100);
 		script.addBrick(placeAtBrick);
 		sprite.addScript(script);
 

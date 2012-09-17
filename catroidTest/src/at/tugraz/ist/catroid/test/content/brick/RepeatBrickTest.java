@@ -57,7 +57,7 @@ public class RepeatBrickTest extends InstrumentationTestCase {
 		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
 
 		testScript.addBrick(repeatBrick);
-		testScript.addBrick(new ChangeYByBrick(testSprite, deltaY));
+		testScript.addBrick(new ChangeYByBrick(null, testSprite, deltaY));
 		testScript.addBrick(loopEndBrick);
 
 		testSprite.addScript(testScript);
@@ -86,9 +86,9 @@ public class RepeatBrickTest extends InstrumentationTestCase {
 		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
 
 		testScript.addBrick(repeatBrick);
-		testScript.addBrick(new ChangeYByBrick(testSprite, deltaY));
+		testScript.addBrick(new ChangeYByBrick(null, testSprite, deltaY));
 		testScript.addBrick(loopEndBrick);
-		testScript.addBrick(new ChangeYByBrick(testSprite, 150));
+		testScript.addBrick(new ChangeYByBrick(null, testSprite, 150));
 
 		testSprite.addScript(testScript);
 		final long startTime = System.currentTimeMillis();
@@ -120,9 +120,9 @@ public class RepeatBrickTest extends InstrumentationTestCase {
 		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
 
 		testScript.addBrick(repeatBrick);
-		testScript.addBrick(new ChangeYByBrick(testSprite, decoyDeltaY));
+		testScript.addBrick(new ChangeYByBrick(null, testSprite, decoyDeltaY));
 		testScript.addBrick(loopEndBrick);
-		testScript.addBrick(new ChangeYByBrick(testSprite, expectedDeltaY));
+		testScript.addBrick(new ChangeYByBrick(null, testSprite, expectedDeltaY));
 
 		testSprite.addScript(testScript);
 		testSprite.startStartScripts();
@@ -150,9 +150,9 @@ public class RepeatBrickTest extends InstrumentationTestCase {
 		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
 
 		testScript.addBrick(repeatBrick);
-		testScript.addBrick(new ChangeYByBrick(testSprite, decoyDeltaY));
+		testScript.addBrick(new ChangeYByBrick(null, testSprite, decoyDeltaY));
 		testScript.addBrick(loopEndBrick);
-		testScript.addBrick(new ChangeYByBrick(testSprite, expectedDeltaY));
+		testScript.addBrick(new ChangeYByBrick(null, testSprite, expectedDeltaY));
 
 		testSprite.addScript(testScript);
 		testSprite.startStartScripts();

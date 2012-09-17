@@ -244,7 +244,7 @@ public class UiTestUtils {
 		brickList.add(new SetSizeToBrick(firstSprite, size));
 		brickList.add(new GoNStepsBackBrick(firstSprite, 1));
 		brickList.add(new ComeToFrontBrick(firstSprite));
-		brickList.add(new PlaceAtBrick(firstSprite, xPosition, yPosition));
+		brickList.add(new PlaceAtBrick(null, firstSprite, xPosition, yPosition));
 
 		for (Brick brick : brickList) {
 			testScript.addBrick(brick);

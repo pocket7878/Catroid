@@ -180,7 +180,7 @@ public class ProjectManagerTest extends InstrumentationTestCase {
 		costumeBrick.setCostume(costumeData);
 		SetSizeToBrick setSizeToBrick = new SetSizeToBrick(secondSprite, size);
 		ComeToFrontBrick comeToFrontBrick = new ComeToFrontBrick(firstSprite);
-		PlaceAtBrick placeAtBrick = new PlaceAtBrick(secondSprite, xPosition, yPosition);
+		PlaceAtBrick placeAtBrick = new PlaceAtBrick(null, secondSprite, xPosition, yPosition);
 
 		// adding Bricks: ----------------
 		testScript.addBrick(hideBrick);

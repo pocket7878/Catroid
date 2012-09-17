@@ -46,7 +46,7 @@ public class ScriptTest extends AndroidTestCase {
 		sprite = new Sprite("testSprite");
 		hideBrick = new HideBrick(sprite);
 		showBrick = new ShowBrick(sprite);
-		placeAtBrick = new PlaceAtBrick(sprite, 0, 0);
+		placeAtBrick = new PlaceAtBrick(null, sprite, 0, 0);
 	};
 
 	public void testAddBricks() {

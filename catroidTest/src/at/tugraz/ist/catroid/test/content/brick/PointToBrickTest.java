@@ -40,20 +40,20 @@ public class PointToBrickTest extends AndroidTestCase {
 
 		Sprite sprite1 = new Sprite("cat1");
 		Script startScript1 = new StartScript(sprite1);
-		PlaceAtBrick placeAt1 = new PlaceAtBrick(sprite1, 300, 400);
+		PlaceAtBrick placeAt1 = new PlaceAtBrick(null, sprite1, 300, 400);
 		SetSizeToBrick size1 = new SetSizeToBrick(sprite1, 20.0);
 		startScript1.addBrick(placeAt1);
 		startScript1.addBrick(size1);
 
 		Sprite sprite2 = new Sprite("cat2");
 		Script startScript2 = new StartScript(sprite2);
-		PlaceAtBrick placeAt2 = new PlaceAtBrick(sprite2, -400, -300);
+		PlaceAtBrick placeAt2 = new PlaceAtBrick(null, sprite2, -400, -300);
 		SetSizeToBrick size2 = new SetSizeToBrick(sprite2, 20.0);
 		startScript2.addBrick(placeAt2);
 		startScript2.addBrick(size2);
 		sprite2.addScript(startScript2);
 
-		PointToBrick pointToBrick = new PointToBrick(sprite1, sprite2);
+		PointToBrick pointToBrick = new PointToBrick(null, sprite1, sprite2);
 		startScript1.addBrick(pointToBrick);
 		sprite1.addScript(startScript1);
 
@@ -71,7 +71,7 @@ public class PointToBrickTest extends AndroidTestCase {
 		} catch (InterruptedException e) {
 		}
 
-		assertEquals("Wrong direction", -135.0, sprite1.costume.rotation, 1e-3);
+		assertEquals("Wrong direction", -135.0, sprite1.costume.getRotation(), 1e-3);
 	}
 
 }

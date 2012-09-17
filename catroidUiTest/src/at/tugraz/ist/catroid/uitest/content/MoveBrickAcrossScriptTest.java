@@ -148,7 +148,7 @@ public class MoveBrickAcrossScriptTest extends ActivityInstrumentationTestCase2<
 		secondBrickListForMoving.add(new ShowBrick(firstSprite));
 		secondBrickListForMoving.add(new WaitBrick(firstSprite, 200));
 		secondBrickListForMoving.add(new SetBrightnessBrick(firstSprite, 2.0));
-		secondBrickListForMoving.add(new SetXBrick(firstSprite, 100));
+		secondBrickListForMoving.add(new SetXBrick(null, firstSprite, 100));
 		secondBrickListForMoving.add(new SetSizeToBrick(firstSprite, size));
 
 		// adding Bricks: ----------------

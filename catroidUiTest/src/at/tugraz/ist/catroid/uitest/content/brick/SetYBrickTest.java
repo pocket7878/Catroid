@@ -99,7 +99,7 @@ public class SetYBrickTest extends ActivityInstrumentationTestCase2<ScriptActivi
 		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		setYBrick = new SetYBrick(sprite, 0);
+		setYBrick = new SetYBrick(null, sprite, 0);
 		script.addBrick(setYBrick);
 
 		sprite.addScript(script);

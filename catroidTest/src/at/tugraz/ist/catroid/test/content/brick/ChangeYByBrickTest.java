@@ -37,7 +37,7 @@ public class ChangeYByBrickTest extends AndroidTestCase {
 
 		int yPosition = (int) sprite.costume.getYPosition();
 
-		ChangeYByBrick changeYByBrick = new ChangeYByBrick(sprite, yMovement);
+		ChangeYByBrick changeYByBrick = new ChangeYByBrick(null, sprite, yMovement);
 		changeYByBrick.execute();
 
 		yPosition += yMovement;
@@ -46,7 +46,7 @@ public class ChangeYByBrickTest extends AndroidTestCase {
 	}
 
 	public void testNullSprite() {
-		ChangeYByBrick brick = new ChangeYByBrick(null, yMovement);
+		ChangeYByBrick brick = new ChangeYByBrick(null, null, yMovement);
 
 		try {
 			brick.execute();
@@ -61,7 +61,7 @@ public class ChangeYByBrickTest extends AndroidTestCase {
 
 		int yPosition = 10;
 		sprite.costume.setXYPosition(sprite.costume.getXPosition(), yPosition);
-		ChangeYByBrick changeYByBrick = new ChangeYByBrick(sprite, Integer.MAX_VALUE);
+		ChangeYByBrick changeYByBrick = new ChangeYByBrick(null, sprite, Integer.MAX_VALUE);
 		changeYByBrick.execute();
 
 		assertEquals("ChangeYByBrick failed to place Sprite at maximum y integer value", Integer.MAX_VALUE,
@@ -69,7 +69,7 @@ public class ChangeYByBrickTest extends AndroidTestCase {
 
 		yPosition = -10;
 		sprite.costume.setXYPosition(sprite.costume.getXPosition(), yPosition);
-		changeYByBrick = new ChangeYByBrick(sprite, Integer.MIN_VALUE);
+		changeYByBrick = new ChangeYByBrick(null, sprite, Integer.MIN_VALUE);
 		changeYByBrick.execute();
 
 		assertEquals("ChangeYByBrick failed to place Sprite at minimum y integer value", Integer.MIN_VALUE,

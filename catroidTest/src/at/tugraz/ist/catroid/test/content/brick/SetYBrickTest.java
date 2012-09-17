@@ -35,7 +35,7 @@ public class SetYBrickTest extends AndroidTestCase {
 		assertEquals("Unexpected initial sprite x position", 0f, sprite.costume.getXPosition());
 		assertEquals("Unexpected initial sprite y position", 0f, sprite.costume.getYPosition());
 
-		SetYBrick setYBrick = new SetYBrick(sprite, yPosition);
+		SetYBrick setYBrick = new SetYBrick(null, sprite, yPosition);
 		setYBrick.execute();
 
 		assertEquals("Incorrect sprite y position after SetYBrick executed", (float) yPosition,
@@ -43,7 +43,7 @@ public class SetYBrickTest extends AndroidTestCase {
 	}
 
 	public void testNullSprite() {
-		SetYBrick setYBrick = new SetYBrick(null, yPosition);
+		SetYBrick setYBrick = new SetYBrick(null, null, yPosition);
 		try {
 			setYBrick.execute();
 			fail("Execution of SetYBrick with null Sprite did not cause a NullPointerException to be thrown");
@@ -55,13 +55,13 @@ public class SetYBrickTest extends AndroidTestCase {
 	public void testBoundaryPositions() {
 		Sprite sprite = new Sprite("testSprite");
 
-		SetYBrick setYBrick = new SetYBrick(sprite, Integer.MAX_VALUE);
+		SetYBrick setYBrick = new SetYBrick(null, sprite, Integer.MAX_VALUE);
 		setYBrick.execute();
 
 		assertEquals("SetYBrick failed to place Sprite at maximum y integer value", Integer.MAX_VALUE,
 				(int) sprite.costume.getYPosition());
 
-		setYBrick = new SetYBrick(sprite, Integer.MIN_VALUE);
+		setYBrick = new SetYBrick(null, sprite, Integer.MIN_VALUE);
 		setYBrick.execute();
 
 		assertEquals("SetYBrick failed to place Sprite at minimum y integer value", Integer.MIN_VALUE,

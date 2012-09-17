@@ -97,7 +97,7 @@ public class TouchAxisTest extends ActivityInstrumentationTestCase2<StageActivit
 		touchSprite.addScript(startScript);
 
 		WhenScript touchWhenScript = new WhenScript(touchSprite);
-		TurnLeftBrick turnLeftBrick = new TurnLeftBrick(touchSprite, 180.0);
+		TurnLeftBrick turnLeftBrick = new TurnLeftBrick(null, touchSprite, 180.0);
 		touchWhenScript.addBrick(turnLeftBrick);
 
 		touchSprite.addScript(touchWhenScript);

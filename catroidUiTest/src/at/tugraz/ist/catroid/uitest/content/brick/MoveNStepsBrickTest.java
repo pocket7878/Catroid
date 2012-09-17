@@ -67,7 +67,7 @@ public class MoveNStepsBrickTest extends ActivityInstrumentationTestCase2<Script
 		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		moveNStepsBrick = new MoveNStepsBrick(sprite, 0);
+		moveNStepsBrick = new MoveNStepsBrick(null, sprite, 0);
 		script.addBrick(moveNStepsBrick);
 
 		sprite.addScript(script);

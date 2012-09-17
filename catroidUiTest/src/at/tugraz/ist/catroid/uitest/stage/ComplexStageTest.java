@@ -166,7 +166,7 @@ public class ComplexStageTest extends ActivityInstrumentationTestCase2<StageActi
 
 		yellowCostumeBrick.setCostume(yellowCostumeData);
 		yellowStartScript.addBrick(yellowCostumeBrick);
-		yellowStartScript.addBrick(new PlaceAtBrick(yellowSprite, -21, 21));
+		yellowStartScript.addBrick(new PlaceAtBrick(null, yellowSprite, -21, 21));
 
 		yellowSprite.addScript(yellowStartScript);
 
@@ -189,7 +189,7 @@ public class ComplexStageTest extends ActivityInstrumentationTestCase2<StageActi
 
 		blueCostumeBrick.setCostume(blueCostumeData);
 		blueStartScript.addBrick(blueCostumeBrick);
-		blueStartScript.addBrick(new PlaceAtBrick(blueSprite, 21, 21));
+		blueStartScript.addBrick(new PlaceAtBrick(null, blueSprite, 21, 21));
 
 		blueSprite.addScript(blueStartScript);
 
@@ -212,7 +212,7 @@ public class ComplexStageTest extends ActivityInstrumentationTestCase2<StageActi
 
 		greenCostumeBrick.setCostume(greenCostumeData);
 		greenStartScript.addBrick(greenCostumeBrick);
-		greenStartScript.addBrick(new PlaceAtBrick(greenSprite, 21, -21));
+		greenStartScript.addBrick(new PlaceAtBrick(null, greenSprite, 21, -21));
 
 		greenSprite.addScript(greenStartScript);
 
@@ -235,14 +235,14 @@ public class ComplexStageTest extends ActivityInstrumentationTestCase2<StageActi
 
 		redCostumeBrick.setCostume(redCostumeData);
 		redStartScript.addBrick(redCostumeBrick);
-		redStartScript.addBrick(new PlaceAtBrick(redSprite, -21, -21));
+		redStartScript.addBrick(new PlaceAtBrick(null, redSprite, -21, -21));
 
 		redSprite.addScript(redStartScript);
 
 		WhenScript redWhenScript = new WhenScript(redSprite);
 		ComeToFrontBrick redComeToFrontBrick = new ComeToFrontBrick(redSprite);
 		SetBrightnessBrick redSetBrightnessBrick = new SetBrightnessBrick(redSprite, 50d);
-		TurnLeftBrick redTurnLeftBrick = new TurnLeftBrick(redSprite, 45d);
+		TurnLeftBrick redTurnLeftBrick = new TurnLeftBrick(null, redSprite, 45d);
 		redWhenScript.addBrick(redComeToFrontBrick);
 		redWhenScript.addBrick(redSetBrightnessBrick);
 		redWhenScript.addBrick(redTurnLeftBrick);
@@ -262,7 +262,7 @@ public class ComplexStageTest extends ActivityInstrumentationTestCase2<StageActi
 
 		blackCostumeBrick.setCostume(blackCostumeData);
 		blackStartScript.addBrick(blackCostumeBrick);
-		blackStartScript.addBrick(new PlaceAtBrick(blackSprite, -50, 50));
+		blackStartScript.addBrick(new PlaceAtBrick(null, blackSprite, -50, 50));
 
 		blackSprite.addScript(blackStartScript);
 

@@ -117,7 +117,7 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 		Project project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		Brick glideToBrick = new GlideToBrick(sprite, xValue, yValue, 1000);
+		Brick glideToBrick = new GlideToBrick(null, sprite, xValue, yValue, 1000);
 		script.addBrick(glideToBrick);
 
 		sprite.addScript(script);

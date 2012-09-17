@@ -59,7 +59,7 @@ public class ForeverBrickTest extends InstrumentationTestCase {
 		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
 
 		testScript.addBrick(foreverBrick);
-		testScript.addBrick(new ChangeYByBrick(testSprite, deltaY));
+		testScript.addBrick(new ChangeYByBrick(null, testSprite, deltaY));
 		testScript.addBrick(loopEndBrick);
 
 		testSprite.addScript(testScript);
@@ -91,7 +91,7 @@ public class ForeverBrickTest extends InstrumentationTestCase {
 		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
 
 		testScript.addBrick(foreverBrick);
-		testScript.addBrick(new ChangeYByBrick(testSprite, deltaY));
+		testScript.addBrick(new ChangeYByBrick(null, testSprite, deltaY));
 		testScript.addBrick(loopEndBrick);
 
 		testSprite.addScript(testScript);

@@ -98,7 +98,7 @@ public class TurnLeftBrickTest extends ActivityInstrumentationTestCase2<ScriptAc
 		project = new Project(null, UiTestUtils.DEFAULT_TEST_PROJECT_NAME);
 		Sprite sprite = new Sprite("cat");
 		Script script = new StartScript(sprite);
-		turnLeftBrick = new TurnLeftBrick(sprite, 0);
+		turnLeftBrick = new TurnLeftBrick(null, sprite, 0);
 		script.addBrick(turnLeftBrick);
 
 		sprite.addScript(script);
