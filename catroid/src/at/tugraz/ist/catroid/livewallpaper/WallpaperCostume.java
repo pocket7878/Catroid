@@ -25,6 +25,7 @@ package at.tugraz.ist.catroid.livewallpaper;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -35,6 +36,8 @@ public class WallpaperCostume {
 	private CostumeData costumeData;
 	private Sprite sprite;
 	private Bitmap costume = null;
+	private Bitmap costumeRotated = null;
+	private Matrix rotationMatrix = null;
 
 	private int x;
 	private int y;
@@ -51,6 +54,7 @@ public class WallpaperCostume {
 	private boolean topNeedsAdjustment = false;
 	private boolean leftNeedsAdjustment = false;
 	private boolean sizeChanged = false;
+	private boolean coordsSwapped = false;
 
 	private WallpaperHelper wallpaperHelper;
 
@@ -58,6 +62,9 @@ public class WallpaperCostume {
 
 		this.wallpaperHelper = WallpaperHelper.getInstance();
 		this.sprite = sprite;
+
+		this.rotationMatrix = new Matrix();
+		rotationMatrix.postRotate(90.0f);
 
 		//TODO: refactor the hard-coded value
 		if (sprite.getName().equals("Background")) {
@@ -130,7 +137,27 @@ public class WallpaperCostume {
 	}
 
 	public Bitmap getCostume() {
-		return costume;
+		if (!wallpaperHelper.isLandscape()) {
+			return costume;
+		} else {
+			if (costumeRotated == null) {
+				costumeRotated = Bitmap.createBitmap(costume, 0, 0, costume.getWidth(), costume.getHeight(),
+						rotationMatrix, false);
+			}
+
+			if (!coordsSwapped) {
+				swapCoords();
+				this.coordsSwapped = true;
+			}
+
+			return costumeRotated;
+		}
+	}
+
+	private void swapCoords() {
+		int temp = this.top;
+		this.top = this.left;
+		this.left = temp;
 	}
 
 	public void setCostume(CostumeData costumeData) {

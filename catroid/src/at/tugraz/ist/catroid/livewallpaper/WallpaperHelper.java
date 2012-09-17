@@ -35,6 +35,8 @@ public class WallpaperHelper {
 	private Handler drawingThreadHandler;
 	private Runnable drawingThread;
 
+	private boolean isLandscape = false;
+
 	private boolean isLiveWallpaper = false;
 
 	public WallpaperHelper() {
@@ -54,8 +56,7 @@ public class WallpaperHelper {
 	}
 
 	public void setProject(Project project) {
-		this.centerYCoord = Values.SCREEN_HEIGHT / 2;
-		this.centerXCoord = Values.SCREEN_WIDTH / 2;
+		setCenterCoordinates();
 		this.project = project;
 	}
 
@@ -107,6 +108,28 @@ public class WallpaperHelper {
 
 	public void setDrawingThread(Runnable drawingThread) {
 		this.drawingThread = drawingThread;
+	}
+
+	public void setCenterCoordinates() {
+		this.centerYCoord = Values.SCREEN_HEIGHT / 2;
+		this.centerXCoord = Values.SCREEN_WIDTH / 2;
+	}
+
+	public boolean isLandscape() {
+		return isLandscape;
+	}
+
+	public void setLandscape(boolean isLandscape) {
+		this.isLandscape = isLandscape;
+		if (isLandscape) {
+			swapWidthAndHeight();
+		}
+	}
+
+	public void swapWidthAndHeight() {
+		int temp = centerXCoord;
+		centerXCoord = centerYCoord;
+		centerYCoord = temp;
 	}
 
 }
