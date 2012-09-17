@@ -30,7 +30,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
-import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.MotionEvent.PointerCoords;
@@ -59,6 +58,8 @@ public class LiveWallpaper extends WallpaperService {
 
 		private boolean mVisible = false;
 
+		private Display display;
+
 		private Paint paint;
 		private List<Sprite> sprites;
 
@@ -72,6 +73,14 @@ public class LiveWallpaper extends WallpaperService {
 				draw();
 			}
 		};
+
+		@Override
+		public void onCreate(SurfaceHolder surfaceHolder) {
+			super.onCreate(surfaceHolder);
+
+			display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
+
+		}
 
 		@Override
 		public void onVisibilityChanged(boolean visible) {
@@ -98,10 +107,6 @@ public class LiveWallpaper extends WallpaperService {
 
 		@Override
 		public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-			DisplayMetrics metrics = new DisplayMetrics();
-			Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-			display.getMetrics(metrics);
 
 			int rotation = display.getRotation();
 			if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
