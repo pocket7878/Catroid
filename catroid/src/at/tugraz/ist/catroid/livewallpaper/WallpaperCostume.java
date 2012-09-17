@@ -25,6 +25,7 @@ package at.tugraz.ist.catroid.livewallpaper;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -400,5 +401,63 @@ public class WallpaperCostume {
 			this.setX(xDestination);
 			this.setY(yDestination);
 		}
+	}
+
+	public void ifOnEdgeBounce() {
+		float size = sprite.costume.getSize();
+
+		sprite.costume.aquireXYWidthHeightLock();
+		float width = sprite.costume.getWidth() * size;
+		float height = sprite.costume.getHeight() * size;
+		int xPosition = (int) sprite.costume.getXPosition();
+		int yPosition = (int) sprite.costume.getYPosition();
+		sprite.costume.releaseXYWidthHeightLock();
+
+		int virtualScreenWidth = ProjectManager.getInstance().getCurrentProject().virtualScreenWidth / 2;
+		int virtualScreenHeight = ProjectManager.getInstance().getCurrentProject().virtualScreenHeight / 2;
+		float rotationResult = -sprite.costume.rotation + 90f;
+
+		if (xPosition < -virtualScreenWidth + width / 2) {
+
+			rotationResult = Math.abs(rotationResult);
+			xPosition = -virtualScreenWidth + (int) (width / 2);
+
+		} else if (xPosition > virtualScreenWidth - width / 2) {
+
+			rotationResult = -Math.abs(rotationResult);
+
+			xPosition = virtualScreenWidth - (int) (width / 2);
+		}
+
+		if (yPosition > virtualScreenHeight - height / 2) {
+
+			if (Math.abs(rotationResult) < 90f) {
+				if (rotationResult < 0f) {
+					rotationResult = -180f - rotationResult;
+				} else {
+					rotationResult = 180f - rotationResult;
+				}
+			}
+
+			yPosition = virtualScreenHeight - (int) (height / 2);
+
+		} else if (yPosition < -virtualScreenHeight + height / 2) {
+
+			if (Math.abs(rotationResult) > 90f) {
+				if (rotationResult < 0f) {
+					rotationResult = -180f - rotationResult;
+				} else {
+					rotationResult = 180f - rotationResult;
+				}
+			}
+
+			yPosition = -virtualScreenHeight + (int) (height / 2);
+		}
+
+		sprite.costume.rotation = -rotationResult + 90f;
+
+		sprite.costume.aquireXYWidthHeightLock();
+		sprite.costume.setXYPosition(xPosition, yPosition);
+		sprite.costume.releaseXYWidthHeightLock();
 	}
 }
