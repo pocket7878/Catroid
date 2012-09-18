@@ -35,10 +35,10 @@ import at.tugraz.ist.catroid.formulaeditor.FormulaElement.ElementType;
 public class Formula implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private transient FormulaElement root;
-	private String textRepresentation = "0";
+	private FormulaElement formulaTree;
 	private transient Integer formulaTextFieldId = null;
 	private transient Drawable originalEditTextDrawable = null;
+	private transient InternFormula internFormula = null;
 
 	//	public Formula() {
 	//		root = new FormulaElement(FormulaElement.ElementType.VALUE, "0", null);
@@ -49,34 +49,32 @@ public class Formula implements Serializable {
 	}
 
 	public Object readResolve() {
-		CalcGrammarParser parser = CalcGrammarParser.getFormulaParser(textRepresentation);
-		root = parser.parseFormula();
 
-		if (root == null) {
-			root = new FormulaElement(ElementType.VALUE, "0 ", null);
-			textRepresentation = "0 ";
+		if (formulaTree == null) {
+			formulaTree = new FormulaElement(ElementType.NUMBER, "0 ", null);
 		}
+
+		internFormula = new InternFormula(formulaTree.getInternTokenList());
 
 		return this;
 	}
 
 	public Formula(FormulaElement formEle) {
-		root = formEle;
-		textRepresentation = root.getEditTextRepresentation();
+		formulaTree = formEle;
+
+		internFormula = new InternFormula(formulaTree.getInternTokenList());
 	}
 
 	public Formula(String value) {
-		textRepresentation = value;
-		if (!textRepresentation.endsWith(" ")) {
-			textRepresentation += " ";
-		}
-		CalcGrammarParser parser = CalcGrammarParser.getFormulaParser(textRepresentation);
-		root = parser.parseFormula();
 
-		if (root == null) {
-			root = new FormulaElement(ElementType.VALUE, "0 ", null);
-			textRepresentation = "0 ";
+		try {
+			Double.parseDouble(value);
+			formulaTree = new FormulaElement(ElementType.NUMBER, value, null);
+		} catch (NumberFormatException nfe) {
+			formulaTree = new FormulaElement(ElementType.NUMBER, "0", null);
 		}
+		internFormula = new InternFormula(formulaTree.getInternTokenList());
+
 	}
 
 	//	public Formula(String value, int formulaTextFieldId) {
@@ -96,7 +94,7 @@ public class Formula implements Serializable {
 	}
 
 	public int interpretInteger(int minValue, int maxValue) {
-		Object interpretedValue = root.interpretRecursive();
+		Object interpretedValue = formulaTree.interpretRecursive();
 
 		int interpretedIntValue = 0;
 
@@ -121,7 +119,7 @@ public class Formula implements Serializable {
 	}
 
 	public float interpretFloat(float minValue, float maxValue) {
-		Object interpretedValue = root.interpretRecursive();
+		Object interpretedValue = formulaTree.interpretRecursive();
 
 		float interpretedFloatValue = 0;
 
@@ -143,12 +141,12 @@ public class Formula implements Serializable {
 	@Override
 	public String toString() {
 		//return root.getEditTextRepresentation();
-		return textRepresentation;
+		return "DEPRICATED - XML UPDATE"; //TODO remove when xml update is finished
 	}
 
 	public void setRoot(FormulaElement formula) {
-		root = formula;
-		textRepresentation = root.getEditTextRepresentation();
+		formulaTree = formula;
+		internFormula = new InternFormula(formula.getInternTokenList());
 
 	}
 
@@ -157,12 +155,14 @@ public class Formula implements Serializable {
 	}
 
 	public void refreshTextField(View view) {
-		if (formulaTextFieldId != null && root != null && view != null) {
+		if (formulaTextFieldId != null && formulaTree != null && view != null) {
 			EditText formulaTextField = (EditText) view.findViewById(formulaTextFieldId);
 			if (formulaTextField == null) {
 				return;
 			}
-			formulaTextField.setText(textRepresentation);
+			internFormula.generateExternFormulaStringAndInternExternMapping(view.getContext());//TODO refactor - currently too slow
+
+			formulaTextField.setText(internFormula.getExternFormulaString());
 			//			if (textRepresentation.length() > 5) {
 			//				formulaTextField.setText(textRepresentation.substring(0, 5) + "...");
 			//			} else {
@@ -173,7 +173,7 @@ public class Formula implements Serializable {
 	}
 
 	public void refreshTextField(View view, String formulaString) {
-		if (formulaTextFieldId != null && root != null && view != null) {
+		if (formulaTextFieldId != null && formulaTree != null && view != null) {
 			EditText formulaTextField = (EditText) view.findViewById(formulaTextFieldId);
 			if (formulaTextField == null) {
 				return;
@@ -226,6 +226,10 @@ public class Formula implements Serializable {
 	public void prepareToRemove() {
 		originalEditTextDrawable = null;
 		formulaTextFieldId = null;
+	}
+
+	public InternFormula getInternFormula() {
+		return internFormula;
 	}
 
 }

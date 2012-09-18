@@ -36,10 +36,8 @@ public class InternFormula {
 	};
 
 	private ExternInternRepresentationMapping externInternRepresentationMapping;
-	private InternToExternGenerator internToExternGenerator;
 
 	private List<InternToken> internTokenFormulaList;
-	private String internFormulaString;
 	private String externFormulaString;
 
 	private boolean tokenSelection;
@@ -51,19 +49,16 @@ public class InternFormula {
 	private int cursorPositionInternTokenIndex;
 	private CursorTokenPosition cursorTokenPosition;
 
-	public InternFormula(String internalFormulaString, Context context) {
-		this.internFormulaString = internalFormulaString;
-		internTokenFormulaList = new LinkedList<InternToken>();
+	public InternFormula(List<InternToken> internTokenList) {
 
+		internTokenFormulaList = internTokenList;
 		externFormulaString = null;
-		internToExternGenerator = new InternToExternGenerator(context);
 		externInternRepresentationMapping = new ExternInternRepresentationMapping();
 		tokenSelection = false;
 		externCursorPosition = 0;
 		internTokenSelectionEnd = -1;
 		internTokenSelectionStart = -1;
 		cursorPositionInternTokenIndex = 0;
-
 	}
 
 	public synchronized void setCursorAndSelection(int externCursorPosition, boolean tokenIsSelected) {
@@ -156,8 +151,6 @@ public class InternFormula {
 	}
 
 	public String getExternFormulaString() {
-		Log.i("info", "Intern Formula = \"" + internFormulaString + "\"");
-		Log.i("info", "Extern Formula = \"" + externFormulaString + "\"");
 		return externFormulaString;
 	}
 
@@ -398,12 +391,11 @@ public class InternFormula {
 				deleteInternTokens(internTokenIndex, internTokenIndex);
 				break;
 		}
-
-		Log.i("info", "deleteInternTokenByIndex: resulting internFormulaString = " + internFormulaString);
 	}
 
-	public void generateExternFormulaStringAndInternExternMapping() {
-		Log.i("info", "generateExternFormulaStringAndInternExternMapping:enter");
+	public void generateExternFormulaStringAndInternExternMapping(Context context) {
+		InternToExternGenerator internToExternGenerator = new InternToExternGenerator(context);
+
 		internToExternGenerator.generateExternStringAndMapping(internTokenFormulaList);
 		externFormulaString = internToExternGenerator.getGeneratedExternFormulaString();
 		externInternRepresentationMapping = internToExternGenerator.getGeneratedExternInternRepresentationMapping();
@@ -754,6 +746,17 @@ public class InternFormula {
 	private void setExternCursorLeftToToken(int internTokenIndex) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public InternFormulaParser getInternFormulaParser() {
+		InternFormulaParser parser = new InternFormulaParser(internTokenFormulaList);
+
+		return parser;
+	}
+
+	public List<InternToken> getInternTokens() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

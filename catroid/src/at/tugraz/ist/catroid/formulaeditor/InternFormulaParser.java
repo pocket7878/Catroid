@@ -22,6 +22,7 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class InternFormulaParser {
@@ -44,7 +45,13 @@ public class InternFormulaParser {
 	private InternToken currentToken;
 
 	public InternFormulaParser(List<InternToken> internTokensToParse) {
-		this.internTokensToParse = internTokensToParse;
+
+		this.internTokensToParse = new LinkedList<InternToken>();
+
+		for (InternToken internToken : internTokensToParse) {
+			this.internTokensToParse.add(internToken);
+		}
+
 	}
 
 	private void getNextToken() throws InternFormulaParserException {
@@ -188,12 +195,12 @@ public class InternFormulaParser {
 
 	private FormulaElement term() throws InternFormulaParserException {
 
-		FormulaElement termTree = new FormulaElement(FormulaElement.ElementType.VALUE, null, null);
+		FormulaElement termTree = new FormulaElement(FormulaElement.ElementType.NUMBER, null, null);
 		FormulaElement curElem = termTree;
 
 		if (currentToken.isOperator() && currentToken.getTokenSringValue().equals("-")) {
 
-			curElem = new FormulaElement(FormulaElement.ElementType.VALUE, null, termTree, null, null);
+			curElem = new FormulaElement(FormulaElement.ElementType.NUMBER, null, termTree, null, null);
 			termTree.replaceElement(FormulaElement.ElementType.OPERATOR, "-", null, curElem);
 
 			getNextToken();
@@ -201,7 +208,7 @@ public class InternFormulaParser {
 
 		if (currentToken.isNumber()) {
 
-			curElem.replaceElement(FormulaElement.ElementType.VALUE, number());
+			curElem.replaceElement(FormulaElement.ElementType.NUMBER, number());
 
 		} else if (currentToken.isBracketOpen()) {
 
@@ -225,12 +232,27 @@ public class InternFormulaParser {
 
 			curElem.replaceElement(FormulaElement.ElementType.BRACKET, null, null, costume());
 
+		} else if (currentToken.isUserVariable()) {
+
+			curElem.replaceElement(FormulaElement.ElementType.USER_VARIABLE, null, null, userVariable());
+
 		} else {
 			throw new InternFormulaParserException("Parse Error");
 		}
 
 		return termTree;
 
+	}
+
+	private FormulaElement userVariable() throws InternFormulaParserException {
+		//TODO check if user-variable exists
+
+		FormulaElement costumeTree = new FormulaElement(FormulaElement.ElementType.USER_VARIABLE,
+				currentToken.getTokenSringValue(), null);
+
+		getNextToken();
+
+		return costumeTree;
 	}
 
 	private FormulaElement costume() throws InternFormulaParserException {

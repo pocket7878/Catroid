@@ -23,13 +23,15 @@
 package at.tugraz.ist.catroid.formulaeditor;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 public class FormulaElement implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	public static enum ElementType {
-		OPERATOR, FUNCTION, VALUE, SENSOR, VARIABLE, BRACKET
+		OPERATOR, FUNCTION, NUMBER, SENSOR, USER_VARIABLE, BRACKET
 	}
 
 	//	public static final int ELEMENT_OPERATOR = 2;
@@ -86,6 +88,55 @@ public class FormulaElement implements Serializable {
 		return rightChild;
 	}
 
+	public List<InternToken> getInternTokenList() {
+		List<InternToken> internTokenList = new LinkedList<InternToken>();
+
+		switch (type) {
+			case BRACKET:
+				internTokenList.add(new InternToken(InternTokenType.BRACKET_OPEN));
+				if (rightChild != null) {
+					internTokenList.addAll(rightChild.getInternTokenList());
+				}
+				internTokenList.add(new InternToken(InternTokenType.BRACKET_CLOSE));
+				break;
+			case OPERATOR:
+				if (leftChild != null) {
+					internTokenList.addAll(leftChild.getInternTokenList());
+				}
+				internTokenList.add(new InternToken(InternTokenType.OPERATOR, this.value));
+				if (rightChild != null) {
+					internTokenList.addAll(rightChild.getInternTokenList());
+				}
+				break;
+			case FUNCTION:
+				internTokenList.add(new InternToken(InternTokenType.FUNCTION_NAME));
+				boolean functionHasParameters = false;
+				if (leftChild != null) {
+					internTokenList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
+					functionHasParameters = true;
+					internTokenList.addAll(leftChild.getInternTokenList());
+				}
+				if (rightChild != null) {
+					internTokenList.add(new InternToken(InternTokenType.FUNCTION_PARAMETER_DELIMITER));
+					internTokenList.addAll(rightChild.getInternTokenList());
+				}
+				if (functionHasParameters) {
+					internTokenList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
+				}
+				break;
+			case USER_VARIABLE:
+				internTokenList.add(new InternToken(InternTokenType.USER_VARIABLE, this.value));
+				break;
+			case NUMBER:
+				internTokenList.add(new InternToken(InternTokenType.NUMBER, this.value));
+				break;
+			case SENSOR:
+				internTokenList.add(new InternToken(InternTokenType.SENSOR, this.value));
+				break;
+		}
+		return internTokenList;
+	}
+
 	//TODO remove Method
 	public String getEditTextRepresentation() {
 		String result = "";
@@ -118,10 +169,10 @@ public class FormulaElement implements Serializable {
 				}
 				result += ") ";
 				break;
-			case VARIABLE:
+			case USER_VARIABLE:
 				result += this.value + " ";
 				break;
-			case VALUE:
+			case NUMBER:
 				result += this.value + " ";
 				break;
 			case SENSOR:
@@ -144,7 +195,7 @@ public class FormulaElement implements Serializable {
 		if (type == ElementType.BRACKET) {
 			return rightChild.interpretRecursive();
 		}
-		if (type == ElementType.VALUE) {
+		if (type == ElementType.NUMBER) {
 			return Double.parseDouble(value);
 		} else if (type == ElementType.OPERATOR) {
 			if (leftChild != null) {// binär operator
@@ -219,7 +270,7 @@ public class FormulaElement implements Serializable {
 			}
 		} else if (type == ElementType.SENSOR) {
 			return SensorManager.getSensorValue(value);
-		} else if (type == ElementType.VARIABLE) {
+		} else if (type == ElementType.USER_VARIABLE) {
 			//			TODO ^_^
 			return null;
 		}

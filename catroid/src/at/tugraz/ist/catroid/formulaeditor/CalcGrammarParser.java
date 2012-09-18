@@ -348,7 +348,7 @@ public class CalcGrammarParser extends Parser {
 			// src/CalcGrammar.g:210:5: ( MINUS )? ( NUMBER | '(' term_list ')' | variableOrFunction )
 			{
 
-				termTree = new FormulaElement(FormulaElement.ElementType.VALUE, null, null);
+				termTree = new FormulaElement(FormulaElement.ElementType.NUMBER, null, null);
 				FormulaElement curElem = termTree;
 
 				// src/CalcGrammar.g:214:5: ( MINUS )?
@@ -364,7 +364,7 @@ public class CalcGrammarParser extends Parser {
 					{
 						MINUS3 = (Token) match(input, MINUS, FOLLOW_MINUS_in_term163);
 
-						curElem = new FormulaElement(FormulaElement.ElementType.VALUE, null, termTree, null, null);
+						curElem = new FormulaElement(FormulaElement.ElementType.NUMBER, null, termTree, null, null);
 						termTree.replaceElement(FormulaElement.ElementType.OPERATOR, MINUS3.getText(), null, curElem);
 
 					}
@@ -404,7 +404,7 @@ public class CalcGrammarParser extends Parser {
 						NUMBER4 = (Token) match(input, NUMBER, FOLLOW_NUMBER_in_term181);
 
 						String number = internalCommaSeperatedDouble(NUMBER4.getText());
-						curElem.replaceElement(FormulaElement.ElementType.VALUE, number);
+						curElem.replaceElement(FormulaElement.ElementType.NUMBER, number);
 
 					}
 						break;
@@ -574,7 +574,7 @@ public class CalcGrammarParser extends Parser {
 				{
 					UPID10 = (Token) match(input, UPID, FOLLOW_UPID_in_variableOrFunction493);
 
-					variableOrFunctionTree = new FormulaElement(FormulaElement.ElementType.VARIABLE, UPID10.getText(),
+					variableOrFunctionTree = new FormulaElement(FormulaElement.ElementType.USER_VARIABLE, UPID10.getText(),
 							null, null, null);
 
 				}

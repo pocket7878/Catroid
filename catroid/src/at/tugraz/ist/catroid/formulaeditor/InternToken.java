@@ -129,6 +129,14 @@ public class InternToken {
 		return false;
 	}
 
+	public boolean isUserVariable() {
+		if (internTokenType == InternTokenType.USER_VARIABLE) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public void appendToTokenStringValue(String stringToAppend) {
 		this.tokenStringValue += stringToAppend;
 	}

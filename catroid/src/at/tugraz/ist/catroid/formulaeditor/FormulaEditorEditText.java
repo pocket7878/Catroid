@@ -42,7 +42,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	//New InternExtern Language Support Members
 
-	InternFormula internFormula;
+	private InternFormula internFormula;
 
 	//Before InternExtern Language Support Members
 
@@ -96,20 +96,19 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		this.setCursorVisible(false);
 	}
 
-	public void enterNewFormula(String internFormulaString) {
+	public void enterNewFormula(InternFormula internFormulaToRepresent) {
 
-		internFormula = new InternFormula("", context);
-		internFormula.generateExternFormulaStringAndInternExternMapping();
+		internFormula = internFormulaToRepresent;
+		internFormula.generateExternFormulaStringAndInternExternMapping(context);
 		setText(internFormula.getExternFormulaString());
 
 		//		quickSelect();
 
 		//TODO History support
 		if (history == null) {
-			history = new FormulaEditorHistory(internFormulaString, absoluteCursorPosition, selectionStartIndex,
-					selectionEndIndex);
+			history = new FormulaEditorHistory("test", absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
 		} else {
-			history.init(internFormulaString, absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
+			history.init("test", absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
 		}
 	}
 
@@ -496,7 +495,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		Log.i("info", "checkAndModifyKeyInput:enter");
 
 		internFormula.handleKeyInput(catKey);
-		internFormula.generateExternFormulaStringAndInternExternMapping();
+		internFormula.generateExternFormulaStringAndInternExternMapping(context);
 		String newExternFormulaString = internFormula.getExternFormulaString();
 
 		setText(newExternFormulaString);
@@ -505,6 +504,10 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		if (absoluteCursorPosition > getText().length()) {
 			absoluteCursorPosition = getText().length();
 		}
+
+		setSelection(absoluteCursorPosition);
+
+		formulaEditorDialog.refreshFormulaPreviewString(this.getText().toString());
 
 		//		String newElement = null;
 		//		if (catKey.getKeyCode() == CatKeyEvent.KEYCODE_COMMA) {
@@ -637,7 +640,8 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	}
 
 	public boolean hasChanges() {
-		return history == null ? false : history.hasUnsavedChanges();
+		return true; //TODO enable history support
+		//		return history == null ? false : history.hasUnsavedChanges();
 	}
 
 	public void formulaSaved() {
@@ -795,5 +799,9 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	@Override
 	public boolean onCheckIsTextEditor() {
 		return false;
+	}
+
+	public InternFormulaParser getFormulaParser() {
+		return internFormula.getInternFormulaParser();
 	}
 }

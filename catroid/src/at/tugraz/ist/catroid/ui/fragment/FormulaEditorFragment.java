@@ -39,6 +39,8 @@ import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.formulaeditor.CatKeyboardView;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.formulaeditor.FormulaEditorEditText;
+import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
+import at.tugraz.ist.catroid.formulaeditor.InternFormulaParser;
 import at.tugraz.ist.catroid.utils.Utils;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -182,7 +184,7 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 				if (restoreInstance) { //after orientation switch
 					restoreInstance = false;
 					if (!formulaEditorEditText.restoreFieldFromPreviousHistory()) { //history is only deleted when editor is shut down by  user!
-						formulaEditorEditText.enterNewFormula(newFormula.toString()); // this happens when onSaveInstanceState() is being called but not by orientation change (e.g.user turns off screen)
+						formulaEditorEditText.enterNewFormula(newFormula.getInternFormula()); // this happens when onSaveInstanceState() is being called but not by orientation change (e.g.user turns off screen)
 					}
 					refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
 
@@ -190,13 +192,17 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 					getActivity().findViewById(R.id.fragment_formula_editor).setVisibility(View.VISIBLE);
 					//((ScriptTabActivity) getActivity()).formulaEditor = this;
 				} else { //on create
-					if (!formulaEditorEditText.hasChanges()) {
-						currentFormula.removeTextFieldHighlighting(brickView, orientation);
-						formulaEditorEditText.enterNewFormula(currentFormula.toString());
-						currentFormula.highlightTextField(brickView, orientation);
-					} else {
-						formulaEditorEditText.quickSelect();
-					}
+					currentFormula.removeTextFieldHighlighting(brickView, orientation);
+					formulaEditorEditText.enterNewFormula(currentFormula.getInternFormula());
+					currentFormula.highlightTextField(brickView, orientation);
+					//TODO enable History support
+					//					if (!formulaEditorEditText.hasChanges()) {
+					//						currentFormula.removeTextFieldHighlighting(brickView, orientation);
+					//						formulaEditorEditText.enterNewFormula(currentFormula.getInternFormula());
+					//						currentFormula.highlightTextField(brickView, orientation);
+					//					} else {
+					//						formulaEditorEditText.quickSelect();
+					//					}
 					refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
 				}
 				break;
@@ -217,7 +223,7 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 				currentFormula.removeTextFieldHighlighting(brickView, orientation);
 				currentFormula = newFormula;
 				currentFormula.highlightTextField(brickView, orientation);
-				formulaEditorEditText.enterNewFormula(newFormula.toString());
+				formulaEditorEditText.enterNewFormula(newFormula.getInternFormula());
 				break;
 			default:
 				break;
@@ -275,10 +281,12 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 	}
 
 	public boolean saveFormulaIfPossible() {
-		String formulaToParse = formulaEditorEditText.getText().toString();
-		int err = parseFormula(formulaToParse);
+		InternFormulaParser formulaToParse = formulaEditorEditText.getFormulaParser();
+		FormulaElement formulaParseTree = formulaToParse.parseFormula();
+		int err = formulaToParse.getErrorTokenIndex();
 		switch (err) {
 			case PARSER_OK:
+				currentFormula.setRoot(formulaParseTree);
 				if (brickSpace != null) {
 					currentFormula.refreshTextField(brickView);
 				}
@@ -288,7 +296,7 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 			case PARSER_STACK_OVERFLOW:
 				return checkReturnWithoutSaving(PARSER_STACK_OVERFLOW);
 			default:
-				formulaEditorEditText.setParseErrorCursor(err);
+				formulaEditorEditText.setParseErrorCursor(err);//TODO change name and functionality to show error tokens
 				return checkReturnWithoutSaving(PARSER_INPUT_SYNTAX_ERROR);
 		}
 	}
