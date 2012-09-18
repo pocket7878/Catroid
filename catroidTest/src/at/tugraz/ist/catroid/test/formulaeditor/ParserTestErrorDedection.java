@@ -48,6 +48,32 @@ public class ParserTestErrorDedection extends AndroidTestCase {
 		assertEquals("Error Token Index is not as expected", 1, errorTokenIndex);
 
 		internTokenList = new LinkedList<InternToken>();
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internParser = new InternFormulaParser(internTokenList);
+		parseTree = internParser.parseFormula();
+		assertNull("Invalid formula parsed: +", parseTree);
+		errorTokenIndex = internParser.getErrorTokenIndex();
+		assertEquals("Error Token Index is not as expected", 0, errorTokenIndex);
+
+		internTokenList = new LinkedList<InternToken>();
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "-"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internParser = new InternFormulaParser(internTokenList);
+		parseTree = internParser.parseFormula();
+		assertNull("Invalid formula parsed: + -", parseTree);
+		errorTokenIndex = internParser.getErrorTokenIndex();
+		assertEquals("Error Token Index is not as expected", 1, errorTokenIndex);
+
+		internTokenList = new LinkedList<InternToken>();
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "*"));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.53"));
+		internParser = new InternFormulaParser(internTokenList);
+		parseTree = internParser.parseFormula();
+		assertNull("Invalid formula parsed:  * 42.53", parseTree);
+		errorTokenIndex = internParser.getErrorTokenIndex();
+		assertEquals("Error Token Index is not as expected", 0, errorTokenIndex);
+
+		internTokenList = new LinkedList<InternToken>();
 		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "-"));
 		internTokenList.add(new InternToken(InternTokenType.NUMBER, "42.42"));
 		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "-"));
@@ -57,7 +83,7 @@ public class ParserTestErrorDedection extends AndroidTestCase {
 		parseTree = internParser.parseFormula();
 		assertNull("Invalid formula parsed: - 42.42 - 42.42 -", parseTree);
 		errorTokenIndex = internParser.getErrorTokenIndex();
-		assertEquals("Error Token Index is not as expected", 4, errorTokenIndex);
+		assertEquals("Error Token Index is not as expected", 5, errorTokenIndex);
 
 	}
 
