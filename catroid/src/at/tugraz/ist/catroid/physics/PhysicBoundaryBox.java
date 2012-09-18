@@ -57,6 +57,7 @@ public class PhysicBoundaryBox {
 	private void createSide(float x, float y, float width, float height) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
+		bodyDef.allowSleep = false;
 
 		PolygonShape shape = new PolygonShape();
 		shape.setAsBox(width / 2f, height / 2f);
@@ -69,5 +70,6 @@ public class PhysicBoundaryBox {
 		Body body = world.createBody(bodyDef);
 		body.createFixture(fixtureDef);
 		body.setTransform(x, y, 0.0f);
+
 	}
 }

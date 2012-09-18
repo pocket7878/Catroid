@@ -109,6 +109,12 @@ public class PhysicWorld implements Serializable {
 	}
 
 	public void changeCostume(Sprite sprite) {
+
+		String name = sprite.getName();
+
+		if (name.equalsIgnoreCase("background")) {
+			return;
+		}
 		CostumeData costumeData = sprite.costume.getCostumeData();
 		Shape[] shapes = shapeBuilder.createShape(costumeData);
 		this.getPhysicObject(sprite).setShape(shapes);

@@ -40,7 +40,7 @@ public class PhysicSettings {
 
 		public static class BoundaryBox {
 			//			public final static boolean DEBUGFLAG = true;
-			public final static int FRAME_SIZE = 100;
+			public final static int FRAME_SIZE = 1;
 			public final static short COLLISION_MASK = 0x0002;
 		}
 	}
