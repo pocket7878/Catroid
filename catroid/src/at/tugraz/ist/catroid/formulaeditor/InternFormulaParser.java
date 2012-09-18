@@ -40,7 +40,7 @@ public class InternFormulaParser {
 
 	private List<InternToken> internTokensToParse;
 	private int currentTokenParseIndex;
-	private int errorCharacterPosition;
+	private int errorTokenIndex;
 	private InternToken currentToken;
 
 	public InternFormulaParser(List<InternToken> internTokensToParse) {
@@ -57,8 +57,8 @@ public class InternFormulaParser {
 
 	}
 
-	public int getErrorCharacterPosition() {
-		return errorCharacterPosition;
+	public int getErrorTokenIndex() {
+		return errorTokenIndex;
 
 	}
 
@@ -129,15 +129,15 @@ public class InternFormulaParser {
 	}
 
 	public FormulaElement parseFormula() {
-		errorCharacterPosition = PARSER_OK;
+		errorTokenIndex = PARSER_OK;
 		currentTokenParseIndex = 0;
 
 		if (internTokensToParse == null) {
-			errorCharacterPosition = PARSER_NO_INPUT;
+			errorTokenIndex = PARSER_NO_INPUT;
 			return null;
 		}
 		if (internTokensToParse.size() == 0) {
-			errorCharacterPosition = PARSER_NO_INPUT;
+			errorTokenIndex = PARSER_NO_INPUT;
 			return null;
 		}
 
@@ -150,7 +150,7 @@ public class InternFormulaParser {
 		try {
 			formulaParseTree = formula();
 		} catch (InternFormulaParserException parseExeption) {
-			errorCharacterPosition = currentTokenParseIndex;
+			errorTokenIndex = currentTokenParseIndex;
 		}
 
 		return formulaParseTree;

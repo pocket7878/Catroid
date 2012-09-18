@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import android.test.suitebuilder.annotation.Smoke;
 import android.widget.EditText;
 import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -144,8 +145,13 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("rand");
-		assertEquals("Wrong button clicked", "rand( 0 , 1 )",
-				text.getText().toString().substring(0, "rand( 0 , 1 )".length()));
+		assertEquals(
+				"Wrong button clicked",
+				getActivity().getString(R.string.formula_editor_function_rand) + "( 0 , 1 )",
+				text.getText()
+						.toString()
+						.substring(0,
+								(getActivity().getString(R.string.formula_editor_function_rand) + "( 0 , 1 )").length()));
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
@@ -156,6 +162,8 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 	}
 
 	public void testKeysFromFunctionKeyboard() {
+
+		String functionString = "";
 
 		solo.clickOnEditText(0);
 		//		solo.clickOnEditText(0);
@@ -171,37 +179,49 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 
 		catKeyboardClicker.clickOnKey("keyboardswitch");
 		catKeyboardClicker.clickOnKey("cos");
-		assertEquals("Wrong button clicked", "cos( 0 )", text.getText().toString().substring(0, "cos( 0 )".length()));
+		functionString = getActivity().getString(R.string.formula_editor_function_cos) + "( 0 )";
+		assertEquals("Wrong button clicked", functionString,
+				text.getText().toString().substring(0, functionString.length()));
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("sin");
-		assertEquals("Wrong button clicked", "sin( 0 )", text.getText().toString().substring(0, "sin( 0 )".length()));
+		functionString = getActivity().getString(R.string.formula_editor_function_sin) + "( 0 )";
+		assertEquals("Wrong button clicked", functionString,
+				text.getText().toString().substring(0, functionString.length()));
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("tan");
-		assertEquals("Wrong button clicked", "tan( 0 )", text.getText().toString().substring(0, "tan( 0 )".length()));
+		functionString = getActivity().getString(R.string.formula_editor_function_tan) + "( 0 )";
+		assertEquals("Wrong button clicked", functionString,
+				text.getText().toString().substring(0, functionString.length()));
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("ln");
-		assertEquals("Wrong button clicked", "ln( 0 )", text.getText().toString().substring(0, "ln( 0 )".length()));
+		functionString = getActivity().getString(R.string.formula_editor_function_ln) + "( 0 )";
+		assertEquals("Wrong button clicked", functionString,
+				text.getText().toString().substring(0, functionString.length()));
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("log");
-		assertEquals("Wrong button clicked", "log( 0 )", text.getText().toString().substring(0, "log( 0 )".length()));
+		functionString = getActivity().getString(R.string.formula_editor_function_log) + "( 0 )";
+		assertEquals("Wrong button clicked", functionString,
+				text.getText().toString().substring(0, functionString.length()));
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("sqrt");
-		assertEquals("Wrong button clicked", "sqrt( 0 )", text.getText().toString().substring(0, "sqrt( 0 )".length()));
+		functionString = getActivity().getString(R.string.formula_editor_function_sqrt) + "( 0 )";
+		assertEquals("Wrong button clicked", functionString,
+				text.getText().toString().substring(0, functionString.length()));
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
@@ -213,24 +233,31 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("abs");
-		assertEquals("Wrong button clicked", "abs( 0 )", text.getText().toString().substring(0, "abs( 0 )".length()));
+		functionString = getActivity().getString(R.string.formula_editor_function_abs) + "( 0 )";
+		assertEquals("Wrong button clicked", functionString,
+				text.getText().toString().substring(0, functionString.length()));
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("round");
-		assertEquals("Wrong button clicked", "round( 0 )", text.getText().toString()
-				.substring(0, "round( 0 )".length()));
+		functionString = getActivity().getString(R.string.formula_editor_function_round) + "( 0 )";
+		assertEquals("Wrong button clicked", functionString,
+				text.getText().toString().substring(0, functionString.length()));
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("pi");
-		assertEquals("Wrong button clicked", "pi", text.getText().toString().substring(0, "pi".length()));
+		functionString = getActivity().getString(R.string.formula_editor_function_pi);
+		assertEquals("Wrong button clicked", functionString,
+				text.getText().toString().substring(0, functionString.length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("e");
-		assertEquals("Wrong button clicked", "e", text.getText().toString().substring(0, "e".length()));
+		functionString = getActivity().getString(R.string.formula_editor_function_e);
+		assertEquals("Wrong button clicked", functionString,
+				text.getText().toString().substring(0, functionString.length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		solo.goBack();
@@ -240,6 +267,8 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 	}
 
 	public void testKeysFromSensorKeyboard() {
+
+		String sensorString = "";
 
 		//		solo.clickOnEditText(0);
 		solo.clickOnEditText(0);
@@ -256,33 +285,39 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 		catKeyboardClicker.clickOnKey("keyboardswitch");
 		catKeyboardClicker.clickOnKey("keyboardswitch");
 		catKeyboardClicker.clickOnKey("x-accel");
-		assertEquals("Wrong button clicked", "X_ACCELERATION_",
-				text.getText().toString().substring(0, "X_ACCELERATION_".length()));
+		sensorString = getActivity().getString(R.string.formula_editor_sensor_x_acceleration);
+		assertEquals("Wrong button clicked", sensorString, text.getText().toString()
+				.substring(0, sensorString.length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("y-accel");
-		assertEquals("Wrong button clicked", "Y_ACCELERATION_",
-				text.getText().toString().substring(0, "Y_ACCELERATION_".length()));
+		sensorString = getActivity().getString(R.string.formula_editor_sensor_y_acceleration);
+		assertEquals("Wrong button clicked", sensorString, text.getText().toString()
+				.substring(0, sensorString.length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("z-accel");
-		assertEquals("Wrong button clicked", "Z_ACCELERATION_",
-				text.getText().toString().substring(0, "Z_ACCELERATION_".length()));
+		sensorString = getActivity().getString(R.string.formula_editor_sensor_z_acceleration);
+		assertEquals("Wrong button clicked", sensorString, text.getText().toString()
+				.substring(0, sensorString.length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("pitch");
-		assertEquals("Wrong button clicked", "PITCH_ORIENTATION_",
-				text.getText().toString().substring(0, "PITCH_ORIENTATION_".length()));
+		sensorString = getActivity().getString(R.string.formula_editor_sensor_pitch_orientation);
+		assertEquals("Wrong button clicked", sensorString, text.getText().toString()
+				.substring(0, sensorString.length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("roll");
-		assertEquals("Wrong button clicked", "ROLL_ORIENTATION_",
-				text.getText().toString().substring(0, "ROLL_ORIENTATION_".length()));
+		sensorString = getActivity().getString(R.string.formula_editor_sensor_roll_orientation);
+		assertEquals("Wrong button clicked", sensorString, text.getText().toString()
+				.substring(0, sensorString.length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("azimuth");
-		assertEquals("Wrong button clicked", "AZIMUTH_ORIENTATION_",
-				text.getText().toString().substring(0, "AZIMUTH_ORIENTATION_".length()));
+		sensorString = getActivity().getString(R.string.formula_editor_sensor_azimuth_orientation);
+		assertEquals("Wrong button clicked", sensorString, text.getText().toString()
+				.substring(0, sensorString.length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		solo.goBack();
@@ -314,6 +349,8 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 
 	public void testChooseCostumeDialog() {
 
+		String costumeString = "";
+
 		//		solo.clickOnEditText(0);
 		solo.clickOnEditText(0);
 		solo.clickOnEditText(1);
@@ -328,51 +365,58 @@ public class CatKeyboardTest extends android.test.ActivityInstrumentationTestCas
 
 		catKeyboardClicker.clickOnKey("costume");
 		solo.clickOnText("COSTUME_X_");
+		costumeString = getActivity().getString(R.string.formula_editor_costume_x);
 		solo.sleep(100);// without sleep it crashes x.x
-		assertEquals("Wrong button clicked", "COSTUME_X_", text.getText().toString()
-				.substring(0, "COSTUME_X_".length()));
+		assertEquals("Wrong button clicked", costumeString,
+				text.getText().toString().substring(0, costumeString.length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("costume");
 		solo.clickOnText("COSTUME_Y_");
+		costumeString = getActivity().getString(R.string.formula_editor_costume_y);
 		solo.sleep(100);
-		assertEquals("Wrong button clicked", "COSTUME_Y_", text.getText().toString()
-				.substring(0, "COSTUME_Y_".length()));
+		assertEquals("Wrong button clicked", costumeString,
+				text.getText().toString().substring(0, costumeString.length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("costume");
 		solo.clickOnText("COSTUME_GHOSTEFFECT_");
+		costumeString = getActivity().getString(R.string.formula_editor_costume_ghosteffect);
 		solo.sleep(100);
-		assertEquals("Wrong button clicked", "COSTUME_GHOSTEFFECT_",
-				text.getText().toString().substring(0, "COSTUME_GHOSTEFFECT_".length()));
+		assertEquals("Wrong button clicked", costumeString,
+				text.getText().toString().substring(0, costumeString.length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("costume");
 		solo.clickOnText("COSTUME_BRIGHTNESS_");
+		costumeString = getActivity().getString(R.string.formula_editor_costume_brightness);
 		solo.sleep(100);
-		assertEquals("Wrong button clicked", "COSTUME_BRIGHTNESS_",
-				text.getText().toString().substring(0, "COSTUME_BRIGHTNESS_".length()));
+		assertEquals("Wrong button clicked", costumeString,
+				text.getText().toString().substring(0, costumeString.length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("costume");
 		solo.clickOnText("COSTUME_SIZE_");
+		costumeString = getActivity().getString(R.string.formula_editor_costume_size);
 		solo.sleep(100);
-		assertEquals("Wrong button clicked", "COSTUME_SIZE_",
-				text.getText().toString().substring(0, "COSTUME_SIZE_".length()));
+		assertEquals("Wrong button clicked", costumeString,
+				text.getText().toString().substring(0, costumeString.length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("costume");
 		solo.clickOnText("COSTUME_ROTATION_");
+		costumeString = getActivity().getString(R.string.formula_editor_costume_rotation);
 		solo.sleep(100);
-		assertEquals("Wrong button clicked", "COSTUME_ROTATION_",
-				text.getText().toString().substring(0, "COSTUME_ROTATION_".length()));
+		assertEquals("Wrong button clicked", costumeString,
+				text.getText().toString().substring(0, costumeString.length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("costume");
 		solo.clickOnText("COSTUME_LAYER_");
+		costumeString = getActivity().getString(R.string.formula_editor_costume_layer);
 		solo.sleep(100);
-		assertEquals("Wrong button clicked", "COSTUME_LAYER_",
-				text.getText().toString().substring(0, "COSTUME_LAYER_".length()));
+		assertEquals("Wrong button clicked", costumeString,
+				text.getText().toString().substring(0, costumeString.length()));
 		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.clickOnKey("costume");
