@@ -231,6 +231,10 @@
     <string name="brick_repeat">Repeat</string>
     <string name="times_label">times</string>
     <string name="brick_loop_end">End of loop</string>
+    <string name="brick_if_begin">If</string>
+    <string name="brick_if_begin_second_part">is true</string>
+    <string name="brick_if_else">Else</string>
+    <string name="brick_if_end">End If</string>
     <!-- Actions -->
     <string name="action_tapped">tapped</string>
     <string name="action_doubleTapped">double tapped</string>
