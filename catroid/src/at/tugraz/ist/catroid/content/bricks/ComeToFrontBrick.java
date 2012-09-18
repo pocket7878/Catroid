@@ -25,11 +25,13 @@ package at.tugraz.ist.catroid.content.bricks;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -51,8 +53,7 @@ public class ComeToFrontBrick implements Brick {
 
 	@Override
 	public void execute() {
-		List<Sprite> spriteList = ProjectManager.getInstance()
-				.getCurrentProject().getSpriteList();
+		List<Sprite> spriteList = ProjectManager.getInstance().getCurrentProject().getSpriteList();
 		int highestPosition = 0;
 		for (Sprite sprite : spriteList) {
 			if (highestPosition < sprite.costume.zPosition) {
@@ -96,7 +97,40 @@ public class ComeToFrontBrick implements Brick {
 
 	@Override
 	public void executeLiveWallpaper() {
-		// TODO Auto-generated method stub
+		List<Sprite> sprites = ProjectManager.getInstance().getCurrentProject().getSpriteList();
+		WallpaperCostume wallpaperCostume = sprite.getWallpaperCostume();
+
+		if (wallpaperCostume == null) {
+			wallpaperCostume = new WallpaperCostume(sprite, null);
+		}
+
+		int position = wallpaperCostume.getzPosition();
+
+		for (int index = position + 1; index < sprites.size(); index++) {
+			for (Sprite sprite : sprites) {
+				wallpaperCostume = sprite.getWallpaperCostume();
+
+				if (wallpaperCostume == null) {
+					wallpaperCostume = new WallpaperCostume(sprite, null);
+				}
+
+				if (wallpaperCostume.getzPosition() == index) {
+					wallpaperCostume.setzPosition(index - 1);
+					break;
+				}
+
+			}
+
+		}
+
+		sprite.getWallpaperCostume().setzPosition(sprites.size() - 1);
+
+		for (Sprite sprite : sprites) {
+			wallpaperCostume = sprite.getWallpaperCostume();
+			if (wallpaperCostume != null) {
+				Log.v("DEPTH", String.valueOf(wallpaperCostume.getzPosition()));
+			}
+		}
 
 	}
 }

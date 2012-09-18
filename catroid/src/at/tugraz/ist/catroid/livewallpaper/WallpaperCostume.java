@@ -37,12 +37,14 @@ public class WallpaperCostume {
 	private Sprite sprite;
 	private Bitmap costume = null;
 	private Bitmap costumeRotated = null;
-	private Matrix rotationMatrix = null;
+	private Matrix landscapeRotationMatrix = null;
 
 	private int x;
 	private int y;
 	private int top;
 	private int left;
+
+	private int zPosition;
 
 	private float alphaValue = 1f;
 	private float brightness = 1f;
@@ -62,9 +64,10 @@ public class WallpaperCostume {
 
 		this.wallpaperHelper = WallpaperHelper.getInstance();
 		this.sprite = sprite;
+		this.zPosition = wallpaperHelper.getProject().getSpriteList().indexOf(sprite);
 
-		this.rotationMatrix = new Matrix();
-		rotationMatrix.postRotate(90.0f);
+		this.landscapeRotationMatrix = new Matrix();
+		landscapeRotationMatrix.postRotate(90.0f);
 
 		//TODO: refactor the hard-coded value
 		if (sprite.getName().equals("Background")) {
@@ -152,7 +155,7 @@ public class WallpaperCostume {
 		} else {
 			if (costumeRotated == null) {
 				costumeRotated = Bitmap.createBitmap(costume, 0, 0, costume.getWidth(), costume.getHeight(),
-						rotationMatrix, false);
+						landscapeRotationMatrix, false);
 			}
 
 			if (!coordsSwapped) {
@@ -371,6 +374,14 @@ public class WallpaperCostume {
 			}
 		}
 		this.costume = resultBitmap;
+	}
+
+	public int getzPosition() {
+		return zPosition;
+	}
+
+	public void setzPosition(int zPosition) {
+		this.zPosition = zPosition;
 	}
 
 }

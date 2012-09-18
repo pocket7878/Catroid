@@ -137,16 +137,19 @@ public class LiveWallpaper extends WallpaperService {
 				if (c != null && sprites != null) {
 
 					WallpaperCostume wallpaperCostume;
-					for (Sprite sprite : sprites) {
-						wallpaperCostume = sprite.getWallpaperCostume();
-						if (wallpaperCostume != null && wallpaperCostume.getCostume() != null
-								&& !wallpaperCostume.isCostumeHidden()) {
-							c.drawBitmap(wallpaperCostume.getCostume(), wallpaperCostume.getTop(),
-									wallpaperCostume.getLeft(), paint);
+					for (int position = 0; position < sprites.size(); position++) {
+						Sprites: for (Sprite sprite : sprites) {
+							wallpaperCostume = sprite.getWallpaperCostume();
+							if (wallpaperCostume != null && wallpaperCostume.getzPosition() == position) {
+								if (wallpaperCostume.getCostume() != null && !wallpaperCostume.isCostumeHidden()) {
+									c.drawBitmap(wallpaperCostume.getCostume(), wallpaperCostume.getTop(),
+											wallpaperCostume.getLeft(), paint);
 
+								}
+								break Sprites;
+							}
 						}
 					}
-
 				}
 
 			} finally {
@@ -164,7 +167,6 @@ public class LiveWallpaper extends WallpaperService {
 		@Override
 		public void onTouchEvent(MotionEvent event) {
 
-			Sprite spriteToExecute = null;
 			PointerCoords coords = new PointerCoords();
 
 			int action = event.getActionMasked();
@@ -172,20 +174,23 @@ public class LiveWallpaper extends WallpaperService {
 				for (int pointerIndex = 0; pointerIndex < event.getPointerCount(); pointerIndex++) {
 
 					event.getPointerCoords(pointerIndex, coords);
+					WallpaperCostume wallpaperCostume;
 
-					for (Sprite sprite : sprites) {
-						if (sprite.getWallpaperCostume() != null
-								&& sprite.getWallpaperCostume().touchedInsideTheCostume(coords.x, coords.y)) {
-							spriteToExecute = sprite;
+					Positions: for (int position = sprites.size() - 1; position >= 0; position--) {
+						Sprites: for (Sprite sprite : sprites) {
+							wallpaperCostume = sprite.getWallpaperCostume();
+							if (wallpaperCostume != null && wallpaperCostume.getzPosition() == position) {
+								if (wallpaperCostume.touchedInsideTheCostume(coords.x, coords.y)) {
+									sprite.startWhenScripts("Tapped");
+									draw();
+									break Positions;
+								}
 
+								break Sprites;
+							}
 						}
-
 					}
 
-					if (spriteToExecute != null) {
-						spriteToExecute.startWhenScripts("Tapped");
-						draw();
-					}
 				}
 			}
 		}
