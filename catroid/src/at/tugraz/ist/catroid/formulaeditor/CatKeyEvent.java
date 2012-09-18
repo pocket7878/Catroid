@@ -185,33 +185,33 @@ public class CatKeyEvent extends KeyEvent {
 
 	private List<InternToken> buildNumber(String numberValue) {
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(numberValue, InternTokenType.NUMBER));
+		returnList.add(new InternToken(InternTokenType.NUMBER, numberValue));
 		return returnList;
 	}
 
 	private List<InternToken> buildCostume(String costumeName) {
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(costumeName, InternTokenType.COSTUME));
+		returnList.add(new InternToken(InternTokenType.COSTUME, costumeName));
 		return returnList;
 	}
 
 	private List<InternToken> buildBracket(String bracketValue) {
 		List<InternToken> returnList = new LinkedList<InternToken>();
 		returnList.add(new InternToken(InternTokenType.BRACKET_OPEN));
-		returnList.add(new InternToken(bracketValue, InternTokenType.NUMBER));
+		returnList.add(new InternToken(InternTokenType.NUMBER, bracketValue));
 		returnList.add(new InternToken(InternTokenType.BRACKET_CLOSE));
 		return returnList;
 	}
 
 	private List<InternToken> buildOperator(String operatorName) {
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(operatorName, InternTokenType.OPERATOR));
+		returnList.add(new InternToken(InternTokenType.OPERATOR, operatorName));
 		return returnList;
 	}
 
 	private List<InternToken> buildSensor(String sensorName) {
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(sensorName, InternTokenType.SENSOR));
+		returnList.add(new InternToken(InternTokenType.SENSOR, sensorName));
 		return returnList;
 	}
 
@@ -219,15 +219,15 @@ public class CatKeyEvent extends KeyEvent {
 			String secondParameterNumberValue) {
 
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(functionName, InternTokenType.FUNCTION_NAME));
+		returnList.add(new InternToken(InternTokenType.FUNCTION_NAME, functionName));
 
 		returnList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
 
-		returnList.add(new InternToken(firstParameterNumberValue, InternTokenType.NUMBER));
+		returnList.add(new InternToken(InternTokenType.NUMBER, firstParameterNumberValue));
 
 		returnList.add(new InternToken(InternTokenType.FUNCTION_PARAMETER_DELIMITER));
 
-		returnList.add(new InternToken(secondParameterNumberValue, InternTokenType.NUMBER));
+		returnList.add(new InternToken(InternTokenType.NUMBER, secondParameterNumberValue));
 
 		returnList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
 
@@ -238,11 +238,11 @@ public class CatKeyEvent extends KeyEvent {
 	private List<InternToken> buildSingleParameterFunction(String functionName, String parameterNumberValue) {
 
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(functionName, InternTokenType.FUNCTION_NAME));
+		returnList.add(new InternToken(InternTokenType.FUNCTION_NAME, functionName));
 
 		returnList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
 
-		returnList.add(new InternToken(parameterNumberValue, InternTokenType.NUMBER));
+		returnList.add(new InternToken(InternTokenType.NUMBER, parameterNumberValue));
 
 		returnList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
 
@@ -253,7 +253,7 @@ public class CatKeyEvent extends KeyEvent {
 	private List<InternToken> buildFunctionWithoutParametersAndBrackets(String functionName) {
 
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(functionName, InternTokenType.FUNCTION_NAME));
+		returnList.add(new InternToken(InternTokenType.FUNCTION_NAME, functionName));
 
 		return returnList;
 

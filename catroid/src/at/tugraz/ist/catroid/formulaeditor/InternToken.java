@@ -33,7 +33,7 @@ public class InternToken {
 		this.internTokenType = internTokenType;
 	}
 
-	public InternToken(String tokenStringValue, InternTokenType internTokenType) {
+	public InternToken(InternTokenType internTokenType, String tokenStringValue) {
 		this.tokenStringValue = tokenStringValue;
 		this.internTokenType = internTokenType;
 	}

@@ -751,4 +751,9 @@ public class InternFormula {
 		return this.externCursorPosition;
 	}
 
+	private void setExternCursorLeftToToken(int internTokenIndex) {
+		// TODO Auto-generated method stub
+
+	}
+
 }
