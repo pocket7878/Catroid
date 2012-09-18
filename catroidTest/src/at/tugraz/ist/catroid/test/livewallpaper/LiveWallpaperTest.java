@@ -37,6 +37,7 @@ import at.tugraz.ist.catroid.content.bricks.ChangeGhostEffectBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeSizeByNBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeXByBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeYByBrick;
+import at.tugraz.ist.catroid.content.bricks.ComeToFrontBrick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.NextCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
@@ -102,6 +103,7 @@ public class LiveWallpaperTest extends AndroidTestCase {
 		this.chasireCatBitmap = catroidSprite.getCostumeDataList().get(2).getImageBitmap();
 
 		this.wallpaperHelper = WallpaperHelper.getInstance();
+		wallpaperHelper.setProject(defaultProject);
 	}
 
 	public boolean sameBitmaps(Bitmap first, Bitmap second) {
@@ -341,5 +343,26 @@ public class LiveWallpaperTest extends AndroidTestCase {
 		float alpha = 100 - (wallpaperCostume.getAlphaValue() * 100f);
 
 		assertEquals("The alpha value was not set properly", alpha, initialAlpha1 + initialAlpha2);
+	}
+
+	public void testComeToFrontBrick() {
+		WallpaperCostume backgroundCostume = new WallpaperCostume(backgroundSprite, backgroundSprite
+				.getCostumeDataList().get(0));
+		WallpaperCostume catroidCostume = new WallpaperCostume(catroidSprite, catroidSprite.getCostumeDataList().get(0));
+
+		int backgroundPosition = backgroundCostume.getzPosition();
+		int catroidPosition = catroidCostume.getzPosition();
+
+		assertTrue("The position parameter has not been initialized properly", backgroundPosition == 0
+				&& catroidPosition == 1);
+
+		Brick brick = new ComeToFrontBrick(backgroundSprite);
+		brick.executeLiveWallpaper();
+
+		backgroundPosition = backgroundCostume.getzPosition();
+		catroidPosition = catroidCostume.getzPosition();
+
+		assertTrue("The position parameter has not been set properly", backgroundPosition == 1 && catroidPosition == 0);
+
 	}
 }
