@@ -3,7 +3,7 @@ package at.tugraz.ist.catroid.test.content.brick;
 import junit.framework.TestCase;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
-import at.tugraz.ist.catroid.content.bricks.SetAngularVelocityBrick;
+import at.tugraz.ist.catroid.content.bricks.TurnLeftSpeedBrick;
 import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
 
@@ -11,14 +11,14 @@ public class SetAngularVelocityBrickTest extends TestCase {
 	private float degreesPerSec = 3.50f;
 	private PhysicWorld physicWorld;
 	private Sprite sprite;
-	private SetAngularVelocityBrick angularVelocityBrick;
+	private TurnLeftSpeedBrick angularVelocityBrick;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		sprite = new Sprite("testSprite");
 		physicWorld = new PhysicWorldMock();
-		angularVelocityBrick = new SetAngularVelocityBrick(physicWorld, sprite, degreesPerSec);
+		angularVelocityBrick = new TurnLeftSpeedBrick(physicWorld, sprite, degreesPerSec);
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class SetAngularVelocityBrickTest extends TestCase {
 	}
 
 	public void testNullSprite() {
-		angularVelocityBrick = new SetAngularVelocityBrick(null, sprite, degreesPerSec);
+		angularVelocityBrick = new TurnLeftSpeedBrick(null, sprite, degreesPerSec);
 		try {
 			angularVelocityBrick.execute();
 			fail("Execution of SetAngularVelocityBrick with null Sprite did not cause a "

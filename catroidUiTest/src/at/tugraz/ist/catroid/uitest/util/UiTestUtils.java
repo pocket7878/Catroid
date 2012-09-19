@@ -193,14 +193,6 @@ public class UiTestUtils {
 		brickCategoryMap.put(R.string.brick_repeat, R.string.category_control);
 
 		brickCategoryMap.put(R.string.brick_motor_action, R.string.category_lego_nxt);
-
-		brickCategoryMap.put(R.string.brick_set_gravity, R.string.category_physic);
-		brickCategoryMap.put(R.string.brick_set_mass, R.string.category_physic);
-		brickCategoryMap.put(R.string.brick_set_velocity, R.string.category_physic);
-		brickCategoryMap.put(R.string.brick_set_angular_velocity, R.string.category_physic);
-		brickCategoryMap.put(R.string.brick_set_friction, R.string.category_physic);
-		brickCategoryMap.put(R.string.brick_set_bounce_factor, R.string.category_physic);
-		brickCategoryMap.put(R.string.brick_set_physic_object_type, R.string.category_physic);
 	}
 
 	public static int getBrickCategory(Solo solo, int brickStringId) {

@@ -55,7 +55,6 @@ public class GlideToBrickTest extends AndroidTestCase {
 
 		GlideToBrick glideToBrick = new GlideToBrick(physicWorld, sprite, xPosition, yPosition, duration);
 		glideToBrick.execute();
-		boolean isPhysicObject = physicWorld.isPhysicObject(sprite);
 		assertFalse(physicWorld.isPhysicObject(sprite));
 		Thread.sleep(1200);
 

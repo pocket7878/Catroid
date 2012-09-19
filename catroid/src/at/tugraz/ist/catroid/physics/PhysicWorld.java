@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.content.Costume;
 import at.tugraz.ist.catroid.content.Sprite;
 
@@ -47,6 +46,7 @@ public class PhysicWorld implements Serializable {
 	private final transient Map<Sprite, PhysicObject> physicObjects;
 	private final transient PhysicShapeBuilder shapeBuilder;
 	private transient Box2DDebugRenderer renderer;
+	public int ignoreSteps = 0;
 
 	public PhysicWorld() {
 		physicObjects = new HashMap<Sprite, PhysicObject>();
@@ -56,8 +56,13 @@ public class PhysicWorld implements Serializable {
 	}
 
 	public void step(float deltaTime) {
-		world.step(deltaTime, PhysicSettings.World.VELOCITY_ITERATIONS, PhysicSettings.World.POSITION_ITERATIONS);
+		if (ignoreSteps < 6) {
+			ignoreSteps += 1;
+		} else {
+			world.step(deltaTime, PhysicSettings.World.VELOCITY_ITERATIONS, PhysicSettings.World.POSITION_ITERATIONS);
+		}
 		updateSprites();
+
 	}
 
 	private void updateSprites() {
@@ -89,7 +94,7 @@ public class PhysicWorld implements Serializable {
 		world.setGravity(gravity);
 	}
 
-	public PhysicObject createPhysicObject(Sprite sprite) {
+	public PhysicObject getPhysicObject(Sprite sprite) {
 		if (physicObjects.containsKey(sprite)) {
 			return physicObjects.get(sprite);
 		}
@@ -100,23 +105,13 @@ public class PhysicWorld implements Serializable {
 		return physicObject;
 	}
 
-	public PhysicObject getPhysicObject(Sprite sprite) {
-		return createPhysicObject(sprite);
-	}
-
 	public boolean isPhysicObject(Sprite sprite) {
 		return physicObjects.containsKey(sprite);
 	}
 
 	public void changeCostume(Sprite sprite) {
-
-		String name = sprite.getName();
-
-		if (name.equalsIgnoreCase("background")) {
-			return;
-		}
-		CostumeData costumeData = sprite.costume.getCostumeData();
-		Shape[] shapes = shapeBuilder.createShape(costumeData);
+		Shape[] shapes = shapeBuilder.getShape(sprite.costume.getCostumeData(), sprite.costume.getSize());
 		this.getPhysicObject(sprite).setShape(shapes);
 	}
+
 }

@@ -312,6 +312,7 @@ public class Costume extends Image {
 		this.scaleX = size;
 		this.scaleY = size;
 		scaleLock.release();
+		//TODO: inform Physicworld
 	}
 
 	public float getSize() {

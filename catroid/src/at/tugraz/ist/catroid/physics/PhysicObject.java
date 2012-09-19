@@ -37,7 +37,7 @@ public class PhysicObject {
 
 	private final Body body;
 	private final FixtureDef fixtureDef = new FixtureDef();
-	private Shape[] shapes;
+	private Shape[] currentShape;
 	private Type type;
 	private float mass;
 	private boolean ifOnEdgeBounce = false;
@@ -56,10 +56,10 @@ public class PhysicObject {
 	}
 
 	public void setShape(Shape[] shapes) {
-		if (this.shapes == shapes) {
+		if (this.currentShape == shapes) {
 			return;
 		}
-		this.shapes = shapes;
+		this.currentShape = shapes;
 
 		List<Fixture> fixturesOld = new ArrayList<Fixture>(body.getFixtureList());
 

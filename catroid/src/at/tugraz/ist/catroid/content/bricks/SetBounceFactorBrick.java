@@ -97,8 +97,7 @@ public class SetBounceFactorBrick implements Brick, OnClickListener {
 		AlertDialog.Builder dialog = new AlertDialog.Builder(context);
 		final EditText input = new EditText(context);
 		input.setText(String.valueOf(bounceFactor));
-		input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
-				| InputType.TYPE_NUMBER_FLAG_SIGNED);
+		input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 		input.setSelectAllOnFocus(true);
 		dialog.setView(input);
 		dialog.setOnCancelListener((OnCancelListener) context);

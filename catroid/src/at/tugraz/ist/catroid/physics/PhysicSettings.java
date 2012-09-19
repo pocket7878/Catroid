@@ -22,6 +22,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class PhysicSettings {
 
+	public final static boolean DEBUGFLAG = true;
+
 	public static class Render {
 		public final static boolean RENDER_COLLISION_FRAMES = true;
 		public final static boolean RENDER_BODIES = true;
@@ -39,7 +41,6 @@ public class PhysicSettings {
 		public final static boolean IGNORE_SLEEPING_OBJECTS = false;
 
 		public static class BoundaryBox {
-			//			public final static boolean DEBUGFLAG = true;
 			public final static int FRAME_SIZE = 1;
 			public final static short COLLISION_MASK = 0x0002;
 		}

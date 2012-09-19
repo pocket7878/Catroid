@@ -397,7 +397,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 	}
 
 	protected PhysicObject createPhysicObject(PhysicObject.Type type, Shape shape) {
-		PhysicObject physicObject = physicWorld.createPhysicObject(new Sprite("TestSprite"));
+		PhysicObject physicObject = physicWorld.getPhysicObject(new Sprite("TestSprite"));
 
 		if (type != null) {
 			physicObject.setType(type);

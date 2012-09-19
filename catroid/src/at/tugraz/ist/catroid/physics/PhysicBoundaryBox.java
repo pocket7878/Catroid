@@ -64,7 +64,12 @@ public class PhysicBoundaryBox {
 
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
-		fixtureDef.filter.categoryBits = PhysicSettings.World.BoundaryBox.COLLISION_MASK;
+		if (PhysicSettings.DEBUGFLAG) {
+			fixtureDef.filter.categoryBits = PhysicSettings.Object.COLLISION_MASK;
+		} else {
+			fixtureDef.filter.categoryBits = PhysicSettings.World.BoundaryBox.COLLISION_MASK;
+		}
+
 		fixtureDef.filter.maskBits = PhysicSettings.Object.COLLISION_MASK;
 
 		Body body = world.createBody(bodyDef);

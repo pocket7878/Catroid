@@ -32,26 +32,29 @@ import com.badlogic.gdx.physics.box2d.Shape;
  */
 public class PhysicShapeBuilder {
 
-	private final Map<CostumeData, Shape[]> shapes;
+	private final Map<String, Shape[]> shapes;
 
 	public PhysicShapeBuilder() {
-		shapes = new HashMap<CostumeData, Shape[]>();
+		shapes = new HashMap<String, Shape[]>();
 	}
 
-	public Shape[] createShape(CostumeData costumeData) {
-		if (shapes.containsKey(costumeData)) {
-			return shapes.get(costumeData);
+	public Shape[] getShape(CostumeData costumeData, float scaleFactor) {
+		int scale = (int) (scaleFactor * 10);
+		String key = costumeData.getChecksum() + scale;
+
+		if (shapes.containsKey(key)) {
+			return shapes.get(key);
 		}
 
 		int[] imageResolution = costumeData.getResolution();
-		float width = PhysicWorldConverter.lengthCatToBox2d(imageResolution[0]);
-		float height = PhysicWorldConverter.lengthCatToBox2d(imageResolution[1]);
+		float width = PhysicWorldConverter.lengthCatToBox2d(imageResolution[0] * scaleFactor);
+		float height = PhysicWorldConverter.lengthCatToBox2d(imageResolution[1] * scaleFactor);
 
 		PolygonShape shape = new PolygonShape();
 		shape.setAsBox(width / 2f, height / 2f);
 
 		Shape[] shapeArray = new Shape[] { shape };
-		shapes.put(costumeData, shapeArray);
+		shapes.put(key, shapeArray);
 		return shapeArray;
 	}
 }

@@ -61,7 +61,7 @@ public class PhysicShapeBuilderTest extends AndroidTestCase {
 
 	public void testRectangle() {
 
-		Shape[] shapes = builder.createShape(costume.getCostumeData());
+		Shape[] shapes = builder.getShape(costume.getCostumeData(), 1.0f);
 		PolygonShape polyShape = (PolygonShape) shapes[0];//[19/67]
 
 		float[][] points = getRectPointsOfImage();

@@ -37,6 +37,8 @@ public class PhysicObjectConverter {
 	}
 
 	public void convert(Project project) {
+		PhysicWorld physicWorld = project.getPhysicWorld();
+		physicWorld.ignoreSteps = 0;
 		for (Sprite sprite : project.getSpriteList()) {
 
 			scriptLoop: for (int scriptIndex = 0; scriptIndex < sprite.getNumberOfScripts(); scriptIndex++) {
@@ -44,7 +46,7 @@ public class PhysicObjectConverter {
 
 				for (Brick brick : script.getBrickList()) {
 					if (brick instanceof SetPhysicObjectTypeBrick) {
-						project.getPhysicWorld().createPhysicObject(sprite);
+						physicWorld.getPhysicObject(sprite);
 						break scriptLoop;
 					}
 				}

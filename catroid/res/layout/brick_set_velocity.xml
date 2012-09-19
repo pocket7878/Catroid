@@ -31,8 +31,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true" >
+        android:layout_height="wrap_content" >
 
         <TextView
             style="@style/brick_text_style"
@@ -44,8 +43,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true" >
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/brick_set_velocity_x_text_view"
@@ -70,7 +68,7 @@
             android:maxLength="6"
             android:maxLines="1"
             android:minWidth="50dip"
-            android:text="0.0" >
+            android:text="@string/default_velocity_x" >
         </EditText>
         
        <TextView
@@ -98,7 +96,7 @@
             android:maxLength="6"
             android:maxLines="1"
             android:minWidth="50dip"
-            android:text="0.0" >
+            android:text="@string/default_velocity_y" >
         </EditText>
         
         <TextView

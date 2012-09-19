@@ -86,6 +86,17 @@ public class GlideToBrick implements Brick, OnClickListener {
 
 		long startTime = System.currentTimeMillis();
 		int duration = durationInMilliSeconds;
+
+		if (physicWorld.isPhysicObject(sprite)) {
+			PhysicObject physicObject = physicWorld.getPhysicObject(sprite);
+			if (oldPhysicObjectType == null) { // Multi-Touching is bad 
+				oldPhysicObjectType = physicObject.getType();
+			}
+			physicObject.setVelocity(new Vector2());
+			physicObject.setRotationSpeed(0.0f);
+			physicObject.setType(Type.FIXED);
+		}
+
 		while (duration > 0) {
 			if (!sprite.isAlive(Thread.currentThread())) {
 				break;
@@ -121,14 +132,13 @@ public class GlideToBrick implements Brick, OnClickListener {
 
 			if (physicWorld.isPhysicObject(sprite)) {
 				PhysicObject physicObject = physicWorld.getPhysicObject(sprite);
-				oldPhysicObjectType = physicObject.getType();
 
-				physicObject.setVelocity(new Vector2());
-				physicObject.setRotationSpeed(0.0f);
-				physicObject.setType(Type.FIXED);
 				Vector2 newPos = new Vector2(xDestination, yDestination);
-				physicWorld.getPhysicObject(sprite).setXYPosition(PhysicWorldConverter.vecCatToBox2d(newPos));
+				physicObject.setVelocity(new Vector2());
+				physicObject.setXYPosition(PhysicWorldConverter.vecCatToBox2d(newPos));
 				physicObject.setType(oldPhysicObjectType);
+				oldPhysicObjectType = null;
+
 			} else {
 				sprite.costume.aquireXYWidthHeightLock();
 				sprite.costume.setXYPosition(xDestination, yDestination);
@@ -139,18 +149,23 @@ public class GlideToBrick implements Brick, OnClickListener {
 	}
 
 	private void updatePositions(int timePassed, int duration) {
+		if (duration <= 0) {
+			return;
+		}
 		sprite.costume.aquireXYWidthHeightLock();
 		float xPosition = sprite.costume.getXPosition();
 		float yPosition = sprite.costume.getYPosition();
 
-		xPosition += ((float) timePassed / duration) * (xDestination - xPosition);
-		yPosition += ((float) timePassed / duration) * (yDestination - yPosition);
-
 		if (physicWorld.isPhysicObject(sprite)) {
 			sprite.costume.releaseXYWidthHeightLock();
+			xPosition = (xDestination - xPosition) / (duration / 1000f);
+			yPosition = (yDestination - yPosition) / (duration / 1000f);
 			Vector2 newPos = new Vector2(xPosition, yPosition);
-			physicWorld.getPhysicObject(sprite).setXYPosition(PhysicWorldConverter.vecCatToBox2d(newPos));
+			physicWorld.getPhysicObject(sprite).setVelocity(PhysicWorldConverter.vecCatToBox2d(newPos));
+			System.out.println("VEL  velocity :" + PhysicWorldConverter.vecCatToBox2d(newPos));
 		} else {
+			xPosition += ((float) timePassed / duration) * (xDestination - xPosition);
+			yPosition += ((float) timePassed / duration) * (yDestination - yPosition);
 			sprite.costume.setXYPosition(xPosition, yPosition);
 			sprite.costume.releaseXYWidthHeightLock();
 		}

@@ -60,6 +60,7 @@ import at.tugraz.ist.catroid.content.bricks.GlideToBrick;
 import at.tugraz.ist.catroid.content.bricks.GoNStepsBackBrick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.IfOnEdgeBounceBrick;
+import at.tugraz.ist.catroid.content.bricks.TurnLeftSpeedBrick;
 import at.tugraz.ist.catroid.content.bricks.MoveNStepsBrick;
 import at.tugraz.ist.catroid.content.bricks.NXTMotorActionBrick;
 import at.tugraz.ist.catroid.content.bricks.NXTMotorStopBrick;
@@ -73,7 +74,7 @@ import at.tugraz.ist.catroid.content.bricks.PointInDirectionBrick;
 import at.tugraz.ist.catroid.content.bricks.PointInDirectionBrick.Direction;
 import at.tugraz.ist.catroid.content.bricks.PointToBrick;
 import at.tugraz.ist.catroid.content.bricks.RepeatBrick;
-import at.tugraz.ist.catroid.content.bricks.SetAngularVelocityBrick;
+import at.tugraz.ist.catroid.content.bricks.TurnRightSpeedBrick;
 import at.tugraz.ist.catroid.content.bricks.SetBounceFactorBrick;
 import at.tugraz.ist.catroid.content.bricks.SetBrightnessBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
@@ -126,11 +127,13 @@ public class AddBrickDialog extends Dialog {
 		motionBrickList.add(new SetMassBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_MASS));
 		motionBrickList.add(new SetGravityBrick(physicWorld, sprite, PhysicSettings.World.DEFAULT_GRAVITY));
 		motionBrickList.add(new SetVelocityBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_VELOCITY));
-		motionBrickList.add(new SetAngularVelocityBrick(physicWorld, sprite,
+		motionBrickList.add(new TurnLeftSpeedBrick(physicWorld, sprite,
 				PhysicSettings.Object.DEFAULT_ANGULAR_VELOCITY));
-		motionBrickList
-				.add(new SetBounceFactorBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_FRICTION * 100));
-		motionBrickList.add(new SetFrictionBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_FRICTION));
+		motionBrickList.add(new TurnRightSpeedBrick(physicWorld, sprite,
+				PhysicSettings.Object.DEFAULT_ANGULAR_VELOCITY));
+		motionBrickList.add(new SetBounceFactorBrick(physicWorld, sprite,
+				PhysicSettings.Object.DEFAULT_RESTITUTION * 100));
+		motionBrickList.add(new SetFrictionBrick(physicWorld, sprite, PhysicSettings.Object.DEFAULT_FRICTION * 100));
 		motionBrickList.add(new PlaceAtBrick(physicWorld, sprite, 0, 0));
 		motionBrickList.add(new SetXBrick(physicWorld, sprite, 0));
 		motionBrickList.add(new SetYBrick(physicWorld, sprite, 0));
