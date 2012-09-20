@@ -846,7 +846,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		assertTrue("dialog not loaded in 5 seconds", solo.waitForText(setDescriptionDialogTitle, 0, 5000));
 		solo.clearEditText(0);
 		solo.enterText(0, lorem);
-		solo.sleep(200);
+		solo.sleep(400);
 		solo.setActivityOrientation(Solo.LANDSCAPE);
 		solo.sleep(300);
 		solo.setActivityOrientation(Solo.PORTRAIT);
@@ -891,7 +891,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		assertTrue("dialog not loaded in 5 seconds", solo.waitForText(setDescriptionDialogTitle, 0, 5000));
 		solo.clearEditText(0);
 		solo.enterText(0, lorem);
-		solo.sleep(200);
+		solo.sleep(400);
 		solo.setActivityOrientation(Solo.LANDSCAPE);
 		solo.sleep(300);
 		solo.setActivityOrientation(Solo.PORTRAIT);
@@ -931,7 +931,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.clickOnText(solo.getString(R.string.set_description));
 		solo.clearEditText(0);
 		UiTestUtils.enterText(solo, 0, UiTestUtils.PROJECTDESCRIPTION1);
-		solo.sleep(200);
+		solo.sleep(400);
 		solo.setActivityOrientation(Solo.LANDSCAPE);
 		solo.sleep(300);
 		solo.setActivityOrientation(Solo.PORTRAIT);
@@ -1113,6 +1113,28 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		solo.waitForDialogToClose(500);
 		solo.clickOnText(solo.getString(R.string.project_name)); //just to get focus for solo
 		assertTrue("List was not updated after rename", solo.searchText(UiTestUtils.PROJECTNAME3));
+	}
+
+	public void testResetActiveDialogId() {
+		createProjects();
+		solo.sleep(200);
+		solo.clickOnButton(solo.getString(R.string.my_projects));
+		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+		solo.waitForFragmentById(R.id.fr_projects_list);
+		UiTestUtils.longClickOnTextInList(solo, UiTestUtils.PROJECTNAME1);
+		solo.clickOnText(solo.getString(R.string.rename));
+		String buttonNegativeText = solo.getString(R.string.cancel_button);
+		try {
+			solo.clickOnText(buttonNegativeText);
+		} catch (AssertionFailedError e) {
+			solo.goBack();
+			solo.clickOnText(buttonNegativeText);
+		}
+		solo.waitForDialogToClose(500);
+
+		solo.setActivityOrientation(Solo.LANDSCAPE);
+		solo.sleep(300);
+		solo.assertCurrentActivity("Catroid should not crash", MyProjectsActivity.class);
 	}
 
 	public void createProjects() {
