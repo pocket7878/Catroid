@@ -222,19 +222,17 @@ public class InternFormulaParser {
 			getNextToken();
 
 		} else if (currentToken.isFunctionName()) {
-			curElem.replaceElement(FormulaElement.ElementType.BRACKET, null, null, function());
+			curElem.replaceElement(function());
 
 		} else if (currentToken.isSensor()) {
-
-			curElem.replaceElement(FormulaElement.ElementType.BRACKET, null, null, sensor());
+			curElem.replaceElement(sensor());
 
 		} else if (currentToken.isCostume()) {
-
-			curElem.replaceElement(FormulaElement.ElementType.BRACKET, null, null, costume());
+			curElem.replaceElement(costume());
 
 		} else if (currentToken.isUserVariable()) {
 
-			curElem.replaceElement(FormulaElement.ElementType.USER_VARIABLE, null, null, userVariable());
+			curElem.replaceElement(userVariable());
 
 		} else {
 			throw new InternFormulaParserException("Parse Error");
@@ -269,12 +267,12 @@ public class InternFormulaParser {
 	private FormulaElement sensor() throws InternFormulaParserException {
 		//TODO check if sensor-name exists
 
-		FormulaElement costumeTree = new FormulaElement(FormulaElement.ElementType.SENSOR,
+		FormulaElement sensorTree = new FormulaElement(FormulaElement.ElementType.SENSOR,
 				currentToken.getTokenSringValue(), null);
 
 		getNextToken();
 
-		return costumeTree;
+		return sensorTree;
 	}
 
 	private FormulaElement function() throws InternFormulaParserException {

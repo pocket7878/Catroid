@@ -109,7 +109,7 @@ public class FormulaElement implements Serializable {
 				}
 				break;
 			case FUNCTION:
-				internTokenList.add(new InternToken(InternTokenType.FUNCTION_NAME));
+				internTokenList.add(new InternToken(InternTokenType.FUNCTION_NAME, value));
 				boolean functionHasParameters = false;
 				if (leftChild != null) {
 					internTokenList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
