@@ -153,6 +153,8 @@ public class Costume extends Image {
 			TextureRegion region = costumeData.getTextureRegion();
 			setRegion(region);
 
+			ProjectManager.getInstance().getCurrentProject().getPhysicWorld().changeCostume(sprite);
+
 			imageChanged = false;
 		}
 		imageLock.release();

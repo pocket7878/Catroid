@@ -41,7 +41,7 @@ public class Project implements Serializable {
 	private String projectName;
 	private String description;
 
-	private transient PhysicWorld physicWorld = new PhysicWorld();
+	private PhysicWorld physicWorld;
 
 	// Only used for Catroid website
 	@SuppressWarnings("unused")
@@ -69,7 +69,7 @@ public class Project implements Serializable {
 			return;
 		}
 
-		//		physicWorld = new PhysicWorld();
+		physicWorld = new PhysicWorld();
 		Sprite background = new Sprite(context.getString(R.string.background));
 		background.costume.zPosition = Integer.MIN_VALUE;
 		addSprite(background);

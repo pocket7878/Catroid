@@ -98,8 +98,7 @@ public class SetMassBrick implements Brick, OnClickListener {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(mass));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
-						| InputType.TYPE_NUMBER_FLAG_SIGNED);
+				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 				input.setSelectAllOnFocus(true);
 			}
 
