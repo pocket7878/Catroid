@@ -37,7 +37,7 @@ import at.tugraz.ist.catroid.utils.Utils;
 import at.tugraz.ist.catroid.web.ServerCalls;
 import at.tugraz.ist.catroid.web.WebconnectionException;
 
-public class ProjectUploadService extends IntentService {
+public class ProjectUploadReceiver extends IntentService {
 
 	private static final String UPLOAD_FILE_NAME = "upload" + Constants.CATROID_EXTENTION;
 	private Context context;
@@ -47,7 +47,7 @@ public class ProjectUploadService extends IntentService {
 	private String token;
 	private String serverAnswer;
 
-	public ProjectUploadService(Context context, String projectName, String projectDescription, String projectPath,
+	public ProjectUploadReceiver(Context context, String projectName, String projectDescription, String projectPath,
 			String token) {
 		super("Download" + projectName);
 		this.context = context;
