@@ -71,13 +71,12 @@ public class PhysicWorld implements Serializable {
 		for (Entry<Sprite, PhysicObject> entry : physicObjects.entrySet()) {
 			physicObject = entry.getValue();
 			physicObject.setIfOnEdgeBounce(false);
-			Vector2 position = PhysicWorldConverter.vecBox2dToCat(physicObject.getPosition());
-			float angle = PhysicWorldConverter.angleBox2dToCat(physicObject.getAngle());
+			Vector2 position = physicObject.getPosition();
 
 			costume = entry.getKey().costume;
 			costume.aquireXYWidthHeightLock();
 			costume.setXYPosition(position.x, position.y);
-			costume.setRotation(angle);
+			costume.setRotation(physicObject.getAngle());
 			costume.releaseXYWidthHeightLock();
 		}
 	}

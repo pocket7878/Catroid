@@ -31,6 +31,7 @@ import at.tugraz.ist.catroid.content.bricks.BroadcastBrick;
 import at.tugraz.ist.catroid.content.bricks.BroadcastWaitBrick;
 import at.tugraz.ist.catroid.content.bricks.SetXBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
 
 public class BroadcastBricksTest extends AndroidTestCase {
 
@@ -45,7 +46,7 @@ public class BroadcastBricksTest extends AndroidTestCase {
 
 		BroadcastScript broadcastScript = new BroadcastScript(sprite);
 		int testPosition = 100;
-		SetXBrick testBrick = new SetXBrick(null, sprite, testPosition);
+		SetXBrick testBrick = new SetXBrick(new PhysicWorld(), sprite, testPosition);
 		broadcastScript.setBroadcastMessage(message);
 		broadcastScript.addBrick(testBrick);
 		sprite.addScript(broadcastScript);
@@ -60,13 +61,14 @@ public class BroadcastBricksTest extends AndroidTestCase {
 	}
 
 	public void testBroadcastWait() {
+		PhysicWorld physicWorld = new PhysicWorld();
 		Sprite sprite = new Sprite("spriteOne");
 		Script scriptWait = new StartScript(sprite);
 		BroadcastWaitBrick broadcastWaitBrick = new BroadcastWaitBrick(sprite);
 		String message = "waitTest";
 		broadcastWaitBrick.setSelectedMessage(message);
 		int testPosition = 100;
-		SetXBrick setXBrick = new SetXBrick(null, sprite, testPosition);
+		SetXBrick setXBrick = new SetXBrick(physicWorld, sprite, testPosition);
 		scriptWait.addBrick(broadcastWaitBrick);
 		scriptWait.addBrick(setXBrick);
 		sprite.addScript(scriptWait);
@@ -74,7 +76,7 @@ public class BroadcastBricksTest extends AndroidTestCase {
 		BroadcastScript broadcastScript = new BroadcastScript(sprite);
 		WaitBrick waitBrick = new WaitBrick(sprite, 500);
 		int setTestPosition = 20;
-		SetXBrick setXBrick2 = new SetXBrick(null, sprite, setTestPosition);
+		SetXBrick setXBrick2 = new SetXBrick(physicWorld, sprite, setTestPosition);
 		broadcastScript.setBroadcastMessage(message);
 		broadcastScript.addBrick(waitBrick);
 		broadcastScript.addBrick(setXBrick2);

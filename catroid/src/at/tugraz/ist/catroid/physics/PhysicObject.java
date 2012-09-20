@@ -37,7 +37,7 @@ public class PhysicObject {
 
 	private final Body body;
 	private final FixtureDef fixtureDef = new FixtureDef();
-	private Shape[] currentShape;
+	private Shape[] shapes;
 	private Type type;
 	private float mass;
 	private boolean ifOnEdgeBounce = false;
@@ -56,10 +56,10 @@ public class PhysicObject {
 	}
 
 	public void setShape(Shape[] shapes) {
-		if (this.currentShape == shapes) {
+		if (this.shapes == shapes) {
 			return;
 		}
-		this.currentShape = shapes;
+		this.shapes = shapes;
 
 		List<Fixture> fixturesOld = new ArrayList<Fixture>(body.getFixtureList());
 
@@ -125,23 +125,41 @@ public class PhysicObject {
 	}
 
 	public float getAngle() {
-		return body.getAngle();
+		return PhysicWorldConverter.angleBox2dToCat(body.getAngle());
 	}
 
 	public void setAngle(float angle) {
-		body.setTransform(body.getPosition(), angle);
+		body.setTransform(body.getPosition(), PhysicWorldConverter.angleCatToBox2d(angle));
 	}
 
 	public Vector2 getPosition() {
-		return new Vector2(body.getPosition());
+		return PhysicWorldConverter.vecBox2dToCat(body.getPosition());
 	}
 
 	public void setXYPosition(float x, float y) {
+		x = PhysicWorldConverter.lengthCatToBox2d(x);
+		y = PhysicWorldConverter.lengthCatToBox2d(y);
 		body.setTransform(x, y, body.getAngle());
 	}
 
-	public void setXYPosition(Vector2 vecCatToBox2d) {
-		body.setTransform(vecCatToBox2d, body.getAngle());
+	public void setXYPosition(Vector2 position) {
+		body.setTransform(PhysicWorldConverter.vecCatToBox2d(position), body.getAngle());
+	}
+
+	public float getRotationSpeed() {
+		return PhysicWorldConverter.angleBox2dToCat(body.getAngularVelocity());
+	}
+
+	public void setRotationSpeed(float degreesPerSecond) {
+		body.setAngularVelocity(PhysicWorldConverter.angleCatToBox2d(degreesPerSecond));
+	}
+
+	public Vector2 getVelocity() {
+		return PhysicWorldConverter.vecBox2dToCat(body.getLinearVelocity());
+	}
+
+	public void setVelocity(Vector2 velocity) {
+		body.setLinearVelocity(PhysicWorldConverter.vecCatToBox2d(velocity));
 	}
 
 	public void setMass(float mass) {
@@ -181,21 +199,4 @@ public class PhysicObject {
 			fixture.setRestitution(bounceFactor);
 		}
 	}
-
-	public float getRotationSpeed() {
-		return body.getAngularVelocity();
-	}
-
-	public void setRotationSpeed(float radian) {
-		body.setAngularVelocity(radian);
-	}
-
-	public Vector2 getVelocity() {
-		return new Vector2(body.getLinearVelocity());
-	}
-
-	public void setVelocity(Vector2 velocity) {
-		body.setLinearVelocity(velocity);
-	}
-
 }

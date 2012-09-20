@@ -29,6 +29,7 @@ import android.graphics.BitmapFactory;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.utils.ImageEditing;
 import at.tugraz.ist.catroid.utils.Utils;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;

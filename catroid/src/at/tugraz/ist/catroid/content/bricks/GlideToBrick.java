@@ -32,12 +32,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.ui.ScriptTabActivity;
-import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.physics.PhysicObject.Type;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
-import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -133,7 +132,7 @@ public class GlideToBrick implements Brick, OnClickListener {
 
 				Vector2 newPos = new Vector2(xDestination, yDestination);
 				physicObject.setVelocity(new Vector2());
-				physicObject.setXYPosition(PhysicWorldConverter.vecCatToBox2d(newPos));
+				physicObject.setXYPosition(newPos);
 				physicObject.setType(oldPhysicObjectType);
 				oldPhysicObjectType = null;
 
@@ -159,8 +158,8 @@ public class GlideToBrick implements Brick, OnClickListener {
 			xPosition = (xDestination - xPosition) / (duration / 1000f);
 			yPosition = (yDestination - yPosition) / (duration / 1000f);
 			Vector2 newPos = new Vector2(xPosition, yPosition);
-			physicWorld.getPhysicObject(sprite).setVelocity(PhysicWorldConverter.vecCatToBox2d(newPos));
-			System.out.println("VEL  velocity :" + PhysicWorldConverter.vecCatToBox2d(newPos));
+			physicWorld.getPhysicObject(sprite).setVelocity(newPos);
+			System.out.println("VEL  velocity :" + newPos);
 		} else {
 			xPosition += ((float) timePassed / duration) * (xDestination - xPosition);
 			yPosition += ((float) timePassed / duration) * (yDestination - yPosition);
@@ -222,7 +221,7 @@ public class GlideToBrick implements Brick, OnClickListener {
 	@Override
 	public void onClick(final View view) {
 		ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
-		
+
 		BrickTextDialog editDialog = new BrickTextDialog() {
 			@Override
 			protected void initialize() {
@@ -237,10 +236,10 @@ public class GlideToBrick implements Brick, OnClickListener {
 					input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
 							| InputType.TYPE_NUMBER_FLAG_SIGNED);
 				}
-				
+
 				input.setSelectAllOnFocus(true);
 			}
-			
+
 			@Override
 			protected boolean handleOkButton() {
 				try {
@@ -249,16 +248,17 @@ public class GlideToBrick implements Brick, OnClickListener {
 					} else if (view.getId() == R.id.brick_glide_to_y_edit_text) {
 						yDestination = Integer.parseInt(input.getText().toString());
 					} else if (view.getId() == R.id.brick_glide_to_duration_edit_text) {
-						durationInMilliSeconds = (int) Math.round(Double.parseDouble(input.getText().toString()) * 1000);
+						durationInMilliSeconds = (int) Math
+								.round(Double.parseDouble(input.getText().toString()) * 1000);
 					}
 				} catch (NumberFormatException exception) {
 					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 				}
-				
+
 				return true;
 			}
 		};
-		
+
 		editDialog.show(activity.getSupportFragmentManager(), "dialog_glide_to_brick");
 	}
 }

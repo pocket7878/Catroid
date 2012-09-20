@@ -33,7 +33,6 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
-import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 
@@ -63,8 +62,7 @@ public class TurnRightBrick implements Brick, OnClickListener {
 	@Override
 	public void execute() {
 		if (physicWorld.isPhysicObject(sprite)) {
-			physicWorld.getPhysicObject(sprite).setAngle(
-					PhysicWorldConverter.angleCatToBox2d((sprite.costume.getRotation() % 360) - (float) degrees));
+			physicWorld.getPhysicObject(sprite).setAngle((sprite.costume.getRotation() % 360) - (float) degrees);
 		} else {
 			sprite.costume.setRotation((sprite.costume.getRotation() % 360) - (float) degrees);
 		}
@@ -104,7 +102,7 @@ public class TurnRightBrick implements Brick, OnClickListener {
 	@Override
 	public void onClick(View view) {
 		ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
-		
+
 		BrickTextDialog editDialog = new BrickTextDialog() {
 			@Override
 			protected void initialize() {
@@ -112,7 +110,7 @@ public class TurnRightBrick implements Brick, OnClickListener {
 				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 				input.setSelectAllOnFocus(true);
 			}
-			
+
 			@Override
 			protected boolean handleOkButton() {
 				try {
@@ -120,11 +118,11 @@ public class TurnRightBrick implements Brick, OnClickListener {
 				} catch (NumberFormatException exception) {
 					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 				}
-				
+
 				return true;
 			}
 		};
-		
+
 		editDialog.show(activity.getSupportFragmentManager(), "dialog_turn_right_brick");
 	}
 

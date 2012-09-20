@@ -27,6 +27,7 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.WhenScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
 
 public class WhenBrickTest extends AndroidTestCase {
 
@@ -36,7 +37,7 @@ public class WhenBrickTest extends AndroidTestCase {
 		Sprite sprite = new Sprite("new sprite");
 		WhenScript whenScript = new WhenScript(sprite);
 		whenScript.setAction(1);
-		Brick placeAtBrick = new PlaceAtBrick(null, sprite, testPosition, testPosition);
+		Brick placeAtBrick = new PlaceAtBrick(new PhysicWorld(), sprite, testPosition, testPosition);
 		whenScript.addBrick(placeAtBrick);
 		sprite.addScript(whenScript);
 		sprite.startWhenScripts(whenScript.getAction());

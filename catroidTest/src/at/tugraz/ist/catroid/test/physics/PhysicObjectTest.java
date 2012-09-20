@@ -9,6 +9,7 @@ import at.tugraz.ist.catroid.physics.PhysicObject;
 import at.tugraz.ist.catroid.physics.PhysicObject.Type;
 import at.tugraz.ist.catroid.physics.PhysicSettings;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
+import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 
 import com.badlogic.gdx.math.Vector2;
@@ -161,11 +162,13 @@ public class PhysicObjectTest extends AndroidTestCase {
 			PhysicObject physicObject = createPhysicObject(type);
 			assertEquals(0.0f, getBody(physicObject).getAngle());
 
-			float[] radians = { 0.1f, 3.14f, -1.0f, 10.0f };
+			float[] degrees = { 1.0f, 131.4f, -10.0f };
 
-			for (float angle : radians) {
+			for (float angle : degrees) {
 				physicObject.setAngle(angle);
-				assertEquals(angle, getBody(physicObject).getAngle());
+
+				float physicObjectCatAngle = PhysicWorldConverter.angleBox2dToCat(getBody(physicObject).getAngle());
+				assertEquals(angle, physicObjectCatAngle);
 			}
 		}
 	}
@@ -178,12 +181,18 @@ public class PhysicObjectTest extends AndroidTestCase {
 			Vector2[] positions = { new Vector2(12.34f, 56.78f), new Vector2(-87.65f, -43.21f) };
 			for (Vector2 position : positions) {
 				physicObject.setXYPosition(position.x, position.y);
-				assertEquals(position, getBody(physicObject).getPosition());
+
+				Vector2 physicObjectCatPosition = PhysicWorldConverter.vecBox2dToCat(getBody(physicObject)
+						.getPosition());
+				assertEquals(position, physicObjectCatPosition);
 			}
 
 			for (Vector2 position : positions) {
 				physicObject.setXYPosition(position);
-				assertEquals(position, getBody(physicObject).getPosition());
+
+				Vector2 physicObjectCatPosition = PhysicWorldConverter.vecBox2dToCat(getBody(physicObject)
+						.getPosition());
+				assertEquals(position, physicObjectCatPosition);
 			}
 		}
 	}
@@ -194,13 +203,16 @@ public class PhysicObjectTest extends AndroidTestCase {
 			assertEquals(0.0f, getBody(physicObject).getAngle());
 			assertEquals(new Vector2(), getBody(physicObject).getPosition());
 
-			float angle = 1.56f;
+			float angle = 15.6f;
 			Vector2 position = new Vector2(12.34f, 56.78f);
 			physicObject.setAngle(angle);
 			physicObject.setXYPosition(position.x, position.y);
 
-			assertEquals(angle, getBody(physicObject).getAngle());
-			assertEquals(position, getBody(physicObject).getPosition());
+			float physicObjectCatAngle = PhysicWorldConverter.angleBox2dToCat(getBody(physicObject).getAngle());
+			Vector2 physicObjectCatPosition = PhysicWorldConverter.vecBox2dToCat(getBody(physicObject).getPosition());
+
+			assertEquals(angle, physicObjectCatAngle);
+			assertEquals(position, physicObjectCatPosition);
 		}
 	}
 
@@ -368,9 +380,11 @@ public class PhysicObjectTest extends AndroidTestCase {
 		Body body = getBody(physicObject);
 
 		assertEquals(0.0f, body.getAngularVelocity());
-		float rotationSpeed = 1.23f;
+		float rotationSpeed = 20.0f;
 		physicObject.setRotationSpeed(rotationSpeed);
-		assertEquals(rotationSpeed, body.getAngularVelocity());
+
+		float physicObjectCatRotationSpeed = PhysicWorldConverter.angleBox2dToCat(body.getAngularVelocity());
+		assertEquals(rotationSpeed, physicObjectCatRotationSpeed);
 	}
 
 	public void testSetVelocity() {
@@ -378,9 +392,11 @@ public class PhysicObjectTest extends AndroidTestCase {
 		Body body = getBody(physicObject);
 
 		assertEquals(new Vector2(), body.getLinearVelocity());
-		Vector2 velocity = new Vector2(1.23f, 4.56f);
+		Vector2 velocity = new Vector2(12.3f, 45.6f);
 		physicObject.setVelocity(velocity);
-		assertEquals(velocity, body.getLinearVelocity());
+
+		Vector2 physicObjectCatVelocity = PhysicWorldConverter.vecBox2dToCat(body.getLinearVelocity());
+		assertEquals(velocity, physicObjectCatVelocity);
 	}
 
 	// SANTA'S LITTLE HELPERS :)

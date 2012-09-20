@@ -33,7 +33,6 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
-import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 
@@ -64,7 +63,7 @@ public class SetXBrick implements Brick, OnClickListener {
 	public void execute() {
 		if (physicWorld.isPhysicObject(sprite)) {
 			Vector2 newPos = new Vector2(xPosition, sprite.costume.getYPosition());
-			physicWorld.getPhysicObject(sprite).setXYPosition(PhysicWorldConverter.vecCatToBox2d(newPos));
+			physicWorld.getPhysicObject(sprite).setXYPosition(newPos);
 		} else {
 			sprite.costume.aquireXYWidthHeightLock();
 			sprite.costume.setXPosition(xPosition);
@@ -105,7 +104,7 @@ public class SetXBrick implements Brick, OnClickListener {
 	@Override
 	public void onClick(View view) {
 		ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
-		
+
 		BrickTextDialog editDialog = new BrickTextDialog() {
 			@Override
 			protected void initialize() {
@@ -114,7 +113,7 @@ public class SetXBrick implements Brick, OnClickListener {
 						| InputType.TYPE_NUMBER_FLAG_SIGNED);
 				input.setSelectAllOnFocus(true);
 			}
-			
+
 			@Override
 			protected boolean handleOkButton() {
 				try {
@@ -122,11 +121,11 @@ public class SetXBrick implements Brick, OnClickListener {
 				} catch (NumberFormatException exception) {
 					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 				}
-				
+
 				return true;
 			}
 		};
-		
+
 		editDialog.show(activity.getSupportFragmentManager(), "dialog_set_x_brick");
 	}
 }

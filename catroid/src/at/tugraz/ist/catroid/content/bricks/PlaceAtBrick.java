@@ -33,11 +33,9 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
-import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 
-import com.badlogic.gdx.math.Vector2;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 public class PlaceAtBrick implements Brick, OnClickListener {
@@ -65,8 +63,7 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 	@Override
 	public void execute() {
 		if (physicWorld.isPhysicObject(sprite)) {
-			physicWorld.getPhysicObject(sprite).setXYPosition(
-					PhysicWorldConverter.vecCatToBox2d(new Vector2(xPosition, yPosition)));
+			physicWorld.getPhysicObject(sprite).setXYPosition(xPosition, yPosition);
 		} else {
 			sprite.costume.aquireXYWidthHeightLock();
 			sprite.costume.setXYPosition(xPosition, yPosition);
@@ -123,7 +120,7 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 	@Override
 	public void onClick(final View view) {
 		ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
-		
+
 		BrickTextDialog editDialog = new BrickTextDialog() {
 			@Override
 			protected void initialize() {
@@ -135,7 +132,7 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_SIGNED);
 				input.setSelectAllOnFocus(true);
 			}
-			
+
 			@Override
 			protected boolean handleOkButton() {
 				try {
@@ -147,11 +144,11 @@ public class PlaceAtBrick implements Brick, OnClickListener {
 				} catch (NumberFormatException exception) {
 					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 				}
-				
+
 				return true;
 			}
 		};
-		
+
 		editDialog.show(activity.getSupportFragmentManager(), "dialog_place_at_brick");
 	}
 }

@@ -36,7 +36,6 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
-import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 
 public class PointToBrick implements Brick {
 
@@ -125,8 +124,7 @@ public class PointToBrick implements Brick {
 		}
 
 		if (physicWorld.isPhysicObject(sprite)) {
-			physicWorld.getPhysicObject(sprite).setAngle(
-					PhysicWorldConverter.angleCatToBox2d((-(float) rotationDegrees) + 90f));
+			physicWorld.getPhysicObject(sprite).setAngle((-(float) rotationDegrees) + 90f);
 		} else {
 			sprite.costume.setRotation((-(float) rotationDegrees) + 90f);
 		}

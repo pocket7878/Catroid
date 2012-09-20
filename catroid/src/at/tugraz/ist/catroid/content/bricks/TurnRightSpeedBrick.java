@@ -32,7 +32,6 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
-import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 
@@ -60,8 +59,7 @@ public class TurnRightSpeedBrick implements Brick, OnClickListener {
 
 	@Override
 	public void execute() {
-		float radian = -PhysicWorldConverter.angleCatToBox2d(degreesPerSec);
-		physicWorld.getPhysicObject(sprite).setRotationSpeed(radian);
+		physicWorld.getPhysicObject(sprite).setRotationSpeed(degreesPerSec);
 	}
 
 	@Override

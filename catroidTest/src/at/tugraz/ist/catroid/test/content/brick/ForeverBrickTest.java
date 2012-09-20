@@ -30,6 +30,7 @@ import at.tugraz.ist.catroid.content.bricks.ChangeYByBrick;
 import at.tugraz.ist.catroid.content.bricks.ForeverBrick;
 import at.tugraz.ist.catroid.content.bricks.LoopBeginBrick;
 import at.tugraz.ist.catroid.content.bricks.LoopEndBrick;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.test.utils.TestUtils;
 
 public class ForeverBrickTest extends InstrumentationTestCase {
@@ -38,10 +39,12 @@ public class ForeverBrickTest extends InstrumentationTestCase {
 	private StartScript testScript;
 	private LoopEndBrick loopEndBrick;
 	private LoopBeginBrick foreverBrick;
+	private PhysicWorld physicWorld;
 
 	@Override
 	protected void setUp() throws Exception {
 		testSprite = new Sprite("testSprite");
+		physicWorld = new PhysicWorld();
 	}
 
 	@FlakyTest(tolerance = 3)
@@ -59,7 +62,7 @@ public class ForeverBrickTest extends InstrumentationTestCase {
 		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
 
 		testScript.addBrick(foreverBrick);
-		testScript.addBrick(new ChangeYByBrick(null, testSprite, deltaY));
+		testScript.addBrick(new ChangeYByBrick(physicWorld, testSprite, deltaY));
 		testScript.addBrick(loopEndBrick);
 
 		testSprite.addScript(testScript);
@@ -91,7 +94,7 @@ public class ForeverBrickTest extends InstrumentationTestCase {
 		final int expectedDelay = (Integer) TestUtils.getPrivateField("LOOP_DELAY", loopEndBrick, false);
 
 		testScript.addBrick(foreverBrick);
-		testScript.addBrick(new ChangeYByBrick(null, testSprite, deltaY));
+		testScript.addBrick(new ChangeYByBrick(physicWorld, testSprite, deltaY));
 		testScript.addBrick(loopEndBrick);
 
 		testSprite.addScript(testScript);
