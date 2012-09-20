@@ -41,10 +41,11 @@ import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import com.jayway.android.robotium.solo.Solo;
 
 public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTabActivity> {
+
 	private Solo solo;
 
 	public GlideToBrickTest() {
-		super("at.tugraz.ist.catroid", ScriptTabActivity.class);
+		super(ScriptTabActivity.class);
 	}
 
 	@Override
@@ -55,6 +56,7 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 
 	@Override
 	public void tearDown() throws Exception {
+		UiTestUtils.goBackToHome(getInstrumentation());
 		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
@@ -77,7 +79,7 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 		UiTestUtils.clickEnterClose(solo, 2, String.valueOf(yPosition));
 
 		ProjectManager manager = ProjectManager.getInstance();
-		List<Brick> brickList = manager.getCurrentScript().getBrickList();
+		List<Brick> brickList = manager.getCurrentSprite().getScript(0).getBrickList();
 		GlideToBrick glideToBrick = (GlideToBrick) brickList.get(0);
 		assertEquals("Wrong duration input in Glide to brick", Math.round(duration * 1000),
 				glideToBrick.getDurationInMilliSeconds());
@@ -89,12 +91,14 @@ public class GlideToBrickTest extends ActivityInstrumentationTestCase2<ScriptTab
 	}
 
 	public void testResizeInputFields() {
-		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_home);
+		UiTestUtils.goToHomeActivity(getActivity());
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
 		createProject();
 		solo.sleep(200);
-		solo.clickOnText(getActivity().getString(R.string.current_project_button));
-		solo.waitForActivity(ProjectActivity.class.getSimpleName());
+		solo.clickOnText(solo.getString(R.string.current_project_button));
+		solo.waitForActivity(ProjectActivity.class.getSimpleName(), 1);
+		solo.sleep(200);
+		solo.clickOnText(solo.getString(R.string.project_name)); //just to get focus for solo
 		solo.clickOnText(solo.getCurrentListViews().get(0).getItemAtPosition(0).toString());
 		solo.waitForActivity(ScriptTabActivity.class.getSimpleName());
 

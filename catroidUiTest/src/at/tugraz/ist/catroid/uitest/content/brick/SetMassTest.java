@@ -14,18 +14,20 @@ import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.SetMassBrick;
 import at.tugraz.ist.catroid.physics.PhysicSettings;
-import at.tugraz.ist.catroid.ui.ScriptActivity;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
+import at.tugraz.ist.catroid.ui.fragment.ScriptFragment;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
 
-public class SetMassTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
+public class SetMassTest extends ActivityInstrumentationTestCase2<ScriptTabActivity> {
 	private Solo solo;
 	private Project project;
 	private SetMassBrick setMassBrick;
 
 	public SetMassTest() {
-		super("at.tugraz.ist.catroid", ScriptActivity.class);
+		super(ScriptTabActivity.class);
 	}
 
 	@Override
@@ -48,20 +50,22 @@ public class SetMassTest extends ActivityInstrumentationTestCase2<ScriptActivity
 
 	@Smoke
 	public void testSetup() {
-		int childrenCount = getActivity().getAdapter().getChildCountFromLastGroup();
-		int groupCount = getActivity().getAdapter().getGroupCount();
+		ScriptTabActivity activity = (ScriptTabActivity) solo.getCurrentActivity();
+		ScriptFragment fragment = (ScriptFragment) activity.getTabFragment(ScriptTabActivity.INDEX_TAB_SCRIPTS);
+		BrickAdapter adapter = fragment.getAdapter();
 
-		assertEquals("Incorrect number of bricks.", 2, solo.getCurrentListViews().get(0).getChildCount());
+		int childrenCount = adapter.getChildCountFromLastGroup();
+		int groupCount = adapter.getScriptCount();
+
+		assertEquals("Incorrect number of bricks.", 2 + 1, solo.getCurrentListViews().get(0).getChildCount()); // don't forget the footer
 		assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
 		ArrayList<Brick> projectBrickList = project.getSpriteList().get(0).getScript(0).getBrickList();
 		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0),
-				getActivity().getAdapter().getChild(groupCount - 1, 0));
-		String massByString = solo.getString(R.string.brick_set_mass);
-		solo.waitForText(massByString);
-		assertNotNull("TextView does not exist", solo.getText(massByString));
+		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+		String textSetMass = solo.getString(R.string.brick_set_mass);
+		assertNotNull("TextView does not exist.", solo.getText(textSetMass));
 	}
 
 	@Smoke

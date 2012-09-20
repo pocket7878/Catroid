@@ -33,6 +33,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Color;
 import at.tugraz.ist.catroid.ProjectManager;
+import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -114,6 +115,8 @@ public class StageListener implements ApplicationListener {
 	private int testHeight = 0;
 
 	private StageDialog stageDialog;
+
+	private boolean texturesRendered = false;
 
 	public StageListener() {
 	}
@@ -199,7 +202,7 @@ public class StageListener implements ApplicationListener {
 		ProjectManager projectManager = ProjectManager.getInstance();
 		int currentSpritePos = projectManager.getCurrentSpritePosition();
 		int currentScriptPos = projectManager.getCurrentScriptPosition();
-		projectManager.loadProject(projectManager.getCurrentProject().getName(), context, false);
+		projectManager.loadProject(projectManager.getCurrentProject().getName(), context, null, false);
 		projectManager.setCurrentSpriteWithPosition(currentSpritePos);
 		projectManager.setCurrentScriptWithPosition(currentScriptPos);
 		reloadProject = true;
@@ -213,9 +216,11 @@ public class StageListener implements ApplicationListener {
 				sprite.resume();
 			}
 		}
+		renderTextures();
 		for (Sprite sprite : sprites) {
 			sprite.costume.refreshTextures();
 		}
+
 	}
 
 	@Override
@@ -247,17 +252,19 @@ public class StageListener implements ApplicationListener {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		if (reloadProject) {
-			for (Sprite sprite : sprites) {
+			int spriteSize = sprites.size();
+			for (int i = 0; i < spriteSize; i++) {
+				Sprite sprite = sprites.get(i);
 				sprite.pause();
 				sprite.finish();
-				sprite.costume.disposeTextures();
 			}
 			stage.clear();
 			SoundManager.getInstance().clear();
 
 			project = ProjectManager.getInstance().getCurrentProject();
 			sprites = project.getSpriteList();
-			for (Sprite sprite : sprites) {
+			for (int i = 0; i < spriteSize; i++) {
+				Sprite sprite = sprites.get(i);
 				stage.addActor(sprite.costume);
 				sprite.pause();
 			}
@@ -273,6 +280,11 @@ public class StageListener implements ApplicationListener {
 			synchronized (stageDialog) {
 				stageDialog.notify();
 			}
+		}
+
+		if (!texturesRendered) {
+			renderTextures();
+			texturesRendered = true;
 		}
 
 		stage.getRoot().sortChildren(costumeComparator);
@@ -298,8 +310,9 @@ public class StageListener implements ApplicationListener {
 		this.drawRectangle();
 
 		if (firstStart) {
-			for (Sprite sprite : sprites) {
-				sprite.startStartScripts();
+			int spriteSize = sprites.size();
+			for (int i = 0; i < spriteSize; i++) {
+				sprites.get(i).startStartScripts();
 			}
 			firstStart = false;
 		}
@@ -395,9 +408,7 @@ public class StageListener implements ApplicationListener {
 		font.dispose();
 		background.dispose();
 		axes.dispose();
-		for (Sprite sprite : sprites) {
-			sprite.costume.disposeTextures();
-		}
+		disposeTextures();
 	}
 
 	private void makeThumbnail() {
@@ -457,6 +468,33 @@ public class StageListener implements ApplicationListener {
 			case STRETCH:
 				screenMode = ScreenModes.MAXIMIZE;
 				break;
+		}
+	}
+
+	private void renderTextures() {
+		List<Sprite> sprites = project.getSpriteList();
+		int spriteSize = sprites.size();
+		for (int i = 0; i > spriteSize; i++) {
+			List<CostumeData> data = sprites.get(i).getCostumeDataList();
+			int dataSize = data.size();
+			for (int j = 0; j < dataSize; j++) {
+				CostumeData costumeData = data.get(j);
+				costumeData.setTextureRegion();
+			}
+		}
+	}
+
+	private void disposeTextures() {
+		List<Sprite> sprites = project.getSpriteList();
+		int spriteSize = sprites.size();
+		for (int i = 0; i > spriteSize; i++) {
+			List<CostumeData> data = sprites.get(i).getCostumeDataList();
+			int dataSize = data.size();
+			for (int j = 0; j < dataSize; j++) {
+				CostumeData costumeData = data.get(j);
+				costumeData.getPixmap().dispose();
+				costumeData.getTextureRegion().getTexture().dispose();
+			}
 		}
 	}
 

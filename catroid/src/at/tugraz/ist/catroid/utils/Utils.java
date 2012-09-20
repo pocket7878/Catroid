@@ -43,20 +43,18 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.DialogInterface.OnShowListener;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.ResolveInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -64,8 +62,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
@@ -76,6 +72,11 @@ import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.ui.dialogs.ErrorDialogFragment;
+
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class Utils {
 
@@ -118,6 +119,7 @@ public class Utils {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void updateScreenWidthAndHeight(Context context) {
 		WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		Display display = windowManager.getDefaultDisplay();
@@ -171,24 +173,9 @@ public class Utils {
 	//		return projectFileName;
 	//	}
 
-	/**
-	 * Displays an AlertDialog with the given error message and just a close
-	 * button
-	 * 
-	 * @param context
-	 * @param errorMessage
-	 */
-	public static void displayErrorMessage(Context context, String errorMessage) {
-		Builder builder = new AlertDialog.Builder(context);
-
-		builder.setTitle(context.getString(R.string.error));
-		builder.setMessage(errorMessage);
-		builder.setNeutralButton(context.getString(R.string.close), new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-			}
-		});
-		builder.show();
+	public static void displayErrorMessageFragment(FragmentManager fragmentManager, String errorMessage) {
+		DialogFragment errorDialog = ErrorDialogFragment.newInstance(errorMessage);
+		errorDialog.show(fragmentManager, ErrorDialogFragment.DIALOG_FRAGMENT_TAG);
 	}
 
 	public static void displayToast(Activity activity, String message/* , int duration */) {
@@ -300,17 +287,6 @@ public class Utils {
 		return versionName;
 	}
 
-	public static OnShowListener getBrickDialogOnClickListener(final Context context, final EditText input) {
-		return new OnShowListener() {
-			@Override
-			public void onShow(DialogInterface dialog) {
-				InputMethodManager inputManager = (InputMethodManager) context
-						.getSystemService(Context.INPUT_METHOD_SERVICE);
-				inputManager.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT);
-			}
-		};
-	}
-
 	public static int getPhysicalPixels(int densityIndependentPixels, Context context) {
 		final float scale = context.getResources().getDisplayMetrics().density;
 		int physicalPixels = (int) (densityIndependentPixels * scale + 0.5f);
@@ -324,15 +300,18 @@ public class Utils {
 		edit.commit();
 	}
 
-	public static void loadProjectIfNeeded(Context context) {
+	public static void loadProjectIfNeeded(Context context, ErrorListenerInterface errorListener) {
 		if (ProjectManager.getInstance().getCurrentProject() == null) {
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 			String projectName = prefs.getString(Constants.PREF_PROJECTNAME_KEY, null);
 
 			if (projectName != null) {
-				ProjectManager.getInstance().loadProject(projectName, context, false);
+				ProjectManager.getInstance().loadProject(projectName, context, errorListener, false);
+			} else if (ProjectManager.INSTANCE.canLoadProject(context.getString(R.string.default_project_name))) {
+				ProjectManager.getInstance().loadProject(context.getString(R.string.default_project_name), context,
+						errorListener, false);
 			} else {
-				ProjectManager.getInstance().initializeDefaultProject(context);
+				ProjectManager.getInstance().initializeDefaultProject(context, errorListener);
 			}
 		}
 	}
@@ -395,43 +374,23 @@ public class Utils {
 		return newTitle;
 	}
 
-	public static ArrayList<InstalledApplicationInfo> createApplicationsInfoList(PackageManager packageManager) {
-		ArrayList<InstalledApplicationInfo> applicationsInfoList = new ArrayList<InstalledApplicationInfo>();
-		Intent pictureFileManagerIntent = new Intent(Intent.ACTION_GET_CONTENT);
-		pictureFileManagerIntent.setType("image/*");
-
-		Intent cameraAppIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-		final List<ResolveInfo> cameraApplicationsList = packageManager.queryIntentActivities(cameraAppIntent, 0);
-		final List<ResolveInfo> pictureFileManagerApplicationList = packageManager.queryIntentActivities(
-				pictureFileManagerIntent, 0);
-
-		addApplicationInfoToList(applicationsInfoList, cameraApplicationsList, PICTURE_INTENT, packageManager);
-		addApplicationInfoToList(applicationsInfoList, pictureFileManagerApplicationList, FILE_INTENT, packageManager);
-
-		return applicationsInfoList;
-
-	}
-
-	private static void addApplicationInfoToList(ArrayList<InstalledApplicationInfo> applicationInfoList,
-			List<ResolveInfo> installedApplicationsList, int INTENT_CODE, PackageManager packageManager) {
-
-		InstalledApplicationInfo currentAppInfo;
-		if (installedApplicationsList != null) {
-			for (ResolveInfo currentInfo : installedApplicationsList) {
-				currentAppInfo = new InstalledApplicationInfo(INTENT_CODE, currentInfo.activityInfo.packageName,
-						currentInfo.activityInfo.name, currentInfo.loadLabel(packageManager).toString(),
-						currentInfo.loadIcon(packageManager));
-				applicationInfoList.add(currentAppInfo);
-			}
-		}
-	}
-
 	public static boolean isApplicationDebuggable(Context context) {
 		if (isUnderTest) {
 			return false;
 		} else {
 			return (context.getApplicationContext().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
 		}
+	}
+
+	public static Pixmap getPixmapFromFile(File imageFile) {
+		Pixmap pixmap = null;
+		try {
+			pixmap = new Pixmap(new FileHandle(imageFile));
+		} catch (GdxRuntimeException e) {
+			return null;
+		} catch (Exception e1) {
+			return null;
+		}
+		return pixmap;
 	}
 }

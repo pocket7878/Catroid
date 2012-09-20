@@ -41,12 +41,13 @@ import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import com.jayway.android.robotium.solo.Solo;
 
 public class NewSpriteDialogTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
+
 	private Solo solo;
 	private String testingproject = UiTestUtils.PROJECTNAME1;
 	private String testingsprite = "testingsprite";
 
 	public NewSpriteDialogTest() {
-		super("at.tugraz.ist.catroid", MainMenuActivity.class);
+		super(MainMenuActivity.class);
 	}
 
 	@Override
@@ -58,6 +59,7 @@ public class NewSpriteDialogTest extends ActivityInstrumentationTestCase2<MainMe
 
 	@Override
 	protected void tearDown() throws Exception {
+		UiTestUtils.goBackToHome(getInstrumentation());
 		solo.finishOpenedActivities();
 		ProjectManager.getInstance().deleteCurrentProject();
 		UiTestUtils.clearAllUtilTestProjects();
@@ -69,10 +71,11 @@ public class NewSpriteDialogTest extends ActivityInstrumentationTestCase2<MainMe
 		solo.sleep(300);
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
 		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+		solo.waitForFragmentById(R.id.fr_projects_list);
 		assertTrue("Cannot click on project.", UiTestUtils.clickOnTextInList(solo, testingproject));
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
 
-		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_add_button);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_add);
 		solo.waitForView(EditText.class);
 		int spriteEditTextId = solo.getCurrentEditTexts().size() - 1;
 		UiTestUtils.enterText(solo, spriteEditTextId, testingsprite);
@@ -81,6 +84,24 @@ public class NewSpriteDialogTest extends ActivityInstrumentationTestCase2<MainMe
 		solo.clickOnText(testingsprite);
 		solo.waitForActivity(ScriptTabActivity.class.getSimpleName());
 		solo.assertCurrentActivity("Current Activity is not ScriptActivity", ScriptTabActivity.class);
+	}
+
+	public void testAddSpriteDialogNoName() {
+		createTestProject(testingproject);
+		solo.clickOnButton(solo.getString(R.string.my_projects));
+		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+		solo.waitForFragmentById(R.id.fr_projects_list);
+		UiTestUtils.clickOnTextInList(solo, testingproject);
+		solo.sleep(500);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_add);
+		solo.waitForView(EditText.class);
+		solo.clearEditText(0);
+		UiTestUtils.enterText(solo, 0, " ");
+		solo.sendKey(Solo.ENTER);
+		solo.sleep(200);
+		String errorMessageInvalidInput = solo.getString(R.string.spritename_invalid);
+		assertTrue("No or wrong error message shown", solo.searchText(errorMessageInvalidInput));
+		solo.clickOnButton(solo.getString(R.string.close));
 	}
 
 	public void createTestProject(String projectName) {

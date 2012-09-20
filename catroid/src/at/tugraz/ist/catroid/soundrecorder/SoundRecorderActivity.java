@@ -39,8 +39,9 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.utils.Utils;
 
-public class SoundRecorderActivity extends Activity implements OnClickListener {
-	private static final String TAG = SoundRecorderActivity.class.getSimpleName();
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
+public class SoundRecorderActivity extends SherlockFragmentActivity implements OnClickListener {
 
 	private SoundRecorder soundRecorder;
 	private ImageView recordButton;
@@ -62,7 +63,7 @@ public class SoundRecorderActivity extends Activity implements OnClickListener {
 
 		recordLayout.setOnClickListener(this);
 
-		soundRecorder = (SoundRecorder) getLastNonConfigurationInstance();
+		soundRecorder = (SoundRecorder) getLastCustomNonConfigurationInstance();
 		if (soundRecorder != null && soundRecorder.isRecording()) {
 			setViewsToRecordingState();
 		}
@@ -70,6 +71,7 @@ public class SoundRecorderActivity extends Activity implements OnClickListener {
 		Utils.checkForSdCard(this);
 	}
 
+	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.recordLayout) {
 			if (soundRecorder != null && soundRecorder.isRecording()) {
@@ -88,7 +90,7 @@ public class SoundRecorderActivity extends Activity implements OnClickListener {
 	}
 
 	@Override
-	public Object onRetainNonConfigurationInstance() {
+	public Object onRetainCustomNonConfigurationInstance() {
 		return soundRecorder;
 	}
 
@@ -103,7 +105,7 @@ public class SoundRecorderActivity extends Activity implements OnClickListener {
 			soundRecorder.start();
 			setViewsToRecordingState();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e("CATROID", "Error recording sound.", e);
 			Toast.makeText(this, R.string.soundrecorder_error, Toast.LENGTH_SHORT).show();
 		}
 	}
@@ -122,10 +124,9 @@ public class SoundRecorderActivity extends Activity implements OnClickListener {
 		try {
 			soundRecorder.stop();
 			Uri uri = soundRecorder.getPath();
-			Log.i(TAG, "uri from record file:" + uri);
 			setResult(Activity.RESULT_OK, new Intent(Intent.ACTION_PICK, uri));
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e("CATROID", "Error recording sound.", e);
 			Toast.makeText(this, R.string.soundrecorder_error, Toast.LENGTH_SHORT).show();
 			setResult(Activity.RESULT_CANCELED);
 		}

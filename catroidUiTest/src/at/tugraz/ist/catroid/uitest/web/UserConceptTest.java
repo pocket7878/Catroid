@@ -22,12 +22,17 @@
  */
 package at.tugraz.ist.catroid.uitest.web;
 
+import java.util.ArrayList;
+
 import junit.framework.AssertionFailedError;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.UiThreadTest;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
@@ -37,11 +42,14 @@ import at.tugraz.ist.catroid.web.ServerCalls;
 import com.jayway.android.robotium.solo.Solo;
 
 public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
+
 	private Solo solo;
 	private String saveToken;
 
+	//private String testUser;
+
 	public UserConceptTest() {
-		super("at.tugraz.ist.catroid", MainMenuActivity.class);
+		super(MainMenuActivity.class);
 		UiTestUtils.clearAllUtilTestProjects();
 	}
 
@@ -58,6 +66,7 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		prefs.edit().putString(Constants.TOKEN, saveToken).commit();
 		UiTestUtils.setPrivateField("emailForUiTests", ServerCalls.getInstance(), null, false);
+		UiTestUtils.goBackToHome(getInstrumentation());
 		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
@@ -206,5 +215,37 @@ public class UserConceptTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		solo.setActivityOrientation(Solo.PORTRAIT);
 
 		solo.clickOnButton(0);
+	}
+
+	public void testLoginWhenUploading() throws Throwable {
+		setTestUrl();
+		clearSharedPreferences();
+
+		solo.sleep(500);
+		solo.clickOnButton(solo.getString(R.string.upload_project));
+		solo.sleep(4000);
+
+		String username = "MAXmustermann"; //real username is MaxMustermann
+		String password = "password";
+		String testEmail = "maxmustermann@gmail.com";
+		UiTestUtils.setPrivateField("emailForUiTests", ServerCalls.getInstance(), testEmail, false);
+		EditText usernameEditText = (EditText) solo.getView(R.id.username);
+		EditText passwordEditText = (EditText) solo.getView(R.id.password);
+		solo.enterText(usernameEditText, username);
+		solo.enterText(passwordEditText, password);
+		solo.clickOnButton(solo.getString(R.string.login_or_register));
+		solo.sleep(5000);
+
+		TextView uploadProject = (TextView) solo.getView(R.id.dialog_upload_size_of_project);
+		ArrayList<View> currentViews = solo.getCurrentViews();
+		assertTrue("Cannot login because username is upper or lower case", currentViews.contains(uploadProject));
+	}
+
+	private void clearSharedPreferences() {
+		SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getInstrumentation()
+				.getTargetContext());
+		Editor edit = defaultSharedPreferences.edit();
+		edit.clear();
+		edit.commit();
 	}
 }

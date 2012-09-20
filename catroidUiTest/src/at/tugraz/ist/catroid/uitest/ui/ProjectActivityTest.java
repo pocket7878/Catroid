@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import android.graphics.Bitmap;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -52,10 +53,11 @@ import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 import com.jayway.android.robotium.solo.Solo;
 
 public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
+
 	private Solo solo;
 
 	public ProjectActivityTest() {
-		super("at.tugraz.ist.catroid", MainMenuActivity.class);
+		super(MainMenuActivity.class);
 	}
 
 	@Override
@@ -68,14 +70,15 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 	@Override
 	public void tearDown() throws Exception {
 		ProjectManager.getInstance().deleteCurrentProject();
+		UiTestUtils.goBackToHome(getInstrumentation());
 		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
 	}
 
 	private void addNewSprite(String spriteName) {
-		solo.sleep(200);
-		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_add_button);
+		solo.sleep(500);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_add);
 		solo.waitForText(solo.getString(R.string.new_sprite_dialog_title));
 
 		EditText addNewSpriteEditText = solo.getEditText(0);
@@ -136,6 +139,81 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 		assertTrue("Sprite not shown in Adapter", solo.searchText(spriteName2));
 	}
 
+	public void testAddNewSpriteUnderList() {
+		String spriteName = "testSprite";
+		String newSpriteDialogTitle = solo.getString(R.string.new_sprite_dialog_title);
+		solo.clickOnButton(solo.getString(R.string.current_project_button));
+		solo.waitForActivity(ProjectActivity.class.getSimpleName());
+
+		solo.clickOnView(solo.getView(R.id.spritelist_footerview));
+		solo.waitForText(newSpriteDialogTitle, 0, 1000);
+		assertTrue("New Sprite dialog did not appear", solo.searchText(newSpriteDialogTitle));
+
+		EditText addNewSpriteEditText = solo.getEditText(0);
+		assertEquals("Not the proper hint set",
+				getActivity().getString(R.string.new_sprite_dialog_default_sprite_name), addNewSpriteEditText.getHint());
+		assertEquals("There should no text be set", "", addNewSpriteEditText.getText().toString());
+		solo.clearEditText(0);
+		solo.enterText(0, spriteName);
+		solo.sleep(200);
+		solo.setActivityOrientation(Solo.LANDSCAPE);
+		solo.sleep(100);
+		assertTrue("EditText field got cleared after changing orientation", solo.searchText(spriteName));
+		solo.setActivityOrientation(Solo.PORTRAIT);
+		solo.sleep(200);
+		solo.sendKey(Solo.ENTER);
+		solo.sleep(300);
+
+		ListView spriteList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
+		assertEquals("Sprite was not added", 3, spriteList.getCount());
+
+		spriteName = "testSprite2";
+		solo.clickOnView(solo.getView(R.id.spritelist_footerview_add_image));
+		solo.waitForText(newSpriteDialogTitle, 0, 1000);
+		assertTrue("New Sprite dialog did not appear", solo.searchText(newSpriteDialogTitle));
+		solo.clearEditText(0);
+		solo.enterText(0, spriteName);
+		solo.sendKey(Solo.ENTER);
+		solo.sleep(300);
+		spriteList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
+		assertEquals("Sprite was not added", 4, spriteList.getCount());
+
+		spriteName = "testSprite3";
+		solo.clickOnView(solo.getView(R.id.view_below_spritelist_non_scrollable));
+		solo.waitForText(newSpriteDialogTitle, 0, 1000);
+		assertTrue("New Sprite dialog did not appear", solo.searchText(newSpriteDialogTitle));
+		solo.clearEditText(0);
+		solo.enterText(0, spriteName);
+		solo.sendKey(Solo.ENTER);
+		solo.sleep(300);
+		spriteList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
+		assertEquals("Sprite was not added", 5, spriteList.getCount());
+	}
+
+	public void testAddedSpriteVisibleOnLongList() {
+		Project project = ProjectManager.INSTANCE.getCurrentProject();
+		addSprite("dog", project);
+		addSprite("mouse", project);
+		addSprite("bear", project);
+		addSprite("tiger", project);
+		addSprite("lion", project);
+		addSprite("eagle", project);
+		addSprite("leopard", project);
+		addSprite("snake", project);
+		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
+		solo.sleep(500);
+		solo.clickOnButton(solo.getString(R.string.current_project_button));
+		solo.waitForActivity(ProjectActivity.class.getSimpleName());
+
+		assertTrue("Sprite cat is first in list - should be visible on initial start without scrolling",
+				solo.searchText("cat", 0, false));
+
+		String newSpriteName = "Koala";
+		addNewSprite(newSpriteName);
+		assertTrue("Sprite Koala was not found - List did not move to last added sprite",
+				solo.searchText(newSpriteName, 0, false));
+	}
+
 	public void testContextMenu() {
 		solo.clickOnButton(getActivity().getString(R.string.current_project_button));
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
@@ -163,6 +241,7 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 
 		ListView spritesList = (ListView) solo.getCurrentActivity().findViewById(android.R.id.list);
 		Sprite sprite = (Sprite) spritesList.getItemAtPosition(1);
+		Log.v("ProjectActivityTest", sprite.getName());
 		assertEquals("Sprite on position wasn't renamed correctly", newSpriteName, sprite.getName());
 
 		// Delete sprite
@@ -184,11 +263,11 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 	public void testMainMenuButton() {
 		solo.clickOnButton(getActivity().getString(R.string.current_project_button));
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_home);
+		UiTestUtils.clickOnUpActionBarButton(solo.getCurrentActivity());
 		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
 
-		boolean buttonFound = solo.getView(R.id.btn_home) != null ? true : false;
-		assertTrue("Main menu is not visible", buttonFound);
+		assertTrue("Clicking on main menu button did not cause main menu to be displayed",
+				solo.getCurrentActivity() instanceof MainMenuActivity);
 	}
 
 	public void testChangeOrientation() {
@@ -238,7 +317,7 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 		TextView textView = solo.getText(9);
 		assertEquals("linecount is wrong - ellipsize failed", expectedLineCount, textView.getLineCount());
 		solo.clickLongOnText(spriteName);
-		expectedLineCount = 3;
+		expectedLineCount = 2;
 		TextView textView2 = solo.getText(0);
 		assertEquals("linecount is wrong", expectedLineCount, textView2.getLineCount());
 	}
@@ -425,6 +504,7 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 		solo.sleep(500);
 		solo.clickOnButton(getActivity().getString(R.string.current_project_button));
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
+		addNewSprite("testSprite");
 
 		Sprite sprite = ProjectManager.getInstance().getCurrentSprite();
 		int scriptCount = sprite.getNumberOfScripts();
@@ -453,7 +533,7 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 
 	private void openNewSpriteDialog() {
 		solo.sleep(200);
-		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_add_button);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_add);
 		solo.sleep(50);
 	}
 
@@ -508,5 +588,12 @@ public class ProjectActivityTest extends ActivityInstrumentationTestCase2<MainMe
 		soundInfoList.add(soundInfo);
 		ProjectManager.getInstance().getFileChecksumContainer()
 				.addChecksum(soundInfo.getChecksum(), soundInfo.getAbsolutePath());
+	}
+
+	private void addSprite(String spriteName, Project project) {
+		Sprite spriteToAdd = new Sprite(spriteName);
+		project.addSprite(spriteToAdd);
+		ProjectManager.INSTANCE.saveProject();
+		ProjectManager.INSTANCE.setProject(project);
 	}
 }

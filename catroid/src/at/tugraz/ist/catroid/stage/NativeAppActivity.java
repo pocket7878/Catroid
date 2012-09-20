@@ -22,8 +22,11 @@
  */
 package at.tugraz.ist.catroid.stage;
 
-import android.app.Dialog;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -35,7 +38,6 @@ import at.tugraz.ist.catroid.ui.dialogs.AboutDialog;
 
 public class NativeAppActivity extends StageActivity {
 	private static Context context = null;
-	private static final int DIALOG_ABOUT = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,21 @@ public class NativeAppActivity extends StageActivity {
 
 		context = this;
 
-		manager.loadProject("project.xml", this, false);
+		if (!manager.loadProject("project.xml", this, null, false)) {
+
+			Builder builder = new AlertDialog.Builder(context);
+
+			builder.setTitle(context.getString(R.string.error));
+			builder.setMessage(context.getString(R.string.error_load_project));
+			builder.setNeutralButton(context.getString(R.string.close), new OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+				}
+			});
+			builder.show();
+
+		}
 		manager = ProjectManager.getInstance();
 		super.onCreate(savedInstanceState);
 	}
@@ -78,18 +94,10 @@ public class NativeAppActivity extends StageActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.nativeappMenuAbout) {
-			showDialog(DIALOG_ABOUT);
+			AboutDialog aboutDialog = new AboutDialog(this);
+			aboutDialog.show();
 		}
 		return true;
-	}
-
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		Dialog dialog = null;
-		if (id == DIALOG_ABOUT) {
-			dialog = new AboutDialog(this);
-		}
-		return dialog;
 	}
 
 	@Override

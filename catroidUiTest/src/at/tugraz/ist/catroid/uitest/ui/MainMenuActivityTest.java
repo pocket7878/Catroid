@@ -23,15 +23,21 @@
 package at.tugraz.ist.catroid.uitest.ui;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
+import at.tugraz.ist.catroid.common.StandardProjectHandler;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -39,6 +45,7 @@ import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.ComeToFrontBrick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
+import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
 import at.tugraz.ist.catroid.content.bricks.ShowBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
@@ -52,6 +59,7 @@ import at.tugraz.ist.catroid.utils.Utils;
 import com.jayway.android.robotium.solo.Solo;
 
 public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
+
 	private Solo solo;
 	private String testProject = UiTestUtils.PROJECTNAME1;
 	private String testProject2 = UiTestUtils.PROJECTNAME2;
@@ -60,7 +68,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 	private String projectNameWithWhitelistedCharacters = "[Hey+, =lo_ok. I'm; -special! ?äöüß<>]";
 
 	public MainMenuActivityTest() {
-		super("at.tugraz.ist.catroid", MainMenuActivity.class);
+		super(MainMenuActivity.class);
 	}
 
 	@Override
@@ -71,6 +79,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 
 	@Override
 	public void tearDown() throws Exception {
+		UiTestUtils.goBackToHome(getInstrumentation());
 		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 		UtilFile.deleteDirectory(new File(Utils.buildProjectPath(projectNameWithBlacklistedCharacters)));
@@ -122,10 +131,9 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		solo.sleep(100);
 		solo.setActivityOrientation(Solo.PORTRAIT);
 		solo.sleep(100);
-		solo.sendKey(Solo.ENTER);
+		Button okButton = (Button) solo.getView(R.id.new_project_ok_button);
 
-		assertTrue("No error message was displayed upon creating a project with an empty name.",
-				solo.searchText(getActivity().getString(R.string.error_no_name_entered)));
+		assertFalse("New project ok button is enabled!", okButton.isEnabled());
 		solo.clickOnButton(0);
 
 		File directory = new File(Constants.DEFAULT_ROOT + "/" + testProject);
@@ -166,6 +174,7 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 
 		assertTrue("No error message was displayed upon creating a project with the same name twice.",
 				solo.searchText(getActivity().getString(R.string.error_project_exists)));
+		solo.clickOnButton(getActivity().getString(R.string.close));
 
 		UtilFile.deleteDirectory(directory);
 	}
@@ -214,6 +223,21 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 
 		File file = new File(Utils.buildPath(directoryPath, Constants.PROJECTCODE_NAME));
 		assertTrue("Project file with whitelisted characters was not created!", file.exists());
+	}
+
+	public void testErrorDialogOrientationChange() {
+		solo.clickOnButton(solo.getString(R.string.new_project));
+		solo.setActivityOrientation(Solo.PORTRAIT);
+		solo.sleep(100);
+		solo.clearEditText(0);
+		UiTestUtils.enterText(solo, 0, " ");
+		solo.clickOnButton(solo.getString(R.string.ok));
+		solo.sleep(100);
+		solo.setActivityOrientation(Solo.LANDSCAPE);
+		solo.sleep(200);
+		String errorMessage = solo.getString(R.string.error_no_name_entered);
+		assertTrue("Error dialog dissapeared after orientation change", solo.searchText(errorMessage));
+		solo.goBack();
 	}
 
 	public void testLoadProject() {
@@ -267,6 +291,8 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 	}
 
 	public void testAboutCatroid() {
+		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
+		solo.sleep(200);
 		solo.clickOnButton(getActivity().getString(R.string.about));
 		solo.sleep(200);
 		ArrayList<TextView> textViewList = solo.getCurrentTextViews(null);
@@ -277,6 +303,22 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 				.getText().toString());
 		assertEquals("Link text is not correct!", getActivity().getString(R.string.about_catroid_license_link_text),
 				textViewList.get(2).getText().toString());
+		solo.goBack();
+	}
+
+	public void testAboutDialogOrientationChange() {
+		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
+		solo.sleep(200);
+		solo.clickOnButton(solo.getString(R.string.about));
+		solo.sleep(200);
+		solo.setActivityOrientation(Solo.PORTRAIT);
+		solo.sleep(200);
+		assertTrue("About dialog is not visible", solo.searchText(getActivity().getString(R.string.about_text)));
+		solo.sleep(200);
+		solo.setActivityOrientation(Solo.LANDSCAPE);
+		solo.sleep(200);
+		assertTrue("About dialog is not visible", solo.searchText(getActivity().getString(R.string.about_text)));
+		solo.goBack();
 	}
 
 	public void testShouldDisplayDialogIfVersionNumberTooHigh() throws Throwable {
@@ -289,7 +331,8 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 
 		runTestOnUiThread(new Runnable() {
 			public void run() {
-				ProjectManager.INSTANCE.loadProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, getActivity(), true);
+				ProjectManager.INSTANCE.loadProject(UiTestUtils.DEFAULT_TEST_PROJECT_NAME, getActivity(),
+						getActivity(), true);
 			}
 		});
 
@@ -376,5 +419,60 @@ public class MainMenuActivityTest extends ActivityInstrumentationTestCase2<MainM
 		project.addSprite(fourthSprite);
 
 		storageHandler.saveProject(project);
+	}
+
+	public void testOverrideMyFirstProject() {
+		String standardProjectName = solo.getString(R.string.default_project_name);
+		Project standardProject = null;
+
+		try {
+			standardProject = StandardProjectHandler.createAndSaveStandardProject(standardProjectName,
+					getInstrumentation().getTargetContext());
+		} catch (IOException e) {
+			fail("Could not create standard project");
+			e.printStackTrace();
+		}
+
+		if (standardProject == null) {
+			fail("Could not create standard project");
+		}
+		ProjectManager.INSTANCE.setProject(standardProject);
+		StorageHandler.getInstance().saveProject(standardProject);
+
+		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
+		solo.sleep(300);
+		solo.clickOnButton(solo.getString(R.string.my_projects));
+		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+
+		Sprite backgroundSprite = standardProject.getSpriteList().get(0);
+		Script startingScript = backgroundSprite.getScript(0);
+		assertEquals("Number of bricks in background sprite was wrong", 1, backgroundSprite.getNumberOfBricks());
+		startingScript.addBrick(new SetCostumeBrick(backgroundSprite));
+		startingScript.addBrick(new SetCostumeBrick(backgroundSprite));
+		startingScript.addBrick(new SetCostumeBrick(backgroundSprite));
+		assertEquals("Number of bricks in background sprite was wrong", 4, backgroundSprite.getNumberOfBricks());
+		ProjectManager.INSTANCE.setCurrentSprite(backgroundSprite);
+		ProjectManager.INSTANCE.setCurrentScript(startingScript);
+		ProjectManager.INSTANCE.saveProject();
+
+		UiTestUtils.goBackToHome(getInstrumentation());
+		solo.waitForActivity(MainMenuActivity.class.getSimpleName());
+		solo.sleep(300);
+		SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getInstrumentation()
+				.getTargetContext());
+		assertEquals("Standard project was not set in shared preferences", standardProjectName,
+				defaultSharedPreferences.getString(Constants.PREF_PROJECTNAME_KEY, null));
+
+		Utils.saveToPreferences(getInstrumentation().getTargetContext(), Constants.PREF_PROJECTNAME_KEY, null);
+		assertEquals("Standard project was not reset to null in shared preferences", null,
+				defaultSharedPreferences.getString(Constants.PREF_PROJECTNAME_KEY, null));
+
+		Intent intent = new Intent(solo.getCurrentActivity(), ProjectActivity.class);
+		ProjectManager.INSTANCE.setProject(null);
+		solo.getCurrentActivity().startActivity(intent);
+		solo.waitForActivity(ProjectActivity.class.getSimpleName());
+		solo.sleep(500);
+		assertEquals("Number of bricks in background sprite was wrong - standard project was overwritten", 4,
+				ProjectManager.INSTANCE.getCurrentProject().getSpriteList().get(0).getNumberOfBricks());
 	}
 }

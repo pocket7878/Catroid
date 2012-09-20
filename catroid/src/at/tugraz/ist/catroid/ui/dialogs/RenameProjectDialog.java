@@ -22,87 +22,111 @@
  */
 package at.tugraz.ist.catroid.ui.dialogs;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnKeyListener;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.os.Bundle;
+import android.util.Log;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.io.StorageHandler;
-import at.tugraz.ist.catroid.ui.MyProjectsActivity;
+import at.tugraz.ist.catroid.utils.ErrorListenerInterface;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class RenameProjectDialog extends TextDialog {
 
-	public RenameProjectDialog(MyProjectsActivity myProjectsActivity, String projectName) {
-		super(myProjectsActivity, myProjectsActivity.getString(R.string.rename_project), null);
-		initKeyListenerAndClickListener();
+	private static final String BUNDLE_ARGUMENTS_OLD_PROJECT_NAME = "old_project_name";
+	public static final String DIALOG_FRAGMENT_TAG = "dialog_rename_project";
+
+	private OnProjectRenameListener onProjectRenameListener;
+
+	private String oldProjectName;
+
+	public static RenameProjectDialog newInstance(String oldProjectName) {
+		RenameProjectDialog dialog = new RenameProjectDialog();
+
+		Bundle arguments = new Bundle();
+		arguments.putString(BUNDLE_ARGUMENTS_OLD_PROJECT_NAME, oldProjectName);
+		dialog.setArguments(arguments);
+
+		return dialog;
 	}
 
-	public void handleOkButton() {
+	public void setOnProjectRenameListener(OnProjectRenameListener listener) {
+		onProjectRenameListener = listener;
+	}
+
+	@Override
+	protected void initialize() {
+		oldProjectName = getArguments().getString(BUNDLE_ARGUMENTS_OLD_PROJECT_NAME);
+		input.setText(oldProjectName);
+	}
+
+	@Override
+	protected boolean handleOkButton() {
 		String newProjectName = (input.getText().toString()).trim();
-		String oldProjectName = (((MyProjectsActivity) activity).projectToEdit.projectName);
+
+		if (newProjectName.equalsIgnoreCase("")) {
+			Utils.displayErrorMessageFragment(getActivity().getSupportFragmentManager(),
+					getString(R.string.notification_invalid_text_entered));
+			return false;
+		} else if (StorageHandler.getInstance().projectExistsIgnoreCase(newProjectName)
+				&& !oldProjectName.equalsIgnoreCase(newProjectName)) {
+			Utils.displayErrorMessageFragment(getFragmentManager(), getString(R.string.error_project_exists));
+			return false;
+		}
 
 		if (newProjectName.equals(oldProjectName)) {
-			activity.dismissDialog(MyProjectsActivity.DIALOG_RENAME_PROJECT);
-			return;
+			dismiss();
+			return false;
 		}
+		try {
+			if (newProjectName != null && !newProjectName.equalsIgnoreCase("")) {
+				ProjectManager projectManager = ProjectManager.getInstance();
+				String currentProjectName = projectManager.getCurrentProject().getName();
 
-		if (newProjectName != null && !newProjectName.equalsIgnoreCase("")) {
+				// check if is current project
+				boolean isCurrentProject = false;
 
-			ProjectManager projectManager = ProjectManager.getInstance();
-			String currentProjectName = projectManager.getCurrentProject().getName();
-			// check if is current project
-			if (oldProjectName.equalsIgnoreCase(currentProjectName)) {
-				projectManager.renameProject(newProjectName, activity);
-				((MyProjectsActivity) activity).updateProjectTitle();
-				Utils.saveToPreferences(activity, Constants.PREF_PROJECTNAME_KEY, newProjectName);
-			} else {
-				projectManager.loadProject(oldProjectName, activity, false);
-				projectManager.renameProject(newProjectName, activity);
-				projectManager.loadProject(currentProjectName, activity, false);
-			}
-			((MyProjectsActivity) activity).initAdapter();
-		} else {
-			Utils.displayErrorMessage(activity, activity.getString(R.string.notification_invalid_text_entered));
-			return;
-		}
-		activity.dismissDialog(MyProjectsActivity.DIALOG_RENAME_PROJECT);
-	}
+				if (oldProjectName.equalsIgnoreCase(currentProjectName)) {
+					projectManager.renameProject(newProjectName, getActivity(), (ErrorListenerInterface) getActivity());
 
-	private void initKeyListenerAndClickListener() {
-		dialog.setOnKeyListener(new OnKeyListener() {
-			public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-				if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-					String newProjectName = (input.getText().toString()).trim();
-					String oldProjectName = (((MyProjectsActivity) activity).projectToEdit.projectName);
-					if (StorageHandler.getInstance().projectExistsCheckCase(newProjectName)
-							&& !newProjectName.equalsIgnoreCase(oldProjectName)) {
-						Utils.displayErrorMessage(activity, activity.getString(R.string.error_project_exists));
-					} else if (newProjectName.equalsIgnoreCase("")) {
-						Utils.displayErrorMessage(activity,
-								activity.getString(R.string.notification_invalid_text_entered));
-					} else {
-						handleOkButton();
-					}
-					return true;
+					isCurrentProject = true;
+					Utils.saveToPreferences(getActivity(), Constants.PREF_PROJECTNAME_KEY, newProjectName);
+				} else {
+					projectManager.loadProject(oldProjectName, getActivity(), (ErrorListenerInterface) getActivity(),
+							false);
+					projectManager.renameProject(newProjectName, getActivity(), (ErrorListenerInterface) getActivity());
+					projectManager.loadProject(currentProjectName, getActivity(),
+							(ErrorListenerInterface) getActivity(), false);
 				}
+
+				if (onProjectRenameListener != null) {
+					onProjectRenameListener.onProjectRename(isCurrentProject);
+				}
+			} else {
+				Utils.displayErrorMessageFragment(getFragmentManager(),
+						getString(R.string.notification_invalid_text_entered));
 				return false;
 			}
-		});
+		} catch (ClassCastException exception) {
+			Log.e("CATROID", getActivity().toString() + " does not implement ErrorListenerInterface", exception);
+		}
 
-		buttonPositive.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				handleOkButton();
-			}
-		});
+		return true;
+	}
 
-		buttonNegative.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				activity.dismissDialog(MyProjectsActivity.DIALOG_RENAME_PROJECT);
-			}
-		});
+	@Override
+	protected String getTitle() {
+		return getString(R.string.rename_project);
+	}
+
+	@Override
+	protected String getHint() {
+		return null;
+	}
+
+	public interface OnProjectRenameListener {
+
+		public void onProjectRename(boolean isCurrentProject);
+
 	}
 }

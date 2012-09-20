@@ -13,17 +13,19 @@ import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.SetPhysicObjectTypeBrick;
 import at.tugraz.ist.catroid.physics.PhysicObject;
-import at.tugraz.ist.catroid.ui.ScriptActivity;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
+import at.tugraz.ist.catroid.ui.fragment.ScriptFragment;
 
 import com.jayway.android.robotium.solo.Solo;
 
-public class SetPhysicObjectTypeBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
+public class SetPhysicObjectTypeBrickTest extends ActivityInstrumentationTestCase2<ScriptTabActivity> {
 	private Solo solo;
 	private Project project;
 	private SetPhysicObjectTypeBrick setPhysicObjectTypeBrick;
 
 	public SetPhysicObjectTypeBrickTest() {
-		super("at.tugraz.ist.catroid", ScriptActivity.class);
+		super(ScriptTabActivity.class);
 	}
 
 	@Override
@@ -46,22 +48,22 @@ public class SetPhysicObjectTypeBrickTest extends ActivityInstrumentationTestCas
 
 	@Smoke
 	public void testPhysicObjectTypeBrick() {
-		int childrenCount = getActivity().getAdapter().getChildCountFromLastGroup();
-		int groupCount = getActivity().getAdapter().getGroupCount();
+		ScriptTabActivity activity = (ScriptTabActivity) solo.getCurrentActivity();
+		ScriptFragment fragment = (ScriptFragment) activity.getTabFragment(ScriptTabActivity.INDEX_TAB_SCRIPTS);
+		BrickAdapter adapter = fragment.getAdapter();
 
-		assertEquals("Incorrect number of bricks.", 2, solo.getCurrentListViews().get(0).getChildCount());
+		int childrenCount = adapter.getChildCountFromLastGroup();
+		int groupCount = adapter.getScriptCount();
+
+		assertEquals("Incorrect number of bricks.", 2 + 1, solo.getCurrentListViews().get(0).getChildCount()); // don't forget the footer
 		assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
 		ArrayList<Brick> projectBrickList = project.getSpriteList().get(0).getScript(0).getBrickList();
 		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0),
-				getActivity().getAdapter().getChild(groupCount - 1, 0));
-
-		String physicObjectTypeByString = solo.getString(R.string.brick_set_physic_object_type);
-		solo.waitForText(physicObjectTypeByString);
-
-		assertNotNull("TextView does not exist", solo.getText(physicObjectTypeByString));
+		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+		String textSetPhysicObjectType = solo.getString(R.string.brick_set_physic_object_type);
+		assertNotNull("TextView does not exist.", solo.getText(textSetPhysicObjectType));
 
 		PhysicObject.Type type = PhysicObject.Type.DYNAMIC;
 

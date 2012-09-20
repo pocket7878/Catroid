@@ -54,12 +54,13 @@ import at.tugraz.ist.catroid.utils.Utils;
 import com.jayway.android.robotium.solo.Solo;
 
 public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
+
 	private Solo solo;
 	private String testProject = UiTestUtils.PROJECTNAME1;
 	private StorageHandler storageHandler;
 
 	public StageDialogTest() {
-		super("at.tugraz.ist.catroid", MainMenuActivity.class);
+		super(MainMenuActivity.class);
 		storageHandler = StorageHandler.getInstance();
 	}
 
@@ -72,14 +73,18 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 
 	@Override
 	protected void tearDown() throws Exception {
+		UiTestUtils.goBackToHome(getInstrumentation());
 		solo.finishOpenedActivities();
 		ProjectManager.getInstance().deleteCurrentProject();
 		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
 	}
 
-	public void testBackButtonPressedTwice() {
-		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_play);
+	public void testBackButtonPressedTwice() throws NameNotFoundException, IOException {
+		Project project = createTestProject(testProject);
+		ProjectManager.getInstance().setProject(project);
+
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_start);
 		solo.waitForActivity(StageActivity.class.getSimpleName());
 		solo.sleep(1000);
 		solo.goBack();
@@ -93,11 +98,12 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		createAndSaveTestProject(testProject);
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
 		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+		solo.waitForFragmentById(R.id.fr_projects_list);
 		assertTrue("Cannot click project.", UiTestUtils.clickOnTextInList(solo, testProject));
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
 
 		Activity previousActivity = getActivity();
-		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_play);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_start);
 		solo.waitForActivity(StageActivity.class.getSimpleName());
 
 		solo.goBack();
@@ -124,7 +130,7 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		storageHandler.saveProject(project);
 		ProjectManager.getInstance().setProject(project);
 
-		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_play);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_start);
 
 		//		assertEquals("Unexpected sprite size", 100.0, sprite.getSize());
 		//		solo.goBack();
@@ -139,12 +145,13 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		createAndSaveTestProject(testProject);
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
 		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+		solo.waitForFragmentById(R.id.fr_projects_list);
 		assertTrue("Cannot click project.", UiTestUtils.clickOnTextInList(solo, testProject));
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
 
 		Activity currentActivity = solo.getCurrentActivity();
 
-		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_play);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_start);
 		solo.waitForActivity(StageActivity.class.getSimpleName());
 		solo.goBack();
 		solo.sleep(100);
@@ -166,7 +173,7 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		scriptPositionsStart.clear();
 		scriptPositionsRestart.clear();
 
-		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_play);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_start);
 		solo.waitForActivity(StageActivity.class.getSimpleName());
 		solo.sleep(1000);
 
@@ -244,7 +251,7 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		storageHandler.saveProject(project);
 
 		MediaPlayer mediaPlayer = SoundManager.getInstance().getMediaPlayer();
-		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_play);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_start);
 		solo.waitForActivity(StageActivity.class.getSimpleName());
 		solo.sleep(1000);
 		assertTrue("Sound not playing.", mediaPlayer.isPlaying());
@@ -253,7 +260,7 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		solo.sleep(500);
 		assertFalse("Sound playing but should be paused.", mediaPlayer.isPlaying());
 		solo.clickOnButton(getActivity().getString(R.string.restart_current_project));
-		solo.sleep(500);
+		solo.sleep(300);
 		@SuppressWarnings("unchecked")
 		ArrayList<MediaPlayer> mediaPlayerArrayList = (ArrayList<MediaPlayer>) UiTestUtils.getPrivateField(
 				"mediaPlayers", SoundManager.getInstance());
@@ -266,9 +273,10 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		createAndSaveTestProject(testProject);
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
 		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+		solo.waitForFragmentById(R.id.fr_projects_list);
 		assertTrue("Cannot click project.", UiTestUtils.clickOnTextInList(solo, testProject));
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
-		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_play);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_start);
 		solo.waitForActivity(StageActivity.class.getSimpleName());
 		solo.goBack();
 		solo.clickOnButton(getActivity().getString(R.string.stagemenu_axes_on));
@@ -311,10 +319,12 @@ public class StageDialogTest extends ActivityInstrumentationTestCase2<MainMenuAc
 		storageHandler.saveProject(project);
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
 		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
+		solo.waitForFragmentById(R.id.fr_projects_list);
 		assertTrue("Cannot click project.", UiTestUtils.clickOnTextInList(solo, testProject));
 		solo.waitForActivity(ProjectActivity.class.getSimpleName());
+
 		Utils.updateScreenWidthAndHeight(getActivity());
-		UiTestUtils.clickOnLinearLayout(solo, R.id.btn_action_play);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_start);
 		solo.waitForActivity(StageActivity.class.getSimpleName());
 		assertTrue("Stage not resizeable.", ((StageActivity) solo.getCurrentActivity()).getResizePossible());
 		byte[] whitePixel = { (byte) 255, (byte) 255, (byte) 255, (byte) 255 };

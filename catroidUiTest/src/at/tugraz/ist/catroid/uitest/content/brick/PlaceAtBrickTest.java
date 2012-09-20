@@ -24,6 +24,7 @@ package at.tugraz.ist.catroid.uitest.content.brick;
 
 import java.util.ArrayList;
 
+import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.Smoke;
 import at.tugraz.ist.catroid.ProjectManager;
@@ -38,7 +39,9 @@ import at.tugraz.ist.catroid.content.bricks.HideBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaySoundBrick;
 import at.tugraz.ist.catroid.content.bricks.SetSizeToBrick;
-import at.tugraz.ist.catroid.ui.ScriptActivity;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
+import at.tugraz.ist.catroid.ui.fragment.ScriptFragment;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
@@ -48,13 +51,14 @@ import com.jayway.android.robotium.solo.Solo;
  * @author Daniel Burtscher
  * 
  */
-public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
+public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptTabActivity> {
+
 	private Solo solo;
 	private Project project;
 	private PlaceAtBrick placeAtBrick;
 
 	public PlaceAtBrickTest() {
-		super("at.tugraz.ist.catroid", ScriptActivity.class);
+		super(ScriptTabActivity.class);
 	}
 
 	@Override
@@ -65,6 +69,7 @@ public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptAct
 
 	@Override
 	public void tearDown() throws Exception {
+		UiTestUtils.goBackToHome(getInstrumentation());
 		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
@@ -72,26 +77,26 @@ public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptAct
 
 	@Smoke
 	public void testPlaceAtBrick() throws InterruptedException {
-		int childrenCount = getActivity().getAdapter().getChildCountFromLastGroup();
-		int groupCount = getActivity().getAdapter().getGroupCount();
+		ScriptTabActivity activity = (ScriptTabActivity) solo.getCurrentActivity();
+		ScriptFragment fragment = (ScriptFragment) activity.getTabFragment(ScriptTabActivity.INDEX_TAB_SCRIPTS);
+		BrickAdapter adapter = fragment.getAdapter();
 
-		assertEquals("Incorrect number of bricks.", 5, solo.getCurrentListViews().get(0).getChildCount());
+		int childrenCount = adapter.getChildCountFromLastGroup();
+		int groupCount = adapter.getScriptCount();
+
+		assertEquals("Incorrect number of bricks.", 5 + 1, solo.getCurrentListViews().get(0).getChildCount()); // don't forget the footer
 		assertEquals("Incorrect number of bricks.", 4, childrenCount);
 
 		ArrayList<Brick> projectBrickList = project.getSpriteList().get(0).getScript(0).getBrickList();
 		assertEquals("Incorrect number of bricks.", 4, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0),
-				getActivity().getAdapter().getChild(groupCount - 1, 0));
+		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(1),
-				getActivity().getAdapter().getChild(groupCount - 1, 1));
+		assertEquals("Wrong Brick instance.", projectBrickList.get(1), adapter.getChild(groupCount - 1, 1));
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(2),
-				getActivity().getAdapter().getChild(groupCount - 1, 2));
+		assertEquals("Wrong Brick instance.", projectBrickList.get(2), adapter.getChild(groupCount - 1, 2));
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(3),
-				getActivity().getAdapter().getChild(groupCount - 1, 3));
+		assertEquals("Wrong Brick instance.", projectBrickList.get(3), adapter.getChild(groupCount - 1, 3));
 		assertNotNull("TextView does not exist", solo.getText(getActivity().getString(R.string.brick_place_at)));
 
 		int xPosition = 987;
@@ -121,6 +126,9 @@ public class PlaceAtBrickTest extends ActivityInstrumentationTestCase2<ScriptAct
 	public void testResizeInputFields() {
 		ProjectManager.getInstance().deleteCurrentProject();
 		createTestProject();
+		Intent intent = new Intent(ScriptTabActivity.ACTION_NEW_BRICK_ADDED);
+		intent.setAction(ScriptTabActivity.ACTION_BRICK_LIST_CHANGED);
+		solo.getCurrentActivity().sendBroadcast(intent);
 
 		for (int i = 0; i < 2; i++) {
 			UiTestUtils.testIntegerEditText(solo, i, 1, 60, true);

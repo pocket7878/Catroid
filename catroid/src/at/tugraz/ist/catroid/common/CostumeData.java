@@ -22,13 +22,21 @@
  */
 package at.tugraz.ist.catroid.common;
 
+import java.io.Serializable;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.utils.ImageEditing;
 import at.tugraz.ist.catroid.utils.Utils;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class CostumeData {
+public class CostumeData implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private String name;
 	private String fileName;
@@ -37,6 +45,42 @@ public class CostumeData {
 	private transient Integer height;
 	private transient static final int THUMBNAIL_WIDTH = 150;
 	private transient static final int THUMBNAIL_HEIGHT = 150;
+	private transient Pixmap pixmap = null;
+	private transient Pixmap originalPixmap = null;
+	private transient TextureRegion region = null;
+
+	public TextureRegion getTextureRegion() {
+		if (region == null) {
+			region = new TextureRegion(new Texture(getPixmap()));
+		}
+		return region;
+	}
+
+	public void setTextureRegion() {
+		this.region = new TextureRegion(new Texture(getPixmap()));
+	}
+
+	public Pixmap getPixmap() {
+		if (pixmap == null) {
+			pixmap = new Pixmap(Gdx.files.absolute(getAbsolutePath()));
+		}
+		return pixmap;
+	}
+
+	public void setPixmap(Pixmap pixmap) {
+		this.pixmap = pixmap;
+	}
+
+	public Pixmap getOriginalPixmap() {
+		if (originalPixmap == null) {
+			originalPixmap = new Pixmap(Gdx.files.absolute(getAbsolutePath()));
+		}
+		return originalPixmap;
+
+	}
+
+	public CostumeData() {
+	}
 
 	public String getAbsolutePath() {
 		if (fileName != null) {
@@ -95,9 +139,6 @@ public class CostumeData {
 	}
 
 	public int[] getResolution() {
-		if (width != null && height != null) {
-			return new int[] { width, height };
-		}
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
 		BitmapFactory.decodeFile(getAbsolutePath(), options);

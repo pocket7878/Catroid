@@ -139,7 +139,5 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
-
 	}
-
 }

@@ -12,18 +12,21 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.TurnLeftSpeedBrick;
-import at.tugraz.ist.catroid.ui.ScriptActivity;
+import at.tugraz.ist.catroid.ui.MainMenuActivity;
+import at.tugraz.ist.catroid.ui.ScriptTabActivity;
+import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
+import at.tugraz.ist.catroid.ui.fragment.ScriptFragment;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
 
-public class LeftRotationSpeedBrickTest extends ActivityInstrumentationTestCase2<ScriptActivity> {
+public class LeftRotationSpeedBrickTest extends ActivityInstrumentationTestCase2<MainMenuActivity> {
 	private Solo solo;
 	private Project project;
 	private TurnLeftSpeedBrick setAngularVelocityBrick;
 
 	public LeftRotationSpeedBrickTest() {
-		super("at.tugraz.ist.catroid", ScriptActivity.class);
+		super(MainMenuActivity.class);
 	}
 
 	@Override
@@ -46,19 +49,22 @@ public class LeftRotationSpeedBrickTest extends ActivityInstrumentationTestCase2
 
 	@Smoke
 	public void testSetAngularVelocityBrick() {
-		int childrenCount = getActivity().getAdapter().getChildCountFromLastGroup();
-		int groupCount = getActivity().getAdapter().getGroupCount();
+		ScriptTabActivity activity = (ScriptTabActivity) solo.getCurrentActivity();
+		ScriptFragment fragment = (ScriptFragment) activity.getTabFragment(ScriptTabActivity.INDEX_TAB_SCRIPTS);
+		BrickAdapter adapter = fragment.getAdapter();
 
-		assertEquals("Incorrect number of bricks.", 2, solo.getCurrentListViews().get(0).getChildCount());
+		int childrenCount = adapter.getChildCountFromLastGroup();
+		int groupCount = adapter.getScriptCount();
+
+		assertEquals("Incorrect number of bricks.", 2 + 1, solo.getCurrentListViews().get(0).getChildCount()); // don't forget the footer
 		assertEquals("Incorrect number of bricks.", 1, childrenCount);
 
 		ArrayList<Brick> projectBrickList = project.getSpriteList().get(0).getScript(0).getBrickList();
 		assertEquals("Incorrect number of bricks.", 1, projectBrickList.size());
 
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0),
-				getActivity().getAdapter().getChild(groupCount - 1, 0));
-		assertNotNull("TextView does not exist",
-				solo.getText(getActivity().getString(R.string.brick_turn_left_speed)));
+		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getChild(groupCount - 1, 0));
+		String textSetRotationSpeed = solo.getString(R.string.brick_turn_left_speed);
+		assertNotNull("TextView does not exist.", solo.getText(textSetRotationSpeed));
 
 		float angularVelocity = 10.0f;
 

@@ -35,19 +35,20 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.BroadcastBrick;
 import at.tugraz.ist.catroid.content.bricks.BroadcastWaitBrick;
-import at.tugraz.ist.catroid.ui.ScriptActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.adapter.BrickAdapter;
+import at.tugraz.ist.catroid.ui.fragment.ScriptFragment;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
 import com.jayway.android.robotium.solo.Solo;
 
 public class BroadcastBricksTest extends ActivityInstrumentationTestCase2<ScriptTabActivity> {
+
 	private Solo solo;
 	private Project project;
 
 	public BroadcastBricksTest() {
-		super("at.tugraz.ist.catroid", ScriptTabActivity.class);
+		super(ScriptTabActivity.class);
 	}
 
 	@Override
@@ -58,6 +59,7 @@ public class BroadcastBricksTest extends ActivityInstrumentationTestCase2<Script
 
 	@Override
 	public void tearDown() throws Exception {
+		UiTestUtils.goBackToHome(getInstrumentation());
 		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
@@ -65,18 +67,18 @@ public class BroadcastBricksTest extends ActivityInstrumentationTestCase2<Script
 
 	@Smoke
 	public void testBroadcastBricks() {
-		BrickAdapter adapter = ((ScriptActivity) getActivity().getCurrentActivity()).getAdapter();
+		ScriptTabActivity activity = (ScriptTabActivity) solo.getCurrentActivity();
+		ScriptFragment fragment = (ScriptFragment) activity.getTabFragment(ScriptTabActivity.INDEX_TAB_SCRIPTS);
+		BrickAdapter adapter = fragment.getAdapter();
 
-		int childrenCount = adapter.getBrickCount(adapter.getScriptCount() - 1);
-		int groupCount = adapter.getScriptCount();
-		assertEquals("Incorrect number of bricks.", 3, solo.getCurrentListViews().get(0).getChildCount());
+		int childrenCount = ProjectManager.getInstance().getCurrentSprite().getScript(adapter.getScriptCount() - 1)
+				.getBrickList().size();
+		assertEquals("Incorrect number of bricks.", 3 + 1, solo.getCurrentListViews().get(0).getChildCount()); // don't forget the footer
 		assertEquals("Incorrect number of bricks.", 2, childrenCount);
 
 		ArrayList<Brick> projectBrickList = project.getSpriteList().get(0).getScript(0).getBrickList();
 		assertEquals("Incorrect number of bricks.", 2, projectBrickList.size());
-
-		assertEquals("Wrong Brick instance.", projectBrickList.get(0),
-				adapter.getItem(adapter.getScriptId(groupCount - 1) + 1));
+		assertEquals("Wrong Brick instance.", projectBrickList.get(0), adapter.getItem(1));
 
 		String testString = "test";
 		String testString2 = "test2";
@@ -84,31 +86,36 @@ public class BroadcastBricksTest extends ActivityInstrumentationTestCase2<Script
 
 		String buttonNewBroadcastText = solo.getString(R.string.new_broadcast_message);
 		solo.clickOnText(buttonNewBroadcastText, 1);
+		solo.clearEditText(0);
 		solo.enterText(0, testString);
-		solo.clickOnButton(0);
+		solo.sleep(200);
+		solo.sendKey(Solo.ENTER);
 		solo.sleep(400);
 		solo.setActivityOrientation(Solo.LANDSCAPE);
-		solo.sleep(600);
+		solo.sleep(300);
 		solo.setActivityOrientation(Solo.PORTRAIT);
 		solo.sleep(600);
+		solo.clickOnText(solo.getString(R.string.brick_broadcast_receive)); //just to get focus for solo
 
 		assertEquals("Wrong selection", testString, (String) solo.getCurrentSpinners().get(0).getSelectedItem());
 		assertNotSame("Wrong selection", testString, solo.getCurrentSpinners().get(1).getSelectedItem());
 
 		solo.pressSpinnerItem(1, 2);
-		solo.waitForActivity(ScriptTabActivity.class.getSimpleName());
+		solo.sleep(200);
 		assertEquals("Wrong selection", testString, (String) solo.getCurrentSpinners().get(1).getSelectedItem());
 
 		solo.pressSpinnerItem(2, 2);
-		solo.waitForActivity(ScriptTabActivity.class.getSimpleName());
+		solo.sleep(200);
 		assertEquals("Wrong selection", testString, (String) solo.getCurrentSpinners().get(2).getSelectedItem());
 
 		solo.clickOnText(buttonNewBroadcastText, 2);
+		solo.clearEditText(0);
 		solo.enterText(0, testString2);
-		solo.clickOnButton(0);
+		solo.sleep(200);
+		solo.sendKey(Solo.ENTER);
 		solo.sleep(400);
 		solo.setActivityOrientation(Solo.LANDSCAPE);
-		solo.sleep(600);
+		solo.sleep(300);
 		solo.setActivityOrientation(Solo.PORTRAIT);
 		solo.sleep(600);
 
@@ -117,11 +124,13 @@ public class BroadcastBricksTest extends ActivityInstrumentationTestCase2<Script
 		assertEquals("Wrong selection", testString, (String) solo.getCurrentSpinners().get(2).getSelectedItem());
 
 		solo.clickOnText(buttonNewBroadcastText, 3);
+		solo.clearEditText(0);
 		solo.enterText(0, testString3);
-		solo.clickOnButton(0);
+		solo.sleep(200);
+		solo.sendKey(Solo.ENTER);
 		solo.sleep(400);
 		solo.setActivityOrientation(Solo.LANDSCAPE);
-		solo.sleep(600);
+		solo.sleep(300);
 		solo.setActivityOrientation(Solo.PORTRAIT);
 		solo.sleep(600);
 
@@ -130,7 +139,7 @@ public class BroadcastBricksTest extends ActivityInstrumentationTestCase2<Script
 		assertEquals("Wrong selection", testString3, (String) solo.getCurrentSpinners().get(2).getSelectedItem());
 
 		solo.pressSpinnerItem(1, 4);
-		solo.waitForActivity(ScriptTabActivity.class.getSimpleName());
+		solo.sleep(200);
 		assertEquals("Wrong selection", testString3, (String) solo.getCurrentSpinners().get(1).getSelectedItem());
 	}
 

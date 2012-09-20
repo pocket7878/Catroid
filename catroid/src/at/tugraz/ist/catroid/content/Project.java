@@ -39,8 +39,9 @@ public class Project implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private List<Sprite> spriteList = new ArrayList<Sprite>();
 	private String projectName;
+	private String description;
 
-	private PhysicWorld physicWorld;
+	private transient PhysicWorld physicWorld = new PhysicWorld();
 
 	// Only used for Catroid website
 	@SuppressWarnings("unused")
@@ -56,8 +57,6 @@ public class Project implements Serializable {
 	@XStreamAlias("screenHeight")
 	public int virtualScreenHeight = 0;
 
-	public String description;
-
 	public Project(Context context, String name) {
 		this.projectName = name;
 
@@ -70,7 +69,7 @@ public class Project implements Serializable {
 			return;
 		}
 
-		physicWorld = new PhysicWorld();
+		//		physicWorld = new PhysicWorld();
 		Sprite background = new Sprite(context.getString(R.string.background));
 		background.costume.zPosition = Integer.MIN_VALUE;
 		addSprite(background);
@@ -105,6 +104,14 @@ public class Project implements Serializable {
 
 	public String getName() {
 		return projectName;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 	public int getCatroidVersionCode() {
