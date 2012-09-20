@@ -33,6 +33,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,6 +49,7 @@ import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
 import at.tugraz.ist.catroid.transfers.ProjectUploadTask;
+import at.tugraz.ist.catroid.utils.ErrorListenerInterface;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
 
@@ -63,6 +65,7 @@ public class UploadProjectDialog extends DialogFragment {
 	private Button cancelButton;
 
 	private String currentProjectName;
+	private String currentProjectDescription;
 	private String newProjectName;
 
 	@Override
@@ -97,11 +100,12 @@ public class UploadProjectDialog extends DialogFragment {
 	}
 
 	private void initControls() {
-		currentProjectName = ProjectManager.getInstance().getCurrentProject().getName();
+		currentProjectName = ProjectManager.INSTANCE.getCurrentProject().getName();
+		currentProjectDescription = ProjectManager.INSTANCE.getCurrentProject().getDescription();
 		sizeOfProject.setText(UtilFile.getSizeAsString(new File(Constants.DEFAULT_ROOT + "/" + currentProjectName)));
 		projectRename.setVisibility(View.GONE);
 		projectUploadName.setText(currentProjectName);
-		projectDescriptionField.setText("");
+		projectDescriptionField.setText(currentProjectDescription);
 		projectUploadName.requestFocus();
 		projectUploadName.selectAll();
 
@@ -171,18 +175,28 @@ public class UploadProjectDialog extends DialogFragment {
 	}
 
 	private void handleUploadButtonClick() {
-		ProjectManager projectManager = ProjectManager.getInstance();
+		ProjectManager projectManager = ProjectManager.INSTANCE;
 
 		String uploadName = projectUploadName.getText().toString();
+		String projectDescription = projectDescriptionField.getText().toString();
+
 		if (uploadName.length() == 0) {
-			Utils.displayErrorMessage(getActivity(), getString(R.string.error_no_name_entered));
+			Utils.displayErrorMessageFragment(getFragmentManager(), getString(R.string.error_no_name_entered));
 			return;
-		} else if (!uploadName.equals(currentProjectName)) {
-			projectRename.setVisibility(View.VISIBLE);
-			boolean renamed = projectManager.renameProject(newProjectName, getActivity());
-			if (!renamed) {
-				return;
+		}
+		if (!uploadName.equals(currentProjectName)) {
+			try {
+				projectRename.setVisibility(View.VISIBLE);
+				boolean renamed = projectManager.renameProjectNameAndDescription(newProjectName, projectDescription,
+						getActivity(), (ErrorListenerInterface) getActivity());
+				if (!renamed) {
+					return;
+				}
+			} catch (ClassCastException exception) {
+				Log.e("CATROID", getActivity().toString() + " does not implement ErrorListenerInterface", exception);
 			}
+		} else if (uploadName.equals(currentProjectName) && (!projectDescription.equals(currentProjectDescription))) {
+			projectManager.getCurrentProject().setDescription(projectDescription);
 		}
 
 		projectManager.getCurrentProject().setDeviceData(getActivity());
@@ -190,13 +204,6 @@ public class UploadProjectDialog extends DialogFragment {
 
 		dismiss();
 		String projectPath = Constants.DEFAULT_ROOT + "/" + projectManager.getCurrentProject().getName();
-		String projectDescription;
-
-		if (projectDescriptionField.length() != 0) {
-			projectDescription = projectDescriptionField.getText().toString();
-		} else {
-			projectDescription = "";
-		}
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		String token = prefs.getString(Constants.TOKEN, "0");

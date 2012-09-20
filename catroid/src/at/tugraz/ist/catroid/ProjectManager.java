@@ -35,6 +35,7 @@ import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.utils.ErrorListenerInterface;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class ProjectManager {
@@ -56,8 +57,8 @@ public class ProjectManager {
 		return INSTANCE;
 	}
 
-	public boolean loadProject(String projectName, Context context, boolean errorMessage) {
-
+	public boolean loadProject(String projectName, Context context, ErrorListenerInterface errorListener,
+			boolean errorMessage) {
 		fileChecksumContainer = new FileChecksumContainer();
 		messageContainer = new MessageContainer();
 		Project oldProject = project;
@@ -72,23 +73,23 @@ public class ProjectManager {
 					try {
 						project = StandardProjectHandler.createAndSaveStandardProject(context);
 					} catch (IOException e) {
-						if (errorMessage) {
-							Utils.displayErrorMessage(context, context.getString(R.string.error_load_project));
+						if (errorMessage && errorListener != null) {
+							errorListener.showErrorDialog(context.getString(R.string.error_load_project));
 						}
 						Log.e("CATROID", "Cannot load project.", e);
 						return false;
 					}
 				}
 			}
-			if (errorMessage) {
-				Utils.displayErrorMessage(context, context.getString(R.string.error_load_project));
+			if (errorMessage && errorListener != null) {
+				errorListener.showErrorDialog(context.getString(R.string.error_load_project));
 			}
 			return false;
 		} else if (!Utils.isApplicationDebuggable(context)
 				&& project.getCatroidVersionCode() > Utils.getVersionCode(context)) {
 			project = oldProject;
-			if (errorMessage) {
-				Utils.displayErrorMessage(context, context.getString(R.string.error_project_compatability));
+			if (errorMessage && errorListener != null) {
+				errorListener.showErrorDialog(context.getString(R.string.error_project_compatability));
 				// TODO show dialog to download latest catroid version instead
 			}
 			return false;
@@ -121,7 +122,7 @@ public class ProjectManager {
 		return StorageHandler.getInstance().saveProject(project);
 	}
 
-	public boolean initializeDefaultProject(Context context) {
+	public boolean initializeDefaultProject(Context context, ErrorListenerInterface errorListener) {
 		try {
 			fileChecksumContainer = new FileChecksumContainer();
 			messageContainer = new MessageContainer();
@@ -131,7 +132,7 @@ public class ProjectManager {
 			return true;
 		} catch (Exception e) {
 			Log.e("CATROID", "Cannot initialize default project.", e);
-			Utils.displayErrorMessage(context, context.getString(R.string.error_load_project));
+			errorListener.showErrorDialog(context.getString(R.string.error_load_project));
 			return false;
 		}
 	}
@@ -162,9 +163,9 @@ public class ProjectManager {
 		project = null;
 	}
 
-	public boolean renameProject(String newProjectName, Context context) {
+	public boolean renameProject(String newProjectName, Context context, ErrorListenerInterface errorListener) {
 		if (StorageHandler.getInstance().projectExistsCheckCase(newProjectName)) {
-			Utils.displayErrorMessage(context, context.getString(R.string.error_project_exists));
+			errorListener.showErrorDialog(context.getString(R.string.error_project_exists));
 			return false;
 		}
 
@@ -184,7 +185,6 @@ public class ProjectManager {
 				directoryRenamed = tmpProjectDirectory.renameTo(newProjectDirectory);
 			}
 		} else {
-
 			directoryRenamed = oldProjectDirectory.renameTo(newProjectDirectory);
 		}
 
@@ -193,7 +193,50 @@ public class ProjectManager {
 			this.saveProject();
 		}
 
-		return (directoryRenamed);
+		if (!directoryRenamed) {
+			errorListener.showErrorDialog(context.getString(R.string.error_rename_project));
+		}
+
+		return directoryRenamed;
+	}
+
+	public boolean renameProjectNameAndDescription(String newProjectName, String newProjectDescription,
+			Context context, ErrorListenerInterface errorListener) {
+		if (StorageHandler.getInstance().projectExistsCheckCase(newProjectName)) {
+			errorListener.showErrorDialog(context.getString(R.string.error_project_exists));
+			return false;
+		}
+
+		String oldProjectPath = Utils.buildProjectPath(project.getName());
+		File oldProjectDirectory = new File(oldProjectPath);
+
+		String newProjectPath = Utils.buildProjectPath(newProjectName);
+		File newProjectDirectory = new File(newProjectPath);
+
+		boolean directoryRenamed = false;
+
+		if (oldProjectPath.equalsIgnoreCase(newProjectPath)) {
+			String tmpProjectPath = Utils.buildProjectPath(createTemporaryDirectoryName(newProjectName));
+			File tmpProjectDirectory = new File(tmpProjectPath);
+			directoryRenamed = oldProjectDirectory.renameTo(tmpProjectDirectory);
+			if (directoryRenamed) {
+				directoryRenamed = tmpProjectDirectory.renameTo(newProjectDirectory);
+			}
+		} else {
+			directoryRenamed = oldProjectDirectory.renameTo(newProjectDirectory);
+		}
+
+		if (directoryRenamed) {
+			project.setName(newProjectName);
+			project.setDescription(newProjectDescription);
+			this.saveProject();
+		}
+
+		if (!directoryRenamed) {
+			errorListener.showErrorDialog(context.getString(R.string.error_rename_project));
+		}
+
+		return directoryRenamed;
 	}
 
 	public Sprite getCurrentSprite() {

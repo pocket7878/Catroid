@@ -30,6 +30,7 @@ import static junit.framework.Assert.fail;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,6 +47,8 @@ import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
@@ -102,10 +105,15 @@ public class UiTestUtils {
 	private static SparseIntArray brickCategoryMap;
 
 	public static final String DEFAULT_TEST_PROJECT_NAME = "testProject";
-	public static final String PROJECTNAME1 = "testproject1";
-	public static final String PROJECTNAME2 = "testproject2";
-	public static final String PROJECTNAME3 = "testproject3";
+	public static final String PROJECTNAME1 = "testingproject1";
+	public static final String PROJECTNAME2 = "testingproject2";
+	public static final String PROJECTNAME3 = "testingproject3";
+	public static final String PROJECTDESCRIPTION1 = "testdescription1";
+	public static final String PROJECTDESCRIPTION2 = "testdescription2";
+	public static final String PROJECTDESCRIPTION3 = "testdescription3";
 	public static final String DEFAULT_TEST_PROJECT_NAME_MIXED_CASE = "TeStPROjeCt";
+	public static final String COPIED_PROJECT_NAME = "copiedProject";
+	public static final String JAPANESE_PROJECT_NAME = "これは例の説明です。";
 
 	public static enum FileTypes {
 		IMAGE, SOUND, ROOT
@@ -244,11 +252,7 @@ public class UiTestUtils {
 	}
 
 	public static void addNewBrick(Solo solo, int categoryStringId, int brickStringId, int nThElement) {
-		if (Build.VERSION.SDK_INT < 15) {
-			UiTestUtils.clickOnLinearLayout(solo, R.id.menu_add);
-		} else {
-			solo.clickOnActionBarItem(R.id.menu_add);
-		}
+		clickOnActionBar(solo, R.id.menu_add);
 		if (!solo.waitForText(solo.getCurrentActivity().getString(categoryStringId), 0, 5000)) {
 			fail("Text not shown in 5 secs!");
 		}
@@ -445,6 +449,21 @@ public class UiTestUtils {
 		if (directory.exists()) {
 			UtilFile.deleteDirectory(directory);
 		}
+
+		directory = new File(Constants.DEFAULT_ROOT + "/" + DEFAULT_TEST_PROJECT_NAME_MIXED_CASE);
+		if (directory.exists()) {
+			UtilFile.deleteDirectory(directory);
+		}
+
+		directory = new File(Constants.DEFAULT_ROOT + "/" + COPIED_PROJECT_NAME);
+		if (directory.exists()) {
+			UtilFile.deleteDirectory(directory);
+		}
+
+		directory = new File(Constants.DEFAULT_ROOT + "/" + JAPANESE_PROJECT_NAME);
+		if (directory.exists()) {
+			UtilFile.deleteDirectory(directory);
+		}
 	}
 
 	public static Object getPrivateField(String fieldName, Object object) {
@@ -514,16 +533,6 @@ public class UiTestUtils {
 		Field field = classFromObject.getDeclaredField(fieldName);
 		field.setAccessible(true);
 		field.set(object, value);
-	}
-
-	/**
-	 * @deprecated Will fail on devices with API > 14, replaced by {@link #clickOnActionBar(Solo, int)}
-	 */
-	@Deprecated
-	public static void clickOnLinearLayout(Solo solo, int imageButtonId) {
-		solo.waitForView(LinearLayout.class);
-		LinearLayout linearLayout = (LinearLayout) solo.getView(imageButtonId);
-		solo.clickOnView(linearLayout);
 	}
 
 	public static void clickOnActionBar(Solo solo, int imageButtonId) {
@@ -620,6 +629,7 @@ public class UiTestUtils {
 
 	private static void testEditText(Solo solo, int editTextIndex, String value, int editTextMinWidth,
 			boolean assertMode) {
+
 		//be aware, negativ numbers are displayed as "- 0.1", not "-0.1" by the FE
 
 		if (value.startsWith("-")) {
@@ -629,6 +639,7 @@ public class UiTestUtils {
 		solo.sleep(500);
 
 		solo.goBack();
+
 
 		int width = 0;
 		if (assertMode) {
@@ -849,11 +860,25 @@ public class UiTestUtils {
 	}
 
 	public static boolean clickOnTextInList(Solo solo, String text) {
+		solo.sleep(300);
 		ArrayList<TextView> textViews = solo.getCurrentTextViews(solo.getView(android.R.id.list));
 		for (int i = 0; i < textViews.size(); i++) {
 			TextView view = textViews.get(i);
 			if (view.getText().toString().equalsIgnoreCase(text)) {
 				solo.clickOnView(view);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean longClickOnTextInList(Solo solo, String text) {
+		solo.sleep(300);
+		ArrayList<TextView> textViews = solo.getCurrentTextViews(solo.getView(android.R.id.list));
+		for (int i = 0; i < textViews.size(); i++) {
+			TextView view = textViews.get(i);
+			if (view.getText().toString().equalsIgnoreCase(text)) {
+				solo.clickLongOnView(view);
 				return true;
 			}
 		}
@@ -877,4 +902,13 @@ public class UiTestUtils {
 			}
 		}
 	}
+
+	public static void cropImage(String pathToImageFile, int sampleSize) throws FileNotFoundException {
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inSampleSize = sampleSize;
+		Bitmap imageBitmap = BitmapFactory.decodeFile(pathToImageFile, options);
+		File imageFile = new File(pathToImageFile);
+		StorageHandler.saveBitmapToImageFile(imageFile, imageBitmap);
+	}
+
 }

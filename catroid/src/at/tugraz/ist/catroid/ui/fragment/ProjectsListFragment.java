@@ -34,11 +34,14 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
@@ -48,18 +51,22 @@ import at.tugraz.ist.catroid.io.StorageHandler;
 import at.tugraz.ist.catroid.ui.ProjectActivity;
 import at.tugraz.ist.catroid.ui.adapter.IconMenuAdapter;
 import at.tugraz.ist.catroid.ui.adapter.ProjectAdapter;
+import at.tugraz.ist.catroid.ui.dialogs.CopyProjectDialog;
+import at.tugraz.ist.catroid.ui.dialogs.CopyProjectDialog.OnCopyProjectListener;
 import at.tugraz.ist.catroid.ui.dialogs.CustomIconContextMenu;
+import at.tugraz.ist.catroid.ui.dialogs.NewProjectDialog;
 import at.tugraz.ist.catroid.ui.dialogs.RenameProjectDialog;
 import at.tugraz.ist.catroid.ui.dialogs.RenameProjectDialog.OnProjectRenameListener;
 import at.tugraz.ist.catroid.ui.dialogs.SetDescriptionDialog;
 import at.tugraz.ist.catroid.ui.dialogs.SetDescriptionDialog.OnUpdateProjectDescriptionListener;
+import at.tugraz.ist.catroid.utils.ErrorListenerInterface;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 
 public class ProjectsListFragment extends SherlockListFragment implements OnProjectRenameListener,
-		OnUpdateProjectDescriptionListener {
+		OnUpdateProjectDescriptionListener, OnCopyProjectListener, OnClickListener {
 
 	private static final String BUNDLE_ARGUMENTS_PROJECT_DATA = "project_data";
 
@@ -67,19 +74,28 @@ public class ProjectsListFragment extends SherlockListFragment implements OnProj
 	private ProjectData projectToEdit;
 	private ProjectAdapter adapter;
 
+	private int activeDialogId = NO_DIALOG_FRAGMENT_ACTIVE;
+
+	private View viewBelowMyProjectlistNonScrollable;
+	private View myprojectlistFooterView;
+
+	private static final int NO_DIALOG_FRAGMENT_ACTIVE = -1;
 	private static final int CONTEXT_MENU_ITEM_RENAME = 0;
 	private static final int CONTEXT_MENU_ITEM_DESCRIPTION = 1;
 	private static final int CONTEXT_MENU_ITEM_DELETE = 2;
+	private static final int FOOTER_ADD_PROJECT_ALPHA_VALUE = 35;
+	private static final int CONTEXT_MENU_ITEM_COPY = 3;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
+		super.onCreate(savedInstanceState);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_projects_list, null);
+
 		return rootView;
 	}
 
@@ -91,6 +107,19 @@ public class ProjectsListFragment extends SherlockListFragment implements OnProj
 			projectToEdit = (ProjectData) savedInstanceState.getSerializable(BUNDLE_ARGUMENTS_PROJECT_DATA);
 		}
 
+		viewBelowMyProjectlistNonScrollable = getActivity().findViewById(R.id.view_below_myprojectlist_non_scrollable);
+		viewBelowMyProjectlistNonScrollable.setOnClickListener(this);
+
+		View footerView = getActivity().getLayoutInflater().inflate(R.layout.activity_my_projects_footer,
+				getListView(), false);
+		myprojectlistFooterView = footerView.findViewById(R.id.myprojectlist_footerview);
+		ImageView footerAddImage = (ImageView) footerView.findViewById(R.id.myprojectlist_footerview_add_image);
+		footerAddImage.setAlpha(FOOTER_ADD_PROJECT_ALPHA_VALUE);
+		myprojectlistFooterView.setOnClickListener(this);
+		getListView().addFooterView(footerView);
+
+		checkForCanceledFragment();
+		reattachDialogFragmentListener();
 		initAdapter();
 		initClickListener();
 	}
@@ -106,13 +135,77 @@ public class ProjectsListFragment extends SherlockListFragment implements OnProj
 		if (isCurrentProject) {
 			updateProjectTitle();
 		}
-
+		activeDialogId = NO_DIALOG_FRAGMENT_ACTIVE;
 		initAdapter();
 	}
 
 	@Override
+	public void onCopyProject(boolean orientationChangedWhileCopying) {
+		if (!orientationChangedWhileCopying) {
+			activeDialogId = NO_DIALOG_FRAGMENT_ACTIVE;
+			initAdapter();
+		}
+	}
+
+	@Override
 	public void onUpdateProjectDescription() {
+		activeDialogId = NO_DIALOG_FRAGMENT_ACTIVE;
 		initAdapter();
+	}
+
+	@Override
+	public void onClick(View v) {
+		NewProjectDialog dialog = null;
+		switch (v.getId()) {
+			case R.id.view_below_myprojectlist_non_scrollable:
+				dialog = new NewProjectDialog();
+				dialog.show(getActivity().getSupportFragmentManager(), NewProjectDialog.DIALOG_FRAGMENT_TAG);
+				break;
+			case R.id.myprojectlist_footerview:
+				dialog = new NewProjectDialog();
+				dialog.show(getActivity().getSupportFragmentManager(), NewProjectDialog.DIALOG_FRAGMENT_TAG);
+				break;
+		}
+	}
+
+	private void reattachDialogFragmentListener() {
+		Fragment activeFragmentDialog;
+		if (activeDialogId != NO_DIALOG_FRAGMENT_ACTIVE) {
+			switch (activeDialogId) {
+				case CONTEXT_MENU_ITEM_RENAME:
+					activeFragmentDialog = getFragmentManager().findFragmentByTag(
+							RenameProjectDialog.DIALOG_FRAGMENT_TAG);
+					RenameProjectDialog displayingRenameProjectDialog = (RenameProjectDialog) activeFragmentDialog;
+					displayingRenameProjectDialog.setOnProjectRenameListener(ProjectsListFragment.this);
+					break;
+				case CONTEXT_MENU_ITEM_DESCRIPTION:
+					activeFragmentDialog = getFragmentManager().findFragmentByTag(
+							SetDescriptionDialog.DIALOG_FRAGMENT_TAG);
+					SetDescriptionDialog displayingSetDescriptionProjectDialog = (SetDescriptionDialog) activeFragmentDialog;
+					displayingSetDescriptionProjectDialog
+							.setOnUpdateProjectDescriptionListener(ProjectsListFragment.this);
+					break;
+				case CONTEXT_MENU_ITEM_COPY:
+					activeFragmentDialog = getFragmentManager()
+							.findFragmentByTag(CopyProjectDialog.DIALOG_FRAGMENT_TAG);
+					CopyProjectDialog displayingCopyProjectDialog = (CopyProjectDialog) activeFragmentDialog;
+					displayingCopyProjectDialog.setOnCopyProjectListener(ProjectsListFragment.this);
+					break;
+			}
+		}
+	}
+
+	private void checkForCanceledFragment() {
+		if (getFragmentManager().findFragmentByTag(RenameProjectDialog.DIALOG_FRAGMENT_TAG) == null
+				&& activeDialogId == CONTEXT_MENU_ITEM_RENAME) {
+			activeDialogId = NO_DIALOG_FRAGMENT_ACTIVE;
+		} else if (getFragmentManager().findFragmentByTag(SetDescriptionDialog.DIALOG_FRAGMENT_TAG) == null
+				&& activeDialogId == CONTEXT_MENU_ITEM_DESCRIPTION) {
+			activeDialogId = NO_DIALOG_FRAGMENT_ACTIVE;
+		} else if (getFragmentManager().findFragmentByTag(CopyProjectDialog.DIALOG_FRAGMENT_TAG) == null
+				&& activeDialogId == CONTEXT_MENU_ITEM_COPY) {
+			activeDialogId = NO_DIALOG_FRAGMENT_ACTIVE;
+		}
 	}
 
 	private void initAdapter() {
@@ -139,11 +232,17 @@ public class ProjectsListFragment extends SherlockListFragment implements OnProj
 		getListView().setOnItemClickListener(new ListView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if (!ProjectManager.getInstance().loadProject((adapter.getItem(position)).projectName, getActivity(),
-						true)) {
-					return; // error message already in ProjectManager
-							// loadProject
+				try {
+					if (!ProjectManager.getInstance().loadProject((adapter.getItem(position)).projectName,
+							getActivity(), (ErrorListenerInterface) getActivity(), true)) {
+						return; // error message already in ProjectManager
+								// loadProject
+					}
+				} catch (ClassCastException exception) {
+					Log.e("CATROID", getActivity().toString() + " does not implement ErrorListenerInterface", exception);
+					return;
 				}
+
 				Intent intent = new Intent(getActivity(), ProjectActivity.class);
 				getActivity().startActivity(intent);
 			}
@@ -186,26 +285,36 @@ public class ProjectsListFragment extends SherlockListFragment implements OnProj
 				CONTEXT_MENU_ITEM_DESCRIPTION);
 		adapter.addItem(resources, this.getString(R.string.delete), R.drawable.ic_context_delete,
 				CONTEXT_MENU_ITEM_DELETE);
+		adapter.addItem(resources, this.getString(R.string.copy), R.drawable.ic_context_copy, CONTEXT_MENU_ITEM_COPY);
 		iconContextMenu.setAdapter(adapter);
 
 		iconContextMenu.setOnClickListener(new CustomIconContextMenu.IconContextMenuOnClickListener() {
 			@Override
 			public void onClick(int menuId) {
+				activeDialogId = menuId;
 				switch (menuId) {
 					case CONTEXT_MENU_ITEM_RENAME:
 						RenameProjectDialog dialogRenameProject = RenameProjectDialog
 								.newInstance(projectToEdit.projectName);
 						dialogRenameProject.setOnProjectRenameListener(ProjectsListFragment.this);
-						dialogRenameProject.show(getFragmentManager(), RenameProjectDialog.DIALOG_FRAGMENT_TAG);
+						dialogRenameProject.show(getActivity().getSupportFragmentManager(),
+								RenameProjectDialog.DIALOG_FRAGMENT_TAG);
 						break;
 					case CONTEXT_MENU_ITEM_DESCRIPTION:
 						SetDescriptionDialog dialogSetDescription = SetDescriptionDialog
 								.newInstance(projectToEdit.projectName);
 						dialogSetDescription.setOnUpdateProjectDescriptionListener(ProjectsListFragment.this);
-						dialogSetDescription.show(getFragmentManager(), SetDescriptionDialog.DIALOG_FRAGMENT_TAG);
+						dialogSetDescription.show(getActivity().getSupportFragmentManager(),
+								SetDescriptionDialog.DIALOG_FRAGMENT_TAG);
 						break;
 					case CONTEXT_MENU_ITEM_DELETE:
 						deleteProject();
+						break;
+					case CONTEXT_MENU_ITEM_COPY:
+						CopyProjectDialog dialogCopyProject = CopyProjectDialog.newInstance(projectToEdit.projectName);
+						dialogCopyProject.setOnCopyProjectListener(ProjectsListFragment.this);
+						dialogCopyProject.show(getActivity().getSupportFragmentManager(),
+								CopyProjectDialog.DIALOG_FRAGMENT_TAG);
 						break;
 				}
 			}
@@ -221,13 +330,18 @@ public class ProjectsListFragment extends SherlockListFragment implements OnProj
 		} else {
 			StorageHandler.getInstance().deleteProject(projectToEdit);
 		}
+		try {
+			projectList.remove(projectToEdit);
+			if (projectList.size() == 0) {
+				projectManager.initializeDefaultProject(getActivity(), (ErrorListenerInterface) getActivity());
+			} else {
 
-		projectList.remove(projectToEdit);
-		if (projectList.size() == 0) {
-			projectManager.initializeDefaultProject(getActivity());
-		} else {
-			projectManager.loadProject((projectList.get(0)).projectName, getActivity(), false);
-			projectManager.saveProject();
+				projectManager.loadProject((projectList.get(0)).projectName, getActivity(),
+						(ErrorListenerInterface) getActivity(), false);
+				projectManager.saveProject();
+			}
+		} catch (ClassCastException exception) {
+			Log.e("CATROID", getActivity().toString() + " does not implement ErrorListenerInterface", exception);
 		}
 
 		updateProjectTitle();
