@@ -207,22 +207,22 @@ public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<
 		assertEquals("Wrong text in field", "1 - 2 * cos( sin( tan( 0 ) ) ) ",
 				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
 
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_undo);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_undo);
 		solo.sleep(50);
 		assertEquals("Undo did something wrong", "1 - 2 * cos( sin( 0 ) ) ",
 				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
 
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_undo);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_undo);
 		solo.sleep(50);
 		assertEquals("Undo did something wrong", "1 - 2 * cos( 0 ) ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
 				.getText().toString());
 
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_undo);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_undo);
 		solo.sleep(50);
 		assertEquals("Undo did something wrong", "1 - 2 * ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
 				.toString());
 
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_undo);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_undo);
 		solo.sleep(50);
 		assertEquals("Undo did something wrong", "1 - 2 ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText()
 				.toString());
@@ -253,20 +253,20 @@ public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<
 				.toString());
 
 		for (int i = 0; i < 7; i++) {
-			UiTestUtils.clickOnLinearLayout(solo, R.id.menu_undo);
+			UiTestUtils.clickOnActionBar(solo, R.id.menu_undo);
 		}
 
 		solo.sleep(50);
 		assertEquals("Undo did something wrong", INITIAL_X + " ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
 				.getText().toString());
 
-		UiTestUtils.clickOnLinearLayout(solo, R.id.menu_undo);
+		UiTestUtils.clickOnActionBar(solo, R.id.menu_undo);
 
 		assertEquals("Undo did something wrong", INITIAL_X + " ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
 				.getText().toString());
 
 		for (int i = 0; i < 7; i++) {
-			UiTestUtils.clickOnLinearLayout(solo, R.id.menu_redo);
+			UiTestUtils.clickOnActionBar(solo, R.id.menu_redo);
 		}
 
 		solo.sleep(50);
@@ -297,13 +297,13 @@ public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<
 				.getText().toString());
 
 		for (int i = 0; i < maxHistoryElements + 2; i++) {
-			UiTestUtils.clickOnLinearLayout(solo, R.id.menu_undo);
+			UiTestUtils.clickOnActionBar(solo, R.id.menu_undo);
 		}
 
 		assertEquals("Wrong text in field", "1 ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
 
 		for (int i = 0; i < maxHistoryElements + 2; i++) {
-			UiTestUtils.clickOnLinearLayout(solo, R.id.menu_redo);
+			UiTestUtils.clickOnActionBar(solo, R.id.menu_redo);
 		}
 
 		assertEquals("Wrong text in field", "1" + searchString + " ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)

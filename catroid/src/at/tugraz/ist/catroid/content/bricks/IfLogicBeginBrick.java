@@ -42,20 +42,19 @@ public class IfLogicBeginBrick extends NestingBrick implements OnClickListener {
 	private static final long serialVersionUID = 1L;
 	private static final String TAG = IfLogicBeginBrick.class.getSimpleName();
 	public static final int EXECUTE_ELSE_PART = -1;
-	private Formula conditionToCheck;
+	private Formula ifCondition;
 	protected Sprite sprite;
 	protected IfLogicElseBrick ifElseBrick;
 	protected IfLogicEndBrick ifEndBrick;
-	private int position;
 
 	public IfLogicBeginBrick(Sprite sprite, int condition) {
 		this.sprite = sprite;
-		conditionToCheck = new Formula(Integer.toString(condition));
+		ifCondition = new Formula(Integer.toString(condition));
 	}
 
 	public IfLogicBeginBrick(Sprite sprite, Formula condition) {
 		this.sprite = sprite;
-		conditionToCheck = condition;
+		ifCondition = condition;
 	}
 
 	@Override
@@ -65,7 +64,7 @@ public class IfLogicBeginBrick extends NestingBrick implements OnClickListener {
 
 	@Override
 	public void execute() {
-		int condition = conditionToCheck.interpretInteger();
+		int condition = ifCondition.interpretInteger();
 		if (condition != 0) {
 			ifElseBrick.skipToEndIfPositionOnElse(true);
 		} else {
@@ -99,7 +98,7 @@ public class IfLogicBeginBrick extends NestingBrick implements OnClickListener {
 	}
 
 	public boolean checkCondition() {
-		double evaluated = conditionToCheck.interpretInteger();
+		double evaluated = ifCondition.interpretInteger();
 		if (evaluated == 0) {
 			return false;
 		} else {
@@ -109,7 +108,7 @@ public class IfLogicBeginBrick extends NestingBrick implements OnClickListener {
 
 	@Override
 	public Brick clone() {
-		return new IfLogicBeginBrick(getSprite(), conditionToCheck);
+		return new IfLogicBeginBrick(getSprite(), ifCondition);
 	}
 
 	@Override
@@ -120,8 +119,8 @@ public class IfLogicBeginBrick extends NestingBrick implements OnClickListener {
 		TextView text1 = (TextView) view.findViewById(R.id.brick_if_text_view1);
 		EditText edit1 = (EditText) view.findViewById(R.id.brick_if_edit_text1);
 
-		conditionToCheck.setTextFieldId(R.id.brick_if_edit_text1);
-		conditionToCheck.refreshTextField(view);
+		ifCondition.setTextFieldId(R.id.brick_if_edit_text1);
+		ifCondition.refreshTextField(view);
 
 		text1.setVisibility(View.GONE);
 		edit1.setVisibility(View.VISIBLE);
@@ -138,7 +137,7 @@ public class IfLogicBeginBrick extends NestingBrick implements OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		FormulaEditorFragment.showFragment(view, this, conditionToCheck);
+		FormulaEditorFragment.showFragment(view, this, ifCondition);
 	}
 
 	@Override
