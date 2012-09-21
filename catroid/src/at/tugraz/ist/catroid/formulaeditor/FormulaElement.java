@@ -192,30 +192,33 @@ public class FormulaElement implements Serializable {
 
 	public Double interpretRecursive() {
 
+		Double returnValue = 0.0d;
+
 		if (type == ElementType.BRACKET) {
-			return rightChild.interpretRecursive();
+			returnValue = rightChild.interpretRecursive();
 		}
 		if (type == ElementType.NUMBER) {
-			return Double.parseDouble(value);
+			returnValue = Double.parseDouble(value);
 		} else if (type == ElementType.OPERATOR) {
 			if (leftChild != null) {// binär operator
 				Double left = leftChild.interpretRecursive();
 				Double right = rightChild.interpretRecursive();
 
 				if (value.equals("+")) {
-					return left + right;
+					returnValue = left + right;
 				}
 				if (value.equals("-")) {
-					return left - right;
+					returnValue = left - right;
 				}
 				if (value.equals("*")) {
-					return left * right;
+					returnValue = left * right;
 				}
 				if (value.equals("/")) {
-					return left / right;
+
+					returnValue = left / right;
 				}
 				if (value.equals("^")) {
-					return java.lang.Math.pow(left, right);
+					returnValue = java.lang.Math.pow(left, right);
 				}
 			} else {//unary operators
 				Double right = rightChild.interpretRecursive();
@@ -223,7 +226,7 @@ public class FormulaElement implements Serializable {
 				//					return right;
 				//				}
 				if (value.equals("-")) {
-					return -right;
+					returnValue = -right;
 				}
 
 			}
@@ -234,49 +237,65 @@ public class FormulaElement implements Serializable {
 			}
 
 			if (value.equals("sin")) {
-				return java.lang.Math.sin(Math.toRadians(left));
+				returnValue = java.lang.Math.sin(Math.toRadians(left));
 			}
 			if (value.equals("cos")) {
-				return java.lang.Math.cos(Math.toRadians(left));
+				returnValue = java.lang.Math.cos(Math.toRadians(left));
 			}
 			if (value.equals("tan")) {
-				return java.lang.Math.tan(Math.toRadians(left));
+				returnValue = java.lang.Math.tan(Math.toRadians(left));
 			}
 			if (value.equals("ln")) {
-				return java.lang.Math.log(left);
+				returnValue = java.lang.Math.log(left);
 			}
 			if (value.equals("log")) {
-				return java.lang.Math.log10(left);
+				returnValue = java.lang.Math.log10(left);
 			}
 			if (value.equals("sqrt")) {
-				return java.lang.Math.sqrt(left);
+				returnValue = java.lang.Math.sqrt(left);
 			}
 			if (value.equals("rand")) {
 				double min = left;
 				double max = rightChild.interpretRecursive();
-				return min + (java.lang.Math.random() * (max - min));
+				returnValue = min + (java.lang.Math.random() * (max - min));
 			}
 			if (value.equals("abs")) {
-				return java.lang.Math.abs(left);
+				returnValue = java.lang.Math.abs(left);
 			}
 			if (value.equals("round")) {
-				return (double) java.lang.Math.round(left);
+				returnValue = (double) java.lang.Math.round(left);
 			}
 			if (value.equals("pi")) {
-				return java.lang.Math.PI;
+				returnValue = java.lang.Math.PI;
 			}
 			if (value.equals("e")) {
-				return java.lang.Math.E;
+				returnValue = java.lang.Math.E;
 			}
 		} else if (type == ElementType.SENSOR) {
-			return SensorManager.getSensorValue(value);
+			returnValue = SensorManager.getSensorValue(value);
 		} else if (type == ElementType.USER_VARIABLE) {
 			//			TODO ^_^
 			return null;
 		}
 
-		return null;
+		returnValue = checkDegeneratedDoubleValues(returnValue);
 
+		return returnValue;
+
+	}
+
+	private Double checkDegeneratedDoubleValues(Double valueToCheck) {
+		if (valueToCheck.doubleValue() == Double.NEGATIVE_INFINITY) {
+			return -Double.MAX_VALUE;
+		}
+		if (valueToCheck.doubleValue() == Double.POSITIVE_INFINITY) {
+			return Double.MAX_VALUE;
+		}
+		if (valueToCheck.isNaN()) {
+			return 1.0;
+		}
+
+		return 1.0;
 	}
 
 	public FormulaElement getParent() {
