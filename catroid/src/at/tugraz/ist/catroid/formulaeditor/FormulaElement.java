@@ -47,7 +47,7 @@ public class FormulaElement implements Serializable {
 	private String value;
 	private FormulaElement leftChild = null;
 	private FormulaElement rightChild = null;
-	private FormulaElement parent = null;
+	private transient FormulaElement parent = null;
 
 	public FormulaElement(ElementType type, String value, FormulaElement parent) {
 		this.type = type;
@@ -295,7 +295,7 @@ public class FormulaElement implements Serializable {
 			return 1.0;
 		}
 
-		return 1.0;
+		return valueToCheck;
 	}
 
 	public FormulaElement getParent() {

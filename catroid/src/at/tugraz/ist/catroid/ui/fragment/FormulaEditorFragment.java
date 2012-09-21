@@ -28,6 +28,7 @@ import android.content.DialogInterface.OnKeyListener;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -283,6 +284,7 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 	public boolean saveFormulaIfPossible() {
 		InternFormulaParser formulaToParse = formulaEditorEditText.getFormulaParser();
 		FormulaElement formulaParseTree = formulaToParse.parseFormula();
+		Log.i("info", "interpreted Value = " + formulaParseTree.interpretRecursive());
 		int err = formulaToParse.getErrorTokenIndex();
 		switch (err) {
 			case PARSER_OK:

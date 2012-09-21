@@ -148,9 +148,9 @@ public class InternFormulaParser {
 			return null;
 		}
 
-		currentToken = internTokensToParse.get(0);
-
 		addEndOfFileToken();
+
+		currentToken = internTokensToParse.get(0);
 
 		FormulaElement formulaParseTree = null;
 

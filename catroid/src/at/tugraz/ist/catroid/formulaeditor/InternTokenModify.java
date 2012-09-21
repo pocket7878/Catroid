@@ -61,30 +61,6 @@ public class InternTokenModify {
 
 	}
 
-	public static InternToken insertPeriodIntoNumberToken(InternToken numberTokenToBeModified, int externNumberOffset) {
-		Log.i("info", "insertPeriodIntoNumberToken:enter");
-		Log.i("info", "insertPeriodIntoNumberToken: externNumberOffset = " + externNumberOffset);
-
-		Log.i("info", "insertPeriodIntoNumberToken: Before Insertion = " + numberTokenToBeModified.getTokenSringValue());
-
-		String numberString = numberTokenToBeModified.getTokenSringValue();
-
-		if (numberString.contains(".")) //TODO create Constant for "."
-		{
-			return null;
-		}
-
-		String leftPart = numberString.substring(0, externNumberOffset);
-		String rightPart = numberString.substring(externNumberOffset);
-
-		numberTokenToBeModified.setTokenStringValue(leftPart + "." + rightPart); //TODO create Constant for "."
-
-		Log.i("info", "insertPeriodIntoNumberToken: After  Insertion = " + numberTokenToBeModified.getTokenSringValue());
-
-		return numberTokenToBeModified;
-
-	}
-
 	private static List<InternToken> replaceFunctionButKeepParameters(List<InternToken> functionToReplace,
 			List<InternToken> functionToReplaceWith) {
 

@@ -494,7 +494,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	public void checkAndModifyKeyInput(CatKeyEvent catKey) {
 		Log.i("info", "checkAndModifyKeyInput:enter");
 
-		internFormula.handleKeyInput(catKey);
+		internFormula.handleKeyInput(catKey, context);
 		internFormula.generateExternFormulaStringAndInternExternMapping(context);
 		String newExternFormulaString = internFormula.getExternFormulaString();
 
