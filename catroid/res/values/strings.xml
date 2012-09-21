@@ -309,4 +309,16 @@
     <string name="nxt_tone_hundred_hz">x100Hz</string>
     <string name="number_to_small">Value is too small!</string>
     <string name="number_to_big">Value is too big!</string>
+      <!-- Live Wallpaper Strings -->
+     <string name="lwp_about_catroid">About Catroid</string>
+     <string name="lwp_project_information">Project information</string>
+     <string name="lwp_sound_control">Sounds</string>
+     <string name="lwp_project_name">Name:</string>
+     <string name="lwp_project_description">Description:</string>
+     <string name="lwp_project_uploader">Uploaded by:</string>
+     <string name="lwp_project_upload_date">Upload date:</string>
+     <string name="lwp_project_link">Project link</string>
+     <string name="lwp_general_information">General information</string>
+      <string name="lwp_preferences">Preferences</string>
+   
 </resources>

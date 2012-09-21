@@ -82,6 +82,8 @@ public class WallpaperHelper {
 		for (Sprite sprite : project.getSpriteList()) {
 			if (sprite.getWallpaperCostume() != null) {
 				sprite.getWallpaperCostume().clear();
+				sprite.pause();
+				sprite.finish();
 			}
 		}
 

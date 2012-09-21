@@ -129,7 +129,10 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 
 	@Override
 	public void executeLiveWallpaper() {
+		//	if (!soundInfo.isPlaying) {
+		//		soundInfo.isPlaying = true;
 		execute();
+		//	}
 
 	}
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+  <PreferenceCategory android:title = "@string/lwp_general_information" />
+  
+  <Preference 
+      android:title = "@string/lwp_about_catroid"
+      android:key="@string/lwp_about_catroid" />
+  
+   <Preference
+     android:title = "@string/lwp_project_information" 
+     android:key = "@string/lwp_project_information"/>
+  
+   <PreferenceCategory android:title = "@string/lwp_preferences" />
+   
+   <SwitchPreference 
+       android:title="@string/lwp_sound_control"
+       android:defaultValue="true"/>
+
+</PreferenceScreen> 
