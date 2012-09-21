@@ -38,7 +38,6 @@ import android.view.SurfaceHolder;
 import android.view.WindowManager;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class LiveWallpaper extends WallpaperService {
@@ -100,7 +99,6 @@ public class LiveWallpaper extends WallpaperService {
 
 			} else {
 				wallpaperHelper.setLiveWallpaper(false);
-				SoundManager.getInstance().stopAllSounds();
 				mHandler.removeCallbacks(mUpdateDisplay);
 			}
 		}

@@ -61,6 +61,14 @@
                 android:resource="@xml/mywallpaper"/> 
         </service>
         
+        <activity 
+            android:label="@string/app_name" 
+            android:name=".livewallpaper.LiveWallpaperSettings"
+            android:theme="@android:style/Theme.Light.WallpaperSettings"
+            android:exported="true">
+   		</activity>
+        
+        
         <activity
             android:name=".ui.MainMenuActivity"
             android:configChanges="keyboardHidden|orientation" 

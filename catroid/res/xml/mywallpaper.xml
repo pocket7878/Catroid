@@ -27,5 +27,6 @@
 <wallpaper 
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:thumbnail="@drawable/ic_launcher_catroid_fat"
-	android:description="@string/app_name"  
+	android:description="@string/app_name"
+	android:settingsActivity= "at.tugraz.ist.catroid.livewallpaper.LiveWallpaperSettings" 
 	/>
