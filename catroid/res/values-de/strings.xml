@@ -167,14 +167,9 @@
     <string name="overwrite_rename">benenne heruntergeladenes Projekt um</string>
     	<!-- TakeScreenshotInformation -->
     <string name="take_screenshot_title">Erstelle einen Screenshot</string>
-    <string name="take_screenshot_help">Klicke auf den Zurückbutton um die Menüleiste zu aktivieren um einen Screenshot zu erstellen. \n Du kannst ein Projekt starten und jederzeit anhalten um einen Screenshot zu erstellen.</string>
+    <string name="take_screenshot_help">Klicke auf den Zurückbutton während das Programm läuft um die Menüleiste zu aktivieren um einen Screenshot vom aktuellen Bildschirm zu erstellen.</string>
     <string name="take_screenshot_information">Der Screenshot wird als Vorschaubild benutzt, wenn das Projekt hochgeladen wird und in der lokalen Projektliste angezeigt.</string> 
-	
-	<!-- Add Screenshot dialog -->
-    <string name="add_project_screenshot_titel">Vorschaubild erzeugen:</string>
-    <string name="project_screenshot_from_stage">Von Bühne</string>
-    <string name="upload_project_no_thumbnail_error">Kein Vorschaubild vorhanden!</string>
-    <string name="project_screenshot_auto_generate">Automatisch generieren</string>
+
     <!-- Broadcast spinner -->
     <string name="new_broadcast_message">Neu…</string>
     <string name="broadcast_nothing_selected">Nichts…</string>

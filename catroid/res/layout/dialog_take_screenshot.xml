@@ -35,8 +35,7 @@
         android:textSize="20dp" />
 
     <ImageView
-        android:id="@+id/imageView1"
-        android:layout_gravity="center"
+        android:id="@+id/dialog_take_screenshot_image"
         android:contentDescription="not available"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
