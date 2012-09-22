@@ -52,13 +52,14 @@ import android.widget.Toast;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.Constants;
-import at.tugraz.ist.catroid.transfers.ProjectUploadReceiver;
+import at.tugraz.ist.catroid.transfers.ProjectUploadTask;
 import at.tugraz.ist.catroid.utils.UtilFile;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class UploadProjectDialog extends DialogFragment {
 
 	public static final String DIALOG_FRAGMENT_TAG = "dialog_upload_project";
+	public static final int UPLOAD_NOTIFICATION = 100;
 
 	private EditText projectUploadName;
 	private EditText projectDescriptionField;
@@ -184,7 +185,7 @@ public class UploadProjectDialog extends DialogFragment {
 
 		uploadNotification.flags |= Notification.FLAG_AUTO_CANCEL;
 
-		Intent uploadIntent = new Intent(this.getActivity(), ProjectUploadReceiver.class); //getactivity?
+		Intent uploadIntent = new Intent(this.getActivity(), ProjectUploadTask.class); //getactivity?
 		uploadIntent.putExtra("projectName", uploadName);
 		uploadIntent.putExtra("projectDescription", projectDescription);
 		uploadIntent.putExtra("projectPath", projectPath);
@@ -192,6 +193,8 @@ public class UploadProjectDialog extends DialogFragment {
 		PendingIntent pendingUpload = PendingIntent.getActivity(this.getActivity(), 0, uploadIntent, 0);
 		String notificationTitle = getString(R.string.notification_upload_title);
 		uploadNotification.setLatestEventInfo(this.getActivity(), notificationTitle, uploadName, pendingUpload);
+		uploadNotification.number += 1;
+		uploadNotificationManager.notify(UPLOAD_NOTIFICATION, uploadNotification);
 	}
 
 	private void handleUploadButtonClick() {
@@ -224,7 +227,6 @@ public class UploadProjectDialog extends DialogFragment {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 		String token = prefs.getString(Constants.TOKEN, "0");
 		//new ProjectUploadTask(getActivity(), uploadName, projectDescription, projectPath, token).execute();
-		//TODO: make intent and start service
 		createNotification(uploadName, projectDescription, projectPath, token);
 	}
 
