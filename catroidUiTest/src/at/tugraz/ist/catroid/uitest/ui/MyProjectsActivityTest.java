@@ -473,7 +473,6 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 		//current project is UiTestUtils.DEFAULT_TEST_PROJECT_NAME
 		solo.clickOnButton(getActivity().getString(R.string.my_projects));
 		solo.waitForActivity(MyProjectsActivity.class.getSimpleName());
-
 		solo.waitForFragmentById(R.id.fr_projects_list);
 		assertTrue("longclick on project '" + UiTestUtils.DEFAULT_TEST_PROJECT_NAME + "' in list not successful",
 				UiTestUtils.longClickOnTextInList(solo, UiTestUtils.DEFAULT_TEST_PROJECT_NAME));
@@ -527,6 +526,7 @@ public class MyProjectsActivityTest extends ActivityInstrumentationTestCase2<Mai
 				UiTestUtils.longClickOnTextInList(solo, UiTestUtils.PROJECTNAME1));
 		solo.clickOnText(buttonDeleteText);
 		assertTrue("delete dialog not closed in time", solo.waitForDialogToClose(5000));
+		solo.sleep(1000);
 		assertFalse("project " + UiTestUtils.PROJECTNAME1 + " is still visible",
 				solo.searchText(UiTestUtils.PROJECTNAME1, 1));
 		assertNotSame("the deleted project is still the current project", UiTestUtils.DEFAULT_TEST_PROJECT_NAME,

@@ -640,7 +640,6 @@ public class UiTestUtils {
 
 		solo.goBack();
 
-
 		int width = 0;
 		if (assertMode) {
 			assertTrue("EditText not resized - value not (fully) visible", solo.searchText(value));
