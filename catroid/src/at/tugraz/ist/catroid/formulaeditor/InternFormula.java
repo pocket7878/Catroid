@@ -39,6 +39,10 @@ public class InternFormula {
 		LEFT, RIGHT, SELECT, DO_NOT_MODIFY;
 	}
 
+	public static enum TokenSelectionType {
+		USER_SELECTION, PARSER_ERROR_SELECTION;
+	}
+
 	private ExternInternRepresentationMapping externInternRepresentationMapping;
 
 	private List<InternToken> internTokenFormulaList;
@@ -47,12 +51,15 @@ public class InternFormula {
 	private boolean tokenSelection;
 	private int internTokenSelectionStart;
 	private int internTokenSelectionEnd;
+	private TokenSelectionType tokenSelectionType;
 
 	private int externCursorPosition;
 
 	private InternToken cursorPositionInternToken;
 	private int cursorPositionInternTokenIndex;
 	private CursorTokenPosition cursorTokenPosition;
+
+	private InternFormulaParser internTokenFormulaParser;
 
 	public InternFormula(List<InternToken> internTokenList) {
 
@@ -117,7 +124,7 @@ public class InternFormula {
 		}
 
 		if (tokenIsSelected) {
-			selectCursorPositionInternToken();
+			selectCursorPositionInternToken(TokenSelectionType.USER_SELECTION);
 		} else {
 			internTokenSelectionEnd = -1;
 			internTokenSelectionStart = -1;
@@ -472,6 +479,7 @@ public class InternFormula {
 		}
 
 		externCursorPosition = externTokenStartIndex;
+		cursorTokenPosition = CursorTokenPosition.LEFT;
 
 	}
 
@@ -490,6 +498,7 @@ public class InternFormula {
 		}
 
 		externCursorPosition = externTokenEndIndex;
+		cursorTokenPosition = CursorTokenPosition.RIGHT;
 
 	}
 
@@ -502,7 +511,9 @@ public class InternFormula {
 
 	}
 
-	private void selectCursorPositionInternToken() {
+	private void selectCursorPositionInternToken(TokenSelectionType internTokenSelectionType) {
+		this.tokenSelectionType = internTokenSelectionType;
+
 		switch (cursorPositionInternToken.getInternTokenType()) {
 			case FUNCTION_NAME:
 				List<InternToken> functionInternTokens = InternTokenGroups.getFunctionByName(internTokenFormulaList,
@@ -621,6 +632,8 @@ public class InternFormula {
 				this.internTokenSelectionEnd = cursorPositionInternTokenIndex;
 				break;
 		}
+
+		this.tokenSelection = true;
 
 	}
 
@@ -871,14 +884,43 @@ public class InternFormula {
 	}
 
 	public InternFormulaParser getInternFormulaParser() {
-		InternFormulaParser parser = new InternFormulaParser(internTokenFormulaList);
+		internTokenFormulaParser = new InternFormulaParser(internTokenFormulaList);
 
-		return parser;
+		return internTokenFormulaParser;
 	}
 
 	public List<InternToken> getInternTokens() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void selectParseErrorTokenAndSetCursor() {
+		if (internTokenFormulaParser == null) {
+			return;
+		}
+
+		if (internTokenFormulaList.size() == 0) {
+			return;
+		}
+
+		int internErrorTokenIndex = internTokenFormulaParser.getErrorTokenIndex();
+
+		if (internErrorTokenIndex < 0) {
+			return;
+		}
+
+		if (internErrorTokenIndex >= internTokenFormulaList.size()) {
+			internErrorTokenIndex = internTokenFormulaList.size() - 1;
+		}
+
+		setExternCursorPositionRightTo(internErrorTokenIndex);
+		cursorPositionInternTokenIndex = internErrorTokenIndex;
+		cursorPositionInternToken = internTokenFormulaList.get(cursorPositionInternTokenIndex);
+		selectCursorPositionInternToken(TokenSelectionType.PARSER_ERROR_SELECTION);
+	}
+
+	public TokenSelectionType getExternSelectionType() {
+		return tokenSelectionType;
 	}
 
 }

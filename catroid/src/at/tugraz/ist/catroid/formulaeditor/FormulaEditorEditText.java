@@ -36,6 +36,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.EditText;
+import at.tugraz.ist.catroid.formulaeditor.InternFormula.TokenSelectionType;
 import at.tugraz.ist.catroid.ui.fragment.FormulaEditorFragment;
 
 public class FormulaEditorEditText extends EditText implements OnTouchListener {
@@ -427,9 +428,11 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	public void highlightSelection() {
 		highlightSpan = this.getText();
 		highlightSpan.removeSpan(COLOR_HIGHLIGHT);
+		highlightSpan.removeSpan(COLOR_ERROR);
 
 		int selectionStartIndex = internFormula.getExternSelectionStartIndex();
 		int selectionEndIndex = internFormula.getExternSelectionEndIndex();
+		TokenSelectionType selectionType = internFormula.getExternSelectionType();
 
 		Log.i("info", "highlightSelection: start=" + selectionStartIndex + "  end=" + selectionEndIndex);
 
@@ -438,8 +441,13 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 			return;
 		}
 
-		highlightSpan.setSpan(COLOR_HIGHLIGHT, selectionStartIndex, selectionEndIndex,
-				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		if (selectionType == TokenSelectionType.USER_SELECTION) {
+			highlightSpan.setSpan(COLOR_HIGHLIGHT, selectionStartIndex, selectionEndIndex,
+					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		} else {
+			highlightSpan.setSpan(COLOR_ERROR, selectionStartIndex, selectionEndIndex,
+					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		}
 	}
 
 	public void clearSelectionHighlighting() {
@@ -448,8 +456,10 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		highlightSpan.removeSpan(COLOR_ERROR);
 	}
 
-	public void setParseErrorCursor(int firstError) {
-		clearSelectionHighlighting();
+	public void setParseErrorCursorAndSelection() {
+
+		internFormula.selectParseErrorTokenAndSetCursor();
+		highlightSelection();
 
 		//TODO: setError selection by internFormula
 		//		
