@@ -64,9 +64,11 @@ public class InternTokenModify {
 	private static List<InternToken> replaceFunctionButKeepParameters(List<InternToken> functionToReplace,
 			List<InternToken> functionToReplaceWith) {
 
-		List<List<InternToken>> keepParameterInternTokenList = getFunctionParameterInternTokensAsLists(functionToReplace);
+		List<List<InternToken>> keepParameterInternTokenList = InternTokenGroups
+				.getFunctionParameterInternTokensAsLists(functionToReplace);
 		List<InternToken> replacedParametersFunction = new LinkedList<InternToken>();
-		List<List<InternToken>> originalParameterInternTokenList = getFunctionParameterInternTokensAsLists(functionToReplaceWith);
+		List<List<InternToken>> originalParameterInternTokenList = InternTokenGroups
+				.getFunctionParameterInternTokensAsLists(functionToReplaceWith);
 
 		if (functionToReplace == null || keepParameterInternTokenList == null
 				|| originalParameterInternTokenList == null) {
@@ -91,7 +93,7 @@ public class InternTokenModify {
 		int functionParameterCount = getFunctionParameterCount(functionToReplaceWith);
 
 		for (int index = 0; index < functionParameterCount; index++) {
-			if (index < keepParameterInternTokenList.size()) {
+			if (index < keepParameterInternTokenList.size() && keepParameterInternTokenList.get(index).size() > 0) {
 				replacedParametersFunction.addAll(keepParameterInternTokenList.get(index));
 			} else {
 				replacedParametersFunction.addAll(originalParameterInternTokenList.get(index));
@@ -155,68 +157,6 @@ public class InternTokenModify {
 		} while (tempSearchToken.getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE
 				|| nestedFunctionsCounter != 0);
 		return functionParameterCount;
-	}
-
-	private static List<List<InternToken>> getFunctionParameterInternTokensAsLists(
-			List<InternToken> functionInternTokenList) {
-
-		List<List<InternToken>> functionParameterInternTokenList = new LinkedList<List<InternToken>>();
-
-		if (functionInternTokenList == null) {
-			return null;
-		}
-
-		if (functionInternTokenList.size() < 4) {
-			return null;
-		}
-
-		if (functionInternTokenList.get(0).getInternTokenType() != InternTokenType.FUNCTION_NAME) {
-			return null;
-		}
-
-		if (functionInternTokenList.get(1).getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
-			return null;
-		}
-
-		int searchIndex = 2;
-		List<InternToken> currentParameterInternTokenList = new LinkedList<InternToken>();
-
-		InternToken tempSearchToken;
-		int nestedFunctionsCounter = 1;
-
-		do {
-			if (searchIndex >= functionInternTokenList.size()) {
-				return null;
-			}
-
-			tempSearchToken = functionInternTokenList.get(searchIndex);
-
-			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
-				nestedFunctionsCounter++;
-				currentParameterInternTokenList.add(tempSearchToken);
-			} else if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE) {
-				nestedFunctionsCounter--;
-				if (nestedFunctionsCounter != 0) {
-					currentParameterInternTokenList.add(tempSearchToken);
-				}
-			} else if (nestedFunctionsCounter == 1
-					&& tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETER_DELIMITER) {
-				functionParameterInternTokenList.add(currentParameterInternTokenList);
-				currentParameterInternTokenList = new LinkedList<InternToken>();
-			} else {
-				currentParameterInternTokenList.add(tempSearchToken);
-			}
-
-			searchIndex++;
-
-		} while (tempSearchToken.getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE
-				|| nestedFunctionsCounter != 0);
-
-		if (currentParameterInternTokenList.size() > 0) {
-			functionParameterInternTokenList.add(currentParameterInternTokenList);
-		}
-
-		return functionParameterInternTokenList;
 	}
 
 	public static InternToken deleteNumberByOffset(InternToken cursorPositionInternToken, int externNumberOffset) {

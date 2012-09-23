@@ -293,4 +293,66 @@ public class InternTokenGroups {
 		return bracketInternTokenListToReturn;
 	}
 
+	public static List<List<InternToken>> getFunctionParameterInternTokensAsLists(
+			List<InternToken> functionInternTokenList) {
+
+		List<List<InternToken>> functionParameterInternTokenList = new LinkedList<List<InternToken>>();
+
+		if (functionInternTokenList == null) {
+			return null;
+		}
+
+		if (functionInternTokenList.size() < 4) {
+			return null;
+		}
+
+		if (functionInternTokenList.get(0).getInternTokenType() != InternTokenType.FUNCTION_NAME) {
+			return null;
+		}
+
+		if (functionInternTokenList.get(1).getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
+			return null;
+		}
+
+		int searchIndex = 2;
+		List<InternToken> currentParameterInternTokenList = new LinkedList<InternToken>();
+
+		InternToken tempSearchToken;
+		int nestedFunctionsCounter = 1;
+
+		do {
+			if (searchIndex >= functionInternTokenList.size()) {
+				return null;
+			}
+
+			tempSearchToken = functionInternTokenList.get(searchIndex);
+
+			if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN) {
+				nestedFunctionsCounter++;
+				currentParameterInternTokenList.add(tempSearchToken);
+			} else if (tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE) {
+				nestedFunctionsCounter--;
+				if (nestedFunctionsCounter != 0) {
+					currentParameterInternTokenList.add(tempSearchToken);
+				}
+			} else if (nestedFunctionsCounter == 1
+					&& tempSearchToken.getInternTokenType() == InternTokenType.FUNCTION_PARAMETER_DELIMITER) {
+				functionParameterInternTokenList.add(currentParameterInternTokenList);
+				currentParameterInternTokenList = new LinkedList<InternToken>();
+			} else {
+				currentParameterInternTokenList.add(tempSearchToken);
+			}
+
+			searchIndex++;
+
+		} while (tempSearchToken.getInternTokenType() != InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE
+				|| nestedFunctionsCounter != 0);
+
+		if (currentParameterInternTokenList.size() > 0) {
+			functionParameterInternTokenList.add(currentParameterInternTokenList);
+		}
+
+		return functionParameterInternTokenList;
+	}
+
 }

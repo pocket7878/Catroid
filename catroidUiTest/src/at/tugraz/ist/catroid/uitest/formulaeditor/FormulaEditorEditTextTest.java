@@ -93,25 +93,6 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 	}
 
 	@Smoke
-	public void testGoBackToDiscardChanges() {
-
-		solo.clickOnEditText(0);
-		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.clickOnKey("9");
-		catKeyboardClicker.clickOnKey("9");
-		catKeyboardClicker.clickOnKey(".");
-		catKeyboardClicker.clickOnKey("9");
-		catKeyboardClicker.clickOnKey("+");
-		solo.sleep(50);
-		solo.goBack();
-		solo.goBack();
-
-		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_changes_discarded)));
-		assertEquals("Wrong text in FormulaEditor", "0.0 ", solo.getEditText(0).getText().toString());
-
-	}
-
-	@Smoke
 	public void testDoubleTapSelection() {
 		//		float xCoordinate = 60;
 		//		float brickOffset = 99;
@@ -144,73 +125,48 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 				solo.getEditText(1).getText().getSpanStart(COLOR_HIGHLIGHT) == -1);
 
 		catKeyboardClicker.clickOnKey("rand");
-		assertTrue("Text not found", solo.searchText("rand("));
+		assertTrue("Text not found", solo.searchText(solo.getString(R.string.formula_editor_function_rand) + "("));
 		//There is no doubleclick in robotium q.q, this is a workaround!
 		solo.clickOnScreen(threeCharactersWidth, firstLineYCoordinate);
 		solo.drag(threeCharactersWidth, threeCharactersWidth + 1, firstLineYCoordinate, firstLineYCoordinate, 50);
 
 		catKeyboardClicker.clickOnKey("del");
 
-		assertFalse("Text found but shouldnt", solo.searchText("rand("));
+		assertFalse("Text found but shouldnt",
+				solo.searchText(solo.getString(R.string.formula_editor_function_rand) + "("));
 
 		catKeyboardClicker.switchToSensorKeyboard();
 		//catKeyboardClicker.clickOnKey("keyboardswitch");
 		catKeyboardClicker.clickOnKey("y-accel");
-		assertTrue("Text not found", solo.searchText("Y_ACCELERATION_"));
+		assertTrue("Text not found", solo.searchText(solo.getString(R.string.formula_editor_sensor_y_acceleration)));
 		//There is no doubleclick in robotium q.q, this is a workaround!
 		solo.clickOnScreen(threeCharactersWidth, firstLineYCoordinate);
 		solo.drag(threeCharactersWidth, threeCharactersWidth + 1, firstLineYCoordinate, firstLineYCoordinate, 50);
 
 		catKeyboardClicker.clickOnKey("del");
 
-		assertFalse("Text found but shouldnt", solo.searchText("_"));
+		assertFalse("Text found but shouldnt",
+				solo.searchText(solo.getString(R.string.formula_editor_sensor_y_acceleration)));
 
 		catKeyboardClicker.clickOnKey("y-accel");
 		catKeyboardClicker.clickOnKey("x-accel");
-		assertTrue("Text not found", solo.searchText("Y_ACCELERATION_ X_ACCELERATION_"));
+		assertTrue(
+				"Text not found",
+				solo.searchText(solo.getString(R.string.formula_editor_sensor_y_acceleration) + " "
+						+ solo.getString(R.string.formula_editor_sensor_x_acceleration)));
 		//There is no doubleclick in robotium q.q, this is a workaround!
 		solo.clickOnScreen(threeCharactersWidth, firstLineYCoordinate);
 		solo.drag(threeCharactersWidth, threeCharactersWidth + 1, firstLineYCoordinate, firstLineYCoordinate, 50);
 
 		catKeyboardClicker.clickOnKey("del");
 
-		assertTrue("Text not found", solo.searchText("X_ACCELERATION_"));
+		assertTrue("Text not found", solo.searchText(solo.getString(R.string.formula_editor_sensor_x_acceleration)));
 
 		solo.goBack();
 		solo.goBack();
 	}
 
-	@Smoke
-	public void testErrorInFirstAndLastCharactersAndEmptyFormula() {
-
-		solo.clickOnEditText(0);
-		//catKeyboardClicker.clearEditTextWithDeletes(1);
-		BackgroundColorSpan COLOR_ERROR = (BackgroundColorSpan) UiTestUtils.getPrivateField("COLOR_ERROR",
-				new FormulaEditorEditText(getActivity()));
-		catKeyboardClicker.clickOnKey("del");
-		assertTrue("Error cursor found in text, but should not be",
-				solo.getEditText(1).getText().getSpanStart(COLOR_ERROR) == -1);
-		solo.goBack();
-		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
-		assertTrue("Error cursor not found in text, but should be",
-				solo.getEditText(1).getText().getSpanStart(COLOR_ERROR) > -1);
-		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.clickOnKey("+");
-		solo.goBack();
-		solo.sleep(50);
-		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
-		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(0);
-		catKeyboardClicker.clickOnKey("1");
-		catKeyboardClicker.clickOnKey("+");
-		catKeyboardClicker.clickOnKey("1");
-		catKeyboardClicker.clickOnKey("+");
-		solo.goBack();
-		solo.sleep(50);
-		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
-
-		solo.goBack();
-		solo.goBack();
-	}
+	//TODO Adapt tests below this line!
 
 	@Smoke
 	public void testTextSelectionLogicForNumbers() {
@@ -309,6 +265,57 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		solo.clickOnScreen(10 * oneCharacterWidth, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("del");
 		assertEquals("Text deletion was wrong!", "X_ACCELERATION_ ", solo.getEditText(1).getText().toString());
+
+		solo.goBack();
+		solo.goBack();
+	}
+
+	@Smoke
+	public void testGoBackToDiscardChanges() {
+
+		solo.clickOnEditText(0);
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("9");
+		catKeyboardClicker.clickOnKey("9");
+		catKeyboardClicker.clickOnKey(".");
+		catKeyboardClicker.clickOnKey("9");
+		catKeyboardClicker.clickOnKey("+");
+		solo.sleep(50);
+		solo.goBack();
+		solo.goBack();
+
+		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_changes_discarded)));
+		assertEquals("Wrong text in FormulaEditor", "0.0 ", solo.getEditText(0).getText().toString());
+
+	}
+
+	@Smoke
+	public void testErrorInFirstAndLastCharactersAndEmptyFormula() {
+
+		solo.clickOnEditText(0);
+		//catKeyboardClicker.clearEditTextWithDeletes(1);
+		BackgroundColorSpan COLOR_ERROR = (BackgroundColorSpan) UiTestUtils.getPrivateField("COLOR_ERROR",
+				new FormulaEditorEditText(getActivity()));
+		catKeyboardClicker.clickOnKey("del");
+		assertTrue("Error cursor found in text, but should not be",
+				solo.getEditText(1).getText().getSpanStart(COLOR_ERROR) == -1);
+		solo.goBack();
+		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
+		assertTrue("Error cursor not found in text, but should be",
+				solo.getEditText(1).getText().getSpanStart(COLOR_ERROR) > -1);
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("+");
+		solo.goBack();
+		solo.sleep(50);
+		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
+		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(0);
+		catKeyboardClicker.clickOnKey("1");
+		catKeyboardClicker.clickOnKey("+");
+		catKeyboardClicker.clickOnKey("1");
+		catKeyboardClicker.clickOnKey("+");
+		solo.goBack();
+		solo.sleep(50);
+		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
 
 		solo.goBack();
 		solo.goBack();

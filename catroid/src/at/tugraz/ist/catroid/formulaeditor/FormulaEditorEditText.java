@@ -103,6 +103,9 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		internFormula.generateExternFormulaStringAndInternExternMapping(context);
 		setText(internFormula.getExternFormulaString());
 
+		internFormula.selectWholeFormula();
+		highlightSelection();
+
 		//		quickSelect();
 
 		//TODO History support
@@ -510,6 +513,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 		setText(newExternFormulaString);
 		absoluteCursorPosition = internFormula.getExternCursorPosition();
+		highlightSelection();
 
 		if (absoluteCursorPosition > getText().length()) {
 			absoluteCursorPosition = getText().length();
