@@ -26,6 +26,7 @@ import java.util.concurrent.Semaphore;
 
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.CostumeData;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -49,6 +50,8 @@ public class Costume extends Image {
 	public boolean show;
 	public int zPosition;
 	protected Pixmap pixmap;
+	private transient PhysicWorld physicWorld = null;
+	private Semaphore physicWorldLock = new Semaphore(1);
 
 	public Costume(Sprite sprite) {
 		this.sprite = sprite;
@@ -85,8 +88,7 @@ public class Costume extends Image {
 		// We use Y-down, libgdx Y-up. This is the fix for accurate y-axis detection
 		y = height - y;
 
-		// XXX: Should be < width & < height
-		if (x >= 0 && x <= width && y >= 0 && y <= height) {
+		if (x >= 0 && x < width && y >= 0 && y < height) {
 			if (pixmap != null && ((pixmap.getPixel((int) x, (int) y) & 0x000000FF) > 10)) {
 				sprite.startWhenScripts("Tapped");
 				return true;
@@ -116,6 +118,8 @@ public class Costume extends Image {
 	protected void checkImageChanged() {
 		imageLock.acquireUninterruptibly();
 		if (imageChanged) {
+			this.getPhysicWorld().changeCostume(sprite);
+
 			if (costumeData == null) {
 				xYWidthHeightLock.acquireUninterruptibly();
 				this.x += this.width / 2f;
@@ -152,8 +156,6 @@ public class Costume extends Image {
 
 			TextureRegion region = costumeData.getTextureRegion();
 			setRegion(region);
-
-			ProjectManager.getInstance().getCurrentProject().getPhysicWorld().changeCostume(sprite);
 
 			imageChanged = false;
 		}
@@ -197,6 +199,18 @@ public class Costume extends Image {
 		imageLock.acquireUninterruptibly();
 		this.imageChanged = true;
 		imageLock.release();
+	}
+
+	private PhysicWorld getPhysicWorld() {
+		if (physicWorld == null) {
+			physicWorldLock.acquireUninterruptibly();
+			if (physicWorld == null) {
+				physicWorld = ProjectManager.getInstance().getCurrentProject().getPhysicWorld();
+			}
+			physicWorldLock.release();
+		}
+
+		return physicWorld;
 	}
 
 	// Always use this method for the following methods
@@ -283,6 +297,8 @@ public class Costume extends Image {
 		this.scaleX = size;
 		this.scaleY = size;
 		scaleLock.release();
+
+		this.getPhysicWorld().changeCostume(sprite);
 	}
 
 	public float getSize() {

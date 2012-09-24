@@ -41,7 +41,7 @@ public class PhysicSettings {
 		public final static boolean IGNORE_SLEEPING_OBJECTS = false;
 
 		public static class BoundaryBox {
-			public final static int FRAME_SIZE = 1;
+			public final static int FRAME_SIZE = 5;
 			public final static short COLLISION_MASK = 0x0002;
 		}
 	}

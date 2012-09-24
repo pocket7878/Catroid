@@ -24,6 +24,7 @@ package at.tugraz.ist.catroid.physics;
 
 import at.tugraz.ist.catroid.common.Values;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -42,39 +43,38 @@ public class PhysicBoundaryBox {
 	public void create() {
 		float boxWidth = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_WIDTH);
 		float boxHeight = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_HEIGHT);
-		float boxElementSize = PhysicSettings.World.BoundaryBox.FRAME_SIZE;
+		float boxElementSize = PhysicWorldConverter.lengthCatToBox2d(PhysicSettings.World.BoundaryBox.FRAME_SIZE);
+		float halfBoxElementSize = boxElementSize / 2.0f;
 
 		// Top
-		createSide(0.0f, boxHeight / 2 + boxElementSize, boxWidth, boxElementSize * 2);
+		createSide(new Vector2(0.0f, (boxHeight / 2.0f) + halfBoxElementSize), boxWidth, boxElementSize);
 		// Bottom
-		createSide(0.0f, -boxHeight / 2 - boxElementSize, boxWidth, boxElementSize * 2);
+		createSide(new Vector2(0.0f, -(boxHeight / 2.0f) - halfBoxElementSize), boxWidth, boxElementSize);
 		// Left
-		createSide(-boxWidth / 2 - boxElementSize, 0.0f, boxElementSize * 2, boxHeight);
+		createSide(new Vector2(-(boxWidth / 2.0f) - halfBoxElementSize, 0.0f), boxElementSize, boxHeight);
 		// Right
-		createSide(boxWidth / 2 + boxElementSize, 0.0f, boxElementSize * 2, boxHeight);
+		createSide(new Vector2((boxWidth / 2.0f) + halfBoxElementSize, 0.0f), boxElementSize, boxHeight);
 	}
 
-	private void createSide(float x, float y, float width, float height) {
+	private void createSide(Vector2 center, float width, float height) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
 		bodyDef.allowSleep = false;
 
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width / 2f, height / 2f);
+		shape.setAsBox(width / 2f, height / 2f, center, 0.0f);
 
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
+		fixtureDef.filter.maskBits = PhysicSettings.Object.COLLISION_MASK;
+
 		if (PhysicSettings.DEBUGFLAG) {
 			fixtureDef.filter.categoryBits = PhysicSettings.Object.COLLISION_MASK;
 		} else {
 			fixtureDef.filter.categoryBits = PhysicSettings.World.BoundaryBox.COLLISION_MASK;
 		}
 
-		fixtureDef.filter.maskBits = PhysicSettings.Object.COLLISION_MASK;
-
 		Body body = world.createBody(bodyDef);
 		body.createFixture(fixtureDef);
-		body.setTransform(x, y, 0.0f);
-
 	}
 }

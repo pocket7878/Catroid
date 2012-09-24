@@ -39,6 +39,10 @@ public class PhysicShapeBuilder {
 	}
 
 	public Shape[] getShape(CostumeData costumeData, float scaleFactor) {
+		if (costumeData == null) {
+			return null;
+		}
+
 		int scale = (int) (scaleFactor * 10);
 		String key = costumeData.getChecksum() + scale;
 

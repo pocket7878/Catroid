@@ -42,6 +42,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 			PhysicObject objectWithNullBody = new PhysicObject(null);
 			assertTrue(false);
 		} catch (NullPointerException exception) {
+			// Expected behavior.
 		}
 	}
 
@@ -142,7 +143,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 		assertFalse(body.isActive());
 	}
 
-	public void testSetTypeDynamicUpdatesMass() {
+	public void testSetTypeToDynamicUpdatesMass() {
 		PhysicObject physicObject = createPhysicObject(Type.NONE);
 		Body body = getBody(physicObject);
 
@@ -426,7 +427,6 @@ public class PhysicObjectTest extends AndroidTestCase {
 		return physicObject;
 	}
 
-	// Private member helper methods.
 	protected PhysicObject createPhysicObject(PhysicObject.Type type) {
 		return createPhysicObject(type, null);
 	}
@@ -435,6 +435,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 		return createPhysicObject(null, null);
 	}
 
+	// Private member helper methods.
 	private Body getBody(PhysicObject physicObject) {
 		return (Body) TestUtils.getPrivateField("body", physicObject, false);
 	}
