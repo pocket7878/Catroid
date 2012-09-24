@@ -201,7 +201,7 @@ public class InternFormula {
 		} else {
 			cursorTokenPosition = null;
 			this.cursorPositionInternToken = null;
-			return; //TODO check if necessary
+			return;
 		}
 
 		switch (cursorTokenPosition) {
@@ -537,6 +537,9 @@ public class InternFormula {
 	private void selectCursorPositionInternToken(TokenSelectionType internTokenSelectionType) {
 
 		internFormulaTokenSelection = null;
+		if (cursorPositionInternToken == null) {
+			return;
+		}
 
 		switch (cursorPositionInternToken.getInternTokenType()) {
 			case FUNCTION_NAME:

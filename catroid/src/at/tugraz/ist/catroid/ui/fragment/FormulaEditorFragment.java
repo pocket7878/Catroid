@@ -104,6 +104,7 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 		} else {
 			formulaEditorDialog.setInputFormula(formula, SET_FORMULA_ON_SWITCH_EDIT_TEXT);
 		}
+
 	}
 
 	public void startFormulaEditor(SherlockFragmentActivity activity) {
@@ -184,7 +185,7 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 				if (restoreInstance) { //after orientation switch
 					restoreInstance = false;
 					if (!formulaEditorEditText.restoreFieldFromPreviousHistory()) { //history is only deleted when editor is shut down by  user!
-						formulaEditorEditText.enterNewFormula(newFormula.getInternFormula()); // this happens when onSaveInstanceState() is being called but not by orientation change (e.g.user turns off screen)
+						formulaEditorEditText.enterNewFormula(newFormula.getInternFormulaState()); // this happens when onSaveInstanceState() is being called but not by orientation change (e.g.user turns off screen)
 					}
 					refreshFormulaPreviewString(formulaEditorEditText.getText().toString());
 
@@ -193,7 +194,7 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 					//((ScriptTabActivity) getActivity()).formulaEditor = this;
 				} else { //on create
 					currentFormula.removeTextFieldHighlighting(brickView, orientation);
-					formulaEditorEditText.enterNewFormula(currentFormula.getInternFormula());
+					formulaEditorEditText.enterNewFormula(currentFormula.getInternFormulaState());
 					currentFormula.highlightTextField(brickView, orientation);
 					//TODO enable History support
 					//					if (!formulaEditorEditText.hasChanges()) {
@@ -219,11 +220,12 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 				if (currentFormula != null) {
 					currentFormula.refreshTextField(brickView);
 				}
+
 				formulaEditorEditText.endEdit();
 				currentFormula.removeTextFieldHighlighting(brickView, orientation);
 				currentFormula = newFormula;
 				currentFormula.highlightTextField(brickView, orientation);
-				formulaEditorEditText.enterNewFormula(newFormula.getInternFormula());
+				formulaEditorEditText.enterNewFormula(newFormula.getInternFormulaState());
 				break;
 			default:
 				break;

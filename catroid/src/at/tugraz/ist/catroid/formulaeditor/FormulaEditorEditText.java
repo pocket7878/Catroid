@@ -97,11 +97,12 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		this.setCursorVisible(false);
 	}
 
-	public void enterNewFormula(InternFormula internFormulaToRepresent) {
+	public void enterNewFormula(InternFormulaState internFormulaState) {
 
-		internFormula = internFormulaToRepresent;
+		internFormula = internFormulaState.createInternFormulaFromState();
 		internFormula.generateExternFormulaStringAndInternExternMapping(context);
-		setText(internFormula.getExternFormulaString());
+
+		updateTextAndCursorFromInternFormula();
 
 		internFormula.selectWholeFormula();
 		highlightSelection();
@@ -463,41 +464,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 		internFormula.selectParseErrorTokenAndSetCursor();
 		highlightSelection();
-
-		//TODO: setError selection by internFormula
-		//		
-		//		highlightSpan = this.getText();
-		//
-		//		if (highlightSpan.length() <= 1 || firstError == 0) {
-		//			if (highlightSpan.length() == 0) {
-		//				append(" ");
-		//			}
-		//			highlightSpan.setSpan(COLOR_ERROR, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		//			absoluteCursorPosition = 0;
-		//			selectionStartIndex = 0;
-		//			selectionEndIndex = 1;
-		//			editMode = true;
-		//			return;
-		//		}
-		//
-		//		if (firstError < highlightSpan.length()) {
-		//			editMode = (charIsLowerCaseLetter(highlightSpan.charAt(firstError))
-		//					|| charIsCapitalLetter(highlightSpan.charAt(firstError)) || highlightSpan.charAt(firstError) == ')' || highlightSpan
-		//					.charAt(firstError) == ',') ? false : true;
-		//			selectionStartIndex = firstError;
-		//			highlightSpan.setSpan(COLOR_ERROR, firstError, ++firstError, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		//			selectionEndIndex = firstError;
-		//		} else {
-		//			editMode = (charIsLowerCaseLetter(highlightSpan.charAt(firstError - 1))
-		//					|| charIsCapitalLetter(highlightSpan.charAt(firstError - 1)) || highlightSpan
-		//					.charAt(firstError - 1) == ')') ? false : true;
-		//			highlightSpan.setSpan(COLOR_ERROR, firstError - 1, firstError, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		//			selectionStartIndex = firstError - 1;
-		//			selectionEndIndex = firstError;
-		//		}
-		//
-		//		setSelection(firstError);
-		//		absoluteCursorPosition = firstError;
 	}
 
 	public void createExternStringRepresentation() {
@@ -649,8 +615,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	}
 
 	public boolean hasChanges() {
-		return true; //TODO enable history support
-		//		return history == null ? false : history.hasUnsavedChanges();
+		return history == null ? false : history.hasUnsavedChanges();
 	}
 
 	public void formulaSaved() {
@@ -662,17 +627,8 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	}
 
 	public void quickSelect() {
-		//TODO handle quickSelect via internFormula
-
-		//		if (getText().length() < 1) {
-		//			return;
-		//		}
-		//		selectionStartIndex = 0;
-		//		selectionEndIndex = getText().length();
-		//		absoluteCursorPosition = selectionEndIndex;
-		//		setSelection(absoluteCursorPosition - 1);
-		//		highlightSelection();
-		//		editMode = true;
+		internFormula.selectWholeFormula();
+		highlightSelection();
 	}
 
 	//	public boolean getUndoIsPossible() {

@@ -228,8 +228,8 @@ public class Formula implements Serializable {
 		formulaTextFieldId = null;
 	}
 
-	public InternFormula getInternFormula() {
-		return internFormula;
+	public InternFormulaState getInternFormulaState() {
+		return internFormula.getInternFormulaState();
 	}
 
 }
