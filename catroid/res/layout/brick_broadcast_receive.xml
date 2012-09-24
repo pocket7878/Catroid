@@ -19,36 +19,45 @@
  *  GNU Affero General Public License for more details.
  *   
  *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/brick_script" >
+    android:background="@drawable/brick_script"
+    android:orientation="horizontal" >
 
-    <TextView
-        android:id="@+id/broadcast_textview"
-        style="@style/brick_text_style"
-        android:text="@string/brick_broadcast_receive" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
-	<Button
-		android:id="@+id/broadcast_new_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/broadcast_textview"
-        android:layout_alignParentRight="true"
-        android:clickable="false"
-        android:focusable="false"
-        android:text="@string/new_broadcast_message" />
-	
-	 <Spinner
-        android:id="@+id/broadcast_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/broadcast_textview"
-        android:layout_toLeftOf="@id/broadcast_new_message"
-        android:clickable="false"
-      	android:focusable="false" />
-        
-</RelativeLayout>
+        <TextView
+            style="@style/brick_text_style"
+            android:text="@string/brick_broadcast_receive" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Spinner
+                android:id="@+id/broadcast_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:clickable="false"
+                android:focusable="false" />
+
+            <Button
+                android:id="@+id/broadcast_new_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clickable="false"
+                android:focusable="false"
+                android:text="@string/new_broadcast_message" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

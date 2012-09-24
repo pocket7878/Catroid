@@ -19,31 +19,29 @@
  *  GNU Affero General Public License for more details.
  *   
  *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/RelativeLayout01"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/brick_magenta" 
-    android:orientation="horizontal">
+    android:background="@drawable/brick_magenta" >
 
     <TextView
         android:id="@+id/ChangeVolumeByTextView"
         style="@style/brick_text_style"
+        android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:paddingRight="5dip"
         android:text="@string/brick_change_volume_by" />
 
     <TextView
         android:id="@+id/brick_change_volume_by_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="5dip"
         android:background="@color/white"
-        android:gravity="center"
+        android:gravity="right"
         android:minHeight="30dip"
         android:minWidth="50dip"
         android:paddingRight="5dip"
@@ -55,19 +53,18 @@
         android:id="@+id/brick_change_volume_by_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:visibility="gone"
-        android:gravity="center"
+        android:gravity="right"
         android:inputType="number|numberDecimal|numberSigned"
-        android:maxLength="6"
+        android:maxLength="5"
         android:maxLines="1"
         android:minWidth="60dip"
         android:numeric="signed"
-        android:text="100" >
+        android:text="100"
+        android:visibility="gone" >
     </EditText>
 
 </RelativeLayout>
