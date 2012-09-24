@@ -166,109 +166,163 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		solo.goBack();
 	}
 
-	//TODO Adapt tests below this line!
-
 	@Smoke
-	public void testTextSelectionLogicForNumbers() {
-		FormulaEditorEditText.autoWhitespaceDeletion = false;
+	public void testFunctionFirstParameterSelectionAndModification() {
 
 		solo.clickOnEditText(0);
-		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.clickOnKey("1");
+
 		catKeyboardClicker.switchToFunctionKeyboard();
 		catKeyboardClicker.clickOnKey("sin");
-		solo.clickOnScreen(2.5f * oneCharacterWidth, firstLineYCoordinate);
-		catKeyboardClicker.clickOnKey("del");
-		solo.clickOnScreen(4 * oneCharacterWidth, firstLineYCoordinate);
-		catKeyboardClicker.clickOnKey("del");
-		assertEquals("Text deletion was wrong!", "1 ", solo.getEditText(1).getText().toString());
-
-		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(0);
 		catKeyboardClicker.switchToNumberKeyboard();
+
 		catKeyboardClicker.clickOnKey("1");
-		catKeyboardClicker.switchToSensorKeyboard();
-		catKeyboardClicker.clickOnKey("y-accel");
+		catKeyboardClicker.clickOnKey("2");
+		catKeyboardClicker.clickOnKey(".");
+		catKeyboardClicker.clickOnKey("3");
+		catKeyboardClicker.clickOnKey("4");
+
+		assertEquals("Function parameter modification failed", solo.getString(R.string.formula_editor_function_sin)
+				+ "( 12.34 ) ", solo.getEditText(1).getText().toString());
+
 		solo.clickOnScreen(2.5f * oneCharacterWidth, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("del");
-		solo.clickOnScreen(5 * oneCharacterWidth, firstLineYCoordinate);
+
+		assertEquals("Text deletion was wrong!", " ", solo.getEditText(1).getText().toString());
+
+		catKeyboardClicker.clickOnKey("rand");
+		catKeyboardClicker.switchToNumberKeyboard();
+
+		catKeyboardClicker.clickOnKey("1");
+		catKeyboardClicker.clickOnKey("2");
+		catKeyboardClicker.clickOnKey(".");
+		catKeyboardClicker.clickOnKey("3");
+		catKeyboardClicker.clickOnKey("4");
+
+		assertEquals("Function parameter modification failed", solo.getString(R.string.formula_editor_function_rand)
+				+ "( 12.34 , 1 ) ", solo.getEditText(1).getText().toString());
+
+		solo.clickOnScreen(2.5f * oneCharacterWidth, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("del");
-		assertEquals("Text deletion was wrong!", "1 ", solo.getEditText(1).getText().toString());
+
+		assertEquals("Text deletion was wrong!", " ", solo.getEditText(1).getText().toString());
 
 		solo.goBack();
 		solo.goBack();
 	}
 
 	@Smoke
-	public void testTextSelectionLogicForFunctions() {
-		FormulaEditorEditText.autoWhitespaceDeletion = false;
+	public void testFunctionReplaceButKeepParameters() {
 
 		solo.clickOnEditText(0);
-		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.switchToFunctionKeyboard();
-		catKeyboardClicker.clickOnKey("sin");
-		solo.clickOnScreen(10, firstLineYCoordinate);
-		catKeyboardClicker.switchToSensorKeyboard();
-		catKeyboardClicker.clickOnKey("x-accel");
-		catKeyboardClicker.clickOnKey("del");
-		solo.clickOnScreen(23 * oneCharacterWidth, firstLineYCoordinate);
-		catKeyboardClicker.clickOnKey("del");
-		assertEquals("Text deletion was wrong!", "X_ACCELERATION_ ", solo.getEditText(1).getText().toString());
-
-		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.switchToFunctionKeyboard();
-		catKeyboardClicker.clickOnKey("sin");
-		solo.clickOnScreen(14 * oneCharacterWidth, firstLineYCoordinate);
-		catKeyboardClicker.switchToSensorKeyboard();
-		catKeyboardClicker.clickOnKey("x-accel");
-		solo.clickOnScreen(8 * oneCharacterWidth, firstLineYCoordinate);
-		catKeyboardClicker.clickOnKey("del");
-		solo.clickOnScreen(2 * oneCharacterWidth, firstLineYCoordinate);
-		catKeyboardClicker.clickOnKey("del");
-		assertEquals("Text deletion was wrong!", "X_ACCELERATION_ ", solo.getEditText(1).getText().toString());
-		solo.clickOnScreen(2 * oneCharacterWidth, firstLineYCoordinate);
-		catKeyboardClicker.clickOnKey("del");
 
 		catKeyboardClicker.switchToFunctionKeyboard();
 		catKeyboardClicker.clickOnKey("sin");
-		solo.clickOnScreen(10, firstLineYCoordinate);
-		catKeyboardClicker.clickOnKey("cos");
-		solo.clickOnScreen(2 * oneCharacterWidth, firstLineYCoordinate);
-		catKeyboardClicker.clickOnKey("del");
-		assertEquals("Text deletion was wrong!", " sin( 0 ) ", solo.getEditText(1).getText().toString());
+		catKeyboardClicker.switchToNumberKeyboard();
+
+		catKeyboardClicker.clickOnKey("1");
+		catKeyboardClicker.clickOnKey("2");
+		catKeyboardClicker.clickOnKey(".");
+		catKeyboardClicker.clickOnKey("3");
+		catKeyboardClicker.clickOnKey("4");
+
+		assertEquals("Function parameter modification failed", solo.getString(R.string.formula_editor_function_sin)
+				+ "( 12.34 ) ", solo.getEditText(1).getText().toString());
+
+		solo.clickOnScreen(2.5f * oneCharacterWidth, firstLineYCoordinate);
+		catKeyboardClicker.clickOnKey("rand");
+
+		assertEquals("Keep function parameters failed", solo.getString(R.string.formula_editor_function_rand)
+				+ "( 12.34 , 1 ) ", solo.getEditText(1).getText().toString());
 
 		solo.goBack();
 		solo.goBack();
 	}
 
 	@Smoke
-	public void testTextSelectionLogicForSensors() {
-		FormulaEditorEditText.autoWhitespaceDeletion = false;
+	public void testBracketValueSelectionAndModification() {
 
 		solo.clickOnEditText(0);
-		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.switchToSensorKeyboard();
-		catKeyboardClicker.clickOnKey("x-accel");
-		solo.clickOnScreen(10, firstLineYCoordinate);
-		catKeyboardClicker.clickOnKey("y-accel");
-		catKeyboardClicker.clickOnKey("del");
-		solo.clickOnScreen(25 * oneCharacterWidth, firstLineYCoordinate);
-		catKeyboardClicker.clickOnKey("del");
-		assertEquals("Text deletion was wrong!", "Y_ACCELERATION_ ", solo.getEditText(1).getText().toString());
 
-		solo.clickOnEditText(0);
+		catKeyboardClicker.switchToFunctionKeyboard();
+		catKeyboardClicker.clickOnKey("bracket");
+		catKeyboardClicker.switchToNumberKeyboard();
+
+		catKeyboardClicker.clickOnKey("1");
+		catKeyboardClicker.clickOnKey(".");
+		catKeyboardClicker.clickOnKey("3");
+
+		assertEquals("Bracket value modification failed", "( 1.3 ) ", solo.getEditText(1).getText().toString());
+
+		solo.clickOnScreen(12f * oneCharacterWidth, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.clickOnKey("x-accel");
-		solo.clickOnScreen(10, firstLineYCoordinate);
-		catKeyboardClicker.clickOnKey("y-accel");
-		catKeyboardClicker.clickOnKey("del");
-		solo.clickOnScreen(10 * oneCharacterWidth, firstLineYCoordinate);
-		catKeyboardClicker.clickOnKey("del");
-		assertEquals("Text deletion was wrong!", "X_ACCELERATION_ ", solo.getEditText(1).getText().toString());
+
+		assertEquals("Text deletion was wrong!", " ", solo.getEditText(1).getText().toString());
 
 		solo.goBack();
 		solo.goBack();
 	}
+
+	@Smoke
+	public void testNumberDelimiterInsertion() {
+
+		solo.clickOnEditText(0);
+
+		catKeyboardClicker.clickOnKey(".");
+		catKeyboardClicker.clickOnKey("1");
+
+		assertEquals("Number insertion was wrong!", "0.1 ", solo.getEditText(1).getText().toString());
+
+		catKeyboardClicker.clickOnKey(".");
+
+		assertEquals("Delimiter insertion was wrong!", "0.1 ", solo.getEditText(1).getText().toString());
+
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del");
+
+		assertEquals("Number deletion failed!", " ", solo.getEditText(1).getText().toString());
+
+		catKeyboardClicker.clickOnKey("1");
+		catKeyboardClicker.clickOnKey("2");
+
+		solo.clickOnScreen(oneCharacterWidth / 2f, firstLineYCoordinate);
+		catKeyboardClicker.clickOnKey(".");
+
+		assertEquals("Delimiter insertion was wrong!", "0.12 ", solo.getEditText(1).getText().toString());
+
+		solo.goBack();
+		solo.goBack();
+	}
+
+	//TODO Adapt tests below this line!
+	//-------------------------------------------------------------------------------------------------
+
+	//	@Smoke TODO: Not necessary anymore 
+	//	public void testTextSelectionLogicForSensors() {
+	//
+	//		solo.clickOnEditText(0);
+	//		catKeyboardClicker.switchToSensorKeyboard();
+	//		catKeyboardClicker.clickOnKey("x-accel");
+	//		solo.clickOnScreen(10, firstLineYCoordinate);
+	//		catKeyboardClicker.clickOnKey("y-accel");
+	//		catKeyboardClicker.clickOnKey("del");
+	//		solo.clickOnScreen(25 * oneCharacterWidth, firstLineYCoordinate);
+	//		catKeyboardClicker.clickOnKey("del");
+	//		assertEquals("Text deletion was wrong!", "Y_ACCELERATION_ ", solo.getEditText(1).getText().toString());
+	//
+	//		solo.clickOnEditText(0);
+	//		catKeyboardClicker.clickOnKey("del");
+	//		catKeyboardClicker.clickOnKey("x-accel");
+	//		solo.clickOnScreen(10, firstLineYCoordinate);
+	//		catKeyboardClicker.clickOnKey("y-accel");
+	//		catKeyboardClicker.clickOnKey("del");
+	//		solo.clickOnScreen(10 * oneCharacterWidth, firstLineYCoordinate);
+	//		catKeyboardClicker.clickOnKey("del");
+	//		assertEquals("Text deletion was wrong!", "X_ACCELERATION_ ", solo.getEditText(1).getText().toString());
+	//
+	//		solo.goBack();
+	//		solo.goBack();
+	//	}
 
 	@Smoke
 	public void testGoBackToDiscardChanges() {

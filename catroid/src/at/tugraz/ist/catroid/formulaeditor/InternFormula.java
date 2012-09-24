@@ -234,6 +234,10 @@ public class InternFormula {
 
 	private CursorTokenPropertiesAfterModification replaceSelection(List<InternToken> tokenListToInsert) {
 
+		if (InternToken.isPeriodToken(tokenListToInsert)) {
+			tokenListToInsert = new LinkedList<InternToken>();
+			tokenListToInsert.add(new InternToken(InternTokenType.NUMBER, "0."));
+		}
 		replaceInternTokens(tokenListToInsert, internTokenSelectionStart, internTokenSelectionEnd);
 
 		return setCursorPositionAndSelectionAfterInput(internTokenSelectionStart);
@@ -261,12 +265,12 @@ public class InternFormula {
 		if (tokenSelection) {
 			deleteInternTokens(internTokenSelectionStart, internTokenSelectionEnd);
 
+			cursorPositionInternTokenIndex = internTokenSelectionStart;
+			cursorPositionInternToken = null;
+
 			tokenSelection = false;
 			internTokenSelectionStart = -1;
 			internTokenSelectionEnd = -1;
-
-			cursorPositionInternTokenIndex = internTokenSelectionStart;
-			cursorPositionInternToken = null;
 
 			return CursorTokenPropertiesAfterModification.LEFT;
 
@@ -408,9 +412,9 @@ public class InternFormula {
 
 				functionInternTokensLastIndex = functionInternTokens.size() - 1;
 
-				startDeletionIndex = functionInternTokens.indexOf(functionInternTokens.get(0));
-				endIndexToDelete = functionInternTokens
-						.indexOf(functionInternTokens.get(functionInternTokensLastIndex));
+				startDeletionIndex = internTokenFormulaList.indexOf(functionInternTokens.get(0));
+				endIndexToDelete = internTokenFormulaList.indexOf(functionInternTokens
+						.get(functionInternTokensLastIndex));
 
 				deleteInternTokens(startDeletionIndex, endIndexToDelete);
 
@@ -666,8 +670,8 @@ public class InternFormula {
 				return CursorTokenPropertiesAfterModification.DO_NOT_MODIFY;
 			}
 
-			InternTokenModify.insertIntoNumberToken(cursorPositionInternToken, 0, "."); //TODO Hardcoded period, may search for better solution
-			externCursorPosition++;
+			InternTokenModify.insertIntoNumberToken(cursorPositionInternToken, 0, "0."); //TODO Hardcoded period, may search for better solution
+			externCursorPosition += 2;
 
 			return CursorTokenPropertiesAfterModification.DO_NOT_MODIFY;
 
@@ -710,9 +714,7 @@ public class InternFormula {
 
 			cursorPositionInternToken.appendToTokenStringValue(internTokensToInsert);
 
-			externCursorPosition++;
-
-			return CursorTokenPropertiesAfterModification.DO_NOT_MODIFY;
+			return CursorTokenPropertiesAfterModification.RIGHT;
 
 		} else if (cursorPositionInternToken.isNumber() && InternToken.isPeriodToken(internTokensToInsert)) {
 			String numberString = cursorPositionInternToken.getTokenSringValue();
@@ -722,11 +724,16 @@ public class InternFormula {
 			}
 			cursorPositionInternToken.appendToTokenStringValue("."); //TODO Hardcoded period, may search for better solution
 
-			externCursorPosition++;
-			return CursorTokenPropertiesAfterModification.DO_NOT_MODIFY;
+			return CursorTokenPropertiesAfterModification.RIGHT;
 
 		} else if (InternToken.isPeriodToken(internTokensToInsert)) {
-			return CursorTokenPropertiesAfterModification.DO_NOT_MODIFY; //TODO Find better period solution
+
+			internTokenFormulaList.add(cursorPositionInternTokenIndex + 1,
+					new InternToken(InternTokenType.NUMBER, "0."));
+
+			cursorPositionInternToken = null;
+			cursorPositionInternTokenIndex = cursorPositionInternTokenIndex + 1;
+			return CursorTokenPropertiesAfterModification.RIGHT; //TODO Find better period solution
 		} else {
 
 			internTokenFormulaList.addAll(cursorPositionInternTokenIndex + 1, internTokensToInsert);
@@ -743,6 +750,10 @@ public class InternFormula {
 
 		if (firstLeftToken == null) {
 
+			if (InternToken.isPeriodToken(internTokensToAppend)) {
+				internTokensToAppend = new LinkedList<InternToken>();
+				internTokensToAppend.add(new InternToken(InternTokenType.NUMBER, "0."));
+			}
 			internTokenFormulaList.addAll(0, internTokensToAppend);
 
 			return setCursorPositionAndSelectionAfterInput(0);
@@ -819,6 +830,24 @@ public class InternFormula {
 				tokenSelectionType = TokenSelectionType.USER_SELECTION;
 				internTokenSelectionStart = insertedInternTokenIndex + 2;
 				internTokenSelectionEnd = internTokenSelectionStart + functionFirstParameter.size() - 1;
+				cursorPositionInternTokenIndex = internTokenSelectionEnd;
+				cursorPositionInternToken = null;
+				return CursorTokenPropertiesAfterModification.RIGHT;
+
+			case BRACKET_OPEN:
+				List<InternToken> bracketInternTokenList = InternTokenGroups.generateTokenListByBracketOpen(
+						internTokenFormulaList, insertedInternTokenIndex);
+
+				if (bracketInternTokenList.size() < 3) {
+					cursorPositionInternTokenIndex = insertedInternTokenIndex + bracketInternTokenList.size() - 1;
+					cursorPositionInternToken = null;
+					return CursorTokenPropertiesAfterModification.RIGHT;
+				}
+
+				tokenSelection = true;
+				tokenSelectionType = TokenSelectionType.USER_SELECTION;
+				internTokenSelectionStart = insertedInternTokenIndex + 1;
+				internTokenSelectionEnd = internTokenSelectionStart + bracketInternTokenList.size() - 3;
 				cursorPositionInternTokenIndex = internTokenSelectionEnd;
 				cursorPositionInternToken = null;
 				return CursorTokenPropertiesAfterModification.RIGHT;
