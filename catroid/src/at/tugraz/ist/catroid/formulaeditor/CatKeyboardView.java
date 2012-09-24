@@ -190,75 +190,75 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 		switch (primaryCode) {
 			case KeyEvent.KEYCODE_0:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_0));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_1:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_1));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_2:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_2));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_3:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_3));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_4:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_4));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_5:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_5));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_6:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_6));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_7:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_7));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_8:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_8));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_9:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_9));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_DEL:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_COMMA:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_COMMA));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_PLUS:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_PLUS));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_MINUS:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MINUS));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_STAR:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_STAR));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_SLASH:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SLASH));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_PERIOD:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_PERIOD));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_POWER:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_POWER));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case KeyEvent.KEYCODE_SHIFT_RIGHT:
 				this.swipeRight();
@@ -268,83 +268,83 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 				break;
 			case CatKeyEvent.KEYCODE_SPACE:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SPACE));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_SIN:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SIN));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_COS:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COS));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_TAN:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_TAN));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_LN:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_LN));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_LOG:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_LOG));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_PI:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_PI));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_SQUAREROOT:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SQUAREROOT));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_EULER:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_EULER));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_RANDOM:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_RANDOM));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_ABS:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_ABS));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_ROUND:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_ROUND));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_SENSOR1:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SENSOR1));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_SENSOR2:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SENSOR2));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_SENSOR3:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SENSOR3));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_SENSOR4:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SENSOR4));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_SENSOR5:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SENSOR5));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_SENSOR6:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SENSOR6));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_SENSOR7:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SENSOR7));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_BRACKET:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_BRACKET));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_COSTUME_BUTTON:
 				this.chooseSpriteVariablesFragment.show(
@@ -353,31 +353,31 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 				break;
 			case CatKeyEvent.KEYCODE_COSTUME_X:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_X));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_COSTUME_Y:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_Y));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_COSTUME_GHOSTEFFECT:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_GHOSTEFFECT));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_COSTUME_BRIGHTNESS:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_BRIGHTNESS));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_COSTUME_SIZE:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_SIZE));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_COSTUME_ROTATION:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_ROTATION));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 			case CatKeyEvent.KEYCODE_COSTUME_LAYER:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_LAYER));
-				editText.checkAndModifyKeyInput(cKE);
+				editText.handleKeyEvent(cKE);
 				break;
 		}
 

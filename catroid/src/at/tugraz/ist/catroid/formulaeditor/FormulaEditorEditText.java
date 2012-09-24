@@ -110,9 +110,9 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 		//TODO History support
 		if (history == null) {
-			history = new FormulaEditorHistory("test", absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
+			history = new FormulaEditorHistory(internFormula.getInternFormulaState());
 		} else {
-			history.init("test", absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
+			history.init(internFormula.getInternFormulaState());
 		}
 	}
 
@@ -504,20 +504,15 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 	}
 
-	public void checkAndModifyKeyInput(CatKeyEvent catKey) {
+	public void handleKeyEvent(CatKeyEvent catKey) {
 		Log.i("info", "checkAndModifyKeyInput:enter");
 
 		internFormula.handleKeyInput(catKey, context);
-		internFormula.generateExternFormulaStringAndInternExternMapping(context);
-		String newExternFormulaString = internFormula.getExternFormulaString();
+		history.push(internFormula.getInternFormulaState());
 
-		setText(newExternFormulaString);
-		absoluteCursorPosition = internFormula.getExternCursorPosition();
-		highlightSelection();
+		updateTextAndCursorFromInternFormula();
 
-		if (absoluteCursorPosition > getText().length()) {
-			absoluteCursorPosition = getText().length();
-		}
+		internFormula.getInternFormulaState();
 
 		setSelection(absoluteCursorPosition);
 
@@ -692,11 +687,12 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		if (!history.undoIsPossible()) {
 			return false;
 		}
-		FormulaEditorHistoryElement lastStep = history.backward();
+		InternFormulaState lastStep = history.backward();
 		if (lastStep != null) {
-			//TODO: History should contain InternFormula member to generate extern representation
-			//			setInputTextAndPosition(lastStep.text, lastStep.cursorPosition, lastStep.selectionStart,
-			//					lastStep.selectionEnd);
+
+			internFormula = lastStep.createInternFormulaFromState();
+			internFormula.generateExternFormulaStringAndInternExternMapping(context);
+			updateTextAndCursorFromInternFormula();
 		}
 
 		formulaEditorDialog.refreshFormulaPreviewString(this.getText().toString());
@@ -707,12 +703,12 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		if (!history.redoIsPossible()) {
 			return false;
 		}
-		FormulaEditorHistoryElement nextStep = history.forward();
+		InternFormulaState nextStep = history.forward();
 		if (nextStep != null) {
 
-			//TODO: History should contain InternFormula member to generate extern representation
-			//			setInputTextAndPosition(nextStep.text, nextStep.cursorPosition, nextStep.selectionStart,
-			//					nextStep.selectionEnd);
+			internFormula = nextStep.createInternFormulaFromState();
+			internFormula.generateExternFormulaStringAndInternExternMapping(context);
+			updateTextAndCursorFromInternFormula();
 		}
 		formulaEditorDialog.refreshFormulaPreviewString(this.getText().toString());
 		return true;
@@ -723,6 +719,17 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		//This is only used to get the scrollbar to the right position easily
 		super.setSelection(index);
 
+	}
+
+	private void updateTextAndCursorFromInternFormula() {
+		String newExternFormulaString = internFormula.getExternFormulaString();
+		setText(newExternFormulaString);
+		absoluteCursorPosition = internFormula.getExternCursorPosition();
+		if (absoluteCursorPosition > getText().length()) {
+			absoluteCursorPosition = getText().length();
+		}
+
+		highlightSelection();
 	}
 
 	private void updateSelection() {
@@ -742,10 +749,9 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 	final GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
 		@Override
 		public boolean onDoubleTap(MotionEvent e) {
-			//TODO: history update
-			history.updateCurrentSelection(absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
 
 			internFormula.setCursorAndSelection(absoluteCursorPosition, true);
+			history.updateCurrentSelection(internFormula.getSelection());
 			doSelectionAndHighlighting();
 
 			return true;
@@ -802,7 +808,7 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 
 				doSelectionAndHighlighting();
 
-				history.updateCurrentSelection(absoluteCursorPosition, selectionStartIndex, selectionEndIndex);
+				history.updateCurrentSelection(internFormula.getSelection());
 			}
 			return true;
 

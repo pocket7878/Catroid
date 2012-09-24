@@ -376,34 +376,6 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 	}
 
 	@Smoke
-	public void testCursorPositionOnInsertFunctionAndBrackets() {
-
-		solo.clickOnEditText(0);
-		//catKeyboardClicker.clearEditTextWithDeletes(1);
-		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.switchToFunctionKeyboard();
-		catKeyboardClicker.clickOnKey("sin");
-		catKeyboardClicker.switchToSensorKeyboard();
-		catKeyboardClicker.clickOnKey("x-accel");
-		solo.sleep(50);
-		assertEquals("Text not correct", "sin( X_ACCELERATION_ ) ", solo.getEditText(1).getText().toString());
-
-		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(0);
-		catKeyboardClicker.switchToFunctionKeyboard();
-		catKeyboardClicker.clickOnKey("bracket");
-		catKeyboardClicker.clickOnKey("bracket");
-		catKeyboardClicker.switchToNumberKeyboard();
-		catKeyboardClicker.clickOnKey("1");
-		catKeyboardClicker.clickOnKey(".");
-		catKeyboardClicker.clickOnKey("1");
-
-		solo.sleep(50);
-		assertEquals("Text not correct", "( ( 1.1 ) ) ", solo.getEditText(1).getText().toString());
-
-		solo.goBack();
-	}
-
-	@Smoke
 	public void testTextCursorAndScrolling() {
 
 		//		float xCoordinate = 60;

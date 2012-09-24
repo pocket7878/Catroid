@@ -26,30 +26,28 @@ import java.util.Stack;
 
 public class FormulaEditorHistory {
 
-	//TODO: History should contain InternFormula member to generate extern representation
-
 	private static final int MAXIMUM_HISTORY_LENGTH = 15;
-	private Stack<FormulaEditorHistoryElement> undoStack = null;
-	private Stack<FormulaEditorHistoryElement> redoStack = null;
-	private FormulaEditorHistoryElement current = null;
+	private Stack<InternFormulaState> undoStack = null;
+	private Stack<InternFormulaState> redoStack = null;
+	private InternFormulaState current = null;
 	private boolean hasUnsavedChanges = false;
 
-	public FormulaEditorHistory(String text, int cursorPosition, int selectionStart, int selectionEnd) {
-		current = new FormulaEditorHistoryElement(text, cursorPosition, selectionStart, selectionEnd);
-		undoStack = new Stack<FormulaEditorHistoryElement>();
-		redoStack = new Stack<FormulaEditorHistoryElement>();
+	public FormulaEditorHistory(InternFormulaState internFormulaState) {
+		current = internFormulaState;
+		undoStack = new Stack<InternFormulaState>();
+		redoStack = new Stack<InternFormulaState>();
 	}
 
-	public void push(String text, int cursorPosition, int selectionStart, int selectionEnd) {
+	public void push(InternFormulaState internFormulaState) {
 
-		if (current != null && current.text.equals(text)) {
+		if (current != null && current.equals(internFormulaState)) {
 			return;
 		}
 
 		if (current != null) {
 			undoStack.push(current);
 		}
-		current = new FormulaEditorHistoryElement(text, cursorPosition, selectionStart, selectionEnd);
+		current = internFormulaState;
 		redoStack.clear();
 		hasUnsavedChanges = true;
 		//Log.i("info", "history size: " + undoStack.size());
@@ -59,7 +57,7 @@ public class FormulaEditorHistory {
 
 	}
 
-	public FormulaEditorHistoryElement backward() {
+	public InternFormulaState backward() {
 		redoStack.push(current);
 		hasUnsavedChanges = true;
 		if (!undoStack.empty()) {
@@ -68,7 +66,7 @@ public class FormulaEditorHistory {
 		return current;
 	}
 
-	public FormulaEditorHistoryElement forward() {
+	public InternFormulaState forward() {
 		undoStack.push(current);
 		hasUnsavedChanges = true;
 		if (!redoStack.empty()) {
@@ -77,14 +75,12 @@ public class FormulaEditorHistory {
 		return current;
 	}
 
-	public void updateCurrentSelection(int cursorPosition, int selectionStart, int selectionEnd) {
-		current.cursorPosition = cursorPosition;
-		current.selectionStart = selectionStart;
-		current.selectionEnd = selectionEnd;
+	public void updateCurrentSelection(InternFormulaTokenSelection internFormulaTokenSelection) {
+		current.setSelection(internFormulaTokenSelection);
 	}
 
-	public void init(String text, int cursorPosition, int selectionStart, int selectionEnd) {
-		current = new FormulaEditorHistoryElement(text, cursorPosition, selectionStart, selectionEnd);
+	public void init(InternFormulaState internFormulaState) {
+		current = internFormulaState;
 	}
 
 	public void clear() {
@@ -94,12 +90,12 @@ public class FormulaEditorHistory {
 		hasUnsavedChanges = false;
 	}
 
-	public FormulaEditorHistoryElement getCurrentState() {
+	public InternFormulaState getCurrentState() {
 		return current;
 	}
 
 	public void updateCurrentCursor(int cursorPosition) {
-		current.cursorPosition = cursorPosition;
+		current.setExternCursorPosition(cursorPosition);
 	}
 
 	public boolean undoIsPossible() {

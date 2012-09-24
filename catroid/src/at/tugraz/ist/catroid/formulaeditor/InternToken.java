@@ -156,6 +156,11 @@ public class InternToken {
 		this.internTokenType = newInternTokenType;
 	}
 
+	public InternToken deepCopy() {
+
+		return new InternToken(internTokenType, tokenStringValue);
+	}
+
 	private static InternTokenType getFirstInternTokenType(List<InternToken> internTokens) {
 		if (internTokens.size() == 0) {
 			return null;
