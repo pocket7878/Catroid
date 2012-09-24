@@ -40,6 +40,7 @@ import at.tugraz.ist.catroid.content.bricks.ChangeYByBrick;
 import at.tugraz.ist.catroid.content.bricks.ClearGraphicEffectBrick;
 import at.tugraz.ist.catroid.content.bricks.GlideToBrick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
+import at.tugraz.ist.catroid.content.bricks.IfOnEdgeBounceBrick;
 import at.tugraz.ist.catroid.content.bricks.NextCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.SetBrightnessBrick;
@@ -384,5 +385,22 @@ public class LiveWallpaperTest extends AndroidTestCase {
 
 		assertEquals("Object is not on the desired x destination", x, xDestination);
 		assertEquals("Object is not on the desired y destination", y, yDestination);
+	}
+
+	public void testIfOnEdgeBounceBrick() {
+		WallpaperCostume wallpaperCostume = new WallpaperCostume(catroidSprite, catroidSprite.getCostumeDataList().get(
+				0));
+
+		int xDestination = 500;
+
+		Brick changeXBrick = new ChangeXByBrick(catroidSprite, xDestination);
+		Brick ifOnEdgeBounceBrick = new IfOnEdgeBounceBrick(catroidSprite);
+		changeXBrick.executeLiveWallpaper();
+		ifOnEdgeBounceBrick.executeLiveWallpaper();
+
+		int settedX = wallpaperCostume.getX();
+		int x = (Values.SCREEN_WIDTH / 2) - (wallpaperCostume.getCostume().getWidth() / 2);
+
+		assertEquals("Object is not on the edge of the screen", x, settedX);
 	}
 }
