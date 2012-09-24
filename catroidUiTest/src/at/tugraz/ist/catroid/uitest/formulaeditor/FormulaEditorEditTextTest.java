@@ -23,6 +23,9 @@
 
 package at.tugraz.ist.catroid.uitest.formulaeditor;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import android.test.suitebuilder.annotation.Smoke;
 import android.text.style.BackgroundColorSpan;
 import at.tugraz.ist.catroid.ProjectManager;
@@ -34,10 +37,12 @@ import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.ChangeSizeByNBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
-import at.tugraz.ist.catroid.formulaeditor.CalcGrammarParser;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.formulaeditor.FormulaEditorEditText;
 import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
+import at.tugraz.ist.catroid.formulaeditor.InternFormulaParser;
+import at.tugraz.ist.catroid.formulaeditor.InternToken;
+import at.tugraz.ist.catroid.formulaeditor.InternTokenType;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
 
@@ -294,36 +299,6 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		solo.goBack();
 	}
 
-	//TODO Adapt tests below this line!
-	//-------------------------------------------------------------------------------------------------
-
-	//	@Smoke TODO: Not necessary anymore 
-	//	public void testTextSelectionLogicForSensors() {
-	//
-	//		solo.clickOnEditText(0);
-	//		catKeyboardClicker.switchToSensorKeyboard();
-	//		catKeyboardClicker.clickOnKey("x-accel");
-	//		solo.clickOnScreen(10, firstLineYCoordinate);
-	//		catKeyboardClicker.clickOnKey("y-accel");
-	//		catKeyboardClicker.clickOnKey("del");
-	//		solo.clickOnScreen(25 * oneCharacterWidth, firstLineYCoordinate);
-	//		catKeyboardClicker.clickOnKey("del");
-	//		assertEquals("Text deletion was wrong!", "Y_ACCELERATION_ ", solo.getEditText(1).getText().toString());
-	//
-	//		solo.clickOnEditText(0);
-	//		catKeyboardClicker.clickOnKey("del");
-	//		catKeyboardClicker.clickOnKey("x-accel");
-	//		solo.clickOnScreen(10, firstLineYCoordinate);
-	//		catKeyboardClicker.clickOnKey("y-accel");
-	//		catKeyboardClicker.clickOnKey("del");
-	//		solo.clickOnScreen(10 * oneCharacterWidth, firstLineYCoordinate);
-	//		catKeyboardClicker.clickOnKey("del");
-	//		assertEquals("Text deletion was wrong!", "X_ACCELERATION_ ", solo.getEditText(1).getText().toString());
-	//
-	//		solo.goBack();
-	//		solo.goBack();
-	//	}
-
 	@Smoke
 	public void testGoBackToDiscardChanges() {
 
@@ -355,8 +330,6 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 				solo.getEditText(1).getText().getSpanStart(COLOR_ERROR) == -1);
 		solo.goBack();
 		assertTrue("Toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
-		assertTrue("Error cursor not found in text, but should be",
-				solo.getEditText(1).getText().getSpanStart(COLOR_ERROR) > -1);
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("+");
 		solo.goBack();
@@ -374,6 +347,36 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		solo.goBack();
 		solo.goBack();
 	}
+
+	//TODO Adapt tests below this line!
+	//-------------------------------------------------------------------------------------------------
+
+	//	@Smoke TODO: Not necessary anymore 
+	//	public void testTextSelectionLogicForSensors() {
+	//
+	//		solo.clickOnEditText(0);
+	//		catKeyboardClicker.switchToSensorKeyboard();
+	//		catKeyboardClicker.clickOnKey("x-accel");
+	//		solo.clickOnScreen(10, firstLineYCoordinate);
+	//		catKeyboardClicker.clickOnKey("y-accel");
+	//		catKeyboardClicker.clickOnKey("del");
+	//		solo.clickOnScreen(25 * oneCharacterWidth, firstLineYCoordinate);
+	//		catKeyboardClicker.clickOnKey("del");
+	//		assertEquals("Text deletion was wrong!", "Y_ACCELERATION_ ", solo.getEditText(1).getText().toString());
+	//
+	//		solo.clickOnEditText(0);
+	//		catKeyboardClicker.clickOnKey("del");
+	//		catKeyboardClicker.clickOnKey("x-accel");
+	//		solo.clickOnScreen(10, firstLineYCoordinate);
+	//		catKeyboardClicker.clickOnKey("y-accel");
+	//		catKeyboardClicker.clickOnKey("del");
+	//		solo.clickOnScreen(10 * oneCharacterWidth, firstLineYCoordinate);
+	//		catKeyboardClicker.clickOnKey("del");
+	//		assertEquals("Text deletion was wrong!", "X_ACCELERATION_ ", solo.getEditText(1).getText().toString());
+	//
+	//		solo.goBack();
+	//		solo.goBack();
+	//	}
 
 	@Smoke
 	public void testTextCursorAndScrolling() {
@@ -401,7 +404,7 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		}
 		assertTrue("Text could not be found!", solo.searchText("999999999999999999 ")); //note always ALL the text can be found by solo, not just the part currently visible due to scroll position 
 		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.clickOnKey("del");
+		catKeyboardClicker.clickOnKey("del"); //TODO: fix line 
 		assertFalse("Wrong line deleted!", solo.searchText("999999999999999999 "));
 		assertTrue("Wrong number of characters deleted!", solo.searchText("9999999999999999 "));
 
@@ -428,9 +431,42 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 
 	private Formula createVeryLongFormula() {
 
-		CalcGrammarParser parser = CalcGrammarParser
-				.getFormulaParser("999999999999999999 + 888888888888888888 + 777777777777777777 + 666666666666666666 + 555555555555555555 + 444444444444444444 + 333333333333333333 + 333333333333333333 + 111111111111111111 + 000000000000000000 + 111111111111111111 + 222222222222222222");
-		FormulaElement root = parser.parseFormula();
+		List<InternToken> internTokenList = new LinkedList<InternToken>();
+
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "999999999999999999"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "888888888888888888"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "777777777777777777"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "666666666666666666"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "555555555555555555"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "444444444444444444"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "333333333333333333"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "222222222222222222"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "111111111111111111"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "000000000000000000"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "999999999999999999"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "888888888888888888"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "777777777777777777"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "666666666666666666"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "555555555555555555"));
+		internTokenList.add(new InternToken(InternTokenType.OPERATOR, "+"));
+		internTokenList.add(new InternToken(InternTokenType.NUMBER, "444444444444444444"));
+
+		InternFormulaParser internParser = new InternFormulaParser(internTokenList);
+		FormulaElement root = internParser.parseFormula();
 		Formula formula = new Formula(root);
 
 		return formula;

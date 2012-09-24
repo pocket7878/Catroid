@@ -282,7 +282,7 @@ public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
 		int maxHistoryElements = (Integer) UiTestUtils.getPrivateField("MAXIMUM_HISTORY_LENGTH",
-				new FormulaEditorHistory(null, 0, 0, 0));
+				new FormulaEditorHistory(null));
 		catKeyboardClicker.clickOnKey("del");
 		catKeyboardClicker.clickOnKey("1");
 
