@@ -37,8 +37,11 @@ import at.tugraz.ist.catroid.content.bricks.ChangeGhostEffectBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeSizeByNBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeXByBrick;
 import at.tugraz.ist.catroid.content.bricks.ChangeYByBrick;
+import at.tugraz.ist.catroid.content.bricks.ClearGraphicEffectBrick;
 import at.tugraz.ist.catroid.content.bricks.ComeToFrontBrick;
+import at.tugraz.ist.catroid.content.bricks.GlideToBrick;
 import at.tugraz.ist.catroid.content.bricks.HideBrick;
+import at.tugraz.ist.catroid.content.bricks.IfOnEdgeBounceBrick;
 import at.tugraz.ist.catroid.content.bricks.NextCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
 import at.tugraz.ist.catroid.content.bricks.SetBrightnessBrick;
@@ -363,6 +366,64 @@ public class LiveWallpaperTest extends AndroidTestCase {
 		catroidPosition = catroidCostume.getzPosition();
 
 		assertTrue("The position parameter has not been set properly", backgroundPosition == 1 && catroidPosition == 0);
+	}
+
+	public void testClearGraphicEffectBrick() {
+		WallpaperCostume wallpaperCostume = new WallpaperCostume(catroidSprite, catroidSprite.getCostumeDataList().get(
+				0));
+		int initialAlpha = 50;
+		int initialBrightness = 50;
+		Brick brick1 = new SetBrightnessBrick(catroidSprite, initialBrightness);
+		Brick brick2 = new SetGhostEffectBrick(catroidSprite, initialAlpha);
+		brick1.executeLiveWallpaper();
+		brick2.executeLiveWallpaper();
+
+		int alpha = (int) (wallpaperCostume.getAlphaValue() * 100f);
+		assertEquals("The alpha value was not set properly", alpha, initialAlpha);
+
+		int brightness = (int) (wallpaperCostume.getBrightness() * 100f);
+		assertEquals("The brightness was not set properly", brightness, initialBrightness);
+
+		Brick brick3 = new ClearGraphicEffectBrick(catroidSprite);
+		brick3.executeLiveWallpaper();
+
+		assertEquals("Ghost Effect was not cleared", 1f, wallpaperCostume.getAlphaValue());
+		assertEquals("Brightness was not cleared", 1f, wallpaperCostume.getBrightness());
+	}
+
+	public void testGlideToEffectBrick() {
+		WallpaperCostume wallpaperCostume = new WallpaperCostume(catroidSprite, catroidSprite.getCostumeDataList().get(
+				0));
+
+		int xDestination = 100;
+		int yDestination = 100;
+		int duration = 3;
+
+		Brick glideBrick = new GlideToBrick(catroidSprite, xDestination, yDestination, duration);
+		glideBrick.executeLiveWallpaper();
+
+		int x = wallpaperCostume.getX();
+		int y = wallpaperCostume.getY();
+
+		assertEquals("Object is not on the desired x destination", x, xDestination);
+		assertEquals("Object is not on the desired y destination", y, yDestination);
+	}
+
+	public void testIfOnEdgeBounceBrick() {
+		WallpaperCostume wallpaperCostume = new WallpaperCostume(catroidSprite, catroidSprite.getCostumeDataList().get(
+				0));
+
+		int xDestination = 500;
+
+		Brick changeXBrick = new ChangeXByBrick(catroidSprite, xDestination);
+		Brick ifOnEdgeBounceBrick = new IfOnEdgeBounceBrick(catroidSprite);
+		changeXBrick.executeLiveWallpaper();
+		ifOnEdgeBounceBrick.executeLiveWallpaper();
+
+		int settedX = wallpaperCostume.getX();
+		int x = (Values.SCREEN_WIDTH / 2) - (wallpaperCostume.getCostume().getWidth() / 2);
+
+		assertEquals("Object is not on the edge of the screen", x, settedX);
 
 	}
 }

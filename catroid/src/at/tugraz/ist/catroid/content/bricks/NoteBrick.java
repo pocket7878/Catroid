@@ -78,10 +78,8 @@ public class NoteBrick implements Brick {
 
 		view = View.inflate(context, R.layout.brick_note, null);
 
-		TextView textHolder = (TextView) view
-				.findViewById(R.id.brick_note_text_view);
-		EditText editText = (EditText) view
-				.findViewById(R.id.brick_note_edit_text);
+		TextView textHolder = (TextView) view.findViewById(R.id.brick_note_text_view);
+		EditText editText = (EditText) view.findViewById(R.id.brick_note_edit_text);
 		editText.setText(note);
 
 		textHolder.setVisibility(View.GONE);
@@ -91,8 +89,7 @@ public class NoteBrick implements Brick {
 
 			@Override
 			public void onClick(View v) {
-				ScriptTabActivity activity = (ScriptTabActivity) view
-						.getContext();
+				ScriptTabActivity activity = (ScriptTabActivity) view.getContext();
 
 				BrickTextDialog editDialog = new BrickTextDialog() {
 					@Override
@@ -107,17 +104,14 @@ public class NoteBrick implements Brick {
 					}
 
 					@Override
-					protected TextWatcher getInputTextChangedListener(
-							Button buttonPositive) {
+					protected TextWatcher getInputTextChangedListener(Button buttonPositive) {
 						return new TextWatcher() {
 							@Override
-							public void onTextChanged(CharSequence s,
-									int start, int before, int count) {
+							public void onTextChanged(CharSequence s, int start, int before, int count) {
 							}
 
 							@Override
-							public void beforeTextChanged(CharSequence s,
-									int start, int count, int after) {
+							public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 							}
 
 							@Override
@@ -133,8 +127,7 @@ public class NoteBrick implements Brick {
 					}
 				};
 
-				editDialog.show(activity.getSupportFragmentManager(),
-						"dialog_note_brick");
+				editDialog.show(activity.getSupportFragmentManager(), "dialog_note_brick");
 			}
 		});
 
@@ -153,7 +146,5 @@ public class NoteBrick implements Brick {
 
 	@Override
 	public void executeLiveWallpaper() {
-		// TODO Auto-generated method stub
-
 	}
 }
