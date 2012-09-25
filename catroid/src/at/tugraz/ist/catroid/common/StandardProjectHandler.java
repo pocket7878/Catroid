@@ -65,7 +65,7 @@ public class StandardProjectHandler {
 		Project defaultProject = new Project(context, projectName);
 		StorageHandler.getInstance().saveProject(defaultProject);
 		ProjectManager.getInstance().setProject(defaultProject);
-		Sprite sprite = new Sprite(context.getString(R.string.default_project_sprites_catroid_name));
+		Sprite sprite = new Sprite(context.getString(R.string.default_project_sprites_catroid_name) + "ABC");
 		Sprite backgroundSprite = defaultProject.getSpriteList().get(0);
 
 		Script backgroundStartScript = new StartScript(backgroundSprite);
@@ -140,6 +140,90 @@ public class StandardProjectHandler {
 		return defaultProject;
 	}
 
+	//	public static Project createAndSaveStandardProject(String projectName, Context context) throws IOException {
+	//		String normalCatName = context.getString(R.string.default_project_sprites_catroid_normalcat);
+	//		String banzaiCatName = context.getString(R.string.default_project_sprites_catroid_banzaicat);
+	//		String cheshireCatName = context.getString(R.string.default_project_sprites_catroid_cheshirecat);
+	//		String backgroundName = context.getString(R.string.default_project_backgroundname);
+	//
+	//		Project defaultProject = new Project(context, projectName);
+	//		StorageHandler.getInstance().saveProject(defaultProject);
+	//		ProjectManager.getInstance().setProject(defaultProject);
+	//		Sprite sprite = new Sprite(context.getString(R.string.default_project_sprites_catroid_name));
+	//		Sprite backgroundSprite = defaultProject.getSpriteList().get(0);
+	//
+	//		Script backgroundStartScript = new StartScript(backgroundSprite);
+	//		Script startScript = new StartScript(sprite);
+	//		Script whenScript = new WhenScript(sprite);
+	//
+	//		File backgroundFile = createBackgroundImage(projectName, backgroundName,
+	//				context.getString(R.string.default_project_backgroundcolor));
+	//
+	//		File normalCat = copyAndScaleImageToProject(projectName, context, normalCatName, R.drawable.catroid);
+	//		File banzaiCat = copyAndScaleImageToProject(projectName, context, banzaiCatName, R.drawable.catroid_banzai);
+	//		File cheshireCat = copyAndScaleImageToProject(projectName, context, cheshireCatName,
+	//				R.drawable.catroid_cheshire);
+	//
+	//		CostumeData normalCatCostumeData = new CostumeData();
+	//		normalCatCostumeData.setCostumeName(normalCatName);
+	//		normalCatCostumeData.setCostumeFilename(normalCat.getName());
+	//
+	//		CostumeData banzaiCatCostumeData = new CostumeData();
+	//		banzaiCatCostumeData.setCostumeName(banzaiCatName);
+	//		banzaiCatCostumeData.setCostumeFilename(banzaiCat.getName());
+	//
+	//		CostumeData cheshireCatCostumeData = new CostumeData();
+	//		cheshireCatCostumeData.setCostumeName(cheshireCatName);
+	//		cheshireCatCostumeData.setCostumeFilename(cheshireCat.getName());
+	//
+	//		CostumeData backgroundCostumeData = new CostumeData();
+	//		backgroundCostumeData.setCostumeName(backgroundName);
+	//		backgroundCostumeData.setCostumeFilename(backgroundFile.getName());
+	//
+	//		ArrayList<CostumeData> costumeDataList = sprite.getCostumeDataList();
+	//		costumeDataList.add(normalCatCostumeData);
+	//		costumeDataList.add(banzaiCatCostumeData);
+	//		costumeDataList.add(cheshireCatCostumeData);
+	//		ArrayList<CostumeData> costumeDataList2 = backgroundSprite.getCostumeDataList();
+	//		costumeDataList2.add(backgroundCostumeData);
+	//
+	//		SetCostumeBrick setCostumeBrick = new SetCostumeBrick(sprite);
+	//		setCostumeBrick.setCostume(normalCatCostumeData);
+	//
+	//		SetCostumeBrick setCostumeBrick1 = new SetCostumeBrick(sprite);
+	//		setCostumeBrick1.setCostume(normalCatCostumeData);
+	//
+	//		SetCostumeBrick setCostumeBrick2 = new SetCostumeBrick(sprite);
+	//		setCostumeBrick2.setCostume(banzaiCatCostumeData);
+	//
+	//		SetCostumeBrick setCostumeBrick3 = new SetCostumeBrick(sprite);
+	//		setCostumeBrick3.setCostume(cheshireCatCostumeData);
+	//
+	//		SetCostumeBrick backgroundBrick = new SetCostumeBrick(backgroundSprite);
+	//		backgroundBrick.setCostume(backgroundCostumeData);
+	//
+	//		WaitBrick waitBrick1 = new WaitBrick(sprite, 500);
+	//		WaitBrick waitBrick2 = new WaitBrick(sprite, 500);
+	//
+	//		startScript.addBrick(setCostumeBrick);
+	//
+	//		whenScript.addBrick(setCostumeBrick2);
+	//		whenScript.addBrick(waitBrick1);
+	//		whenScript.addBrick(setCostumeBrick3);
+	//		whenScript.addBrick(waitBrick2);
+	//		whenScript.addBrick(setCostumeBrick1);
+	//		backgroundStartScript.addBrick(backgroundBrick);
+	//
+	//		defaultProject.addSprite(sprite);
+	//		sprite.addScript(startScript);
+	//		sprite.addScript(whenScript);
+	//		backgroundSprite.addScript(backgroundStartScript);
+	//
+	//		StorageHandler.getInstance().saveProject(defaultProject);
+	//
+	//		return defaultProject;
+	//	}
+
 	private static File createBackgroundImage(String projectName, String backgroundName, String backgroundColor)
 			throws FileNotFoundException {
 		String directoryName = Utils.buildPath(Utils.buildProjectPath(projectName), Constants.IMAGE_DIRECTORY);
@@ -179,7 +263,8 @@ public class StandardProjectHandler {
 	private static File savePictureFromResourceInProject(String project, String outputName, int fileId, Context context)
 			throws IOException {
 
-		final String imagePath = Utils.buildPath(Utils.buildProjectPath(project), Constants.IMAGE_DIRECTORY, outputName);
+		final String imagePath = Utils
+				.buildPath(Utils.buildProjectPath(project), Constants.IMAGE_DIRECTORY, outputName);
 		File testImage = new File(imagePath);
 		if (!testImage.exists()) {
 			testImage.createNewFile();

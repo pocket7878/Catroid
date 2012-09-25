@@ -60,8 +60,9 @@ public class PhysicShapeBuilder {
 		List<Pixel> convexGrahamPoints = ImageProcessor.getShape(costumeData.getAbsolutePath());
 
 		Vector2[] boundary = getBoundary(convexGrahamPoints);
-		width = boundary[0].x;
-		height = boundary[0].y;
+		int[] size = costumeData.getResolution();
+		width = size[0];
+		height = size[1];
 
 		Vector2 center = new Vector2((boundary[0].x - boundary[1].x) / 2 - (width / 2), (boundary[0].y - boundary[1].y)
 				/ 2 - height / 2);
@@ -141,6 +142,15 @@ public class PhysicShapeBuilder {
 			} else {
 				tempVertices = new Vector2[convexpoints.length - j + 1];
 				i = convexpoints.length - j;
+
+				if (i < 2) {
+					Shape[] shapesSizeMinusOne = new Shape[shapes.length - 1];
+					for (int index = 0; index < shapesSizeMinusOne.length; index++) {
+						shapesSizeMinusOne[index] = shapes[index];
+					}
+					shapes = shapesSizeMinusOne;
+					break;
+				}
 			}
 
 			tempVertices[0] = start;
@@ -153,14 +163,11 @@ public class PhysicShapeBuilder {
 			start = tempVertices[k - 1];
 
 			Vector2[] reverse = new Vector2[tempVertices.length];
-
-			int l = 0;
-			for (Vector2 vector : tempVertices) {
-				reverse[i] = vector;
-				l++;
+			for (int l = 0; l < reverse.length; l++) {
+				reverse[reverse.length - (l + 1)] = tempVertices[l];
 			}
 
-			tempshape.set(tempVertices);
+			tempshape.set(reverse);
 			shapes[j / 6] = tempshape;
 		}
 

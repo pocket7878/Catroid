@@ -71,7 +71,6 @@ public class PhysicWorld implements Serializable {
 		for (Entry<Sprite, PhysicObject> entry : physicObjects.entrySet()) {
 			physicObject = entry.getValue();
 			physicObject.setIfOnEdgeBounce(false);
-			Vector2 positionPhysicObject = physicObject.getPosition();
 			Vector2 position = PhysicWorldConverter.vecBox2dToCat(physicObject.getPosition());
 			float angle = PhysicWorldConverter.angleBox2dToCat(physicObject.getAngle());
 
