@@ -42,6 +42,7 @@ import java.util.Locale;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
@@ -61,9 +62,9 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 
 	private FormulaEditorEditText editText;
 
-	private CatKeyboard symbolsNumbers;
-	private CatKeyboard symbolsFunctions;
-	private CatKeyboard symbolsSensors;
+	private Keyboard symbolsNumbers;
+	private Keyboard symbolsFunctions;
+	private Keyboard symbolsSensors;
 	private Context context;
 	private ChooseCostumeVariableFragment chooseSpriteVariablesFragment;
 	private View swipeBar;
@@ -77,13 +78,13 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 		this.symbolsNumbers = null;
 
 		if (Locale.getDefault().getDisplayLanguage().contentEquals(Locale.GERMAN.getDisplayLanguage())) {
-			this.symbolsNumbers = new CatKeyboard(this.getContext(), R.xml.symbols_de_numbers);
-			this.symbolsFunctions = new CatKeyboard(this.getContext(), R.xml.symbols_de_functions);
-			this.symbolsSensors = new CatKeyboard(this.getContext(), R.xml.symbols_de_sensors);
+			this.symbolsNumbers = new Keyboard(this.getContext(), R.xml.symbols_de_numbers);
+			this.symbolsFunctions = new Keyboard(this.getContext(), R.xml.symbols_de_functions);
+			this.symbolsSensors = new Keyboard(this.getContext(), R.xml.symbols_de_sensors);
 		} else {//if (Locale.getDefault().getDisplayLanguage().contentEquals(Locale.ENGLISH.getDisplayLanguage())) {
-			this.symbolsNumbers = new CatKeyboard(this.getContext(), R.xml.symbols_eng_numbers);
-			this.symbolsFunctions = new CatKeyboard(this.getContext(), R.xml.symbols_eng_functions);
-			this.symbolsSensors = new CatKeyboard(this.getContext(), R.xml.symbols_eng_sensors);
+			this.symbolsNumbers = new Keyboard(this.getContext(), R.xml.symbols_eng_numbers);
+			this.symbolsFunctions = new Keyboard(this.getContext(), R.xml.symbols_eng_functions);
+			this.symbolsSensors = new Keyboard(this.getContext(), R.xml.symbols_eng_sensors);
 
 		}
 
