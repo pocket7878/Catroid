@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.uitest.stage;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.WindowManager;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Project;
@@ -53,6 +54,16 @@ public class SimpleStageTest extends ActivityInstrumentationTestCase2<StageActiv
 		solo.finishOpenedActivities();
 		UiTestUtils.clearAllUtilTestProjects();
 		super.tearDown();
+	}
+
+	public void testScreenAlwaysOn() {
+		solo.waitForActivity(StageActivity.class.getSimpleName());
+		WindowManager.LayoutParams settings = getActivity().getWindow().getAttributes();
+
+		//the value below represents the correct flags for portrait stage with screen always on property
+		int correctWindowFlag = 66944;
+
+		assertEquals("Window flag is not set to FLAG_KEEP_SCREEN_ON!", correctWindowFlag, settings.flags);
 	}
 
 	public void testSimple() {
