@@ -347,6 +347,7 @@ public class StageListener implements ApplicationListener {
 
 		if (PhysicSettings.Render.RENDER_COLLISION_FRAMES && !finished) {
 			project.getPhysicWorld().render(camera.combined);
+			//PhysicRenderer.getInstance().render(camera.combined);
 		}
 
 		if (DEBUG) {

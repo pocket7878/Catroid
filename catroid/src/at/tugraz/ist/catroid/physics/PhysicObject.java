@@ -66,7 +66,7 @@ public class PhysicObject {
 		if (shapes != null) {
 			for (Shape tempShape : shapes) {
 				fixtureDef.shape = tempShape;
-				body.createFixture(fixtureDef);
+				body.createFixture(fixtureDef);///
 			}
 		}
 

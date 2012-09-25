@@ -71,6 +71,7 @@ public class PhysicWorld implements Serializable {
 		for (Entry<Sprite, PhysicObject> entry : physicObjects.entrySet()) {
 			physicObject = entry.getValue();
 			physicObject.setIfOnEdgeBounce(false);
+			Vector2 positionPhysicObject = physicObject.getPosition();
 			Vector2 position = PhysicWorldConverter.vecBox2dToCat(physicObject.getPosition());
 			float angle = PhysicWorldConverter.angleBox2dToCat(physicObject.getAngle());
 
@@ -110,8 +111,13 @@ public class PhysicWorld implements Serializable {
 	}
 
 	public void changeCostume(Sprite sprite) {
-		Shape[] shapes = shapeBuilder.getShape(sprite.costume.getCostumeData(), sprite.costume.getSize());
-		this.getPhysicObject(sprite).setShape(shapes);
+		if (sprite.getName().equals("Hintergrund")) {
+			return;
+		}
+		if (isPhysicObject(sprite)) {
+			Shape[] shapes = shapeBuilder.getShape(sprite.costume.getCostumeData(), sprite.costume.getSize());
+			this.getPhysicObject(sprite).setShape(shapes);
+		}
 	}
 
 }
