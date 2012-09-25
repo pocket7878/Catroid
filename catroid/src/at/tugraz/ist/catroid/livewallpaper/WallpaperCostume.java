@@ -396,9 +396,7 @@ public class WallpaperCostume {
 		if (!sprite.isAlive(Thread.currentThread())) {
 			// -stay at last position
 		} else {
-
-			this.setX(xDestination);
-			this.setY(yDestination);
+			setXYPosition(xDestination, yDestination);
 		}
 	}
 
@@ -425,7 +423,17 @@ public class WallpaperCostume {
 			yPosition = -virtualScreenHeight + (int) (height / 2);
 		}
 
-		setX(xPosition);
-		setY(yPosition);
+		setXYPosition(xPosition, yPosition);
 	}
+
+	public void setXYPosition(int xPosition, int yPosition) {
+		this.x = xPosition;
+		this.y = yPosition;
+	}
+
+	public void moveNStepsBrick(int newXPosition, int newYPosition) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

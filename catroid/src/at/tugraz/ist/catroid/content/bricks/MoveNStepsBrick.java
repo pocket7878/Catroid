@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.ui.dialogs.BrickTextDialog;
 
@@ -60,10 +61,8 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 
 		double radians = Math.toRadians(sprite.costume.rotation);
 
-		int newXPosition = (int) Math.round(sprite.costume.getXPosition()
-				+ steps * Math.cos(radians));
-		int newYPosition = (int) Math.round(sprite.costume.getYPosition()
-				+ steps * Math.sin(radians));
+		int newXPosition = (int) Math.round(sprite.costume.getXPosition() + steps * Math.cos(radians));
+		int newYPosition = (int) Math.round(sprite.costume.getYPosition() + steps * Math.sin(radians));
 
 		sprite.costume.setXYPosition(newXPosition, newYPosition);
 		sprite.costume.releaseXYWidthHeightLock();
@@ -80,10 +79,8 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 
 		view = View.inflate(context, R.layout.brick_move_n_steps, null);
 
-		TextView text = (TextView) view
-				.findViewById(R.id.brick_move_n_steps_text_view);
-		EditText edit = (EditText) view
-				.findViewById(R.id.brick_move_n_steps_edit_text);
+		TextView text = (TextView) view.findViewById(R.id.brick_move_n_steps_text_view);
+		EditText edit = (EditText) view.findViewById(R.id.brick_move_n_steps_edit_text);
 
 		edit.setText(String.valueOf(steps));
 		text.setVisibility(View.GONE);
@@ -95,8 +92,7 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 
 	@Override
 	public View getPrototypeView(Context context) {
-		LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.brick_move_n_steps, null);
 		return view;
 	}
@@ -114,8 +110,7 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(steps));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER
-						| InputType.TYPE_NUMBER_FLAG_DECIMAL
+				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL
 						| InputType.TYPE_NUMBER_FLAG_SIGNED);
 				input.setSelectAllOnFocus(true);
 			}
@@ -125,22 +120,29 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 				try {
 					steps = Double.parseDouble(input.getText().toString());
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(),
-							R.string.error_no_number_entered,
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 				}
 
 				return true;
 			}
 		};
 
-		editDialog.show(activity.getSupportFragmentManager(),
-				"dialog_move_n_steps_brick");
+		editDialog.show(activity.getSupportFragmentManager(), "dialog_move_n_steps_brick");
 	}
 
 	@Override
 	public void executeLiveWallpaper() {
-		// TODO Auto-generated method stub
 
+		WallpaperCostume wallpaperCostume = sprite.getWallpaperCostume();
+		if (wallpaperCostume == null) {
+			wallpaperCostume = new WallpaperCostume(sprite, null);
+		}
+
+		double radians = Math.toRadians(sprite.costume.rotation);
+
+		int newXPosition = (int) Math.round(sprite.costume.getXPosition() + steps * Math.cos(radians));
+		int newYPosition = (int) Math.round(sprite.costume.getYPosition() + steps * Math.sin(radians));
+
+		wallpaperCostume.moveNStepsBrick(newXPosition, newYPosition);
 	}
 }
