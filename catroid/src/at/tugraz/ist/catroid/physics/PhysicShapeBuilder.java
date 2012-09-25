@@ -163,8 +163,10 @@ public class PhysicShapeBuilder {
 			start = tempVertices[k - 1];
 
 			Vector2[] reverse = new Vector2[tempVertices.length];
-			for (int l = 0; l < reverse.length; l++) {
-				reverse[reverse.length - (l + 1)] = tempVertices[l];
+			int l = tempVertices.length - 1;
+			for (Vector2 vector : tempVertices) {
+				reverse[l] = vector;
+				l--;
 			}
 
 			tempshape.set(reverse);
