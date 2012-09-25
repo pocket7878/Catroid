@@ -154,13 +154,13 @@ public class PhysicShapeBuilder {
 
 			Vector2[] reverse = new Vector2[tempVertices.length];
 
-			int l = 0;
+			int l = tempVertices.length - 1;
 			for (Vector2 vector : tempVertices) {
-				reverse[i] = vector;
-				l++;
+				reverse[l] = vector;
+				l--;
 			}
 
-			tempshape.set(tempVertices);
+			tempshape.set(reverse);
 			shapes[j / 6] = tempshape;
 		}
 
