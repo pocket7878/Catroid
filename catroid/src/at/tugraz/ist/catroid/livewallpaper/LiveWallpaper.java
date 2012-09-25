@@ -121,7 +121,6 @@ public class LiveWallpaper extends WallpaperService {
 									wallpaperCostume.getLeft(), paint);
 						}
 					}
-
 				}
 
 			} finally {

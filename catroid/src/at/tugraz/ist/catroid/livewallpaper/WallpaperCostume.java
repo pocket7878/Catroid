@@ -25,6 +25,7 @@ package at.tugraz.ist.catroid.livewallpaper;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import at.tugraz.ist.catroid.common.CostumeData;
 import at.tugraz.ist.catroid.common.Values;
 import at.tugraz.ist.catroid.content.Sprite;
@@ -145,6 +146,8 @@ public class WallpaperCostume {
 	}
 
 	public void setCostume(CostumeData costumeData) {
+		this.topNeedsAdjustment = true;
+		this.leftNeedsAdjustment = true;
 		this.costumeData = costumeData;
 		Bitmap costumeImage = costumeData.getImageBitmap();
 
@@ -436,4 +439,13 @@ public class WallpaperCostume {
 
 	}
 
+	public void rotate(float rotation) {
+		Matrix matrix = new Matrix();
+		matrix.setRotate(rotation, (float) costume.getWidth() / 2, (float) costume.getHeight() / 2);
+		Bitmap rotatedBitmap = Bitmap.createBitmap(this.costume, 0, 0, this.costume.getWidth(),
+				this.costume.getHeight(), matrix, true);
+		this.costume = rotatedBitmap;
+		this.topNeedsAdjustment = true;
+		this.leftNeedsAdjustment = true;
+	}
 }
