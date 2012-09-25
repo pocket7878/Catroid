@@ -26,6 +26,7 @@ package at.tugraz.ist.catroid.livewallpaper;
 import java.util.List;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
@@ -113,6 +114,7 @@ public class LiveWallpaper extends WallpaperService {
 				if (c != null && sprites != null) {
 
 					WallpaperCostume wallpaperCostume;
+					c.drawColor(Color.WHITE);
 					for (Sprite sprite : sprites) {
 						wallpaperCostume = sprite.getWallpaperCostume();
 						if (wallpaperCostume != null && wallpaperCostume.getCostume() != null
