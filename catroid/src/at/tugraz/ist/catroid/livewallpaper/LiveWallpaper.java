@@ -137,7 +137,6 @@ public class LiveWallpaper extends WallpaperService {
 				if (c != null && sprites != null) {
 
 					WallpaperCostume wallpaperCostume;
-
 					for (int position = 0; position < sprites.size(); position++) {
 						Sprites: for (Sprite sprite : sprites) {
 							wallpaperCostume = sprite.getWallpaperCostume();

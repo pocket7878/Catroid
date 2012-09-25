@@ -28,7 +28,6 @@ import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
@@ -60,8 +59,10 @@ public class IfOnEdgeBounceBrick implements Brick {
 		int yPosition = (int) sprite.costume.getYPosition();
 		sprite.costume.releaseXYWidthHeightLock();
 
-		int virtualScreenWidth = ProjectManager.getInstance().getCurrentProject().virtualScreenWidth / 2;
-		int virtualScreenHeight = ProjectManager.getInstance().getCurrentProject().virtualScreenHeight / 2;
+		int virtualScreenWidth = ProjectManager.getInstance()
+				.getCurrentProject().virtualScreenWidth / 2;
+		int virtualScreenHeight = ProjectManager.getInstance()
+				.getCurrentProject().virtualScreenHeight / 2;
 		float rotationResult = -sprite.costume.rotation + 90f;
 
 		if (xPosition < -virtualScreenWidth + width / 2) {
@@ -116,7 +117,8 @@ public class IfOnEdgeBounceBrick implements Brick {
 	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
-			view = View.inflate(context, R.layout.brick_if_on_edge_bounce, null);
+			view = View
+					.inflate(context, R.layout.brick_if_on_edge_bounce, null);
 		}
 
 		return view;
@@ -134,13 +136,7 @@ public class IfOnEdgeBounceBrick implements Brick {
 
 	@Override
 	public void executeLiveWallpaper() {
-		WallpaperCostume wallpaperCostume = sprite.getWallpaperCostume();
-
-		if (wallpaperCostume == null) {
-			wallpaperCostume = new WallpaperCostume(sprite, null);
-		}
-
-		wallpaperCostume.ifOnEdgeBounce();
+		// TODO Auto-generated method stub
 
 	}
 

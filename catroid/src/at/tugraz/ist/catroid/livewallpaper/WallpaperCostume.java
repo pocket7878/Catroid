@@ -45,8 +45,6 @@ public class WallpaperCostume {
 	private int left;
 
 	private int zPosition;
-	int xDestination;
-	int yDestination;
 
 	private float alphaValue = 1f;
 	private float brightness = 1f;
@@ -115,14 +113,6 @@ public class WallpaperCostume {
 		this.y = y;
 	}
 
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
 	public void changeXBy(int x) {
 		this.topNeedsAdjustment = true;
 		this.x += x;
@@ -184,8 +174,6 @@ public class WallpaperCostume {
 	}
 
 	public void setCostume(CostumeData costumeData) {
-		this.topNeedsAdjustment = true;
-		this.leftNeedsAdjustment = true;
 		this.costumeData = costumeData;
 		Bitmap costumeImage = costumeData.getImageBitmap();
 
@@ -361,7 +349,7 @@ public class WallpaperCostume {
 	}
 
 	private void adjustGhostEffect() {
-		//		setCostume(this.costumeData);
+		setCostume(this.costumeData);
 		Bitmap resultBitmap = Bitmap.createBitmap(this.costume.getWidth(), this.costume.getHeight(),
 				this.costume.getConfig());
 
@@ -394,107 +382,6 @@ public class WallpaperCostume {
 
 	public void setzPosition(int zPosition) {
 		this.zPosition = zPosition;
-	}
-
-	public void clearGraphicEffect() {
-		this.alphaValue = 1f;
-		this.brightness = 1f;
-		adjustBrightness();
-		adjustGhostEffect();
-	}
-
-	public void glideTo(int xDest, int yDest, int durationInMilliSeconds) {
-		this.xDestination = xDest;
-		this.yDestination = yDest;
-
-		long startTime = System.currentTimeMillis();
-		int duration = durationInMilliSeconds;
-		while (duration > 0) {
-			if (!sprite.isAlive(Thread.currentThread())) {
-				break;
-			}
-			long timeBeforeSleep = System.currentTimeMillis();
-			int sleep = 100;
-			while (System.currentTimeMillis() <= (timeBeforeSleep + sleep)) {
-
-				if (sprite.isPaused) {
-					sleep = (int) ((timeBeforeSleep + sleep) - System.currentTimeMillis());
-					long milliSecondsBeforePause = System.currentTimeMillis();
-					while (sprite.isPaused) {
-						if (sprite.isFinished) {
-							return;
-						}
-						Thread.yield();
-					}
-					timeBeforeSleep = System.currentTimeMillis();
-					startTime += System.currentTimeMillis() - milliSecondsBeforePause;
-				}
-
-				Thread.yield();
-			}
-			long currentTime = System.currentTimeMillis();
-			duration -= (int) (currentTime - startTime);
-			long timePassed = currentTime - startTime;
-
-			float xPosition = this.x;
-			float yPosition = this.y;
-
-			this.changeXBy((int) (((float) timePassed / duration) * (xDestination - xPosition)));
-			this.changeYby((int) (((float) timePassed / duration) * (yDestination - yPosition)));
-
-			startTime = currentTime;
-		}
-		if (!sprite.isAlive(Thread.currentThread())) {
-			// -stay at last position
-		} else {
-			setXYPosition(xDestination, yDestination);
-		}
-	}
-
-	public void ifOnEdgeBounce() {
-
-		float size = (float) this.size;
-
-		float width = costume.getWidth() * size;
-		float height = costume.getHeight() * size;
-		int xPosition = getX();
-		int yPosition = getY();
-
-		int virtualScreenWidth = Values.SCREEN_WIDTH / 2;
-		int virtualScreenHeight = Values.SCREEN_HEIGHT / 2;
-
-		if (xPosition < -virtualScreenWidth + width / 2) {
-			xPosition = -virtualScreenWidth + (int) (width / 2);
-		} else if (xPosition > virtualScreenWidth - width / 2) {
-			xPosition = virtualScreenWidth - (int) (width / 2);
-		}
-		if (yPosition > virtualScreenHeight - height / 2) {
-			yPosition = virtualScreenHeight - (int) (height / 2);
-		} else if (yPosition < -virtualScreenHeight + height / 2) {
-			yPosition = -virtualScreenHeight + (int) (height / 2);
-		}
-
-		setXYPosition(xPosition, yPosition);
-	}
-
-	public void setXYPosition(int xPosition, int yPosition) {
-		this.x = xPosition;
-		this.y = yPosition;
-	}
-
-	public void moveNStepsBrick(int newXPosition, int newYPosition) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void rotate(float rotation) {
-		Matrix matrix = new Matrix();
-		matrix.setRotate(rotation, (float) costume.getWidth() / 2, (float) costume.getHeight() / 2);
-		Bitmap rotatedBitmap = Bitmap.createBitmap(this.costume, 0, 0, this.costume.getWidth(),
-				this.costume.getHeight(), matrix, true);
-		this.costume = rotatedBitmap;
-		this.topNeedsAdjustment = true;
-		this.leftNeedsAdjustment = true;
 	}
 
 }

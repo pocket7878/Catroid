@@ -28,7 +28,6 @@ import android.view.View;
 import android.widget.BaseAdapter;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
-import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
 
 public class ClearGraphicEffectBrick implements Brick {
 	private static final long serialVersionUID = 1L;
@@ -59,7 +58,8 @@ public class ClearGraphicEffectBrick implements Brick {
 	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 		if (view == null) {
-			view = View.inflate(context, R.layout.brick_clear_graphic_effect, null);
+			view = View.inflate(context, R.layout.brick_clear_graphic_effect,
+					null);
 		}
 
 		return view;
@@ -67,7 +67,8 @@ public class ClearGraphicEffectBrick implements Brick {
 
 	@Override
 	public View getPrototypeView(Context context) {
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) context
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		return inflater.inflate(R.layout.brick_clear_graphic_effect, null);
 	}
 
@@ -78,13 +79,7 @@ public class ClearGraphicEffectBrick implements Brick {
 
 	@Override
 	public void executeLiveWallpaper() {
-		WallpaperCostume wallpaperCostume = sprite.getWallpaperCostume();
-
-		if (wallpaperCostume == null) {
-			wallpaperCostume = new WallpaperCostume(sprite, null);
-		}
-
-		wallpaperCostume.clearGraphicEffect();
+		// TODO Auto-generated method stub
 
 	}
 }
