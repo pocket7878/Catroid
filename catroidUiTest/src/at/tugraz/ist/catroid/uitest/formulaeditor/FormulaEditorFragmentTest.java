@@ -24,7 +24,6 @@ package at.tugraz.ist.catroid.uitest.formulaeditor;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Project;
@@ -132,62 +131,7 @@ public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<
 
 		solo.goBack();
 		solo.sleep(50);
-		assertEquals("Wrong text in X EditText", "12 ", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString()); //TODO changed it to 12 because we expect that or?
-	}
-
-	public void testDialogAndSimpleInterpretation() {
-		//		Note solo.enterText() modifications to the text are undetectable to FormulaEditorEditText.
-		//		Text via solo.enterText() *must* be longer than the original text!!! To be safe use CatKeyboardKlicker to clear!
-		//		Use CatKeyboardClicker for full functionality, is a lot slower and inconvenient! Will do just fine here without
-
-		String newXFormula = "10 + 12 - 2 * 3 - 4 ";
-		int newXValue = 10 + 12 - 2 * 3 - 4;
-		String newYFormula = "rand( cos( 90 ) , 10 * sin( 90 ) ) ";
-
-		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		catKeyboardClicker.clearEditTextWithCursorBehindLastCharacterOnlyQuickly(FORMULA_EDITOR_EDIT_TEXT_ID);
-
-		solo.sleep(50);
-		catKeyboardClicker.enterText("999++" + newXFormula);
-		solo.goBack();
-		assertTrue("Save failed toast not found", solo.searchText(solo.getString(R.string.formula_editor_parse_fail)));
-
-		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
-		catKeyboardClicker.enterText(newXFormula);
-		solo.goBack();
-		solo.sleep(200);
-		assertTrue("Changes saved toast not found",
-				solo.searchText(solo.getString(R.string.formula_editor_changes_saved)));
-
-		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
-		catKeyboardClicker.clickOnKey("del");
-		solo.enterText(FORMULA_EDITOR_EDIT_TEXT_ID, newYFormula);
-
-		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		assertTrue("Changes saved toast not found",
-				solo.searchText(solo.getString(R.string.formula_editor_changes_saved)));
-
-		assertEquals("Wrong text in FormulaEditor", newXFormula, solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
-				.getText().toString());
-
-		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
-		solo.sleep(50);
-		assertEquals("Wrong text in FormulaEditor", newYFormula, solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
-				.getText().toString());
-
-		solo.goBack();
-		solo.sleep(300);
-
-		//Interpretation test
-		Formula formula = (Formula) UiTestUtils.getPrivateField("xPosition", placeAtBrick);
-		assertEquals("Wrong text in field", newXValue, formula.interpretInteger());
-
-		formula = (Formula) UiTestUtils.getPrivateField("yPosition", placeAtBrick);
-
-		int newYValue = formula.interpretInteger();
-		Log.i("info", "" + newYValue);
-		assertTrue("Wrong text in field", newYValue >= 0 && newYValue <= 10);
-
+		assertEquals("Wrong text in X EditText", "12 ", solo.getEditText(X_POS_EDIT_TEXT_ID).getText().toString());
 	}
 
 	public void testUndo() {
@@ -314,48 +258,6 @@ public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<
 
 	}
 
-	public void testOrientationChanges() {
-
-		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		catKeyboardClicker.switchToNumberKeyboard();
-		catKeyboardClicker.clickOnKey("rand");
-
-		solo.setActivityOrientation(Solo.LANDSCAPE);
-
-		solo.sleep(2500); //orientation change takes forever...
-		assertEquals("Wrong text after oprientation switch", "rand( 0 , 1 ) ", solo.getEditText(0).getText().toString());
-
-		solo.goBack();
-
-		solo.sleep(200);
-		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		assertEquals("Wrong text after oprientation switch", "rand( 0 , 1 ) ", solo.getEditText(X_POS_EDIT_TEXT_ID)
-				.getText().toString());
-		solo.setActivityOrientation(Solo.PORTRAIT);
-		solo.sleep(500);
-
-		catKeyboardClicker.switchToFunctionKeyboard();
-		catKeyboardClicker.clickOnKey("sin");
-		catKeyboardClicker.clickOnKey("cos");
-
-		solo.sleep(500);
-		solo.setActivityOrientation(Solo.LANDSCAPE);
-		solo.sleep(1500);
-		solo.setActivityOrientation(Solo.PORTRAIT);
-
-		assertEquals("Wrong text after oprientation switch", "sin( cos( 0 ) ) ",
-				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
-
-		solo.goBack();
-		solo.sleep(2000);
-		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
-		assertEquals("Wrong text after oprientation switch", "sin( cos( 0 ) ) ",
-				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
-
-		solo.goBack();
-
-	}
-
 	public void testKeyboardSwipeAndSwipeBar() {
 		DisplayMetrics currentDisplayMetrics = new DisplayMetrics();
 		solo.getCurrentActivity().getWindowManager().getDefaultDisplay().getMetrics(currentDisplayMetrics);
@@ -365,61 +267,107 @@ public class FormulaEditorFragmentTest extends ActivityInstrumentationTestCase2<
 
 		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
 
-		//Tab bar not clickable anymore...
-		//		solo.clickOnText(solo.getString(R.string.functions));
-		//		catKeyboardClicker.clickOnKey("sin");
-		//		assertEquals("Wrong keyboard after keyboard switch", "sin( 0 ) ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
-		//				.getText().toString());
-		//		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
-		//
-		//		solo.clickOnText(solo.getString(R.string.numbers));
-		//		catKeyboardClicker.clickOnKey("1");
-		//		assertEquals("Wrong keyboard after keyboard switch", "1 ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
-		//				.getText().toString());
-		//		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
-		//
-		//		solo.clickOnText(solo.getString(R.string.sensors));
-		//		catKeyboardClicker.clickOnKey("x-accel");
-		//		assertEquals("Wrong keyboard after keyboard switch", "X_ACCELERATION_ ",
-		//				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
-		//		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
-		//solo.drag(10, displayWidth - 10, displayHeight - 50, displayHeight - 50, 100);
-
 		catKeyboardClicker.clickOnKey("1");
 		assertEquals("Wrong keyboard after keyboard switch", "1 ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
 				.getText().toString());
 		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
 
-		solo.drag(10, displayWidth - 10, displayHeight - 50, displayHeight - 50, 100);
+		solo.drag(10, displayWidth - 10, displayHeight - 50, displayHeight - 50, 10);
 		catKeyboardClicker.clickOnKey("sin");
-		assertEquals("Wrong keyboard after keyboard switch", "sin( 0 ) ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+		String sinus = getActivity().getString(R.string.formula_editor_function_sin) + "( 0 ) ";
+		assertEquals("Wrong keyboard after keyboard switch", sinus, solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
 				.getText().toString());
 		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
 
-		solo.drag(10, displayWidth - 10, displayHeight - 50, displayHeight - 50, 100);
+		solo.drag(10, displayWidth - 10, displayHeight - 50, displayHeight - 50, 10);
 		catKeyboardClicker.clickOnKey("x-accel");
-		assertEquals("Wrong keyboard after keyboard switch", "X_ACCELERATION_ ",
+		String x_acceleration = getActivity().getString(R.string.formula_editor_sensor_x_acceleration) + " ";
+		assertEquals("Wrong keyboard after keyboard switch", x_acceleration,
 				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
 		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
 
-		solo.drag(displayWidth - 10, 10, displayHeight - 50, displayHeight - 50, 100);
+		solo.drag(displayWidth - 10, 10, displayHeight - 50, displayHeight - 50, 10);
 		catKeyboardClicker.clickOnKey("sin");
-		assertEquals("Wrong keyboard after keyboard switch", "sin( 0 ) ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+		assertEquals("Wrong keyboard after keyboard switch", sinus, solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
 				.getText().toString());
 		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
 
-		solo.drag(displayWidth - 10, 10, displayHeight - 50, displayHeight - 50, 100);
+		solo.drag(displayWidth - 10, 10, displayHeight - 50, displayHeight - 50, 10);
 		catKeyboardClicker.clickOnKey("1");
 		assertEquals("Wrong keyboard after keyboard switch", "1 ", solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
 				.getText().toString());
 		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(X_POS_EDIT_TEXT_ID);
 
-		solo.drag(displayWidth - 10, 10, displayHeight - 50, displayHeight - 50, 100);
+		solo.drag(displayWidth - 10, 10, displayHeight - 50, displayHeight - 50, 10);
 		catKeyboardClicker.clickOnKey("x-accel");
-		assertEquals("Wrong keyboard after keyboard switch", "X_ACCELERATION_ ",
+		assertEquals("Wrong keyboard after keyboard switch", x_acceleration,
 				solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID).getText().toString());
 
 		solo.goBack();
+
+	}
+
+	public void testSimpleInterpretation() {
+		String newXFormula = "10 + 12 - 2 * 3 - 4 ";
+		int newXValue = 10 + 12 - 2 * 3 - 4;
+		String newYFormula = getActivity().getString(R.string.formula_editor_function_rand) + "( "
+				+ getActivity().getString(R.string.formula_editor_function_cos) + "( 90 - - 30 ) , 1 ) ";
+
+		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		catKeyboardClicker.clearEditTextWithCursorBehindLastCharacterOnlyQuickly(FORMULA_EDITOR_EDIT_TEXT_ID);
+
+		solo.sleep(50);
+		catKeyboardClicker.clickOnKey("1");
+		catKeyboardClicker.clickOnKey("0");
+		catKeyboardClicker.clickOnKey("+");
+		catKeyboardClicker.clickOnKey("1");
+		catKeyboardClicker.clickOnKey("2");
+		catKeyboardClicker.clickOnKey("-");
+		catKeyboardClicker.clickOnKey("2");
+		catKeyboardClicker.clickOnKey("*");
+		catKeyboardClicker.clickOnKey("3");
+		catKeyboardClicker.clickOnKey("-");
+		catKeyboardClicker.clickOnKey("4");
+		solo.goBack();
+		assertTrue("Save failed toast not found",
+				solo.searchText(solo.getString(R.string.formula_editor_changes_saved)));
+
+		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
+
+		catKeyboardClicker.clickOnKey("rand");
+		catKeyboardClicker.switchToFunctionKeyboard();
+		catKeyboardClicker.clickOnKey("cos");
+		catKeyboardClicker.switchToNumberKeyboard();
+		catKeyboardClicker.clickOnKey("9");
+		catKeyboardClicker.clickOnKey("0");
+		catKeyboardClicker.clickOnKey("-");
+		catKeyboardClicker.clickOnKey("-");
+		catKeyboardClicker.clickOnKey("3");
+		catKeyboardClicker.clickOnKey("0");
+
+		solo.clickOnEditText(X_POS_EDIT_TEXT_ID);
+		assertTrue("Changes saved toast not found",
+				solo.searchText(solo.getString(R.string.formula_editor_changes_saved)));
+
+		assertEquals("Wrong text in FormulaEditor", newXFormula, solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+				.getText().toString());
+
+		solo.clickOnEditText(Y_POS_EDIT_TEXT_ID);
+		solo.sleep(50);
+		assertEquals("Wrong text in FormulaEditor", newYFormula, solo.getEditText(FORMULA_EDITOR_EDIT_TEXT_ID)
+				.getText().toString());
+
+		solo.goBack();
+		solo.sleep(300);
+
+		//Interpretation test
+		Formula formula = (Formula) UiTestUtils.getPrivateField("xPosition", placeAtBrick);
+		assertEquals("Wrong text in field", newXValue, formula.interpretInteger());
+
+		formula = (Formula) UiTestUtils.getPrivateField("yPosition", placeAtBrick);
+
+		float newYValue = formula.interpretFloat();
+		assertTrue("Wrong text in field", newYValue >= -0.5f && newYValue <= 1f);
 
 	}
 
