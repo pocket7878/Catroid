@@ -66,4 +66,8 @@ public enum Operators {
 		return false;
 	}
 
+	public String getOperatorString() {
+		return operatorRepresentation;
+	}
+
 }

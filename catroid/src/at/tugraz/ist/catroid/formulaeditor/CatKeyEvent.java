@@ -93,44 +93,42 @@ public class CatKeyEvent extends KeyEvent {
 
 		//FUNCTIONS:
 			case CatKeyEvent.KEYCODE_SIN:
-				return buildSingleParameterFunction("sin", "0");
+				return buildSingleParameterFunction(Functions.SIN, "0");
 			case CatKeyEvent.KEYCODE_COS:
-				return buildSingleParameterFunction("cos", "0");
+				return buildSingleParameterFunction(Functions.COS, "0");
 			case CatKeyEvent.KEYCODE_TAN:
-				return buildSingleParameterFunction("tan", "0");
+				return buildSingleParameterFunction(Functions.TAN, "0");
 			case CatKeyEvent.KEYCODE_LN:
-				return buildSingleParameterFunction("ln", "0");
+				return buildSingleParameterFunction(Functions.LN, "0");
 			case CatKeyEvent.KEYCODE_LOG:
-				return buildSingleParameterFunction("log", "0");
+				return buildSingleParameterFunction(Functions.LOG, "0");
 			case CatKeyEvent.KEYCODE_PI:
-				return buildFunctionWithoutParametersAndBrackets("pi");
+				return buildFunctionWithoutParametersAndBrackets(Functions.PI);
 			case CatKeyEvent.KEYCODE_SQUAREROOT:
-				return buildSingleParameterFunction("sqrt", "0");
+				return buildSingleParameterFunction(Functions.SQRT, "0");
 			case CatKeyEvent.KEYCODE_EULER:
-				return buildFunctionWithoutParametersAndBrackets("e");
+				return buildFunctionWithoutParametersAndBrackets(Functions.EULER);
 			case CatKeyEvent.KEYCODE_RANDOM:
-				return buildDoubleParameterFunction("rand", "0", "1");
+				return buildDoubleParameterFunction(Functions.RAND, "0", "1");
 			case CatKeyEvent.KEYCODE_ABS:
-				return buildSingleParameterFunction("abs", "0");
+				return buildSingleParameterFunction(Functions.ABS, "0");
 			case CatKeyEvent.KEYCODE_ROUND:
-				return buildSingleParameterFunction("round", "0");
+				return buildSingleParameterFunction(Functions.ROUND, "0");
 
 				//SENSOR
 
 			case CatKeyEvent.KEYCODE_SENSOR1:
-				return buildSensor("X_ACCELERATION_");
+				return buildSensor(Sensors.X_ACCELERATION_);
 			case CatKeyEvent.KEYCODE_SENSOR2:
-				return buildSensor("Y_ACCELERATION_");
+				return buildSensor(Sensors.Y_ACCELERATION_);
 			case CatKeyEvent.KEYCODE_SENSOR3:
-				return buildSensor("Z_ACCELERATION_");
+				return buildSensor(Sensors.Z_ACCELERATION_);
 			case CatKeyEvent.KEYCODE_SENSOR4:
-				return buildSensor("AZIMUTH_ORIENTATION_");
+				return buildSensor(Sensors.AZIMUTH_ORIENTATION_);
 			case CatKeyEvent.KEYCODE_SENSOR5:
-				return buildSensor("PITCH_ORIENTATION_");
+				return buildSensor(Sensors.PITCH_ORIENTATION_);
 			case CatKeyEvent.KEYCODE_SENSOR6:
-				return buildSensor("ROLL_ORIENTATION_");
-			case CatKeyEvent.KEYCODE_SENSOR7:
-				return buildSensor("SLIDER_");
+				return buildSensor(Sensors.ROLL_ORIENTATION_);
 
 				//PERIOD
 			case CatKeyEvent.KEYCODE_PERIOD:
@@ -139,15 +137,15 @@ public class CatKeyEvent extends KeyEvent {
 				//OPERATOR
 
 			case CatKeyEvent.KEYCODE_PLUS:
-				return buildOperator("+");
+				return buildOperator(Operators.PLUS);
 			case CatKeyEvent.KEYCODE_MINUS:
-				return buildOperator("-");
+				return buildOperator(Operators.MINUS);
 			case CatKeyEvent.KEYCODE_STAR:
-				return buildOperator("*");
+				return buildOperator(Operators.MULT);
 			case CatKeyEvent.KEYCODE_SLASH:
-				return buildOperator("/");
+				return buildOperator(Operators.DIVIDE);
 			case CatKeyEvent.KEYCODE_POWER:
-				return buildOperator("^");
+				return buildOperator(Operators.POW);
 
 				//BRACKET
 
@@ -157,19 +155,19 @@ public class CatKeyEvent extends KeyEvent {
 				//COSTUME
 
 			case CatKeyEvent.KEYCODE_COSTUME_X:
-				return buildCostume("COSTUME_X_");
+				return buildCostume(Sensors.COSTUME_X_);
 			case CatKeyEvent.KEYCODE_COSTUME_Y:
-				return buildCostume("COSTUME_Y_");
+				return buildCostume(Sensors.COSTUME_Y_);
 			case CatKeyEvent.KEYCODE_COSTUME_GHOSTEFFECT:
-				return buildCostume("COSTUME_GHOSTEFFECT_");
+				return buildCostume(Sensors.COSTUME_GHOSTEFFECT_);
 			case CatKeyEvent.KEYCODE_COSTUME_BRIGHTNESS:
-				return buildCostume("COSTUME_BRIGHTNESS_");
+				return buildCostume(Sensors.COSTUME_BRIGHTNESS_);
 			case CatKeyEvent.KEYCODE_COSTUME_SIZE:
-				return buildCostume("COSTUME_SIZE_");
+				return buildCostume(Sensors.COSTUME_SIZE_);
 			case CatKeyEvent.KEYCODE_COSTUME_ROTATION:
-				return buildCostume("COSTUME_ROTATION_");
+				return buildCostume(Sensors.COSTUME_ROTATION_);
 			case CatKeyEvent.KEYCODE_COSTUME_LAYER:
-				return buildCostume("COSTUME_LAYER_");
+				return buildCostume(Sensors.COSTUME_LAYER_);
 
 		}
 
@@ -189,9 +187,9 @@ public class CatKeyEvent extends KeyEvent {
 		return returnList;
 	}
 
-	private List<InternToken> buildCostume(String costumeName) {
+	private List<InternToken> buildCostume(Sensors sensors) {
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(InternTokenType.COSTUME, costumeName));
+		returnList.add(new InternToken(InternTokenType.COSTUME, sensors.getSensorName()));
 		return returnList;
 	}
 
@@ -203,23 +201,23 @@ public class CatKeyEvent extends KeyEvent {
 		return returnList;
 	}
 
-	private List<InternToken> buildOperator(String operatorName) {
+	private List<InternToken> buildOperator(Operators operator) {
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(InternTokenType.OPERATOR, operatorName));
+		returnList.add(new InternToken(InternTokenType.OPERATOR, operator.getOperatorString()));
 		return returnList;
 	}
 
-	private List<InternToken> buildSensor(String sensorName) {
+	private List<InternToken> buildSensor(Sensors sensor) {
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(InternTokenType.SENSOR, sensorName));
+		returnList.add(new InternToken(InternTokenType.SENSOR, sensor.getSensorName()));
 		return returnList;
 	}
 
-	private List<InternToken> buildDoubleParameterFunction(String functionName, String firstParameterNumberValue,
+	private List<InternToken> buildDoubleParameterFunction(Functions function, String firstParameterNumberValue,
 			String secondParameterNumberValue) {
 
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(InternTokenType.FUNCTION_NAME, functionName));
+		returnList.add(new InternToken(InternTokenType.FUNCTION_NAME, function.getFunctionName()));
 
 		returnList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
 
@@ -235,28 +233,21 @@ public class CatKeyEvent extends KeyEvent {
 
 	}
 
-	private List<InternToken> buildSingleParameterFunction(String functionName, String parameterNumberValue) {
+	private List<InternToken> buildSingleParameterFunction(Functions function, String parameterNumberValue) {
 
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(InternTokenType.FUNCTION_NAME, functionName));
-
+		returnList.add(new InternToken(InternTokenType.FUNCTION_NAME, function.getFunctionName()));
 		returnList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
-
 		returnList.add(new InternToken(InternTokenType.NUMBER, parameterNumberValue));
-
 		returnList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
-
 		return returnList;
-
 	}
 
-	private List<InternToken> buildFunctionWithoutParametersAndBrackets(String functionName) {
+	private List<InternToken> buildFunctionWithoutParametersAndBrackets(Functions function) {
 
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(InternTokenType.FUNCTION_NAME, functionName));
-
+		returnList.add(new InternToken(InternTokenType.FUNCTION_NAME, function.getFunctionName()));
 		return returnList;
-
 	}
 
 	private void initializeKeyMap() {
