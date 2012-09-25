@@ -22,6 +22,9 @@
  */
 package at.tugraz.ist.catroid.uitest.formulaeditor;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.easymock.PowerMock;
@@ -36,10 +39,13 @@ import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.bricks.Brick;
 import at.tugraz.ist.catroid.content.bricks.ChangeSizeByNBrick;
-import at.tugraz.ist.catroid.formulaeditor.CalcGrammarParser;
 import at.tugraz.ist.catroid.formulaeditor.Formula;
 import at.tugraz.ist.catroid.formulaeditor.FormulaElement;
+import at.tugraz.ist.catroid.formulaeditor.InternFormulaParser;
+import at.tugraz.ist.catroid.formulaeditor.InternToken;
+import at.tugraz.ist.catroid.formulaeditor.InternTokenType;
 import at.tugraz.ist.catroid.formulaeditor.SensorManager;
+import at.tugraz.ist.catroid.formulaeditor.Sensors;
 import at.tugraz.ist.catroid.ui.MainMenuActivity;
 import at.tugraz.ist.catroid.ui.ScriptTabActivity;
 import at.tugraz.ist.catroid.uitest.util.UiTestUtils;
@@ -88,27 +94,27 @@ public class SensorTest extends ActivityInstrumentationTestCase2<MainMenuActivit
 
 		createProject();
 
-		Formula formula = createFormulaWithSensor("X_ACCELERATION_");
+		Formula formula = createFormulaWithSensor(Sensors.X_ACCELERATION_);
 		ChangeSizeByNBrick xBrick = new ChangeSizeByNBrick(firstSprite, formula);
 		startScript1.addBrick(xBrick);
 
-		Formula formula1 = createFormulaWithSensor("Y_ACCELERATION_");
+		Formula formula1 = createFormulaWithSensor(Sensors.Y_ACCELERATION_);
 		ChangeSizeByNBrick yBrick = new ChangeSizeByNBrick(firstSprite, formula1);
 		startScript1.addBrick(yBrick);
 
-		Formula formula2 = createFormulaWithSensor("Z_ACCELERATION_");
+		Formula formula2 = createFormulaWithSensor(Sensors.Z_ACCELERATION_);
 		ChangeSizeByNBrick zBrick = new ChangeSizeByNBrick(firstSprite, formula2);
 		startScript1.addBrick(zBrick);
 
-		Formula formula3 = createFormulaWithSensor("AZIMUTH_ORIENTATION_");
+		Formula formula3 = createFormulaWithSensor(Sensors.AZIMUTH_ORIENTATION_);
 		ChangeSizeByNBrick azimuthBrick = new ChangeSizeByNBrick(firstSprite, formula3);
 		startScript1.addBrick(azimuthBrick);
 
-		Formula formula4 = createFormulaWithSensor("PITCH_ORIENTATION_");
+		Formula formula4 = createFormulaWithSensor(Sensors.PITCH_ORIENTATION_);
 		ChangeSizeByNBrick pitchBrick = new ChangeSizeByNBrick(firstSprite, formula4);
 		startScript1.addBrick(pitchBrick);
 
-		Formula formula5 = createFormulaWithSensor("ROLL_ORIENTATION_");
+		Formula formula5 = createFormulaWithSensor(Sensors.ROLL_ORIENTATION_);
 		ChangeSizeByNBrick rollBrick = new ChangeSizeByNBrick(firstSprite, formula5);
 		startScript1.addBrick(rollBrick);
 
@@ -140,10 +146,12 @@ public class SensorTest extends ActivityInstrumentationTestCase2<MainMenuActivit
 
 	}
 
-	private Formula createFormulaWithSensor(String sensor) {
+	private Formula createFormulaWithSensor(Sensors sensor) {
 
-		CalcGrammarParser parser = CalcGrammarParser.getFormulaParser(sensor);
-		FormulaElement root = parser.parseFormula();
+		List<InternToken> internTokenList = new LinkedList<InternToken>();
+		internTokenList.add(new InternToken(InternTokenType.SENSOR, sensor.sensorName));
+		InternFormulaParser internFormulaParser = new InternFormulaParser(internTokenList);
+		FormulaElement root = internFormulaParser.parseFormula();
 		Formula formula = new Formula(root);
 
 		return formula;

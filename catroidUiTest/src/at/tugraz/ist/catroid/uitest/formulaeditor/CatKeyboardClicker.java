@@ -96,7 +96,6 @@ public class CatKeyboardClicker {
 	}
 
 	public void clearEditTextPortraitModeOnlyQuickly(int editTextIndex) {
-		this.clickOnKey("del");
 		solo.clickOnEditText(editTextIndex);
 		this.clickOnKey("del");
 	}

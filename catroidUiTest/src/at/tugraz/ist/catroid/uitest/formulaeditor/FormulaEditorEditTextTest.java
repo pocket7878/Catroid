@@ -268,32 +268,33 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 	}
 
 	@Smoke
-	public void testNumberDelimiterInsertion() {
+	public void testNumberInsertion() {
 
 		solo.clickOnEditText(0);
 
 		catKeyboardClicker.clickOnKey(".");
 		catKeyboardClicker.clickOnKey("1");
-
-		assertEquals("Number insertion was wrong!", "0.1 ", solo.getEditText(1).getText().toString());
-
+		assertEquals("Number insertion failed!", "0.1 ", solo.getEditText(1).getText().toString());
 		catKeyboardClicker.clickOnKey(".");
-
-		assertEquals("Delimiter insertion was wrong!", "0.1 ", solo.getEditText(1).getText().toString());
-
-		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.clickOnKey("del");
-		catKeyboardClicker.clickOnKey("del");
-
+		assertEquals("Delimiter insertion failed!", "0.1 ", solo.getEditText(1).getText().toString());
+		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(0);
 		assertEquals("Number deletion failed!", " ", solo.getEditText(1).getText().toString());
 
 		catKeyboardClicker.clickOnKey("1");
 		catKeyboardClicker.clickOnKey("2");
-
 		solo.clickOnScreen(oneCharacterWidth / 2f, firstLineYCoordinate);
 		catKeyboardClicker.clickOnKey(".");
+		assertEquals("Delimiter insertion failed!", "0.12 ", solo.getEditText(1).getText().toString());
+		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(0);
 
-		assertEquals("Delimiter insertion was wrong!", "0.12 ", solo.getEditText(1).getText().toString());
+		catKeyboardClicker.clickOnKey("1");
+		catKeyboardClicker.clickOnKey("2");
+		catKeyboardClicker.clickOnKey("3");
+		catKeyboardClicker.clickOnKey("4");
+		solo.clickOnScreen(oneCharacterWidth * 3, firstLineYCoordinate);
+		catKeyboardClicker.clickOnKey(".");
+		assertEquals("Delimiter insertion failed!", "12.34 ", solo.getEditText(1).getText().toString());
+		catKeyboardClicker.clearEditTextPortraitModeOnlyQuickly(0);
 
 		solo.goBack();
 		solo.goBack();
@@ -379,9 +380,6 @@ public class FormulaEditorEditTextTest extends android.test.ActivityInstrumentat
 		solo.goBack();
 		solo.goBack();
 	}
-
-	//TODO Adapt tests below this line!
-	//-------------------------------------------------------------------------------------------------
 
 	@Smoke
 	public void testSingleParseTest() {
