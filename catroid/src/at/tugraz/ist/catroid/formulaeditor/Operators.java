@@ -27,11 +27,11 @@ import java.util.EnumSet;
 public enum Operators {
 	PLUS("+", 0), MINUS("-", 0), MULT("*", 1), DIVIDE("/", 1), MOD("%", 1), POW("^", 2);
 
-	private final String operatorRepresentation;
+	public final String operatorName;
 	private final Integer priority;
 
 	Operators(String value, Integer priority) {
-		this.operatorRepresentation = value;
+		this.operatorName = value;
 		this.priority = priority;
 	}
 
@@ -50,7 +50,7 @@ public enum Operators {
 
 	public static Operators getOperatorByValue(String value) {
 		for (Operators op : EnumSet.allOf(Operators.class)) {
-			if (op.operatorRepresentation.equals(value)) {
+			if (op.operatorName.equals(value)) {
 				return op;
 			}
 		}
@@ -59,15 +59,11 @@ public enum Operators {
 
 	public static boolean isOperator(String value) {
 		for (Operators op : EnumSet.allOf(Operators.class)) {
-			if (op.operatorRepresentation.equals(value)) {
+			if (op.operatorName.equals(value)) {
 				return true;
 			}
 		}
 		return false;
-	}
-
-	public String getOperatorString() {
-		return operatorRepresentation;
 	}
 
 }

@@ -22,6 +22,8 @@
  */
 package at.tugraz.ist.catroid.formulaeditor;
 
+import java.util.EnumSet;
+
 public enum Sensors {
 	X_ACCELERATION_("X_ACCELERATION_"), Y_ACCELERATION_("Y_ACCELERATION_"), Z_ACCELERATION_("Z_ACCELERATION_"), AZIMUTH_ORIENTATION_(
 			"AZIMUTH_ORIENTATION_"), PITCH_ORIENTATION_("PITCH_ORIENTATION_"), ROLL_ORIENTATION_("ROLL_ORIENTATION_"), COSTUME_X_(
@@ -34,8 +36,13 @@ public enum Sensors {
 		this.sensorName = value;
 	}
 
-	public String getSensorName() {
-		return sensorName;
+	public static boolean isSensor(String value) {
+		for (Sensors fct : EnumSet.allOf(Sensors.class)) {
+			if (value.startsWith(fct.sensorName)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

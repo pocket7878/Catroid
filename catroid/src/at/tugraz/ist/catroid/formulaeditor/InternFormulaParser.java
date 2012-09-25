@@ -254,7 +254,10 @@ public class InternFormulaParser {
 	}
 
 	private FormulaElement costume() throws InternFormulaParserException {
-		//TODO check if costume-name exists
+
+		if (!Sensors.isSensor(currentToken.getTokenSringValue())) {
+			throw new InternFormulaParserException("Parse Error");
+		}
 
 		FormulaElement costumeTree = new FormulaElement(FormulaElement.ElementType.SENSOR,
 				currentToken.getTokenSringValue(), null);
@@ -265,7 +268,10 @@ public class InternFormulaParser {
 	}
 
 	private FormulaElement sensor() throws InternFormulaParserException {
-		//TODO check if sensor-name exists
+
+		if (!Sensors.isSensor(currentToken.getTokenSringValue())) {
+			throw new InternFormulaParserException("Parse Error");
+		}
 
 		FormulaElement sensorTree = new FormulaElement(FormulaElement.ElementType.SENSOR,
 				currentToken.getTokenSringValue(), null);
@@ -278,7 +284,10 @@ public class InternFormulaParser {
 	private FormulaElement function() throws InternFormulaParserException {
 		FormulaElement functionTree = new FormulaElement(FormulaElement.ElementType.FUNCTION, null, null);
 
-		//TODO check if functionName is valid
+		if (!Functions.isFunction(currentToken.getTokenSringValue())) {
+			throw new InternFormulaParserException("Parse Error");
+		}
+
 		functionTree = new FormulaElement(FormulaElement.ElementType.FUNCTION, currentToken.getTokenSringValue(), null);
 		getNextToken();
 

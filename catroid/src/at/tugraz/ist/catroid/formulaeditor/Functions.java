@@ -27,7 +27,7 @@ import java.util.EnumSet;
 public enum Functions {
 	SIN("sin"), COS("cos"), TAN("tan"), LN("ln"), LOG("log"), SQRT("sqrt"), RAND("rand"), ROUND("round"), ABS("abs"), EULER(
 			"e"), PI("pi");
-	private final String functionName;
+	public final String functionName;
 
 	Functions(String value) {
 		this.functionName = value;
@@ -40,11 +40,6 @@ public enum Functions {
 			}
 		}
 		return false;
-	}
-
-	public String getFunctionName() {
-
-		return functionName;
 	}
 
 }

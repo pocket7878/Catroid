@@ -189,7 +189,7 @@ public class CatKeyEvent extends KeyEvent {
 
 	private List<InternToken> buildCostume(Sensors sensors) {
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(InternTokenType.COSTUME, sensors.getSensorName()));
+		returnList.add(new InternToken(InternTokenType.COSTUME, sensors.sensorName));
 		return returnList;
 	}
 
@@ -203,13 +203,13 @@ public class CatKeyEvent extends KeyEvent {
 
 	private List<InternToken> buildOperator(Operators operator) {
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(InternTokenType.OPERATOR, operator.getOperatorString()));
+		returnList.add(new InternToken(InternTokenType.OPERATOR, operator.operatorName));
 		return returnList;
 	}
 
 	private List<InternToken> buildSensor(Sensors sensor) {
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(InternTokenType.SENSOR, sensor.getSensorName()));
+		returnList.add(new InternToken(InternTokenType.SENSOR, sensor.sensorName));
 		return returnList;
 	}
 
@@ -217,7 +217,7 @@ public class CatKeyEvent extends KeyEvent {
 			String secondParameterNumberValue) {
 
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(InternTokenType.FUNCTION_NAME, function.getFunctionName()));
+		returnList.add(new InternToken(InternTokenType.FUNCTION_NAME, function.functionName));
 
 		returnList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
 
@@ -236,7 +236,7 @@ public class CatKeyEvent extends KeyEvent {
 	private List<InternToken> buildSingleParameterFunction(Functions function, String parameterNumberValue) {
 
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(InternTokenType.FUNCTION_NAME, function.getFunctionName()));
+		returnList.add(new InternToken(InternTokenType.FUNCTION_NAME, function.functionName));
 		returnList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_OPEN));
 		returnList.add(new InternToken(InternTokenType.NUMBER, parameterNumberValue));
 		returnList.add(new InternToken(InternTokenType.FUNCTION_PARAMETERS_BRACKET_CLOSE));
@@ -246,7 +246,7 @@ public class CatKeyEvent extends KeyEvent {
 	private List<InternToken> buildFunctionWithoutParametersAndBrackets(Functions function) {
 
 		List<InternToken> returnList = new LinkedList<InternToken>();
-		returnList.add(new InternToken(InternTokenType.FUNCTION_NAME, function.getFunctionName()));
+		returnList.add(new InternToken(InternTokenType.FUNCTION_NAME, function.functionName));
 		return returnList;
 	}
 
