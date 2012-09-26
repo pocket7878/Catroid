@@ -196,9 +196,9 @@ public class StandardProjectHandler {
 			defaultProject.addSprite(sprite);
 		}
 
-		//		for (Sprite sprite : lowerBouncers) {
-		//			defaultProject.addSprite(sprite);
-		//		}
+		for (Sprite sprite : lowerBouncers) {
+			defaultProject.addSprite(sprite);
+		}
 
 		return defaultProject;
 	}
