@@ -61,8 +61,7 @@ public class WaitBrick implements Brick, OnClickListener {
 				break;
 			}
 			if (sprite.isPaused) {
-				timeToWait = timeToWait
-						- (int) (System.currentTimeMillis() - startTime);
+				timeToWait = timeToWait - (int) (System.currentTimeMillis() - startTime);
 				while (sprite.isPaused) {
 					if (sprite.isFinished) {
 						return;
@@ -113,28 +112,23 @@ public class WaitBrick implements Brick, OnClickListener {
 			@Override
 			protected void initialize() {
 				input.setText(String.valueOf(timeToWaitInMilliSeconds / 1000.0));
-				input.setInputType(InputType.TYPE_CLASS_NUMBER
-						| InputType.TYPE_NUMBER_FLAG_DECIMAL);
+				input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 				input.setSelectAllOnFocus(true);
 			}
 
 			@Override
 			protected boolean handleOkButton() {
 				try {
-					timeToWaitInMilliSeconds = (int) (Double.parseDouble(input
-							.getText().toString()) * 1000);
+					timeToWaitInMilliSeconds = (int) (Double.parseDouble(input.getText().toString()) * 1000);
 				} catch (NumberFormatException exception) {
-					Toast.makeText(getActivity(),
-							R.string.error_no_number_entered,
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), R.string.error_no_number_entered, Toast.LENGTH_SHORT).show();
 				}
 
 				return true;
 			}
 		};
 
-		editDialog.show(activity.getSupportFragmentManager(),
-				"dialog_wait_brick");
+		editDialog.show(activity.getSupportFragmentManager(), "dialog_wait_brick");
 	}
 
 	@Override

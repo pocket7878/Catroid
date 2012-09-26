@@ -23,6 +23,7 @@
 package at.tugraz.ist.catroid.content.bricks;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -31,14 +32,14 @@ import android.widget.BaseAdapter;
 import android.widget.Spinner;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperCostume;
 
 public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 
 	private static final long serialVersionUID = 1L;
 
 	public static enum Direction {
-		DIRECTION_RIGHT(90), DIRECTION_LEFT(-90), DIRECTION_UP(0), DIRECTION_DOWN(
-				180);
+		DIRECTION_RIGHT(90), DIRECTION_LEFT(-90), DIRECTION_UP(0), DIRECTION_DOWN(180);
 
 		private double directionDegrees;
 
@@ -68,9 +69,12 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 	}
 
 	public PointInDirectionBrick(Sprite sprite, Direction direction) {
+		//Log.d("TAG", "PointInDirection! --> Constructor");
 		this.sprite = sprite;
 		this.direction = direction;
 		this.degrees = direction.getDegrees();
+
+		//Log.d("TAG", "Degree: " + this.degrees);
 	}
 
 	@Override
@@ -80,8 +84,16 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 
 	@Override
 	public void execute() {
+		//Log.d("TAG", "PointInDirection! --> execute()");
 		double degreeOffset = 90f;
-		sprite.costume.rotation = (float) (-degrees + degreeOffset);
+
+		// why "+degreeOffset????
+
+		//sprite.costume.rotation = (float) (-degrees + degreeOffset);
+
+		sprite.costume.rotation = (float) (-degrees);
+
+		//Log.d("TAG", "PointInDirection! --> execute() --> degrees: " + degrees);
 	}
 
 	@Override
@@ -92,17 +104,13 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 	@Override
 	public View getView(Context context, int brickId, BaseAdapter adapter) {
 
-		View view = View.inflate(context, R.layout.brick_point_in_direction,
-				null);
-		ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter
-				.createFromResource(context,
-						R.array.point_in_direction_strings,
-						android.R.layout.simple_spinner_item);
-		arrayAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		Log.d("TAG", "PointInDirection! --> getView()");
+		View view = View.inflate(context, R.layout.brick_point_in_direction, null);
+		ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(context,
+				R.array.point_in_direction_strings, android.R.layout.simple_spinner_item);
+		arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		Spinner spinner = (Spinner) view
-				.findViewById(R.id.point_in_direction_spinner);
+		Spinner spinner = (Spinner) view.findViewById(R.id.point_in_direction_spinner);
 		spinner.setAdapter(arrayAdapter);
 
 		spinner.setClickable(true);
@@ -126,10 +134,12 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 	}
 
 	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position,
-			long id) {
+	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+		//Log.d("TAG", "PointInDirection! --> onItemSelected()");
 		direction = Direction.values()[position];
 		degrees = direction.getDegrees();
+
+		//Log.d("TAG", "PointInDirection! --> onItemSelected(): direction= " + direction + "degrees= " + degrees);
 	}
 
 	@Override
@@ -139,6 +149,16 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 	@Override
 	public void executeLiveWallpaper() {
 		// TODO Auto-generated method stub
+
+		//Log.d("TAG", "PointInDirection --> executeLiveWallpaper()");
+
+		WallpaperCostume wallpaperCostume = sprite.getWallpaperCostume();
+		if (wallpaperCostume == null) {
+			wallpaperCostume = new WallpaperCostume(sprite, null);
+		}
+
+		double degreeOffset = 90f;
+		sprite.costume.rotation = (float) (-degrees);
 
 	}
 }
