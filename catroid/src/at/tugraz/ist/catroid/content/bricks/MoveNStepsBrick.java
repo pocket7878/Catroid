@@ -158,7 +158,5 @@ public class MoveNStepsBrick implements Brick, OnClickListener {
 		wallpaperCostume.setX(newXPosition);
 		wallpaperCostume.setY(newYPosition);
 
-		//sprite.costume.setXYPosition(newXPosition, newYPosition);
-
 	}
 }
