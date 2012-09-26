@@ -25,7 +25,7 @@ package at.tugraz.ist.catroid.livewallpaper;
 
 import java.util.List;
 
-import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
@@ -53,6 +53,7 @@ public class LiveWallpaper extends WallpaperService {
 
 	}
 
+	@TargetApi(9)
 	public class CatWallEngine extends Engine {
 
 		private boolean mVisible = false;
@@ -161,7 +162,6 @@ public class LiveWallpaper extends WallpaperService {
 			}
 		}
 
-		@SuppressLint("NewApi")
 		@Override
 		public void onTouchEvent(MotionEvent event) {
 
