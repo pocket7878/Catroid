@@ -36,6 +36,8 @@ public class WallpaperHelper {
 	private Handler drawingThreadHandler;
 	private Runnable drawingThread;
 
+	private boolean soundAllowed = true;
+
 	private boolean isLandscape = false;
 
 	private boolean isLiveWallpaper = false;
@@ -138,6 +140,14 @@ public class WallpaperHelper {
 		int temp = centerXCoord;
 		centerXCoord = centerYCoord;
 		centerYCoord = temp;
+	}
+
+	public boolean isSoundAllowed() {
+		return soundAllowed;
+	}
+
+	public void setSoundAllowed(boolean soundAllowed) {
+		this.soundAllowed = soundAllowed;
 	}
 
 }

@@ -2,7 +2,9 @@ package at.tugraz.ist.catroid.livewallpaper;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import at.tugraz.ist.catroid.R;
@@ -22,6 +24,7 @@ public class LiveWallpaperSettings extends PreferenceActivity {
 		addPreferencesFromResource(R.xml.livewallpapersettings);
 		handleLicencePreference();
 		handleProjectInformation();
+		handleSoundPreference();
 
 	}
 
@@ -57,6 +60,27 @@ public class LiveWallpaperSettings extends PreferenceActivity {
 
 		});
 
+	}
+
+	private void handleSoundPreference() {
+		@SuppressWarnings("deprecation")
+		final CheckBoxPreference allowSounds = (CheckBoxPreference) findPreference(getResources().getString(
+				R.string.lwp_sound_control));
+
+		allowSounds.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				if (newValue.toString().equals("true")) {
+					WallpaperHelper.getInstance().setSoundAllowed(true);
+					allowSounds.setChecked(true);
+				} else {
+					WallpaperHelper.getInstance().setSoundAllowed(false);
+					allowSounds.setChecked(false);
+				}
+				return false;
+			}
+		});
 	}
 
 }

@@ -47,7 +47,7 @@ public class ProjectInformationDialog extends Dialog {
 		setContentView(R.layout.dialog_project_information);
 		setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, android.R.drawable.ic_dialog_info);
 
-		setTitle("Project information");
+		setTitle(context.getResources().getString(R.string.lwp_project_information));
 		TextView projectInformationTextView = (TextView) findViewById(R.id.dialog_project_information_text_view);
 		projectInformationTextView.setText(getProjectInformationText());
 		setCanceledOnTouchOutside(true);
@@ -57,9 +57,10 @@ public class ProjectInformationDialog extends Dialog {
 	public String getProjectInformationText() {
 		Resources resources = context.getResources();
 		String text = resources.getString(R.string.lwp_project_name) + ProjectInformation.projectName + "\n";
-		text += resources.getString(R.string.lwp_project_description) + ProjectInformation.projectDescription + "\n";
 		text += resources.getString(R.string.lwp_project_uploader) + ProjectInformation.uploader + "\n";
-		text += resources.getString(R.string.lwp_project_upload_date) + ProjectInformation.uploadDate + "\n";
+		text += resources.getString(R.string.lwp_project_link) + ProjectInformation.link + "\n";
+		text += resources.getString(R.string.lwp_project_licnese) + ProjectInformation.license + "\n";
+		text += resources.getString(R.string.lwp_project_description) + ProjectInformation.projectDescription + "\n";
 		return text;
 	}
 }

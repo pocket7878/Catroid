@@ -13,8 +13,10 @@
   
    <PreferenceCategory android:title = "@string/lwp_preferences" />
    
-   <SwitchPreference 
+   <CheckBoxPreference
        android:title="@string/lwp_sound_control"
-       android:defaultValue="true"/>
+       android:key= "@string/lwp_sound_control"
+
+      />
 
 </PreferenceScreen> 

@@ -27,7 +27,7 @@ public class ProjectInformation {
 	public static String uploader = "";
 	public static String projectName = "";
 	public static String projectDescription = "";
-	public static String uploadDate = "";
-	public static String url = "";
+	public static String link = "";
+	public static String license = "www.catrobat.org/licenses";
 
 }

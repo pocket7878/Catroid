@@ -33,6 +33,7 @@ import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.common.SoundInfo;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.SoundManager;
+import at.tugraz.ist.catroid.livewallpaper.WallpaperHelper;
 import at.tugraz.ist.catroid.utils.Utils;
 
 public class PlaySoundBrick implements Brick, OnItemSelectedListener {
@@ -129,10 +130,9 @@ public class PlaySoundBrick implements Brick, OnItemSelectedListener {
 
 	@Override
 	public void executeLiveWallpaper() {
-		//	if (!soundInfo.isPlaying) {
-		//		soundInfo.isPlaying = true;
-		execute();
-		//	}
+		if (WallpaperHelper.getInstance().isSoundAllowed()) {
+			execute();
+		}
 
 	}
 }
