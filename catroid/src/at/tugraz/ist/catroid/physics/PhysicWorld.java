@@ -110,7 +110,7 @@ public class PhysicWorld implements Serializable {
 	}
 
 	public void changeCostume(Sprite sprite) {
-		if (sprite.getName().equals("Hintergrund")) {
+		if (sprite.getName().equals("Hintergrund") || sprite.getName().equals("Background")) {
 			return;
 		}
 		if (isPhysicObject(sprite)) {

@@ -40,8 +40,8 @@ public class PhysicBoundaryBox {
 	}
 
 	public void create() {
-		float boxWidth = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_WIDTH - 10);
-		float boxHeight = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_HEIGHT - 10);
+		float boxWidth = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_WIDTH);
+		float boxHeight = PhysicWorldConverter.lengthCatToBox2d(Values.SCREEN_HEIGHT);
 		float boxElementSize = PhysicSettings.World.BoundaryBox.FRAME_SIZE;
 
 		// Top

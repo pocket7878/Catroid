@@ -59,13 +59,9 @@ public class PhysicShapeBuilder {
 
 		List<Pixel> convexGrahamPoints = ImageProcessor.getShape(costumeData.getAbsolutePath());
 
-		Vector2[] boundary = getBoundary(convexGrahamPoints);
 		int[] size = costumeData.getResolution();
 		width = size[0];
 		height = size[1];
-
-		Vector2 center = new Vector2((boundary[0].x - boundary[1].x) / 2 - (width / 2), (boundary[0].y - boundary[1].y)
-				/ 2 - height / 2);
 
 		Vector2[] vec = new Vector2[convexGrahamPoints.size() + 1];
 
@@ -81,39 +77,38 @@ public class PhysicShapeBuilder {
 			x[index] = PhysicWorldConverter.vecCatToBox2d(new Vector2((float) pixel.x() - (width / 2), height
 					- (float) pixel.y() - height / 2));
 		}
+
 		PhysicRenderer.getInstance().shapes.add(x);
 		PhysicRenderer.getInstance().shapes.add(vec);
 
 		vec[convexGrahamPoints.size()] = vec[0];
 
-		Shape[] shapes2 = devideShape(vec, PhysicWorldConverter.vecCatToBox2d(center));
+		Shape[] shapes2 = devideShape(vec, getCenter(vec));
+		//		Shape[] shapes2 = devideShape(vec, PhysicWorldConverter.vecCatToBox2d(center));
 
 		shapes.put(key, shapes2);
 
 		return shapes2;
 	}
 
-	private Vector2[] getBoundary(List<Pixel> pixels) {
-		float max_x = 0;
-		float max_y = 0;
-		float min_x = Integer.MAX_VALUE;
-		float min_y = Integer.MAX_VALUE;
-		for (Pixel pixel : pixels) {
-			if (pixel.x > max_x) {
-				max_x = pixel.x;
+	private Vector2 getCenter(Vector2[] vertices) {
+		Vector2 min = new Vector2(vertices[0]);
+		Vector2 max = new Vector2(vertices[0]);
+		for (Vector2 vertex : vertices) {
+			if (vertex.x < min.x) {
+				min.x = vertex.x;
+			} else if (vertex.x > max.x) {
+				max.x = vertex.x;
 			}
-			if (pixel.y > max_y) {
-				max_y = pixel.y;
-			}
-			if (pixel.x < min_x) {
-				min_x = pixel.x;
-			}
-			if (pixel.y < min_y) {
-				min_y = pixel.y;
+
+			if (vertex.y < min.y) {
+				min.y = vertex.y;
+			} else if (vertex.y > max.y) {
+				max.y = vertex.y;
 			}
 		}
 
-		return new Vector2[] { new Vector2(max_x, max_y), new Vector2(min_x, min_y) };
+		return new Vector2((max.x + min.x) / 2.0f, (max.y + min.y) / 2.0f);
 	}
 
 	private Shape[] devideShape(Vector2[] convexpoints, Vector2 center) {
