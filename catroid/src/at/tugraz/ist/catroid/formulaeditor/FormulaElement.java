@@ -34,15 +34,6 @@ public class FormulaElement implements Serializable {
 		OPERATOR, FUNCTION, NUMBER, SENSOR, USER_VARIABLE, BRACKET
 	}
 
-	//	public static final int ELEMENT_OPERATOR = 2;
-	//	public static final int ELEMENT_FUNCTION = 3;
-	//	public static final int ELEMENT_VALUE = 4;
-	//	public static final int ELEMENT_SENSOR = 5;
-	//	public static final int ELEMENT_CONSTANT = 6;
-	//	public static final int ELEMENT_VARIABLE = 7;
-
-	//	private static HashMap<String, Integer> variableMap = new HashMap<String, Integer>(); TODO
-	//private int type;
 	private ElementType type;
 	private String value;
 	private FormulaElement leftChild = null;
@@ -137,51 +128,6 @@ public class FormulaElement implements Serializable {
 		return internTokenList;
 	}
 
-	//TODO remove Method
-	public String getEditTextRepresentation() {
-		String result = "";
-
-		switch (type) {
-			case BRACKET:
-				result += "( ";
-				if (rightChild != null) {
-					result += rightChild.getEditTextRepresentation();
-				}
-				result += ") ";
-				break;
-			case OPERATOR:
-				if (leftChild != null) {
-					result += leftChild.getEditTextRepresentation();
-				}
-				result += this.value + " ";
-				if (rightChild != null) {
-					result += rightChild.getEditTextRepresentation();
-				}
-				break;
-			case FUNCTION:
-				result += this.value + "( ";
-				if (leftChild != null) {
-					result += leftChild.getEditTextRepresentation();
-				}
-				if (rightChild != null) {
-					result += ", ";
-					result += rightChild.getEditTextRepresentation();
-				}
-				result += ") ";
-				break;
-			case USER_VARIABLE:
-				result += this.value + " ";
-				break;
-			case NUMBER:
-				result += this.value + " ";
-				break;
-			case SENSOR:
-				result += this.value + " ";
-				break;
-		}
-		return result;
-	}
-
 	public FormulaElement getRoot() {
 		FormulaElement root = this;
 		while (root.getParent() != null) {
@@ -204,20 +150,20 @@ public class FormulaElement implements Serializable {
 				Double left = leftChild.interpretRecursive();
 				Double right = rightChild.interpretRecursive();
 
-				if (value.equals("+")) {
+				if (value.equals(Operators.PLUS.operatorName)) {
 					returnValue = left + right;
 				}
-				if (value.equals("-")) {
+				if (value.equals(Operators.MINUS.operatorName)) {
 					returnValue = left - right;
 				}
-				if (value.equals("*")) {
+				if (value.equals(Operators.MULT.operatorName)) {
 					returnValue = left * right;
 				}
-				if (value.equals("/")) {
+				if (value.equals(Operators.DIVIDE.operatorName)) {
 
 					returnValue = left / right;
 				}
-				if (value.equals("^")) {
+				if (value.equals(Operators.POW.operatorName)) {
 					returnValue = java.lang.Math.pow(left, right);
 				}
 			} else {//unary operators
@@ -225,7 +171,7 @@ public class FormulaElement implements Serializable {
 				//				if (value.equals("+")) {
 				//					return right;
 				//				}
-				if (value.equals("-")) {
+				if (value.equals(Operators.MINUS.operatorName)) {
 					returnValue = -right;
 				}
 
@@ -236,45 +182,45 @@ public class FormulaElement implements Serializable {
 				left = leftChild.interpretRecursive();
 			}
 
-			if (value.equals("sin")) {
+			if (value.equals(Functions.SIN.functionName)) {
 				returnValue = java.lang.Math.sin(Math.toRadians(left));
 			}
-			if (value.equals("cos")) {
+			if (value.equals(Functions.COS.functionName)) {
 				returnValue = java.lang.Math.cos(Math.toRadians(left));
 			}
-			if (value.equals("tan")) {
+			if (value.equals(Functions.TAN.functionName)) {
 				returnValue = java.lang.Math.tan(Math.toRadians(left));
 			}
-			if (value.equals("ln")) {
+			if (value.equals(Functions.LN.functionName)) {
 				returnValue = java.lang.Math.log(left);
 			}
-			if (value.equals("log")) {
+			if (value.equals(Functions.LOG.functionName)) {
 				returnValue = java.lang.Math.log10(left);
 			}
-			if (value.equals("sqrt")) {
+			if (value.equals(Functions.SQRT.functionName)) {
 				returnValue = java.lang.Math.sqrt(left);
 			}
-			if (value.equals("rand")) {
+			if (value.equals(Functions.RAND.functionName)) {
 				double min = left;
 				double max = rightChild.interpretRecursive();
 				returnValue = min + (java.lang.Math.random() * (max - min));
 			}
-			if (value.equals("abs")) {
+			if (value.equals(Functions.ABS.functionName)) {
 				returnValue = java.lang.Math.abs(left);
 			}
-			if (value.equals("round")) {
+			if (value.equals(Functions.ROUND.functionName)) {
 				returnValue = (double) java.lang.Math.round(left);
 			}
-			if (value.equals("pi")) {
+			if (value.equals(Functions.PI.functionName)) {
 				returnValue = java.lang.Math.PI;
 			}
-			if (value.equals("e")) {
+			if (value.equals(Functions.EULER.functionName)) {
 				returnValue = java.lang.Math.E;
 			}
 		} else if (type == ElementType.SENSOR) {
 			returnValue = SensorManager.getSensorValue(value);
 		} else if (type == ElementType.USER_VARIABLE) {
-			//			TODO ^_^
+			//			TODO handle UserVariables
 			return null;
 		}
 
@@ -359,6 +305,7 @@ public class FormulaElement implements Serializable {
 
 	}
 
+	//TODO just for debugging -> remove
 	public String getTreeString() {
 		String text = "";
 

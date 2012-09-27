@@ -24,6 +24,7 @@ package at.tugraz.ist.catroid.formulaeditor;
 
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.content.Costume;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
@@ -39,44 +40,44 @@ public class SensorManager {
 			sensors = Gdx.input;
 		}
 		Double sensorValue = 0.0;
-		if (sensorName.equals("X_ACCELERATION_")) {
+		if (sensorName.equals(Sensors.X_ACCELERATION_.sensorName)) {
 			sensorValue = Double.valueOf(sensors.getAccelerometerX());
 		}
-		if (sensorName.equals("Y_ACCELERATION_")) {
+		if (sensorName.equals(Sensors.Y_ACCELERATION_.sensorName)) {
 			sensorValue = Double.valueOf(-sensors.getAccelerometerY());
 		}
-		if (sensorName.equals("Z_ACCELERATION_")) {
+		if (sensorName.equals(Sensors.Z_ACCELERATION_.sensorName)) {
 			sensorValue = Double.valueOf(-sensors.getAccelerometerZ());
 		}
-		if (sensorName.equals("AZIMUTH_ORIENTATION_")) {
+		if (sensorName.equals(Sensors.AZIMUTH_ORIENTATION_.sensorName)) {
 			sensorValue = Double.valueOf(sensors.getAzimuth());
 		}
-		if (sensorName.equals("PITCH_ORIENTATION_")) {
+		if (sensorName.equals(Sensors.PITCH_ORIENTATION_.sensorName)) {
 			sensorValue = Double.valueOf(sensors.getPitch());
 		}
-		if (sensorName.equals("ROLL_ORIENTATION_")) {
+		if (sensorName.equals(Sensors.ROLL_ORIENTATION_.sensorName)) {
 			sensorValue = Double.valueOf(-sensors.getRoll());
 		}
 		//SPRITE VALUES
-		if (sensorName.equals("COSTUME_X_")) {
+		if (sensorName.equals(Sensors.COSTUME_X_.sensorName)) {
 			sensorValue = Double.valueOf(getCurrentSpriteCostume().getXPosition());
 		}
-		if (sensorName.equals("COSTUME_Y_")) {
+		if (sensorName.equals(Sensors.COSTUME_Y_.sensorName)) {
 			sensorValue = Double.valueOf(getCurrentSpriteCostume().getYPosition());
 		}
-		if (sensorName.equals("COSTUME_GHOSTEFFECT_")) {
+		if (sensorName.equals(Sensors.COSTUME_GHOSTEFFECT_.sensorName)) {
 			sensorValue = Double.valueOf(getCurrentSpriteCostume().getAlphaValue());
 		}
-		if (sensorName.equals("COSTUME_BRIGHTNESS_")) {
+		if (sensorName.equals(Sensors.COSTUME_BRIGHTNESS_.sensorName)) {
 			sensorValue = Double.valueOf(getCurrentSpriteCostume().getBrightnessValue());
 		}
-		if (sensorName.equals("COSTUME_SIZE_")) {
+		if (sensorName.equals(Sensors.COSTUME_SIZE_.sensorName)) {
 			sensorValue = Double.valueOf(getCurrentSpriteCostume().scaleX);
 		}
-		if (sensorName.equals("COSTUME_ROTATION_")) {
+		if (sensorName.equals(Sensors.COSTUME_ROTATION_.sensorName)) {
 			sensorValue = Double.valueOf(getCurrentSpriteCostume().rotation);
 		}
-		if (sensorName.equals("COSTUME_LAYER_")) {
+		if (sensorName.equals(Sensors.COSTUME_LAYER_.sensorName)) {
 			sensorValue = Double.valueOf(getCurrentSpriteCostume().zPosition);
 		}
 

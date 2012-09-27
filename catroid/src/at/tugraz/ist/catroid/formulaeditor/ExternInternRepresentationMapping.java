@@ -30,7 +30,6 @@ public class ExternInternRepresentationMapping {
 	private SparseArray<ExternToken> internExternMapping;
 
 	private int externStringLength = 10;
-	private int internStringLength;
 
 	public ExternInternRepresentationMapping() {
 		externInternMapping = new SparseArray<Integer>();
@@ -38,8 +37,6 @@ public class ExternInternRepresentationMapping {
 	}
 
 	public void putExternInternMapping(int externStartIndex, int externEndIndex, int internIndex) {
-		//		Log.i("info", "Mapping put extern to intern: FROM extern start/end = " + externStartIndex + "/"
-		//				+ externEndIndex + " TO " + internStartIndex);
 		externInternMapping.put(externStartIndex, internIndex);
 		externInternMapping.put(externEndIndex, internIndex);
 
@@ -84,9 +81,6 @@ public class ExternInternRepresentationMapping {
 		Integer currentInternToken = externInternMapping.get(externIndex);
 		Integer searchUpInternToken = searchUp(externInternMapping, externIndex + 1, externStringLength);
 
-		//		Log.i("info", "getInternTokenByExternIndex: search Down/Up/Current = " + searchDownInternToken + "/"
-		//				+ searchUpInternToken + "/" + currentInternToken);
-
 		if (currentInternToken != null) {
 			return currentInternToken;
 		}
@@ -95,8 +89,6 @@ public class ExternInternRepresentationMapping {
 				return searchDownInternToken;
 			}
 		}
-
-		//TODO return functionName Token when parameter delimiter deleted
 
 		return null;
 	}

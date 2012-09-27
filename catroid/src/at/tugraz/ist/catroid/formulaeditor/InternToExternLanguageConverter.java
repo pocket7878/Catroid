@@ -34,31 +34,39 @@ public class InternToExternLanguageConverter {
 		internExternLanguageConverterMap.put("sin", R.string.formula_editor_function_sin);
 
 		internExternLanguageConverterMap.put(".", R.string.formula_editor_decimal_mark);
-		internExternLanguageConverterMap.put("sin", R.string.formula_editor_function_sin);
-		internExternLanguageConverterMap.put("cos", R.string.formula_editor_function_cos);
-		internExternLanguageConverterMap.put("tan", R.string.formula_editor_function_tan);
-		internExternLanguageConverterMap.put("ln", R.string.formula_editor_function_ln);
-		internExternLanguageConverterMap.put("log", R.string.formula_editor_function_log);
-		internExternLanguageConverterMap.put("pi", R.string.formula_editor_function_pi);
-		internExternLanguageConverterMap.put("sqrt", R.string.formula_editor_function_sqrt);
-		internExternLanguageConverterMap.put("e", R.string.formula_editor_function_e);
-		internExternLanguageConverterMap.put("rand", R.string.formula_editor_function_rand);
-		internExternLanguageConverterMap.put("abs", R.string.formula_editor_function_abs);
-		internExternLanguageConverterMap.put("round", R.string.formula_editor_function_round);
-		internExternLanguageConverterMap.put("X_ACCELERATION_", R.string.formula_editor_sensor_x_acceleration);
-		internExternLanguageConverterMap.put("Y_ACCELERATION_", R.string.formula_editor_sensor_y_acceleration);
-		internExternLanguageConverterMap.put("Z_ACCELERATION_", R.string.formula_editor_sensor_z_acceleration);
-		internExternLanguageConverterMap
-				.put("AZIMUTH_ORIENTATION_", R.string.formula_editor_sensor_azimuth_orientation);
-		internExternLanguageConverterMap.put("PITCH_ORIENTATION_", R.string.formula_editor_sensor_pitch_orientation);
-		internExternLanguageConverterMap.put("ROLL_ORIENTATION_", R.string.formula_editor_sensor_roll_orientation);
-		internExternLanguageConverterMap.put("COSTUME_X_", R.string.formula_editor_costume_x);
-		internExternLanguageConverterMap.put("COSTUME_Y_", R.string.formula_editor_costume_y);
-		internExternLanguageConverterMap.put("COSTUME_GHOSTEFFECT_", R.string.formula_editor_costume_ghosteffect);
-		internExternLanguageConverterMap.put("COSTUME_BRIGHTNESS_", R.string.formula_editor_costume_brightness);
-		internExternLanguageConverterMap.put("COSTUME_SIZE_", R.string.formula_editor_costume_size);
-		internExternLanguageConverterMap.put("COSTUME_ROTATION_", R.string.formula_editor_costume_rotation);
-		internExternLanguageConverterMap.put("COSTUME_LAYER_", R.string.formula_editor_costume_layer);
+		internExternLanguageConverterMap.put(Functions.SIN.functionName, R.string.formula_editor_function_sin);
+		internExternLanguageConverterMap.put(Functions.COS.functionName, R.string.formula_editor_function_cos);
+		internExternLanguageConverterMap.put(Functions.TAN.functionName, R.string.formula_editor_function_tan);
+		internExternLanguageConverterMap.put(Functions.LN.functionName, R.string.formula_editor_function_ln);
+		internExternLanguageConverterMap.put(Functions.LOG.functionName, R.string.formula_editor_function_log);
+		internExternLanguageConverterMap.put(Functions.PI.functionName, R.string.formula_editor_function_pi);
+		internExternLanguageConverterMap.put(Functions.SQRT.functionName, R.string.formula_editor_function_sqrt);
+		internExternLanguageConverterMap.put(Functions.EULER.functionName, R.string.formula_editor_function_e);
+		internExternLanguageConverterMap.put(Functions.RAND.functionName, R.string.formula_editor_function_rand);
+		internExternLanguageConverterMap.put(Functions.ABS.functionName, R.string.formula_editor_function_abs);
+		internExternLanguageConverterMap.put(Functions.ROUND.functionName, R.string.formula_editor_function_round);
+		internExternLanguageConverterMap.put(Sensors.X_ACCELERATION_.sensorName,
+				R.string.formula_editor_sensor_x_acceleration);
+		internExternLanguageConverterMap.put(Sensors.Y_ACCELERATION_.sensorName,
+				R.string.formula_editor_sensor_y_acceleration);
+		internExternLanguageConverterMap.put(Sensors.Z_ACCELERATION_.sensorName,
+				R.string.formula_editor_sensor_z_acceleration);
+		internExternLanguageConverterMap.put(Sensors.AZIMUTH_ORIENTATION_.sensorName,
+				R.string.formula_editor_sensor_azimuth_orientation);
+		internExternLanguageConverterMap.put(Sensors.PITCH_ORIENTATION_.sensorName,
+				R.string.formula_editor_sensor_pitch_orientation);
+		internExternLanguageConverterMap.put(Sensors.ROLL_ORIENTATION_.sensorName,
+				R.string.formula_editor_sensor_roll_orientation);
+		internExternLanguageConverterMap.put(Sensors.COSTUME_X_.sensorName, R.string.formula_editor_costume_x);
+		internExternLanguageConverterMap.put(Sensors.COSTUME_Y_.sensorName, R.string.formula_editor_costume_y);
+		internExternLanguageConverterMap.put(Sensors.COSTUME_GHOSTEFFECT_.sensorName,
+				R.string.formula_editor_costume_ghosteffect);
+		internExternLanguageConverterMap.put(Sensors.COSTUME_BRIGHTNESS_.sensorName,
+				R.string.formula_editor_costume_brightness);
+		internExternLanguageConverterMap.put(Sensors.COSTUME_SIZE_.sensorName, R.string.formula_editor_costume_size);
+		internExternLanguageConverterMap.put(Sensors.COSTUME_ROTATION_.sensorName,
+				R.string.formula_editor_costume_rotation);
+		internExternLanguageConverterMap.put(Sensors.COSTUME_LAYER_.sensorName, R.string.formula_editor_costume_layer);
 	}
 
 	public static String getExternStringForInternTokenValue(String internTokenValue, Context context) {
