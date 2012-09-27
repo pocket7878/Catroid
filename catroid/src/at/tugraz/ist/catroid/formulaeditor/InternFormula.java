@@ -1038,7 +1038,4 @@ public class InternFormula {
 		return internFormulaTokenSelection;
 	}
 
-	public void setStateTo(InternFormulaState lastStep) {
-
-	}
 }

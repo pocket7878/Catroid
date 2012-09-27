@@ -25,8 +25,6 @@ package at.tugraz.ist.catroid.formulaeditor;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.util.Log;
-
 public class InternTokenModify {
 
 	public static List<InternToken> replaceFunctionByTokens(List<InternToken> functionToReplace,
@@ -44,18 +42,11 @@ public class InternTokenModify {
 
 	public static InternToken insertIntoNumberToken(InternToken numberTokenToBeModified, int externNumberOffset,
 			String numberToInsert) {
-		Log.i("info", "insertNumberIntoNumberToken:enter");
-		Log.i("info", "insertNumberIntoNumberToken: externNumberOffset = " + externNumberOffset);
-
-		Log.i("info", "insertNumberIntoNumberToken: Before Insertion = " + numberTokenToBeModified.getTokenSringValue());
-
 		String numberString = numberTokenToBeModified.getTokenSringValue();
 		String leftPart = numberString.substring(0, externNumberOffset);
 		String rightPart = numberString.substring(externNumberOffset);
 
 		numberTokenToBeModified.setTokenStringValue(leftPart + numberToInsert + rightPart);
-
-		Log.i("info", "insertNumberIntoNumberToken: After  Insertion = " + numberTokenToBeModified.getTokenSringValue());
 
 		return numberTokenToBeModified;
 
