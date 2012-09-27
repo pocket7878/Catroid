@@ -179,11 +179,19 @@ public class StandardProjectHandler {
 			setPhysicProperties(upperBouncers[index], physicWorld, Type.FIXED, 110.0f, -1.0f);
 		}
 
+<<<<<<< HEAD
+=======
+		defaultProject.getSpriteList().clear();
+>>>>>>> 50dbbb6a32189c8334fbce5e6fbbe1fb2e109660
 		//		defaultProject.addSprite(ball);
 		//		defaultProject.addSprite(leftButton);
 		//		defaultProject.addSprite(rightButton);
 		defaultProject.addSprite(leftArm);
+<<<<<<< HEAD
 		// defaultProject.addSprite(rightArm);
+=======
+		//		defaultProject.addSprite(rightArm);
+>>>>>>> 50dbbb6a32189c8334fbce5e6fbbe1fb2e109660
 		//		defaultProject.addSprite(middleBouncer);
 		//		defaultProject.addSprite(leftHardBouncer);
 		//		defaultProject.addSprite(rightHardBouncer);
@@ -191,7 +199,11 @@ public class StandardProjectHandler {
 		//		defaultProject.addSprite(leftBottomWall);
 		//		defaultProject.addSprite(rightVerticalWall);
 		//		defaultProject.addSprite(rightBottomWall);
+<<<<<<< HEAD
 
+=======
+		//
+>>>>>>> 50dbbb6a32189c8334fbce5e6fbbe1fb2e109660
 		//		for (Sprite sprite : upperBouncers) {
 		//			defaultProject.addSprite(sprite);
 		//		}
