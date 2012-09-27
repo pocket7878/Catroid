@@ -21,6 +21,7 @@ package at.tugraz.ist.catroid.physics;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Matrix4;
@@ -35,8 +36,12 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 public class PhysicRenderer {
 	private final ShapeRenderer renderer = new ShapeRenderer();
 	public final List<Vector2[]> shapes = new ArrayList<Vector2[]>();
+	public List<PolygonShape> polyShape = new ArrayList<PolygonShape>();
 
 	private static PhysicRenderer instance = null;
+	private Color[] color = new Color[] { new Color(0, 255, 0, 1), new Color(255, 255, 0, 1), new Color(255, 0, 0, 1),
+			new Color(255, 0, 255, 1), new Color(0, 0, 255, 1), new Color(0, 255, 255, 1), new Color(255, 255, 255, 1),
+			new Color(0, 0, 0, 1) };
 
 	public static synchronized PhysicRenderer getInstance() {
 		if (instance == null) {
@@ -79,43 +84,47 @@ public class PhysicRenderer {
 		//			draw(shape);
 		//		}
 
-		for (Vector2[] points : shapes) {
+		for (PolygonShape poly : polyShape) {
 			renderer.identity();
 			renderer.begin(ShapeType.Line);
-			draw(points);
+			draw(poly);
 			renderer.end();
 		}
 	}
 
-	private void draw(Vector2[] points) {
-		int index;
-		for (index = 0; index < points.length - 1; index++) {
-			drawLine(points[index], points[index + 1]);
-		}
-		drawLine(points[index], points[0]);
-	}
+	//		private void draw(Vector2[] points) {
+	//			int index;
+	//			for (index = 0; index < points.length - 1; index++) {
+	//				drawLine(points[index], points[index + 1]);
+	//			}
+	//			drawLine(points[index], points[0]);
+	//		}
 
 	private void draw(PolygonShape polygon) {
 		renderer.begin(ShapeType.Line);
 
 		Vector2 from = new Vector2();
 		Vector2 to = new Vector2();
-		for (int index = 0; index < polygon.getVertexCount() - 1; index++) {
+		int index = 0;
+		for (index = 0; index < polygon.getVertexCount() - 1; index++) {
 			polygon.getVertex(index, from);
 			polygon.getVertex(index + 1, to);
-			drawLine(from, to);
+			drawLine(from, to, index);
 		}
 		from = to.cpy();
 		polygon.getVertex(0, to);
-		drawLine(from, to);
+		drawLine(from, to, index);
 
 		renderer.end();
 	}
 
-	private void drawLine(Vector2 from, Vector2 to) {
+	private void drawLine(Vector2 from, Vector2 to, int index) {
 		from = PhysicWorldConverter.vecBox2dToCat(from);
 		to = PhysicWorldConverter.vecBox2dToCat(to);
+
+		renderer.setColor(color[index]);
 		renderer.line(from.x, from.y, to.x, to.y);
+
 	}
 
 	private void draw(CircleShape circle) {

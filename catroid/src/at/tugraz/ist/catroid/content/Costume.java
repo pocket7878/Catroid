@@ -74,6 +74,7 @@ public class Costume extends Image {
 		this.currentAlphaPixmap = null;
 		this.zPosition = 0;
 		this.internalPath = false;
+		this.alphaValue = 0;
 	}
 
 	@Override

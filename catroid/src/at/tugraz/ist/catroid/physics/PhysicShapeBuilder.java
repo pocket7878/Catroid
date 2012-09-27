@@ -47,16 +47,6 @@ public class PhysicShapeBuilder {
 			return shapes.get(key);
 		}
 
-		//		width = costumeData.getResolution()[0];
-		//		height = costumeData.getResolution()[1];
-		//
-		//		PolygonShape shape = new PolygonShape();
-		//		shape.setAsBox(PhysicWorldConverter.lengthCatToBox2d(width / 2f),
-		//				PhysicWorldConverter.lengthCatToBox2d(height / 2f));
-		//
-		//		Shape[] shapeArray = new Shape[] { shape };
-		//		shapes.put(key, shapeArray);
-
 		List<Pixel> convexGrahamPoints = ImageProcessor.getShape(costumeData.getAbsolutePath());
 
 		int[] size = costumeData.getResolution();
@@ -78,13 +68,12 @@ public class PhysicShapeBuilder {
 					- (float) pixel.y() - height / 2));
 		}
 
-		PhysicRenderer.getInstance().shapes.add(x);
-		PhysicRenderer.getInstance().shapes.add(vec);
+		//PhysicRenderer.getInstance().shapes.add(x);
+		//PhysicRenderer.getInstance().shapes.add(vec);
 
 		vec[convexGrahamPoints.size()] = vec[0];
 
 		Shape[] shapes2 = devideShape(vec, getCenter(vec));
-		//		Shape[] shapes2 = devideShape(vec, PhysicWorldConverter.vecCatToBox2d(center));
 
 		shapes.put(key, shapes2);
 
@@ -166,6 +155,7 @@ public class PhysicShapeBuilder {
 
 			tempshape.set(reverse);
 			shapes[j / 6] = tempshape;
+			PhysicRenderer.getInstance().polyShape.add(tempshape);
 		}
 
 		return shapes;
