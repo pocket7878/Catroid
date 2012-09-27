@@ -18,6 +18,9 @@
  */
 package at.tugraz.ist.catroid.physics;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +56,7 @@ public class PhysicShapeBuilder {
 		width = size[0];
 		height = size[1];
 
-		Vector2[] vec = new Vector2[convexGrahamPoints.size() + 1];
+		Vector2[] vec = new Vector2[convexGrahamPoints.size()];
 
 		for (int i = 0; i < convexGrahamPoints.size(); i++) {
 			Pixel pixel = convexGrahamPoints.get(i);
@@ -71,93 +74,54 @@ public class PhysicShapeBuilder {
 		//PhysicRenderer.getInstance().shapes.add(x);
 		//PhysicRenderer.getInstance().shapes.add(vec);
 
-		vec[convexGrahamPoints.size()] = vec[0];
-
-		Shape[] shapes2 = devideShape(vec, getCenter(vec));
+		Shape[] shapes2 = devideShape(vec);
 
 		shapes.put(key, shapes2);
 
 		return shapes2;
 	}
 
-	private Vector2 getCenter(Vector2[] vertices) {
-		Vector2 min = new Vector2(vertices[0]);
-		Vector2 max = new Vector2(vertices[0]);
-		for (Vector2 vertex : vertices) {
-			if (vertex.x < min.x) {
-				min.x = vertex.x;
-			} else if (vertex.x > max.x) {
-				max.x = vertex.x;
-			}
+	private Shape[] devideShape(Vector2[] convexpoints) {
 
-			if (vertex.y < min.y) {
-				min.y = vertex.y;
-			} else if (vertex.y > max.y) {
-				max.y = vertex.y;
-			}
+		if (convexpoints.length < 9) {
+			List<Vector2> x = Arrays.asList(convexpoints);
+			Collections.reverse(x);
+
+			PolygonShape polygon = new PolygonShape();
+			polygon.set(x.toArray(new Vector2[x.size()]));
+			return new Shape[] { polygon };
 		}
 
-		return new Vector2((max.x + min.x) / 2.0f, (max.y + min.y) / 2.0f);
+		List<Shape> shapes = new ArrayList<Shape>(convexpoints.length / 6 + 1);
+		List<Vector2> pointsPerShape = new ArrayList<Vector2>(8);
+
+		Vector2 rome = convexpoints[0];
+		int index = 1;
+		while (index < convexpoints.length - 1) {
+			int k = index + 7;
+
+			int remainingPointsCount = convexpoints.length - index;
+			if (remainingPointsCount > 7 && remainingPointsCount < 9) {
+				k -= 3;
+			}
+
+			pointsPerShape.add(rome);
+			for (; index < k && index < convexpoints.length; index++) {
+				pointsPerShape.add(convexpoints[index]);
+			}
+
+			if (index < convexpoints.length) {
+				index--;
+			}
+			Collections.reverse(pointsPerShape);
+
+			PolygonShape polygon = new PolygonShape();
+			polygon.set(pointsPerShape.toArray(new Vector2[pointsPerShape.size()]));
+			shapes.add(polygon);
+
+			pointsPerShape.clear();
+		}
+
+		return shapes.toArray(new Shape[shapes.size()]);
 	}
-
-	private Shape[] devideShape(Vector2[] convexpoints, Vector2 center) {
-
-		int size = convexpoints.length / 6;
-		if (convexpoints.length % 6 > 0) {
-			size += 1;
-		}
-
-		Shape[] shapes = new Shape[size];
-
-		Vector2 start = convexpoints[0];
-		PolygonShape tempshape;
-		int containersize = 8;
-		Vector2[] tempVertices;
-
-		for (int j = 0; j < convexpoints.length; j += 6) {
-
-			tempshape = new PolygonShape();
-			int i = 0;
-
-			if (convexpoints.length - j > 5) {
-				tempVertices = new Vector2[containersize];
-				i = 7;
-
-			} else {
-				tempVertices = new Vector2[convexpoints.length - j + 1];
-				i = convexpoints.length - j;
-
-				if (i < 2) {
-					Shape[] shapesSizeMinusOne = new Shape[shapes.length - 1];
-					for (int index = 0; index < shapesSizeMinusOne.length; index++) {
-						shapesSizeMinusOne[index] = shapes[index];
-					}
-					shapes = shapesSizeMinusOne;
-					break;
-				}
-			}
-
-			tempVertices[0] = start;
-			int k;
-			for (k = 1; k < i; k++) {
-				tempVertices[k] = convexpoints[j + k];
-			}
-			tempVertices[k] = center;
-
-			start = tempVertices[k - 1];
-
-			Vector2[] reverse = new Vector2[tempVertices.length];
-			int l = tempVertices.length - 1;
-			for (Vector2 vector : tempVertices) {
-				reverse[l] = vector;
-				l--;
-			}
-
-			tempshape.set(reverse);
-			shapes[j / 6] = tempshape;
-			PhysicRenderer.instance.shapes.add((PolygonShape) shapes[0]);
-		}
-		return shapes;
-	}
-
 }

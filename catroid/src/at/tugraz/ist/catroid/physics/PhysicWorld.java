@@ -104,7 +104,9 @@ public class PhysicWorld implements Serializable {
 			return physicObjects.get(sprite);
 		}
 
-		PhysicObject physicObject = new PhysicObject(world.createBody(new BodyDef()));
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.bullet = true;
+		PhysicObject physicObject = new PhysicObject(world.createBody(bodyDef));
 		physicObjects.put(sprite, physicObject);
 
 		return physicObject;

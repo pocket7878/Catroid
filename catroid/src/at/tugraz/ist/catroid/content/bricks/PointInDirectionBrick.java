@@ -32,7 +32,6 @@ import android.widget.Spinner;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.physics.PhysicWorld;
-import at.tugraz.ist.catroid.physics.PhysicWorldConverter;
 
 public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 
@@ -87,8 +86,8 @@ public class PointInDirectionBrick implements Brick, OnItemSelectedListener {
 		sprite.costume.setRotation((float) (-degrees + degreeOffset));
 
 		if (physicWorld.isPhysicObject(sprite)) {
-			physicWorld.getPhysicObject(sprite).setAngle(
-					PhysicWorldConverter.angleCatToBox2d((float) (-degrees + degreeOffset)));
+			float mukku = 0.0f;
+			physicWorld.getPhysicObject(sprite).setAngle(mukku);
 		} else {
 			sprite.costume.setRotation((float) (-degrees + degreeOffset));
 		}
