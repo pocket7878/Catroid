@@ -166,6 +166,24 @@ public class FormulaElement implements Serializable {
 				if (value.equals(Operators.POW.operatorName)) {
 					returnValue = java.lang.Math.pow(left, right);
 				}
+				if (value.equals(Operators.EQUAL.operatorName)) {
+					returnValue = left.equals(right) ? 1d : 0d; //TODO Double equality, may round first?
+				}
+				if (value.equals(Operators.NOT_EQUAL.operatorName)) {
+					returnValue = left.equals(right) ? 0d : 1d;//TODO Double equality, may round first?
+				}
+				if (value.equals(Operators.GREATER_THAN.operatorName)) {
+					returnValue = left.compareTo(right) > 0 ? 1d : 0d;
+				}
+				if (value.equals(Operators.SMALLER_THAN.operatorName)) {
+					returnValue = left.compareTo(right) < 0 ? 1d : 0d;
+				}
+				if (value.equals(Operators.LOGICAL_AND.operatorName)) {
+					returnValue = (left * right) != 0d ? 1d : 0d;
+				}
+				if (value.equals(Operators.LOGICAL_OR.operatorName)) {
+					returnValue = left != 0d && right != 0d ? 1d : 0d;
+				}
 			} else {//unary operators
 				Double right = rightChild.interpretRecursive();
 				//				if (value.equals("+")) {

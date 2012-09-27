@@ -318,6 +318,7 @@
     <string name="formula_editor_parse_fail">Error in the input! Fix or press again to discard.</string>
     <string name="formula_nothing_selected">Define the brick´s input value</string>
     <string name="formula_editor_parse_fail_formula_too_long">Formula too long! Fix or press again to discard.</string>
+    <string name="formula_editor_choose_costume_variable">Choose your Costume Variable:</string>
     <string name="formula_editor_function_sin">sin</string>
 	<string name="formula_editor_function_cos">cos</string>
 	<string name="formula_editor_function_tan">tan</string>

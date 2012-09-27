@@ -51,6 +51,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.ui.dialogs.ChooseCostumeVariableFragment;
+import at.tugraz.ist.catroid.ui.dialogs.FormulaEditorChooseOperatorDialog;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
@@ -67,6 +68,7 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 	private Keyboard symbolsSensors;
 	private Context context;
 	private ChooseCostumeVariableFragment chooseSpriteVariablesFragment;
+	private FormulaEditorChooseOperatorDialog chooseOperatorDialogFragment;
 	private View swipeBar;
 
 	public CatKeyboardView(Context context, AttributeSet attrs) {
@@ -94,12 +96,23 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 				"chooseSpriteVariablesDialogFragment") == null) {
 			this.chooseSpriteVariablesFragment = ChooseCostumeVariableFragment
 					.newInstance(android.R.string.dialog_alert_title);
-			this.chooseSpriteVariablesFragment.setCatKeyboardView(this);
+
 		} else {
 			this.chooseSpriteVariablesFragment = (ChooseCostumeVariableFragment) ((SherlockFragmentActivity) context)
 					.getSupportFragmentManager().findFragmentByTag("chooseSpriteVariablesDialogFragment");
-			this.chooseSpriteVariablesFragment.setCatKeyboardView(this);
 		}
+		this.chooseSpriteVariablesFragment.setCatKeyboardView(this);
+
+		if (((SherlockFragmentActivity) context).getSupportFragmentManager().findFragmentByTag(
+				"chooseOperatorDialogFragment") == null) {
+			this.chooseOperatorDialogFragment = FormulaEditorChooseOperatorDialog
+					.newInstance(android.R.string.dialog_alert_title);
+
+		} else {
+			this.chooseOperatorDialogFragment = (FormulaEditorChooseOperatorDialog) ((SherlockFragmentActivity) context)
+					.getSupportFragmentManager().findFragmentByTag("chooseOperatorDialogFragment");
+		}
+		this.chooseOperatorDialogFragment.setCatKeyboardView(this);
 
 		//		LayoutParams relative = new LayoutParams(source);
 		//		this.symbols.setShifted(false);
@@ -199,6 +212,11 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 				this.chooseSpriteVariablesFragment.show(
 						((SherlockFragmentActivity) context).getSupportFragmentManager(),
 						"chooseSpriteVariablesDialogFragment");
+				break;
+			case KeyEvent.KEYCODE_MENU:
+				this.chooseOperatorDialogFragment.show(
+						((SherlockFragmentActivity) context).getSupportFragmentManager(),
+						"chooseOperatorDialogFragment");
 				break;
 			default:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, primaryCode));

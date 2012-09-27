@@ -69,6 +69,13 @@ public class CatKeyEvent extends KeyEvent {
 	public static final int KEYCODE_COSTUME_ROTATION = 1207;
 	public static final int KEYCODE_COSTUME_LAYER = 1208;
 
+	/* OPERATORS */
+	public static final int KEYCODE_NOT_EQUAL = 1300;
+	public static final int KEYCODE_SMALLER_THAN = 1301;
+	public static final int KEYCODE_GREATER_THAN = 1302;
+	public static final int KEYCODE_LOGICAL_AND = 1303;
+	public static final int KEYCODE_LOGICAL_OR = 1304;
+
 	// Please update the functions of this class if you add new KEY_CODE constants ^_^
 
 	/**
@@ -146,6 +153,18 @@ public class CatKeyEvent extends KeyEvent {
 				return buildOperator(Operators.DIVIDE);
 			case CatKeyEvent.KEYCODE_POWER:
 				return buildOperator(Operators.POW);
+			case CatKeyEvent.KEYCODE_EQUALS:
+				return buildOperator(Operators.EQUAL);
+			case CatKeyEvent.KEYCODE_NOT_EQUAL:
+				return buildOperator(Operators.NOT_EQUAL);
+			case CatKeyEvent.KEYCODE_SMALLER_THAN:
+				return buildOperator(Operators.SMALLER_THAN);
+			case CatKeyEvent.KEYCODE_GREATER_THAN:
+				return buildOperator(Operators.GREATER_THAN);
+			case CatKeyEvent.KEYCODE_LOGICAL_AND:
+				return buildOperator(Operators.LOGICAL_AND);
+			case CatKeyEvent.KEYCODE_LOGICAL_OR:
+				return buildOperator(Operators.LOGICAL_OR);
 
 				//BRACKET
 

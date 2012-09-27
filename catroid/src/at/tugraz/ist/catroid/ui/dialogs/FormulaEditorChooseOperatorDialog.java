@@ -22,25 +22,37 @@
  */
 package at.tugraz.ist.catroid.ui.dialogs;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.ArrayAdapter;
 import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.formulaeditor.CatKeyEvent;
 import at.tugraz.ist.catroid.formulaeditor.CatKeyboardView;
+import at.tugraz.ist.catroid.formulaeditor.Operators;
 
-public class ChooseCostumeVariableFragment extends DialogFragment implements DialogInterface.OnClickListener {
+public class FormulaEditorChooseOperatorDialog extends DialogFragment implements DialogInterface.OnClickListener {
 
 	private CatKeyboardView catKeyboardView;
-	private final Integer[] costumeResourceIds = { R.string.formula_editor_costume_x,
-			R.string.formula_editor_costume_y, R.string.formula_editor_costume_ghosteffect,
-			R.string.formula_editor_costume_brightness, R.string.formula_editor_costume_size,
-			R.string.formula_editor_costume_rotation, R.string.formula_editor_costume_layer };
+	private final String[] operatorNames = { Operators.GREATER_THAN.operatorName, Operators.SMALLER_THAN.operatorName,
+			Operators.EQUAL.operatorName, Operators.NOT_EQUAL.operatorName, Operators.LOGICAL_AND.operatorName,
+			Operators.LOGICAL_OR.operatorName };
 	private static final int CANCEL_INDEX = -2;
+	private static final Map<String, Integer> indexToKeyCode = new HashMap<String, Integer>();
+	static {
+		indexToKeyCode.put(Operators.GREATER_THAN.operatorName, CatKeyEvent.KEYCODE_GREATER_THAN);
+		indexToKeyCode.put(Operators.SMALLER_THAN.operatorName, CatKeyEvent.KEYCODE_SMALLER_THAN);
+		indexToKeyCode.put(Operators.EQUAL.operatorName, KeyEvent.KEYCODE_EQUALS);
+		indexToKeyCode.put(Operators.NOT_EQUAL.operatorName, CatKeyEvent.KEYCODE_NOT_EQUAL);
+		indexToKeyCode.put(Operators.LOGICAL_AND.operatorName, CatKeyEvent.KEYCODE_LOGICAL_AND);
+		indexToKeyCode.put(Operators.LOGICAL_OR.operatorName, CatKeyEvent.KEYCODE_LOGICAL_OR);
+	}
 
 	@Override
 	public void onClick(DialogInterface dialog, int index) {
@@ -48,18 +60,23 @@ public class ChooseCostumeVariableFragment extends DialogFragment implements Dia
 			this.dismiss();
 			return;
 		}
-		Log.v("touched: ", "" + index);
-		Log.v("touched: ", costumeResourceIds[index].toString());
 
-		int[] keyCode = new int[1];
-		keyCode[0] = 0;
+		if (index < 0 || index >= operatorNames.length) {
+			return;
+		}
 
-		catKeyboardView.onKey(CatKeyEvent.KEYCODE_COSTUME_X + index, keyCode);
+		Integer keyCode = indexToKeyCode.get(operatorNames[index]);
+
+		if (keyCode == null) {
+			return;
+		}
+
+		catKeyboardView.onKey(keyCode, null);
 
 	}
 
-	public static ChooseCostumeVariableFragment newInstance(int title) {
-		ChooseCostumeVariableFragment fragment = new ChooseCostumeVariableFragment();
+	public static FormulaEditorChooseOperatorDialog newInstance(int title) {
+		FormulaEditorChooseOperatorDialog fragment = new FormulaEditorChooseOperatorDialog();
 
 		return fragment;
 	}
@@ -73,19 +90,12 @@ public class ChooseCostumeVariableFragment extends DialogFragment implements Dia
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-		String[] costumeNames = new String[costumeResourceIds.length];
-		int index = 0;
-		for (Integer costumeResourceID : costumeResourceIds) {
-			costumeNames[index] = getString(costumeResourceID);
-			index++;
-		}
-
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setTitle(getString(R.string.formula_editor_choose_costume_variable));
+		//		builder.setTitle(getString(R.string.formula_editor_choose_costume_variable));
 		builder.setNegativeButton(getString(R.string.cancel_button), this);
 
 		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_list_item_1, costumeNames);
+				android.R.layout.simple_list_item_1, operatorNames);
 
 		builder.setAdapter(arrayAdapter, this);
 

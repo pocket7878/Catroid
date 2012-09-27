@@ -41,6 +41,7 @@ public class SensorManager {
 		}
 		Double sensorValue = 0.0;
 		if (sensorName.equals(Sensors.X_ACCELERATION_.sensorName)) {
+
 			sensorValue = Double.valueOf(sensors.getAccelerometerX());
 		}
 		if (sensorName.equals(Sensors.Y_ACCELERATION_.sensorName)) {

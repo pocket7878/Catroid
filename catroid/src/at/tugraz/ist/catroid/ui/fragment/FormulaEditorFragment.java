@@ -334,6 +334,9 @@ public class FormulaEditorFragment extends SherlockFragment implements OnKeyList
 				case KeyEvent.KEYCODE_BACK:
 					endFormulaEditor();
 					break;
+				case KeyEvent.KEYCODE_MENU:
+					catKeyboardView.onKey(KeyEvent.KEYCODE_MENU, null);//TODO just for debugging
+					break;
 				default:
 					break;
 			}

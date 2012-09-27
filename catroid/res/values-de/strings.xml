@@ -320,6 +320,7 @@
     <string name="formula_editor_parse_fail">Fehler in der Eingabe! Zum Verwerfen erneut klicken.</string>
     <string name="formula_nothing_selected">Bitte Wert eingeben!</string>
     <string name="formula_editor_parse_fail_formula_too_long">Formel zu lang! Zum Verwerfen erneut klicken.</string>
+    <string name="formula_editor_choose_costume_variable">Kostüm Variable auswählen:</string>
     <string name="formula_editor_function_sin">sin</string>
 	<string name="formula_editor_function_cos">cos</string>
 	<string name="formula_editor_function_tan">tan</string>
