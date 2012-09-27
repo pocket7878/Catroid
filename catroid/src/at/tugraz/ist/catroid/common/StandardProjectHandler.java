@@ -111,14 +111,15 @@ public class StandardProjectHandler {
 		final String leftButtonPressed = "Left button pressed";
 		final String rightButtonPressed = "Right button pressed";
 
-		final float armMovingSpeed = 800;
+		final float armMovingSpeed = 1000.0f;
+		float doodlydoo = 50.0f;
 
 		// Background
 		createElement(background, physicWorld, "background_480_800", R.drawable.background_480_800, new Vector2());
 
 		// Ball
 		createElement(ball, physicWorld, "pinball", R.drawable.pinball, new Vector2(-100.0f, 300.0f));
-		setPhysicProperties(ball, physicWorld, Type.DYNAMIC, 80.0f, 0.0f);
+		setPhysicProperties(ball, physicWorld, Type.DYNAMIC, 20.0f, 0.0f);
 
 		// Buttons
 		createElement(leftButton, physicWorld, "button", R.drawable.button, new Vector2(-175.0f, -340.0f));
@@ -128,7 +129,7 @@ public class StandardProjectHandler {
 
 		// Arms
 		createElement(leftArm, physicWorld, "left_arm", R.drawable.left_arm, new Vector2(-77.0f, -305.0f));
-		setPhysicProperties(leftArm, physicWorld, Type.DYNAMIC, -1.0f, -1.0f);
+		setPhysicProperties(leftArm, physicWorld, Type.FIXED, -1.0f, -1.0f);
 		createMovingArm(leftArm, leftButtonPressed, physicWorld, armMovingSpeed);
 		createElement(rightArm, physicWorld, "right_arm", R.drawable.right_arm, new Vector2(77.0f, -305.0f));
 		setPhysicProperties(rightArm, physicWorld, Type.FIXED, -1.0f, -1.0f);
@@ -152,65 +153,54 @@ public class StandardProjectHandler {
 		// Hard Bouncer
 		createElement(leftHardBouncer, physicWorld, "left_hard_bouncer", R.drawable.left_hard_bouncer, new Vector2(
 				-140.0f, -165.0f));
-		setPhysicProperties(leftHardBouncer, physicWorld, Type.FIXED, 140.0f, -1.0f);
+		setPhysicProperties(leftHardBouncer, physicWorld, Type.FIXED, 70.0f, -1.0f);
 		createElement(rightHardBouncer, physicWorld, "right_hard_bouncer", R.drawable.right_hard_bouncer, new Vector2(
 				140.0f, -165.0f));
-		setPhysicProperties(rightHardBouncer, physicWorld, Type.FIXED, 140.0f, -1.0f);
+		setPhysicProperties(rightHardBouncer, physicWorld, Type.FIXED, 70.0f, -1.0f);
 
 		// Lower wool bouncers
-		Vector2[] lowerBouncersPositions = { new Vector2(-100.0f, -80.0f), new Vector2(0.0f, -140.0f),
-				new Vector2(100.0f, -80.0f) };
+		Vector2[] lowerBouncersPositions = { new Vector2(-100.0f, -80.0f + doodlydoo),
+				new Vector2(0.0f, -140.0f + doodlydoo), new Vector2(100.0f, -80.0f + doodlydoo) };
 		for (int index = 0; index < lowerBouncers.length; index++) {
 			createElement(lowerBouncers[index], physicWorld, "wolle_bouncer", R.drawable.wolle_bouncer,
 					lowerBouncersPositions[index]);
-			setPhysicProperties(lowerBouncers[index], physicWorld, Type.FIXED, 124.0f, -1.0f);
+			setPhysicProperties(lowerBouncers[index], physicWorld, Type.FIXED, 120.0f, -1.0f);
 		}
 
 		// Middle bouncer
 		createElement(middleBouncer, physicWorld, "middle_cat_bouncer", R.drawable.middle_cat_bouncer, new Vector2(
-				0.0f, 75.0f));
-		setPhysicProperties(middleBouncer, physicWorld, Type.FIXED, -1.0f, 110.0f);
+				0.0f, 75.0f + doodlydoo));
+		setPhysicProperties(middleBouncer, physicWorld, Type.FIXED, -1.0f, 40.0f);
 
 		// Upper bouncers
-		Vector2[] upperBouncersPositions = { new Vector2(0.0f, 240.f), new Vector2(150.0f, 200.0f) };
+		Vector2[] upperBouncersPositions = { new Vector2(0.0f, 240.f + doodlydoo),
+				new Vector2(150.0f, 200.0f + doodlydoo) };
 		for (int index = 0; index < upperBouncers.length; index++) {
 			createElement(upperBouncers[index], physicWorld, "cat_bouncer", R.drawable.cat_bouncer,
 					upperBouncersPositions[index]);
 			setPhysicProperties(upperBouncers[index], physicWorld, Type.FIXED, 110.0f, -1.0f);
 		}
 
-<<<<<<< HEAD
-=======
-		defaultProject.getSpriteList().clear();
->>>>>>> 50dbbb6a32189c8334fbce5e6fbbe1fb2e109660
-		//		defaultProject.addSprite(ball);
-		//		defaultProject.addSprite(leftButton);
-		//		defaultProject.addSprite(rightButton);
+		defaultProject.addSprite(ball);
+		defaultProject.addSprite(leftButton);
+		defaultProject.addSprite(rightButton);
 		defaultProject.addSprite(leftArm);
-<<<<<<< HEAD
-		// defaultProject.addSprite(rightArm);
-=======
-		//		defaultProject.addSprite(rightArm);
->>>>>>> 50dbbb6a32189c8334fbce5e6fbbe1fb2e109660
-		//		defaultProject.addSprite(middleBouncer);
-		//		defaultProject.addSprite(leftHardBouncer);
-		//		defaultProject.addSprite(rightHardBouncer);
-		//		defaultProject.addSprite(leftVerticalWall);
-		//		defaultProject.addSprite(leftBottomWall);
-		//		defaultProject.addSprite(rightVerticalWall);
-		//		defaultProject.addSprite(rightBottomWall);
-<<<<<<< HEAD
+		defaultProject.addSprite(rightArm);
+		defaultProject.addSprite(middleBouncer);
+		defaultProject.addSprite(leftHardBouncer);
+		defaultProject.addSprite(rightHardBouncer);
+		defaultProject.addSprite(leftVerticalWall);
+		defaultProject.addSprite(leftBottomWall);
+		defaultProject.addSprite(rightVerticalWall);
+		defaultProject.addSprite(rightBottomWall);
 
-=======
-		//
->>>>>>> 50dbbb6a32189c8334fbce5e6fbbe1fb2e109660
-		//		for (Sprite sprite : upperBouncers) {
-		//			defaultProject.addSprite(sprite);
-		//		}
-		//
-		//		for (Sprite sprite : lowerBouncers) {
-		//			defaultProject.addSprite(sprite);
-		//		}
+		for (Sprite sprite : upperBouncers) {
+			defaultProject.addSprite(sprite);
+		}
+
+		for (Sprite sprite : lowerBouncers) {
+			defaultProject.addSprite(sprite);
+		}
 
 		return defaultProject;
 	}
@@ -240,11 +230,11 @@ public class StandardProjectHandler {
 
 		startScript.addBrick(new SetPhysicObjectTypeBrick(physicWorld, sprite, type));
 
-		if (bounce < 0.0f) {
+		if (bounce >= 0.0f) {
 			startScript.addBrick(new SetBounceFactorBrick(physicWorld, sprite, bounce));
 		}
 
-		if (friction < 0.0f) {
+		if (friction >= 0.0f) {
 			startScript.addBrick(new SetFrictionBrick(physicWorld, sprite, friction));
 		}
 
@@ -269,7 +259,7 @@ public class StandardProjectHandler {
 		BroadcastScript broadcastScript = new BroadcastScript(sprite);
 		broadcastScript.setBroadcastMessage(broadcastMessage);
 
-		int waitInMillis = 110;
+		int waitInMillis = 80;
 
 		broadcastScript.addBrick(new TurnLeftSpeedBrick(physicWorld, sprite, degreeSpeed));
 		broadcastScript.addBrick(new WaitBrick(sprite, waitInMillis));

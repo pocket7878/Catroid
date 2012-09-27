@@ -34,21 +34,12 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
  * 
  */
 public class PhysicRenderer {
-	private final ShapeRenderer renderer = new ShapeRenderer();
-	public final List<Vector2[]> shapes = new ArrayList<Vector2[]>();
-	public List<PolygonShape> polyShape = new ArrayList<PolygonShape>();
-
-	private static PhysicRenderer instance = null;
-	private Color[] color = new Color[] { new Color(0, 255, 0, 1), new Color(255, 255, 0, 1), new Color(255, 0, 0, 1),
-			new Color(255, 0, 255, 1), new Color(0, 0, 255, 1), new Color(0, 255, 255, 1), new Color(255, 255, 255, 1),
-			new Color(0, 0, 0, 1) };
-
-	public static synchronized PhysicRenderer getInstance() {
-		if (instance == null) {
-			instance = new PhysicRenderer();
-		}
-		return instance;
-	}
+	public ShapeRenderer renderer = null;
+	public static PhysicRenderer instance = new PhysicRenderer();
+	public List<PolygonShape> shapes = new ArrayList<PolygonShape>();
+	private Color[] color = new Color[] { new Color(0, 1, 0, 1), new Color(1, 1, 0, 1), new Color(1, 0, 0, 1),
+			new Color(1, 0, 1, 1), new Color(0, 0, 1, 1), new Color(0, 1, 1, 1), new Color(1, 1, 1, 1),
+			new Color(1, 0.5f, 0, 1) };
 
 	//	public void render(Matrix4 perspectiveMatrix, Collection<Body> bodies) {
 	//		renderer.setProjectionMatrix(perspectiveMatrix);
@@ -75,56 +66,43 @@ public class PhysicRenderer {
 	//			}
 	//		}
 	//	}
-	//
+
 	public void render(Matrix4 perspectiveMatrix) {
 		renderer.setProjectionMatrix(perspectiveMatrix);
 
-		//		for (PolygonShape shape : shapes) {
-		//			renderer.identity();
-		//			draw(shape);
-		//		}
-
-		for (PolygonShape poly : polyShape) {
-			renderer.identity();
-			renderer.begin(ShapeType.Line);
-			draw(poly);
-			renderer.end();
+		renderer.identity();
+		for (PolygonShape shape : shapes) {
+			draw(shape);
 		}
 	}
-
-	//		private void draw(Vector2[] points) {
-	//			int index;
-	//			for (index = 0; index < points.length - 1; index++) {
-	//				drawLine(points[index], points[index + 1]);
-	//			}
-	//			drawLine(points[index], points[0]);
-	//		}
 
 	private void draw(PolygonShape polygon) {
 		renderer.begin(ShapeType.Line);
 
+		float multiplier = 4.0f;
 		Vector2 from = new Vector2();
 		Vector2 to = new Vector2();
 		int index = 0;
 		for (index = 0; index < polygon.getVertexCount() - 1; index++) {
 			polygon.getVertex(index, from);
 			polygon.getVertex(index + 1, to);
+			from.mul(multiplier);
+			to.mul(multiplier);
 			drawLine(from, to, index);
 		}
-		from = to.cpy();
+		from = new Vector2(to);
 		polygon.getVertex(0, to);
+		to.mul(multiplier);
 		drawLine(from, to, index);
 
 		renderer.end();
 	}
 
 	private void drawLine(Vector2 from, Vector2 to, int index) {
+		renderer.setColor(color[index]);
 		from = PhysicWorldConverter.vecBox2dToCat(from);
 		to = PhysicWorldConverter.vecBox2dToCat(to);
-
-		renderer.setColor(color[index]);
 		renderer.line(from.x, from.y, to.x, to.y);
-
 	}
 
 	private void draw(CircleShape circle) {

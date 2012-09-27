@@ -38,7 +38,6 @@ import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.io.SoundManager;
 import at.tugraz.ist.catroid.physics.PhysicObjectConverter;
-import at.tugraz.ist.catroid.physics.PhysicRenderer;
 import at.tugraz.ist.catroid.physics.PhysicSettings;
 import at.tugraz.ist.catroid.ui.dialogs.StageDialog;
 import at.tugraz.ist.catroid.utils.Utils;
@@ -347,8 +346,7 @@ public class StageListener implements ApplicationListener {
 		}
 
 		if (PhysicSettings.Render.RENDER_COLLISION_FRAMES && !finished) {
-			//project.getPhysicWorld().render(camera.combined);
-			PhysicRenderer.getInstance().render(camera.combined);
+			//			project.getPhysicWorld().render(camera.combined);
 		}
 
 		if (DEBUG) {

@@ -155,9 +155,8 @@ public class PhysicShapeBuilder {
 
 			tempshape.set(reverse);
 			shapes[j / 6] = tempshape;
-			PhysicRenderer.getInstance().polyShape.add(tempshape);
+			PhysicRenderer.instance.shapes.add((PolygonShape) shapes[0]);
 		}
-
 		return shapes;
 	}
 
