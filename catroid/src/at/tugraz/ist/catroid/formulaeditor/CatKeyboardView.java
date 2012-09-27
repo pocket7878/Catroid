@@ -189,215 +189,24 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 		CatKeyEvent cKE = null;
 
 		switch (primaryCode) {
-			case KeyEvent.KEYCODE_0:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_0));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_1:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_1));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_2:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_2));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_3:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_3));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_4:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_4));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_5:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_5));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_6:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_6));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_7:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_7));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_8:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_8));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_9:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_9));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_DEL:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_COMMA:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_COMMA));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_PLUS:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_PLUS));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_MINUS:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MINUS));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_STAR:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_STAR));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_SLASH:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SLASH));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_PERIOD:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_PERIOD));
-				editText.handleKeyEvent(cKE);
-				break;
-			case KeyEvent.KEYCODE_POWER:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_POWER));
-				editText.handleKeyEvent(cKE);
-				break;
 			case KeyEvent.KEYCODE_SHIFT_RIGHT:
 				this.swipeRight();
 				break;
 			case KeyEvent.KEYCODE_SHIFT_LEFT:
 				this.swipeLeft();
 				break;
-			case CatKeyEvent.KEYCODE_SPACE:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SPACE));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_SIN:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SIN));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_COS:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COS));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_TAN:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_TAN));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_LN:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_LN));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_LOG:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_LOG));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_PI:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_PI));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_SQUAREROOT:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SQUAREROOT));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_EULER:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_EULER));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_RANDOM:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_RANDOM));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_ABS:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_ABS));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_ROUND:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_ROUND));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_SENSOR1:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SENSOR1));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_SENSOR2:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SENSOR2));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_SENSOR3:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SENSOR3));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_SENSOR4:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SENSOR4));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_SENSOR5:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SENSOR5));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_SENSOR6:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SENSOR6));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_SENSOR7:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_SENSOR7));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_BRACKET:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_BRACKET));
-				editText.handleKeyEvent(cKE);
-				break;
 			case CatKeyEvent.KEYCODE_COSTUME_BUTTON:
 				this.chooseSpriteVariablesFragment.show(
 						((SherlockFragmentActivity) context).getSupportFragmentManager(),
 						"chooseSpriteVariablesDialogFragment");
 				break;
-			case CatKeyEvent.KEYCODE_COSTUME_X:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_X));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_COSTUME_Y:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_Y));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_COSTUME_GHOSTEFFECT:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_GHOSTEFFECT));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_COSTUME_BRIGHTNESS:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_BRIGHTNESS));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_COSTUME_SIZE:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_SIZE));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_COSTUME_ROTATION:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_ROTATION));
-				editText.handleKeyEvent(cKE);
-				break;
-			case CatKeyEvent.KEYCODE_COSTUME_LAYER:
-				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, CatKeyEvent.KEYCODE_COSTUME_LAYER));
+			default:
+				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, primaryCode));
 				editText.handleKeyEvent(cKE);
 				break;
 		}
 
 	}
-
-	//	private void handleKeyboardChange() {
-	//		if (this.getKeyboard() == this.symbolsNumbers) {
-	//			this.setKeyboard(this.symbolsFunctions);
-	//			return;
-	//		}
-	//		if (this.getKeyboard() == this.symbolsFunctions) {
-	//			this.setKeyboard(this.symbolsSensors);
-	//			return;
-	//		}
-	//		if (this.getKeyboard() == this.symbolsSensors) {
-	//			this.setKeyboard(this.symbolsNumbers);
-	//			return;
-	//		}
-	//	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

@@ -29,18 +29,17 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import at.tugraz.ist.catroid.R;
 import at.tugraz.ist.catroid.formulaeditor.CatKeyEvent;
 import at.tugraz.ist.catroid.formulaeditor.CatKeyboardView;
 
-/**
- * @author obusher
- * 
- */
 public class ChooseCostumeVariableFragment extends DialogFragment implements DialogInterface.OnClickListener {
 
 	private CatKeyboardView catKeyboardView;
-	private final String[] items = { "COSTUME_X_", "COSTUME_Y_", "COSTUME_GHOSTEFFECT_", "COSTUME_BRIGHTNESS_",
-			"COSTUME_SIZE_", "COSTUME_ROTATION_", "COSTUME_LAYER_" };
+	private final Integer[] costumeResourceIds = { R.string.formula_editor_costume_x,
+			R.string.formula_editor_costume_y, R.string.formula_editor_costume_ghosteffect,
+			R.string.formula_editor_costume_brightness, R.string.formula_editor_costume_size,
+			R.string.formula_editor_costume_rotation, R.string.formula_editor_costume_layer };
 	private static final int CANCEL_INDEX = -2;
 
 	@Override
@@ -50,17 +49,10 @@ public class ChooseCostumeVariableFragment extends DialogFragment implements Dia
 			return;
 		}
 		Log.v("touched: ", "" + index);
-		Log.v("touched: ", items[index].toString());
+		Log.v("touched: ", costumeResourceIds[index].toString());
 
 		int[] keyCode = new int[1];
 		keyCode[0] = 0;
-
-		//		if (catKeyboardView == null) {
-		//			Log.i("info", "catKeyboardView == null");
-		//		}
-		//
-		//		Log.i("info", "fuuuuuuuuuuuuuuuuuuuuuuuuu catKeyboardView: " + catKeyboardView
-		//				+ "\n ChooseCostumeDialogFragment: " + this);
 
 		catKeyboardView.onKey(CatKeyEvent.KEYCODE_COSTUME_X + index, keyCode);
 
@@ -69,9 +61,6 @@ public class ChooseCostumeVariableFragment extends DialogFragment implements Dia
 	public static ChooseCostumeVariableFragment newInstance(int title) {
 		ChooseCostumeVariableFragment fragment = new ChooseCostumeVariableFragment();
 
-		//		Bundle arguments = new Bundle();
-		//		arguments.putInt("title", title);
-		//		fragment.setArguments(arguments);
 		return fragment;
 	}
 
@@ -79,19 +68,24 @@ public class ChooseCostumeVariableFragment extends DialogFragment implements Dia
 	public void onCreate(Bundle bundle) {
 		super.onCreate(bundle);
 		setCancelable(true);
-		//		int style = DialogFragment.STYLE_NORMAL;
-		//		int theme = 0;
-		//		setStyle(style, theme);
 	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+		String[] costumeNames = new String[costumeResourceIds.length];
+		int index = 0;
+		for (Integer costumeResourceID : costumeResourceIds) {
+			costumeNames[index] = getString(costumeResourceID);
+			index++;
+		}
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(new String("Choose your Costume Variable:"));
 		builder.setNegativeButton("Cancel", this);
 
 		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),
-				android.R.layout.simple_list_item_1, items);
+				android.R.layout.simple_list_item_1, costumeNames);
 
 		builder.setAdapter(arrayAdapter, this);
 
@@ -100,8 +94,6 @@ public class ChooseCostumeVariableFragment extends DialogFragment implements Dia
 	}
 
 	public void setCatKeyboardView(CatKeyboardView catKeyboardView) {
-		Log.i("info", "ChooseCostumeVariableFragment.setCatKeyboardView() catKeyboardView= " + catKeyboardView
-				+ "\n ChooseCostumeDialogFragment: " + this);
 		this.catKeyboardView = catKeyboardView;
 
 	}
