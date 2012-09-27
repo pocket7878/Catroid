@@ -128,7 +128,7 @@ public class StandardProjectHandler {
 
 		// Arms
 		createElement(leftArm, physicWorld, "left_arm", R.drawable.left_arm, new Vector2(-77.0f, -305.0f));
-		setPhysicProperties(leftArm, physicWorld, Type.FIXED, -1.0f, -1.0f);
+		setPhysicProperties(leftArm, physicWorld, Type.DYNAMIC, -1.0f, -1.0f);
 		createMovingArm(leftArm, leftButtonPressed, physicWorld, armMovingSpeed);
 		createElement(rightArm, physicWorld, "right_arm", R.drawable.right_arm, new Vector2(77.0f, -305.0f));
 		setPhysicProperties(rightArm, physicWorld, Type.FIXED, -1.0f, -1.0f);
@@ -179,26 +179,27 @@ public class StandardProjectHandler {
 			setPhysicProperties(upperBouncers[index], physicWorld, Type.FIXED, 110.0f, -1.0f);
 		}
 
-		defaultProject.addSprite(ball);
-		defaultProject.addSprite(leftButton);
-		defaultProject.addSprite(rightButton);
+		defaultProject.getSpriteList().clear();
+		//		defaultProject.addSprite(ball);
+		//		defaultProject.addSprite(leftButton);
+		//		defaultProject.addSprite(rightButton);
 		defaultProject.addSprite(leftArm);
-		defaultProject.addSprite(rightArm);
-		defaultProject.addSprite(middleBouncer);
-		defaultProject.addSprite(leftHardBouncer);
-		defaultProject.addSprite(rightHardBouncer);
-		defaultProject.addSprite(leftVerticalWall);
-		defaultProject.addSprite(leftBottomWall);
-		defaultProject.addSprite(rightVerticalWall);
-		defaultProject.addSprite(rightBottomWall);
-
-		for (Sprite sprite : upperBouncers) {
-			defaultProject.addSprite(sprite);
-		}
-
-		for (Sprite sprite : lowerBouncers) {
-			defaultProject.addSprite(sprite);
-		}
+		//		defaultProject.addSprite(rightArm);
+		//		defaultProject.addSprite(middleBouncer);
+		//		defaultProject.addSprite(leftHardBouncer);
+		//		defaultProject.addSprite(rightHardBouncer);
+		//		defaultProject.addSprite(leftVerticalWall);
+		//		defaultProject.addSprite(leftBottomWall);
+		//		defaultProject.addSprite(rightVerticalWall);
+		//		defaultProject.addSprite(rightBottomWall);
+		//
+		//		for (Sprite sprite : upperBouncers) {
+		//			defaultProject.addSprite(sprite);
+		//		}
+		//
+		//		for (Sprite sprite : lowerBouncers) {
+		//			defaultProject.addSprite(sprite);
+		//		}
 
 		return defaultProject;
 	}
