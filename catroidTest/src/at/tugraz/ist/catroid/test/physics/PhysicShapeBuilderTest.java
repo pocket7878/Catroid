@@ -62,6 +62,7 @@ public class PhysicShapeBuilderTest extends AndroidTestCase {
 	public void testRectangle() {
 
 		Shape[] shapes = builder.getShape(costume.getCostumeData(), 1.0f);
+		assertEquals(1, shapes.length);
 		PolygonShape polyShape = (PolygonShape) shapes[0];//[19/67]
 
 		float[][] points = getRectPointsOfImage();
@@ -74,6 +75,30 @@ public class PhysicShapeBuilderTest extends AndroidTestCase {
 			assertEquals(points[i][0], x);
 			assertEquals(points[i][1], y);
 		}
+	}
+
+	public void testRectangle2() {
+		float scale = 0.5f;
+		Shape[] shapes = builder.getShape(costume.getCostumeData(), scale);
+		assertEquals(1, shapes.length);
+		PolygonShape polyShape = (PolygonShape) shapes[0];//[19/67]
+
+		float[][] points = getRectPointsOfImage();
+
+		Vector2 tempVertex = new Vector2();
+		for (int i = 0; i < polyShape.getVertexCount(); i++) {
+			polyShape.getVertex(i, tempVertex);
+			float x = tempVertex.x;
+			float y = tempVertex.y;
+			assertEquals(points[i][0] * scale, x);
+			assertEquals(points[i][1] * scale, y);
+		}
+	}
+
+	public void testRectangle3() {
+		Shape[] shapes1 = builder.getShape(costume.getCostumeData(), 0.6f);
+		Shape[] shapes2 = builder.getShape(costume.getCostumeData(), 0.6f);
+		assertEquals(shapes1, shapes2);
 	}
 
 	private float[][] getRectPointsOfImage() {

@@ -82,6 +82,11 @@ public class PhysicWorld implements Serializable {
 	}
 
 	public void render(Matrix4 perspectiveMatrix) {
+		//		if (PhysicRenderer.instance.renderer == null) {
+		//			PhysicRenderer.instance.renderer = new ShapeRenderer();
+		//		}
+		//		PhysicRenderer.instance.render(perspectiveMatrix);
+
 		if (renderer == null) {
 			renderer = new Box2DDebugRenderer(PhysicSettings.Render.RENDER_BODIES, PhysicSettings.Render.RENDER_JOINTS,
 					PhysicSettings.Render.RENDER_AABBs, PhysicSettings.Render.RENDER_INACTIVE_BODIES);
@@ -98,7 +103,9 @@ public class PhysicWorld implements Serializable {
 			return physicObjects.get(sprite);
 		}
 
-		PhysicObject physicObject = new PhysicObject(world.createBody(new BodyDef()));
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.bullet = true;
+		PhysicObject physicObject = new PhysicObject(world.createBody(bodyDef));
 		physicObjects.put(sprite, physicObject);
 
 		return physicObject;
@@ -109,8 +116,13 @@ public class PhysicWorld implements Serializable {
 	}
 
 	public void changeCostume(Sprite sprite) {
-		Shape[] shapes = shapeBuilder.getShape(sprite.costume.getCostumeData(), sprite.costume.getSize());
-		this.getPhysicObject(sprite).setShape(shapes);
+		if (sprite.getName().equals("Hintergrund") || sprite.getName().equals("Background")) {
+			return;
+		}
+		if (isPhysicObject(sprite)) {
+			Shape[] shapes = shapeBuilder.getShape(sprite.costume.getCostumeData(), sprite.costume.getSize());
+			this.getPhysicObject(sprite).setShape(shapes);
+		}
 	}
 
 }

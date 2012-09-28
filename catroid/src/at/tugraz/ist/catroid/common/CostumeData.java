@@ -119,6 +119,10 @@ public class CostumeData implements Serializable {
 		if (fileName == null) {
 			return null;
 		}
+		if (fileName.length() < 32) {
+			return fileName;
+		}
+
 		return fileName.substring(0, 32);
 	}
 

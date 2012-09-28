@@ -30,22 +30,38 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import at.tugraz.ist.catroid.ProjectManager;
 import at.tugraz.ist.catroid.R;
+import at.tugraz.ist.catroid.content.BroadcastScript;
 import at.tugraz.ist.catroid.content.Project;
 import at.tugraz.ist.catroid.content.Script;
 import at.tugraz.ist.catroid.content.Sprite;
 import at.tugraz.ist.catroid.content.StartScript;
 import at.tugraz.ist.catroid.content.WhenScript;
+import at.tugraz.ist.catroid.content.bricks.BroadcastBrick;
+import at.tugraz.ist.catroid.content.bricks.PlaceAtBrick;
+import at.tugraz.ist.catroid.content.bricks.PointInDirectionBrick;
+import at.tugraz.ist.catroid.content.bricks.PointInDirectionBrick.Direction;
+import at.tugraz.ist.catroid.content.bricks.SetBounceFactorBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
+import at.tugraz.ist.catroid.content.bricks.SetFrictionBrick;
+import at.tugraz.ist.catroid.content.bricks.SetPhysicObjectTypeBrick;
+import at.tugraz.ist.catroid.content.bricks.TurnLeftBrick;
+import at.tugraz.ist.catroid.content.bricks.TurnLeftSpeedBrick;
 import at.tugraz.ist.catroid.content.bricks.WaitBrick;
 import at.tugraz.ist.catroid.io.StorageHandler;
+import at.tugraz.ist.catroid.physics.PhysicObject;
+import at.tugraz.ist.catroid.physics.PhysicObject.Type;
+import at.tugraz.ist.catroid.physics.PhysicWorld;
 import at.tugraz.ist.catroid.utils.ImageEditing;
 import at.tugraz.ist.catroid.utils.Utils;
+
+import com.badlogic.gdx.math.Vector2;
 
 public class StandardProjectHandler {
 
@@ -54,6 +70,245 @@ public class StandardProjectHandler {
 	public static Project createAndSaveStandardProject(Context context) throws IOException {
 		String projectName = context.getString(R.string.default_project_name);
 		return createAndSaveStandardProject(projectName, context);
+		//		return createAndSaveStandardProjectPinball(projectName, context);
+	}
+
+	private static Context context;
+	private static String projectName;
+
+	public static Project createAndSaveStandardProjectPinball(String projectName, Context context) throws IOException {
+		Project defaultProject = new Project(context, projectName);
+		StorageHandler.getInstance().saveProject(defaultProject);
+		ProjectManager.getInstance().setProject(defaultProject);
+
+		StandardProjectHandler.context = context;
+		StandardProjectHandler.projectName = defaultProject.getName();
+		PhysicWorld physicWorld = defaultProject.getPhysicWorld();
+
+		Sprite background = defaultProject.getSpriteList().get(0);
+
+		Sprite ball = new Sprite("Ball");
+
+		Sprite leftButton = new Sprite("Left button");
+		Sprite rightButton = new Sprite("Right button");
+
+		Sprite leftArm = new Sprite("Left arm");
+		Sprite rightArm = new Sprite("Right arm");
+
+		Sprite[] upperBouncers = { new Sprite("Middle cat bouncer"), new Sprite("Right cat bouncer") };
+
+		Sprite[] lowerBouncers = { new Sprite("Left wool bouncer"), new Sprite("Middle wool bouncer"),
+				new Sprite("Right wool bouncer") };
+
+		Sprite middleBouncer = new Sprite("Cat head bouncer");
+
+		Sprite leftHardBouncer = new Sprite("Left hard bouncer");
+		Sprite leftHardBouncerBouncer = new Sprite("Left hard bouncer bouncer");
+		Sprite rightHardBouncer = new Sprite("Right hard bouncer");
+		Sprite rightHardBouncerBouncer = new Sprite("Right hard bouncer bouncer");
+
+		Sprite leftVerticalWall = new Sprite("Left vertical wall");
+		Sprite leftBottomWall = new Sprite("Left bottom wall");
+		Sprite rightVerticalWall = new Sprite("Right vertical wall");
+		Sprite rightBottomWall = new Sprite("Right bottom wall");
+
+		final String leftButtonPressed = "Left button pressed";
+		final String rightButtonPressed = "Right button pressed";
+
+		final float armMovingSpeed = 600.0f;
+		float doodlydoo = 50.0f;
+
+		// Background
+		createElement(background, physicWorld, "background_480_800", R.drawable.background_480_800, new Vector2(),
+				Float.NaN);
+
+		// Ball
+		createElement(ball, physicWorld, "pinball", R.drawable.pinball, new Vector2(-200.0f, 300.0f), Float.NaN);
+		setPhysicProperties(ball, physicWorld, Type.DYNAMIC, 20.0f, 80.0f);
+
+		// Buttons
+		createElement(leftButton, physicWorld, "button", R.drawable.button, new Vector2(-175.0f, -330.0f), Float.NaN);
+		createButtonPressed(leftButton, leftButtonPressed);
+		createElement(rightButton, physicWorld, "button", R.drawable.button, new Vector2(175.0f, -330.0f), Float.NaN);
+		createButtonPressed(rightButton, rightButtonPressed);
+
+		// Arms
+		createElement(leftArm, physicWorld, "left_arm", R.drawable.left_arm, new Vector2(-80.0f, -315.0f), Float.NaN);
+		setPhysicProperties(leftArm, physicWorld, Type.FIXED, 50.0f, -1.0f);
+		createMovingArm(leftArm, leftButtonPressed, physicWorld, armMovingSpeed);
+		createElement(rightArm, physicWorld, "right_arm", R.drawable.right_arm, new Vector2(80.0f, -315.0f), Float.NaN);
+		setPhysicProperties(rightArm, physicWorld, Type.FIXED, 50.0f, -1.0f);
+		createMovingArm(rightArm, rightButtonPressed, physicWorld, -armMovingSpeed);
+
+		// Lower walls
+		createElement(leftVerticalWall, physicWorld, "vertical_wall", R.drawable.vertical_wall, new Vector2(-232.0f,
+				-160.0f), 8.0f);
+		setPhysicProperties(leftVerticalWall, physicWorld, Type.FIXED, -1.0f, -1.0f);
+		createElement(rightVerticalWall, physicWorld, "vertical_wall", R.drawable.vertical_wall, new Vector2(232.0f,
+				-160.0f), -8.0f);
+		setPhysicProperties(rightVerticalWall, physicWorld, Type.FIXED, -1.0f, -1.0f);
+
+		createElement(leftBottomWall, physicWorld, "wall_bottom", R.drawable.wall_bottom,
+				new Vector2(-155.0f, -255.0f), 57.0f);
+		setPhysicProperties(leftBottomWall, physicWorld, Type.FIXED, -1.0f, -1.0f);
+		createElement(rightBottomWall, physicWorld, "wall_bottom", R.drawable.wall_bottom,
+				new Vector2(155.0f, -255.0f), -57.0f);
+		setPhysicProperties(rightBottomWall, physicWorld, Type.FIXED, -1.0f, -1.0f);
+
+		// Hard Bouncer
+		createElement(leftHardBouncer, physicWorld, "left_hard_bouncer", R.drawable.left_hard_bouncer, new Vector2(
+				-140.0f, -165.0f), Float.NaN);
+		setPhysicProperties(leftHardBouncer, physicWorld, Type.FIXED, 10.0f, -1.0f);
+		createElement(leftHardBouncerBouncer, physicWorld, "left_light_bouncer", R.drawable.left_light_bouncer,
+				new Vector2(-129.0f, -163.0f), Float.NaN);
+		setPhysicProperties(leftHardBouncerBouncer, physicWorld, Type.FIXED, 124.0f, -1.0f);
+
+		createElement(rightHardBouncer, physicWorld, "right_hard_bouncer", R.drawable.right_hard_bouncer, new Vector2(
+				140.0f, -165.0f), Float.NaN);
+		setPhysicProperties(rightHardBouncer, physicWorld, Type.FIXED, 10.0f, -1.0f);
+		createElement(rightHardBouncerBouncer, physicWorld, "right_light_bouncer", R.drawable.right_light_bouncer,
+				new Vector2(129.0f, -163.0f), Float.NaN);
+		setPhysicProperties(rightHardBouncerBouncer, physicWorld, Type.FIXED, 124.0f, -1.0f);
+
+		// Lower wool bouncers
+		Vector2[] lowerBouncersPositions = { new Vector2(-100.0f, -80.0f + doodlydoo),
+				new Vector2(0.0f, -140.0f + doodlydoo), new Vector2(100.0f, -80.0f + doodlydoo) };
+		for (int index = 0; index < lowerBouncers.length; index++) {
+			createElement(lowerBouncers[index], physicWorld, "wolle_bouncer", R.drawable.wolle_bouncer,
+					lowerBouncersPositions[index], Float.NaN);
+			setPhysicProperties(lowerBouncers[index], physicWorld, Type.FIXED, 120.0f, -1.0f);
+		}
+
+		// Middle bouncer
+		createElement(middleBouncer, physicWorld, "middle_cat_bouncer", R.drawable.middle_cat_bouncer, new Vector2(
+				0.0f, 75.0f + doodlydoo), Float.NaN);
+		setPhysicProperties(middleBouncer, physicWorld, Type.FIXED, 40.0f, 100.0f);
+
+		// Upper bouncers
+		Vector2[] upperBouncersPositions = { new Vector2(0.0f, 240.f + doodlydoo),
+				new Vector2(150.0f, 200.0f + doodlydoo) };
+		for (int index = 0; index < upperBouncers.length; index++) {
+			createElement(upperBouncers[index], physicWorld, "cat_bouncer", R.drawable.cat_bouncer,
+					upperBouncersPositions[index], Float.NaN);
+			setPhysicProperties(upperBouncers[index], physicWorld, Type.FIXED, 110.0f, -1.0f);
+		}
+
+		defaultProject.addSprite(leftButton);
+		defaultProject.addSprite(rightButton);
+		defaultProject.addSprite(ball);
+		defaultProject.addSprite(leftArm);
+		defaultProject.addSprite(rightArm);
+		defaultProject.addSprite(middleBouncer);
+		defaultProject.addSprite(leftHardBouncerBouncer);
+		defaultProject.addSprite(leftHardBouncer);
+		defaultProject.addSprite(rightHardBouncerBouncer);
+		defaultProject.addSprite(rightHardBouncer);
+		defaultProject.addSprite(leftVerticalWall);
+		defaultProject.addSprite(leftBottomWall);
+		defaultProject.addSprite(rightVerticalWall);
+		defaultProject.addSprite(rightBottomWall);
+
+		for (Sprite sprite : upperBouncers) {
+			defaultProject.addSprite(sprite);
+		}
+
+		for (Sprite sprite : lowerBouncers) {
+			defaultProject.addSprite(sprite);
+		}
+
+		return defaultProject;
+	}
+
+	private static void createElement(Sprite sprite, PhysicWorld physicWorld, String fileName, int fileId,
+			Vector2 position, float angle) throws IOException {
+		File file = savePictureFromResourceInProject(projectName, fileName, fileId, context);
+		CostumeData costumeData = new CostumeData();
+		costumeData.setCostumeName(fileName);
+		costumeData.setCostumeFilename(file.getName());
+
+		List<CostumeData> costumes = sprite.getCostumeDataList();
+		costumes.add(costumeData);
+
+		SetCostumeBrick costumeBrick = new SetCostumeBrick(sprite);
+		costumeBrick.setCostume(costumeData);
+
+		Script startScript = new StartScript(sprite);
+		startScript.addBrick(new PlaceAtBrick(physicWorld, sprite, (int) position.x, (int) position.y));
+		startScript.addBrick(costumeBrick);
+
+		if (!Float.isNaN(angle)) {
+			TurnLeftBrick turnLeftBrick = new TurnLeftBrick(physicWorld, sprite, angle);
+			startScript.addBrick(turnLeftBrick);
+		}
+
+		sprite.addScript(startScript);
+	}
+
+	private static void setPhysicProperties(Sprite sprite, PhysicWorld physicWorld, PhysicObject.Type type,
+			float bounce, float friction) {
+		Script startScript = new StartScript(sprite);
+
+		startScript.addBrick(new SetPhysicObjectTypeBrick(physicWorld, sprite, type));
+
+		if (bounce >= 0.0f) {
+			startScript.addBrick(new SetBounceFactorBrick(physicWorld, sprite, bounce));
+		}
+
+		if (friction >= 0.0f) {
+			startScript.addBrick(new SetFrictionBrick(physicWorld, sprite, friction));
+		}
+
+		sprite.addScript(startScript);
+	}
+
+	private static void createButtonPressed(Sprite sprite, String broadcastMessage) throws IOException {
+		ProjectManager.getInstance().getMessageContainer().addMessage(broadcastMessage);
+
+		WhenScript whenPressedScript = new WhenScript(sprite);
+		whenPressedScript.setAction(0);
+
+		BroadcastBrick leftButtonBroadcastBrick = new BroadcastBrick(sprite);
+		leftButtonBroadcastBrick.setSelectedMessage(broadcastMessage);
+
+		String filename = "button_pressed";
+		File file = savePictureFromResourceInProject(projectName, filename, R.drawable.button_pressed, context);
+		CostumeData costumeData = new CostumeData();
+		costumeData.setCostumeName(filename);
+		costumeData.setCostumeFilename(file.getName());
+
+		List<CostumeData> costumes = sprite.getCostumeDataList();
+		costumes.add(costumeData);
+
+		SetCostumeBrick costumeBrick = new SetCostumeBrick(sprite);
+		costumeBrick.setCostume(costumeData);
+
+		WaitBrick waitBrick = new WaitBrick(sprite, 500);
+
+		SetCostumeBrick costumeBack = new SetCostumeBrick(sprite);
+		costumeBack.setCostume(costumes.get(0));
+
+		whenPressedScript.addBrick(leftButtonBroadcastBrick);
+		whenPressedScript.addBrick(costumeBrick);
+		whenPressedScript.addBrick(waitBrick);
+		whenPressedScript.addBrick(costumeBack);
+		sprite.addScript(whenPressedScript);
+	}
+
+	private static void createMovingArm(Sprite sprite, String broadcastMessage, PhysicWorld physicWorld,
+			float degreeSpeed) {
+		BroadcastScript broadcastScript = new BroadcastScript(sprite);
+		broadcastScript.setBroadcastMessage(broadcastMessage);
+
+		int waitInMillis = 180;
+
+		broadcastScript.addBrick(new TurnLeftSpeedBrick(physicWorld, sprite, degreeSpeed));
+		broadcastScript.addBrick(new WaitBrick(sprite, waitInMillis));
+		broadcastScript.addBrick(new TurnLeftSpeedBrick(physicWorld, sprite, 0));
+		broadcastScript.addBrick(new PointInDirectionBrick(physicWorld, sprite, Direction.DIRECTION_RIGHT));
+		broadcastScript.addBrick(new WaitBrick(sprite, 25));
+		broadcastScript.addBrick(new PointInDirectionBrick(physicWorld, sprite, Direction.DIRECTION_RIGHT));
+
+		sprite.addScript(broadcastScript);
 	}
 
 	public static Project createAndSaveStandardProject(String projectName, Context context) throws IOException {
@@ -179,7 +434,8 @@ public class StandardProjectHandler {
 	private static File savePictureFromResourceInProject(String project, String outputName, int fileId, Context context)
 			throws IOException {
 
-		final String imagePath = Utils.buildPath(Utils.buildProjectPath(project), Constants.IMAGE_DIRECTORY, outputName);
+		final String imagePath = Utils
+				.buildPath(Utils.buildProjectPath(project), Constants.IMAGE_DIRECTORY, outputName);
 		File testImage = new File(imagePath);
 		if (!testImage.exists()) {
 			testImage.createNewFile();
