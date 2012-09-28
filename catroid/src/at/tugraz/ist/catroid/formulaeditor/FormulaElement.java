@@ -182,7 +182,7 @@ public class FormulaElement implements Serializable {
 					returnValue = (left * right) != 0d ? 1d : 0d;
 				}
 				if (value.equals(Operators.LOGICAL_OR.operatorName)) {
-					returnValue = left != 0d && right != 0d ? 1d : 0d;
+					returnValue = left != 0d || right != 0d ? 1d : 0d;
 				}
 			} else {//unary operators
 				Double right = rightChild.interpretRecursive();
