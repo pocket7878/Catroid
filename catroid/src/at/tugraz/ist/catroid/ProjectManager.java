@@ -59,14 +59,6 @@ public class ProjectManager {
 
 	public boolean loadProject(String projectName, Context context, ErrorListenerInterface errorListener,
 			boolean errorMessage) {
-		try {
-			StandardProjectHandler.createAndSaveStandardProject(context);
-			return true;
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
 		fileChecksumContainer = new FileChecksumContainer();
 		messageContainer = new MessageContainer();
 		Project oldProject = project;

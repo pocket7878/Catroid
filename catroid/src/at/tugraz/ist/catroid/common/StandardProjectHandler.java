@@ -31,6 +31,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -50,6 +51,7 @@ import at.tugraz.ist.catroid.content.bricks.PointInDirectionBrick.Direction;
 import at.tugraz.ist.catroid.content.bricks.SetBounceFactorBrick;
 import at.tugraz.ist.catroid.content.bricks.SetCostumeBrick;
 import at.tugraz.ist.catroid.content.bricks.SetFrictionBrick;
+import at.tugraz.ist.catroid.content.bricks.SetGravityBrick;
 import at.tugraz.ist.catroid.content.bricks.SetPhysicObjectTypeBrick;
 import at.tugraz.ist.catroid.content.bricks.TurnLeftBrick;
 import at.tugraz.ist.catroid.content.bricks.TurnLeftSpeedBrick;
@@ -70,13 +72,12 @@ public class StandardProjectHandler {
 	public static Project createAndSaveStandardProject(Context context) throws IOException {
 		String projectName = context.getString(R.string.default_project_name);
 		return createAndSaveStandardProject(projectName, context);
-		//		return createAndSaveStandardProjectPinball(projectName, context);
 	}
 
 	private static Context context;
 	private static String projectName;
 
-	public static Project createAndSaveStandardProjectPinball(String projectName, Context context) throws IOException {
+	public static Project createAndSaveStandardProject(String projectName, Context context) throws IOException {
 		Project defaultProject = new Project(context, projectName);
 		StorageHandler.getInstance().saveProject(defaultProject);
 		ProjectManager.getInstance().setProject(defaultProject);
@@ -115,12 +116,15 @@ public class StandardProjectHandler {
 		final String leftButtonPressed = "Left button pressed";
 		final String rightButtonPressed = "Right button pressed";
 
-		final float armMovingSpeed = 600.0f;
+		final float armMovingSpeed = 720.0f;
 		float doodlydoo = 50.0f;
 
 		// Background
 		createElement(background, physicWorld, "background_480_800", R.drawable.background_480_800, new Vector2(),
 				Float.NaN);
+		StartScript startScript = new StartScript(background);
+		startScript.addBrick(new SetGravityBrick(physicWorld, background, new Vector2(0.0f, -8.0f)));
+		background.addScript(startScript);
 
 		// Ball
 		createElement(ball, physicWorld, "pinball", R.drawable.pinball, new Vector2(-200.0f, 300.0f), Float.NaN);
@@ -143,17 +147,17 @@ public class StandardProjectHandler {
 		// Lower walls
 		createElement(leftVerticalWall, physicWorld, "vertical_wall", R.drawable.vertical_wall, new Vector2(-232.0f,
 				-160.0f), 8.0f);
-		setPhysicProperties(leftVerticalWall, physicWorld, Type.FIXED, -1.0f, -1.0f);
+		setPhysicProperties(leftVerticalWall, physicWorld, Type.FIXED, 5.0f, -1.0f);
 		createElement(rightVerticalWall, physicWorld, "vertical_wall", R.drawable.vertical_wall, new Vector2(232.0f,
 				-160.0f), -8.0f);
-		setPhysicProperties(rightVerticalWall, physicWorld, Type.FIXED, -1.0f, -1.0f);
+		setPhysicProperties(rightVerticalWall, physicWorld, Type.FIXED, 5.0f, -1.0f);
 
 		createElement(leftBottomWall, physicWorld, "wall_bottom", R.drawable.wall_bottom,
-				new Vector2(-155.0f, -255.0f), 57.0f);
-		setPhysicProperties(leftBottomWall, physicWorld, Type.FIXED, -1.0f, -1.0f);
+				new Vector2(-155.0f, -255.0f), 58.5f);
+		setPhysicProperties(leftBottomWall, physicWorld, Type.FIXED, 5.0f, -1.0f);
 		createElement(rightBottomWall, physicWorld, "wall_bottom", R.drawable.wall_bottom,
-				new Vector2(155.0f, -255.0f), -57.0f);
-		setPhysicProperties(rightBottomWall, physicWorld, Type.FIXED, -1.0f, -1.0f);
+				new Vector2(155.0f, -255.0f), -58.5f);
+		setPhysicProperties(rightBottomWall, physicWorld, Type.FIXED, 5.0f, -1.0f);
 
 		// Hard Bouncer
 		createElement(leftHardBouncer, physicWorld, "left_hard_bouncer", R.drawable.left_hard_bouncer, new Vector2(
@@ -175,14 +179,14 @@ public class StandardProjectHandler {
 				new Vector2(0.0f, -140.0f + doodlydoo), new Vector2(100.0f, -80.0f + doodlydoo) };
 		for (int index = 0; index < lowerBouncers.length; index++) {
 			createElement(lowerBouncers[index], physicWorld, "wolle_bouncer", R.drawable.wolle_bouncer,
-					lowerBouncersPositions[index], Float.NaN);
-			setPhysicProperties(lowerBouncers[index], physicWorld, Type.FIXED, 120.0f, -1.0f);
+					lowerBouncersPositions[index], new Random().nextInt(360));
+			setPhysicProperties(lowerBouncers[index], physicWorld, Type.FIXED, 116.0f, -1.0f);
 		}
 
 		// Middle bouncer
 		createElement(middleBouncer, physicWorld, "middle_cat_bouncer", R.drawable.middle_cat_bouncer, new Vector2(
 				0.0f, 75.0f + doodlydoo), Float.NaN);
-		setPhysicProperties(middleBouncer, physicWorld, Type.FIXED, 40.0f, 100.0f);
+		setPhysicProperties(middleBouncer, physicWorld, Type.FIXED, 40.0f, 80.0f);
 
 		// Upper bouncers
 		Vector2[] upperBouncersPositions = { new Vector2(0.0f, 240.f + doodlydoo),
@@ -190,7 +194,7 @@ public class StandardProjectHandler {
 		for (int index = 0; index < upperBouncers.length; index++) {
 			createElement(upperBouncers[index], physicWorld, "cat_bouncer", R.drawable.cat_bouncer,
 					upperBouncersPositions[index], Float.NaN);
-			setPhysicProperties(upperBouncers[index], physicWorld, Type.FIXED, 110.0f, -1.0f);
+			setPhysicProperties(upperBouncers[index], physicWorld, Type.FIXED, 106.0f, -1.0f);
 		}
 
 		defaultProject.addSprite(leftButton);
@@ -299,10 +303,11 @@ public class StandardProjectHandler {
 		BroadcastScript broadcastScript = new BroadcastScript(sprite);
 		broadcastScript.setBroadcastMessage(broadcastMessage);
 
-		int waitInMillis = 180;
+		int waitInMillis = 110;
 
 		broadcastScript.addBrick(new TurnLeftSpeedBrick(physicWorld, sprite, degreeSpeed));
 		broadcastScript.addBrick(new WaitBrick(sprite, waitInMillis));
+
 		broadcastScript.addBrick(new TurnLeftSpeedBrick(physicWorld, sprite, 0));
 		broadcastScript.addBrick(new PointInDirectionBrick(physicWorld, sprite, Direction.DIRECTION_RIGHT));
 		broadcastScript.addBrick(new WaitBrick(sprite, 25));
@@ -311,7 +316,7 @@ public class StandardProjectHandler {
 		sprite.addScript(broadcastScript);
 	}
 
-	public static Project createAndSaveStandardProject(String projectName, Context context) throws IOException {
+	public static Project createAndSaveStandardProjectDefault(String projectName, Context context) throws IOException {
 		String normalCatName = context.getString(R.string.default_project_sprites_catroid_normalcat);
 		String banzaiCatName = context.getString(R.string.default_project_sprites_catroid_banzaicat);
 		String cheshireCatName = context.getString(R.string.default_project_sprites_catroid_cheshirecat);

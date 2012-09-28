@@ -41,6 +41,7 @@ public class PhysicShapeBuilder {
 		shapes = new HashMap<String, Shape[]>();
 	}
 
+	// TODO: Inclode scaleFactor
 	public Shape[] getShape(CostumeData costumeData, float scaleFactor) {
 		if (costumeData == null) {
 			return null;
