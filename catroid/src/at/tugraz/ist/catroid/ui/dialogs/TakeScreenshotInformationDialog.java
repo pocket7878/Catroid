@@ -53,6 +53,16 @@ public class TakeScreenshotInformationDialog extends Dialog {
 
 		helpTextView.setText(context.getString(R.string.take_screenshot_help));
 
+		/*
+		 * SpannableString ss = new SpannableString(context.getString(R.string.take_screenshot_help));
+		 * Drawable d = context.getResources().getDrawable(R.drawable.ic_screenshot_information);
+		 * d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
+		 * ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
+		 * ss.setSpan(span, 25, 30, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+		 * helpTextView.setText(ss);
+		 */
+		;
+
 		TextView InformationTextView = (TextView) findViewById(R.id.dialog_take_screenshot_information);
 		InformationTextView.setText(context.getString(R.string.take_screenshot_information));
 
