@@ -62,7 +62,7 @@ public class PhysicBoundaryBox {
 		bodyDef.allowSleep = false;
 
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(width / 2f, height / 2f, center, 0.0f);
+		shape.setAsBox(width / 2.0f, height / 2f, center, 0.0f);
 
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
