@@ -24,16 +24,22 @@ package at.tugraz.ist.catroid.ui.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import at.tugraz.ist.catroid.R;
 
 public class TakeScreenshotInformationDialog extends Dialog {
 	private Context context;
+	private TextView helpTextView;
+	private ImageView imageView;
+	private TextView informationTextView;
 
 	public TakeScreenshotInformationDialog(Context context) {
 		super(context);
@@ -45,6 +51,11 @@ public class TakeScreenshotInformationDialog extends Dialog {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_LEFT_ICON);
 		setContentView(R.layout.dialog_take_screenshot);
+
+		helpTextView = (TextView) findViewById(R.id.dialog_take_screenshot_help);
+		imageView = (ImageView) findViewById(R.id.dialog_take_screenshot_image);
+		informationTextView = (TextView) findViewById(R.id.dialog_take_screenshot_information);
+
 		setFeatureDrawableResource(Window.FEATURE_LEFT_ICON, android.R.drawable.ic_dialog_info);
 
 		getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
@@ -52,21 +63,21 @@ public class TakeScreenshotInformationDialog extends Dialog {
 		setTitle(context.getString(R.string.take_screenshot_title));
 		setCanceledOnTouchOutside(true);
 
-		TextView helpTextView = (TextView) findViewById(R.id.dialog_take_screenshot_help);
+		//helpTextView.setText(context.getString(R.string.take_screenshot_help));
+		String text = context.getString(R.string.take_screenshot_help);
 
-		helpTextView.setText(context.getString(R.string.take_screenshot_help));
+		Drawable icon = context.getResources().getDrawable(R.drawable.ic_screenshot_information);
 
-		/*
-		 * SpannableString ss = new SpannableString(context.getString(R.string.take_screenshot_help));
-		 * Drawable d = context.getResources().getDrawable(R.drawable.ic_screenshot_information);
-		 * d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
-		 * ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
-		 * ss.setSpan(span, 25, 30, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-		 * helpTextView.setText(ss);
-		 */
+		imageView.setBackgroundDrawable(icon);
 
-		TextView InformationTextView = (TextView) findViewById(R.id.dialog_take_screenshot_information);
-		InformationTextView.setText(context.getString(R.string.take_screenshot_information));
+		int leftMargin = icon.getIntrinsicWidth() + 50;
+
+		SpannableString ss = new SpannableString(text);
+		ss.setSpan(new MyLeadingMarginSpan2(6, leftMargin), 0, ss.length(), 0);
+
+		helpTextView.setText(ss);
+
+		informationTextView.setText(context.getString(R.string.take_screenshot_information));
 
 		Button okButton = (Button) findViewById(R.id.dialog_take_screenshot_ok_button);
 		okButton.setOnClickListener(new View.OnClickListener() {
