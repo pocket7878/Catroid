@@ -75,7 +75,7 @@ public class ChangeXByBrick implements Brick, OnClickListener {
 		if (physicWorld.isPhysicObject(sprite)) {
 			sprite.costume.releaseXYWidthHeightLock();
 			Vector2 newPos = new Vector2(xPosition, sprite.costume.getYPosition());
-			physicWorld.getPhysicObject(sprite).setXYPosition(newPos);
+			physicWorld.getPhysicObject(sprite).setPosition(newPos);
 		} else {
 			sprite.costume.setXYPosition(xPosition, sprite.costume.getYPosition());
 			sprite.costume.releaseXYWidthHeightLock();

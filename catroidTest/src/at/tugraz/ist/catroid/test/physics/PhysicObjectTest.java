@@ -26,14 +26,16 @@ public class PhysicObjectTest extends AndroidTestCase {
 		GdxNativesLoader.load();
 	}
 
-	private PhysicWorld physicWorld = new PhysicWorld();
+	private PhysicWorld physicWorld;
 
 	@Override
 	protected void setUp() throws Exception {
+		physicWorld = new PhysicWorld();
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
+		physicWorld = null;
 	}
 
 	public void testNullBody() {
@@ -69,7 +71,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 		checkIfShapesAreTheSameAsInPhysicObject(rectangle, getBody(physicObject));
 	}
 
-	public void testSetNewShape() {
+	public void testSetNewShape() { // CONTINUE HERE!
 		PhysicObject physicObject = createPhysicObject();
 		Shape[] shape = new PolygonShape[] { createRectanglePolygonShape(5.0f, 5.0f) };
 		physicObject.setShape(shape);
@@ -181,7 +183,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 
 			Vector2[] positions = { new Vector2(12.34f, 56.78f), new Vector2(-87.65f, -43.21f) };
 			for (Vector2 position : positions) {
-				physicObject.setXYPosition(position.x, position.y);
+				physicObject.setPosition(position.x, position.y);
 
 				Vector2 physicObjectCatPosition = PhysicWorldConverter.vecBox2dToCat(getBody(physicObject)
 						.getPosition());
@@ -189,7 +191,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 			}
 
 			for (Vector2 position : positions) {
-				physicObject.setXYPosition(position);
+				physicObject.setPosition(position);
 
 				Vector2 physicObjectCatPosition = PhysicWorldConverter.vecBox2dToCat(getBody(physicObject)
 						.getPosition());
@@ -207,7 +209,7 @@ public class PhysicObjectTest extends AndroidTestCase {
 			float angle = 15.6f;
 			Vector2 position = new Vector2(12.34f, 56.78f);
 			physicObject.setAngle(angle);
-			physicObject.setXYPosition(position.x, position.y);
+			physicObject.setPosition(position.x, position.y);
 
 			float physicObjectCatAngle = PhysicWorldConverter.angleBox2dToCat(getBody(physicObject).getAngle());
 			Vector2 physicObjectCatPosition = PhysicWorldConverter.vecBox2dToCat(getBody(physicObject).getPosition());
@@ -490,7 +492,8 @@ public class PhysicObjectTest extends AndroidTestCase {
 	// ... and other helpers
 	private void checkIfShapesAreTheSameAsInPhysicObject(PolygonShape[] shapes, Body body) {
 		List<Fixture> fixtures = body.getFixtureList();
-		assertEquals(shapes.length, body.getFixtureList().size());
+		assertEquals(shapes.length, fixtures.size());
+
 		if (body.getFixtureList().isEmpty()) {
 			return;
 		}
@@ -500,11 +503,10 @@ public class PhysicObjectTest extends AndroidTestCase {
 		for (int shapeIndex = 0; shapeIndex < shapes.length; shapeIndex++) {
 			currentShape = shapes[shapeIndex];
 			currentPhysicObjectShape = (PolygonShape) fixtures.get(shapeIndex).getShape();
-			assertNotSame(currentShape, currentPhysicObjectShape);
+			assertEquals(currentShape.getVertexCount(), currentPhysicObjectShape.getVertexCount());
 
 			Vector2 expectedVertex = new Vector2();
 			Vector2 actualVertex = new Vector2();
-			assertEquals(currentShape.getVertexCount(), currentPhysicObjectShape.getVertexCount());
 			for (int vertexIndex = 0; vertexIndex < currentShape.getVertexCount(); vertexIndex++) {
 				currentShape.getVertex(vertexIndex, expectedVertex);
 				currentPhysicObjectShape.getVertex(vertexIndex, actualVertex);

@@ -75,7 +75,7 @@ public class ChangeYByBrick implements Brick, OnClickListener {
 		if (physicWorld.isPhysicObject(sprite)) {
 			sprite.costume.releaseXYWidthHeightLock();
 			Vector2 newPos = new Vector2(sprite.costume.getXPosition(), yPosition);
-			physicWorld.getPhysicObject(sprite).setXYPosition(newPos);
+			physicWorld.getPhysicObject(sprite).setPosition(newPos);
 		} else {
 			sprite.costume.setXYPosition(sprite.costume.getXPosition(), yPosition);
 			sprite.costume.releaseXYWidthHeightLock();

@@ -132,7 +132,7 @@ public class GlideToBrick implements Brick, OnClickListener {
 
 				Vector2 newPos = new Vector2(xDestination, yDestination);
 				physicObject.setVelocity(new Vector2());
-				physicObject.setXYPosition(newPos);
+				physicObject.setPosition(newPos);
 				physicObject.setType(oldPhysicObjectType);
 				oldPhysicObjectType = null;
 

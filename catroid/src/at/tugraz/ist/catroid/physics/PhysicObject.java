@@ -30,7 +30,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 
 public class PhysicObject {
-
 	public enum Type {
 		DYNAMIC, FIXED, NONE;
 	}
@@ -85,7 +84,7 @@ public class PhysicObject {
 
 		short bitMask;
 		if (bounce) {
-			bitMask = PhysicSettings.World.BoundaryBox.COLLISION_MASK | PhysicSettings.Object.COLLISION_MASK;
+			bitMask = PhysicSettings.Object.COLLISION_MASK | PhysicSettings.World.BoundaryBox.COLLISION_MASK;
 		} else {
 			bitMask = PhysicSettings.Object.COLLISION_MASK;
 		}
@@ -136,13 +135,13 @@ public class PhysicObject {
 		return PhysicWorldConverter.vecBox2dToCat(body.getPosition());
 	}
 
-	public void setXYPosition(float x, float y) {
+	public void setPosition(float x, float y) {
 		x = PhysicWorldConverter.lengthCatToBox2d(x);
 		y = PhysicWorldConverter.lengthCatToBox2d(y);
 		body.setTransform(x, y, body.getAngle());
 	}
 
-	public void setXYPosition(Vector2 position) {
+	public void setPosition(Vector2 position) {
 		body.setTransform(PhysicWorldConverter.vecCatToBox2d(position), body.getAngle());
 	}
 
@@ -199,5 +198,4 @@ public class PhysicObject {
 			fixture.setRestitution(bounceFactor);
 		}
 	}
-
 }

@@ -63,7 +63,7 @@ public class SetXBrick implements Brick, OnClickListener {
 	public void execute() {
 		if (physicWorld.isPhysicObject(sprite)) {
 			Vector2 newPos = new Vector2(xPosition, sprite.costume.getYPosition());
-			physicWorld.getPhysicObject(sprite).setXYPosition(newPos);
+			physicWorld.getPhysicObject(sprite).setPosition(newPos);
 		} else {
 			sprite.costume.aquireXYWidthHeightLock();
 			sprite.costume.setXPosition(xPosition);

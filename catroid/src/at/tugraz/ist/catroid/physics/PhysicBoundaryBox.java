@@ -34,7 +34,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class PhysicBoundaryBox {
 
-	private final transient World world;
+	private final World world;
 
 	public PhysicBoundaryBox(World world) {
 		this.world = world;
