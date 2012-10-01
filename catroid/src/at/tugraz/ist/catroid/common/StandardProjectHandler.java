@@ -79,6 +79,8 @@ public class StandardProjectHandler {
 
 	public static Project createAndSaveStandardProject(String projectName, Context context) throws IOException {
 		Project defaultProject = new Project(context, projectName);
+		defaultProject.virtualScreenWidth = 480;
+		defaultProject.virtualScreenHeight = 800;
 		StorageHandler.getInstance().saveProject(defaultProject);
 		ProjectManager.getInstance().setProject(defaultProject);
 

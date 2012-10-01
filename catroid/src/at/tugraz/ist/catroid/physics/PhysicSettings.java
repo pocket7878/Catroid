@@ -25,7 +25,7 @@ public class PhysicSettings {
 	public final static boolean DEBUGFLAG = true;
 
 	public static class Render {
-		public final static boolean RENDER_COLLISION_FRAMES = true;
+		public final static boolean RENDER_COLLISION_FRAMES = false;
 		public final static boolean RENDER_BODIES = true;
 		public final static boolean RENDER_JOINTS = false;
 		public final static boolean RENDER_AABBs = false;
