@@ -125,9 +125,6 @@ public class Utils {
 		Display display = windowManager.getDefaultDisplay();
 		Values.SCREEN_WIDTH = display.getWidth();
 		Values.SCREEN_HEIGHT = display.getHeight();
-
-		Values.SCREEN_WIDTH = 640;
-		Values.SCREEN_HEIGHT = 320;
 	}
 
 	public static boolean isNetworkAvailable(Context context) {

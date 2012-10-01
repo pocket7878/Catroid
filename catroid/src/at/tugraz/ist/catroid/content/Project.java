@@ -61,8 +61,8 @@ public class Project implements Serializable {
 		this.projectName = name;
 
 		ifLandscapeSwitchWidthAndHeight();
-		virtualScreenWidth = Values.SCREEN_WIDTH;
-		virtualScreenHeight = Values.SCREEN_HEIGHT;
+		virtualScreenWidth = 320; //Values.SCREEN_WIDTH;
+		virtualScreenHeight = 640; //Values.SCREEN_HEIGHT;
 		setDeviceData(context);
 
 		if (context == null) {

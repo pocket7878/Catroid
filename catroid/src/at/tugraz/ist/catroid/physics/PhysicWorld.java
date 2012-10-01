@@ -87,11 +87,11 @@ public class PhysicWorld implements Serializable {
 		//				}
 		//				PhysicRenderer.instance.render(perspectiveMatrix);
 
-		//		if (renderer == null) {
-		//			renderer = new Box2DDebugRenderer(PhysicSettings.Render.RENDER_BODIES, PhysicSettings.Render.RENDER_JOINTS,
-		//					PhysicSettings.Render.RENDER_AABBs, PhysicSettings.Render.RENDER_INACTIVE_BODIES);
-		//		}
-		//		renderer.render(world, perspectiveMatrix.scl(PhysicSettings.World.RATIO));
+		if (renderer == null) {
+			renderer = new Box2DDebugRenderer(PhysicSettings.Render.RENDER_BODIES, PhysicSettings.Render.RENDER_JOINTS,
+					PhysicSettings.Render.RENDER_AABBs, PhysicSettings.Render.RENDER_INACTIVE_BODIES);
+		}
+		renderer.render(world, perspectiveMatrix.scl(PhysicSettings.World.RATIO));
 	}
 
 	public void setGravity(Sprite sprite, Vector2 gravity) {
