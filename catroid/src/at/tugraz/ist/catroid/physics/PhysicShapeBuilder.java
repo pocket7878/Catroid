@@ -41,7 +41,6 @@ public class PhysicShapeBuilder {
 		shapes = new HashMap<String, Shape[]>();
 	}
 
-	// TODO: Inclode scaleFactor
 	public Shape[] getShape(CostumeData costumeData, float scaleFactor) {
 		if (costumeData == null) {
 			return null;
@@ -79,6 +78,28 @@ public class PhysicShapeBuilder {
 		//PhysicRenderer.getInstance().shapes.add(vec);
 
 		Shape[] shapes2 = devideShape(vec);
+
+		if (scaleFactor != 1.0f) {
+			List<Shape> scaledShapes = new ArrayList<Shape>();
+
+			for (Shape shape : shapes2) {
+				List<Vector2> vertices = new ArrayList<Vector2>();
+
+				PolygonShape polygon = (PolygonShape) shape;
+				for (int index = 0; index < polygon.getVertexCount(); index++) {
+					Vector2 vertex = new Vector2();
+					polygon.getVertex(index, vertex);
+					vertex = vertex.mul(scaleFactor);
+					vertices.add(vertex);
+				}
+
+				PolygonShape polygonShape = new PolygonShape();
+				polygonShape.set(vertices.toArray(new Vector2[vertices.size()]));
+				scaledShapes.add(polygonShape);
+			}
+
+			shapes2 = scaledShapes.toArray(new Shape[scaledShapes.size()]);
+		}
 
 		shapes.put(key, shapes2);
 

@@ -359,7 +359,7 @@ public class StageListener implements ApplicationListener {
 		}
 
 		if (PhysicSettings.Render.RENDER_COLLISION_FRAMES && !finished) {
-			//			project.getPhysicWorld().render(camera.combined);
+			project.getPhysicWorld().render(camera.combined);
 		}
 
 		if (DEBUG) {
