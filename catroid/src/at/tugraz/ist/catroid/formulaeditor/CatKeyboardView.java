@@ -217,6 +217,7 @@ public class CatKeyboardView extends KeyboardView implements KeyboardView.OnKeyb
 				this.chooseOperatorDialogFragment.show(
 						((SherlockFragmentActivity) context).getSupportFragmentManager(),
 						"chooseOperatorDialogFragment");
+
 				break;
 			default:
 				cKE = new CatKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, primaryCode));

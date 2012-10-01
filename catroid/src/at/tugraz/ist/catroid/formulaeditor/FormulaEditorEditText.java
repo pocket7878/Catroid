@@ -173,7 +173,6 @@ public class FormulaEditorEditText extends EditText implements OnTouchListener {
 		internFormula.handleKeyInput(catKey, context);
 		history.push(internFormula.getInternFormulaState());
 		updateTextAndCursorFromInternFormula();
-		internFormula.getInternFormulaState();
 		setSelection(absoluteCursorPosition);
 		formulaEditorDialog.refreshFormulaPreviewString(this.getText().toString());
 	}

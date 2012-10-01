@@ -25,7 +25,6 @@ package at.tugraz.ist.catroid.formulaeditor;
 import java.util.LinkedList;
 import java.util.List;
 
-import android.util.SparseArray;
 import android.view.KeyEvent;
 
 /**
@@ -33,8 +32,6 @@ import android.view.KeyEvent;
  * 
  */
 public class CatKeyEvent extends KeyEvent {
-
-	private static SparseArray<String> keyMap;
 
 	/* FUNCTIONS */
 	public static final int KEYCODE_SIN = 1000;
@@ -83,11 +80,6 @@ public class CatKeyEvent extends KeyEvent {
 	 */
 	public CatKeyEvent(KeyEvent origEvent) {
 		super(origEvent);
-
-		if (CatKeyEvent.keyMap == null) {
-			initializeKeyMap();
-		}
-
 	}
 
 	public List<InternToken> createInternTokensByCatKeyEvent() {
@@ -267,10 +259,6 @@ public class CatKeyEvent extends KeyEvent {
 		List<InternToken> returnList = new LinkedList<InternToken>();
 		returnList.add(new InternToken(InternTokenType.FUNCTION_NAME, function.functionName));
 		return returnList;
-	}
-
-	private void initializeKeyMap() {
-
 	}
 
 	public boolean isOperator() {
