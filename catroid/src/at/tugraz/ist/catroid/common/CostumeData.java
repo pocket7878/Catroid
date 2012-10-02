@@ -93,6 +93,14 @@ public class CostumeData implements Serializable {
 	public CostumeData() {
 	}
 
+	public String getAbsolutePath() {
+		if (fileName != null) {
+			return Utils.buildPath(getPathToImageDirectory(), fileName);
+		} else {
+			return null;
+		}
+	}
+
 	public String getPath() {
 		String path;
 		if (fileName != null) {

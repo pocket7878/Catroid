@@ -31,6 +31,7 @@
     <string name="cancel_button">Cancel</string>
     <string name="rename">Rename</string>
     <string name="delete">Delete</string>
+    <string name="delete_lowercase">delete</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="copy">Copy</string>
@@ -104,7 +105,6 @@
     <string name="soundname_invalid">This sound\'s name is invalid</string>
     <string name="sound_play">play</string>
     <string name="sound_pause">pause</string>
-    <string name="sound_delete">delete</string>
     <string name="sound_select_source">Select a sound</string>
     <string name="delete_sound_dialog">Delete sound?</string>
     <string name="soundlist_footer_image_description">Tap to add new sound</string>
@@ -309,7 +309,8 @@
     <string name="nxt_tone_hundred_hz">x100Hz</string>
     <string name="number_to_small">Value is too small!</string>
     <string name="number_to_big">Value is too big!</string>
-      <!-- Live Wallpaper Strings -->
+    
+         <!-- Live Wallpaper Strings -->
      <string name="lwp_about_catroid">About Catrobat</string>
      <string name="lwp_project_information">About this wallpaper</string>
      <string name="lwp_sound_control">Allow sounds</string>
@@ -320,5 +321,4 @@
      <string name="lwp_project_licnese">License: </string>
      <string name="lwp_general_information">General information</string>
      <string name="lwp_preferences">Preferences</string>
-   
 </resources>
