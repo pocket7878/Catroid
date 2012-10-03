@@ -102,7 +102,17 @@ public class InternToExternGenerator {
 	private String generateExternStringFromToken(InternToken internToken) {
 		switch (internToken.getInternTokenType()) {
 			case NUMBER:
-				return internToken.getTokenSringValue();
+				String number = internToken.getTokenSringValue();
+
+				if (!number.contains(".")) {
+					return number;
+				}
+
+				String left = number.substring(0, number.indexOf("."));
+				String right = number.substring(number.indexOf(".") + 1);
+
+				return left + InternToExternLanguageConverter.getExternStringForInternTokenValue(".", context) + right;
+
 			case OPERATOR:
 				return internToken.getTokenSringValue();
 

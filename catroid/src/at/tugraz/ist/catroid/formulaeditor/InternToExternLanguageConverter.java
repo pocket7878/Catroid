@@ -31,7 +31,6 @@ public class InternToExternLanguageConverter {
 
 	private static final HashMap<String, Integer> internExternLanguageConverterMap = new HashMap<String, Integer>();
 	static {
-		internExternLanguageConverterMap.put("sin", R.string.formula_editor_function_sin);
 
 		internExternLanguageConverterMap.put(".", R.string.formula_editor_decimal_mark);
 		internExternLanguageConverterMap.put(Functions.SIN.functionName, R.string.formula_editor_function_sin);
