@@ -60,6 +60,11 @@ public class SensorManager {
 			sensorValue = Double.valueOf(-sensors.getRoll());
 		}
 		//SPRITE VALUES
+
+		if (getCurrentSpriteCostume() == null) {
+			return 0d;
+		}
+
 		if (sensorName.equals(Sensors.COSTUME_X_.sensorName)) {
 			sensorValue = Double.valueOf(getCurrentSpriteCostume().getXPosition());
 		}
@@ -87,6 +92,9 @@ public class SensorManager {
 	}
 
 	private static Costume getCurrentSpriteCostume() {
+		if (ProjectManager.getInstance().getCurrentSprite() == null) {
+			return null;
+		}
 		return ProjectManager.getInstance().getCurrentSprite().costume;
 	}
 
